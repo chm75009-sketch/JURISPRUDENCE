@@ -4268,7 +4268,26 @@
     var items = window.FeuilleDoc ? window.FeuilleDoc.items(blocsAEmporter())
       : String($("dt-corps").textContent).split(/\r?\n/).map(function (ligne) { return { k: "p", t: ligne }; });
     if (items.length && items[0].k === "t1") titre = items.shift().t;
-    AuditExport.telecharger(AuditExport.docx(items, titre), nomFichier(titre) + ".docx",
+    /* CE QUI SORT DU CABINET NE PORTE PAS LE NOM DE L'APPLICATION.
+
+       Le fichier emporté prenait pour titre le nom du parcours et celui de
+       l'onglet ouvert — « Le règlement intérieur, et ses formalités - Le
+       règlement » — et l'écrivait en tête du document, dans son pied de page
+       et dans ses propriétés, tandis que la case Auteur restait vide. Un
+       règlement intérieur déposé au greffe porte le nom de l'entreprise et
+       celui du gérant, et rien d'autre. Le titre du document se prend donc
+       dans le document lui-même, et les propriétés reçoivent l'entreprise et
+       la personne qui signe. Relevé le 25 septembre 2026. */
+    var propre = titre;
+    for (var iT = 0; iT < items.length && iT < 10; iT++) {
+      if (items[iT].k === "t1" || items[iT].k === "h1") { propre = items[iT].t; break; }
+    }
+    var maison = String((PROFIL && (PROFIL.denomination || PROFIL.entreprise)) || "").trim();
+    AuditExport.telecharger(AuditExport.docx(items, propre, {
+      sansTitre: true,
+      auteur: String((PROFIL && (PROFIL.responsable || PROFIL.denomination)) || "").trim(),
+      pied: (maison ? maison + "  ·  " : "") + propre,
+    }), nomFichier(propre) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     etatCourrier(entier ? "Téléchargé en Word, l'onglet entier." : "Téléchargé en Word.");
   });

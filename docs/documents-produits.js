@@ -226,7 +226,11 @@
     var out = [];
     m.unites.forEach(function (u) {
       var vise = (u.risques || []).some(function (r) { return r && r.cle === "vigilance"; });
-      if (vise) out.push(u.qui ? u.nom + " (" + u.qui + ")" : u.nom);
+      /* La description du document unique est une phrase, et elle finit par
+         un point : entre parenthèses, au milieu d'une énumération, ce point
+         coupait la liste en deux à la lecture. Relevé le 25 septembre 2026. */
+      var qui = String(u.qui || "").trim().replace(/\s*\.\s*$/, "");
+      if (vise) out.push(qui ? u.nom + " (" + qui + ")" : u.nom);
     });
     return out.join(", ");
   }

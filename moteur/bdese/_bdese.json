@@ -26,6 +26,7 @@
       {
        "lettre": "A",
        "titre": "Investissement social",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -118,6 +119,7 @@
       {
        "lettre": "B",
        "titre": "Investissement matériel et immatériel",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -152,6 +154,7 @@
       {
        "lettre": "A",
        "titre": "Analyse des données chiffrées",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -167,6 +170,7 @@
       {
        "lettre": "B",
        "titre": "Stratégie d'action",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -211,6 +215,7 @@
       {
        "lettre": null,
        "titre": "a) Capitaux propres de l'entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -243,6 +248,7 @@
       {
        "lettre": "A",
        "titre": "Evolution des rémunérations salariales",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -274,6 +280,7 @@
       {
        "lettre": null,
        "titre": "montant de la contribution aux activités sociales et culturelles Du comité social et économique, mécénat",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -295,6 +302,7 @@
       {
        "lettre": "A",
        "titre": "Rémunération des actionnaires (revenus distribués)",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -306,6 +314,7 @@
       {
        "lettre": "B",
        "titre": "Rémunération de l'actionnariat salarié (montant des actions détenues dans le cadre de l'épargne salariale, part dans le capital, dividendes reçus)",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -327,6 +336,7 @@
       {
        "lettre": "A",
        "titre": "Aides publiques",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -338,6 +348,7 @@
       {
        "lettre": "B",
        "titre": "Réductions d'impôts",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -349,6 +360,7 @@
       {
        "lettre": "C",
        "titre": "Exonérations et réductions de cotisations sociales",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -360,6 +372,7 @@
       {
        "lettre": "D",
        "titre": "Crédits d'impôts",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -371,6 +384,7 @@
       {
        "lettre": "E",
        "titre": "Mécénat",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -382,6 +396,7 @@
       {
        "lettre": "F",
        "titre": "Résultats financiers",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -413,6 +428,7 @@
       {
        "lettre": "A",
        "titre": "Partenariats conclus pour produire des services ou des produits pour une autre entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -424,6 +440,7 @@
       {
        "lettre": "B",
        "titre": "Partenariats conclus pour bénéficier des services ou des produits d'une autre entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -443,6 +460,7 @@
       {
        "lettre": "A",
        "titre": "Transferts de capitaux tels qu'ils figurent dans les comptes individuels des sociétés du",
+       "sansTitre": true,
        "sujets": [
         {
          "lettre": null,
@@ -454,6 +472,7 @@
       {
        "lettre": "B",
        "titre": "Cessions, fusions, et acquisitions réalisées.",
+       "sansTitre": true,
        "sujets": [
         {
          "lettre": null,
@@ -473,6 +492,7 @@
       {
        "lettre": null,
        "titre": "Environnement (1)",
+       "sansTitre": true,
        "sujets": [
         {
          "lettre": null,
@@ -485,6 +505,7 @@
       {
        "lettre": "A",
        "titre": "Politique générale en matière environnementale",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -496,6 +517,7 @@
       {
        "lettre": "B",
        "titre": "Economie circulaire",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -512,6 +534,7 @@
       {
        "lettre": "C",
        "titre": "Changement climatique",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -557,6 +580,7 @@
       {
        "lettre": "A",
        "titre": "Investissement social",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -848,6 +872,7 @@
       {
        "lettre": "B",
        "titre": "Investissement matériel et immatériel",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -880,6 +905,7 @@
       {
        "lettre": "I",
        "titre": "Indicateurs sur la situation comparée des femmes et des hommes dans l'entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -891,6 +917,7 @@
       {
        "lettre": "A",
        "titre": "Conditions générales d'emploi",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -938,6 +965,7 @@
       {
        "lettre": "B",
        "titre": "Rémunérations et déroulement de carrière",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -985,6 +1013,7 @@
       {
        "lettre": "C",
        "titre": "Formation",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1000,6 +1029,7 @@
       {
        "lettre": "D",
        "titre": "Conditions de travail, santé et sécurité au travail",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1023,6 +1053,7 @@
       {
        "lettre": "II",
        "titre": "Indicateurs relatifs à l'articulation entre l'activité professionnelle et l'exercice de la responsabilité familiale",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1034,6 +1065,7 @@
       {
        "lettre": "A",
        "titre": "Congés",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -1050,6 +1082,7 @@
       {
        "lettre": "B",
        "titre": "Organisation du temps de travail dans l'entreprise. a) Existence de formules",
+       "sansTitre": true,
        "sujets": [
         {
          "lettre": "a",
@@ -1095,6 +1128,7 @@
       {
        "lettre": "III",
        "titre": "Stratégie d'action",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1139,6 +1173,7 @@
       {
        "lettre": null,
        "titre": "a) Capitaux propres de l'entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -1171,6 +1206,7 @@
       {
        "lettre": "A",
        "titre": "Evolution des rémunérations salariales",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -1219,6 +1255,7 @@
       {
        "lettre": "B",
        "titre": "Epargne salariale",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1235,6 +1272,7 @@
       {
        "lettre": "C",
        "titre": "Rémunérations accessoires",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1250,6 +1288,7 @@
       {
        "lettre": "D",
        "titre": "Rémunération des dirigeants mandataires sociaux telles que présentées dans le rapport de",
+       "sansTitre": true,
        "sujets": [
         {
          "lettre": null,
@@ -1271,6 +1310,7 @@
       {
        "lettre": null,
        "titre": "montant de la contribution aux activités sociales et culturelles du comité social et économique, mécénat",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1282,6 +1322,7 @@
       {
        "lettre": "A",
        "titre": "Représentation du personnel",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -1317,6 +1358,7 @@
       {
        "lettre": "B",
        "titre": "Activités sociales et culturelles",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -1352,6 +1394,7 @@
       {
        "lettre": "A",
        "titre": "Rémunération des actionnaires (revenus distribués)",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1363,6 +1406,7 @@
       {
        "lettre": "B",
        "titre": "Rémunération de l'actionnariat salarié (montant des actions détenues dans le cadre de l'épargne salariale, part dans le capital, dividendes reçus)",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1384,6 +1428,7 @@
       {
        "lettre": "A",
        "titre": "Aides publiques",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1399,6 +1444,7 @@
       {
        "lettre": "B",
        "titre": "Réductions d'impôts",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1410,6 +1456,7 @@
       {
        "lettre": "C",
        "titre": "Exonérations et réductions de cotisations sociales",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1421,6 +1468,7 @@
       {
        "lettre": "D",
        "titre": "Crédits d'impôts",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1432,6 +1480,7 @@
       {
        "lettre": "E",
        "titre": "Mécénat",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1443,6 +1492,7 @@
       {
        "lettre": "F",
        "titre": "Résultats financiers a) Le chiffre d'affaires",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "a",
@@ -1479,6 +1529,7 @@
       {
        "lettre": "A",
        "titre": "Partenariats conclus pour produire des services ou des produits pour une autre entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1490,6 +1541,7 @@
       {
        "lettre": "B",
        "titre": "Partenariats conclus pour bénéficier des services ou des produits d'une autre entreprise",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1509,6 +1561,7 @@
       {
        "lettre": "A",
        "titre": "Transferts de capitaux tels qu'ils figurent dans les comptes individuels des sociétés du groupe lorsqu'ils présentent une importance significative",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1520,6 +1573,7 @@
       {
        "lettre": "B",
        "titre": "Cessions, fusions, et acquisitions réalisées.",
+       "sansTitre": true,
        "sujets": [
         {
          "lettre": null,
@@ -1539,6 +1593,7 @@
       {
        "lettre": "I",
        "titre": "Pour les entreprises soumises à la déclaration prévue à l'article R. 225-105 du code de commerce",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1550,6 +1605,7 @@
       {
        "lettre": "A",
        "titre": "Politique générale en matière environnementale",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1561,6 +1617,7 @@
       {
        "lettre": "B",
        "titre": "Economie circulaire",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1572,6 +1629,7 @@
       {
        "lettre": "C",
        "titre": "Changement climatique",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1583,6 +1641,7 @@
       {
        "lettre": "II",
        "titre": "Pour les entreprises non soumises à la déclaration prévue à l'article R. 225-105 du code de commerce",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1594,6 +1653,7 @@
       {
        "lettre": "A",
        "titre": "Politique générale en matière environnementale",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": null,
@@ -1605,6 +1665,7 @@
       {
        "lettre": "B",
        "titre": "Economie circulaire",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "i",
@@ -1621,6 +1682,7 @@
       {
        "lettre": "C",
        "titre": "Changement climatique",
+       "sansTitre": false,
        "sujets": [
         {
          "lettre": "i",

@@ -406,11 +406,13 @@
          fixe lui-même ses dates : « à compter du 1er juillet 2023 » au-dessus
          de cent cinquante salariés, et « à compter de dates fixées par décret
          […] et au plus tard à compter du 1er juillet 2024 » en dessous.
-         L'obligation est donc entrée en vigueur ; ce qui manque, c'est le
-         portail qui doit la recevoir, et que les organisations patronales
-         n'ont pas ouvert, vérifié le 25 septembre 2026. Écrire l'inverse
-         donnait au lecteur une échéance qui n'existe pas. */
-      "<p>Le dépôt dématérialisé du document sur un portail numérique est prévu par l'article L. 4121-3-1, V, B, qui le rend applicable au plus tard à compter du 1er juillet 2024 aux entreprises de moins de cent cinquante salariés. Ce portail n'est pas ouvert à ce jour : tant qu'aucun dépôt n'y est possible, l'employeur conserve les versions successives du document au sein de l'entreprise, sur papier ou sous forme dématérialisée, comme le prévoit l'article R. 4121-4, et c'est ce que fait la présente version.</p>" +
+         L'obligation est donc entrée en vigueur ; ce qui manque est le
+         portail qui doit la recevoir. Le document ne dit pas que ce portail
+         n'existe pas — ce serait un fait, et le document n'en rapporte aucun
+         qu'il n'ait vérifié : il écrit la condition, « tant que l'entreprise
+         n'est pas en mesure d'y déposer le document ». Relecture du
+         25 septembre 2026. */
+      "<p>Le dépôt dématérialisé du document sur un portail numérique est prévu par l'article L. 4121-3-1, V, B, qui le rend applicable au plus tard à compter du 1er juillet 2024 aux entreprises de moins de cent cinquante salariés. Tant que l'entreprise n'est pas en mesure d'y déposer le document, elle en conserve les versions successives sur place, sur papier ou sous forme dématérialisée, comme le prévoit l'article R. 4121-4, et c'est ce que fait la présente version.</p>" +
       "<p>La cotation par gravité et fréquence est une aide au classement des actions : aucun des textes cités ne l'impose.</p>";
   }
 

@@ -134,7 +134,14 @@ function decouper(brut) {
       if (tete.length > 3) zones.unshift({ lettre: null, corps: tete });
     }
     for (const z of zones) {
-      const titre = net((z.corps.match(/^([^:;]{3,160})\s*[:;]/) || [, tete(z.corps, 90)])[1]);
+      /* Une section peut n'avoir pas de titre à elle : le décret enchaîne
+         alors directement sur le premier sujet, et le découpage en prend la
+         tête. Cette tête n'est pas un titre, et elle ne doit pas s'afficher
+         comme tel — c'est ce qui donnait « …des sociétés du » au-dessus de la
+         phrase entière. La marque est posée ici, une fois, plutôt que devinée
+         à l'affichage. Relevé le 25 septembre 2026. */
+      const mTitre = z.corps.match(/^([^:;]{3,160})\s*[:;]/);
+      const titre = net(mTitre ? mTitre[1] : tete(z.corps, 90));
       const sujets = [];
       /* Les sujets : « a) … », « b) … ». */
       /* Les sujets : « a) … », et les alinéas romains minuscules « i-Identification
@@ -152,7 +159,7 @@ function decouper(brut) {
         sujets.push({ lettre: p.lettre, intitule,
           informations: morceaux.slice(1).map(x => net(x.replace(/^-\s*/, ""))).filter(Boolean) });
       }
-      r.sections.push({ lettre: z.lettre, titre, sujets });
+      r.sections.push({ lettre: z.lettre, titre, sansTitre: !mTitre, sujets });
     }
     delete r.corps;
   }

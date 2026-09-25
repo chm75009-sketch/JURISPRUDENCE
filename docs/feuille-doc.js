@@ -114,6 +114,14 @@
       } else if (para.every(function (l) { return /^\s{2,}/.test(l) || /^\s*[-•·]\s/.test(l); })) {
         para.forEach(function (l) {
           if (/https?:\/\//.test(l)) b.push({ k: "lien", t: l.trim().replace(/^[-•·]\s*/, "") });
+          /* UNE LISTE DÉJÀ NUMÉROTÉE NE PREND PAS DE PUCE EN PLUS.
+
+             L'échelle des sanctions du règlement intérieur est écrite « 1. »
+             à « 5. », et son ordre est le sujet même de la clause. Rendue en
+             liste à puces, elle sortait « - 1. L'avertissement ». Relevé le
+             25 septembre 2026 : le numéro est dans le texte, la puce s'en
+             va. */
+          else if (/^\s*\d{1,2}[.)]\s/.test(l)) b.push({ k: "p", t: l.trim() });
           else b.push({ k: "puce", t: l.trim().replace(/^[-•·]\s*/, "") });
         });
       } else if (para.length >= 2 && para.every(function (l) { return /^[^:]{2,70} ?:/.test(l.trim()); })) {

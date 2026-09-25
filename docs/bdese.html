@@ -333,16 +333,26 @@
   /* Une ligne porte des cases dès qu'elle n'est pas un simple intertitre. */
   function aCases(l) { return !l.mere || !!l.bornes; }
 
+  /* Les quatre répartitions que le décret demande, et le mot qui les appelle.
+     Une ligne peut en porter plusieurs : « par sexe et par qualification ». */
+  var AXES = [
+    { cle: "categorie", mot: /par cat[ée]gorie professionnelle|par cat[ée]gorie socioprofessionnelle|par qualification/i,
+      nom: "Répartition par catégorie professionnelle", lib: CATEGORIES },
+    /* « par âge » dans R. 2312-8, « selon l'ancienneté » dans R. 2312-9 : le
+       décret dit la même chose de deux façons, et n'en reconnaître qu'une
+       laissait la répartition sur la ligne qui l'annonce au lieu de celle qui
+       la demande. Relevé le 25 septembre 2026. */
+    { cle: "age", mot: /par [âa]ge|selon l['’][âa]ge/i, nom: "Répartition par âge", lib: AGES },
+    { cle: "anciennete", mot: /par anciennet[ée]|selon l['’]anciennet[ée]/i,
+      nom: "Répartition par ancienneté", lib: ANCIENNETES },
+    { cle: "sexe", mot: /par sexe|respectifs des femmes et des hommes|des femmes et des hommes/i,
+      nom: "Répartition par sexe", lib: ["Femmes", "Hommes"] },
+  ];
   function ventilation(info) {
     var t = String(info || "");
     if (mensuelle(t)) return MOIS_BDESE;
     var L = [];
-    if (/par cat[ée]gorie professionnelle|par cat[ée]gorie socioprofessionnelle|par qualification/i.test(t))
-      L = L.concat(CATEGORIES);
-    if (/par [âa]ge/i.test(t)) L = L.concat(AGES);
-    if (/par anciennet[ée]/i.test(t)) L = L.concat(ANCIENNETES);
-    if (/par sexe|respectifs des femmes et des hommes|des femmes et des hommes/i.test(t))
-      L = L.concat(["Femmes", "Hommes"]);
+    AXES.forEach(function (a) { if (a.mot.test(t)) L = L.concat(a.lib); });
     return L.length ? L : null;
   }
 
@@ -351,6 +361,20 @@
       return c.grille.rubriques.map(function (r) {
         var lignes = [];
         (r.sections || []).forEach(function (s) {
+          /* Les répartitions déjà portées, en propre, par une ligne de la
+             section : c'est à elles que revient le détail, et non à l'intitulé
+             qui les annonce. Dans la grille des trois cents salariés et plus,
+             l'intitulé du sujet a) annonce l'âge et l'ancienneté, et c'est le
+             sujet i) de la même section qui les demande ligne par ligne. */
+          var axesSection = {};
+          (s.sujets || []).forEach(function (su) {
+            var dues = AUD && AUD.informationsDues ? AUD.informationsDues(su)
+              : ((su.informations && su.informations.length) ? su.informations : [su.intitule]);
+            dues.forEach(function (x) {
+              if (String(x).trim() === String(su.intitule || "").trim()) return;
+              AXES.forEach(function (a) { if (a.mot.test(String(x))) axesSection[a.cle] = true; });
+            });
+          });
           (s.sujets || []).forEach(function (su) {
             /* Ce qui est dû, et rien d'autre : le commentaire du décret, sa
                nomenclature et ses notes de bas de page restent dans les données
@@ -361,8 +385,24 @@
               : ((su.informations && su.informations.length) ? su.informations : [su.intitule]);
             if (!infos.length) return;
             var base = r.n + "/" + (s.lettre || "-") + "/" + (su.lettre || "-") + "/";
+            /* Une section sans titre propre ne porte que sa lettre : sa
+               « tête » n'est que le début de la première phrase, et l'écrire
+               en titre donnait « …des sociétés du » au-dessus de cette même
+               phrase. Relevé le 25 septembre 2026. */
+            var sec = s.sansTitre ? (s.lettre ? s.lettre + "." : "")
+              : ((s.lettre ? s.lettre + ". " : "") + s.titre);
+            var titreEntier = String(su.intitule || "");
+            /* UNE RÉPARTITION NE SE DEMANDE PAS DEUX FOIS.
+
+               Dans la grille des trois cents salariés et plus, le sujet a)
+               s'intitule « Evolution des effectifs par type de contrat, par
+               âge, par ancienneté » et ses informations comptent déjà
+               « Répartition par âge de l'effectif total au 31/12 ». Les six
+               tranches sortaient deux fois, sous l'intitulé puis sous la
+               ligne qui les demande vraiment. Relevé le 25 septembre 2026 :
+               la ligne qui n'est que l'intitulé cède la répartition à celle
+               qui la porte en propre. */
             infos.forEach(function (i, k) {
-              var sec = (s.lettre ? s.lettre + ". " : "") + s.titre;
               var suj = (su.lettre ? su.lettre + ") " : "") +
                 (AUD && AUD.intituleDu ? AUD.intituleDu(su) : su.intitule);
               /* Le sujet ne se vide que s'il n'apporte rien : quand il répète
@@ -373,6 +413,13 @@
               else if (su.lettre && suj.replace(/^[a-z]+\)\s*/i, "").trim() === String(i).trim())
                 suj = su.lettre + ")";
               var v = ventilation(i);
+              if (v && !mensuelle(i) && String(i).trim() === titreEntier.trim()) {
+                var reste = [];
+                AXES.forEach(function (a) {
+                  if (a.mot.test(String(i)) && !axesSection[a.cle]) reste = reste.concat(a.lib);
+                });
+                v = reste.length ? reste : null;
+              }
               var mois = !!v && mensuelle(i);
               /* La raison de R. 2312-10 quand la ligne ne concerne pas
                  l'entreprise : la condition est dans le libellé du décret
@@ -382,11 +429,39 @@
                  9° porte la condition, ses sections ne la répètent pas. */
               var hors = (AUD && AUD.sansObjet)
                 ? AUD.sansObjet(r.titre + " ; " + sec + " ; " + suj + " ; " + i, c.fiche) : null;
-              lignes.push({ cle: base + k, section: sec, sujet: suj, info: i,
+              lignes.push({ cle: base + k, section: sec, secNue: !!s.sansTitre, sujet: suj, info: i,
                 mere: !!v, bornes: mois ? "avenir" : null, hors: hors });
               if (v) v.forEach(function (lib, j) {
-                lignes.push({ cle: base + k + "/" + j, section: sec, sujet: suj, info: lib,
-                  sous: true, bornes: mois ? "passe" : null, hors: hors });
+                lignes.push({ cle: base + k + "/" + j, section: sec, secNue: !!s.sansTitre,
+                  sujet: suj, info: lib, sous: true, bornes: mois ? "passe" : null, hors: hors });
+              });
+            });
+            /* CE QUE LE SUJET DEMANDE ET QUE SES LIGNES NE PORTENT PAS.
+
+               « Evolution des effectifs par type de contrat, par âge, par
+               ancienneté » : la répartition vaut pour le sujet entier, et
+               aucune de ses huit informations ne répète les mots « par âge »
+               ou « par ancienneté ». Les tranches d'âge se sont donc
+               retrouvées sur la seule ligne qui les nommait, celle de
+               l'alternance, et l'ancienneté n'avait aucune ligne. Relevé le
+               25 septembre 2026. Ce qui manque est ajouté ici, une fois par
+               sujet, et seulement si aucune de ses lignes ne le porte déjà. */
+            var tousTextes = infos.join(" ");
+            /* La répartition se cherche dans l'intitulé ENTIER du sujet, non
+               dans sa forme courte : « Evolution des effectifs par type de
+               contrat, par âge, par ancienneté » s'affiche « Evolution des
+               effectifs par type de contrat », et c'est la fin de la phrase
+               qui appelle les tranches. */
+            var titreSujet = String((AUD && AUD.intituleDu ? AUD.intituleDu(su) : su.intitule) || "");
+            AXES.forEach(function (ax, rang) {
+              if (!ax.mot.test(titreEntier) || ax.mot.test(tousTextes)) return;
+              var suj2 = (su.lettre ? su.lettre + ") " : "") + titreSujet;
+              var cle2 = base + "axe" + rang;
+              lignes.push({ cle: cle2, section: sec, secNue: !!s.sansTitre, sujet: suj2,
+                info: ax.nom, mere: true, hors: null });
+              ax.lib.forEach(function (lib, j) {
+                lignes.push({ cle: cle2 + "/" + j, section: sec, secNue: !!s.sansTitre,
+                  sujet: suj2, info: lib, sous: true, hors: null });
               });
             });
           });
@@ -450,7 +525,7 @@
       r.lignes.forEach(function (l) {
         if (l.section && l.section !== sec) {
           sec = l.section; suj = null;
-          if (!amorce(l.section, l.info))
+          if (!l.secNue && !amorce(l.section, l.info))
             corps += '<tr class="sec"><td class="info">' + ech(l.section) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
         if (l.sujet && l.sujet !== suj) {
@@ -848,7 +923,12 @@
   }
   function ligneValeurs(l, precedent) {
     var p = precedent || {};
-    var tete = [l.section === p.section || amorce(l.section, l.info) ? "" : l.section,
+    /* La colonne « Section » porte le groupe, et elle s'écrit au changement :
+       la vider parce que la première ligne commence par le même texte faisait
+       perdre le groupe à toutes les suivantes. Relevé le 25 septembre 2026 sur
+       les onglets 2, 3, 5 à 10. Ce qui ne s'écrit pas, c'est le sujet quand la
+       ligne le répète mot pour mot. */
+    var tete = [l.section === p.section ? "" : l.section,
                 (l.sujet === p.sujet && l.section === p.section) || amorce(l.sujet, l.info) ? "" : l.sujet,
                 l.sous ? "    " + l.info : l.info];
     if (!aCases(l)) return tete.concat(CTX.mil.map(function () { return ""; })).concat([""]);

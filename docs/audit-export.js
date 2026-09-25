@@ -340,7 +340,16 @@
     var doc = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"' +
       ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
-      "<w:body>" + par(titre, { gras: true, taille: 40, style: "Titre1" }) + corps +
+      /* LE TITRE NE S'ÉCRIT PAS DEUX FOIS.
+
+         Un document qui porte déjà son titre et son en-tête — le règlement
+         intérieur en est un — recevait en plus, tout en haut, le nom que
+         l'application donne au parcours : « Le règlement intérieur, et ses
+         formalités - Le règlement ». `opts.sansTitre` laisse le document
+         commencer par lui-même ; le pied de page et les propriétés, eux,
+         gardent un titre, qui n'est pas lu par le destinataire du document.
+         Relevé le 25 septembre 2026. */
+      "<w:body>" + ((opts && opts.sansTitre) ? "" : par(titre, { gras: true, taille: 40, style: "Titre1" })) + corps +
       "<w:sectPr>" + section + "</w:sectPr></w:body></w:document>";
     var octets = zip([
       { nom: "[Content_Types].xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
