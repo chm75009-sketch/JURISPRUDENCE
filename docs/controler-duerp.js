@@ -24,7 +24,7 @@
   var ech = function (s) { return String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
   var DM = window.DuerpMetiers;
-  var LU = "lu le 7 septembre 2026, relu le 8 septembre 2026";
+  var LU = "lus les 7 et 8 septembre 2026, les textes ajoutés le 25 septembre 2026";
 
   /* Les textes, avec leur identifiant de version. Rien n'est réécrit de
      mémoire : ce qui suit est ce que le relais a rendu. */
@@ -47,6 +47,20 @@
       t: "Dans les établissements dotés d'un comité social et économique, le document unique d'évaluation des risques professionnels est utilisé pour l'établissement du rapport annuel prévu au 1° de l'article L. 2312-27." },
     { n: "R. 4121-4", id: "LEGIARTI000045386451",
       t: "Le document unique d'évaluation des risques professionnels et ses versions antérieures sont tenus, pendant une durée de 40 ans à compter de leur élaboration, à la disposition : 1° Des travailleurs et des anciens travailleurs pour les versions en vigueur durant leur période d'activité [...] ; 2° Des membres de la délégation du personnel du comité social et économique ; 3° Du service de prévention et de santé au travail [...] ; 4° Des agents du système d'inspection du travail ; 5° Des agents des services de prévention des organismes de sécurité sociale ; 6° Des agents des organismes professionnels de santé, de sécurité et des conditions de travail [...] ; 7° Des inspecteurs de la radioprotection [...]. Un avis indiquant les modalités d'accès des travailleurs au document unique est affiché à une place convenable et aisément accessible dans les lieux de travail. Dans les entreprises ou établissements dotés d'un règlement intérieur, cet avis est affiché au même emplacement que celui réservé au règlement intérieur." },
+    /* Ajoutés le 25 septembre 2026, après les deux relectures : ils étaient
+       cités dans le corps du document sans figurer dans cette liste. */
+    { n: "L. 4121-3-1, V, B", id: "LEGIARTI000043893919",
+      t: "Pour la mise en œuvre des obligations mentionnées au A du présent V, le document unique d'évaluation des risques professionnels et ses mises à jour font l'objet d'un dépôt dématérialisé sur un portail numérique déployé et administré par un organisme géré par les organisations professionnelles d'employeurs représentatives au niveau national et interprofessionnel. [...] L'obligation de dépôt dématérialisé [...] est applicable : a) A compter du 1er juillet 2023, aux entreprises dont l'effectif est supérieur ou égal à cent cinquante salariés ; b) A compter de dates fixées par décret, en fonction des effectifs des entreprises, et au plus tard à compter du 1er juillet 2024 aux entreprises dont l'effectif est inférieur à cent cinquante salariés." },
+    { n: "L. 3122-11", id: "LEGIARTI000033020153",
+      t: "Tout travailleur de nuit bénéficie d'un suivi individuel régulier de son état de santé dans les conditions fixées à l'article L. 4624-1." },
+    { n: "L. 2314-9", id: "LEGIARTI000035651143",
+      t: "Lorsque le comité social et économique n'a pas été mis en place ou renouvelé, un procès-verbal de carence est établi par l'employeur. L'employeur porte à la connaissance des salariés par tout moyen permettant de donner date certaine à cette information, le procès-verbal dans l'entreprise et le transmet dans les quinze jours [...] à l'agent de contrôle de l'inspection du travail [...]." },
+    { n: "R. 4624-17", id: "LEGIARTI000033769059",
+      t: "Tout travailleur dont l'état de santé, l'âge, les conditions de travail ou les risques professionnels auxquels il est exposé le nécessitent, notamment [...] les travailleurs de nuit mentionnés à l'article L. 3122-5, bénéficie, à l'issue de la visite d'information et de prévention, de modalités de suivi adaptées déterminées dans le cadre du protocole écrit prévu au troisième alinéa de l'article L. 4624-1, selon une périodicité qui n'excède pas une durée de trois ans." },
+    { n: "R. 4624-18", id: "LEGIARTI000033769047",
+      t: "Tout travailleur de nuit mentionné à l'article L. 3122-5 et tout travailleur âgé de moins de dix-huit ans bénéficie d'une visite d'information et de prévention réalisée par un professionnel de santé mentionné au premier alinéa de l'article L. 4624-1 préalablement à son affectation sur le poste." },
+    { n: "R. 4624-23, III", id: "LEGIARTI000053786012",
+      t: "S'il le juge nécessaire, l'employeur complète la liste des postes entrant dans les catégories mentionnées au I. par des postes présentant des risques particuliers [...], après avis du ou des médecins concernés et du comité social et économique s'il existe, en cohérence avec l'évaluation des risques prévue à l'article L. 4121-3 [...]." },
     { n: "R. 4741-1", id: "LEGIARTI000018527390",
       t: "Le fait de ne pas transcrire ou de ne pas mettre à jour les résultats de l'évaluation des risques, dans les conditions prévues aux articles R. 4121-1 et R. 4121-2, est puni de l'amende prévue pour les contraventions de cinquième classe. La récidive est réprimée conformément aux articles 132-11 et 132-15 du code pénal." },
   ];
@@ -307,7 +321,7 @@
          organisations patronales n'ont pas ouvert : vérifié le 25 septembre
          2026. On l'écrit, parce qu'un lecteur qui connaît le texte se demande
          pourquoi le document n'en parle pas. */
-      "<p>Le dépôt dématérialisé du document sur un portail numérique, prévu par l'article L. 4121-3-1, V, B, suppose que ce portail soit déployé par les organisations professionnelles d'employeurs : il ne l'est pas à ce jour, et il n'y a donc rien à y déposer. La conservation pendant quarante ans et la mise à disposition restent dues, sur le support de l'entreprise.</p>" +
+      "<p>Le dépôt dématérialisé du document sur un portail numérique, prévu par l'article L. 4121-3-1, V, B, suppose que ce portail soit déployé et administré par les organisations professionnelles d'employeurs. Tant qu'il ne l'est pas, il n'y a rien à y déposer ; son ouverture est à vérifier à chaque mise à jour. La conservation pendant quarante ans et la mise à disposition restent dues, sur le support de l'entreprise.</p>" +
       "<p>La cotation par gravité et fréquence est une aide au classement des actions : aucun des textes cités ne l'impose.</p>";
   }
 

@@ -37,9 +37,18 @@
     var parts = [], centre = [], offset = 0;
     function u16(v) { return [v & 255, (v >> 8) & 255]; }
     function u32(v) { return [v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >>> 24) & 255]; }
+    /* LA DATE DES ENTRÉES DE L'ARCHIVE.
+
+       Elles étaient laissées à zéro, ce que les lecteurs affichent comme
+       1980 : une relecture y a vu, le 25 septembre 2026, la marque d'un
+       fichier bricolé. La date du jour est écrite au format MS-DOS, deux mots
+       de seize bits, celui des heures et celui des jours. */
+    var d = new Date();
+    var heureDos = ((d.getHours() & 31) << 11) | ((d.getMinutes() & 63) << 5) | ((d.getSeconds() / 2) & 31);
+    var jourDos = (((d.getFullYear() - 1980) & 127) << 9) | (((d.getMonth() + 1) & 15) << 5) | (d.getDate() & 31);
     entrees.forEach(function (e) {
       var nom = octets(e.nom), data = octets(e.contenu), crc = crc32(data);
-      var local = [].concat(u32(0x04034b50), u16(20), u16(0), u16(0), u16(0), u16(0),
+      var local = [].concat(u32(0x04034b50), u16(20), u16(0), u16(0), u16(heureDos), u16(jourDos),
         u32(crc), u32(data.length), u32(data.length), u16(nom.length), u16(0));
       parts.push(new Uint8Array(local), nom, data);
       centre.push({ nom: nom, crc: crc, taille: data.length, offset: offset });
@@ -47,7 +56,7 @@
     });
     var debutCentre = offset, centreOctets = [];
     centre.forEach(function (c) {
-      var h = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0), u16(0), u16(0), u16(0),
+      var h = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0), u16(0), u16(heureDos), u16(jourDos),
         u32(c.crc), u32(c.taille), u32(c.taille), u16(c.nom.length),
         u16(0), u16(0), u16(0), u16(0), u32(0), u32(c.offset));
       centreOctets.push(new Uint8Array(h), c.nom);
@@ -201,6 +210,17 @@
     }).join("") +
     "</w:styles>";
 
+  /* Les paramètres du document. Word en écrit toujours un ; son absence se
+     voit quand on ouvre le fichier au chantier. On y met le strict utile :
+     la langue, et la mise à jour des champs à l'ouverture, pour que le numéro
+     de page du pied se calcule. Posé le 25 septembre 2026. */
+  var REGLAGES =
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    '<w:updateFields w:val="true"/>' +
+    '<w:themeFontLang w:val="fr-FR"/>' +
+    "</w:settings>";
+
   function pied(titre, opts) {
     var bas = (opts && opts.pied) || titre || "";
     return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
@@ -277,6 +297,7 @@
         '<Default Extension="xml" ContentType="application/xml"/>' +
         '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
         '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>' +
+        '<Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>' +
         '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' +
         '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' +
         "</Types>" },
@@ -288,9 +309,11 @@
       { nom: "word/_rels/document.xml.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         '<Relationship Id="rIdStyles" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+        '<Relationship Id="rIdReglages" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>' +
         '<Relationship Id="rIdPied" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>' +
         "</Relationships>" },
       { nom: "word/styles.xml", contenu: STYLES },
+      { nom: "word/settings.xml", contenu: REGLAGES },
       { nom: "word/footer1.xml", contenu: pied(titre, opts) },
       { nom: "docProps/core.xml", contenu: proprietes(titre, opts) },
       { nom: "word/document.xml", contenu: doc },

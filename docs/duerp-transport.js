@@ -54,7 +54,7 @@
               "Consigne écrite : aucun appel ni message pendant la conduite, ni en main ni en kit, l'exploitation rappelle à l'arrêt.",
               "Aucune prime, aucun objectif ni aucune prise de commande n'est assis sur le nombre de livraisons par jour ou sur le respect d'un horaire impossible.",
               "Retard annoncé au client par l'exploitation, jamais rattrapé par le conducteur.",
-              "Formation à la conduite préventive au-delà de la formation continue obligatoire, renouvelée tous les cinq ans.",
+              "Formation à la conduite préventive tous les cinq ans, qui s'ajoute à la formation continue obligatoire du transport et ne s'y substitue pas.",
               "Véhicules entretenus selon le plan d'entretien du constructeur, contrôle avant départ signé chaque jour.",
             ] },
           { n: "Fatigue, horaires décalés et travail de nuit", m: "fatigue|nuit|horaire|sommeil|repos|amplitude",

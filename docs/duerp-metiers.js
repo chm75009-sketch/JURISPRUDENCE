@@ -1402,8 +1402,8 @@
           "liste des postes, encadrement des pots et des repas, salarié qui se déclare hors " +
           "d'état, traitement médical, formation de l'encadrement, écrit du jour même, retour " +
           "sans conduite, coordonnées affichées.",
-          "Écart de poste immédiat avant toute intervention sur un véhicule levé, une machine " +
-          "ou un point chaud : ici, l'erreur ne laisse pas de seconde chance.",
+          "Écart de poste immédiat avant de prendre un poste où l'inattention blesse : sur " +
+          "cette unité, l'erreur ne laisse pas de seconde chance.",
         ];
       }
       u.risques.push({
