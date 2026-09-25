@@ -321,7 +321,7 @@
          organisations patronales n'ont pas ouvert : vérifié le 25 septembre
          2026. On l'écrit, parce qu'un lecteur qui connaît le texte se demande
          pourquoi le document n'en parle pas. */
-      "<p>Le dépôt dématérialisé du document sur un portail numérique, prévu par l'article L. 4121-3-1, V, B, suppose que ce portail soit déployé et administré par les organisations professionnelles d'employeurs. Tant qu'il ne l'est pas, il n'y a rien à y déposer ; son ouverture est à vérifier à chaque mise à jour. La conservation pendant quarante ans et la mise à disposition restent dues, sur le support de l'entreprise.</p>" +
+      "<p>Un dépôt dématérialisé du document sur un portail numérique est prévu par l'article L. 4121-3-1, V, B. Jusqu'à l'entrée en vigueur de cette obligation, l'employeur conserve les versions successives du document au sein de l'entreprise, sur papier ou sous forme dématérialisée : c'est l'article R. 4121-4 lui-même qui le dit, et c'est ce que fait la présente version.</p>" +
       "<p>La cotation par gravité et fréquence est une aide au classement des actions : aucun des textes cités ne l'impose.</p>";
   }
 
