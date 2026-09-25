@@ -247,7 +247,7 @@
     if (eff === null)
       return "[ effectif non renseigné : à partir de cinquante salariés, programme annuel de prévention ; en deçà, liste d'actions consignée dans le document unique (L. 4121-3-1, III) ]";
     if (eff >= 50)
-      return "L'effectif étant de " + eff + " salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : la liste des mesures de l'année à venir avec, pour chacune, ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût, les ressources mobilisables et un calendrier (L. 4121-3-1, III, 1°). Les conditions d'exécution, l'indicateur et le coût de chaque mesure restent à écrire à la main." +
+      return "L'effectif étant de " + eff + " salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : la liste des mesures de l'année à venir avec, pour chacune, ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût, les ressources mobilisables et un calendrier (L. 4121-3-1, III, 1°). Trois colonnes du tableau sont à remplir par l'entreprise, ligne par ligne : les conditions d'exécution de la mesure, son indicateur de résultat et l'estimation de son coût." +
         " Ressources de l'entreprise mobilisables : [ budget de prévention de l'année, heures d'encadrement, personnes désignées, concours du service de prévention et de santé au travail, aide de la branche ou de la Carsat : à écrire ]." +
         " Calendrier : les échéances portées au tableau ci-dessous en tiennent lieu, revues à chaque mise à jour.";
     return "L'effectif étant de " + eff + " salarié" + (eff > 1 ? "s" : "") + ", les résultats de l'évaluation débouchent sur la liste des actions de prévention des risques et de protection des salariés, consignée dans le présent document (L. 4121-3-1, III, 2°).";
@@ -354,21 +354,17 @@
     "utiles à l'évaluation des expositions individuelles aux facteurs de risques professionnels, " +
     "et la proportion de salariés exposés au-delà des seuils réglementaires (R. 4121-1-1). Les dix " +
     "facteurs sont ceux de l'article L. 4161-1 ; les seuils sont fixés par décret et ne sont pas " +
-    "repris ici. Cette proportion est actualisée à chaque mise à jour du document.";
+    "repris ici. Cette proportion est actualisée à chaque mise à jour du document. " +
+    "Pour chaque facteur, répondez oui ou non à l'exposition au-delà des seuils ; ne remplissez " +
+    "le reste de la ligne que pour les facteurs auxquels vous répondez oui.";
 
   function annexeLignes() {
-    return FACTEURS.map(function (f) {
-      return [f, "[ oui / non ]", "[ nombre ]", "[ % de l'effectif ]",
-        "[ mesures en place ]", "[ observations ]"];
-    });
+    return FACTEURS.map(function (f) { return [f, "", "", "", "", ""]; });
   }
   function annexeHtml(num) {
     var h = "<h3>" + num + ". Annexe : données collectives d'exposition</h3>" +
       "<p>" + ech(ANNEXE_TEXTE) + "</p>";
-    h += "<ul>" + FACTEURS.map(function (f) {
-      return "<li>" + ech(f) + " : <mark>[ exposition au-delà des seuils, nombre de salariés, " +
-        "proportion, mesures en place ]</mark></li>";
-    }).join("") + "</ul>";
+    h += "<ul>" + FACTEURS.map(function (f) { return "<li>" + ech(f) + "</li>"; }).join("") + "</ul>";
     return h;
   }
   function annexeItems(num, items) {
@@ -544,9 +540,14 @@
         : ["1F3864", "1F3864", "1F3864", "1F3864", "2F5D3A", "2F5D3A"],
       rows: plan.map(function (p) {
         var prio = { t: p.x.pr.p + " " + p.x.pr.mot, fond: FOND_PRIORITE[p.x.pr.mot] || null };
+        /* Les trois colonnes que l'employeur remplit restent vides plutôt que
+           de porter un crochet rouge sur chacune des trente-trois lignes :
+           quatre-vingt-dix-neuf crochets dans un tableau, c'est une page qui
+           décourage avant d'être lue. La phrase au-dessus du tableau dit ce
+           qu'on y écrit. Demande du 25 septembre 2026, ne pas compliquer la
+           tâche du gérant. */
         if (eff !== null && eff >= 50) {
-          return [p.n, prio, p.u, p.x.r.n, "[ comment, par qui, avec quoi ]",
-            p.x.r.r, dateFr(p.x.ech), "[ à définir ]", "[ à estimer ]"];
+          return [p.n, prio, p.u, p.x.r.n, "", p.x.r.r, dateFr(p.x.ech), "", ""];
         }
         return [p.n, prio, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
       }) });
