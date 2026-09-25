@@ -414,6 +414,15 @@
         L.push("période de vingt-quatre heures à défaut d'accord (R. 3312-53 du code des");
         L.push("transports).");
         L.push("");
+        /* L. 3313-3 du code des transports (LEGIARTI000029234271, lu le
+           25 septembre 2026) : l'interdiction pèse sur le conducteur, et la
+           surveillance de l'organisation du travail sur l'employeur. Les deux
+           sont écrites, la seconde étant ce qui rend la première tenable. */
+        L.push("Il est interdit de prendre à bord du véhicule le repos hebdomadaire normal");
+        L.push("défini au h de l'article 4 du règlement (CE) n° 561/2006. L'entreprise veille");
+        L.push("à ce que l'organisation du travail des conducteurs soit conforme au droit au");
+        L.push("repos hebdomadaire normal (L. 3313-3 du code des transports).");
+        L.push("");
       }
       L.push("Les repas ne sont pas pris dans les locaux affectés au travail (R. 4228-19),");
       L.push("mais dans l'emplacement prévu à cet effet, situé [PRÉCISEZ L'EMPLACEMENT].");
