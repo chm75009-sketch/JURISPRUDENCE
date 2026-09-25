@@ -216,7 +216,7 @@
       var sect = secteurDe(p);
       var L = [];
 
-      L = L.concat(entete(ctx, "Règlement intérieur, mode d'emploi et formalités",
+      L = L.concat(entete(ctx, "Règlement intérieur",
         "articles L. 1311-2 et L. 1321-1 à L. 1321-6 du code du travail"));
 
       L.push(EXEMPLE);
@@ -245,11 +245,12 @@
       L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
 
-      /* Ici commence le règlement lui-même, et il porte son titre : c'est ce
-         qui sera déposé. Le doublon relevé le 25 septembre 2026 venait de
-         l'en-tête du fichier, qui écrivait le même mot quelques lignes plus
-         haut ; c'est lui qui a changé de nom, pour dire ce qu'il annonce
-         vraiment, le règlement avec son mode d'emploi et ses formalités. */
+      /* CETTE LIGNE EST LA BORNE, PAS UN TITRE.
+
+         Elle dit à partiesRi() où finit le mode d'emploi et où commence le
+         règlement. L'onglet du règlement, lui, la saute : le titre y est déjà,
+         posé par l'en-tête du fichier quelques lignes plus haut. Il sortait
+         deux fois, relevé le 25 septembre 2026. */
       L.push("RÈGLEMENT INTÉRIEUR");
       L.push("");
       L.push(nom.toUpperCase());
@@ -1603,7 +1604,9 @@
     }
     var enTete    = iEx > 0 ? L.slice(0, iEx) : [];
     var emploi    = (iEx >= 0 && iRi > iEx) ? L.slice(iEx, iRi) : [];
-    var reglement = enTete.concat(iRi >= 0 ? L.slice(iRi, iOrdre) : coupe(L, L[0], "DANS CET ORDRE"));
+    /* iRi + 2 : la borne « RÈGLEMENT INTÉRIEUR » et la ligne vide qui la suit
+       ne sont pas reprises, l'en-tête du fichier portant déjà ce titre. */
+    var reglement = enTete.concat(iRi >= 0 ? L.slice(iRi + 2, iOrdre) : coupe(L, L[0], "DANS CET ORDRE"));
     var verifs    = coupe(L, "AVANT DE DÉPOSER", "LE DROIT QUI FONDE");
     var etapes    = coupe(L, "DANS CET ORDRE", "AVANT DE DÉPOSER");
     var droit     = coupe(L, "LE DROIT QUI FONDE", null);
