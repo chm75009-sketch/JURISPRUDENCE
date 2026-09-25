@@ -110,6 +110,10 @@
   table.g tr.sec td{background:var(--accent-clair);color:var(--accent);font:600 13.5px/1.35 system-ui;border-right:0}
   table.g tr.suj td{background:var(--creux);font:600 13.5px/1.35 system-ui;color:var(--encre);border-right:0}
   table.g tr.mere td{background:#fff;font:600 13.5px/1.4 system-ui;color:var(--encre);border-right:0}
+  table.g tr.tendance td.info{font-weight:600}
+  table.g td.info small{display:block;font-weight:400;font-size:11.5px;color:var(--texte-2);margin-top:2px}
+  table.g td.hors{min-width:96px;background:var(--creux);color:var(--texte-2);font-size:12.5px;text-align:center}
+  table.g td.hors.gauche{min-width:190px;text-align:left;line-height:1.35}
   table.g tr.sous td.info{padding-left:22px;color:var(--texte-2)}
   @media (min-width:700px){
     table.g{font-size:14.5px}
@@ -269,6 +273,11 @@
       an: nombre($("#an").value) || new Date().getFullYear(),
       accord: $("#acc").value === "oui",
     };
+    /* Ce que la fiche d'entreprise dit de la forme juridique et du groupe :
+       deux rubriques du décret y sont soumises, et elles sont alors écartées
+       plutôt que demandées pour rien. Rien n'est deviné : une fiche muette
+       laisse la ligne due. */
+    c.fiche = { formeJuridique: profil.formeJuridique || "", groupe: profil.groupe || "" };
     c.mil = AUD ? AUD.millesimes(c.an) : [];
     /* L'effectif commande la grille : R. 2312-8 en deçà de trois cents
        salariés, R. 2312-9 à partir de trois cents. La grille du décret n'est
@@ -291,12 +300,50 @@
      entre ce qu'on demande et ce qu'on affiche ». */
   var MOIS_BDESE = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
     "août", "septembre", "octobre", "novembre", "décembre"];
+  /* CE QUE LA LIGNE SE DÉCOMPOSE, QUAND LE DÉCRET LE DIT.
+
+     Une information qui demande une répartition « par sexe » se déplie en
+     deux lignes, Femmes et Hommes ; « mois par mois » en douze. Une relecture
+     du 25 septembre 2026 a relevé que les répartitions par catégorie
+     professionnelle, par âge et par ancienneté restaient, elles, sur une
+     seule ligne : le client n'avait nulle part où porter le détail que le
+     décret réclame pourtant dans la même phrase. On ne déplie que ce que la
+     ligne demande, et rien de plus. */
+  var CATEGORIES = ["Ouvriers", "Employés", "Techniciens et agents de maîtrise", "Cadres"];
+  var AGES = ["Moins de 25 ans", "De 25 à 29 ans", "De 30 à 39 ans", "De 40 à 49 ans",
+    "De 50 à 54 ans", "55 ans et plus"];
+  var ANCIENNETES = ["Moins d'un an", "De 1 à moins de 3 ans", "De 3 à moins de 6 ans",
+    "De 6 à moins de 10 ans", "10 ans et plus"];
+  /* LES DOUZE MOIS NE SE DEMANDENT PAS POUR LES ANNÉES À VENIR.
+
+     R. 2312-10 (LEGIARTI000036411580, relu le 25 septembre 2026) : les
+     informations « sont présentées sous forme de données chiffrées ou, à
+     défaut, pour les années suivantes, sous forme de grandes tendances ».
+     Un effectif mois par mois en 2029 n'est ni l'un ni l'autre : la relecture
+     du même jour a relevé que l'écran et le classeur le demandaient quand
+     même, douze cases par année de perspective. Le détail mensuel reste donc
+     sur les années réalisées et l'année en cours, et la ligne du décret
+     elle-même reçoit la tendance des trois années suivantes.               */
+  function mensuelle(info) { return /mois par mois/i.test(String(info || "")); }
+  function prend(l, m) {
+    if (!l.bornes) return true;
+    var avenir = m.nature === "perspective";
+    return l.bornes === "avenir" ? avenir : !avenir;
+  }
+  /* Une ligne porte des cases dès qu'elle n'est pas un simple intertitre. */
+  function aCases(l) { return !l.mere || !!l.bornes; }
+
   function ventilation(info) {
     var t = String(info || "");
-    if (/mois par mois/i.test(t)) return MOIS_BDESE;
+    if (mensuelle(t)) return MOIS_BDESE;
+    var L = [];
+    if (/par cat[ée]gorie professionnelle|par cat[ée]gorie socioprofessionnelle|par qualification/i.test(t))
+      L = L.concat(CATEGORIES);
+    if (/par [âa]ge/i.test(t)) L = L.concat(AGES);
+    if (/par anciennet[ée]/i.test(t)) L = L.concat(ANCIENNETES);
     if (/par sexe|respectifs des femmes et des hommes|des femmes et des hommes/i.test(t))
-      return ["Femmes", "Hommes"];
-    return null;
+      L = L.concat(["Femmes", "Hommes"]);
+    return L.length ? L : null;
   }
 
   function rubriques(c) {
@@ -318,22 +365,43 @@
               var sec = (s.lettre ? s.lettre + ". " : "") + s.titre;
               var suj = (su.lettre ? su.lettre + ") " : "") +
                 (AUD && AUD.intituleDu ? AUD.intituleDu(su) : su.intitule);
-              if (suj.replace(/^[a-z]\)\s*/i, "").trim() === String(i).trim()) suj = "";
+              /* Le sujet ne se vide que s'il n'apporte rien : quand il répète
+                 mot pour mot son information ET qu'il n'a pas de repère. Le
+                 repère, lui, se garde : c'est par lui qu'on retrouve la ligne
+                 dans le décret. Relevé le 25 septembre 2026. */
+              if (!su.lettre && suj.trim() === String(i).trim()) suj = "";
+              else if (su.lettre && suj.replace(/^[a-z]+\)\s*/i, "").trim() === String(i).trim())
+                suj = su.lettre + ")";
               var v = ventilation(i);
-              lignes.push({ cle: base + k, section: sec, sujet: suj, info: i, mere: !!v });
+              var mois = !!v && mensuelle(i);
+              /* La raison de R. 2312-10 quand la ligne ne concerne pas
+                 l'entreprise : la condition est dans le libellé du décret
+                 (« Pour les entreprises soumises à L. 225-115… », « Pour les
+                 entreprises appartenant à un groupe… »), et la réponse est
+                 dans la fiche. Le titre de la rubrique en fait partie : le
+                 9° porte la condition, ses sections ne la répètent pas. */
+              var hors = (AUD && AUD.sansObjet)
+                ? AUD.sansObjet(r.titre + " ; " + sec + " ; " + suj + " ; " + i, c.fiche) : null;
+              lignes.push({ cle: base + k, section: sec, sujet: suj, info: i,
+                mere: !!v, bornes: mois ? "avenir" : null, hors: hors });
               if (v) v.forEach(function (lib, j) {
-                lignes.push({ cle: base + k + "/" + j, section: sec, sujet: suj, info: lib, sous: true });
+                lignes.push({ cle: base + k + "/" + j, section: sec, sujet: suj, info: lib,
+                  sous: true, bornes: mois ? "passe" : null, hors: hors });
               });
             });
           });
         });
         if (!lignes.length) lignes.push({ cle: r.n + "/-/-/0", section: "", sujet: "", info: r.titre });
-        return { n: r.n, titre: r.titre, lignes: lignes };
+        return { n: r.n,
+          titre: (AUD && AUD.titreRubrique) ? AUD.titreRubrique(r) : r.titre,
+          onglet: (AUD && AUD.titreOnglet) ? AUD.titreOnglet(r) : r.titre,
+          lignes: lignes };
       });
     }
     return c.plancher.map(function (t, i) {
       var titre = t.charAt(0).toUpperCase() + t.slice(1);
-      return { n: i + 1, titre: titre, lignes: [{ cle: "p/" + i, section: "", sujet: "", info: titre }] };
+      return { n: i + 1, titre: titre, onglet: titre,
+        lignes: [{ cle: "p/" + i, section: "", sujet: "", info: titre }] };
     });
   }
 
@@ -382,32 +450,45 @@
       r.lignes.forEach(function (l) {
         if (l.section && l.section !== sec) {
           sec = l.section; suj = null;
-          if (sansLettre(l.section) !== l.info)
+          if (!amorce(l.section, l.info))
             corps += '<tr class="sec"><td class="info">' + ech(l.section) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
         if (l.sujet && l.sujet !== suj) {
           suj = l.sujet;
-          if (sansLettre(l.sujet) !== l.info)
+          if (!amorce(l.sujet, l.info))
             corps += '<tr class="suj"><td class="info">' + ech(l.sujet) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
-        if (l.mere) {
+        if (!aCases(l)) {
           corps += '<tr class="mere"><td class="info">' + ech(l.info) + '</td><td colspan="' +
             (nbCol - 1) + '"></td></tr>';
           return;
         }
         var une = false;
-        corps += '<tr' + (l.sous ? ' class="sous"' : "") + '><td class="info">' + ech(l.info) + "</td>" +
+        corps += '<tr class="' + (l.mere ? "tendance" : (l.sous ? "sous" : "")) + '"><td class="info">' +
+          ech(l.info) +
+          (l.bornes === "avenir" ? "<small>les trois années à venir, en grandes tendances (R. 2312-10)</small>" : "") +
+          "</td>" +
           CTX.mil.map(function (m) {
+            if (l.hors)
+              return '<td class="hors" title="' + ech(l.hors) + '">non applicable</td>';
+            if (!prend(l, m))
+              return '<td class="hors" title="' + ech(l.bornes === "passe"
+                ? "Le détail mois par mois porte sur les années réalisées et l'année en cours ; les trois années à venir se présentent en grandes tendances sur la ligne du décret (R. 2312-10)."
+                : "Le détail de cette année est porté mois par mois sur les douze lignes qui suivent.") +
+                '">sans objet</td>';
             var v = valeur(l.cle, m.annee);
             if (v.trim()) une = true;
             return '<td class="vide"><input data-ligne="' + ech(l.cle) + '" data-annee="' + m.annee + '"' +
               (v.trim() ? ' class="rempli"' : "") + ' value="' + ech(v) + '" aria-label="' + ech(l.info + ", " + m.annee) + '"></td>';
           }).join("") +
-          '<td class="vide"><input data-raison="' + ech(l.cle) + '" value="' + ech(raison(l.cle)) + '"' +
-          (raison(l.cle).trim() ? ' class="rempli"' : "") + ' aria-label="' + ech(l.info + ", raison") + '"></td></tr>';
-        if (une || raison(l.cle).trim()) pleines++;
+          (l.hors
+            ? '<td class="hors gauche">' + ech(l.hors) + "</td>"
+            : '<td class="vide"><input data-raison="' + ech(l.cle) + '" value="' + ech(raison(l.cle)) + '"' +
+              (raison(l.cle).trim() ? ' class="rempli"' : "") + ' aria-label="' + ech(l.info + ", raison") + '"></td>') +
+          "</tr>";
+        if (l.hors || une || raison(l.cle).trim()) pleines++;
       });
-      var aRemplir = r.lignes.filter(function (x) { return !x.mere; }).length;
+      var aRemplir = r.lignes.filter(aCases).length;
       return '<div class="rb"><div class="tt"><h3>' + r.n + ". " + ech(r.titre) + "</h3>" +
         '<span class="n' + (pleines === aRemplir ? " pleine" : "") + '">' + pleines + " / " + aRemplir + "</span></div>" +
         '<div class="grille-tab"><table class="g"><thead>' + head + "</thead><tbody>" + corps +
@@ -442,10 +523,10 @@
     liste.forEach(function (r, i) {
       var n = 0, aRemplir = 0;
       r.lignes.forEach(function (l) {
-        if (l.mere) return;
+        if (!aCases(l)) return;
         aRemplir++;
         var v = E.valeurs[l.cle] || {};
-        if (Object.keys(v).some(function (a) { return String(v[a]).trim() !== ""; }) || raison(l.cle).trim()) n++;
+        if (l.hors || Object.keys(v).some(function (a) { return String(v[a]).trim() !== ""; }) || raison(l.cle).trim()) n++;
       });
       if (titres[i]) { titres[i].textContent = n + " / " + aRemplir; titres[i].className = "n" + (n === aRemplir ? " pleine" : ""); }
     });
@@ -719,6 +800,8 @@
       ["Base de données économiques, sociales et environnementales"],
       ["Entreprise", CTX.ent || "[à renseigner]"],
       ["Effectif", CTX.eff === null ? "[à renseigner]" : String(CTX.eff)],
+      ["Forme juridique", CTX.fiche.formeJuridique || "[à renseigner dans la fiche d'entreprise]"],
+      ["Appartient à un groupe", CTX.fiche.groupe || "[à renseigner dans la fiche d'entreprise]"],
       ["Année en cours", String(CTX.an)],
       ["Texte qui commande le contenu", texteApplicable(CTX)],
       ["Version du texte lue", CTX.grille ? CTX.grille.version : "LEGIARTI000043975329"],
@@ -736,6 +819,14 @@
       ["Informations présentées comme confidentielles", crochets(a["a-confidentiel"])],
       ["Durée de la confidentialité", crochets(a["a-duree"])],
       ["Conservation et trace des consultations", crochets(a["a-trace"])],
+      ["Ce que porte « sans objet »", "La case n'est pas demandée pour cette année-là. Le détail mois par mois " +
+        "porte sur les deux années précédentes et l'année en cours ; pour les trois années à venir, " +
+        "R. 2312-10 veut « des données chiffrées ou, à défaut […] de grandes tendances », qui se portent " +
+        "sur la ligne de l'information elle-même."],
+      ["Ce que porte « Non applicable »", "La rubrique ne concerne pas l'entreprise, et la fiche d'entreprise " +
+        "le dit : forme juridique pour le montant global des plus hautes rémunérations (L. 225-115 du code de " +
+        "commerce, propre aux sociétés anonymes et aux sociétés en commandite par actions), appartenance à un " +
+        "groupe pour les transferts entre entités. La raison est portée dans la dernière colonne de l'onglet."],
       ["Une case sans donnée", "Aucune case ne reste vide : « à renseigner » tant que la donnée manque, " +
         "« Néant » quand elle est nulle, « Non applicable » quand la rubrique ne concerne pas l'entreprise, " +
         "et la raison dans la dernière colonne de l'onglet (R. 2312-10)."],
@@ -745,18 +836,33 @@
   /* La section et le sujet ne sont écrits qu'au changement : répétés sur
      chaque ligne, ils noyaient la seule colonne qui compte, l'information à
      renseigner. */
+  /* Un titre qui n'est que le début de la ligne ne s'écrit pas : le décret
+     n'a pas donné de titre à certaines sections, et le découpage en prend
+     alors la tête. Répétée juste au-dessus de la phrase entière, elle faisait
+     une ligne parasite dans l'onglet. Relevé le 25 septembre 2026 sur le 9°,
+     « Transferts de capitaux tels qu'ils figurent dans les comptes
+     individuels des sociétés du groupe ». */
+  function amorce(titre, info) {
+    var t = sansLettre(titre).trim(), i = String(info || "").trim();
+    return t.length > 0 && i.indexOf(t) === 0;
+  }
   function ligneValeurs(l, precedent) {
     var p = precedent || {};
-    var tete = [l.section === p.section ? "" : l.section,
-                l.sujet === p.sujet && l.section === p.section ? "" : l.sujet,
+    var tete = [l.section === p.section || amorce(l.section, l.info) ? "" : l.section,
+                (l.sujet === p.sujet && l.section === p.section) || amorce(l.sujet, l.info) ? "" : l.sujet,
                 l.sous ? "    " + l.info : l.info];
-    if (l.mere) return tete.concat(CTX.mil.map(function () { return ""; })).concat([""]);
+    if (!aCases(l)) return tete.concat(CTX.mil.map(function () { return ""; })).concat([""]);
+    /* La ligne que la fiche d'entreprise écarte porte « Non applicable » sur
+       chaque année, et la raison dans la dernière colonne (R. 2312-10). */
+    if (l.hors)
+      return tete.concat(CTX.mil.map(function () { return "Non applicable"; })).concat([l.hors]);
     /* Aucune case de donnée ne part vide : une case blanche ne dit pas si
        l'information manque, si elle est nulle ou si elle ne concerne pas
        l'entreprise. Tant qu'elle n'est pas remplie, elle porte « à
        renseigner » ; c'est à l'entreprise d'y mettre le chiffre, « Néant » ou
        « Non applicable », avec la raison dans la dernière colonne. */
     return tete.concat(CTX.mil.map(function (m) {
+      if (!prend(l, m)) return "sans objet";
       return valeur(l.cle, m.annee) || "à renseigner";
     })).concat([raison(l.cle)]);
   }
@@ -768,7 +874,7 @@
       var lignes = [[r.titre].concat(new Array(head.length - 1).fill("")), head];
       var precedent = null;
       r.lignes.forEach(function (l) { lignes.push(ligneValeurs(l, precedent)); precedent = l; });
-      return { titre: r.n + " " + r.titre, lignes: lignes, largeurs: largeurs };
+      return { titre: r.n + " " + r.onglet, lignes: lignes, largeurs: largeurs };
     }));
   }
 

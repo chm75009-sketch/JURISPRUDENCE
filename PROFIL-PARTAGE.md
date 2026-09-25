@@ -55,14 +55,15 @@ responsable et une durée de conservation. Un fichier n'exige rien.
 | `version` | entier | oui | Vaut `1`. Une version inconnue est **refusée**, jamais interprétée au jugé. |
 | `emisPar` | chaîne | non | Le nom de l'application émettrice. Affiché à l'import, sans conséquence. |
 | `emisLe` | chaîne | non | Date d'émission, ISO 8601. Informative. |
-| `entreprise` | objet | oui | Les douze champs ci-dessous. |
+| `entreprise` | objet | oui | Les treize champs ci-dessous. |
 
-### Les douze champs de l'entreprise
+### Les treize champs de l'entreprise
 
 | Clé | Type | Valeurs | Ce qu'elle commande |
 |---|---|---|---|
 | `denomination` | chaîne | libre | En-tête de tous les rapports, courriers et modèles. |
 | `siret` | chaîne | 14 chiffres | Identifie l'établissement. N'est envoyé nulle part. |
+| `formeJuridique` | chaîne | libre, ou l'un de : `SARL`, `EURL`, `SAS`, `SASU`, `SA`, `SCA (commandite par actions)`, `SNC`, `société civile`, `association`, `entreprise individuelle` | Écarte ce qui ne concerne pas la forme : le montant global des plus hautes rémunérations (L. 225-115 du code de commerce) n'est dû dans la base de données économiques et sociales que par les sociétés anonymes et les sociétés en commandite par actions. Vide, rien n'est écarté. |
 | `adresse` | chaîne | libre | En-tête des courriers (convocations, notifications, dépôts). |
 | `responsable` | chaîne | libre | Nom et qualité de la personne qui signe. |
 | `courriel` | chaîne | courriel | Coordonnée portée sur les documents produits. |
@@ -110,7 +111,7 @@ n'y en avait pas.
 
 Les alias historiques de JURISPRUDENCE (`denominationSociale`, `entreprise`,
 `nom`, `convention`, `idcc`, `activite`, `siege`) sont **lus** mais jamais
-écrits dans le fichier d'échange : le format n'expose que les douze clés
+écrits dans le fichier d'échange : le format n'expose que les treize clés
 ci-dessus.
 
 ## Faire évoluer le format

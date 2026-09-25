@@ -233,6 +233,9 @@ module.exports.contenu = () => CONTENU.construire();
    est dû, et l'intitulé sans le premier indicateur qui lui était collé. */
 module.exports.informationsDues = CONTENU.informationsDues;
 module.exports.intituleDu = CONTENU.intituleDu;
+module.exports.titreRubrique = CONTENU.titreRubrique;
+module.exports.titreOnglet = CONTENU.titreOnglet;
+module.exports.sansObjet = CONTENU.sansObjet;
 module.exports.grilleDue = grilleDue;
 module.exports.millesimes = millesimes;
 module.exports.plancher = PLANCHER;

@@ -29,6 +29,22 @@
   var SECTEURS = ["transport et logistique", "industrie",
     "bâtiment et travaux publics", "commerce", "services"];
 
+  /* LA FORME JURIDIQUE COMMANDE CE QUI EST DÛ, ELLE AUSSI.
+
+     Ajoutée le 25 septembre 2026, après une relecture de la base de données
+     économiques et sociales : la rubrique 4° b) de R. 2312-8 ne vaut que
+     « pour les entreprises soumises aux dispositions de l'article L. 225-115
+     du code de commerce », et rien dans la fiche ne disait si l'entreprise
+     l'était. L. 225-115 (LEGIARTI000038610196) ouvre un droit à « tout
+     actionnaire » dans le chapitre des sociétés anonymes ; L. 226-1
+     (LEGIARTI000047591354) l'étend aux sociétés en commandite par actions,
+     et L. 227-1 (LEGIARTI000048535177) l'écarte pour la société par actions
+     simplifiée, qui n'applique pas les articles L. 225-103 à L. 225-126. Une
+     SARL relève de L. 223-26 (LEGIARTI000048535091), qui n'y renvoie pas.
+     Laissée vide, la fiche ne conclut rien : la rubrique reste due. */
+  var FORMES = ["SARL", "EURL", "SAS", "SASU", "SA", "SCA (commandite par actions)",
+    "SNC", "société civile", "association", "entreprise individuelle"];
+
   /* LA FICHE S'OUVRE VIDE. Demande du 15 septembre 2026 : « on ne met pas TEC
      par défaut ; dans les documents, sur tout le site, partout, seules les
      coordonnées saisies dans la page d'accueil apparaîtront ». Jusqu'ici la
@@ -68,6 +84,8 @@
       aide: "Telle qu'elle figure au Kbis. Elle pré-remplit tous les rapports, courriers et modèles de l'application." },
     { c: "siret", nom: "SIRET (14 chiffres)", t: "text",
       aide: "Il identifie l'établissement. L'application ne l'envoie nulle part : il sert à nommer le dossier et à en-tête des documents produits." },
+    { c: "formeJuridique", nom: "Forme juridique", t: "select", options: FORMES, autre: true,
+      aide: "Elle écarte ce qui ne concerne pas l'entreprise : la base de données économiques et sociales ne demande le montant global des plus hautes rémunérations (L. 225-115 du code de commerce) qu'aux sociétés anonymes et aux sociétés en commandite par actions." },
     { c: "adresse", nom: "Adresse du siège", t: "text", pleine: true,
       aide: "Elle figure en tête des courriers produits (convocations, notifications, dépôts)." },
     { c: "responsable", nom: "Responsable du dossier (nom, qualité)", t: "text",
@@ -176,13 +194,15 @@
          "version": 1,
          "emisPar": "…",              nom de l'application émettrice
          "emisLe": "2026-08-22T…Z",   date d'émission, ISO 8601
-         "entreprise": { … } }        les douze champs ci-dessous
+         "entreprise": { … } }        les treize champs ci-dessous
 
-     LES DOUZE CHAMPS. denomination, siret, adresse, responsable, courriel,
-     telephone, effectif, secteur, conventionCollective, groupe,
-     etablissementsDistincts, nbEtablissements. Ce sont exactement les clés de
-     IDENTITE : le format n'invente rien, il expose ce que l'application tient
-     déjà.
+     LES TREIZE CHAMPS. denomination, siret, formeJuridique, adresse,
+     responsable, courriel, telephone, effectif, secteur,
+     conventionCollective, groupe, etablissementsDistincts, nbEtablissements.
+     Ce sont exactement les clés de IDENTITE : le format n'invente rien, il
+     expose ce que l'application tient déjà. La forme juridique est venue en
+     dernier, le 25 septembre 2026 ; facultative, elle ne change pas le numéro
+     de version, comme le prévoit PROFIL-PARTAGE.md.
 
      CE QUI EST INTERDIT. Un import n'efface jamais un champ renseigné avec
      une valeur vide : la fusion ne retient d'un fichier que ce qu'il porte
