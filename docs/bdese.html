@@ -345,14 +345,37 @@
     { cle: "age", mot: /par [âa]ge|selon l['’][âa]ge/i, nom: "Répartition par âge", lib: AGES },
     { cle: "anciennete", mot: /par anciennet[ée]|selon l['’]anciennet[ée]/i,
       nom: "Répartition par ancienneté", lib: ANCIENNETES },
-    { cle: "sexe", mot: /par sexe|respectifs des femmes et des hommes|des femmes et des hommes/i,
+    /* Le décret écrit tantôt « par sexe », tantôt le sexe au milieu d'une
+       énumération : « les effectifs intéressés par âge, sexe et niveau initial
+       de formation ». Ne reconnaître que la première forme laissait ces
+       lignes-là sans la distinction entre les femmes et les hommes. Relevé le
+       25 septembre 2026. */
+    { cle: "sexe", mot: /par sexe|[,:;]\s*sexe\b|\bet sexe\b|respectifs des femmes et des hommes|des femmes et des hommes/i,
       nom: "Répartition par sexe", lib: ["Femmes", "Hommes"] },
   ];
+  /* DEUX RÉPARTITIONS DANS LA MÊME PHRASE SE CROISENT.
+
+     « Répartition des effectifs par sexe et par qualification » : quatre
+     catégories d'un côté, deux sexes de l'autre, cela fait huit cases, non
+     six. Rendue en une seule liste — Ouvriers, Employés, TAM, Cadres, puis
+     Femmes, Hommes — la ligne demandait deux totaux séparés et perdait
+     justement ce que le décret veut voir, la place des femmes dans chaque
+     catégorie. Relevé le 25 septembre 2026. Le sexe se croise donc avec ce
+     qui l'accompagne, et reste seul quand il est seul. */
   function ventilation(info) {
     var t = String(info || "");
     if (mensuelle(t)) return MOIS_BDESE;
-    var L = [];
-    AXES.forEach(function (a) { if (a.mot.test(t)) L = L.concat(a.lib); });
+    var L = [], sexe = false;
+    AXES.forEach(function (a) {
+      if (!a.mot.test(t)) return;
+      if (a.cle === "sexe") sexe = true; else L = L.concat(a.lib);
+    });
+    if (sexe && !L.length) L = ["Femmes", "Hommes"];
+    else if (sexe) {
+      var croise = [];
+      L.forEach(function (lib) { croise.push(lib + ", femmes"); croise.push(lib + ", hommes"); });
+      L = croise;
+    }
     return L.length ? L : null;
   }
 
@@ -412,6 +435,11 @@
               if (!su.lettre && suj.trim() === String(i).trim()) suj = "";
               else if (su.lettre && suj.replace(/^[a-z]+\)\s*/i, "").trim() === String(i).trim())
                 suj = su.lettre + ")";
+              /* Une ligne qui commence par l'intitulé de son sujet ne le
+                 répète pas, mais elle garde son repère : sans le « c) », on ne
+                 retrouve plus la ligne dans le décret. Relevé le 25 septembre
+                 2026. */
+              else if (su.lettre && amorce(suj, i)) suj = su.lettre + ")";
               var v = ventilation(i);
               if (v && !mensuelle(i) && String(i).trim() === titreEntier.trim()) {
                 var reste = [];

@@ -405,10 +405,18 @@ function nettoyer(arbre) {
            sans ligne où le renseigner, et la colonne Sujet répétait la colonne
            Information. Les deux morceaux viennent du texte, le mot pour mot
            est intact. */
-        const k = String(su.intitule).indexOf(" : ");
+        /* Le découpage du sujet se fait sur l'intitulé DÉBARRASSÉ de la note
+           du décret. Sans cela, « Bilan des émissions […] ces bilans. Notes :
+           I.-Une structure de qualification détaillée… » se coupait sur le
+           deux-points de « Notes : », et la nomenclature devenait le premier
+           indicateur du sujet, c'est-à-dire une ligne à renseigner. Relevé le
+           25 septembre 2026 sur l'onglet Environnement du classeur de trois
+           cents salariés et plus. */
+        const net0 = String(su.intitule).replace(NOTE_FINALE, "");
+        const k = net0.indexOf(" : ");
         if (k > 0 && !su.commentaire) {
-          const tete = String(su.intitule).slice(0, k).trim();
-          const queue = String(su.intitule).slice(k + 3).trim();
+          const tete = net0.slice(0, k).trim();
+          const queue = net0.slice(k + 3).trim();
           const premiere = String(infos[0] || "").trim();
           /* L'intitulé n'est pas modifié : il doit rester tel que le décret
              l'écrit, pour la couverture du texte comme pour le mot pour mot.
@@ -445,7 +453,7 @@ const SUITE = /^(notamment|et|ainsi que|ou)\s/;
    découpage la lisait donc comme la suite de la phrase. Relevé le
    25 septembre 2026 : le client voyait la note dans la case à remplir. Les
    données gardent la phrase entière, l'affichage s'arrête à la note.      */
-const NOTE_FINALE = /\s*Notes?\s*:\s*\(\d{1,2}\)[\s\S]*$/;
+const NOTE_FINALE = /\s*Notes?\s*:\s*(?=\(\d{1,2}\)|[IVX]{1,4}\.-)[\s\S]*$/;
 /* L'EXPOSANT QUE LE TEXTE SERVI A PERDU.
 
    Le taux de fréquence de R. 2312-9 s'écrit « × 10⁶ » ; le texte servi par le
@@ -466,6 +474,12 @@ function informationsDues(su) {
   let infos = (su.informations && su.informations.length) ? su.informations : [su.intitule];
   const fin = (su.commentaireDepuis === undefined) ? infos.length : su.commentaireDepuis;
   infos = infos.slice(0, fin);
+  /* Quand TOUTES les informations d'un sujet sont du commentaire du décret,
+     il reste le sujet lui-même, et il est dû : « Bilan des émissions de gaz à
+     effet de serre prévu par l'article L. 229-25… » est la dernière ligne du
+     tableau de R. 2312-9, et les notes qui la suivent ne l'effacent pas.
+     Relevé le 25 septembre 2026. */
+  if (!infos.length && !su.premiere && su.intitule) infos = [String(su.intitule)];
   if (su.premiere) infos = [su.premiere].concat(infos);
   infos = infos.filter(function (i) { return /^[A-Za-zÀ-ÿ0-9]/.test(String(i).trim()); });
   const jointes = [];

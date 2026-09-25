@@ -63,7 +63,15 @@
       t: "Tout travailleur de nuit mentionné à l'article L. 3122-5 et tout travailleur âgé de moins de dix-huit ans bénéficie d'une visite d'information et de prévention réalisée par un professionnel de santé mentionné au premier alinéa de l'article L. 4624-1 préalablement à son affectation sur le poste." },
     { n: "R. 4624-23, III", id: "LEGIARTI000053786012",
       t: "S'il le juge nécessaire, l'employeur complète la liste des postes entrant dans les catégories mentionnées au I. par des postes présentant des risques particuliers [...], après avis du ou des médecins concernés et du comité social et économique s'il existe, en cohérence avec l'évaluation des risques prévue à l'article L. 4121-3 [...]." },
-    { n: "R. 4741-1", id: "LEGIARTI000018527390",
+    /* CE QUI EST CITÉ DANS LE DOCUMENT, ET CE QUI NE L'EST PAS.
+
+       R. 4741-1 sert au contrôle, à l'écran, pour dire ce que coûte un
+       document non mis à jour. Le document unique lui-même, celui que
+       l'employeur signe et dépose, n'a aucune raison de porter la peine qu'il
+       encourt : il le citait pourtant dans sa liste de textes, sans que rien
+       dans son corps y renvoie. Relevé deux fois, le 25 septembre 2026. La
+       marque `ecran` le garde où il sert et le retire d'où il ne dit rien. */
+    { n: "R. 4741-1", id: "LEGIARTI000018527390", ecran: true,
       t: "Le fait de ne pas transcrire ou de ne pas mettre à jour les résultats de l'évaluation des risques, dans les conditions prévues aux articles R. 4121-1 et R. 4121-2, est puni de l'amende prévue pour les contraventions de cinquième classe. La récidive est réprimée conformément aux articles 132-11 et 132-15 du code pénal." },
   ];
 
@@ -420,7 +428,7 @@
     return "<p>Fait à " + marque("ville", "lieu") + ", le " +
       (v("dateVersion") ? "<mark>" + ech(dateFr(v("dateVersion"))) + "</mark>" : marque("dateVersion", "date")) +
       ".<br>" + marque("responsable", "responsable") + ", signature :</p>" +
-      '<p class="qui">Textes : ' + TEXTES.map(function (t) { return ech(t.n) + " (" + ech(t.id) + ")"; }).join(", ") +
+      '<p class="qui">Textes : ' + TEXTES.filter(function (t) { return !t.ecran; }).map(function (t) { return ech(t.n) + " (" + ech(t.id) + ")"; }).join(", ") +
       " du code du travail, " + LU + ".</p>";
   }
 
@@ -576,7 +584,7 @@
     tenueItems(groupes.length + 4, items);
     items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + (dateFr(v("dateVersion")) || "[ date ]") + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
-    items.push({ k: "note", t: "Textes : " + TEXTES.map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
+    items.push({ k: "note", t: "Textes : " + TEXTES.filter(function (t) { return !t.ecran; }).map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
     return items;
   }
 
@@ -1004,7 +1012,7 @@
       ", consulter le comité social et économique s'il existe (L. 4121-3), transmettre la nouvelle version " +
       "au service de prévention et de santé au travail (L. 4121-3-1, VI), et afficher l'avis d'accès au " +
       "même emplacement que le règlement intérieur (R. 4121-4)." });
-    items.push({ k: "note", t: "Textes : " + TEXTES.map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
+    items.push({ k: "note", t: "Textes : " + TEXTES.filter(function (t) { return !t.ecran; }).map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
     return items;
   }
 

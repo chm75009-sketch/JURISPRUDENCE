@@ -1106,14 +1106,17 @@
       L.push("");
       L.push("Article 30 - Modifications");
       L.push("");
-      /* La citation ne peut plus porter le dépôt à elle seule : depuis la
-         version du 28 mai 2026 (LEGIARTI000054140230), L. 1321-4 ne mentionne
-         plus le dépôt, qui reste commandé par R. 1321-2. Son dernier alinéa,
-         lui, vise toujours les modifications et les retraits. */
+      /* Chaque formalité derrière son texte, et pas de parenthèse commune :
+         depuis la version du 28 mai 2026 (LEGIARTI000054140230), L. 1321-4 ne
+         mentionne plus le dépôt, qui est commandé par R. 1321-2. Son dernier
+         alinéa, lui, étend aux modifications et aux retraits ce que l'article
+         prévoit. Écrits ensemble entre les mêmes parenthèses, les deux textes
+         se lisaient comme fondant l'un et l'autre le dépôt : la relecture l'a
+         relevé deux fois, le 25 septembre 2026. */
       L.push("Toute modification ou tout retrait de clause suit les mêmes formalités que");
       L.push("l'établissement du règlement : avis du comité social et économique,");
-      L.push("publicité, dépôt et communication à l'inspecteur du travail (L. 1321-4,");
-      L.push("dernier alinéa ; R. 1321-2 pour le dépôt).");
+      L.push("publicité et communication à l'inspecteur du travail (L. 1321-4, dernier");
+      L.push("alinéa), ainsi que dépôt au greffe du conseil de prud'hommes (R. 1321-2).");
       L.push("");
       L.push("Les notes de service et tout autre document comportant des obligations");
       L.push("générales et permanentes dans les matières du règlement en sont des");
