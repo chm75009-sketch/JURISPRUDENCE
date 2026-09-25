@@ -99,7 +99,13 @@
     var s = String(texte == null ? "" : texte);
     if (o.couleur || s.indexOf("[") < 0)
       return "<w:r>" + rpr + '<w:t xml:space="preserve">' + ech(s) + "</w:t></w:r>";
-    var re = /\[[^\[\]\n]{1,200}\]/g, out = "", i = 0, m;
+    /* La longueur admise entre crochets est passée de 200 à 400 caractères le
+       25 septembre 2026 : le blanc de l'article 27 du règlement intérieur en
+       compte 223 et celui de l'article 7.3 en compte 230. Ils sortaient en
+       noir, au milieu de blancs rouges, et repartaient donc non remplis. Une
+       borne reste nécessaire : sans elle, deux crochets éloignés dans un long
+       paragraphe se recolleraient en un seul. */
+    var re = /\[[^\[\]\n]{1,400}\]/g, out = "", i = 0, m;
     var rprRouge = rpr.replace("</w:rPr>", '<w:color w:val="' + ROUGE_BLANC + '"/><w:b/></w:rPr>');
     function seg(t, r) {
       return t ? "<w:r>" + r + '<w:t xml:space="preserve">' + ech(t) + "</w:t></w:r>" : "";

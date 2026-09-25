@@ -38,7 +38,10 @@
      document imprimé ou collé ailleurs perdrait la couleur. */
   var STYLE_BLANC = "color:#b3261e;font-weight:600";
   function blancs(h) {
-    return h.replace(/\[[^\[\]\n]{1,200}\]/g, function (m) {
+    /* 400 et non 200 depuis le 25 septembre 2026 : voir audit-export.js, les
+       deux bornes doivent rester égales, sinon l'écran et le Word ne colorent
+       pas les mêmes blancs. */
+    return h.replace(/\[[^\[\]\n]{1,400}\]/g, function (m) {
       return '<span class="fd-blanc" style="' + STYLE_BLANC + '">' + m + "</span>";
     });
   }

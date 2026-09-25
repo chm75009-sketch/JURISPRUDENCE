@@ -186,6 +186,18 @@
       postes: "conduite dans le cadre professionnel, travail isolé, intervention chez un client ou sur un site extérieur, accueil du public en horaire décalé"
     }
   };
+  /* LE NUMÉRO DE LA CONVENTION, TIRÉ DE LA FICHE.
+
+     La fiche d'entreprise garde la convention en toutes lettres, « 16,
+     Convention collective nationale des transports routiers... » ou « 0016 ».
+     Les clauses qui dépendent d'une convention déterminée ont besoin du seul
+     numéro. Posé le 25 septembre 2026, pour les délais d'absence de
+     l'article 9.2 et les obligations du conducteur de l'article 12. */
+  function idccDe(p) {
+    var m = /(\d{1,4})/.exec(String((p && p.conventionCollective) || ""));
+    return m ? String(parseInt(m[1], 10)) : "";
+  }
+
   function secteurDe(p) {
     var s = String((p && p.secteur) || "").trim().toLowerCase();
     return Object.prototype.hasOwnProperty.call(SECTEUR, s) ? SECTEUR[s] : null;
@@ -204,7 +216,8 @@
       var sect = secteurDe(p);
       var L = [];
 
-      L = L.concat(entete(ctx, "Règlement intérieur", "articles L. 1311-2 et L. 1321-1 à L. 1321-6 du code du travail"));
+      L = L.concat(entete(ctx, "Règlement intérieur, mode d'emploi et formalités",
+        "articles L. 1311-2 et L. 1321-1 à L. 1321-6 du code du travail"));
 
       L.push(EXEMPLE);
       L.push("");
@@ -232,6 +245,11 @@
       L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
 
+      /* Ici commence le règlement lui-même, et il porte son titre : c'est ce
+         qui sera déposé. Le doublon relevé le 25 septembre 2026 venait de
+         l'en-tête du fichier, qui écrivait le même mot quelques lignes plus
+         haut ; c'est lui qui a changé de nom, pour dire ce qu'il annonce
+         vraiment, le règlement avec son mode d'emploi et ses formalités. */
       L.push("RÈGLEMENT INTÉRIEUR");
       L.push("");
       L.push(nom.toUpperCase());
@@ -256,7 +274,10 @@
       L.push("");
       L.push("Les personnes qui ne sont pas salariées de l'entreprise sont tenues aux règles");
       L.push("de santé, de sécurité et de discipline qu'il énonce, mais ne relèvent pas de");
-      L.push("son pouvoir disciplinaire : les sanctions prévues au titre III ne leur sont pas");
+      /* Titre II, et non titre III : les sanctions sont à l'article 16, le
+         titre III étant celui des droits de la défense. Relevé le
+         25 septembre 2026. */
+      L.push("son pouvoir disciplinaire : les sanctions prévues au titre II ne leur sont pas");
       L.push("applicables, et il appartient à leur employeur d'en tirer les conséquences.");
       L.push("");
       L.push("Le règlement s'impose par son seul dépôt et sa seule publicité. Il n'appelle");
@@ -370,12 +391,30 @@
       L.push("Article 5 - Repos, repas et locaux");
       L.push("");
       L.push("Le salarié veille au respect de son repos quotidien de onze heures");
-      L.push("consécutives au moins (L. 3131-1) et de son repos hebdomadaire de");
-      L.push("vingt-quatre heures consécutives au moins, auxquelles s'ajoute le repos");
-      L.push("quotidien (L. 3132-2). Celui qui dispose d'autonomie dans l'organisation de");
-      L.push("son temps y veille par lui-même, et se conforme aux règles de déconnexion en");
-      L.push("vigueur dans l'entreprise.");
+      L.push("consécutives au moins, sauf dans les cas où la loi permet d'y déroger");
+      L.push("(L. 3131-1, qui réserve les articles L. 3131-2 et L. 3131-3 et l'urgence),");
+      L.push("et de son repos hebdomadaire de vingt-quatre heures consécutives au moins,");
+      L.push("auxquelles s'ajoute le repos quotidien (L. 3132-2). Celui qui dispose");
+      L.push("d'autonomie dans l'organisation de son temps y veille par lui-même, et se");
+      L.push("conforme aux règles de déconnexion en vigueur dans l'entreprise.");
       L.push("");
+      /* LE REPOS DES CONDUCTEURS N'EST PAS CELUI DES AUTRES.
+         Écrire onze heures sans réserve était inexact pour un conducteur
+         routier : R. 3312-53 du code des transports (LEGIARTI000033450343, lu
+         le 25 septembre 2026) permet de réduire ce repos, dans les conditions
+         du règlement (CE) n° 561/2006 pour les transports qui y sont soumis,
+         et à dix heures consécutives par vingt-quatre heures pour ceux qui
+         n'y sont pas, à défaut d'accord. Relevé le même jour sur le règlement
+         de TEC. */
+      if (sect && sect.titre === "transport et logistique") {
+        L.push("Le personnel roulant relève des règles propres au transport routier : son");
+        L.push("repos quotidien peut être réduit dans les conditions fixées par le règlement");
+        L.push("(CE) n° 561/2006 du 15 mars 2006 pour les transports qui y sont soumis, et,");
+        L.push("pour ceux qui n'y sont pas soumis, à dix heures consécutives sur toute");
+        L.push("période de vingt-quatre heures à défaut d'accord (R. 3312-53 du code des");
+        L.push("transports).");
+        L.push("");
+      }
       L.push("Les repas ne sont pas pris dans les locaux affectés au travail (R. 4228-19),");
       L.push("mais dans l'emplacement prévu à cet effet, situé [PRÉCISEZ L'EMPLACEMENT].");
       L.push("");
@@ -487,13 +526,34 @@
       L.push("dès la prise de poste. Le salarié ne quitte son poste avant l'heure qu'avec");
       L.push("l'accord de son responsable.");
       L.push("");
+      /* LES DÉLAIS D'ABSENCE SONT CEUX DE LA CONVENTION, PAS LES NÔTRES.
+
+         Le règlement fixait quarante-huit heures pour justifier une absence.
+         Dans les transports routiers, les clauses communes de la convention
+         du 21 décembre 1950 donnent trois jours francs (article 15,
+         KALIARTI000005849341) et deux jours francs pour la maladie
+         (article 16, KALIARTI000005849342), lus à la source le 25 septembre
+         2026. Quarante-huit heures, c'est moins, donc moins favorable, et
+         L. 1321-3, 1° l'interdit. La clause renvoie désormais à la convention
+         et n'avance son propre délai qu'à défaut. */
       L.push("9.2 Absences - Toute absence est portée à la connaissance de l'entreprise");
       L.push("dès que possible et, sauf impossibilité, le jour même. Elle est justifiée");
-      L.push("dans les quarante-huit heures, sauf force majeure. En cas de maladie ou");
-      L.push("d'accident, le salarié adresse l'arrêt de travail dans ce même délai, ainsi");
-      L.push("que toute prolongation. Toute absence prévisible est autorisée");
-      L.push("préalablement.");
+      L.push("dans le délai prévu par la convention collective applicable et, à défaut de");
+      L.push("stipulation, dans les quarante-huit heures, sauf force majeure. En cas de");
+      L.push("maladie ou d'accident, le salarié notifie son absence dans le même délai et");
+      L.push("adresse l'arrêt de travail ainsi que toute prolongation. Toute absence");
+      L.push("prévisible est autorisée préalablement.");
       L.push("");
+      if (idccDe(p) === "16") {
+        L.push("Dans l'entreprise, ces délais sont ceux des clauses communes de la convention");
+        L.push("collective nationale des transports routiers : l'employeur est prévenu la");
+        L.push("veille, qui demeure la règle normale, et au plus tard dans les trois jours en");
+        L.push("cas d'absence régulière ; l'absence non justifiée l'est au plus tard dans un");
+        L.push("délai de trois jours francs, sauf force majeure (article 15) ; l'absence pour");
+        L.push("maladie ou accident est notifiée le plus rapidement possible et au plus tard");
+        L.push("dans un délai de deux jours francs, sauf force majeure (article 16).");
+        L.push("");
+      }
       L.push("9.3 Contrôle des horaires - Lorsque l'entreprise use d'un dispositif de");
       L.push("contrôle des horaires, chacun l'emploie pour lui-même et pour lui seul :");
       L.push("enregistrer l'arrivée ou le départ d'un autre salarié est une faute. Toute");
@@ -583,14 +643,36 @@
       L.push("");
       L.push("Il informe également la direction, sans délai, de toute infraction routière");
       L.push("relevée au volant d'un véhicule de l'entreprise et de tout accident de la");
-      L.push("circulation, qu'il en soit ou non responsable. L'entreprise est tenue de");
-      L.push("communiquer aux autorités l'identité du conducteur lorsqu'une infraction est");
-      L.push("constatée par un appareil de contrôle automatique.");
+      L.push("circulation, qu'il en soit ou non responsable. Cette information permet au");
+      L.push("représentant légal de l'entreprise de désigner le conducteur dans le délai de");
+      L.push("quarante-cinq jours que lui impose l'article L. 121-6 du code de la route");
+      L.push("lorsque l'infraction est constatée sans interception.");
       L.push("");
-      L.push("NOTE - Cette dernière obligation ne se justifie que pour les salariés dont la");
-      L.push("conduite fait partie du travail : réservez-la-leur expressément, sinon elle");
-      L.push("excède ce que la nature de la tâche justifie (L. 1121-1).");
-      L.push("");
+      /* LA DÉSIGNATION DU CONDUCTEUR N'EST PAS UNE OBLIGATION DU SALARIÉ.
+
+         La note disait de « réserver » cette obligation aux salariés qui
+         conduisent. C'était inexact : L. 121-6 du code de la route
+         (LEGIARTI000051877187, lu le 25 septembre 2026) la fait peser sur le
+         représentant légal de la personne morale, pour tout véhicule dont
+         elle est titulaire ou détentrice, dans les quarante-cinq jours. Ce
+         que le règlement peut demander au salarié, c'est de l'informer ;
+         c'est ce qu'il dit maintenant. Relevé le 25 septembre 2026. */
+      if (idccDe(p) === "16") {
+        L.push("Le conducteur notifie à l'entreprise toute décision d'une commission médicale");
+        L.push("départementale portant retrait définitif ou suspension de son permis de");
+        L.push("conduire. Le défaut d'information constitue une faute lourde (accord du");
+        L.push("16 juin 1961 relatif aux ouvriers, annexe I, article 11 ter, IV).");
+        L.push("");
+        L.push("Il informe par ailleurs l'entreprise de toute suspension ou invalidation de");
+        L.push("son permis au plus tard le premier jour de travail suivant la mesure : c'est");
+        L.push("à cette condition que la mesure n'emporte pas, par elle-même, la rupture de");
+        L.push("son contrat (accord relatif au permis à points, article 2).");
+        L.push("");
+        L.push("NOTE - La faute lourde de l'annexe I ne vise que les décisions de la");
+        L.push("commission médicale départementale, et non les retraits judiciaires ou");
+        L.push("administratifs : ne l'étendez pas.");
+        L.push("");
+      }
       L.push("Article 13 - Outils informatiques et communications");
       L.push("");
       L.push("Les équipements informatiques, les accès au réseau, la messagerie");
@@ -717,7 +799,15 @@
       L.push("Lors de son audition, le salarié peut se faire assister par une personne de");
       L.push("son choix appartenant au personnel de l'entreprise. Au cours de l'entretien,");
       L.push("l'employeur indique le motif de la sanction envisagée et recueille les");
-      L.push("explications du salarié (L. 1332-2).");
+      L.push("explications du salarié.");
+      L.push("");
+      /* L. 1332-2 s'arrêtait au milieu. Ses deux dernières phrases, lues à la
+         source le 25 septembre 2026 (LEGIARTI000025560074), sont le délai et
+         la motivation : elles manquaient, alors que L. 1321-2, 1° impose de
+         rappeler L. 1332-1 à L. 1332-3 en entier. */
+      L.push("La sanction ne peut intervenir moins de deux jours ouvrables, ni plus d'un");
+      L.push("mois après le jour fixé pour l'entretien. Elle est motivée et notifiée à");
+      L.push("l'intéressé (L. 1332-2).");
       L.push("");
       L.push("Article 20 - Mise à pied conservatoire");
       L.push("");
@@ -744,11 +834,22 @@
       L.push("un avis préalable ou des délais particuliers, ces garanties s'appliquent en");
       L.push("sus des dispositions du présent titre, qui ne s'y substituent pas.");
       L.push("");
-      L.push("NOTE - Écrivez ici, en toutes lettres, la procédure que votre convention");
-      L.push("impose. Sa méconnaissance est assimilée à la violation d'une garantie de");
-      L.push("fond lorsqu'elle a privé le salarié de ses droits de la défense ou a pu");
-      L.push("influer sur la décision : la sanction tombe alors sans examen des faits.");
-      L.push("");
+      /* LA NOTE QUI DEMANDAIT D'ÉCRIRE UNE PROCÉDURE INEXISTANTE.
+
+         Elle disait « écrivez ici la procédure que votre convention impose ».
+         Dans les transports routiers, deux relectures et mes propres
+         recherches en plein texte n'ont trouvé ni commission ni procédure
+         disciplinaire conventionnelle : la note envoyait chercher ce qui
+         n'est pas là. Le paragraphe qui précède, lui, reste : il est
+         conditionnel et ne dit rien de faux. Retirée le 25 septembre 2026. */
+      if (idccDe(p) !== "16") {
+        L.push("NOTE - Si votre convention impose une telle procédure, écrivez-la ici en");
+        L.push("toutes lettres. Sa méconnaissance est assimilée à la violation d'une");
+        L.push("garantie de fond lorsqu'elle a privé le salarié de ses droits de la défense");
+        L.push("ou a pu influer sur la décision : la sanction tombe alors sans examen des");
+        L.push("faits. Si elle n'en impose aucune, supprimez le paragraphe ci-dessus.");
+        L.push("");
+      }
 
       L.push("════ TITRE IV - HARCÈLEMENTS ET AGISSEMENTS SEXISTES ════");
       L.push("(L. 1321-2, 2° : le règlement rappelle les dispositions relatives aux");
@@ -951,10 +1052,14 @@
       L.push("");
       L.push("Article 30 - Modifications");
       L.push("");
+      /* La citation ne peut plus porter le dépôt à elle seule : depuis la
+         version du 28 mai 2026 (LEGIARTI000054140230), L. 1321-4 ne mentionne
+         plus le dépôt, qui reste commandé par R. 1321-2. Son dernier alinéa,
+         lui, vise toujours les modifications et les retraits. */
       L.push("Toute modification ou tout retrait de clause suit les mêmes formalités que");
       L.push("l'établissement du règlement : avis du comité social et économique,");
       L.push("publicité, dépôt et communication à l'inspecteur du travail (L. 1321-4,");
-      L.push("dernier alinéa).");
+      L.push("dernier alinéa ; R. 1321-2 pour le dépôt).");
       L.push("");
       L.push("Les notes de service et tout autre document comportant des obligations");
       L.push("générales et permanentes dans les matières du règlement en sont des");
@@ -964,10 +1069,10 @@
       L.push("simultanément communiquées au secrétaire du comité social et économique");
       L.push("ainsi qu'à l'inspection du travail (L. 1321-5).");
       L.push("");
-      L.push("Le présent règlement peut être complété par des notes de service portant des");
-      L.push("obligations générales et permanentes dans les matières qu'il traite. Ces notes");
-      L.push("en sont des adjonctions et suivent les mêmes formalités (L. 1321-5).");
-      L.push("");
+      /* Le paragraphe qui disait une seconde fois que les notes de service
+         sont des adjonctions au règlement, en citant lui aussi L. 1321-5, a
+         été retiré le 25 septembre 2026 : l'alinéa précédent le dit déjà, et
+         y ajoute le cas de l'urgence. */
       L.push("Il est opposable à l'ensemble du personnel visé au préambule, que le contrat");
       L.push("ait été conclu avant ou après son entrée en vigueur, dès lors que les");
       L.push("formalités de publicité et de dépôt ont été accomplies.");
