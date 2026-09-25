@@ -79,6 +79,7 @@ def par(doc, texte="", taille=11, gras=False, italique=False, couleur=None,
     pf.space_before = Pt(avant)
     pf.space_after = Pt(apres)
     pf.line_spacing = interligne
+    pf.widow_control = True
     if align is not None:
         p.alignment = align
     r = p.add_run(texte)
@@ -192,7 +193,6 @@ def construire(sortie="Boudjemaa-livre.docx"):
     numeros_de_page(s)
 
     # page de titre
-    par(doc, "", apres=150)
     par(doc, "BOUDJEMAA", taille=34, gras=True, couleur=ENCRE,
         align=WD_ALIGN_PARAGRAPH.CENTER, apres=6)
     p = par(doc, "Mohamed Boudjemaa, de Béja à Colmar", taille=14, couleur=GRIS,
@@ -200,18 +200,15 @@ def construire(sortie="Boudjemaa-livre.docx"):
     filet(p)
     par(doc, "Mounir CHIKHAOUI", taille=13, gras=True,
         align=WD_ALIGN_PARAGRAPH.CENTER, avant=30, apres=0)
-    doc.add_page_break()
 
     # dédicace
-    par(doc, "", apres=150)
     par(doc, "À Mounir Ben Sakhria,", taille=13, italique=True,
-        align=WD_ALIGN_PARAGRAPH.CENTER, apres=2)
+        align=WD_ALIGN_PARAGRAPH.CENTER, avant=34, apres=2)
     par(doc, "désigné président, décédé en juin 2025.", taille=13, italique=True,
         align=WD_ALIGN_PARAGRAPH.CENTER, apres=0)
-    doc.add_page_break()
 
     # avertissement
-    par(doc, "AVERTISSEMENT", taille=10, couleur=GRIS, apres=2)
+    par(doc, "AVERTISSEMENT", taille=10, couleur=GRIS, avant=34, apres=2)
     p = par(doc, "Comment ce livre est fait", taille=16, gras=True, couleur=BLEU,
             avant=0, apres=12)
     filet(p)
@@ -223,22 +220,17 @@ def construire(sortie="Boudjemaa-livre.docx"):
         "Trois parties de l'introduction restent à écrire par l'auteur, et elles sont signalées à leur place : les joueurs de son enfance à Béja, Mounir Ben Sakhria, et le tournoi Boudjemaa.",
     ]:
         par(doc, t, align=WD_ALIGN_PARAGRAPH.JUSTIFY, apres=8)
-    doc.add_page_break()
 
     chapitre_courant = None
-    premier = True
     vus = set()
     for sp in pages.SPREADS:
         if sp["ch"] != chapitre_courant and sp["ch"] not in vus:
             chapitre_courant = sp["ch"]
             vus.add(sp["ch"])
-            if not premier:
-                doc.add_page_break()
             p = par(doc, chapitre_courant, taille=20, gras=True, couleur=BLEU,
-                    avant=0, apres=16)
+                    avant=30, apres=16)
             filet(p)
             p.paragraph_format.keep_with_next = True
-        premier = False
 
         p = par(doc, sp["titre"], taille=14, gras=True, couleur=BLEU,
                 avant=16, apres=8)
@@ -259,8 +251,7 @@ def construire(sortie="Boudjemaa-livre.docx"):
             page_reserve(doc, sp["leg"], sp["src"])
 
     # annexe
-    doc.add_page_break()
-    p = par(doc, "ANNEXE", taille=20, gras=True, couleur=BLEU, avant=0, apres=6)
+    p = par(doc, "ANNEXE", taille=20, gras=True, couleur=BLEU, avant=32, apres=6)
     filet(p)
     p.paragraph_format.keep_with_next = True
     p = par(doc, "Les documents qui ne sont pas exploités en regard du texte",
@@ -309,9 +300,8 @@ def construire(sortie="Boudjemaa-livre.docx"):
     # repertoire complet des articles
     import re as _re
     rep = open("../repertoire-des-articles.md", encoding="utf-8").read().split("\n")
-    doc.add_page_break()
     p = par(doc, "RÉPERTOIRE DE TOUS LES ARTICLES", taille=20, gras=True,
-            couleur=BLEU, avant=0, apres=6)
+            couleur=BLEU, avant=32, apres=6)
     filet(p)
     p.paragraph_format.keep_with_next = True
     p = par(doc, "Tous ceux où son nom figure, dans l'ordre du temps",
