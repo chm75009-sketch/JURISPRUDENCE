@@ -57,12 +57,17 @@
         "puis « Sur l'écran d'accueil ». L'application s'installe avec son icône.";
     }
     if (edge) {
-      return "Dans Edge : les trois points en haut à droite, puis « Applications », " +
-        "puis « Installer ce site en tant qu'application ».";
+      /* Chemin donné par la documentation de Microsoft, lue le 25 septembre
+         2026 : l'icône « Application disponible » dans la barre d'adresse,
+         et la liste des applications sous « Plus d'outils ». */
+      return "Dans Edge : l'icône « Application disponible » apparaît à droite de " +
+        "l'adresse, cliquez dessus puis sur Installer. Si elle n'y est pas, " +
+        "les trois points en haut à droite, « Plus d'outils », puis « Applications ».";
     }
     if (firefox) {
       return "Firefox n'installe pas les applications web sur ordinateur. Ouvrez cette " +
-        "adresse dans Chrome ou Edge pour l'installer, ou gardez-la en favori.";
+        "adresse dans Edge : l'icône « Application disponible » apparaît à droite de " +
+        "l'adresse, un clic et c'est installé.";
     }
     if (safari) {
       return "Dans Safari : menu Fichier, puis « Ajouter au Dock ».";
@@ -72,15 +77,49 @@
       "l'application » apparaît directement dans le menu.";
   }
 
+  /* OÙ LE MOT SE POSE.
+
+     Sur l'accueil, les cinq boutons sont en ligne au-dessus de 700 pixels.
+     Un paragraphe glissé au milieu d'eux devient une sixième colonne de deux
+     centimètres, et la phrase sort de l'écran, coupée au milieu des mots :
+     mesuré le 25 septembre 2026, sur la capture envoyée depuis Firefox.
+
+     La règle est donc celle-ci : si le bouton est dans une rangée, le mot se
+     met sous la rangée entière, pas à côté du bouton. Ailleurs, dans le menu
+     par exemple, il se met simplement sous le bouton.                       */
+  function rangee(b) {
+    var h = b.parentNode;
+    if (!h || !h.parentNode || !window.getComputedStyle) return null;
+    var s = window.getComputedStyle(h);
+    var d = String(s.display || "");
+    /* Une colonne n'est pas une rangée : le menu est un empilement vertical,
+       et un mot posé après lui sortirait du panneau, sur la page du dessous.
+       Mesuré le 25 septembre 2026. */
+    if (d === "flex" || d === "inline-flex") {
+      return /^row/.test(String(s.flexDirection || "row")) ? h : null;
+    }
+    if (d === "grid" || d === "inline-grid") {
+      return String(s.gridTemplateColumns || "").split(/\s+/).length > 1 ? h : null;
+    }
+    return null;
+  }
+
   function dire(b, texte) {
-    var p = b.parentNode.querySelector(".installer-mot");
-    if (!p) {
+    var p = b.__mot;
+    if (!p || !p.parentNode) {
       p = document.createElement("p");
       p.className = "installer-mot";
-      p.style.cssText = "margin:8px 0 0;font-size:14.5px;line-height:1.5;color:#5f6874";
-      b.parentNode.insertBefore(p, b.nextSibling);
+      p.style.cssText = "box-sizing:border-box;max-width:100%;" +
+        "margin:12px 0 0;padding:13px 15px;border-radius:10px;background:#eef1f6;" +
+        "border-left:3px solid #1f3a68;font:400 15px/1.55 system-ui;color:#3d4757;" +
+        "text-align:left";
+      var r = rangee(b);
+      if (r) r.parentNode.insertBefore(p, r.nextSibling);
+      else b.parentNode.insertBefore(p, b.nextSibling);
+      b.__mot = p;
     }
     p.textContent = texte;
+    if (p.scrollIntoView) { try { p.scrollIntoView({ block: "nearest" }); } catch (e) {} }
   }
 
   function cliquer(ev) {
