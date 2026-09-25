@@ -247,7 +247,7 @@
     if (eff === null)
       return "[ effectif non renseigné : à partir de cinquante salariés, programme annuel de prévention ; en deçà, liste d'actions consignée dans le document unique (L. 4121-3-1, III) ]";
     if (eff >= 50)
-      return "L'effectif étant de " + eff + " salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : la liste des mesures de l'année à venir avec, pour chacune, ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût, les ressources mobilisables et un calendrier (L. 4121-3-1, III, 1°). Trois colonnes du tableau sont à remplir par l'entreprise, ligne par ligne : les conditions d'exécution de la mesure, son indicateur de résultat et l'estimation de son coût." +
+      return "L'effectif étant de " + eff + " salariés, les résultats de l'évaluation débouchent sur un programme annuel de prévention des risques professionnels et d'amélioration des conditions de travail : la liste des mesures de l'année à venir avec, pour chacune, ses conditions d'exécution, un indicateur de résultat et l'estimation de son coût, les ressources mobilisables et un calendrier (L. 4121-3-1, III, 1°). Trois colonnes reviennent à l'entreprise : les conditions d'exécution de la mesure, son indicateur de résultat et l'estimation de son coût. Les deux premières sont proposées en rouge, à titre d'exemple : gardez-les si elles conviennent, corrigez-les sinon. Le coût, lui, n'est pas proposé, personne ici ne peut le connaître." +
         " Ressources de l'entreprise mobilisables : [ budget de prévention de l'année, heures d'encadrement, personnes désignées, concours du service de prévention et de santé au travail, aide de la branche ou de la Carsat : à écrire ]." +
         " Calendrier : les échéances portées au tableau ci-dessous en tiennent lieu, revues à chaque mise à jour.";
     return "L'effectif étant de " + eff + " salarié" + (eff > 1 ? "s" : "") + ", les résultats de l'évaluation débouchent sur la liste des actions de prévention des risques et de protection des salariés, consignée dans le présent document (L. 4121-3-1, III, 2°).";
@@ -546,8 +546,16 @@
            décourage avant d'être lue. La phrase au-dessus du tableau dit ce
            qu'on y écrit. Demande du 25 septembre 2026, ne pas compliquer la
            tâche du gérant. */
+        /* Les conditions d'exécution et l'indicateur sont proposés, entre
+           crochets et donc en rouge : un exemple s'adapte, une case vide se
+           laisse vide. Demande du 25 septembre 2026. Le coût, lui, reste
+           vide : un chiffre en euros inventé dans un document signé serait
+           une affirmation fausse. */
         if (eff !== null && eff >= 50) {
-          return [p.n, prio, p.u, p.x.r.n, "", p.x.r.r, dateFr(p.x.ech), "", ""];
+          return [p.n, prio, p.u, p.x.r.n,
+            p.x.r.cond ? "[ " + p.x.r.cond + " ]" : "",
+            p.x.r.r, dateFr(p.x.ech),
+            p.x.r.ind ? "[ " + p.x.r.ind + " ]" : "", ""];
         }
         return [p.n, prio, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)];
       }) });

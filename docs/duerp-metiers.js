@@ -1358,6 +1358,11 @@
         s: SITUATIONS_THERMIQUE[u.cle] ||
            "Le salarié tient son poste par forte chaleur ou par grand froid, sans que l'organisation change.",
         g: 3, f: 3, r: "Employeur, avec l'encadrement du poste", mois: 2,
+        cond: "fontaines et bouteilles d'eau mises aux postes exposés avant l'été ; consigne sur le " +
+          "coup de chaleur affichée en cabine et au quai ; organisation d'été arrêtée avec " +
+          "l'exploitation en mai, organisation d'hiver en octobre",
+        ind: "points d'eau accessibles à moins de cinq minutes de chaque poste ; jours d'épisode " +
+          "chaud où l'organisation a effectivement changé",
         mes: mesures,
       });
     });
@@ -1415,6 +1420,11 @@
         s: SITUATIONS_VIGILANCE[u.cle] ||
            "Le salarié tient un poste où l'inattention blesse, alors que sa vigilance est diminuée.",
         g: 4, f: 2, r: "Employeur, avec l'encadrement du poste", mois: 3,
+        cond: "liste des postes arrêtée par la direction après avis du médecin du travail ; " +
+          "encadrement formé en une demi-journée sur site ; consigne écrite remise contre décharge " +
+          "et affichée au vestiaire",
+        ind: "postes listés et connus de ceux qui les tiennent ; nombre d'écarts de poste tracés " +
+          "et suivis d'un entretien",
         mes: mesures,
       });
     });

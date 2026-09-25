@@ -49,6 +49,8 @@
           { n: "Accident de la circulation", m: "accident|circulation|route|collision|routier",
             s: "Le conducteur termine une tournée de neuf heures dans la nuit, sous la pluie, avec un retard à rattraper sur le dernier client.",
             g: 4, f: 2, r: "Responsable d'exploitation", mois: 1,
+            cond: "consigne téléphone rédigée par la direction et remise contre décharge en novembre ; plannings revus avec l'exploitation avant le 15 du mois ; deux sessions de conduite préventive réservées auprès de l'organisme retenu",
+            ind: "aucune tournée dont le temps de conduite dépasse la réglementation sur le mois ; nombre de conducteurs formés sur l'effectif",
             mes: [
               "Tournées construites sur les temps de conduite réglementaires, sans marge prise sur les pauses : le planning ne demande jamais ce que la réglementation interdit.",
               "Consigne écrite : aucun appel ni message pendant la conduite, ni en main ni en kit, l'exploitation rappelle à l'arrêt.",
@@ -60,6 +62,8 @@
           { n: "Fatigue, horaires décalés et travail de nuit", m: "fatigue|nuit|horaire|sommeil|repos|amplitude",
             s: "Le conducteur grand routier enchaîne des départs à quatre heures, dort en cabine trois nuits par semaine et cumule les amplitudes hautes.",
             g: 3, f: 3, r: "Responsable d'exploitation", mois: 3,
+            cond: "extraction hebdomadaire des données du chronotachygraphe par l'exploitation, écarts examinés avec le conducteur sous huit jours ; visites de nuit programmées avec le service de santé au travail",
+            ind: "nombre d'écarts d'amplitude par mois, en baisse d'un trimestre à l'autre ; visites de nuit honorées sur visites dues",
             mes: [
               "Amplitude et temps de service suivis chaque semaine sur les données du chronotachygraphe, écarts examinés avec le conducteur.",
               "Repos quotidiens et hebdomadaires garantis par le planning, y compris en cas d'aléa : un aléa se règle par un remplacement, pas par un repos rogné.",
@@ -70,6 +74,8 @@
           { n: "Agression et incivilité en livraison", m: "agression|incivilité|violence|client|vol|braquage",
             s: "Le conducteur livre seul en centre-ville en fin de journée, avec de la marchandise de valeur et un stationnement en double file.",
             g: 3, f: 2, r: "Responsable d'exploitation", mois: 3,
+            cond: "registre des incidents ouvert par l'exploitation ; tournées sensibles repérées avec les conducteurs puis replanifiées ; convention passée avec un service de soutien psychologique",
+            ind: "nombre d'incidents déclarés et suivis d'une mesure ; délai entre l'incident et la mesure",
             mes: [
               "Consigne écrite : aucune résistance en cas d'agression, la marchandise n'a pas la valeur d'une personne.",
               "Téléphone chargé, numéro d'urgence de l'exploitation enregistré, procédure d'alerte connue.",
@@ -80,6 +86,8 @@
           { n: "Postures de conduite et vibrations", m: "vibration|posture|dos|siège|lombaire|tms",
             s: "Huit heures par jour dans le même siège, sur des routes dégradées, avec un siège qui ne se règle plus.",
             g: 2, f: 4, r: "Chef d'atelier", mois: 4,
+            cond: "deux sièges remplacés par trimestre au fil des révisions, en commençant par les grands routiers ; réglage expliqué à la remise de chaque véhicule",
+            ind: "nombre de sièges remplacés sur le parc ; plaintes lombaires signalées au service de santé au travail",
             mes: [
               "Sièges à suspension pneumatique entretenus et remplacés dès que le réglage ne tient plus.",
               "Réglage du poste de conduite expliqué à la prise de poste de chaque véhicule, pas seulement à l'embauche.",
@@ -89,6 +97,8 @@
           { n: "Travail isolé", m: "isolé|isole|seul|malaise|alerte",
             s: "Un conducteur fait un malaise sur une aire de repos, de nuit, hors de portée de vue.",
             g: 4, f: 1, r: "Responsable d'exploitation", mois: 2,
+            cond: "dispositif d'alerte pour travailleur isolé chiffré par deux fournisseurs avant fin novembre, ou appel de contrôle à heure fixe écrit en procédure dès ce mois-ci",
+            ind: "essais d'alerte réussis sur essais faits ; délai de réaction de l'exploitation à un non-retour",
             mes: [
               "Dispositif d'alerte pour travailleur isolé, ou appel de contrôle à heure fixe avec procédure écrite en cas de non-réponse.",
               "Points de passage connus de l'exploitation, position du véhicule suivie pendant le service.",
@@ -103,6 +113,8 @@
           { n: "Chute de hauteur depuis le plateau, le hayon ou la citerne", m: "chute|hauteur|hayon|plateau|bâche|échelle",
             s: "Le conducteur monte sur le plateau pour sangler, à un mètre quarante, sans protection, sous la pluie.",
             g: 4, f: 3, r: "Responsable d'exploitation", mois: 1,
+            cond: "échelle fixe ou plateforme d'accès commandée pour les porteurs bâchés ; bâches à commande latérale au renouvellement ; chaussures vérifiées à l'usure lors de la remise des équipements",
+            ind: "nombre de véhicules équipés d'un accès conforme sur le parc ; aucune chute déclarée sur l'année",
             mes: [
               "Accès au plateau par une échelle fixe ou une plateforme, jamais par les roues ou les ridelles.",
               "Bâchage et débâchage depuis le sol : bâches à commande latérale, systèmes de bâchage automatique lors du renouvellement.",
@@ -113,6 +125,8 @@
           { n: "Renversement de charge, arrimage insuffisant", m: "arrimage|sangle|charge|renversement|calage",
             s: "Une palette mal calée bascule à l'ouverture des portes chez le client.",
             g: 4, f: 2, r: "Responsable d'exploitation", mois: 2,
+            cond: "dotation d'arrimage refaite véhicule par véhicule par l'atelier ; formation arrimage pour tous les conducteurs en deux sessions ; contrôle au départ porté sur la fiche journalière",
+            ind: "véhicules dont la dotation est complète au contrôle mensuel ; nombre de charges déplacées constatées à l'arrivée",
             mes: [
               "Sangles, barres et tapis antiglisse en nombre suffisant dans chaque véhicule, vérifiés au départ.",
               "Sangles contrôlées à chaque usage et retirées dès qu'elles sont coupées ou effilochées.",
@@ -122,6 +136,8 @@
           { n: "Manutention manuelle et transpalette chez le client", m: "manutention|transpalette|rolls|charge|dos|client",
             s: "Livraison d'un magasin sans quai : trente rolls descendus au hayon puis tirés sur trottoir en pente.",
             g: 3, f: 4, r: "Responsable d'exploitation", mois: 3,
+            cond: "protocole de sécurité écrit avec les dix premiers clients réguliers avant mars ; transpalette électrique acheté pour les tournées de rolls ; formation gestes et postures sur site",
+            ind: "clients réguliers couverts par un protocole sur le total ; nombre de refus de livraison motivés par un risque",
             mes: [
               "Protocole de sécurité écrit avec les clients réguliers : lieu de déchargement, moyens mis à disposition, aide éventuelle.",
               "Transpalette électrique là où les rolls ou les charges dépassent ce qu'un homme tire seul.",
@@ -131,6 +147,8 @@
           { n: "Circulation de tiers et manœuvres en cour client", m: "manœuvre|manoeuvre|recul|cour|piéton|guidage",
             s: "Manœuvre en marche arrière dans une cour de supermarché, avec des piétons et sans visibilité à droite.",
             g: 4, f: 3, r: "Responsable d'exploitation", mois: 2,
+            cond: "consigne de guidage écrite et remise aux conducteurs ; caméras de recul posées au renouvellement des véhicules ; gilets renouvelés en dotation",
+            ind: "véhicules équipés d'une caméra de recul sur le parc ; incidents de manœuvre déclarés par trimestre",
             mes: [
               "Tour du véhicule avant toute manœuvre en marche arrière dans un lieu non connu.",
               "Guidage par un tiers uniquement si la personne reste visible dans le rétroviseur, consigne écrite.",
@@ -148,6 +166,8 @@
           { n: "Marchandises dangereuses", m: "adr|matière dangereuse|matieres dangereuses|dangereuse|citerne|épandage|epandage|étiquetage",
             s: "Un conducteur charge des fûts de classe 3 sans que les documents de transport ni les plaques aient été vérifiés, et le kit d'épandage du véhicule est incomplet.",
             g: 4, f: 2, r: "Conseiller à la sécurité", mois: 1,
+            cond: "conseiller à la sécurité désigné par lettre avant fin octobre ; équipements de bord vérifiés au départ sur la fiche journalière ; formations spéciales suivies avant expiration",
+            ind: "conducteurs à formation valide sur conducteurs affectés ; équipements de bord complets au contrôle",
             mes: [
               "Conseiller à la sécurité désigné et joignable, ses rapports annuels classés et ses observations suivies d'effet.",
               "Conducteurs titulaires d'une formation spéciale en cours de validité pour les classes transportées, et pour la citerne lorsqu'elle est utilisée.",
@@ -173,6 +193,8 @@
           { n: "Chute depuis le quai et heurt par un véhicule", m: "quai|chute|heurt|niveleur|recul|camion",
             s: "Un agent recule d'un pas sur le bord du quai pendant qu'un porteur se met à quai, sans butoir ni signal.",
             g: 4, f: 2, r: "Responsable d'exploitation", mois: 1,
+            cond: "butoirs et garde-corps escamotables posés aux portes non utilisées par l'entreprise de maintenance ; marquage des cheminements piétons au sol pendant la fermeture d'août",
+            ind: "portes de quai protégées sur le total ; aucun heurt ni chute déclarés sur l'année",
             mes: [
               "Bords de quai matérialisés, butoirs et garde-corps escamotables aux portes non utilisées.",
               "Calage ou blocage du véhicule à quai, clés remises à l'exploitation ou feu de quai asservi, personne ne repart sur un simple geste.",
@@ -182,6 +204,8 @@
           { n: "Conduite de chariot automoteur et gerbage", m: "chariot|cariste|caces|autorisation de conduite|gerbage|rayonnage",
             s: "Un cariste gerbe une palette filmée en hauteur, à la limite de charge, avec un collègue qui passe dans l'allée.",
             g: 4, f: 3, r: "Responsable d'exploitation", mois: 1,
+            cond: "autorisations de conduite délivrées par écrit après formation et avis médical avant fin décembre ; charges affichées par rayonnage ; contrôle annuel des rayonnages commandé à un organisme",
+            ind: "caristes titulaires d'une autorisation à jour sur caristes affectés ; réserves du contrôle des rayonnages levées",
             mes: [
               "Autorisation de conduite délivrée par écrit après formation, aptitude médicale et connaissance des lieux, tenue à jour.",
               "Charges et hauteurs de gerbage affichées par rayonnage, et jamais dépassées, même pour une palette.",
@@ -193,6 +217,8 @@
           { n: "Manutention manuelle et port de charges", m: "manutention|charge|port|dos|lombalgie|gestes et postures",
             s: "Trois heures de tri de colis au sol, en torsion, avec des charges de vingt kilos reprises une à une.",
             g: 3, f: 4, r: "Responsable d'exploitation", mois: 2,
+            cond: "tables élévatrices chiffrées pour les deux postes de tri ; rotation écrite avec l'encadrement du quai ; deux sessions de trois heures de gestes et postures hors période de pointe",
+            ind: "manutentionnaires formés sur l'effectif du quai ; nombre de jours d'arrêt liés au dos sur l'année",
             mes: [
               "Aides à la manutention à portée du poste : transpalette, table élévatrice, convoyeur, diable.",
               "Hauteurs de travail revues pour éviter le tri au sol et les reprises en torsion.",
@@ -209,6 +235,8 @@
           { n: "Travail sous véhicule et pont élévateur", m: "pont élévateur|élévateur|sous véhicule|fosse|levage|béquille",
             s: "Un mécanicien travaille sous un porteur de dix-neuf tonnes levé sur un pont dont la dernière vérification n'est pas retrouvée.",
             g: 4, f: 3, r: "Chef d'atelier", mois: 1,
+            cond: "vérification générale périodique commandée à un organisme accrédité, réserves levées sous trente jours ; béquilles achetées ; zone de dégagement tracée au sol par l'atelier",
+            ind: "vérification à jour et réserves levées ; interventions sous véhicule avec béquilles sur interventions prolongées",
             mes: [
               "Vérification générale périodique du pont élévateur par un organisme accrédité, rapport classé et levée des réserves tracée.",
               "Charge maximale affichée sur le pont et respectée, y compris pour un véhicule chargé.",
@@ -220,6 +248,8 @@
           { n: "Risque chimique : huiles, solvants, batteries, gaz d'échappement", m: "chimique|huile|solvant|batterie|acide|échappement|ventilation",
             s: "Vidanges, nettoyage des pièces au solvant et charge de batteries dans le même local, ventilation naturelle.",
             g: 3, f: 4, r: "Chef d'atelier", mois: 3,
+            cond: "inventaire des produits et fiches de données de sécurité rassemblées par le chef d'atelier avant fin novembre ; extraction des gaz devisée ; local de charge séparé aménagé",
+            ind: "produits avec fiche à jour sur produits présents ; mesures d'exposition conformes aux valeurs limites",
             mes: [
               "Inventaire des produits, fiches de données de sécurité à jour et accessibles à l'atelier, en français.",
               "Extraction des gaz d'échappement raccordée aux véhicules qui tournent à l'intérieur.",
@@ -231,6 +261,8 @@
           { n: "Bruit de l'atelier", m: "bruit|décibel|acoustique|meuleuse|compresseur|audition",
             s: "Meuleuse, clé à chocs et compresseur dans un local sans traitement acoustique, huit heures par jour.",
             g: 3, f: 3, r: "Chef d'atelier", mois: 4,
+            cond: "mesurage par poste commandé à un organisme avant mars ; protections auditives en trois modèles posées à l'entrée de l'atelier ; capotage étudié au renouvellement des machines",
+            ind: "postes mesurés sur postes exposés ; port effectif constaté lors des contrôles mensuels",
             mes: [
               "Mesurage du bruit par poste, refait après tout changement d'équipement.",
               "Protections auditives adaptées, en plusieurs modèles, disponibles à l'entrée de l'atelier.",
@@ -240,6 +272,8 @@
           { n: "Projection, coupure et écrasement aux mains", m: "projection|coupure|écrasement|main|outil|disque|lunettes",
             s: "Démontage d'un moyeu grippé à la masse, sans lunettes, avec les doigts au point de pincement.",
             g: 3, f: 4, r: "Chef d'atelier", mois: 2,
+            cond: "lunettes et gants mis à chaque poste et non au vestiaire ; outils déformés retirés lors de l'inventaire d'octobre ; contrôle mensuel des protecteurs signé par le chef d'atelier",
+            ind: "contrôles mensuels signés sur douze ; nombre de blessures aux mains déclarées",
             mes: [
               "Lunettes de protection portées dès qu'il y a projection possible, disponibles au poste et non au vestiaire.",
               "Outils entretenus et remplacés dès qu'ils sont déformés ; les outils improvisés sont retirés.",
@@ -249,6 +283,8 @@
           { n: "Pneumatiques et énergies accumulées", m: "pneu|pneumatique|jante|air comprimé|ressort|accumulée",
             s: "Gonflage d'un pneu de poids lourd sans cage de sécurité, à côté d'un collègue qui passe.",
             g: 4, f: 2, r: "Chef d'atelier", mois: 2,
+            cond: "cage de gonflage devisée auprès de deux fournisseurs, pose par l'atelier un samedi, mécaniciens formés le jour de la mise en service",
+            ind: "gonflages réalisés en cage sur gonflages poids lourds ; procédure de consignation signée par chaque mécanicien",
             mes: [
               "Cage de gonflage utilisée pour tout pneumatique de poids lourd, personne devant la jante pendant le gonflage.",
               "Consignation des énergies avant intervention : batterie déconnectée, air purgé, circuits hydrauliques dépressurisés.",
@@ -258,6 +294,8 @@
           { n: "Incendie et permis de feu", m: "incendie|feu|soudure|extincteur|permis|évacuation",
             s: "Une soudure sur un châssis à deux mètres d'un bidon d'huile et de chiffons gras.",
             g: 4, f: 2, r: "Chef d'atelier", mois: 3,
+            cond: "carnet de permis de feu ouvert et expliqué en réunion d'atelier ; récipient métallique pour chiffons commandé ; exercice d'évacuation programmé avec le personnel de quai",
+            ind: "permis de feu établis sur travaux par point chaud recensés ; exercice annuel réalisé",
             mes: [
               "Permis de feu écrit pour tout travail par point chaud, y compris pour une intervention de dix minutes.",
               "Zone dégagée de tout produit inflammable, extincteur adapté à portée immédiate, surveillance après travaux.",
@@ -273,6 +311,8 @@
           { n: "Circulation dans la cour, piétons et poids lourds", m: "circulation|cour|piéton|manœuvre|plan de circulation",
             s: "Un conducteur traverse la cour à pied entre deux camions qui manœuvrent, à la nuit tombée.",
             g: 4, f: 3, r: "Responsable d'exploitation", mois: 2,
+            cond: "plan de circulation dessiné avec l'exploitation, marquage au sol pendant la fermeture d'août, panneaux commandés avant, sens unique expliqué aux conducteurs au retour",
+            ind: "plan affiché et respecté au contrôle trimestriel ; incidents de circulation dans la cour par trimestre",
             mes: [
               "Plan de circulation affiché à l'entrée : sens unique, zones de manœuvre, cheminements piétons séparés et éclairés.",
               "Gilet haute visibilité obligatoire dans la cour pour tous, visiteurs et chauffeurs extérieurs compris.",
@@ -282,6 +322,8 @@
           { n: "Glissade et travail par tous temps sur la cour", m: "glissade|verglas|pluie|sol|cour",
             s: "Verglas sur la cour au petit matin, départs en tournée à partir de cinq heures.",
             g: 2, f: 3, r: "Responsable d'exploitation", mois: 4,
+            cond: "stock de sel constitué avant novembre, personne désignée pour le salage du matin, nids-de-poule traités par l'entreprise de voirie au printemps",
+            ind: "matinées de gel traitées avant le premier départ ; chutes de plain-pied déclarées sur l'hiver",
             mes: [
               "Salage et déneigement organisés à l'avance, avec une personne désignée et un stock constitué avant l'hiver.",
               "Revêtement de cour entretenu, nids-de-poule et flaques traités.",
@@ -290,6 +332,8 @@
           { n: "Carburant et lavage", m: "carburant|cuve|gasoil|lavage|haute pression|adblue",
             s: "Remplissage à la cuve interne, moteur tournant, à côté du poste de lavage haute pression.",
             g: 3, f: 3, r: "Responsable d'exploitation", mois: 3,
+            cond: "consignes affichées à la cuve par l'exploitation ; kit anti-pollution et bac de rétention vérifiés au même rythme que les extincteurs ; sol du lavage repris en revêtement antidérapant",
+            ind: "vérifications du bac et du kit à jour ; aucun épandage non maîtrisé sur l'année",
             mes: [
               "Consignes affichées à la cuve : moteur coupé, pas de téléphone, pas de feu, rétention en état.",
               "Bac de rétention et kit anti-pollution disponibles et connus de tous.",
@@ -305,6 +349,8 @@
           { n: "Charge mentale et pression du planning", m: "charge mentale|stress|pression|planning|urgence|rps",
             s: "L'exploitant gère trente conducteurs, les aléas de la route et les appels des clients en même temps, toute la journée.",
             g: 3, f: 4, r: "Le dirigeant", mois: 3,
+            cond: "renfort d'exploitation prévu au budget pour les congés ; plages sans appel inscrites au planning ; point trimestriel sur la charge, distinct de l'entretien annuel",
+            ind: "points de charge tenus sur quatre par an ; heures supplémentaires de l'exploitation par trimestre",
             mes: [
               "Effectif d'exploitation dimensionné pour absorber les aléas, remplacement prévu pendant les congés.",
               "Interruptions limitées : plages sans appel pour le travail de planification.",
@@ -315,6 +361,8 @@
           { n: "Travail sur écran", m: "écran|ecran|poste|siège|tms|vue",
             s: "Double écran mal placé, siège non réglable, huit heures par jour.",
             g: 1, f: 4, r: "Le dirigeant", mois: 4,
+            cond: "sièges et supports d'écran remplacés poste par poste sur le budget de l'année ; examen de la vue proposé au service de santé au travail à la prochaine visite",
+            ind: "postes conformes sur postes administratifs ; salariés ayant bénéficié de l'examen de la vue",
             mes: [
               "Siège réglable, écrans à hauteur des yeux, distance d'un bras, éclairage sans reflet.",
               "Pause de quelques minutes toutes les deux heures, hors écran.",
@@ -323,6 +371,8 @@
           { n: "Agression verbale au téléphone et à l'accueil", m: "agression|verbale|téléphone|accueil|incivilité",
             s: "Appels de clients mécontents plusieurs fois par jour, parfois insultants, sans soutien organisé.",
             g: 2, f: 3, r: "Le dirigeant", mois: 3,
+            cond: "conduite à tenir écrite par la direction et remise aux exploitants ; relais par l'encadrement organisé pour les clients difficiles ; incidents consignés dans le même registre que les livraisons",
+            ind: "incidents consignés suivis d'une mesure ; nombre d'appels interrompus après avertissement",
             mes: [
               "Conduite à tenir écrite : fin d'appel possible après avertissement, sans avoir à se justifier.",
               "Relais par l'encadrement pour les clients difficiles, le salarié n'est pas laissé seul.",
