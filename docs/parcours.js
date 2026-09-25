@@ -3723,7 +3723,11 @@
   /* parcours ne télécharge rien tant qu'il ne demande pas de courrier. */
   /* ================================================================== */
   var FICHIERS = {
-    DIS: ["documents-produits.js", "documents-discipline.js", "documents-discipline-2.js"],
+    /* Le règlement intérieur tire les postes de son article 7.3 des unités de
+       travail du document unique : le modèle des métiers vient donc avec la
+       famille, et il passe avant le transport, qui s'y ajoute. */
+    DIS: ["documents-produits.js", "documents-discipline.js", "documents-discipline-2.js",
+      "duerp-metiers.js", "duerp-transport.js"],
     SST: ["documents-produits.js", "documents-sst.js", "documents-sst-2.js"],
     CSE: ["documents-produits.js", "documents-cse.js", "documents-cse-2.js", "documents-cse-3.js"],
     /* documents-rh.js porte la base elle-même (BDESE-CTL-CNT-00), écrite le

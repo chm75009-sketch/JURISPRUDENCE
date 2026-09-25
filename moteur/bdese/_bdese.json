@@ -818,6 +818,30 @@
          "court": "Conditions de travail",
          "premiere": "durée du travail dont travail à temps partiel et aménagement du temps de travail",
          "renvoi": "R. 2312-8, 1° A f)"
+        },
+        {
+         "lettre": "i",
+         "intitule": "Aux principes généraux de prévention prévus aux articles L. 4121-1 à L. 4121-5 et L. 4221-1",
+         "informations": [],
+         "renvoi": "R. 2312-8, 1° A i)"
+        },
+        {
+         "lettre": "ii",
+         "intitule": "A l'information et à la formation des travailleurs prévues aux articles L. 4141-1 à L. 4143-1",
+         "informations": [],
+         "renvoi": "R. 2312-8, 1° A ii)"
+        },
+        {
+         "lettre": "iii",
+         "intitule": "A l'information et à la formation des salariés titulaires d'un contrat de travail à durée déterminée et des salariés temporaires prévues aux articles L. 4154-2 et L. 4154-4",
+         "informations": [],
+         "renvoi": "R. 2312-8, 1° A iii)"
+        },
+        {
+         "lettre": "iv",
+         "intitule": "A la coordination de la prévention prévue aux articles L. 4522-1 et L. 4522-2",
+         "informations": [],
+         "renvoi": "R. 2312-8, 1° A iv)"
         }
        ]
       },
@@ -1655,7 +1679,7 @@
    "infidelites": [],
    "renvois": [
     "R. 2312-8, 1° A e) — formation professionnelle",
-    "R. 2312-8, 1° A f) — conditions de travail"
+    "R. 2312-8, 1° A f) — conditions de travail, avec ses alinéas i) à iv)"
    ]
   }
  }

@@ -399,11 +399,18 @@
       "<p>Le comité social et économique est consulté sur le présent document et sur ses mises à jour (L. 4121-3). Avis rendu le " +
       marque("dateAvisCse", "date de l'avis") + ".</p>" +
       "<p><mark>" + ech(CARENCE) + "</mark></p>" +
-      /* Le dépôt dématérialisé de L. 4121-3-1, V, B suppose un portail que les
-         organisations patronales n'ont pas ouvert : vérifié le 25 septembre
-         2026. On l'écrit, parce qu'un lecteur qui connaît le texte se demande
-         pourquoi le document n'en parle pas. */
-      "<p>Un dépôt dématérialisé du document sur un portail numérique est prévu par l'article L. 4121-3-1, V, B. Jusqu'à l'entrée en vigueur de cette obligation, l'employeur conserve les versions successives du document au sein de l'entreprise, sur papier ou sous forme dématérialisée : c'est l'article R. 4121-4 lui-même qui le dit, et c'est ce que fait la présente version.</p>" +
+      /* CE QUI EST EN VIGUEUR, ET CE QUI N'EXISTE PAS ENCORE : DEUX CHOSES.
+
+         La phrase disait « jusqu'à l'entrée en vigueur de cette obligation ».
+         Or L. 4121-3-1, V, B (LEGIARTI000043893919, relu le 25 septembre 2026)
+         fixe lui-même ses dates : « à compter du 1er juillet 2023 » au-dessus
+         de cent cinquante salariés, et « à compter de dates fixées par décret
+         […] et au plus tard à compter du 1er juillet 2024 » en dessous.
+         L'obligation est donc entrée en vigueur ; ce qui manque, c'est le
+         portail qui doit la recevoir, et que les organisations patronales
+         n'ont pas ouvert, vérifié le 25 septembre 2026. Écrire l'inverse
+         donnait au lecteur une échéance qui n'existe pas. */
+      "<p>Le dépôt dématérialisé du document sur un portail numérique est prévu par l'article L. 4121-3-1, V, B, qui le rend applicable au plus tard à compter du 1er juillet 2024 aux entreprises de moins de cent cinquante salariés. Ce portail n'est pas ouvert à ce jour : tant qu'aucun dépôt n'y est possible, l'employeur conserve les versions successives du document au sein de l'entreprise, sur papier ou sous forme dématérialisée, comme le prévoit l'article R. 4121-4, et c'est ce que fait la présente version.</p>" +
       "<p>La cotation par gravité et fréquence est une aide au classement des actions : aucun des textes cités ne l'impose.</p>";
   }
 

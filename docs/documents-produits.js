@@ -203,6 +203,34 @@
     return Object.prototype.hasOwnProperty.call(SECTEUR, s) ? SECTEUR[s] : null;
   }
 
+  /* LES POSTES DU 7.3 SONT CEUX DU DOCUMENT UNIQUE, PAS UNE AUTRE LISTE.
+
+     Le document unique dresse la liste des postes où une vigilance diminuée
+     expose le salarié ou autrui à un danger, et annonce que le règlement
+     intérieur la reprend. Le règlement, lui, écrivait la liste usuelle du
+     secteur : pour une entreprise de transport, l'atelier mécanique figurait
+     au document unique et manquait au règlement. Les deux documents se
+     contredisaient sur la seule liste dont dépend la validité du contrôle.
+     Relevé le 25 septembre 2026.
+
+     Les unités de travail viennent du même modèle que le document unique
+     (duerp-metiers.js, complété par duerp-transport.js), déduit de la fiche.
+     Si ce modèle n'est pas chargé, le règlement reprend la liste du secteur :
+     rien n'est inventé, et rien n'est perdu.                               */
+  function postesDuDocumentUnique(p) {
+    var DM = window.DuerpMetiers;
+    if (!DM || !DM.pour || !DM.deduire) return "";
+    var m;
+    try { m = DM.pour(DM.deduire(p || {})); } catch (_) { return ""; }
+    if (!m || !m.unites) return "";
+    var out = [];
+    m.unites.forEach(function (u) {
+      var vise = (u.risques || []).some(function (r) { return r && r.cle === "vigilance"; });
+      if (vise) out.push(u.qui ? u.nom + " (" + u.qui + ")" : u.nom);
+    });
+    return out.join(", ");
+  }
+
   D["DIS-CTL-RI-01"] = {
     nom: "Le règlement intérieur, et ses formalités",
     detail: "Le règlement rédigé, puis les cinq formalités dans l'ordre, chacune " +
@@ -450,7 +478,10 @@
       L.push("7.3 - La consommation des boissons mentionnées au 7.1 est interdite aux");
       L.push("postes suivants, dont le document unique d'évaluation des risques établit");
       L.push("qu'une atteinte à la vigilance y exposerait le salarié ou autrui à un");
-      if (sect) {
+      var pvDuerp = postesDuDocumentUnique(p);
+      if (pvDuerp) {
+        L.push("danger : " + pvDuerp + " [CONFIRMEZ OU COMPLÉTEZ SELON VOS POSTES RÉELS].");
+      } else if (sect) {
         L.push("danger : " + sect.postes + " [COMPLÉTEZ OU RETIREZ SELON VOS POSTES RÉELS].");
       } else {
         L.push("danger : [LISTER VOS POSTES, par exemple : conduite d'un véhicule ou d'un");
@@ -1039,9 +1070,14 @@
       var derniere = [dPub, dDep].filter(Boolean).sort().pop() || "";
       L.push("Le présent règlement entre en vigueur le " +
         (dv ? leJour(new Date(dv)) : "[DATE D'ENTRÉE EN VIGUEUR]") + ".");
+      /* Chaque moitié de la règle porte sa source, et pas l'autre : depuis la
+         version du 28 mai 2026 (LEGIARTI000054140230), L. 1321-4 ne dit plus
+         rien du dépôt. Le délai d'un mois est à lui ; son point de départ, qui
+         compte le dépôt, est à R. 1321-3. Citer les deux ensemble laissait
+         croire que L. 1321-4 commandait encore le dépôt. */
       L.push("Cette date doit être postérieure d'un mois à l'accomplissement des");
-      L.push("formalités de publicité, le délai courant à compter de la dernière en date");
-      L.push("des formalités de publicité et de dépôt (L. 1321-4 ; R. 1321-3).");
+      L.push("formalités de publicité (L. 1321-4). Le délai court à compter de la");
+      L.push("dernière en date des formalités de publicité et de dépôt (R. 1321-3).");
       if (dv && derniere) {
         var mini = new Date(derniere);
         mini.setMonth(mini.getMonth() + 1);

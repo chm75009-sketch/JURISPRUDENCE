@@ -439,6 +439,20 @@ const SUITE = /^(notamment|et|ainsi que|ou)\s/;
    25 septembre 2026 : le client voyait la note dans la case à remplir. Les
    données gardent la phrase entière, l'affichage s'arrête à la note.      */
 const NOTE_FINALE = /\s*Notes?\s*:\s*\(\d{1,2}\)[\s\S]*$/;
+/* L'EXPOSANT QUE LE TEXTE SERVI A PERDU.
+
+   Le taux de fréquence de R. 2312-9 s'écrit « × 10⁶ » ; le texte servi par le
+   relais rend l'exposant à plat, « × 106 », et le classeur le recopiait tel
+   quel. Une première tentative avait réécrit les données elles-mêmes : la
+   garantie du mot pour mot, qui cherche chaque libellé dans le texte servi,
+   ne le retrouvait plus. La réécriture est donc faite à l'affichage, là où
+   rien n'est vérifié contre la source. Relevé le 25 septembre 2026.       */
+const EXPOSANTS = { 0: "⁰", 1: "¹", 2: "²", 3: "³", 4: "⁴", 5: "⁵", 6: "⁶", 7: "⁷", 8: "⁸", 9: "⁹" };
+function exposant(t) {
+  return String(t).replace(/(×\s?10)(\d)\b/g, function (tout, dix, chiffre) {
+    return EXPOSANTS[chiffre] ? dix + EXPOSANTS[chiffre] : tout;
+  });
+}
 
 function informationsDues(su) {
   if (!su || su.commentaire) return [];
@@ -449,7 +463,7 @@ function informationsDues(su) {
   infos = infos.filter(function (i) { return /^[A-Za-zÀ-ÿ0-9]/.test(String(i).trim()); });
   const jointes = [];
   infos.forEach(function (i) {
-    const t = String(i).trim().replace(NOTE_FINALE, "");
+    const t = exposant(String(i).trim().replace(NOTE_FINALE, ""));
     if (!t) return;
     /* La suite qui n'a rien devant elle se rattache à l'intitulé du sujet :
        le décret écrit « Mesures envisagées en ce qui concerne l'amélioration
@@ -607,19 +621,25 @@ function construire() {
      la formation professionnelle et les conditions de travail — sont ajoutés au
      régime des entreprises d'au moins trois cents salariés, en portant la marque
      de leur origine. Les citer sans les importer aurait laissé un trou de deux
-     sujets dans le contenu du régime le plus exigeant. */
+     sujets dans le contenu du régime le plus exigeant.
+
+     Les quatre alinéas i) à iv) viennent avec f) : la phrase du programme
+     annuel de prévention se termine sur « afin de satisfaire, notamment : »,
+     et ce qu'elle annonce est écrit dans ces quatre sujets-là. Importer f)
+     sans eux laissait la phrase en suspens dans le classeur d'au moins trois
+     cents salariés. Relevé le 25 septembre 2026. */
   const source = out["moins300"].rubriques.find(r => r.n === 1);
   const cible = out["au moins300"].rubriques.find(r => r.n === 1);
   if (source && cible) {
     const sA = source.sections.find(s => s.lettre === "A");
     const cA = cible.sections.find(s => s.lettre === "A") || cible.sections[0];
-    if (sA && cA) for (const lettre of ["e", "f"]) {
+    if (sA && cA) for (const lettre of ["e", "f", "i", "ii", "iii", "iv"]) {
       const su = sA.sujets.find(x => x.lettre === lettre);
       if (su && !cA.sujets.some(x => x.intitule === su.intitule))
         cA.sujets.push({ ...su, renvoi: "R. 2312-8, 1° A " + lettre + ")" });
     }
     out["au moins300"].renvois = ["R. 2312-8, 1° A e) — formation professionnelle",
-                                  "R. 2312-8, 1° A f) — conditions de travail"];
+                                  "R. 2312-8, 1° A f) — conditions de travail, avec ses alinéas i) à iv)"];
   }
 
   return { plancher: PLANCHER, planchierTexte: "L. 2312-21, al. 3",
