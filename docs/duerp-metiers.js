@@ -1247,8 +1247,11 @@
      administratifs : l'inscrire partout ferait un document où il ne se lit
      plus nulle part. Demande du 15 septembre 2026, à faire en premier.       */
   var MESURES_VIGILANCE = [
+    /* La phrase qui disait que le règlement intérieur et le document unique
+       « se relisent ensemble » a été retirée le 25 septembre 2026 : c'est une
+       méthode de rédaction, pas une mesure de prévention, et elle n'avait
+       rien à faire dans une liste que l'employeur s'engage à tenir. */
     "Liste écrite des postes où une vigilance diminuée met en danger le salarié ou autrui, revue à chaque changement d'organisation et connue de ceux qui les tiennent : c'est elle qui fonde toute mesure de prévention et tout contrôle prévu au règlement intérieur.",
-    "Le règlement intérieur et le présent document se relisent ensemble : l'un dit ce qui est autorisé, interdit, et comment un contrôle se fait ; l'autre décrit le risque que ce contrôle sert à prévenir. Un contrôle prévu sans risque décrit, ou un risque décrit sans conduite à tenir, laisse le poste sans prévention.",
     "Pots, repas et fins de poste encadrés : quantité servie limitée, boissons sans alcool toujours disponibles, et personne ne reprend la route, un engin ou une machine après.",
     "Un salarié qui se sait hors d'état de tenir son poste le dit et il est remplacé, sans que le fait de l'avoir dit soit retenu contre lui. La consigne est écrite et rappelée.",
     "Traitement médical susceptible d'altérer la vigilance : le salarié en parle au médecin du travail, jamais à l'employeur, et l'aménagement du poste passe par le service de prévention et de santé au travail.",
@@ -1272,6 +1275,93 @@
     "conduite": "Le conducteur prend la route au petit matin après une courte nuit et un traitement contre le rhume qui fait dormir.",
     "atelier": "Le mécanicien travaille sous un poids lourd levé sur le pont, après un pot d'atelier.",
   };
+  /* ═══════════════════════════════════════════════════════════════════════
+     LES AMBIANCES THERMIQUES, QUE LE TEXTE NOMME ET QUE LE DOCUMENT OUBLIAIT
+
+     R. 4121-1 (LEGIARTI000023795562, lu le 25 septembre 2026) : l'évaluation
+     « comporte un inventaire des risques identifiés dans chaque unité de
+     travail de l'entreprise ou de l'établissement, y compris ceux liés aux
+     ambiances thermiques ». Le document unique de TEC ne portait ni le mot
+     chaleur, ni froid, ni thermique : relevé le 25 septembre 2026, et c'est
+     le seul risque que le texte désigne par son nom.
+
+     Il est posé sur les unités où la température n'est pas maîtrisée : la
+     cabine et la route, le quai, l'atelier, la cour, le chantier, la cuisine.
+     Les bureaux le portent aussi, la canicule s'y installe, mais avec une
+     situation et des mesures qui leur ressemblent.                          */
+  var MESURES_THERMIQUE = [
+    "Eau fraîche mise à disposition à moins de cinq minutes de chaque poste, y compris en tournée et sur le quai, et non à l'entrée du bâtiment seulement.",
+    "Organisation revue quand la chaleur s'installe : départs avancés, tâches lourdes le matin, pauses supplémentaires à l'ombre ou au frais, rotation des postes les plus exposés.",
+    "Vêtements de travail adaptés aux deux saisons, fournis par l'entreprise, y compris tenue chaude et gants pour le froid.",
+    "Ventilation, protection solaire ou chauffage du poste lorsque le lieu s'y prête, et climatisation des cabines entretenue au même titre que les freins.",
+    "Consigne écrite sur les signes du coup de chaleur et de l'hypothermie, ce qu'il faut faire, qui alerter, et interdiction de rester seul au poste quand l'alerte est déclenchée.",
+    "Salarié isolé ou nouveau sur le poste suivi de plus près les premiers jours d'épisode chaud ou froid, le temps de l'acclimatement.",
+    "[ Températures relevées sur les postes exposés, et seuils à partir desquels l'organisation change : à écrire selon vos locaux ]",
+  ];
+  var SITUATIONS_THERMIQUE = {
+    "conduite": "La cabine monte à quarante degrés dans les embouteillages de juillet, climatisation en panne depuis trois semaines, et la tournée n'est pas allégée.",
+    "chargement": "Le conducteur décharge une heure sur un quai ouvert, en janvier, après trois heures de cabine chauffée.",
+    "atelier": "Le mécanicien travaille portes ouvertes en février, mains dans le gasoil froid, puis sous un toit de tôle en août.",
+    "cour": "Le laveur travaille à l'eau dehors toute la matinée, par cinq degrés et du vent.",
+    "quai": "L'agent enchaîne les allers et retours entre la chambre froide et le quai en plein soleil.",
+    "preparation": "Le préparateur porte des charges huit heures dans un entrepôt non chauffé, sous une toiture qui prend le soleil.",
+    "chariot": "Le cariste passe la journée sur un chariot sans cabine, entre les quais ouverts et l'extérieur.",
+    "gros-oeuvre": "Le maçon coule une dalle en plein soleil, sans point d'ombre sur le chantier.",
+    "second-oeuvre": "L'ouvrier travaille dans des combles non isolés au mois d'août.",
+    "circulation": "Le conducteur d'engin manœuvre dans une cabine sans climatisation, vitres fermées à cause de la poussière.",
+    "production": "L'opérateur tient la ligne à côté d'un four, en équipe d'après-midi, au plus chaud de la journée.",
+    "maintenance": "Le technicien intervient en toiture l'été et en local technique non chauffé l'hiver.",
+    "magasin": "Le magasinier fait la navette entre le quai ouvert et la réserve, par tous les temps.",
+    "cuisine": "Le cuisinier tient le piano dans une cuisine à trente-cinq degrés, service après service.",
+    "plonge": "Le plongeur travaille dans la vapeur et l'humidité, sans ventilation qui tire vraiment.",
+    "livraison": "Le livreur enchaîne les tournées en deux-roues sous la pluie froide, puis remonte en cuisine.",
+    "reception": "L'agent décharge sur un quai ouvert, entre la chambre froide et l'extérieur.",
+    "rayon": "Le salarié garnit les rayons frais, entre le froid des meubles et la chaleur du magasin.",
+    "ecran": "Le bureau monte à trente-deux degrés pendant la canicule, sous une verrière, sans store.",
+    "deplacements": "Le commercial enchaîne les rendez-vous en voiture pendant un épisode de canicule.",
+    "exploitation": "L'exploitant tient le planning dans un bureau sous toiture, à trente-deux degrés, fenêtres donnant sur la cour.",
+    "bureaux": "Le bureau atelier monte en température l'été, cloisonné contre le bruit et donc sans air.",
+  };
+  var UNITES_THERMIQUE = {
+    "restauration": ["cuisine", "plonge", "livraison"],
+    "commerce": ["reception", "rayon"],
+    "bureau": ["ecran", "deplacements"],
+    "entrepot": ["quai", "preparation", "chariot"],
+    "batiment": ["gros-oeuvre", "second-oeuvre", "circulation"],
+    "industrie": ["production", "maintenance", "magasin"],
+    "transport": ["conduite", "chargement", "atelier", "cour"],
+  };
+
+  function poserThermique(metier) {
+    var cles = UNITES_THERMIQUE[metier && metier.cle];
+    if (!cles) return metier;
+    var premiere = null;
+    (metier.unites || []).forEach(function (u) {
+      if (cles.indexOf(u.cle) < 0) return;
+      if ((u.risques || []).some(function (r) { return r.cle === "thermique"; })) return;
+      var mesures;
+      if (!premiere) {
+        mesures = MESURES_THERMIQUE.slice();
+        premiere = u.nom || "l'unité précédente";
+      } else {
+        mesures = ["Les mesures écrites à l'unité « " + premiere + " » valent ici : eau fraîche, " +
+          "organisation revue en épisode chaud ou froid, vêtements des deux saisons, ventilation ou " +
+          "chauffage, consigne sur le coup de chaleur, suivi du nouveau et de l'isolé."];
+      }
+      u.risques.push({
+        cle: "thermique",
+        n: "Ambiances thermiques : chaleur et froid",
+        m: "chaleur|canicule|froid|thermique|température|temperature|coup de chaleur|" +
+           "hypothermie|climatisation|chambre froide|intempérie|intemperie",
+        s: SITUATIONS_THERMIQUE[u.cle] ||
+           "Le salarié tient son poste par forte chaleur ou par grand froid, sans que l'organisation change.",
+        g: 3, f: 3, r: "Employeur, avec l'encadrement du poste", mois: 2,
+        mes: mesures,
+      });
+    });
+    return metier;
+  }
+
   /* Quelles unités portent le risque, métier par métier. */
   var UNITES_VIGILANCE = {
     "restauration": ["cuisine", "bar", "livraison"],
@@ -1283,13 +1373,37 @@
     "transport": ["conduite", "atelier"],
   };
 
+  /* LE MÊME RISQUE SUR DEUX UNITÉS NE S'ÉCRIT PAS DEUX FOIS EN ENTIER.
+
+     Le risque de vigilance diminuée est posé sur deux unités par métier, la
+     conduite et l'atelier par exemple. Les neuf mesures étant communes, elles
+     sortaient mot pour mot aux deux endroits : un lecteur qui retrouve le même
+     paragraphe à la page 4 et à la page 9 cesse de lire les deux. Relevé le
+     25 septembre 2026 sur le document de TEC, points 1.6 et 3.7. La seconde
+     unité garde donc les mesures qui lui sont propres et renvoie à la
+     première, qui les porte toutes. */
   function poserVigilance(metier) {
     var cles = UNITES_VIGILANCE[metier && metier.cle];
     if (!cles) return metier;
+    var premiere = null;
     (metier.unites || []).forEach(function (u) {
       if (cles.indexOf(u.cle) < 0) return;
       var deja = (u.risques || []).some(function (r) { return r.cle === "vigilance"; });
       if (deja) return;
+      var mesures;
+      if (!premiere) {
+        mesures = MESURES_VIGILANCE.slice();
+        premiere = u.nom || "l'unité précédente";
+      } else {
+        mesures = [
+          "Les mesures écrites à l'unité « " + premiere + " » valent ici, sans reprise : " +
+          "liste des postes, encadrement des pots et des repas, salarié qui se déclare hors " +
+          "d'état, traitement médical, formation de l'encadrement, écrit du jour même, retour " +
+          "sans conduite, coordonnées affichées.",
+          "Écart de poste immédiat avant toute intervention sur un véhicule levé, une machine " +
+          "ou un point chaud : ici, l'erreur ne laisse pas de seconde chance.",
+        ];
+      }
       u.risques.push({
         cle: "vigilance",
         n: "Vigilance diminuée : alcool, médicaments et autres substances",
@@ -1299,16 +1413,18 @@
         s: SITUATIONS_VIGILANCE[u.cle] ||
            "Le salarié tient un poste où l'inattention blesse, alors que sa vigilance est diminuée.",
         g: 4, f: 2, r: "Employeur, avec l'encadrement du poste", mois: 3,
-        mes: MESURES_VIGILANCE.slice(),
+        mes: mesures,
       });
     });
     return metier;
   }
   METIERS.forEach(poserVigilance);
+  METIERS.forEach(poserThermique);
 
   function ajouter(metier) {
     if (!metier || !metier.cle) return;
     poserVigilance(metier);
+    poserThermique(metier);
     for (var i = 0; i < METIERS.length; i++) if (METIERS[i].cle === metier.cle) { METIERS[i] = metier; return; }
     METIERS.unshift(metier);
   }

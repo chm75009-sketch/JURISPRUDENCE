@@ -71,6 +71,13 @@
   function par(texte, o) {
     o = o || {};
     var ppr = "<w:pPr>" +
+      /* LE STYLE DE TITRE, EN PLUS DE LA MISE EN FORME.
+         Les titres n'étaient que du gras : Word n'y voyait pas de plan, donc
+         ni volet de navigation, ni sommaire, ni signets pour un document que
+         la loi fait conserver quarante ans. Relevé le 25 septembre 2026 sur
+         le document unique. La mise en forme directe est gardée telle quelle,
+         pour que l'aspect ne bouge pas. */
+      (o.style ? '<w:pStyle w:val="' + o.style + '"/>' : "") +
       (o.espaceAvant ? '<w:spacing w:before="' + o.espaceAvant + '" w:after="60"/>' : '<w:spacing w:after="60"/>') +
       /* Le bloc destinataire et la date d'une lettre se posent à droite : sur
          le papier, c'est là qu'ils sont, et un courrier dont l'adresse du
@@ -142,10 +149,10 @@
   /* Les éléments du rapport, dans le vocabulaire du moteur, vers le document. */
   var VERS_WORD = {
     bandeau: function (i) { return par(i.t, { gras: true, taille: 36, couleur: "1F3864", espaceAvant: 120 }) + par(i.sous, { taille: 20 }); },
-    t1: function (i) { return par(i.t, { gras: true, taille: 32, espaceAvant: 200 }); },
-    h1: function (i) { return par(i.t, { gras: true, taille: 28, couleur: "1F3864", espaceAvant: 240 }); },
-    h2: function (i) { return par(i.t, { gras: true, taille: 24, couleur: "1F3864", espaceAvant: 200 }); },
-    h3: function (i) { return par(i.t, { gras: true, taille: 22, couleur: "1F3864", espaceAvant: 160 }); },
+    t1: function (i) { return par(i.t, { gras: true, taille: 32, espaceAvant: 200, style: "Titre1" }); },
+    h1: function (i) { return par(i.t, { gras: true, taille: 28, couleur: "1F3864", espaceAvant: 240, style: "Titre1" }); },
+    h2: function (i) { return par(i.t, { gras: true, taille: 24, couleur: "1F3864", espaceAvant: 200, style: "Titre2" }); },
+    h3: function (i) { return par(i.t, { gras: true, taille: 22, couleur: "1F3864", espaceAvant: 160, style: "Titre3" }); },
     sur: function (i) { return par(i.t, { taille: 18, couleur: "5F6874" }); },
     dest: function (i) { return par(i.t, { droite: true }); },
     p: function (i) { return par(i.t); },
@@ -169,31 +176,123 @@
   /* Un troisième argument, facultatif : { paysage: true } pour un tableau
      large, comme le modèle de registre et ses onze colonnes. Les appels qui ne
      le passent pas gardent le portrait. */
-  function docx(items, titre, opts) {
-    var corps = items.map(function (i) {
-      return VERS_WORD[i.k] ? VERS_WORD[i.k](i) : "";
-    }).join("");
-    var doc = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
-      "<w:body>" + par(titre, { gras: true, taille: 40 }) + corps +
-      '<w:sectPr>' + ((opts && opts.paysage)
+  /* CE QUE LE FICHIER PORTAIT, ET CE QU'IL LUI MANQUAIT.
+
+     Le document sortait en quatre parties : les types, les deux fichiers de
+     relations et le corps. Ni feuille de styles, ni propriétés, ni pied de
+     page, donc aucun plan dans Word, aucun titre dans les informations du
+     fichier, et pas un numéro de page. Pour un document unique que la loi
+     fait conserver quarante ans, et qu'on imprime pour le faire signer, c'est
+     éliminatoire. Relevé le 25 septembre 2026.
+
+     Les trois parties ajoutées sont les plus ordinaires qui soient : styles,
+     core.xml et un pied de page avec le champ PAGE. */
+  var STYLES =
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    '<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>' +
+    '<w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults>' +
+    '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>' +
+    ["Titre1", "Titre2", "Titre3"].map(function (id, n) {
+      return '<w:style w:type="paragraph" w:styleId="' + id + '">' +
+        '<w:name w:val="heading ' + (n + 1) + '"/><w:basedOn w:val="Normal"/>' +
+        '<w:qFormat/><w:pPr><w:outlineLvl w:val="' + n + '"/></w:pPr>' +
+        '<w:rPr><w:b/><w:color w:val="1F3864"/><w:sz w:val="' + (30 - n * 4) + '"/></w:rPr></w:style>';
+    }).join("") +
+    "</w:styles>";
+
+  function pied(titre, opts) {
+    var bas = (opts && opts.pied) || titre || "";
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      '<w:p><w:pPr><w:jc w:val="center"/></w:pPr>' +
+      '<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="5F6874"/></w:rPr>' +
+      '<w:t xml:space="preserve">' + ech(bas) + "  ·  page </w:t></w:r>" +
+      '<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="5F6874"/></w:rPr>' +
+      '<w:fldChar w:fldCharType="begin"/></w:r>' +
+      '<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="5F6874"/></w:rPr>' +
+      '<w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>' +
+      '<w:r><w:rPr><w:sz w:val="16"/><w:color w:val="5F6874"/></w:rPr>' +
+      '<w:fldChar w:fldCharType="end"/></w:r>' +
+      "</w:p></w:ftr>";
+  }
+
+  function proprietes(titre, opts) {
+    var d = new Date().toISOString().slice(0, 19) + "Z";
+    var qui = (opts && opts.auteur) || "";
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
+      ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"' +
+      ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+      "<dc:title>" + ech(titre || "") + "</dc:title>" +
+      "<dc:creator>" + ech(qui) + "</dc:creator>" +
+      "<cp:lastModifiedBy>" + ech(qui) + "</cp:lastModifiedBy>" +
+      '<dcterms:created xsi:type="dcterms:W3CDTF">' + d + "</dcterms:created>" +
+      '<dcterms:modified xsi:type="dcterms:W3CDTF">' + d + "</dcterms:modified>" +
+      "</cp:coreProperties>";
+  }
+
+  /* UN TABLEAU LARGE PASSE EN PAYSAGE, LE RESTE N'Y PASSE PAS.
+
+     Le programme annuel de prévention tient sept colonnes ; en portrait, il
+     sortait en neuf points sur une largeur de quinze centimètres, illisible.
+     Relevé le 25 septembre 2026. Un tableau marqué « paysage » est donc
+     encadré de deux sauts de section : celui qui le précède ferme la partie
+     en portrait, celui qui le suit ferme la partie en paysage, et la suite du
+     document revient au portrait. C'est la mécanique ordinaire d'OOXML, où un
+     sectPr décrit la section qui se termine avec lui.                        */
+  function sautSection(paysage, opts) {
+    return "<w:p><w:pPr><w:sectPr>" + sectionXml(paysage, opts) + "</w:sectPr></w:pPr></w:p>";
+  }
+  function sectionXml(paysage, opts) {
+    return '<w:footerReference w:type="default" r:id="rIdPied"/>' +
+      (paysage
         ? '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>'
         : '<w:pgSz w:w="11906" w:h="16838"/>') +
-      '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/>' +
-      "</w:sectPr></w:body></w:document>";
+      '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/>';
+  }
+
+  function docx(items, titre, opts) {
+    var large = !!(opts && opts.paysage);
+    var corps = items.map(function (i) {
+      if (i.k === "table" && i.paysage && !large) {
+        return sautSection(false, opts) + tableau(i.head, i.rows) + sautSection(true, opts);
+      }
+      return VERS_WORD[i.k] ? VERS_WORD[i.k](i) : "";
+    }).join("");
+    var section = '<w:footerReference w:type="default" r:id="rIdPied"/>' +
+      ((opts && opts.paysage)
+        ? '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>'
+        : '<w:pgSz w:w="11906" w:h="16838"/>') +
+      '<w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1134" w:header="709" w:footer="709" w:gutter="0"/>';
+    var doc = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"' +
+      ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+      "<w:body>" + par(titre, { gras: true, taille: 40, style: "Titre1" }) + corps +
+      "<w:sectPr>" + section + "</w:sectPr></w:body></w:document>";
     var octets = zip([
       { nom: "[Content_Types].xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
         '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
         '<Default Extension="xml" ContentType="application/xml"/>' +
         '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+        '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>' +
+        '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' +
+        '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' +
         "</Types>" },
       { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+        '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>' +
         "</Relationships>" },
       { nom: "word/_rels/document.xml.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
-        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>' },
+        '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+        '<Relationship Id="rIdStyles" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+        '<Relationship Id="rIdPied" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>' +
+        "</Relationships>" },
+      { nom: "word/styles.xml", contenu: STYLES },
+      { nom: "word/footer1.xml", contenu: pied(titre, opts) },
+      { nom: "docProps/core.xml", contenu: proprietes(titre, opts) },
       { nom: "word/document.xml", contenu: doc },
     ]);
     /* Les octets écrits gardent avec eux le rendu qui leur correspond : c'est

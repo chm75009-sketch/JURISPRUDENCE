@@ -63,7 +63,7 @@
             mes: [
               "Amplitude et temps de service suivis chaque semaine sur les données du chronotachygraphe, écarts examinés avec le conducteur.",
               "Repos quotidiens et hebdomadaires garantis par le planning, y compris en cas d'aléa : un aléa se règle par un remplacement, pas par un repos rogné.",
-              "Surveillance médicale renforcée pour les travailleurs de nuit, visites suivies et honorées.",
+              "Travailleurs de nuit : suivi individuel régulier de l'état de santé (L. 3122-11) et visite d'information et de prévention préalable à l'affectation sur le poste (R. 4624-18), visites suivies et honorées.",
               "Cabine équipée pour le repos : couchette, rideaux occultants, chauffage à l'arrêt.",
               "Consigne écrite autorisant l'arrêt immédiat en cas de somnolence, sans avoir à se justifier.",
             ] },
@@ -152,7 +152,7 @@
               "Béquilles ou chandelles en complément du pont pour toute intervention prolongée sous le véhicule.",
               "Dégagement d'au moins un mètre vingt autour du pont, matérialisé au sol et tenu libre.",
               "Commande du pont réservée aux personnes désignées par écrit, consignes de débrayage manuel affichées.",
-              "Fosse, si elle existe, équipée de garde-corps ou de couvertures, éclairée et ventilée.",
+              "[ Si l'atelier comporte une fosse : garde-corps ou couvertures, éclairage et ventilation ; supprimez cette ligne dans le cas contraire ]",
             ] },
           { n: "Risque chimique : huiles, solvants, batteries, gaz d'échappement", m: "chimique|huile|solvant|batterie|acide|échappement|ventilation",
             s: "Vidanges, nettoyage des pièces au solvant et charge de batteries dans le même local, ventilation naturelle.",

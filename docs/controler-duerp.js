@@ -73,6 +73,15 @@
   if (!v("dateVersion")) E.v.dateVersion = aujourdhui;
   if (!v("responsable") && P.responsable) E.v.responsable = String(P.responsable);
   if (!v("etablissement") && P.adresse) E.v.etablissement = String(P.adresse);
+  /* LA VILLE DE SIGNATURE N'EST PAS L'ADRESSE DE L'ÉTABLISSEMENT.
+
+     Le document sortait « Fait à 23 avenue du Château, 95100 Argenteuil » :
+     relevé le 25 septembre 2026. La ville se tire du code postal de l'adresse,
+     comme ailleurs dans l'application ; à défaut, elle reste en rouge. */
+  if (!v("ville")) {
+    var mVille = String(P.ville || P.adresse || "").match(/\d{5}\s+(.+)$/);
+    E.v.ville = mVille ? mVille[1].trim() : String(P.ville || "").trim();
+  }
 
   function effectif() {
     var n = Number(P.effectif);
@@ -121,6 +130,48 @@
   /* ------------------------------------------------------------------ */
   /* LE DOCUMENT, en HTML pour l'écran et en éléments pour le Word. */
   var TITRE = "Document unique d'évaluation des risques professionnels";
+
+  var INTRO = "L'évaluation comporte un inventaire des risques identifiés dans chaque unité de " +
+    "travail, y compris ceux liés aux ambiances thermiques (R. 4121-1). Pour chaque risque : la " +
+    "situation de travail, une cotation de 1 à 16 (gravité multipliée par fréquence), les mesures " +
+    "de prévention retenues, un responsable et une échéance.";
+
+  /* L'IMPACT DIFFÉRENCIÉ SELON LE SEXE, QUE LA LOI IMPOSE DE PRENDRE EN COMPTE.
+
+     L. 4121-3 (LEGIARTI000043893923, lu le 25 septembre 2026) : « Cette
+     évaluation des risques tient compte de l'impact différencié de
+     l'exposition au risque en fonction du sexe. » Le document n'en disait
+     rien, relevé le 25 septembre 2026. La phrase dit ce que la loi exige et
+     laisse en rouge ce que l'entreprise seule peut constater : le texte ne
+     désigne pas de risque, il impose de regarder. */
+  var SEXE = "L'évaluation tient compte de l'impact différencié de l'exposition au risque en " +
+    "fonction du sexe (L. 4121-3) : composition des équipes par poste, charges et hauteurs de " +
+    "travail rapportées aux personnes réelles, équipements de protection disponibles dans les " +
+    "tailles et les formes qui conviennent aux femmes comme aux hommes, vestiaires et sanitaires " +
+    "séparés, et situation des salariées enceintes ou allaitantes. [ Ce que cet examen a fait " +
+    "apparaître dans l'entreprise, poste par poste, et ce qui en a été tiré ]";
+
+  /* LES UNITÉS SONT DÉDUITES DE L'ACTIVITÉ, PAS CONSTATÉES SUR LE SITE.
+
+     Le document de TEC décrivait un atelier mécanique intégré, une citerne et
+     une fosse, et écrivait même « Fosse, si elle existe » : la relecture du
+     25 septembre 2026 a eu raison d'y voir la marque d'un modèle non
+     confronté au terrain. L'application ne peut pas savoir ce qu'il y a dans
+     la cour : elle le dit, en rouge, au lieu de laisser croire qu'elle sait. */
+  var UNITES_A_CONFIRMER = "Les unités de travail qui suivent sont celles que l'activité " +
+    "déclarée implique d'ordinaire. [ À confronter au site avant signature : un atelier intégré, " +
+    "une fosse, une citerne, un poste de lavage ou une cuve de carburant n'existent pas partout. " +
+    "Supprimez l'unité ou le risque qui ne vous concerne pas, et ajoutez ce que l'application ne " +
+    "pouvait pas deviner ]";
+
+  /* La seconde branche de la phrase du comité, celle de l'entreprise qui a
+     organisé les élections sans trouver de candidat. Elle sort en rouge, et
+     l'employeur supprime celle des deux phrases qui ne le concerne pas. */
+  var CARENCE = "[ Si aucun comité n'est en place : les élections ont été organisées et un " +
+    "procès-verbal de carence a été établi le [DATE], porté à la connaissance des salariés et " +
+    "transmis à l'inspection du travail (L. 2314-9) ; le document est alors tenu à disposition " +
+    "dans les conditions de l'article R. 4121-4. Supprimez celle des deux phrases qui ne vous " +
+    "concerne pas. ]";
   function marque(c, quoi) {
     var x = v(c);
     return x ? "<mark>" + ech(x) + "</mark>" : "<mark>[ " + ech(quoi) + " ]</mark>";
@@ -188,12 +239,29 @@
     return "<h3>" + num + ". Tenue du document</h3>" +
       "<p>Mise à jour au moins chaque année à partir de onze salariés, lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail, et lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur (R. 4121-2).</p>" +
       "<p>Le document et ses versions antérieures sont conservés quarante ans à compter de leur élaboration et tenus à la disposition des personnes que désigne l'article R. 4121-4. Un avis indiquant les modalités d'accès des travailleurs au document est affiché à une place convenable et aisément accessible, et au même emplacement que le règlement intérieur là où il en existe un (R. 4121-4).</p>" +
-      "<p>Le document est transmis à chaque mise à jour au service de prévention et de santé au travail (L. 4121-3-1, VI). Le comité social et économique, s'il existe, est consulté sur le document et sur ses mises à jour (L. 4121-3).</p>" +
-      "<p>La cotation par gravité et fréquence est une aide au classement des actions : aucun des textes cités ne l'impose. Les mesures écrites ci-dessus sont celles que l'employeur retient ; elles ne sont l'énoncé d'aucune obligation particulière.</p>";
+      "<p>Le document est transmis à chaque mise à jour au service de prévention et de santé au travail (L. 4121-3-1, VI).</p>" +
+      /* LE COMITÉ : DEUX BRANCHES, UNE SEULE À GARDER.
+
+         L. 4121-3 dit « Le comité social et économique est consulté sur le
+         document unique et sur ses mises à jour », sans condition. La formule
+         « s'il existe » a été retirée le 25 septembre 2026 : elle dispensait
+         d'écrire quoi que ce soit là où un comité existe. À sa place, la date
+         de l'avis, ou celle du procès-verbal de carence pour l'entreprise qui
+         a organisé les élections sans candidat. Demande de l'utilisatrice, le
+         cas de TEC, dont les élections sont en cours. */
+      "<p>Le comité social et économique est consulté sur le présent document et sur ses mises à jour (L. 4121-3). Avis rendu le " +
+      marque("dateAvisCse", "date de l'avis") + ".</p>" +
+      "<p><mark>" + ech(CARENCE) + "</mark></p>" +
+      /* Le dépôt dématérialisé de L. 4121-3-1, V, B suppose un portail que les
+         organisations patronales n'ont pas ouvert : vérifié le 25 septembre
+         2026. On l'écrit, parce qu'un lecteur qui connaît le texte se demande
+         pourquoi le document n'en parle pas. */
+      "<p>Le dépôt dématérialisé du document sur un portail numérique, prévu par l'article L. 4121-3-1, V, B, suppose que ce portail soit déployé par les organisations professionnelles d'employeurs : il ne l'est pas à ce jour, et il n'y a donc rien à y déposer. La conservation pendant quarante ans et la mise à disposition restent dues, sur le support de l'entreprise.</p>" +
+      "<p>La cotation par gravité et fréquence est une aide au classement des actions : aucun des textes cités ne l'impose.</p>";
   }
 
   function signatureHtml() {
-    return "<p>Fait à " + marque("etablissement", "lieu") + ", le " +
+    return "<p>Fait à " + marque("ville", "lieu") + ", le " +
       (v("dateVersion") ? "<mark>" + ech(dateFr(v("dateVersion"))) + "</mark>" : marque("dateVersion", "date")) +
       ".<br>" + marque("responsable", "responsable") + ", signature :</p>" +
       '<p class="qui">Textes : ' + TEXTES.map(function (t) { return ech(t.n) + " (" + ech(t.id) + ")"; }).join(", ") +
@@ -259,7 +327,9 @@
   function documentHtml() {
     var groupes = inventaire();
     return enTeteHtml() +
-      "<p>L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail (R. 4121-1). Pour chaque risque : la situation de travail, une cotation de 1 à 16 (gravité multipliée par fréquence), les mesures de prévention retenues, un responsable et une échéance.</p>" +
+      "<p>" + ech(INTRO) + "</p>" +
+      "<p>" + ech(SEXE) + "</p>" +
+      "<p>" + ech(UNITES_A_CONFIRMER) + "</p>" +
       unitesHtml(groupes, 1) +
       (registrePhrase(groupes) ? "<p>" + ech(registrePhrase(groupes)) + "</p>" : "") +
       planHtml(groupes, groupes.length + 1) +
@@ -294,14 +364,18 @@
     items.push({ k: "sur", t: P.denomination + " · établissement : " + ou("etablissement", "établissement") +
       " · effectif : " + (eff === null ? "[ effectif ]" : eff + " salarié" + (eff > 1 ? "s" : "")) + " · activité : " + M.nom });
     items.push({ k: "p", t: "Version du " + (dateFr(v("dateVersion")) || "[ date ]") + ", établie par " + ou("responsable", "responsable") + "." });
-    items.push({ k: "p", t: "L'évaluation comporte un inventaire des risques identifiés dans chaque unité de travail (R. 4121-1). Pour chaque risque : la situation de travail, une cotation de 1 à 16 (gravité multipliée par fréquence), les mesures de prévention retenues, un responsable et une échéance." });
+    items.push({ k: "p", t: INTRO });
+    items.push({ k: "p", t: SEXE });
+    items.push({ k: "p", t: UNITES_A_CONFIRMER });
     unitesItems(groupes, 1, items);
     var phraseReg = registrePhrase(groupes);
     if (phraseReg) items.push({ k: "p", t: phraseReg });
     var plan = planTrie(groupes);
     items.push({ k: "h2", t: (groupes.length + 1) + ". " + planTitre() });
     items.push({ k: "p", t: planPhrase() });
-    items.push({ k: "table",
+    /* Sept colonnes ne tiennent pas en portrait : le tableau demande sa page
+       en paysage quand le programme annuel est dû. Posé le 25 septembre 2026. */
+    items.push({ k: "table", paysage: eff !== null && eff >= 50,
       head: eff !== null && eff >= 50
         ? ["Priorité", "Unité", "Action", "Responsable", "Échéance", "Indicateur", "Coût"]
         : ["Priorité", "Unité", "Action", "Responsable", "Échéance"],
@@ -311,15 +385,22 @@
         return l;
       }) });
     tenueItems(groupes.length + 2, items);
-    items.push({ k: "p", t: "Fait à " + ou("etablissement", "lieu") + ", le " + (dateFr(v("dateVersion")) || "[ date ]") + "." });
+    items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + (dateFr(v("dateVersion")) || "[ date ]") + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
     items.push({ k: "note", t: "Textes : " + TEXTES.map(function (t) { return t.n + " (" + t.id + ")"; }).join(", ") + " du code du travail, " + LU + "." });
     return items;
   }
 
   function telechargerDocx(items, titre, suffixe) {
+    /* Le pied de page porte l'entreprise et la version : un document conservé
+       quarante ans et imprimé pour signature doit dire, sur chaque feuille, de
+       quelle version il s'agit. Posé le 25 septembre 2026. */
     window.AuditExport.telecharger(
-      window.AuditExport.docx(items, titre),
+      window.AuditExport.docx(items, titre, {
+        auteur: P.denomination || "",
+        pied: (P.denomination || "") + ", document unique, version du " +
+          (dateFr(v("dateVersion")) || dateFr(aujourdhui)),
+      }),
       "document-unique" + (suffixe || "") + "-" + slug(P.denomination) + "-" + aujourdhui + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
@@ -709,7 +790,7 @@
         rows: plan.map(function (p) { return [p.x.pr.p + " " + p.x.pr.mot, p.u, p.x.r.n, p.x.r.r, dateFr(p.x.ech)]; }) });
     }
     tenueItems(groupes.length + 2, items);
-    items.push({ k: "p", t: "Fait à " + ou("etablissement", "lieu") + ", le " + dateFr(aujourdhui) + "." });
+    items.push({ k: "p", t: "Fait à " + ou("ville", "lieu") + ", le " + dateFr(aujourdhui) + "." });
     items.push({ k: "p", t: ou("responsable", "responsable") + ", signature :" });
     /* Le compte rendu ferme le fichier comme il ferme l'écran. */
     items.push({ k: "trait" }, { k: "h1", t: "Le compte rendu" });
