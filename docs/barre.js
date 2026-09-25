@@ -109,6 +109,11 @@
       h += '<li><a href="' + m.page + '"' + ici + '>' + m.nom + "</a></li>";
     });
     h += "</ul>";
+    /* L'installation, à portée de doigt : demandé le 25 septembre 2026, « un
+       bouton pour l'installer sur PC ou téléphone ». Le détail de ce qu'il
+       fait selon le navigateur est dans installer.js. */
+    h += '<button type="button" class="installer-app" id="barre-installer">' +
+      "Installer l'application</button>";
     if (seance()) h += '<button type="button" class="quitter" id="barre-quitter">Quitter</button>' +
       '<p class="apres">Le mot de passe sera redemandé à la prochaine ouverture. ' +
       "Rien de ce qui est sur cet appareil n'est effacé.</p>";
@@ -121,6 +126,7 @@
     });
     var q = $("#barre-quitter");
     if (q) q.addEventListener("click", quitter);
+    if (window.Installer) window.Installer.brancher();
   }
 
   /* QUITTER. La séance se referme, donc verrou.js renvoie à la porte à la
