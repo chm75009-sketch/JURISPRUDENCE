@@ -402,6 +402,7 @@
       h.className = "h";
       d.appendChild(h);
       hote.appendChild(d);
+      l.noeud = d;            /* pour marquer la journée qui passe le plafond */
       majLigne(d, l);
 
       /* La récapitulation de chaque semaine, dimanche ou fin de mois :
@@ -513,6 +514,162 @@
     return t;
   }
 
+  /* ─────────── AU-DELÀ DE TRENTE-CINQ HEURES, ET LES PLAFONDS ──────────── */
+  /* Le décompte additionnait les journées et s'arrêtait là. Il ne disait ni
+     combien d'heures dépassaient la durée légale, ni qu'une journée de treize
+     heures ou une semaine de cinquante-quatre heures est interdite. Relevé le
+     26 septembre 2026 : un relevé qui ne dit pas cela laisse signer
+     l'irrégularité.
+
+     LES TEXTES, lus à la source au relais Légifrance le 26 septembre 2026,
+     deux lectures espacées et concordantes chacun :
+
+       - L. 3121-27 (LEGIARTI000033020376) : « La durée légale de travail
+         effectif des salariés à temps complet est fixée à trente-cinq heures
+         par semaine. »
+       - L. 3121-28 (LEGIARTI000033020373) : « Toute heure accomplie au delà
+         de la durée légale hebdomadaire ou de la durée considérée comme
+         équivalente est une heure supplémentaire qui ouvre droit à une
+         majoration salariale ou, le cas échéant, à un repos compensateur
+         équivalent. »
+       - L. 3121-36 (LEGIARTI000033020341) : « A défaut d'accord, les heures
+         supplémentaires accomplies au-delà de la durée légale hebdomadaire
+         fixée à l'article L. 3121-27 ou de la durée considérée comme
+         équivalente donnent lieu à une majoration de salaire de 25 % pour
+         chacune des huit premières heures supplémentaires. Les heures
+         suivantes donnent lieu à une majoration de 50 %. »
+       - L. 3121-18 (LEGIARTI000033020428) : dix heures par jour, sauf
+         dérogation de l'inspecteur du travail, urgence, ou les cas de
+         L. 3121-19.
+       - L. 3121-20 (LEGIARTI000033020414) : « Au cours d'une même semaine, la
+         durée maximale hebdomadaire de travail est de quarante-huit heures. »
+       - L. 3121-22 (LEGIARTI000033020402) : quarante-quatre heures en moyenne
+         sur douze semaines consécutives. Douze semaines ne tiennent pas dans
+         un mois : cette moyenne-là n'est donc pas calculée ici, elle est
+         nommée.
+       - R. 3312-51 du code des transports (LEGIARTI000033450339) : « La durée
+         quotidienne du temps de service ne peut excéder douze heures pour le
+         personnel roulant. »
+       - R. 3312-50 du code des transports (LEGIARTI000033450337) : cinquante-
+         six heures sur une semaine isolée pour le grand routier, cinquante-
+         deux pour les autres roulants marchandises, quarante-huit pour la
+         messagerie et les convoyeurs de fonds.
+
+     CE QUI N'EST PAS ÉCRIT ICI, ET POURQUOI. Le taux de majoration de
+     L. 3121-36 ne vaut qu'« à défaut d'accord » : l'accord d'entreprise ou la
+     convention collective peuvent en fixer un autre, et celle des transports
+     routiers n'est pas lue ici. Les heures au-delà de trente-cinq heures sont
+     donc comptées, jamais valorisées en euros. De même, le régime
+     d'équivalence de L. 3121-13 et le temps de service du transport ne se
+     déduisent pas d'un horaire : ce qui est comparé, c'est ce qui est saisi. */
+
+  var LEGALE = 35;
+  /* La catégorie vient du contrat écrit ici, pas d'une supposition sur
+     l'emploi : sans elle, ce sont les plafonds du code du travail. */
+  var PLAFONDS_TRANSPORT = {
+    grand: { sem: 56, jour: 12, dit: "personnel roulant grand routier ou longue distance" },
+    courte: { sem: 52, jour: 12, dit: "autre personnel roulant marchandises" },
+    messagerie: { sem: 48, jour: 12, dit: "conducteur de messagerie ou convoyeur de fonds" },
+  };
+  function plafonds() {
+    var su = (qui && window.EcheancesSalaries) ? (window.EcheancesSalaries.suite(qui.id) || {}) : {};
+    var p = PLAFONDS_TRANSPORT[net(su.categorieTransport)];
+    if (p) return { jour: p.jour, sem: p.sem, dit: p.dit,
+      source: "R. 3312-51 et R. 3312-50 du code des transports" };
+    return { jour: 10, sem: 48, dit: "",
+      source: "L. 3121-18 et L. 3121-20 du code du travail" };
+  }
+
+  /* Une semaine du mois n'est complète que si ses sept jours y sont : celles
+     du premier et du dernier jour débordent sur le mois voisin, et un total
+     de quatre jours ne se compare à aucun plafond hebdomadaire. */
+  function analyse() {
+    var pl = plafonds(), out = { pl: pl, jours: [], semaines: [], hs: 0, a25: 0, a50: 0, partielles: 0 };
+    lignes.forEach(function (l) {
+      var v = duree(l);
+      if (v > pl.jour + 0.001) out.jours.push({ j: l.j, h: v });
+    });
+    semaines.forEach(function (s) {
+      var t = 0;
+      s.jours.forEach(function (l) { t += duree(l); });
+      var complete = s.jours.length === 7;
+      if (!complete) { out.partielles++; }
+      out.semaines.push({ du: s.du, au: s.au, h: t, complete: complete,
+        depasse: complete && t > pl.sem + 0.001 });
+      if (complete && t > LEGALE + 0.001) {
+        var sup = t - LEGALE;
+        out.hs += sup;
+        out.a25 += Math.min(sup, 8);
+        out.a50 += Math.max(0, sup - 8);
+      }
+    });
+    return out;
+  }
+
+  /* Ce que l'écran en dit : des phrases, pas un tableau de bord. Ce qui est
+     franchi est dit en premier, avec le jour et le chiffre. */
+  function leJourDit(j) { return j === 1 ? "le 1er" : "le " + j; }
+
+  function rendreControles() {
+    var z = $("controles");
+    if (!z) return;
+    var a = analyse(), L = [];
+    /* Les journées franchies sont marquées dans la grille : la phrase n'en
+       nomme que quatre au plus, sinon elle fait un mur de texte sur un
+       téléphone. Le papier et le classeur, eux, les portent toutes. */
+    lignes.forEach(function (l) {
+      if (l.noeud) l.noeud.classList.toggle("trop", duree(l) > a.pl.jour + 0.001);
+    });
+    if (a.jours.length) {
+      var dits = a.jours.slice(0, 4).map(function (x) { return leJourDit(x.j) + " (" + nbh(x.h) + ")"; });
+      L.push('<p class="al rouge">' + (a.jours.length === 1
+        ? "Une journée dépasse " + a.pl.jour + " heures : " + dits[0]
+        : a.jours.length + " journées dépassent " + a.pl.jour + " heures, dont " + dits.join(", ") +
+          (a.jours.length > 4 ? ", et " + (a.jours.length - 4) + " autres marquées dans la grille" : "")) +
+        ". Plafond de " + ech(a.pl.source.split(" et ")[0]) + ".</p>");
+    }
+    var dep = a.semaines.filter(function (x) { return x.depasse; });
+    if (dep.length) {
+      L.push('<p class="al rouge">' + (dep.length === 1 ? "Une semaine dépasse " : dep.length +
+        " semaines dépassent ") + a.pl.sem + " heures : " +
+        dep.map(function (x) { return "du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au +
+          " (" + nbh(x.h) + ")"; }).join(", ") + ".</p>");
+    }
+    if (a.hs > 0.005) {
+      L.push('<p class="al">Au-delà de trente-cinq heures sur les semaines entières du mois : ' +
+        nbh(a.hs) + ", dont " + nbh(a.a25) + " dans les huit premières heures de chaque semaine et " +
+        nbh(a.a50) + " au-delà.</p>");
+    } else if (!a.jours.length && !dep.length) {
+      L.push('<p class="doux">Aucun dépassement des plafonds sur ce mois, et aucune semaine ' +
+        "entière au-delà de trente-cinq heures.</p>");
+    }
+    if (a.partielles) {
+      L.push('<p class="doux">' + (a.partielles > 1
+        ? a.partielles + " semaines chevauchent le mois voisin : leurs totaux ne sont pas comparés"
+        : "Une semaine chevauche le mois voisin : son total n'est pas comparé") +
+        " aux plafonds hebdomadaires, il se vérifie avec l'autre mois.</p>");
+    }
+    /* CE QUI FONDE CES CHIFFRES SE REPLIE.
+
+       Les quatre paragraphes de droit faisaient huit cents pixels de texte sur
+       un téléphone, au-dessus de la ligne qui compte. Ils restent, derrière un
+       repli : ce qui est franchi se lit d'abord, le fondement se touche.
+       Relevé le 26 septembre 2026. */
+    L.push('<details class="loi"><summary>Ce qui fonde ces plafonds</summary><div>' +
+      "<p>Au-delà de trente-cinq heures par semaine, l'heure est une heure supplémentaire " +
+      "(L. 3121-28). À défaut d'accord, les huit premières de chaque semaine sont majorées de " +
+      "25 % et les suivantes de 50 % (L. 3121-36) ; votre convention ou votre accord peut fixer " +
+      "d'autres taux, et celle des transports routiers n'est pas lue ici. Aucun montant n'est " +
+      "calculé ici.</p>" +
+      "<p>Plafonds appliqués sur ce relevé : " + a.pl.jour + " heures par jour et " + a.pl.sem +
+      " heures par semaine, " + ech(a.pl.source) +
+      (a.pl.dit ? ", catégorie « " + ech(a.pl.dit) + " »" : "") + ".</p>" +
+      "<p>La moyenne de quarante-quatre heures sur douze semaines consécutives (L. 3121-22) ne se " +
+      "calcule pas sur un mois : elle se vérifie sur trois mois de relevés.</p>" +
+      "</div></details>");
+    z.innerHTML = L.join("");
+  }
+
   function calculer() {
     var total = 0, jours = 0, hebdo = hebdoContrat();
     lignes.forEach(function (l) {
@@ -554,6 +711,7 @@
         " par rapport aux jours saisis.";
       $("l-motif").hidden = false;
     }
+    rendreControles();
     return total;
   }
 
@@ -765,7 +923,13 @@
 
   /* ──────────────────────────────── sorties ─────────────────────────────── */
 
-  function tableauMois() {
+  /* Le même relevé pour trois sorties. `chiffres` change une seule chose : les
+     heures et les pauses partent en nombres, pour que le tableur les
+     additionne au lieu de les afficher comme du texte. Relevé le
+     26 septembre 2026, « les heures sortent en texte dans Excel ». */
+  function tableauMois(chiffres) {
+    function h(v) { return chiffres ? Math.round(v * 100) / 100 : v.toFixed(2).replace(".", ","); }
+    function mn(v) { var n = parseInt(v, 10) || 0; return chiffres ? n : String(n); }
     var t = [["Jour", "Nature", "Début", "Fin", "Pause (min)", "Heures"]];
     var sem = null, cumul = 0;
     lignes.forEach(function (l, i) {
@@ -777,15 +941,40 @@
         LIB[l.n] || "",
         l.n === "travail" ? l.d : "",
         l.n === "travail" ? l.f : "",
-        l.n === "travail" ? String(l.p) : "",
-        l.n === "travail" ? v.toFixed(2).replace(".", ",") : "",
+        l.n === "travail" ? mn(l.p) : "",
+        l.n === "travail" ? h(v) : "",
       ]);
       if (l.sem === 0 || i === lignes.length - 1) {
-        t.push(["Semaine du " + sem + " au " + l.j, "", "", "", "Total semaine", cumul.toFixed(2).replace(".", ",")]);
+        t.push(["Semaine du " + sem + " au " + l.j, "", "", "", "Total semaine", h(cumul)]);
         sem = null; cumul = 0;
       }
     });
     return t;
+  }
+
+  /* Les mêmes contrôles qu'à l'écran, en phrases, pour les sorties : le papier
+     signé et le classeur doivent dire ce que le relevé montre. */
+  function phrasesControles() {
+    var a = analyse(), L = [];
+    if (a.jours.length) L.push("Journées au-delà de " + a.pl.jour + " heures : " +
+      a.jours.map(function (x) { return leJourDit(x.j) + " (" + nbh(x.h) + ")"; }).join(", ") + ".");
+    var dep = a.semaines.filter(function (x) { return x.depasse; });
+    if (dep.length) L.push("Semaines au-delà de " + a.pl.sem + " heures : " +
+      dep.map(function (x) { return "du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au +
+        " (" + nbh(x.h) + ")"; }).join(", ") + ".");
+    if (a.hs > 0.005) L.push("Heures au-delà de trente-cinq heures sur les semaines entières : " +
+      nbh(a.hs) + ", dont " + nbh(a.a25) + " dans les huit premières heures de chaque semaine et " +
+      nbh(a.a50) + " au-delà (L. 3121-28 ; à défaut d'accord, 25 % et 50 % par L. 3121-36, sous " +
+      "réserve de votre convention collective, qui n'est pas lue ici).");
+    if (!a.jours.length && !dep.length && a.hs <= 0.005)
+      L.push("Aucun dépassement des plafonds, et aucune semaine entière au-delà de trente-cinq heures.");
+    if (a.partielles) L.push(a.partielles > 1
+      ? a.partielles + " semaines chevauchent le mois voisin : leurs totaux se vérifient avec l'autre mois."
+      : "Une semaine chevauche le mois voisin : son total se vérifie avec l'autre mois.");
+    L.push("Plafonds appliqués : " + a.pl.jour + " heures par jour et " + a.pl.sem +
+      " heures par semaine (" + a.pl.source + ")" + (a.pl.dit ? ", catégorie « " + a.pl.dit + " »" : "") +
+      ". La moyenne de quarante-quatre heures sur douze semaines (L. 3121-22) ne se calcule pas sur un mois.");
+    return L;
   }
 
   /* ───────────────────── la feuille à signer, et l'e-mail ───────────────── */
@@ -832,6 +1021,11 @@
       h += '<p class="tot">Mois rouvert le ' + ech(enFrancais(o.le)) + (o.heure ? " à " + ech(o.heure) : "") +
         ", après une clôture du " + ech(enFrancais(o.closLe)) + " (empreinte " + ech(o.empreinte || "") +
         ") : " + ech(o.motif) + ".</p>";
+    });
+    /* Les plafonds et les heures au-delà de trente-cinq heures se lisent sur
+       le papier que le salarié signe, avant sa signature. */
+    phrasesControles().forEach(function (x) {
+      h += '<p class="tot">' + ech(x) + "</p>";
     });
     h += '<div class="sign">Remis au salarié le ..............................<br>' +
       "Signature du salarié, précédée de la mention « reçu le » :<br><br>" +
@@ -913,25 +1107,31 @@
       ["Entreprise", p.denomination || ""],
       ["Salarié", qui.nom + (qui.emp ? ", " + qui.emp : "")],
       ["Mois", MOIS[mo] + " " + an],
-      ["Horaire de référence", refDe(qui.id).d + " - " + refDe(qui.id).f +
-        ", pause " + refDe(qui.id).p + " min"],
+      /* L'ancien modèle à trois champs n'existe plus : cette ligne sortait
+         « undefined - undefined, pause undefined min ». Relevé le
+         26 septembre 2026. */
+      ["Horaire de référence", direSemaine(refDe(qui.id))],
       [],
     ];
+    var retenu = nombre(m.retenu);
     var pied = [
       [],
-      ["Total calculé par les jours", nbh(totalMois())],
-      ["Total retenu par l'entreprise", m.retenu ? nbh(nombre(m.retenu) || 0) : "à remplir"],
+      ["Total calculé par les jours (heures)", Math.round(totalMois() * 100) / 100],
+      ["Total retenu par l'entreprise (heures)", retenu === null ? "à remplir" : retenu],
       ["Motif de l'écart", m.motif || ""],
       ["État du mois", m.clos && m.clos.le
         ? "clos le " + enFrancais(m.clos.le) + ", empreinte " + m.clos.empreinte
         : "en cours"],
       [],
+      ["Heures supplémentaires et plafonds"],
+    ].concat(phrasesControles().map(function (p) { return [p]; })).concat([
+      [],
       ["Établi en application des articles L. 3171-2 et D. 3171-8 du code du travail. " +
        "À conserver un an au moins à la disposition de l'inspection du travail (D. 3171-16)."],
-    ];
+    ]);
     var feuilles = [{
       titre: "Décompte",
-      lignes: tete.concat(tableauMois()).concat(pied),
+      lignes: tete.concat(tableauMois(true)).concat(pied),
       largeurs: [26, 22, 12, 12, 14, 12],
     }];
 
@@ -991,7 +1191,8 @@
       { k: "p", t: "Total retenu par l'entreprise : " +
         (m.retenu ? nbh(nombre(m.retenu) || 0) : "à compléter") + "." +
         (m.motif ? " Motif de l'écart : " + m.motif + "." : "") },
-    ];
+      { k: "h2", t: "Heures supplémentaires et plafonds" },
+    ].concat(phrasesControles().map(function (x) { return { k: "p", t: x }; }));
     if (m.clos && m.clos.le) {
       items.push({ k: "note", t: "Mois clos le " + enFrancais(m.clos.le) + " à " + (m.clos.heure || "") +
         ". Empreinte des lignes : " + m.clos.empreinte + "." });
@@ -1167,9 +1368,46 @@
       var m = moisDe(); m.motif = $("t-motif").value; garderMois(m);
     });
 
+    /* CE QUI EMPÊCHE DE CLORE.
+
+       Trois clôtures étaient acceptées qui n'auraient pas dû l'être : un mois
+       à venir, dont les journées ne sont que l'horaire de référence recopié ;
+       un mois sans total retenu, c'est-à-dire scellé sans que personne ait dit
+       combien d'heures sont payées ; un écart entre le calcul et le total
+       retenu sans un mot pour l'expliquer. Relevé le 26 septembre 2026. Le
+       refus dit lequel des trois, et met le curseur dans la case qui manque. */
+    function refusDeClore() {
+      var m = moisDe(), d = new Date();
+      var finDuMois = new Date(an, mo + 1, 0);
+      if (finDuMois > d) {
+        return { dit: "Ce mois n'est pas terminé : il se clôt à partir du " +
+          enFrancais(iso(new Date(an, mo + 1, 1))) + ". Les journées qui restent ne sont que " +
+          "l'horaire de référence recopié, elles n'ont pas été travaillées.", ou: null };
+      }
+      var n = nombre(m.retenu);
+      if (n === null) {
+        return { dit: "Le total retenu par l'entreprise n'est pas saisi : un mois se clôt sur un " +
+          "nombre d'heures, pas sur une case vide.", ou: "t-retenu" };
+      }
+      if (Math.abs(n - totalMois()) >= 0.005 && !net(m.motif)) {
+        return { dit: "Le total retenu diffère du calcul des jours de " +
+          nbh(Math.abs(n - totalMois())) + " : le motif de l'écart est à écrire avant la clôture.",
+          ou: "t-motif" };
+      }
+      return null;
+    }
+
     $("clore").addEventListener("click", function () {
       var m = moisDe();
       if (m.clos && m.clos.le) return;
+      var refus = refusDeClore();
+      var zr = $("cl-refus");
+      if (refus) {
+        if (zr) { zr.textContent = refus.dit; zr.hidden = false; }
+        if (refus.ou && $(refus.ou)) { $(refus.ou).focus(); $(refus.ou).scrollIntoView({ behavior: "smooth", block: "center" }); }
+        return;
+      }
+      if (zr) { zr.hidden = true; zr.textContent = ""; }
       if (!window.confirm("Clore " + MOIS[mo] + " " + an + " pour " + qui.nom +
         " ? Le mois passe en lecture seule ; ensuite, une correction ne peut plus " +
         "qu'ouvrir un rectificatif daté.")) return;

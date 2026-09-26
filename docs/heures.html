@@ -123,6 +123,10 @@
     font-variant-numeric:tabular-nums}
   .jour .h small{display:block;font:400 10px/1.5 system-ui;color:var(--texte-3)}
   .jour.change{box-shadow:inset 3px 0 0 var(--ambre)}
+  /* La journée qui passe le plafond quotidien : liseré rouge, et l'heure du
+     jour en rouge. Elle se voit dans la grille sans qu'on lise une liste. */
+  .jour.trop{box-shadow:inset 3px 0 0 var(--rouge)}
+  .jour.trop .h{color:var(--rouge)}
   .jour.verrou select,.jour.verrou input{background:var(--creux);color:var(--texte-2)}
   .semaine{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
     padding:9px 10px 13px;border-bottom:1px solid var(--filet);
@@ -143,6 +147,12 @@
     background:var(--surface);color:var(--texte)}
   .ecart{margin:10px 0 0;font-size:var(--t2);font-weight:600;color:var(--ambre)}
   .ecart.ok{color:var(--vert)}
+  /* Les contrôles du mois : ce qui est franchi se lit d'abord, en rouge, et
+     porte le jour et le chiffre. Le reste est en gris, c'est du rappel. */
+  .al{margin:0 0 8px;font-size:var(--t2);font-weight:600;color:var(--ambre)}
+  .al.rouge{color:var(--rouge)}
+  #controles p.doux{margin:0 0 8px}
+  #controles p:last-child{margin-bottom:0}
 
   .sceau{margin:var(--e3) 0 0;border:1px solid var(--vert);background:var(--vert-clair);
     border-radius:var(--r1);padding:12px 14px}
@@ -309,6 +319,15 @@
         <input type="text" id="t-motif" placeholder="pourquoi le total retenu diffère du calcul des jours"></label>
     </div>
 
+    <!-- CE QUE LE RELEVÉ DOIT DIRE AVANT D'ÊTRE SIGNÉ.
+         Il additionnait les journées sans dire qu'une journée de treize heures
+         ou une semaine de cinquante-quatre heures est interdite, ni combien
+         d'heures passaient la durée légale. Relevé le 26 septembre 2026. -->
+    <div class="bloc">
+      <h2>Heures supplémentaires et plafonds</h2>
+      <div id="controles"></div>
+    </div>
+
     <div class="bloc">
       <h2>Clôture du mois</h2>
       <p class="doux">Une fois clos, le mois passe en lecture seule et son empreinte est calculée :
@@ -320,6 +339,7 @@
         <button type="button" class="second" id="rectifier" hidden>Ouvrir un rectificatif</button>
         <button type="button" class="second" id="rouvrir" hidden>Rouvrir le mois</button>
       </div>
+      <p class="al rouge" id="cl-refus" hidden></p>
       <div class="sceau" id="sceau" hidden><div class="t">Mois clos</div><div class="d" id="sceau-d"></div></div>
       <div id="f-rectif" hidden>
         <div class="deux">

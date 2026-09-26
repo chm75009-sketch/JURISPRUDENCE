@@ -110,13 +110,20 @@
     '<top style="medium"><color rgb="FF4A5568"/></top><bottom style="medium"><color rgb="FF4A5568"/></bottom>' +
     '<diagonal/></border></borders>' +
     '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-    '<cellXfs count="6">' +
+    '<cellXfs count="8">' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
     '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>' +
     '<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
+    /* LES NOMBRES SONT DES NOMBRES. Styles 6 et 7 : les mêmes cellules
+       cadrées que 3 et 5, au format « 0,00 », alignées à droite. Toute
+       cellule était écrite en texte, et un relevé d'heures ouvert dans Excel
+       ne se totalisait pas : « 154,50 » y était une chaîne. Relevé le
+       26 septembre 2026. */
+    '<xf numFmtId="2" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
+    '<xf numFmtId="2" fontId="0" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
     '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
 
   /* La ligne d'en-tête d'une feuille : la première qui porte au moins quatre
@@ -160,6 +167,13 @@
       for (var j = 0; j < largeur; j++) {
         var cel = ligne[j], ref = colonne(j + 1) + (i + 1);
         if (cel === null || cel === undefined || cel === "") { x += '<c r="' + ref + '" s="' + style + '"/>'; continue; }
+        /* Un nombre passé comme nombre s'écrit en nombre : il s'additionne
+           dans le tableur, et il s'affiche avec deux décimales. */
+        if (typeof cel === "number" && isFinite(cel)) {
+          var sn = style === 5 ? 7 : (style === 3 ? 6 : style);
+          x += '<c r="' + ref + '" s="' + sn + '"><v>' + cel + "</v></c>";
+          continue;
+        }
         x += '<c r="' + ref + '" s="' + style + '" t="inlineStr"><is><t xml:space="preserve">' + ech(cel) + "</t></is></c>";
       }
       x += "</row>";

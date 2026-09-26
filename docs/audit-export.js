@@ -225,9 +225,11 @@
     interdit: function (i) { return par(i.t, { gras: true, couleur: "8E1B1B", cadre: true }) +
       par(i.pourquoi + "  ·  " + i.id, { taille: 18, couleur: "5F6874", cadre: true }); },
     acquis: function (i) { return par("✓ " + i.t + ", " + i.base, { puce: true }); },
-    rouge: function (i) { return '<p style="color:#C00000">' + ech(i.t) + "</p>"; },
     table: function (i) { return tableau(i.head, i.rows); },
-    /* Ce qui a été ajouté ou corrigé après coup, et qui doit se voir. */
+    /* Ce qui a été ajouté ou corrigé après coup, et qui doit se voir. Une
+       première version de cette ligne écrivait du HTML, « <p style=... > », au
+       milieu du XML de Word ; elle était doublée par celle-ci, qui seule
+       comptait. Le doublon est retiré le 26 septembre 2026. */
     rouge: function (i) { return par(i.t, { couleur: "C00000" }); },
   };
 

@@ -565,6 +565,12 @@
       heuresMois: String(PROFIL.mensuel || ""),
       dureeQuoi: "temps de service du poste " + String(PROFIL.nom || "") +
         ", convention collective des transports routiers",
+      /* La catégorie de R. 3312-50 part avec l'embauche : c'est elle qui donne
+         au décompte des heures le plafond hebdomadaire du poste, cinquante-six
+         heures pour le grand routier, cinquante-deux pour les autres roulants.
+         Sans elle, le décompte appliquait les quarante-huit heures du code du
+         travail à un conducteur. Relevé le 26 septembre 2026. */
+      categorieTransport: PROFIL.roulant ? (PROFIL.grandRoutier ? "grand" : "courte") : "",
     });
     if (!r) { $("etat").textContent = "Rien n'a été inscrit."; return; }
     var dits = [];
