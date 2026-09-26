@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avis de contravention</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LES AVIS DE CONTRAVENTION, ET LA DÉSIGNATION DU CONDUCTEUR.
+
+  Un transporteur reçoit des avis au nom de la société ; il a quarante-cinq
+  jours pour dire qui conduisait, et il ne les tenait nulle part. L'audit du
+  26 septembre 2026 l'a relevé : ni suivi des avis, ni lettre prête, ni lien
+  avec les points du conducteur.
+
+  Le texte, lu à la source le 26 septembre 2026, deux lectures concordantes,
+  code de la route servi par le relais sous son nom :
+
+    L. 121-6   LEGIARTI000051877187  quand l'infraction constatée par contrôle
+               automatique est commise avec un véhicule dont le titulaire du
+               certificat d'immatriculation est une personne morale, « le
+               représentant légal de cette personne morale doit indiquer, par
+               lettre recommandée avec demande d'avis de réception ou de façon
+               dématérialisée [...] dans un délai de quarante-cinq jours à
+               compter de l'envoi ou de la remise de l'avis d'infraction [...]
+               l'identité et l'adresse de la personne physique qui conduisait
+               ce véhicule », sauf vol, usurpation de plaque ou force majeure ;
+               ne pas le faire est puni de l'amende des contraventions de la
+               quatrième classe, ou de la cinquième quand l'infraction est un
+               délit.
+
+  Ce que la page ne fait pas : elle ne dit pas combien de points telle
+  infraction retire. Le barème est au code de la route, article par article,
+  et l'application ne l'a pas lu. Les points restants sont ceux que
+  l'employeur a portés sur la fiche du conducteur, dans la flotte.
+-->
+
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .filtres{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
+  .filtres button{flex:1 1 auto;min-height:40px;padding:0 12px;border:1px solid var(--filet);
+    border-radius:var(--r2);background:var(--surface);color:var(--encre,#16181d);
+    cursor:pointer;font:15px system-ui}
+  .filtres button.actif{background:var(--accent,#1f3864);color:#fff;border-color:var(--accent,#1f3864)}
+  .compte{margin:8px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .av{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);
+    margin:10px 0 0;padding:12px 14px}
+  .av b.q{display:block;font:600 17px/1.3 system-ui;color:var(--encre)}
+  .av .resume{margin:4px 0 0;font-size:14.5px;color:var(--texte-2)}
+  .jauge{display:inline-block;margin:8px 0 0;padding:2px 8px;border-radius:999px;
+    font:600 13px/1.6 system-ui}
+  .jauge.ok{background:var(--vert-clair);color:var(--vert)}
+  .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
+  .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
+  .av .barre{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}
+  .av .barre button{flex:1 1 auto;min-height:42px;padding:0 12px;border-radius:var(--r2);
+    cursor:pointer;font:600 14.5px system-ui;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre)}
+  .av .barre button.p{background:var(--accent);border-color:var(--accent);color:#fff}
+  .ajout{margin:16px 0 0;border:1px solid var(--filet);border-radius:var(--r2);
+    background:var(--surface);padding:12px 14px}
+  .ajout summary{font:600 16px/1.4 system-ui;color:var(--accent);cursor:pointer}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 0}
+  .ch{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texte-2)}
+  .ch.pleine{grid-column:1 / -1}
+  .ch input,.ch select,.ch textarea{min-height:44px;padding:8px 10px;border:1px solid var(--filet);
+    border-radius:var(--r2);font:16px system-ui;background:#fff;color:var(--encre);
+    font-family:inherit;width:100%;box-sizing:border-box}
+  .avis{margin:12px 0 0;border-radius:var(--r2);padding:12px 14px;font-size:14.5px;line-height:1.55}
+  .avis b{display:block;margin-bottom:4px}
+  .avis.non{background:var(--rouge-clair);color:var(--rouge)}
+  .avis.att{background:var(--ambre-clair);color:var(--ambre)}
+  .avis.ok{background:var(--vert-clair);color:var(--vert)}
+  .avis.info{background:var(--creux);color:var(--texte-2)}
+  .avis ul{margin:6px 0 0;padding-left:20px}
+  .feuille{margin:14px 0 0;border:1px solid var(--filet);border-radius:var(--r2);
+    background:#fff;padding:16px}
+  .feuille p{margin:0 0 10px;font-size:15px;line-height:1.55;color:var(--encre)}
+  .feuille h2{font:700 17px/1.3 Georgia,serif;margin:0 0 12px;text-align:center}
+  .barre-doc{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+  .barre-doc button{flex:1 1 auto;min-height:46px;padding:0 14px;border-radius:var(--r2);
+    cursor:pointer;font:600 15px system-ui;border:1px solid var(--filet);
+    background:var(--surface);color:var(--encre)}
+  .barre-doc button.p{background:var(--accent);border-color:var(--accent);color:#fff}
+  .suite{margin:var(--e5) 0 0}
+  .suite a{display:block;padding:14px 0;border-bottom:1px solid var(--filet);
+    color:var(--encre);text-decoration:none;font:400 17px/1.3 system-ui}
+  .loi{margin:var(--e5) 0 0}
+  .loi .ident{font:12px/1 ui-monospace,monospace;color:var(--texte-3)}
+  @media (max-width:430px){ .champs{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Avis de contravention</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <p class="rappel-fiche" id="rappel"></p>
+
+  <div id="alertes"></div>
+
+  <div class="filtres" id="filtres">
+    <button type="button" data-f="adesigner" class="actif">À désigner</button>
+    <button type="button" data-f="tous">Tous</button>
+  </div>
+  <p class="compte" id="compte"></p>
+
+  <div id="liste"></div>
+
+  <details class="ajout" id="ajout">
+    <summary>Enregistrer un avis reçu</summary>
+    <div class="champs">
+      <label class="ch"><span>Date de l'avis</span><input type="date" id="a-le"></label>
+      <label class="ch"><span>Numéro de l'avis</span><input type="text" id="a-num" placeholder="celui porté sur l'avis"></label>
+      <label class="ch"><span>Véhicule</span><select id="a-immat"></select></label>
+      <label class="ch"><span>Conducteur ce jour-là</span><select id="a-cond"></select></label>
+      <label class="ch pleine"><span>Nature de l'infraction, telle que l'avis la porte</span>
+        <input type="text" id="a-nature" placeholder="excès de vitesse de moins de 20 km/h"></label>
+      <label class="ch pleine"><span>Lieu et date de l'infraction, tels que l'avis les porte</span>
+        <input type="text" id="a-ou" placeholder="A13, sens Paris-Rouen, le 12 septembre 2026 à 14 h 05"></label>
+    </div>
+    <div class="barre-doc"><button type="button" class="p" id="a-ajout">Enregistrer l'avis</button></div>
+  </details>
+
+  <div id="doc" hidden>
+    <div class="feuille" id="feuille"></div>
+    <div class="barre-doc">
+      <button type="button" class="p" id="btn-word">Télécharger en Word</button>
+      <button type="button" id="btn-imprimer">Imprimer</button>
+      <button type="button" id="btn-fermer">Fermer</button>
+    </div>
+  </div>
+
+  <div class="suite">
+    <a href="flotte.html">La flotte et les conducteurs, où se tiennent les points et les permis</a>
+    <a href="sanctions.html">Le registre des sanctions, si les faits appellent une suite disciplinaire</a>
+    <a href="gerer.html">La gestion du quotidien</a>
+  </div>
+
+  <details class="loi"><summary>Voir le texte de loi</summary><div id="textes"></div></details>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function ech(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function net(v) { return String(v == null ? "" : v).trim(); }
+
+  var CLE = "flotte-contraventions";
+  var CLE_REG = "registre-personnel";
+  var CLE_VEH = "flotte-vehicules";
+  var CLE_COND = "flotte-conducteurs";
+  var AUJOURDHUI = new Date();
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+
+  var profil = {};
+  try { profil = (window.Profil && window.Profil.lire) ? (window.Profil.lire() || {}) : {}; }
+  catch (e) { profil = {}; }
+
+  var TEXTES = {
+    "L121-6": { id: "LEGIARTI000051877187", code: "Code de la route",
+      dit: "le représentant légal de la personne morale titulaire du certificat d'immatriculation doit indiquer, par lettre recommandée avec avis de réception ou par voie dématérialisée, dans un délai de quarante-cinq jours à compter de l'envoi ou de la remise de l'avis, l'identité et l'adresse de la personne physique qui conduisait, sauf vol, usurpation de plaque ou force majeure ; à défaut, amende des contraventions de la quatrième classe, ou de la cinquième quand l'infraction est un délit" }
+  };
+
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function deIso(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(net(v));
+    if (!m) return null;
+    var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12, 0, 0);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function dateFr(v) {
+    var d = v instanceof Date ? v : deIso(v);
+    if (!d) return net(v);
+    return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function plusJours(v, n) {
+    var d = v instanceof Date ? new Date(v.getTime()) : deIso(v);
+    if (!d) return null;
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+  function joursEntre(a, b) {
+    if (!a || !b) return null;
+    return Math.round((a.getTime() - b.getTime()) / 864e5);
+  }
+  function slug(s) {
+    try {
+      return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
+  }
+  function lireLocal(cle, defaut) {
+    try { return JSON.parse(localStorage.getItem(cle) || "null") || defaut; }
+    catch (e) { return defaut; }
+  }
+
+  function salaries() {
+    var E = lireLocal(CLE_REG, null);
+    return ((E && E.salaries) || []).filter(function (s) {
+      return !s.ex && !net(s.sor) && (net(s.nom) || net(s.pre));
+    }).map(function (s) {
+      var nom = (net(s.nom) + " " + net(s.pre)).trim();
+      return { id: slug(nom), nom: nom, emp: net(s.emp) };
+    });
+  }
+  function vehicules() {
+    var L = lireLocal(CLE_VEH, []);
+    return (L && L.length ? L : []).map(function (v) {
+      return { immat: net(v.immat), marque: net(v.marque) };
+    }).filter(function (v) { return v.immat; });
+  }
+  function fichesConducteurs() { return lireLocal(CLE_COND, {}) || {}; }
+
+  function avis() {
+    var L = lireLocal(CLE, []);
+    return (L && L.length ? L : []).slice().sort(function (a, b) {
+      return String(b.le).localeCompare(String(a.le));
+    });
+  }
+  function garder(L) {
+    try { localStorage.setItem(CLE, JSON.stringify(L)); } catch (e) {}
+  }
+  function ajouter(a) {
+    var L = lireLocal(CLE, []) || [];
+    L.push(a);
+    garder(L);
+  }
+  function majAvis(id, champ, valeur) {
+    var L = lireLocal(CLE, []) || [];
+    L.forEach(function (a) { if (a.id === id) a[champ] = valeur; });
+    garder(L);
+  }
+  function oter(id) {
+    garder((lireLocal(CLE, []) || []).filter(function (a) { return a.id !== id; }));
+  }
+
+  /* LES QUARANTE-CINQ JOURS DE L. 121-6.
+     Ils courent de l'envoi ou de la remise de l'avis : c'est la date portée
+     sur l'avis que l'employeur saisit, et rien d'autre. */
+  function etatDe(a) {
+    if (net(a.designeLe))
+      return { etat: "ok", dit: "désigné le " + dateFr(a.designeLe) };
+    var fin = plusJours(a.le, 45);
+    if (!fin) return { etat: "att", dit: "date de l'avis à saisir" };
+    var j = joursEntre(fin, new Date(AUJOURDHUI.getFullYear(), AUJOURDHUI.getMonth(),
+      AUJOURDHUI.getDate(), 12, 0, 0));
+    if (j < 0) return { etat: "non", fin: fin, jours: j,
+      dit: "délai dépassé depuis " + (-j) + " jour" + (-j > 1 ? "s" : "") };
+    if (j <= 10) return { etat: "non", fin: fin, jours: j,
+      dit: j === 0 ? "dernier jour" : "à désigner dans " + j + " jour" + (j > 1 ? "s" : "") };
+    return { etat: "att", fin: fin, jours: j, dit: "à désigner avant le " + dateFr(fin) };
+  }
+
+  /* ──────────────────────────────── l'écran ──────────────────────────── */
+  var FILTRE = "adesigner";
+
+  function rendre() {
+    var L = avis();
+    var aFaire = L.filter(function (a) { return !net(a.designeLe); });
+    var cartes = L.map(function (a) {
+      if (FILTRE === "adesigner" && net(a.designeLe)) return "";
+      return carte(a);
+    }).join("");
+    $("liste").innerHTML = cartes || '<div class="avis info"><b>Rien dans cette vue</b>' +
+      (L.length ? "Tous les avis enregistrés portent une désignation. Le filtre « Tous » les montre."
+        : "Aucun avis n'est enregistré : ouvrez « Enregistrer un avis reçu » ci-dessous.") + "</div>";
+    $("compte").textContent = L.length + " avis enregistré" + (L.length > 1 ? "s" : "") + " · " +
+      aFaire.length + " sans désignation";
+    rendreAlertes(aFaire);
+    cabler();
+  }
+
+  function carte(a) {
+    var e = etatDe(a);
+    var f = fichesConducteurs()[a.cond] || {};
+    var pts = net(f.points);
+    return '<div class="av" data-id="' + ech(a.id) + '">' +
+      '<b class="q">' + ech(net(a.immat) || "[véhicule]") + " · " +
+      ech(net(a.nature) || "nature non précisée") + "</b>" +
+      '<p class="resume">' + ech("Avis du " + dateFr(a.le) +
+        (net(a.num) ? ", n° " + a.num : "") +
+        (net(a.ou) ? " · " + a.ou : "")) + "</p>" +
+      '<p class="resume">' + ech(net(a.condNom)
+        ? "Conducteur : " + a.condNom + (pts ? ", " + pts + " points au dernier relevé porté à la flotte" : "")
+        : "Conducteur non désigné dans cet écran") + "</p>" +
+      '<span class="jauge ' + e.etat + '">' + ech(e.dit) + "</span>" +
+      '<div class="barre">' +
+      '<button type="button" class="p" data-lettre="' + ech(a.id) + '">La lettre de désignation</button>' +
+      (net(a.designeLe)
+        ? '<button type="button" data-annuler="' + ech(a.id) + '">Retirer la date de désignation</button>'
+        : '<button type="button" data-fait="' + ech(a.id) + '">Désigné aujourd\'hui</button>') +
+      '<button type="button" data-oter="' + ech(a.id) + '">Retirer cet avis</button>' +
+      "</div></div>";
+  }
+
+  function rendreAlertes(aFaire) {
+    var retard = [], proches = [];
+    aFaire.forEach(function (a) {
+      var e = etatDe(a);
+      if (e.etat === "non" && e.jours < 0) retard.push({ a: a, e: e });
+      else if (e.etat === "non") proches.push({ a: a, e: e });
+    });
+    var h = "";
+    if (retard.length)
+      h += '<div class="avis non"><b>' + retard.length + " avis dont les quarante-cinq jours sont passés</b><ul><li>" +
+        retard.map(function (x) {
+          return ech(net(x.a.immat) + ", avis du " + dateFr(x.a.le) + " : " + x.e.dit);
+        }).join("</li><li>") + "</li></ul>" +
+        "Ne pas désigner est puni de l'amende des contraventions de la quatrième classe, " +
+        "ou de la cinquième quand l'infraction est un délit (L. 121-6 du code de la route).</div>";
+    if (proches.length)
+      h += '<div class="avis att"><b>' + proches.length + " avis à désigner dans les dix jours</b><ul><li>" +
+        proches.map(function (x) {
+          return ech(net(x.a.immat) + ", avis du " + dateFr(x.a.le) + " : " + x.e.dit);
+        }).join("</li><li>") + "</li></ul></div>";
+    if (!retard.length && !proches.length)
+      h = '<div class="avis ok"><b>Aucun délai de désignation en cours</b>' +
+        "Les quarante-cinq jours courent de l'envoi ou de la remise de l'avis (L. 121-6).</div>";
+    $("alertes").innerHTML = h;
+  }
+
+  function cabler() {
+    var z = $("liste");
+    Array.prototype.forEach.call(z.querySelectorAll("[data-lettre]"), function (b) {
+      b.addEventListener("click", function () { ouvrirLettre(b.getAttribute("data-lettre")); });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-fait]"), function (b) {
+      b.addEventListener("click", function () {
+        majAvis(b.getAttribute("data-fait"), "designeLe", iso(AUJOURDHUI));
+        rendre();
+      });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-annuler]"), function (b) {
+      b.addEventListener("click", function () {
+        majAvis(b.getAttribute("data-annuler"), "designeLe", "");
+        rendre();
+      });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-oter]"), function (b) {
+      b.addEventListener("click", function () {
+        oter(b.getAttribute("data-oter"));
+        rendre();
+      });
+    });
+  }
+
+  /* ──────────────────────────────── la lettre ────────────────────────── */
+  var DOC = null;
+  function lettreDe(a) {
+    var L = [];
+    var ent = net(profil.denomination) || "[dénomination]";
+    L.push({ k: "p", t: ent });
+    if (net(profil.adresse)) L.push({ k: "p", t: profil.adresse });
+    if (net(profil.siret)) L.push({ k: "p", t: "SIRET " + profil.siret });
+    L.push({ k: "p", t: " " });
+    L.push({ k: "p", t: "[autorité mentionnée sur l'avis de contravention, et son adresse]" });
+    L.push({ k: "p", t: " " });
+    L.push({ k: "p", t: ville() + ", le " + dateFr(iso(AUJOURDHUI)) });
+    L.push({ k: "p", t: "Lettre recommandée avec demande d'avis de réception" });
+    L.push({ k: "t1", t: "Désignation du conducteur" });
+    L.push({ k: "p", t: "Objet : avis de contravention n° " + (net(a.num) || "[numéro de l'avis]") +
+      ", véhicule " + (net(a.immat) || "[immatriculation]") + "." });
+    L.push({ k: "p", t: "Madame, Monsieur," });
+    L.push({ k: "p", t: "Nous avons reçu l'avis de contravention visé en objet, daté du " +
+      dateFr(a.le) + ", concernant le véhicule immatriculé " +
+      (net(a.immat) || "[immatriculation]") + ", dont " + ent + " est titulaire du certificat " +
+      "d'immatriculation" + (net(a.nature) ? ", pour " + a.nature : "") +
+      (net(a.ou) ? ", " + a.ou : "") + "." });
+    L.push({ k: "p", t: "En application de l'article L. 121-6 du code de la route, nous vous " +
+      "indiquons l'identité et l'adresse de la personne physique qui conduisait ce véhicule :" });
+    L.push({ k: "p", t: "Nom et prénom : " + (net(a.condNom) || "[nom et prénom du conducteur]") + "." });
+    L.push({ k: "p", t: "Adresse : [adresse du conducteur]." });
+    L.push({ k: "p", t: "Date de naissance : [date de naissance]." });
+    L.push({ k: "p", t: "Permis de conduire : [numéro], délivré le [date] par [autorité]." });
+    L.push({ k: "p", t: "Cette désignation vous est adressée dans le délai de quarante-cinq jours " +
+      "à compter de l'envoi de l'avis, soit avant le " +
+      (plusJours(a.le, 45) ? dateFr(plusJours(a.le, 45)) : "[date]") + " (L. 121-6)." });
+    L.push({ k: "p", t: "Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos " +
+      "salutations distinguées." });
+    L.push({ k: "p", t: " " });
+    L.push({ k: "p", t: net(profil.responsable) || "[nom et qualité du représentant légal]" });
+    L.push({ k: "p", t: ent });
+    return { titre: "Désignation du conducteur", blocs: L,
+      fichier: "designation-" + (slug(net(a.immat)) || "vehicule") + "-" + net(a.le) };
+  }
+  function ville() {
+    var m = /(\d{5})\s+([^,;]+)$/.exec(net(profil.adresse));
+    return m ? m[2].trim() : "[ville]";
+  }
+  function ouvrirLettre(id) {
+    var a = null;
+    avis().forEach(function (x) { if (x.id === id) a = x; });
+    if (!a) return;
+    DOC = lettreDe(a);
+    $("feuille").innerHTML = DOC.blocs.map(function (b) {
+      if (b.k === "t1") return "<h2>" + ech(b.t) + "</h2>";
+      return "<p>" + ech(b.t) + "</p>";
+    }).join("");
+    $("doc").hidden = false;
+    $("doc").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("btn-fermer").addEventListener("click", function () { $("doc").hidden = true; });
+  $("btn-imprimer").addEventListener("click", function () { window.print(); });
+  $("btn-word").addEventListener("click", function () {
+    if (!DOC || !window.AuditExport) return;
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(DOC.blocs.map(function (b) {
+        return { k: b.k === "t1" ? "t1" : "p", t: b.t };
+      }), DOC.titre),
+      DOC.fichier + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* ──────────────────────────── l'enregistrement ─────────────────────── */
+  function remplirListes() {
+    var V = vehicules();
+    $("a-immat").innerHTML = '<option value="">- à préciser -</option>' +
+      V.map(function (v) {
+        return '<option value="' + ech(v.immat) + '">' + ech(v.immat +
+          (v.marque ? " · " + v.marque : "")) + "</option>";
+      }).join("");
+    var S = salaries();
+    $("a-cond").innerHTML = '<option value="">- à préciser -</option>' +
+      S.map(function (s) {
+        return '<option value="' + ech(s.id) + '">' + ech(s.nom) + "</option>";
+      }).join("");
+    if (!V.length)
+      $("a-immat").innerHTML = '<option value="">aucun véhicule à la flotte</option>';
+    if (!S.length)
+      $("a-cond").innerHTML = '<option value="">aucun salarié au registre</option>';
+  }
+
+  $("a-ajout").addEventListener("click", function () {
+    var le = net($("a-le").value);
+    if (!le) { $("a-le").focus(); return; }
+    var condId = net($("a-cond").value), condNom = "";
+    salaries().forEach(function (s) { if (s.id === condId) condNom = s.nom; });
+    ajouter({ id: "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+      le: le, num: net($("a-num").value), immat: net($("a-immat").value),
+      cond: condId, condNom: condNom, nature: net($("a-nature").value),
+      ou: net($("a-ou").value), designeLe: "" });
+    $("a-le").value = ""; $("a-num").value = "";
+    $("a-nature").value = ""; $("a-ou").value = "";
+    $("ajout").open = false;
+    rendre();
+  });
+
+  /* ──────────────────────────────── le reste de l'écran ──────────────── */
+  Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      FILTRE = b.getAttribute("data-f");
+      Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (x) {
+        x.classList.toggle("actif", x === b);
+      });
+      rendre();
+    });
+  });
+
+  $("rappel").textContent = [net(profil.denomination),
+    "quarante-cinq jours pour désigner le conducteur (L. 121-6 du code de la route)"]
+    .filter(Boolean).join(" · ");
+
+  $("textes").innerHTML = Object.keys(TEXTES).map(function (c) {
+    var t = TEXTES[c];
+    return "<p><b>" + ech(c.replace(/^([A-Z])(\d)/, "$1. $2")) + "</b> (" + ech(t.code) +
+      ") <span class=\"ident\">" + ech(t.id) + "</span><br>" + ech(t.dit) + "</p>";
+  }).join("");
+
+  remplirListes();
+  rendre();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>
