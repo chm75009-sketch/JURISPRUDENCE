@@ -284,7 +284,7 @@ def construire(sortie="Boudjemaa-livre.docx"):
     for t in A_CHERCHER:
         par(doc, "- " + t, apres=5)
 
-    p = par(doc, "État de la lecture au 24 septembre 2026", taille=14,
+    p = par(doc, "État de la lecture au 26 septembre 2026", taille=14,
             gras=True, couleur=BLEU, avant=16, apres=8)
     p.paragraph_format.keep_with_next = True
     for t in [
@@ -293,6 +293,7 @@ def construire(sortie="Boudjemaa-livre.docx"):
         "937 numéros du Mémorial, quotidien de Saint-Étienne, juin 1936 - janvier 1939, interrogés un par un ; quarante et un le nomment. La reproduction en image de ce titre est refusée par la Bibliothèque nationale de France.",
         "150 numéros du Forez sportif, 1936-1939, interrogés ; sept le nomment.",
         "114 numéros de L'Alsace et des Dernières Nouvelles d'Alsace autour de sa mort : aucune mention.",
+        "20 numéros de La Tribune de l'Aube, Troyes, portent le nom ; quatorze sont bien lui, six sont des homonymes de la rubrique des tribunaux. La reproduction en image de ce titre est refusée : le texte a été reconstitué par fenêtres de recherche, et non lu sur la page.",
         "La presse niçoise n'est pas numérisée : ni L'Éclaireur de Nice ni Le Petit Niçois ne sont accessibles pour 1935-1937. Les citations niçoises de ce livre viennent des coupures communiquées par l'OGC Nice et par l'auteur.",
     ]:
         par(doc, "- " + t, apres=5)

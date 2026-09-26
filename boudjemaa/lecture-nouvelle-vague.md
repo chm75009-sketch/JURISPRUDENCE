@@ -419,9 +419,6 @@ l'avoir vendu.
 
 ## CE QUI RESTE À LIRE
 
-- La Tribune de l'Aube, Troyes : 11 numéros, dont 2 homonymes. Même refus en
-  image que Le Mémorial, même méthode de fenêtres recousues. Récolte en
-  cours.
 - Le Petit Matin de Tunis, 1932-1936 : 39 numéros portent le nom, dont 2
   seulement relèvent du football. Les 37 autres sont des homonymes : vols,
   faillites, liquidations judiciaires, un double suicide, des courses de
@@ -430,3 +427,77 @@ l'avoir vendu.
 - Quatre numéros de L'Écho de Tunis de 1943 et 1944 où la recherche a trouvé
   le nom sans que la reconnaissance de caractères le retrouve sur l'image :
   à reprendre page par page.
+
+---
+
+## La Tribune de l'Aube, Troyes : les vingt numéros, lus le 26 septembre 2026
+
+Gallica refuse la reproduction en image de ce titre, comme pour Le Mémorial.
+Le texte ci-dessous a été reconstitué par fenêtres de recherche successives.
+Ce sont des extraits, pas une lecture de page.
+
+Vingt numéros portent le nom. Quatorze sont bien lui, six sont des homonymes :
+31 mars 1917, 4 septembre 1924, 23 mars 1929, 13 janvier 1938, 6 novembre 1938
+et 29 septembre 1939. Tous les six relèvent de la rubrique des tribunaux.
+
+### 1917-03-31  - HOMONYME, ce n'est pas lui
+PAG_3 : Boudjemaa ben Laniari, J3 ans, appartient au 8 e régiment de tirailleurs(...)50 (composée exactement comme celle volée) sur lea instructions de Boudjemaa
+
+### 1924-09-04  - HOMONYME, ce n'est pas lui
+PAG_3 : REIMS Un Atgérien égorgé. — Dans la nuit de lundi à mardi, vers 2 heures, à la sortie d’une maison hospitalière, l’Arabe Tama- zist Boudjema frappa d’un coup de couteau à la gorge son compatriote Tahadjout Mohamed ben Ali et lui déroba une somme de 150 francs
+
+### 1929-03-23  - HOMONYME, ce n'est pas lui
+PAG_2 : Saïd Boudjema ben Arnara, avec un sabot qu’il lui appliqua sur le nez
+
+### 1936-03-07
+PAG_6 : Avants : Marino, Beraudo A, Dubois, Boudjema, Granler Une défense solide où entre les poteaux, opère l’ex goal du Stade Français(...)
+
+### 1936-03-08
+PAG_4 : C’est cette équipe bénéficiant de la rentrée de Boudjemaa, de l’appoint de Mou(...)
+
+### 1936-03-09
+PAG_5 : I Boudjema et Dubois(...)On y avait d'ailleurs du répondant — en de>hors de la victoire sur Amiens, et sous un autre angle. — Calsaz — un Charles Pélissier en plus étoffé — Moudry, Boudjema. un robuste africain aux cheveux crépus étalent de tai le à le supporter(...)désavouer et dont Boudjema ne tenta pas de se disculper
+
+### 1937-05-29
+PAG_5 : soigner la forme que le Demain , à 15 hau Stade de l A ube Devant NICE et ses étoiles la tâche de l’A.S.T.S. sera rude Dt-meln eu Stade de l'aune, l’O G.C. Nice se présentera avec toutes les vedet- tes qui ont nom Samltler, le fameux International espagnol Boudjema, un Nord- Africain de qualité et l'Italien Orlandlnl, Joueur de premier ordre(...)avants : Bnwsenux, Logez, Samétier, Boudjema, PelUgrlno
+
+### 1937-05-30
+PAG_5 : avec les Samitler, Boudjemaa, Or- nous disait-il. dandinai et autres Chalsaz, qu’au surplus j en cette fin de saison Us viennent d’aff. j mer une forme éclatante qui les a vu(...)Brusseaux, Lopez, Samitler, Boudjemaa, Pellegrino
+
+### 1937-06-01
+PAG_4 : et sur passes croisées Pellegrlno-Boudjema, oblige Troyes A mettre en corner(...)Coup franc contre Eory et bel arrêt de Barella sur un shoot très sec de Boudjema(...)Le compte de Nice apparaît bon, mais trois minutes après, sur une action personnelle, Boudjema réduit le retard niçois à un but et un nouveau tir du même est bien dangereux
+
+### 1938-01-13  - HOMONYME, ce n'est pas lui
+PAG_2 : El Houssine ben Boudjemaa a volé un pont métallique entier, un pont pesant sept tonnes, qu'il vendit à un israélite(...)Seuls Allah et El Houssine ben Boudjemaa savaient de quel travail .i s'agissait(...)Voilà comment El Houssine ben Boudjemaa fut arrêté pour avoir vole, non
+
+### 1938-10-20
+PAG_4 : Ce sont notamment les Sochallrns Bellto et Gcugaln, le dynamique ayant centre Zopp, le Nord- Africain BoudJemaa, ,1e demi-aile Oth- man, le goal Wosniack, etc(...)
+
+### 1938-10-22
+PAG_5 : Les postes d’inters sont confiés à deux autres as : Tellechéa et Boudjemaa(...)Exjoueur de Sochaux, Tellechéa est le star- tige de la ligne et Boudjemaa, le travailleur actif se dépensant du commencement jusqu'à la fin
+
+### 1938-10-23
+PAG_6 : buts marqués par les visiteurs pendant les ramiers matchas da championnat disputés et la fameuse quintette comprenant Tellechéa, Belko, Zcpp Boudjemaa et Binon, z
+PAG_6 : Boudjem aa, Belko(...)buts marqués par les visiteurs pendant les ramiers matchas da championnat disputés et la fameuse quintette comprenant Tellechéa, Belko, Zcpp Boudjemaa et Binon, z
+
+### 1938-10-24
+PAG_6 : infranchissable, par contre, l’astucieux et souple Tchtchea et le brun et robuste Boudjemaa manifestèrent une louable activité, si elle ne fut pas productive(...)I Au contraire, sur une échappée de» Bxs- Troyes dominerait légèrement, quand j son, ben compris pur B ou agresse, c Boudjemaa(...)nt décevant. h la physionomie <ie la partie. j ^ ann. non Un shoot dangereux de Boudjemaa sur coup franc est suivi d’un tir terrible de Krebs qui Oblige Collet à détourner en corner
+
+### 1938-11-06  - HOMONYME, ce n'est pas lui
+PAG_2 : le pacha Si Bcudjemaa ben Em- bars. de Béni Mellal(...)
+
+### 1938-12-23
+PAG_4 : Il n’est pas douteux cependant qu’une ÂCTUAUT FAUTE D’UN JOUR, COLMAR PERDIT SA QUALIFICATION A l’ive de sa défaite devant Colmar, le R.C. Lens déposait une réclamation sur la qualification de Boudjemaa, arguant que sa demande de qualification datait du 10 août, alors que le règlement de la Coupe précise que la qualification
+
+### 1938-12-25
+PAG_7 : Colmar qui, cette fois, pourra disposer en toute certitude de Boudjemaa, est bien CHEZ LES AMATEURS Jusqu’à plus ample informé, nous avons vu qu’à une exception près, Laon-RomiUy, tes rencontres de division d’honneur auraient lieu
+
+### 1939-03-13
+PAG_6 : Un peu désemparés, les visiteurs vont flotter pendant quelque temps et encaisseront deux buts coup sur coup d'un Boudjema qui célèbre ainsi sa rentrée(...)Colmar : Wocnlack, Demuth, Delacourt, était à douter arriva, une balle très for- j Vlllacampa, Telletchea, Cuabrtllargues, te trompe Didier donnant l’égalisation I Meyer, Heine, Zopp, Boudjema, Emonoz
+
+### 1939-05-05
+PAG_4 : Boudjemaa, le brun et vif inter colma- rien, dont nous eûmes tout loisir de Juger des talents tant à Colmar qu’à Nice, Irait, dit-on, au Red Star qui, en vue de sa montée en division nationale se meuble et a engagé des pourparlers avec le demi envols La une
+
+### 1939-09-29  - HOMONYME, ce n'est pas lui
+PAG_3 : Boudjema fut poussé dans la cour par Louail Dcrradji, beau-père de Souici(...)Ce dernier, armé d’un couteau, frappa Boudjema à la main gauche(...)Boudjéma qui a reconnu avoir frappé Souici avec son rasoir retrouvé dans la cour par la police, a été mis à la disposition de M. le Procureur de la République par les soins de M. le Commissaire de police
+
