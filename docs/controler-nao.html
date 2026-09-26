@@ -360,6 +360,44 @@
      ══════════════════════════════════════════════════════════════════════════ */
   function bloc(titre, lignes) { return [titre, ""].concat(lignes).join("\n"); }
 
+  /* LES CHIFFRES DU PROCÈS-VERBAL DÉPOSÉ.
+
+     Un procès-verbal qui porte « +2 % », « +5 % » et « mesure unilatérale
+     +2 % » se voyait répondre par des paragraphes à crochets vides : ce que
+     l'employeur avait écrit n'était pas repris. Les pourcentages et les
+     montants sont relevés avec la phrase qui les porte, et les paragraphes
+     produits les proposent au lieu d'un blanc. Relevé le 26 septembre 2026. */
+  function chiffresDuTexte(t) {
+    var texte = String(t || "");
+    var out = [], vus = {};
+    var phrases = texte.split(/(?<=[.;!?])\s+|\n+/);
+    phrases.forEach(function (ph) {
+      var p = ph.replace(/\s+/g, " ").trim();
+      if (!p) return;
+      var m = p.match(/[-+]?\d+(?:[.,]\d+)?\s*%|\d[\d  ]*(?:,\d+)?\s*(?:euros|€)/gi);
+      if (!m) return;
+      m.forEach(function (v) {
+        var cle = v.replace(/\s+/g, "") + "|" + p.slice(0, 40);
+        if (vus[cle]) return;
+        vus[cle] = true;
+        out.push({ valeur: v.replace(/\s+/g, " ").trim(), phrase: p.length > 180 ? p.slice(0, 177) + "…" : p });
+      });
+    });
+    return out;
+  }
+  function lignesChiffres(chiffres, titre) {
+    if (!chiffres || !chiffres.length) return [];
+    var L = ["", titre, ""];
+    chiffres.slice(0, 12).forEach(function (c) {
+      L.push("  - " + c.valeur + " : « " + c.phrase + " »");
+    });
+    if (chiffres.length > 12) L.push("  - … et " + (chiffres.length - 12) + " autre(s) chiffre(s).");
+    L.push("");
+    L.push("Ces lignes viennent de votre procès-verbal : vérifiez-les, complétez-les,");
+    L.push("et rattachez chacune à la partie qui l'a formulée.");
+    return L;
+  }
+
   var CADRE = [
     "Position de l'employeur, en son dernier état : [.....................].",
     "Position de chaque organisation syndicale représentative, en son dernier",
@@ -776,7 +814,13 @@
         "nomme pas : la réponse se donne proposition par proposition, et se date.",
       ]) },
     { cle: "propositions", nom: "Les propositions respectives des parties, en leur dernier état (L. 2242-5)",
-      marques: ["dernier etat", "dernier état", "propositions respectives"],
+      /* Un procès-verbal peut consigner les propositions sans employer les
+         mots du code : « la direction a proposé », « la délégation a
+         demandé ». Ces tournures comptent. */
+      marques: ["dernier etat", "dernier état", "propositions respectives", "a propose", "a proposé",
+        "ont propose", "ont proposé", "proposition de l employeur", "proposition de la direction",
+        "revendication", "a demande", "a demandé"],
+      chiffres: "Chiffres relevés dans votre procès-verbal, à rattacher à leur auteur :",
       texte: bloc("ARTICLE - LES PROPOSITIONS RESPECTIVES DES PARTIES, EN LEUR DERNIER ÉTAT (L. 2242-5)", [
         "C'est la première des deux mentions que L. 2242-5 exige. Ce sont les",
         "propositions telles qu'elles se présentaient à la FIN de la négociation,",
@@ -803,7 +847,9 @@
         "consigner : ses observations sont annexées au présent procès-verbal.",
       ]) },
     { cle: "unilaterales", nom: "Les mesures que l'employeur entend appliquer unilatéralement (L. 2242-5)",
-      marques: ["unilateralement", "unilatéralement", "mesures unilaterales", "mesures unilatérales"],
+      marques: ["unilateralement", "unilatéralement", "mesures unilaterales", "mesures unilatérales",
+        "decision unilaterale", "décision unilatérale", "appliquera de sa propre initiative"],
+      chiffres: "Chiffres relevés dans votre procès-verbal, si l'un d'eux est une mesure unilatérale :",
       texte: bloc("ARTICLE - LES MESURES QUE L'EMPLOYEUR ENTEND APPLIQUER UNILATÉRALEMENT (L. 2242-5)", [
         "C'est la seconde mention que L. 2242-5 exige, et celle que l'on oublie.",
         "Elle n'est pas une menace : elle est ce qui rendra ces mesures opposables.",
@@ -1017,6 +1063,7 @@
     var n = normaliser(etat.texte);
     var f = fiche();
     etat.absents = []; etat.nbPresents = 0; etat.retenus = {}; etat.redige = {};
+    etat.chiffres = chiffresDuTexte(etat.texte);
     var liste = FORME.map(function (x) { return { fam: "Le procès-verbal lui-même", it: x }; })
       .concat((THEMES[f.nego] || []).map(function (x) {
         return { fam: "Les thèmes de l'article " + NEGOS[f.nego].contenu, it: x }; }));
@@ -1024,7 +1071,9 @@
       var vu = e.it.marques.some(function (m) { return n.indexOf(normaliser(m)) >= 0; });
       if (vu) { etat.nbPresents++; return; }
       etat.absents.push(e);
-      etat.redige[e.it.cle] = e.it.texte;
+      etat.redige[e.it.cle] = e.it.chiffres && etat.chiffres.length
+        ? e.it.texte + "\n" + lignesChiffres(etat.chiffres, e.it.chiffres).join("\n")
+        : e.it.texte;
       etat.retenus[e.it.cle] = true;
     });
     rendreParagraphes();
