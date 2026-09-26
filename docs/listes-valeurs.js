@@ -268,8 +268,51 @@
     return (!feminin && MASCULIN[adj]) ? MASCULIN[adj] : adj;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     QUI A BESOIN D'UN TITRE POUR TRAVAILLER, ET QUI N'EN A PAS BESOIN.
+
+     « L'employeur s'assure auprès des administrations territorialement
+     compétentes de l'existence du titre autorisant l'étranger à exercer une
+     activité salariée en France » (L. 5221-8, LEGIARTI000018766932). Et
+     R. 5221-2 (LEGIARTI000053963834) dispense d'autorisation de travail les
+     ressortissants de l'Union européenne, des autres États de l'Espace
+     économique européen et de la Confédération suisse. Les deux textes ont
+     été lus à la source le 26 septembre 2026, deux fois chacun.
+
+     Le registre d'un transporteur portait vingt-neuf mentions « travailleur
+     étranger à renseigner », dont deux pour des ressortissants de l'Union.
+     Rend true, false, ou null quand la nationalité n'est pas reconnue : on ne
+     tranche pas ce qu'on ne sait pas. */
+  var SANS_TITRE = [
+    "française", "allemande", "autrichienne", "belge", "bulgare", "chypriote",
+    "croate", "danoise", "espagnole", "estonienne", "finlandaise", "grecque",
+    "hongroise", "irlandaise", "italienne", "lettone", "lituanienne",
+    "luxembourgeoise", "maltaise", "néerlandaise", "polonaise", "portugaise",
+    "roumaine", "slovaque", "slovène", "suédoise", "tchèque",
+    "islandaise", "norvégienne", "liechtensteinoise", "suisse",
+  ];
+  var PAYS_SANS_TITRE = {
+    "france": 1, "allemagne": 1, "autriche": 1, "belgique": 1, "bulgarie": 1,
+    "chypre": 1, "croatie": 1, "danemark": 1, "espagne": 1, "estonie": 1,
+    "finlande": 1, "grèce": 1, "hongrie": 1, "irlande": 1, "italie": 1,
+    "lettonie": 1, "lituanie": 1, "luxembourg": 1, "malte": 1, "pays-bas": 1,
+    "pologne": 1, "portugal": 1, "roumanie": 1, "slovaquie": 1, "slovénie": 1,
+    "suède": 1, "tchéquie": 1, "république tchèque": 1, "islande": 1,
+    "norvège": 1, "liechtenstein": 1, "suisse": 1,
+  };
+  function titreDeTravailRequis(valeur) {
+    var bas = plat(valeur);
+    if (!bas) return null;
+    if (SANS_TITRE.indexOf(bas) >= 0 || PAYS_SANS_TITRE[bas]) return false;
+    var adj = ADJECTIF[bas];
+    if (adj && SANS_TITRE.indexOf(adj) >= 0) return false;
+    if (NATIONALITES.indexOf(bas) >= 0 || adj) return true;
+    return null;
+  }
+
   window.ListesValeurs = {
     salarie: salaries,
+    titreDeTravailRequis: titreDeTravailRequis,
     nationalitePhrase: nationalitePhrase,
     nationaliteAdjectif: nationaliteAdjectif,
     nationalite: NATIONALITES,

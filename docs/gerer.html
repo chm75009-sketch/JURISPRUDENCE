@@ -336,6 +336,11 @@
       dit: "à défaut d'accord, les heures complémentaires ne peuvent dépasser le dixième de la durée prévue au contrat" },
     "L3123-29": { id: "LEGIARTI000033019947",
       dit: "à défaut d'accord, majoration de 10 % jusqu'au dixième et de 25 % entre le dixième et le tiers" },
+    /* Lus à la source le 26 septembre 2026, deux lectures concordantes. */
+    "L5221-8": { id: "LEGIARTI000018766932",
+      dit: "l'employeur s'assure auprès des administrations compétentes de l'existence du titre autorisant l'étranger à exercer une activité salariée en France" },
+    "R5221-2": { id: "LEGIARTI000053963834",
+      dit: "sont dispensés d'autorisation de travail les ressortissants de l'Union européenne, des autres États de l'Espace économique européen et de la Confédération suisse" },
     "L3141-3": { id: "LEGIARTI000033020826",
       dit: "deux jours et demi ouvrables de congé par mois de travail effectif, trente jours ouvrables au plus" },
     "L3231-2": { id: "LEGIARTI000006902832",
@@ -949,6 +954,15 @@
     p("ci-après dénommé(e) « le salarié », d'autre part,");
     p("Il a été convenu ce qui suit.");
 
+    /* LE TITRE DE TRAVAIL DU SALARIÉ ÉTRANGER.
+       « L'employeur s'assure auprès des administrations territorialement
+       compétentes de l'existence du titre autorisant l'étranger à exercer une
+       activité salariée en France » (L. 5221-8). Les ressortissants de
+       l'Union, de l'Espace économique européen et de la Suisse en sont
+       dispensés (R. 5221-2). */
+    var titreRequis = (window.ListesValeurs && window.ListesValeurs.titreDeTravailRequis)
+      ? window.ListesValeurs.titreDeTravailRequis(d.nationalite) : null;
+
     A("Engagement");
     p("La Société engage le salarié, qui accepte, en qualité de " + poste + ", statut " + statutMot(d.statut) +
       (niveau ? ", niveau " + niveau + ", échelon " + echelon + " de la grille de classification" : "") +
@@ -1031,7 +1045,17 @@
       p("Les horaires de chaque journée travaillée sont communiqués au salarié par écrit, par remise en main propre contre décharge ou par courriel, au plus tard le [   ] de chaque mois pour le mois suivant (" + ref(["L3123-6"]) + " 3°).");
       p("Le salarié pourra être amené à effectuer des heures complémentaires dans la limite du " + (ccn ? "tiers" : "dixième") + " de la durée mensuelle prévue au contrat, soit " +
         nb(Math.round(hMois * (ccn ? 1 / 3 : 0.1) * 100) / 100) + " heures par mois (" + ref(ccn ? ["L3123-20"] : ["L3123-28"]) + "). Ces heures ne peuvent porter la durée du travail au niveau de la durée légale.");
-      p("Elles sont majorées de 10 % dans la limite du dixième de la durée contractuelle et de 25 % au-delà du dixième et jusqu'au tiers (" + ref(["L3123-29", "L3123-21"]) + ").");
+      /* Sans accord, la limite est le dixième : écrire la majoration « au-delà
+         du dixième et jusqu'au tiers » dans le même contrat faisait deux
+         clauses contraires. Relevé le 26 septembre 2026. */
+      if (ccn) {
+        p("Elles sont majorées de 10 % dans la limite du dixième de la durée contractuelle et de 25 % au-delà du dixième et jusqu'au tiers (" + ref(["L3123-29", "L3123-21"]) + ").");
+      } else {
+        p("Elles sont majorées de 10 % (" + ref(["L3123-29"]) + ").");
+        b.push({ k: "note", t: "La limite du tiers et la majoration de 25 % au-delà du dixième " +
+          "supposent une convention ou un accord (" + ref(["L3123-20", "L3123-21"]) + ") : tant " +
+          "qu'il n'y en a pas, la limite reste le dixième (" + ref(["L3123-28"]) + ")." });
+      }
       if (d.heures < 24) {
         p("Conformément à l'article " + ref(["L3123-7"]) + ", cette durée est inférieure à vingt-quatre heures par semaine à la demande écrite et motivée du salarié, en date du [date], annexée au présent contrat.");
       }
@@ -1070,6 +1094,24 @@
       p("Le salarié bénéficie d'un repas par service travaillé. Cet avantage en nature est évalué selon la réglementation en vigueur et figure sur le bulletin de paie ; à défaut de fourniture du repas, il donne lieu au versement d'une indemnité compensatrice de même montant (article 35.2 de la convention collective).");
       A("Temps d'habillage et de déshabillage");
       p("Le port de la tenue de travail fournie par la Société est obligatoire et l'habillage se fait sur le lieu de travail. En contrepartie, le salarié bénéficie d'un jour de repos par an à partir d'un an d'ancienneté, au prorata en deçà ; lorsque l'activité ne permet pas la prise de ce repos, il perçoit une compensation financière équivalente (article 7 de l'avenant n° 2 du 5 février 2007).");
+    }
+
+    if (titreRequis === true || (titreRequis === null && d.nationalite)) {
+      A("Titre autorisant l'exercice d'une activité salariée");
+      p("Le salarié déclare être titulaire du titre suivant, l'autorisant à exercer une activité " +
+        "salariée en France : " + (d.titreNum || "[type et numéro du titre]") +
+        (d.titreFin ? ", valable jusqu'au " + dateFr(dateDe(d.titreFin)) : ", valable jusqu'au [date]") +
+        ". Il s'engage à en signaler sans délai tout changement et à en produire le renouvellement.");
+      p("L'engagement est subordonné à la vérification, par la Société, de l'existence de ce titre " +
+        "auprès de l'administration compétente (" + ref(["L5221-8"]) + ").");
+      b.push({ k: "note", t: titreRequis === true
+        ? "Cette vérification se fait avant l'embauche, par écrit, auprès de la préfecture du lieu " +
+          "d'embauche ; la réponse se conserve au dossier. L'échéance du titre est à porter au " +
+          "registre du personnel et à l'agenda."
+        : "La nationalité saisie n'est pas reconnue ici : vérifiez si un titre de travail est " +
+          "requis. Les ressortissants de l'Union européenne, de l'Espace économique européen et " +
+          "de la Suisse en sont dispensés (" + ref(["R5221-2"]) + "), les autres non (" +
+          ref(["L5221-8"]) + "). Supprimez cet article s'il ne s'applique pas." });
     }
 
     A("Congés payés");
@@ -1128,7 +1170,7 @@
     return { blocs: b, partiel: partiel, termeManquant: d.cdd && d.motif && !d.motif.interdit && !d.motif.sansTerme && !d.terme };
   }
 
-  function suitesEmbauche(e, cdd) {
+  function suitesEmbauche(e, cdd, titreEtranger) {
     var s = [];
     s.push({ q: "Déclaration préalable à l'embauche",
       d: e ? "du " + dateFr(jour(e, -8)) + " au " + dateFr(e) + ", avant la prise de poste"
@@ -1137,6 +1179,16 @@
     s.push({ q: "Visite d'information et de prévention",
       d: e ? "au plus tard le " + dateFr(plusMois(e, 3)) : "[date d'entrée à saisir]",
       f: "trois mois à compter de la prise effective du poste (" + ref(["R4624-10"]) + ")", c: "tard" });
+    if (titreEtranger) {
+      s.push({ q: "Vérification du titre de travail",
+        d: e ? "avant le " + dateFr(e) : "avant l'embauche",
+        f: "l'employeur s'assure de l'existence du titre auprès de l'administration compétente (" +
+          ref(["L5221-8"]) + ") ; la réponse se conserve au dossier", c: "tot" });
+      if (titreEtranger.fin) s.push({ q: "Échéance du titre de travail",
+        d: "le " + dateFr(titreEtranger.fin),
+        f: "à surveiller : le titre doit rester valable pendant tout le contrat, et son type et " +
+          "son numéro figurent au registre du personnel (" + ref(["D1221-23"]) + ")", c: "tard" });
+    }
     s.push({ q: "Inscription au registre du personnel",
       d: e ? "le " + dateFr(e) : "[date d'entrée à saisir]",
       f: "au moment de l'embauche, de façon indélébile (" + ref(["L1221-13", "D1221-23"]) + ")", c: "" });
@@ -1172,6 +1224,13 @@
              { id: "naissance", nom: "Né(e) le", t: "date" },
              { id: "lieuNaissance", nom: "À", t: "text", ph: "Argenteuil" },
              { id: "nationalite", nom: "Nationalité", t: "text", ph: "française" },
+             /* Le titre de travail ne concerne que le salarié étranger hors
+                Espace économique européen et Suisse : les champs restent
+                vides et muets pour tous les autres. Relevé le
+                26 septembre 2026, rien n'en parlait nulle part. */
+             { id: "titreNum", nom: "Titre de travail, type et numéro (salarié hors Union européenne)", t: "text", pleine: true,
+               ph: "carte de séjour salarié n° 95 AB 12345" },
+             { id: "titreFin", nom: "Validité du titre jusqu'au", t: "date" },
              { id: "secu", nom: "N° de sécurité sociale", t: "text", ph: "13 chiffres et la clé" },
              { id: "adresse", nom: "Adresse", t: "text", pleine: true, ph: "12 rue des Lilas, 95240 Cormeilles-en-Parisis" },
              { id: "salaire", nom: "Salaire brut mensuel (euros)", t: "number", ph: "laissez vide : minimum de la grille" }]);
@@ -1200,7 +1259,16 @@
   function resultatContrat(d, loi) {
     var r = contrat(d);
     if (r.refus) return { refus: r.refus, loi: loi };
-    var out = { blocs: r.blocs, dates: suitesEmbauche(d.entree, d.cdd), alertes: [], loi: loi };
+    var requis = (window.ListesValeurs && window.ListesValeurs.titreDeTravailRequis)
+      ? window.ListesValeurs.titreDeTravailRequis(d.nationalite) : null;
+    var titreEtranger = requis === true
+      ? { fin: dateDe(d.titreFin) } : null;
+    var out = { blocs: r.blocs, dates: suitesEmbauche(d.entree, d.cdd, titreEtranger), alertes: [], loi: loi };
+    if (requis === true && !String(d.titreNum || "").trim()) {
+      out.alertes.push("La nationalité saisie suppose un titre autorisant l'exercice d'une " +
+        "activité salariée : portez son type et son numéro, et son échéance. Ils figurent au " +
+        "contrat, au registre du personnel et à l'agenda (" + ref(["L5221-8", "D1221-23"]) + ").");
+    }
     if (r.termeManquant) out.alertes.push("Ce motif impose un terme fixé avec précision dès la conclusion (" + ref(["L1242-7"]) + ") : saisissez-le en tête.");
     if (r.partiel && d.heures < 24) out.alertes.push("Moins de vingt-quatre heures par semaine : la demande écrite et motivée du salarié doit être annexée au contrat, sauf cas exceptés par l'article " + ref(["L3123-7"]) + ".");
     return out;
@@ -2242,8 +2310,12 @@
         d.remplace = String(v.remplace || "").trim();
         d.terme = d.motif && d.motif.sansTerme ? null : dateDe(v.terme);
         return resultatContrat(d, LOI_CDD); } },
-    partiel: { titre: "Temps partiel", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "serveur" },
-        { id: "heures", nom: "Heures par semaine", t: "number", defaut: "24" }, { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }],
+    /* Le temps partiel est un contrat comme les autres : il lui manquait la
+       naissance, la nationalité et l'adresse, qui sont pourtant au registre,
+       et qu'il fallait retaper dans le fichier. Relevé le 26 septembre 2026. */
+    partiel: { titre: "Temps partiel", champs: champsContrat().concat([
+        { id: "heures", nom: "Heures par semaine", t: "number", defaut: "24" },
+        { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }]),
       produire: function (v) { var d = baseContrat(v); d.cdd = false; d.entree = dateDe(v.entree); d.heures = Number(v.heures) || 24; return resultatContrat(d, LOI_CONTRAT.concat(LOI_PARTIEL)); } },
     dpae: { titre: "Déclaration d'embauche DPAE", ext: ["RH-CTL-EMB-03"], famille: "RH",
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: "Lucie MARTIN" }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
@@ -2673,6 +2745,11 @@
     secu: "le numéro de sécurité sociale", adresse: "l'adresse",
     qua: "la qualification",
   };
+  /* Ce qui a été posé par le registre peut être reposé par le registre quand
+     on change de salarié ; ce que l'utilisateur a tapé, jamais. Sans cette
+     mémoire, passer d'un salarié à l'autre gardait la nationalité du
+     premier. */
+  var VENU_DU_REGISTRE = {};
   function reprendreDuRegistre(doc) {
     var sal = salarieDuRegistre(V.nom);
     if (!sal) { $("d-registre").hidden = true; return; }
@@ -2687,12 +2764,13 @@
       var defaut = String(c.defaut == null ? "" : c.defaut);
       /* On ne remplace que le vide et la valeur par défaut : ce qui a été
          tapé à la main reste. */
-      if (actuel !== "" && actuel !== defaut && actuel !== valeur) return;
+      if (actuel !== "" && actuel !== defaut && actuel !== valeur && !VENU_DU_REGISTRE[id]) return;
       if (actuel !== valeur) {
         V[id] = valeur;
         var el = $("d-champs").querySelector('[data-ch="' + id + '"]');
         if (el) el.value = valeur;
       }
+      VENU_DU_REGISTRE[id] = true;
       /* La phrase dit ce qui vient du registre, pas ce que le dernier
          évènement a changé : sinon elle s'efface au second appel. */
       pris.push(DIT_REGISTRE[DU_REGISTRE[id]] || c.nom.toLowerCase());
@@ -2705,6 +2783,7 @@
         var es = $("d-champs").querySelector('[data-ch="statut"]');
         if (es) es.value = "ouvrier";
       }
+      VENU_DU_REGISTRE.statut = true;
       pris.push("le statut d'ouvrier, d'après la qualification");
     }
     var z = $("d-registre");
@@ -2720,7 +2799,7 @@
   function ouvrir(cle) {
     var doc = DOCS[cle]; if (!doc) return;
     function montrer() {
-      ACTIF = cle; V = {}; corrections = {};
+      ACTIF = cle; V = {}; corrections = {}; VENU_DU_REGISTRE = {};
       doc.champs.forEach(function (c) { V[c.id] = c.defaut == null ? "" : c.defaut; });
       $("d-titre").textContent = doc.titre;
       $("d-champs").innerHTML = doc.champs.map(champHtml).join("");
