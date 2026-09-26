@@ -474,3 +474,42 @@ ramène des décisions sans rapport avec la recherche.
   sienne au premier lancement ; elle reste dans son navigateur (localStorage).
 - Le secret client PISTE ne vit que dans les variables d'environnement Netlify
   (`PISTE_CLIENT_ID`, `PISTE_CLIENT_SECRET`). Ne jamais le demander ni l'afficher.
+
+## Où le travail est publié - trois adresses, et c'est moi qui les ai faites
+
+Posé le 26 septembre 2026, parce que je l'avais oublié et que j'ai répondu ce
+jour-là « il est déployé depuis un autre dépôt, je n'y ai pas accès » à propos
+d'un site que j'ai construit moi-même. Je n'ai pas à le redécouvrir la
+prochaine fois, ni à le présenter comme le travail d'un autre.
+
+**Le dépôt de l'application** : `chm75009-sketch/JURISPRUDENCE`. Le dossier
+`docs/` est la source unique. Il alimente deux adresses à la fois, sans
+construction : Netlify, par `netlify.toml`, qui publie `docs/` et sert le
+relais Légifrance dans `netlify/functions` ; et GitHub Pages, à l'adresse
+`chm75009-sketch.github.io/JURISPRUDENCE/docs/`. Pousser sur `main` suffit,
+les deux suivent.
+
+**Le site du client** : `https://tec-direction.chm75009.workers.dev/`, publié
+par Cloudflare depuis le dépôt `chm75009-sketch/Tec-direction`, qui lance
+`npx wrangler deploy` à chaque envoi sur `main`. Ce dépôt est une copie de
+`docs/` posée à la racine, plus quatre fichiers qui n'appartiennent qu'à lui :
+la porte (`entrer.html`, `entrer.js`), le dossier chiffré du client
+(`dossier-tec.js`) et le verrou (`verrou.js`), avec `sans-cache.js`.
+
+**La mise à jour ne se fait pas à la main.** Le dépôt du client porte son
+propre script, `synchroniser.py`, écrit pour cela :
+
+```
+cd ../Tec-direction && python3 synchroniser.py ../JURISPRUDENCE/docs
+```
+
+Il recopie l'application, épargne les quatre fichiers propres au site, remet
+sur chaque page recopiée les deux lignes qui appellent le verrou et
+`sans-cache.js` - sans elles, une page s'ouvre sans mot de passe -, ne copie
+jamais `sw.js`, et repose le nom et le logo T.E.C sur les manifestes et les
+en-têtes. Puis on commit et on pousse sur `main` : Cloudflare reconstruit seul,
+en quelques minutes.
+
+**Une mise à jour de l'application n'est donc pas finie quand `main` est
+poussé.** Tant que la synchronisation n'a pas été lancée et poussée, le client
+regarde l'ancienne version, et c'est la sienne qu'il regarde.
