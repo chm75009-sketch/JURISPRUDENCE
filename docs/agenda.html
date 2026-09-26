@@ -408,7 +408,10 @@
        carence si elles n'ont donné aucun candidat : L. 2314-4 pour
        l'information du personnel, L. 2314-9 pour la carence. */
     var repCse = String(((window.Profil && window.Profil.lire()) || {}).cseExiste || "").trim().toLowerCase();
-    var pasDeComite = !sansComite && repCse === "non";
+    /* La fiche répond maintenant « oui, élu », « non, procès-verbal de
+       carence » ou « non, aucune élection organisée » : l'égalité stricte à
+       « non » ne reconnaissait plus aucune de ces réponses. */
+    var pasDeComite = !sansComite && repCse.indexOf("non") === 0;
     if (pasDeComite) {
       attentes.push({ t: "Aucun comité en place : ce sont les élections qui sont dues, pas les réunions.",
         w: "Votre fiche répond « non » à la question du comité social et économique, et votre effectif " +
@@ -636,17 +639,27 @@
     (function () {
       var reg = null;
       try { reg = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { reg = null; }
-      var n = ((reg && reg.salaries) || []).filter(function (x) {
-        return String(x.nom || "").trim() || String(x.pre || "").trim();
-      }).length;
-      if (!n) return;
+      /* LES INSCRITS ET CEUX QUI SONT EN POSTE NE SONT PAS LE MÊME NOMBRE.
+
+         L'agenda affichait « 85 salariés au registre » à côté de l'effectif
+         de la fiche, 82, sans dire ce qui les sépare : les lignes d'exemple
+         et les sorties. On compte ici ceux qui sont en poste, c'est-à-dire
+         sans date de sortie, et l'on dit les deux nombres quand ils
+         diffèrent. Relevé le 26 septembre 2026. */
+      var inscrits = ((reg && reg.salaries) || []).filter(function (x) {
+        return !x.ex && (String(x.nom || "").trim() || String(x.pre || "").trim());
+      });
+      var n = inscrits.filter(function (x) { return !String(x.sor || "").trim(); }).length;
+      if (!inscrits.length) return;
       cadences.push({
         titre: "Décompte des heures de chaque salarié",
         rythme: "chaque mois, à clore et à faire signer",
         fondement: "L. 3171-2 et D. 3171-8 (décompte quotidien, récapitulation hebdomadaire, dès que tous les salariés ne suivent pas le même horaire collectif)",
         docs: "le relevé du mois, clos et remis au salarié ; les réclamations et leurs réponses",
         prov: "registre",
-        detail: n + " salarié" + (n > 1 ? "s" : "") + " au registre du personnel. L'écran du décompte est dans Gérer.",
+        detail: n + " salarié" + (n > 1 ? "s" : "") + " en poste" +
+          (inscrits.length !== n ? " sur " + inscrits.length + " inscrits" : "") +
+          " au registre du personnel. L'écran du décompte est dans Gérer.",
       });
     })();
 
