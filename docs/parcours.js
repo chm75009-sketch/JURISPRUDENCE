@@ -2386,6 +2386,25 @@
         aide: "En cas de comité constitué au niveau d'une UES reconnue par accord ou par décision de justice, les indicateurs sont calculés au niveau de l'UES (art. D. 1142-2)." },
     ],
     etapes: [
+      /* CE QUE LE RELAIS DIT DE CES ARTICLES, LE 26 SEPTEMBRE 2026.
+
+         Interrogés deux fois, à cette date, les articles réglementaires de
+         l'index reviennent tous marqués « abrogé à effet différé » :
+         D. 1142-2 (LEGIARTI000038026011), D. 1142-2-1 (…015), D. 1142-3
+         (…019), D. 1142-4 (LEGIARTI000045250060), D. 1142-5 (…047),
+         D. 1142-6 (…040), D. 1142-7 (LEGIARTI000038026035), D. 1142-8
+         (LEGIARTI000045250066), et L. 1142-11 (LEGIARTI000045951643). Les
+         articles de loi qui portent l'obligation, eux, sont en vigueur :
+         L. 1142-8 (LEGIARTI000044605453), L. 1142-9 (…442) et L. 1142-10
+         (LEGIARTI000051289090). Le texte qui remplace la partie
+         réglementaire n'a pas été lu ici, et le relais ne donne pas la date
+         d'effet : l'étape le dit plutôt que de laisser croire à un état
+         stable. */
+      { id: "x0", nom: "Avant tout : ces textes réglementaires sont en cours de remplacement",
+        quoi: "Au 26 septembre 2026, les articles D. 1142-2 à D. 1142-8, qui fixent les indicateurs, le niveau de résultat, la publication et les mesures de correction, reviennent du relais Légifrance marqués « abrogé à effet différé », de même que L. 1142-11. L'obligation elle-même reste portée par L. 1142-8, L. 1142-9 et L. 1142-10, en vigueur. Le texte qui les remplace n'a pas été lu ici, et la date d'effet n'est pas connue de ce relais.",
+        conseil: "Avant de publier au titre de l'exercice à venir, ouvrez le chapitre à la date de votre publication et vérifiez quels articles la commandent : les indicateurs, le barème et la date du 1er mars peuvent avoir changé. Gardez une copie datée du texte sur lequel vous vous êtes fondé, elle expliquera vos calculs si l'administration les discute. Les étapes qui suivent restent écrites sur les articles cités, avec leur identifiant de version.",
+        risque: "Publier sur un texte remplacé expose à une publication irrégulière, et la pénalité de L. 2242-8 vise l'absence de publication conforme. Le seul point sûr à ce jour est l'obligation de publier : ce sont ses modalités qui bougent.",
+        fond: ["L1142-8"] },
       { id: "x1", nom: "Vérifier l'assujettissement et le périmètre de calcul",
         risque: "L'obligation vise les entreprises d'au moins cinquante salariés (L. 1142-8). L'absence de publication des informations qu'il prévoit peut donner lieu à la pénalité de L. 2242-8, fixée au maximum à 1 % des rémunérations et gains, au sens du premier alinéa de l'article L. 242-1 du code de la sécurité sociale, versés au titre des périodes de manquement.",
         conseil: "Arrêtez et écrivez la période de référence retenue, puis gardez-la d'une année sur l'autre : en changer rend les résultats incomparables et nourrit les contestations. Fixez le périmètre, l'entreprise, et non l'établissement, avant tout calcul, et consignez la règle appliquée. Extrayez les données de paie une seule fois, sur un fichier daté et conservé : c'est ce fichier qu'il faudra reproduire si l'administration demande le détail.",
