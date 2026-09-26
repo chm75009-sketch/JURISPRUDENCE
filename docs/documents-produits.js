@@ -45,6 +45,20 @@
     return s === "" ? "[" + (quoi || "à compléter") + "]" : s;
   }
 
+  /* CE QUI NE CHANGE JAMAIS SE PREND DANS LA FICHE.
+
+     L'adresse de l'unité de contrôle de l'inspection du travail et la ville du
+     conseil de prud'hommes revenaient en rouge dans chaque courrier, et il
+     fallait les retaper à chaque document. Elles sont saisies une fois sur la
+     fiche d'entreprise, sous « Organismes et interlocuteurs », et reprises
+     ici. Vides, le crochet reste : rien n'est deviné. Demande du 26 septembre
+     2026, « généraliser ce principe à chaque fois où on doit compléter des
+     informations constantes ». */
+  function org(p, cle, quoi) {
+    var s = String((p && p[cle]) || "").trim();
+    return s === "" ? "[" + quoi + "]" : s;
+  }
+
   function leJour(d) {
     var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
                 "août", "septembre", "octobre", "novembre", "décembre"];
@@ -1265,7 +1279,7 @@
       L.push("");
       if (sansCse) {
         L.push("Monsieur l'Inspecteur du travail");
-        L.push("[ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE]");
+        L.push(org(p, "orgInspection", "ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE"));
         L.push("");
         L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
         L.push("");
@@ -1362,7 +1376,8 @@
       L.push((sansCse
         ? "n'ayant pu être mis en place, et il est déposé au greffe du conseil de"
         : "et il est déposé au greffe du conseil de"));
-      L.push("prud'hommes de [VILLE DU RESSORT] et communiqué à l'inspection du travail.");
+      L.push("prud'hommes de " + org(p, "orgPrudhommes", "VILLE DU RESSORT") +
+        " et communiqué à l'inspection du travail.");
       L.push("");
       L.push("Il fixe les règles de santé et de sécurité, les conditions de");
       L.push("participation des salariés au rétablissement de conditions de travail");
@@ -1407,7 +1422,7 @@
       L.push(cro(p.adresse, "adresse"));
       L.push("");
       L.push("Monsieur le Greffier en chef");
-      L.push("Conseil de prud'hommes de [VILLE DU RESSORT]");
+      L.push("Conseil de prud'hommes de " + org(p, "orgPrudhommes", "VILLE DU RESSORT"));
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
       L.push("");
@@ -1473,7 +1488,7 @@
       L.push(cro(p.adresse, "adresse"));
       L.push("");
       L.push("Monsieur l'Inspecteur du travail");
-      L.push("[ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE]");
+      L.push(org(p, "orgInspection", "ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE"));
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
       L.push("");

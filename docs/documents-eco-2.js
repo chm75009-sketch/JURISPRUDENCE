@@ -2444,7 +2444,10 @@
       L.push(adresse(ctx));
       L.push("");
       L.push("Monsieur l'Inspecteur du travail");
-      L.push("[Unité de contrôle compétente - adresse]");
+      /* L'adresse vient de la fiche d'entreprise, où elle est saisie une fois
+         pour tous les courriers. Vide, le crochet reste. 26 septembre 2026. */
+      L.push(String(((ctx && ctx.profil) || {}).orgInspection || "").trim() ||
+        "[Unité de contrôle compétente - adresse]");
       L.push("");
       L.push(ville(ctx) + ", le " + leJour(d0));
       L.push("");

@@ -3186,9 +3186,10 @@
         "Envoyez-le dès que le calendrier est arrêté : c'est une information annuelle, pas",
         "une confirmation de réunion.",
       ]);
-      papier(L, ctx, ["Monsieur l'Inspecteur du travail - [unité de contrôle]",
-                      "Monsieur / Madame le Médecin du travail - [service de prévention et de",
-                      "santé au travail]",
+      papier(L, ctx, ["Monsieur l'Inspecteur du travail - " +
+                        org(ctx, "orgInspection", "unité de contrôle"),
+                      "Monsieur / Madame le Médecin du travail - " +
+                        org(ctx, "orgSanteTravail", "service de prévention et de santé au travail"),
                       "Monsieur / Madame l'Agent des services de prévention - [organisme de",
                       "sécurité sociale]"], leJour(d0));
       L.push("Objet : calendrier annuel des réunions du comité social et économique");
@@ -3216,7 +3217,8 @@
         "UN courrier PAR RÉUNION, aux mêmes trois destinataires, au moins quinze jours",
         "avant sa tenue. Le délai se compte à rebours depuis la date de la réunion.",
       ]);
-      papier(L, ctx, ["Monsieur l'Inspecteur du travail - [unité de contrôle]",
+      papier(L, ctx, ["Monsieur l'Inspecteur du travail - " +
+                        org(ctx, "orgInspection", "unité de contrôle"),
                       "Monsieur / Madame le Médecin du travail",
                       "Monsieur / Madame l'Agent des services de prévention"], "[DATE D'ENVOI]");
       L.push("Objet : confirmation de la tenue de la réunion du [DATE DE LA RÉUNION] du");

@@ -39,6 +39,18 @@
   .fiche label .nom{font:400 16px/1.35 system-ui;color:var(--texte-2);margin:0}
   .fiche input,.fiche select{font:18px system-ui;padding:12px 14px;min-height:48px;
     border:1px solid var(--filet-2);border-radius:10px;background:var(--surface);color:var(--texte)}
+  /* Le pli des organismes : fermé, il ne pèse qu'une ligne sur la fiche ;
+     ouvert, il est la fiche des organismes, et il n'y en a qu'une. */
+  .pli-org{margin:18px 0 0;border:1px solid var(--filet);border-radius:12px;background:var(--surface)}
+  /* `display:block` retire la boîte du marqueur : sans elle, le titre et sa
+     précision se rangeaient en deux colonnes étroites sur un téléphone. */
+  .pli-org>summary{display:block;cursor:pointer;padding:14px 16px;font:600 16px/1.35 system-ui;list-style:none}
+  .pli-org>summary::-webkit-details-marker{display:none}
+  .pli-org>summary::before{content:"+ ";color:var(--accent);font-weight:700}
+  .pli-org[open]>summary::before{content:"- "}
+  .pli-org>summary span{display:block;font:400 14px/1.35 system-ui;color:var(--texte-2);margin-top:3px}
+  .pli-org>div{padding:0 16px 16px}
+  .pli-org .aide-champ{font-size:14px;line-height:1.4;color:var(--texte-2)}
   .fiche .idcc-liste{font-size:16px}
   .fiche .idcc-liste .idcc-o{min-height:44px}
   .btn-suite{display:block;width:100%;margin:22px 0 0;font:600 19px system-ui;padding:16px;
@@ -106,6 +118,16 @@
   <section class="fiche" id="ecran-fiche" hidden>
     <h1>Votre entreprise</h1>
     <div id="fiche-accueil"></div>
+    <!-- CE QUI NE CHANGE JAMAIS SE SAISIT ICI, ET UNE SEULE FOIS.
+         Les organismes de l'entreprise — retraite complémentaire, prévoyance,
+         frais de santé, caisse, santé au travail, OPCO, inspection, conseil de
+         prud'hommes — étaient redemandés à chaque contrat et laissés en rouge
+         dans les courriers. Repliés par défaut : la fiche reste courte, et ils
+         ne se remplissent qu'une fois. Demande du 26 septembre 2026. -->
+    <details id="pli-organismes" class="pli-org">
+      <summary>Organismes et interlocuteurs <span>à remplir une fois, repris dans tous les documents</span></summary>
+      <div id="fiche-organismes"></div>
+    </details>
     <button type="button" class="btn-suite" id="continuer-fiche">Continuer</button>
   </section>
 
@@ -290,6 +312,15 @@
       legende: "Votre entreprise",
       echange: false,
       onChange: function (p) { $("continuer-fiche").disabled = !complet(p); }
+    });
+    window.Profil.rendre($("fiche-organismes"), {
+      champs: window.Profil.ORGANISMES,
+      prefixe: "fo",
+      legende: "Organismes et interlocuteurs de l'entreprise",
+      aide: "Ils ne dépendent ni du salarié ni de la date : saisis une fois, " +
+        "ils entrent d'eux-mêmes dans les contrats, les courriers et les dépôts. " +
+        "Laissés vides, le document garde son crochet rouge à cet endroit.",
+      echange: false
     });
     var autre = $("fiche-accueil").querySelector('option[value="__autre"]');
     if (autre) autre.textContent = "Autre";

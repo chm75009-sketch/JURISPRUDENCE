@@ -202,6 +202,17 @@
       lieu: g.lieu || ent.adresse || "",
       lieuSignature: g.lieuSignature || "",
       zone: "national et européen",
+      /* LES ORGANISMES VIENNENT DE LA FICHE, PAS DU CONTRAT.
+
+         Ils ne changent ni d'un salarié à l'autre ni d'un contrat à l'autre :
+         ils se saisissent une fois sur la fiche d'entreprise et se reposent
+         ici tout seuls. Ce qui a déjà été tapé sur cet appareil l'emporte,
+         et ce qui est modifié dans le contrat ne remonte pas à la fiche.
+         Demande du 26 septembre 2026. */
+      retraite: ent.orgRetraite || "",
+      prevoyance: ent.orgPrevoyance || "",
+      sante: ent.orgSante || "",
+      urssaf: ent.orgUrssaf || "",
     };
     /* Ce qui a déjà été tapé ne se perd pas quand on coche « temps partiel »
        ou qu'on passe du CDI au CDD : les champs sont refaits, les valeurs

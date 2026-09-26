@@ -394,7 +394,12 @@
     return "<h3>" + num + ". Tenue du document</h3>" +
       "<p>Mise à jour au moins chaque année à partir de onze salariés, lors de toute décision d'aménagement important modifiant les conditions de santé et de sécurité ou les conditions de travail, et lorsqu'une information supplémentaire intéressant l'évaluation d'un risque est portée à la connaissance de l'employeur (R. 4121-2).</p>" +
       "<p>Le document et ses versions antérieures sont conservés quarante ans à compter de leur élaboration et tenus à la disposition des personnes que désigne l'article R. 4121-4. Un avis indiquant les modalités d'accès des travailleurs au document est affiché à une place convenable et aisément accessible, et au même emplacement que le règlement intérieur là où il en existe un (R. 4121-4).</p>" +
-      "<p>Le document est transmis à chaque mise à jour au service de prévention et de santé au travail (L. 4121-3-1, VI).</p>" +
+      /* Le service est nommé quand la fiche d'entreprise le porte : il ne
+         change pas d'une version à l'autre, il se saisit une fois sous
+         « Organismes et interlocuteurs ». 26 septembre 2026. */
+      "<p>Le document est transmis à chaque mise à jour au service de prévention et de santé au travail" +
+      (String(P.orgSanteTravail || "").trim() ? ", " + ech(String(P.orgSanteTravail).trim()) : "") +
+      " (L. 4121-3-1, VI).</p>" +
       /* LE COMITÉ : DEUX BRANCHES, UNE SEULE À GARDER.
 
          L. 4121-3 dit « Le comité social et économique est consulté sur le

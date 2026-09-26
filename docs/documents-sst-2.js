@@ -752,8 +752,14 @@
       R.push(["5° Référent du comité social et économique (L. 2314-1)", E.cseAdresse, E.cseTel, E.cse.referent + ", " + E.cse.qualite]);
       return tableau(T, R);
     }
-    R.push(["1° Médecin du travail ou service de santé au travail compétent pour l'établissement", "[ADRESSE]", "[NUMÉRO]", "[nom du médecin, utile]"]);
-    R.push(["2° Inspection du travail compétente", "[ADRESSE DE L'UNITÉ DE CONTRÔLE]", "[NUMÉRO]", "[NOM DE L'INSPECTEUR, exigé par le 2°]"]);
+    /* Les deux adresses constantes de l'entreprise viennent de la fiche, où
+       elles se saisissent une fois. 26 septembre 2026. */
+    var pf = (window.Profil && window.Profil.lire()) || {};
+    R.push(["1° Médecin du travail ou service de santé au travail compétent pour l'établissement",
+      String(pf.orgSanteTravail || "").trim() || "[ADRESSE]", "[NUMÉRO]", "[nom du médecin, utile]"]);
+    R.push(["2° Inspection du travail compétente",
+      String(pf.orgInspection || "").trim() || "[ADRESSE DE L'UNITÉ DE CONTRÔLE]", "[NUMÉRO]",
+      "[NOM DE L'INSPECTEUR, exigé par le 2°]"]);
     R.push(["3° Défenseur des droits", "[ADRESSE]", "[NUMÉRO]", "sans objet"]);
     if (au250 === true) {
       R.push(["4° Référent de l'employeur (L. 1153-5-1), DÛ : votre effectif atteint deux cent cinquante salariés", "[ADRESSE]", "[NUMÉRO]", "[NOM, PRÉNOM, FONCTION]"]);

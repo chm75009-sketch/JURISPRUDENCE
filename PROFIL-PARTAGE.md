@@ -75,6 +75,24 @@ responsable et une durée de conservation. Un fichier n'exige rien.
 | `etablissementsDistincts` | chaîne fermée | idem | Comités d'établissement, comité central, registres par établissement. |
 | `nbEtablissements` | chaîne numérique | entier ≥ 0 | Facultatif. |
 
+### Les huit organismes, ajoutés le 26 septembre 2026
+
+Facultatifs, et donc sans changement de version. Ils ne dépendent ni du
+salarié ni de la date : saisis une fois dans la fiche, ils entrent d'eux-mêmes
+dans les contrats, les courriers et les dépôts, et restent en crochet rouge
+tant qu'ils sont vides.
+
+| Clé | Ce qu'elle porte |
+|---|---|
+| `orgRetraite` | Institution de retraite complémentaire (AGIRC-ARRCO), nom et adresse. |
+| `orgPrevoyance` | Organisme de prévoyance, nom et adresse. |
+| `orgSante` | Organisme de frais de santé et intitulé de la couverture. |
+| `orgUrssaf` | Caisse d'affiliation, URSSAF ou MSA. |
+| `orgSanteTravail` | Service de prévention et de santé au travail. |
+| `orgOpco` | Opérateur de compétences. |
+| `orgInspection` | Unité de contrôle de l'inspection du travail, et son adresse. |
+| `orgPrudhommes` | Ville du conseil de prud'hommes du ressort. |
+
 ### Les réponses fermées
 
 `groupe` et `etablissementsDistincts` prennent quatre valeurs :

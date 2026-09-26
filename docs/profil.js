@@ -107,6 +107,45 @@
       aide: "Facultatif. Le registre unique du personnel se tient dans chaque établissement (art. L. 1221-13)." },
   ];
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     CE QUI NE CHANGE JAMAIS NE SE SAISIT QU'UNE FOIS.
+
+     Demande du 26 septembre 2026, sur l'article 11 d'un contrat de conducteur :
+     « pourquoi on ne saisit pas les documents à compléter quelque part, comme
+     ça ça apparaîtra automatiquement dans tous les contrats, ça évitera à
+     chaque fois de les saisir, et généraliser ce principe à chaque fois où on
+     doit compléter des informations constantes ».
+
+     Ce sont les organismes et les interlocuteurs de l'entreprise : ils ne
+     dépendent ni du salarié, ni de la date, ni du document. Ils étaient
+     redemandés à chaque contrat, et laissés en rouge dans les courriers de
+     dépôt. Saisis ici une fois, ils entrent d'eux-mêmes partout où le document
+     les appelle ; laissés vides, le crochet rouge reste, et rien n'est deviné.
+
+     Ce qui n'est PAS ici : tout ce qui change d'un document à l'autre — un
+     nom de salarié, une date, un motif, un montant. La règle de partage est
+     celle-là, et elle se vérifie avant d'ajouter un champ : si la réponse
+     peut différer d'un document à l'autre, elle n'a rien à faire dans la
+     fiche.                                                                 */
+  var ORGANISMES = [
+    { c: "orgRetraite", nom: "Retraite complémentaire (AGIRC-ARRCO)", t: "text", pleine: true,
+      aide: "Nom et adresse de l'institution dont relève l'entreprise. Portée à l'article Protection sociale des contrats de travail." },
+    { c: "orgPrevoyance", nom: "Prévoyance", t: "text", pleine: true,
+      aide: "Nom et adresse de l'organisme. Le transport routier a un régime de branche : l'organisme reste celui que l'entreprise a rejoint." },
+    { c: "orgSante", nom: "Frais de santé (complémentaire)", t: "text", pleine: true,
+      aide: "Nom et adresse de l'organisme, et intitulé de la couverture." },
+    { c: "orgUrssaf", nom: "Caisse d'affiliation (URSSAF ou MSA)", t: "text", pleine: true,
+      aide: "Celle qui reçoit les cotisations : maladie, accidents du travail, allocations familiales." },
+    { c: "orgSanteTravail", nom: "Service de prévention et de santé au travail", t: "text", pleine: true,
+      aide: "Nom et adresse. C'est lui qui reçoit le document unique à chaque mise à jour (L. 4121-3-1, VI) et qui assure les visites." },
+    { c: "orgOpco", nom: "Opérateur de compétences (OPCO)", t: "text", pleine: true,
+      aide: "Celui dont relève la branche : il finance l'alternance et le plan de développement des compétences." },
+    { c: "orgInspection", nom: "Inspection du travail : unité de contrôle et adresse", t: "text", pleine: true,
+      aide: "L'adresse où partent le règlement intérieur, les notes de service et les courriers de l'employeur." },
+    { c: "orgPrudhommes", nom: "Conseil de prud'hommes du ressort (ville)", t: "text",
+      aide: "Son greffe reçoit le dépôt du règlement intérieur (R. 1321-2)." },
+  ];
+
   /* Les quatre valeurs de toute réponse fermée de l'application.
 
      « oui » et « non » concluent. « en cours » et « autre » NE CONCLUENT
@@ -159,6 +198,13 @@
   }
 
   function effacer() { try { localStorage.removeItem(CLE); } catch (_) {} }
+
+  /* Un organisme de la fiche, ou la chaîne vide : c'est au document d'écrire
+     son propre crochet quand il n'a rien, avec les mots qu'il veut. */
+  function organisme(cle) {
+    var p = lire();
+    return String(p[cle] == null ? "" : p[cle]).trim();
+  }
 
   /* La fiche par défaut est ÉCRITE, pas seulement rendue à la lecture : une
      douzaine de pages du dépôt relisent la clé « profil-entreprise »
@@ -216,8 +262,12 @@
   var VERSION_FORMAT = 1;
   var APPLICATION = "JURISPRUDENCE — audits et parcours";
 
+  /* Les organismes voyagent avec la fiche : ils en font partie, et une fiche
+     exportée qui les laisserait derrière obligerait à les ressaisir de
+     l'autre côté. Champs facultatifs, la version du format ne change pas,
+     comme le prévoit PROFIL-PARTAGE.md. 26 septembre 2026. */
   function champsEchanges() {
-    return IDENTITE.map(function (ch) { return ch.c; });
+    return IDENTITE.concat(ORGANISMES).map(function (ch) { return ch.c; });
   }
 
   /* L'objet à écrire dans le fichier. Un champ vide n'y figure pas : on
@@ -504,7 +554,8 @@
   }
 
   window.Profil = {
-    CLE: CLE, IDENTITE: IDENTITE, SECTEURS: SECTEURS,
+    CLE: CLE, IDENTITE: IDENTITE, ORGANISMES: ORGANISMES, SECTEURS: SECTEURS,
+    organisme: organisme,
     VALEURS: VALEURS, conclut: conclut,
     lire: lire, ecrire: ecrire, effacer: effacer,
     suffisante: suffisante, manquants: manquants,
