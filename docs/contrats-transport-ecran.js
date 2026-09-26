@@ -518,6 +518,43 @@
     });
   });
 
+  /* LE CONTRAT ÉCRIT, LE SALARIÉ INSCRIT. Mesuré le 26 septembre 2026 : un
+     contrat écrit et gardé n'apparaissait ni au registre, ni au décompte des
+     heures, ni dans la flotte, et l'embauche se ressaisissait trois fois.
+     Un bouton l'inscrit au registre, d'où les heures et la flotte le lisent.
+     Rien ne s'écrit sans ce geste : un contrat en projet n'est pas encore
+     une embauche. */
+  function decouper(nomComplet) {
+    var mots = String(nomComplet || "").trim().split(/\s+/).filter(Boolean);
+    var maj = mots.filter(function (m) { return m.length > 1 && m === m.toUpperCase() && /[A-Z]/i.test(m); });
+    var autres = mots.filter(function (m) { return maj.indexOf(m) < 0; });
+    if (!maj.length) return { nom: mots.slice(-1).join(" "), pre: mots.slice(0, -1).join(" ") };
+    return { nom: maj.join(" "), pre: autres.join(" ") };
+  }
+  $("inscrire").addEventListener("click", function () {
+    var n = decouper(V.nom);
+    if (!n.nom) { $("etat").textContent = "Écrivez d'abord le nom du salarié."; return; }
+    var E = null;
+    try { E = JSON.parse(window.localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
+    E = E || {}; E.salaries = E.salaries || [];
+    var deja = E.salaries.some(function (s) {
+      return String(s.nom || "").trim().toUpperCase() === n.nom.toUpperCase() &&
+        String(s.pre || "").trim().toLowerCase() === n.pre.toLowerCase();
+    });
+    if (deja) { $("etat").textContent = n.pre + " " + n.nom + " est déjà au registre du personnel."; return; }
+    E.salaries = E.salaries.filter(function (s) { return !s.ex; });
+    E.salaries.push({
+      nom: n.nom, pre: n.pre, nat: V.nationalite || "", nais: V.naissance || "",
+      emp: V.emploi || (PROFIL ? PROFIL.nom : ""), ent: V.entree || "", adr: V.adresse || "",
+      qua: /annexe II\b/.test(String((PROFIL && PROFIL.essaiArticle) || "")) ? "Employé" : "Ouvrier",
+      sexe: "",
+    });
+    try { window.localStorage.setItem("registre-personnel", JSON.stringify(E)); }
+    catch (e) { $("etat").textContent = "Impossible d'écrire le registre sur cet appareil."; return; }
+    $("etat").textContent = n.pre + " " + n.nom + " est inscrit au registre du personnel : " +
+      "le décompte des heures et la flotte le reprennent. Le sexe reste à indiquer au registre.";
+  });
+
   $("retour").addEventListener("click", function () {
     if (!$("e-contrat").classList.contains("cache")) {
       $("titre-haut").textContent = PROFIL.nom;
