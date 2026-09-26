@@ -165,6 +165,20 @@
     if (avertissement) { avertissement.forEach(function (a) { L.push(a); }); L.push(""); }
   }
 
+  /* Les interlocuteurs constants de l'entreprise, saisis une fois sur la fiche
+     et repris partout : inspection du travail, service de prévention et de
+     santé au travail. Vides, le crochet reste. Demande du 26 septembre 2026.
+
+     Cette fonction avait été perdue : le script qui l'ajoutait s'est arrêté
+     sur une assertion avant d'écrire le fichier, et trois appels sont restés
+     sans elle. Le défaut n'apparaissait qu'à la production du document, et
+     c'est l'essai qui produit les deux cent vingt-quatre documents qui l'a
+     trouvé. */
+  function org(ctx, cle, quoi) {
+    var s = String(((ctx && ctx.profil) || {})[cle] || "").trim();
+    return s === "" ? "[" + quoi + "]" : s;
+  }
+
   function papier(L, ctx, destinataire, dateLigne) {
     var p = ctx.profil || {};
     L.push(nom(ctx));
