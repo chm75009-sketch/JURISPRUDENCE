@@ -40,6 +40,12 @@
   .feuille .cot{color:var(--texte-2)}
   .feuille p.ent{font-size:18px;margin:0 0 6px}
   @media print{.champs,.barre,details{display:none !important}.feuille .qui,.feuille .cot{color:#000}}
+  .suite{margin:28px 0 0;padding-top:18px;border-top:1px solid var(--filet)}
+  .suite h2{font:600 18px/1.3 system-ui;color:var(--encre);margin:0 0 6px}
+  .suite .dit{font-size:14.5px;line-height:1.55;color:var(--texte-2);margin:0 0 12px}
+  #annexe{margin:20px 0 0}
+  #annexe h2{font:600 18px/1.3 system-ui;color:var(--encre);margin:0 0 10px}
+  #annexe .feuille{max-height:none}
 </style>
 </head>
 <body>
@@ -73,6 +79,33 @@
     <button type="button" class="second" id="imprimer">Imprimer</button>
   </div>
 
+  <!-- CE QUI SUIT LE DOCUMENT, ET QUI SE PRODUIT ICI.
+       Le document unique ne s'arrête pas à lui-même : au-delà de cinquante
+       salariés il débouche sur un programme annuel de prévention (L. 4121-3-1,
+       III, 1°), il se transmet au service de prévention et de santé au travail
+       à chaque mise à jour (VI), et il se tient à la disposition de sept
+       catégories de personnes pendant quarante ans (R. 4121-4). Ces trois
+       écrits existaient dans le parcours et nulle part ici. Relevé le
+       26 septembre 2026. -->
+  <section class="suite" id="suite">
+    <h2>Ce qui suit le document</h2>
+    <p class="dit" id="suite-dit"></p>
+    <div class="barre pile">
+      <button type="button" class="second" data-sst="SST-CTL-DUE-05" id="b-papripact"></button>
+      <button type="button" class="second" data-sst="SST-CTL-DUE-08">La transmission au service de prévention et de santé au travail</button>
+      <button type="button" class="second" data-sst="SST-CTL-DUE-06">L'avis d'accès et la conservation des versions</button>
+    </div>
+  </section>
+
+  <div id="annexe" hidden>
+    <h2 id="annexe-titre"></h2>
+    <div class="feuille" id="annexe-feuille"></div>
+    <div class="barre pile">
+      <button type="button" id="annexe-docx">Télécharger en Word</button>
+      <button type="button" class="second" id="annexe-fermer">Fermer</button>
+    </div>
+  </div>
+
   <details><summary>Voir le texte de loi</summary><div class="corps" id="textes"></div></details>
 
 </main>
@@ -84,11 +117,87 @@
 <script src="duerp-metiers.js"></script>
 <script src="duerp-transport.js"></script>
 <script src="controler-duerp.js"></script>
+<script src="feuille-doc.js"></script>
 <script>
   /* La convention commande la classification et les minima, et le document
      unique se lit à côté d'elle : elle se rappelle ici, avec la date de sa
      dernière vérification. Demande du 15 septembre 2026. */
   if (window.Convention) window.Convention.poser(document.getElementById("conv"));
+
+  /* LES TROIS ÉCRITS QUI SUIVENT LE DOCUMENT UNIQUE.
+     Ils sont écrits dans documents-sst.js, que cette page ne charge qu'au
+     clic : les générateurs pèsent lourd, et personne n'a besoin d'eux pour
+     lire son document. */
+  (function () {
+    "use strict";
+    var $ = function (id) { return document.getElementById(id); };
+    var charges = {};
+    function charger(liste, quand) {
+      var reste = liste.filter(function (f) { return !charges[f]; });
+      if (!reste.length) return quand();
+      var n = reste.length, echec = false;
+      reste.forEach(function (f) {
+        var sc = document.createElement("script");
+        sc.async = false;
+        sc.src = f;
+        sc.onload = function () { charges[f] = true; if (!--n && !echec) quand(); };
+        sc.onerror = function () { echec = true; quand(new Error(f)); };
+        document.head.appendChild(sc);
+      });
+    }
+    var profil = {};
+    try { profil = (window.Profil && window.Profil.lire()) || {}; } catch (e) { profil = {}; }
+    var eff = parseInt(String(profil.effectif == null ? "" : profil.effectif).trim(), 10);
+    if (isNaN(eff)) eff = null;
+
+    /* Au-delà de cinquante salariés, c'est un programme annuel ; en deçà, une
+       liste d'actions consignée dans le document (L. 4121-3-1, III). Le bouton
+       porte le nom de ce qui est dû, non un nom générique. */
+    $("b-papripact").textContent = (eff !== null && eff >= 50)
+      ? "Le programme annuel de prévention"
+      : "La liste des actions de prévention";
+    $("suite-dit").textContent = eff === null
+      ? "L'effectif n'est pas renseigné sur la fiche d'entreprise : le programme annuel n'est dû qu'à partir de cinquante salariés (L. 4121-3-1, III)."
+      : (eff >= 50
+        ? "Votre effectif de " + eff + " salariés rend le programme annuel de prévention obligatoire (L. 4121-3-1, III, 1°), et il se présente au comité avec le rapport annuel (L. 2312-27)."
+        : "En deçà de cinquante salariés, ce sont des actions de prévention, consignées dans le document unique et ses mises à jour (L. 4121-3-1, III, 2°).");
+
+    var COURANT = null;
+    function ouvrir(id, bouton) {
+      var libelle = bouton.textContent;
+      bouton.disabled = true; bouton.textContent = "Un instant…";
+      charger(["documents-produits.js", "documents-sst.js", "documents-sst-2.js"], function (err) {
+        bouton.disabled = false; bouton.textContent = libelle;
+        if (err || !window.DocumentsProduits) {
+          $("suite-dit").textContent = "Le générateur n'a pas pu être chargé. Rechargez la page et réessayez.";
+          return;
+        }
+        var gen = window.DocumentsProduits.pour(id);
+        if (!gen) { $("suite-dit").textContent = "Ce document n'est pas écrit."; return; }
+        var ctx = { profil: profil, fiche: {}, donnees: {}, aujourdhui: new Date() };
+        var texte = gen.produire(ctx);
+        COURANT = { nom: gen.nom, texte: texte };
+        $("annexe-titre").textContent = gen.nom;
+        $("annexe-feuille").innerHTML = window.FeuilleDoc
+          ? window.FeuilleDoc.html(window.FeuilleDoc.blocs(texte), { editable: false, classe: "fd-corps" })
+          : "<pre>" + String(texte).replace(/[&<>]/g, function (c) {
+              return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }) + "</pre>";
+        $("annexe").hidden = false;
+        $("annexe").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll("[data-sst]"), function (b) {
+      b.addEventListener("click", function () { ouvrir(b.getAttribute("data-sst"), b); });
+    });
+    $("annexe-fermer").addEventListener("click", function () { $("annexe").hidden = true; });
+    $("annexe-docx").addEventListener("click", function () {
+      if (!COURANT || !window.AuditExport || !window.FeuilleDoc) return;
+      window.AuditExport.telecharger(
+        window.FeuilleDoc.docx(window.FeuilleDoc.blocs(COURANT.texte), COURANT.nom),
+        "document-unique-suite.docx",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    });
+  })();
   if ("serviceWorker" in navigator)
     window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
 </script>
