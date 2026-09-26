@@ -37,7 +37,16 @@
     { d: "14:00", f: "22:00", p: 30, lib: "Équipe d'après-midi, 14h00 - 22h00, pause 30 min" },
     { d: "21:00", f: "06:00", p: 45, lib: "Équipe de nuit, 21h00 - 6h00, pause 45 min" },
     { d: "09:00", f: "15:00", p: 30, lib: "Temps partiel, 9h00 - 15h00, pause 30 min" },
+    /* Les conducteurs du transport : leur semaine est celle du temps de
+       service du contrat, 39 heures en courte distance, 43 heures en grand
+       routier (D. 3312-45 du code des transports, repris par les contrats du
+       module transport). Mesuré le 26 septembre 2026 : un chauffeur PL au
+       contrat de 169 heures était pré-rempli à 35 heures, 9h00 - 17h00. */
+    { d: "06:00", f: "14:33", p: 45, lib: "Conducteur courte distance, 39 h : 6h00 - 14h33, pause 45 min" },
+    { d: "05:00", f: "14:21", p: 45, lib: "Conducteur grand routier, 43 h : 5h00 - 14h21, pause 45 min" },
   ];
+  var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
+  function estConducteur(s) { return !!(s && CONDUIT.test(String(s.emp || ""))); }
 
   var NATURES = [
     ["travail", "Travail"], ["repos", "Repos"], ["conge", "Congé payé"],
@@ -163,10 +172,13 @@
     if (!sem) {
       sem = {};
       var jours = r.jours || { 1: true, 2: true, 3: true, 4: true, 5: true, 6: false, 0: false };
+      /* Un conducteur sans semaine enregistrée part du temps de service de
+         courte distance, et non de l'horaire de bureau. */
+      var cond = !r.d && qui && qui.id === id && estConducteur(qui);
+      var dd = r.d || (cond ? "06:00" : "09:00"), ff = r.f || (cond ? "14:33" : "17:00");
+      var pp = r.p == null ? (cond ? "45" : "60") : String(r.p);
       for (var k = 0; k < 7; k++) {
-        sem[k] = jours[k]
-          ? { d1: r.d || "09:00", f1: r.f || "17:00", d2: "", f2: "", p: r.p == null ? "60" : String(r.p) }
-          : null;
+        sem[k] = jours[k] ? { d1: dd, f1: ff, d2: "", f2: "", p: pp } : null;
       }
     }
     for (var j = 0; j < 7; j++) {
@@ -502,6 +514,22 @@
     });
     $("t-jours").textContent = jours;
     $("t-calcule").textContent = nbh(total);
+    /* LE TEMPS DE SERVICE DU CONDUCTEUR, ET SES MAJORATIONS. Au-delà de la
+       152e heure du mois, 25 % jusqu'à la 186e incluse, 50 % à compter de la
+       187e (accord du 23 avril 2002 relatif aux salaires des personnels
+       roulants, article 2, tel que le contrat du module transport le cite).
+       Le total est celui des jours saisis : il se reprend du relevé du
+       chronotachygraphe, jour par jour. */
+    var tr = $("t-transport");
+    if (tr) {
+      if (estConducteur(qui)) {
+        var base = Math.min(total, 152), m25 = Math.max(0, Math.min(total, 186) - 152), m50 = Math.max(0, total - 186);
+        tr.hidden = false;
+        tr.textContent = "Temps de service du mois : " + nbh(total) + ". Au taux normal : " + nbh(base) +
+          " ; majorées de 25 % : " + nbh(m25) + " ; majorées de 50 % : " + nbh(m50) +
+          " (accord du 23 avril 2002, article 2). Reprenez chaque jour du relevé du chronotachygraphe.";
+      } else tr.hidden = true;
+    }
 
     var m = moisDe();
     var n = nombre(m.retenu);
