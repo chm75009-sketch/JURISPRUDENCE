@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registre des sanctions</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LES SANCTIONS, SALARIÉ PAR SALARIÉ.
+
+  L'application écrivait les lettres, une par une, et n'en gardait aucune
+  trace : au moment de sanctionner de nouveau, personne ne savait ce qui avait
+  déjà été prononcé, ni si cela pouvait encore être invoqué. Un audit l'a
+  relevé le 26 septembre 2026.
+
+  Ce que cette page tient, et le texte qui le commande, lu à la source le
+  26 septembre 2026, deux lectures concordantes chacun :
+
+    L. 1331-1  LEGIARTI000006901445  « Constitue une sanction toute mesure,
+               autre que les observations verbales, prise par l'employeur à la
+               suite d'un agissement du salarié considéré par l'employeur comme
+               fautif » ; une observation verbale n'a donc rien à faire ici ;
+    L. 1332-4  LEGIARTI000006901450  aucun fait fautif ne peut donner lieu à
+               lui seul à des poursuites au-delà de deux mois à compter du jour
+               où l'employeur en a eu connaissance ;
+    L. 1332-5  LEGIARTI000006901451  « Aucune sanction antérieure de plus de
+               trois ans à l'engagement des poursuites disciplinaires ne peut
+               être invoquée à l'appui d'une nouvelle sanction » ;
+    L. 1333-2  LEGIARTI000006901454  le conseil de prud'hommes peut annuler une
+               sanction irrégulière en la forme, injustifiée, ou disproportionnée
+               à la faute commise.
+
+  Les trois ans se comptent depuis la date de la sanction jusqu'au jour de
+  l'engagement des nouvelles poursuites. La page prend le jour d'aujourd'hui
+  comme repère : c'est ce qu'un employeur regarde quand il se demande ce qu'il
+  peut encore invoquer.
+
+  L'échelle des sanctions vient du règlement intérieur : une sanction que le
+  règlement ne prévoit pas est une sanction à discuter. La page n'invente
+  aucune échelle, elle renvoie au règlement.
+-->
+
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .filtres{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
+  .filtres button{flex:1 1 auto;min-height:40px;padding:0 12px;border:1px solid var(--filet);
+    border-radius:var(--r2);background:var(--surface);color:var(--encre,#16181d);
+    cursor:pointer;font:15px system-ui}
+  .filtres button.actif{background:var(--accent,#1f3864);color:#fff;border-color:var(--accent,#1f3864)}
+  .compte{margin:8px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .sal{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);margin:10px 0 0}
+  .sal .tete{padding:12px 14px;cursor:pointer}
+  .sal .tete b{display:block;font:600 17px/1.3 system-ui;color:var(--encre)}
+  .sal .resume{margin:4px 0 0;font-size:14.5px;color:var(--texte-2)}
+  .jauge{display:inline-block;margin:6px 0 0;padding:2px 8px;border-radius:999px;
+    font:600 13px/1.6 system-ui}
+  .jauge.ok{background:var(--vert-clair);color:var(--vert)}
+  .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
+  .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
+  .sal .corps{display:none;padding:0 14px 14px}
+  .sal.ouverte .corps{display:block}
+  .s{margin:10px 0 0;padding:10px 12px;border-left:3px solid var(--filet);
+    background:var(--creux,#f3f5f8);border-radius:0 8px 8px 0}
+  .s.vive{border-left-color:var(--rouge)}
+  .s.eteinte{border-left-color:var(--filet);opacity:.75}
+  .s .q{font:600 15px/1.35 system-ui;color:var(--encre)}
+  .s .d{font-size:13px;color:var(--texte-3);margin-top:2px}
+  .s .m{font-size:14.5px;line-height:1.5;color:var(--texte-2);margin-top:5px;white-space:pre-wrap}
+  .s .etat{font-size:13.5px;margin-top:6px;font-style:italic}
+  .s .etat.vive{color:var(--rouge)}
+  .s .etat.eteinte{color:var(--texte-3)}
+  .s button{margin-top:7px;min-height:32px;padding:0 10px;border:1px solid var(--filet);
+    border-radius:8px;background:var(--surface);color:var(--texte-2);font:13.5px system-ui;cursor:pointer}
+  .ajout{margin:12px 0 0}
+  .ajout summary{font:600 15px/1.4 system-ui;color:var(--accent);cursor:pointer}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 0}
+  .ch{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texte-2)}
+  .ch.pleine{grid-column:1 / -1}
+  .ch input,.ch select,.ch textarea{min-height:44px;padding:8px 10px;border:1px solid var(--filet);
+    border-radius:var(--r2);font:16px system-ui;background:#fff;color:var(--encre);
+    font-family:inherit;width:100%;box-sizing:border-box}
+  .ch textarea{min-height:88px;line-height:1.5}
+  .avis{margin:12px 0 0;border-radius:var(--r2);padding:12px 14px;font-size:14.5px;line-height:1.55}
+  .avis b{display:block;margin-bottom:4px}
+  .avis.non{background:var(--rouge-clair);color:var(--rouge)}
+  .avis.att{background:var(--ambre-clair);color:var(--ambre)}
+  .avis.ok{background:var(--vert-clair);color:var(--vert)}
+  .avis.info{background:var(--creux);color:var(--texte-2)}
+  .avis ul{margin:6px 0 0;padding-left:20px}
+  .barre{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+  .barre button{flex:1 1 auto;min-height:46px;padding:0 14px;border-radius:var(--r2);cursor:pointer;
+    font:600 15px system-ui;border:1px solid var(--filet);background:var(--surface);color:var(--encre)}
+  .barre button.p{background:var(--accent);border-color:var(--accent);color:#fff}
+  .suite{margin:var(--e5) 0 0}
+  .suite a{display:block;padding:14px 0;border-bottom:1px solid var(--filet);
+    color:var(--encre);text-decoration:none;font:400 17px/1.3 system-ui}
+  .loi{margin:var(--e5) 0 0}
+  .loi .ident{font:12px/1 ui-monospace,monospace;color:var(--texte-3)}
+  @media (max-width:430px){ .champs{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Registre des sanctions</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <p class="rappel-fiche" id="rappel"></p>
+
+  <div id="alertes"></div>
+
+  <div class="filtres" id="filtres">
+    <button type="button" data-f="avec" class="actif">Ceux qui en ont</button>
+    <button type="button" data-f="tous">Tous</button>
+  </div>
+  <p class="compte" id="compte"></p>
+
+  <div id="liste"></div>
+
+  <div class="barre">
+    <button type="button" class="p" id="btn-word">Télécharger le registre en Word</button>
+  </div>
+
+  <div class="suite">
+    <a href="gerer.html#avert">Écrire un avertissement, une mise à pied, une notification</a>
+    <a href="controler-ri.html">Le règlement intérieur, et son échelle des sanctions</a>
+    <a href="registre.html">Le registre du personnel, où se saisissent les salariés</a>
+  </div>
+
+  <details class="loi"><summary>Voir le texte de loi</summary><div id="textes"></div></details>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function ech(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function net(v) { return String(v == null ? "" : v).trim(); }
+
+  var CLE_REG = "registre-personnel";
+  var CLE = "sanctions-salaries";
+  var AUJOURDHUI = new Date();
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+
+  var profil = {};
+  try { profil = (window.Profil && window.Profil.lire) ? (window.Profil.lire() || {}) : {}; }
+  catch (e) { profil = {}; }
+
+  var TEXTES = {
+    "L1331-1": { id: "LEGIARTI000006901445",
+      dit: "constitue une sanction toute mesure, autre que les observations verbales, prise par l'employeur à la suite d'un agissement du salarié considéré par l'employeur comme fautif" },
+    "L1332-4": { id: "LEGIARTI000006901450",
+      dit: "aucun fait fautif ne peut donner lieu à lui seul à l'engagement de poursuites disciplinaires au-delà d'un délai de deux mois à compter du jour où l'employeur en a eu connaissance" },
+    "L1332-5": { id: "LEGIARTI000006901451",
+      dit: "aucune sanction antérieure de plus de trois ans à l'engagement des poursuites disciplinaires ne peut être invoquée à l'appui d'une nouvelle sanction" },
+    "L1333-2": { id: "LEGIARTI000006901454",
+      dit: "le conseil de prud'hommes peut annuler une sanction irrégulière en la forme ou injustifiée ou disproportionnée à la faute commise" }
+  };
+  function art(c) {
+    var m = /^([A-Z]+)(\d+)-(.+)$/.exec(c);
+    return m ? m[1] + ". " + m[2] + "-" + m[3] : c;
+  }
+
+  /* LES NATURES DE SANCTION SONT CELLES DU RÈGLEMENT INTÉRIEUR.
+     Cette liste reprend les mesures que les lettres de l'application savent
+     écrire ; l'échelle applicable, elle, est celle du règlement, et une mesure
+     qu'il ne prévoit pas est une mesure à discuter. */
+  var NATURES = [
+    { v: "avertissement", lib: "Avertissement" },
+    { v: "blame", lib: "Blâme" },
+    { v: "miseapied", lib: "Mise à pied disciplinaire" },
+    { v: "mutation", lib: "Mutation disciplinaire" },
+    { v: "retrogradation", lib: "Rétrogradation" },
+    { v: "licenciement", lib: "Licenciement pour faute" },
+    { v: "autre", lib: "Autre mesure prévue par le règlement intérieur" }
+  ];
+  function libNature(v) {
+    var out = v;
+    NATURES.forEach(function (n) { if (n.v === v) out = n.lib; });
+    return out;
+  }
+
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function deIso(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(net(v));
+    if (!m) return null;
+    var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12, 0, 0);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function dateFr(v) {
+    var d = v instanceof Date ? v : deIso(v);
+    if (!d) return net(v);
+    return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function ansApres(v, n) {
+    var d = deIso(v);
+    if (!d) return null;
+    var r = new Date(d.getTime());
+    r.setFullYear(r.getFullYear() + n);
+    return r;
+  }
+  function slug(s) {
+    try {
+      return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
+  }
+
+  function salaries() {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem(CLE_REG) || "null"); } catch (e) { E = null; }
+    return ((E && E.salaries) || []).filter(function (s) {
+      return !s.ex && !net(s.sor) && (net(s.nom) || net(s.pre));
+    }).map(function (s) {
+      var nom = (net(s.nom) + " " + net(s.pre)).trim();
+      return { id: slug(nom), nom: nom, emp: net(s.emp) };
+    });
+  }
+  function tout() {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
+    catch (e) { return {}; }
+  }
+  function garder(t) {
+    try { localStorage.setItem(CLE, JSON.stringify(t)); } catch (e) {}
+  }
+  function sanctionsDe(id) {
+    var L = tout()[id] || [];
+    return L.slice().sort(function (a, b) { return String(b.le).localeCompare(String(a.le)); });
+  }
+  function ajouter(id, s) {
+    var t = tout();
+    if (!t[id]) t[id] = [];
+    t[id].push(s);
+    garder(t);
+  }
+  function oter(id, rang) {
+    var t = tout(), L = t[id] || [];
+    var tri = sanctionsDe(id);
+    if (rang < 0 || rang >= tri.length) return;
+    var vise = tri[rang];
+    for (var i = 0; i < L.length; i++) {
+      if (L[i].le === vise.le && L[i].nature === vise.nature && L[i].motif === vise.motif) {
+        L.splice(i, 1); break;
+      }
+    }
+    t[id] = L;
+    garder(t);
+  }
+
+  /* CE QUI PEUT ENCORE ÊTRE INVOQUÉ, ET CE QUI NE LE PEUT PLUS.
+     Trois ans depuis la date de la sanction (L. 1332-5), comptés jusqu'à
+     aujourd'hui : c'est le repère de celui qui se demande ce qu'il peut
+     verser à l'appui d'une nouvelle poursuite. */
+  function etatDe(s) {
+    var fin = ansApres(s.le, 3);
+    if (!fin) return { etat: "att", dit: "date à saisir", fin: null, jours: null };
+    var jours = Math.round((fin.getTime() - new Date(AUJOURDHUI.getFullYear(),
+      AUJOURDHUI.getMonth(), AUJOURDHUI.getDate(), 12, 0, 0).getTime()) / 864e5);
+    if (jours <= 0)
+      return { etat: "eteinte", fin: fin, jours: jours,
+        dit: "ne peut plus être invoquée depuis le " + dateFr(fin) + " (L. 1332-5)" };
+    if (jours <= 90)
+      return { etat: "vive", fin: fin, jours: jours, bientot: true,
+        dit: "invocable jusqu'au " + dateFr(fin) + ", dans " + jours + " jour" + (jours > 1 ? "s" : "") };
+    return { etat: "vive", fin: fin, jours: jours,
+      dit: "invocable jusqu'au " + dateFr(fin) };
+  }
+
+  /* ──────────────────────────────── l'écran ──────────────────────────── */
+  var FILTRE = "avec";
+  var ouvert = {};
+
+  function rendre() {
+    var L = salaries();
+    var vives = 0, total = 0, avec = 0;
+    var cartes = L.map(function (s) {
+      var S = sanctionsDe(s.id);
+      total += S.length;
+      if (S.length) avec++;
+      var v = S.filter(function (x) { return etatDe(x).etat === "vive"; }).length;
+      vives += v;
+      if (FILTRE === "avec" && !S.length) return "";
+      return carte(s, S, v);
+    }).join("");
+
+    $("liste").innerHTML = cartes || '<div class="avis info"><b>Aucune sanction inscrite</b>' +
+      "Le filtre « Tous » montre l'ensemble des salariés du registre : ouvrez une fiche " +
+      "pour y porter une sanction déjà prononcée.</div>";
+    $("compte").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") +
+      " en poste au registre · " + total + " sanction" + (total > 1 ? "s" : "") + " inscrite" +
+      (total > 1 ? "s" : "") + " chez " + avec + " d'entre eux · " + vives +
+      " encore invocable" + (vives > 1 ? "s" : "");
+    rendreAlertes(L, vives);
+    cabler();
+  }
+
+  function carte(s, S, vives) {
+    var proches = S.filter(function (x) { var e = etatDe(x); return e.etat === "vive" && e.bientot; });
+    return '<div class="sal' + (ouvert[s.id] ? " ouverte" : "") + '" data-sal="' + ech(s.id) + '">' +
+      '<div class="tete" data-ouvrir="' + ech(s.id) + '"><b>' + ech(s.nom) + "</b>" +
+      '<p class="resume">' + ech(s.emp || "aucun emploi écrit au registre") + "</p>" +
+      '<span class="jauge ' + (vives ? (proches.length ? "att" : "non") : "ok") + '">' +
+      ech(vives
+        ? vives + " sanction" + (vives > 1 ? "s" : "") + " encore invocable" + (vives > 1 ? "s" : "")
+        : (S.length ? "rien d'invocable" : "aucune sanction")) + "</span>" +
+      '</div><div class="corps">' + listeHtml(s, S) + formulaireHtml(s) + "</div></div>";
+  }
+
+  function listeHtml(s, S) {
+    if (!S.length) return '<div class="avis ok"><b>Aucune sanction inscrite</b>' +
+      "Rien n'est porté au registre pour ce salarié.</div>";
+    return S.map(function (x, i) {
+      var e = etatDe(x);
+      return '<div class="s ' + e.etat + '"><div class="q">' + ech(libNature(x.nature)) + "</div>" +
+        '<div class="d">Prononcée le ' + ech(dateFr(x.le)) +
+        (net(x.faits) ? ", faits du " + ech(dateFr(x.faits)) : "") + "</div>" +
+        (net(x.motif) ? '<div class="m">' + ech(x.motif) + "</div>" : "") +
+        '<div class="etat ' + e.etat + '">' + ech(e.dit) + "</div>" +
+        '<button type="button" data-oter="' + ech(s.id) + '" data-rang="' + i +
+        '">Retirer du registre</button></div>';
+    }).join("");
+  }
+
+  function formulaireHtml(s) {
+    return '<details class="ajout"><summary>Inscrire une sanction</summary>' +
+      '<div class="champs">' +
+      '<label class="ch"><span>Nature</span><select data-n="' + ech(s.id) + '">' +
+      NATURES.map(function (n) {
+        return '<option value="' + ech(n.v) + '">' + ech(n.lib) + "</option>";
+      }).join("") + "</select></label>" +
+      '<label class="ch"><span>Prononcée le</span><input type="date" data-le="' + ech(s.id) + '"></label>' +
+      '<label class="ch"><span>Date des faits</span><input type="date" data-faits="' + ech(s.id) + '"></label>' +
+      '<label class="ch pleine"><span>Ce qui a été reproché</span>' +
+      '<textarea data-motif="' + ech(s.id) + '" placeholder="Les faits, datés, tels que la lettre les a énoncés."></textarea></label>' +
+      "</div>" +
+      '<div class="barre"><button type="button" class="p" data-ajout="' + ech(s.id) +
+      '">Inscrire au registre</button></div>' +
+      '<p class="sous" style="font-size:13px;color:var(--texte-3);margin:8px 0 0">' +
+      "Une observation verbale n'est pas une sanction (L. 1331-1) : elle n'a pas à figurer ici.</p>" +
+      "</details>";
+  }
+
+  function rendreAlertes(L, vives) {
+    if (!L.length) {
+      $("alertes").innerHTML = '<div class="avis non"><b>Le registre du personnel ne porte aucun salarié</b>' +
+        "C'est lui qui donne les noms de cet écran : ouvrez le registre et inscrivez-les.</div>";
+      return;
+    }
+    var proches = [];
+    L.forEach(function (s) {
+      sanctionsDe(s.id).forEach(function (x) {
+        var e = etatDe(x);
+        if (e.etat === "vive" && e.bientot) proches.push({ s: s, x: x, e: e });
+      });
+    });
+    var h = "";
+    if (proches.length)
+      h += '<div class="avis att"><b>' + proches.length + " sanction" + (proches.length > 1 ? "s" : "") +
+        " atteindra" + (proches.length > 1 ? "ont" : "") + " trois ans dans les trois mois</b><ul><li>" +
+        proches.slice(0, 8).map(function (p) {
+          return ech(p.s.nom + " : " + libNature(p.x.nature) + " du " + dateFr(p.x.le) +
+            ", invocable jusqu'au " + dateFr(p.e.fin));
+        }).join("</li><li>") + "</li></ul>" +
+        "Passé trois ans, elles ne peuvent plus être invoquées à l'appui d'une nouvelle sanction (L. 1332-5).</div>";
+    if (!vives)
+      h += '<div class="avis ok"><b>Aucune sanction invocable aujourd\'hui</b>' +
+        "Une nouvelle sanction ne peut s'appuyer sur aucun antécédent de moins de trois ans.</div>";
+    $("alertes").innerHTML = h;
+  }
+
+  function cabler() {
+    var z = $("liste");
+    Array.prototype.forEach.call(z.querySelectorAll("[data-ouvrir]"), function (t) {
+      t.addEventListener("click", function () {
+        var id = t.getAttribute("data-ouvrir");
+        if (ouvert[id]) delete ouvert[id]; else ouvert[id] = true;
+        t.parentNode.classList.toggle("ouverte", !!ouvert[id]);
+      });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-ajout]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-ajout");
+        var le = z.querySelector('[data-le="' + id + '"]');
+        var n = z.querySelector('[data-n="' + id + '"]');
+        var f = z.querySelector('[data-faits="' + id + '"]');
+        var m = z.querySelector('[data-motif="' + id + '"]');
+        if (!le || !net(le.value)) { if (le) le.focus(); return; }
+        ajouter(id, { le: le.value, nature: n ? n.value : "autre",
+          faits: f ? f.value : "", motif: m ? m.value : "" });
+        ouvert[id] = true;
+        rendre();
+      });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-oter]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-oter");
+        oter(id, parseInt(b.getAttribute("data-rang"), 10));
+        ouvert[id] = true;
+        rendre();
+      });
+    });
+  }
+
+  /* ──────────────────────────────── le registre en Word ──────────────── */
+  $("btn-word").addEventListener("click", function () {
+    if (!window.AuditExport) return;
+    var rows = [];
+    salaries().forEach(function (s) {
+      sanctionsDe(s.id).forEach(function (x) {
+        var e = etatDe(x);
+        rows.push([s.nom, s.emp || "", libNature(x.nature), dateFr(x.le),
+          net(x.faits) ? dateFr(x.faits) : "",
+          e.etat === "eteinte" ? "plus invocable" : (e.fin ? "jusqu'au " + dateFr(e.fin) : ""),
+          net(x.motif)]);
+      });
+    });
+    if (!rows.length) rows.push(["", "", "", "", "", "", "aucune sanction inscrite"]);
+    var items = [];
+    items.push({ k: "sur", t: net(profil.denomination) || "[dénomination]" });
+    items.push({ k: "t1", t: "Registre des sanctions disciplinaires" });
+    items.push({ k: "p", t: "Établi le " + dateFr(iso(AUJOURDHUI)) + "." });
+    items.push({ k: "p", t: "Une observation verbale n'est pas une sanction (L. 1331-1). " +
+      "Aucune sanction antérieure de plus de trois ans à l'engagement des poursuites ne peut " +
+      "être invoquée à l'appui d'une nouvelle sanction (L. 1332-5) : la colonne « invocable » " +
+      "se compte depuis la date de la sanction." });
+    items.push({ k: "table", paysage: true,
+      head: ["Salarié", "Emploi", "Nature", "Prononcée le", "Faits du", "Invocable", "Ce qui a été reproché"],
+      proportions: [15, 13, 14, 12, 11, 13, 22],
+      rows: rows });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Registre des sanctions"),
+      "registre-sanctions-" + iso(AUJOURDHUI) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* ──────────────────────────────── le reste de l'écran ──────────────── */
+  Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      FILTRE = b.getAttribute("data-f");
+      Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (x) {
+        x.classList.toggle("actif", x === b);
+      });
+      rendre();
+    });
+  });
+
+  $("rappel").textContent = [net(profil.denomination),
+    "les trois ans se comptent au " + dateFr(iso(AUJOURDHUI)),
+    "l'échelle applicable est celle de votre règlement intérieur"]
+    .filter(Boolean).join(" · ");
+
+  $("textes").innerHTML = Object.keys(TEXTES).map(function (c) {
+    return "<p><b>" + ech(art(c)) + "</b> <span class=\"ident\">" + ech(TEXTES[c].id) + "</span><br>" +
+      ech(TEXTES[c].dit) + "</p>";
+  }).join("");
+
+  rendre();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>
