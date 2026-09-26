@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minima conventionnels</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LES MINIMA DE LA CONVENTION, EN FACE DES SALAIRES PAYÉS.
+
+  L'application savait calculer le minimum d'un contrat qu'on écrit ; elle ne
+  savait pas dire si les salariés déjà en poste étaient payés au-dessus. Un
+  audit l'a relevé le 26 septembre 2026, et c'est ce que cette page fait :
+  un salarié, un coefficient, un salaire, et l'écart s'il y en a un.
+
+  Ce qui commande, et qui a été lu à la source le 26 septembre 2026, deux
+  lectures concordantes chacun :
+
+    L. 2253-1   LEGIARTI000036761771  la convention de branche définit les
+                garanties applicables, au premier rang desquelles « les
+                salaires minima hiérarchiques » ;
+    L. 2251-1   LEGIARTI000006901772  une convention peut être plus favorable
+                que la loi, elle « ne peut déroger aux dispositions qui
+                revêtent un caractère d'ordre public » ;
+    R. 3233-1   LEGIARTI000018533820  payer « des salaires inférieurs au
+                salaire minimum de croissance » est une contravention de la
+                cinquième classe, « appliquée autant de fois qu'il y a de
+                salariés rémunérés dans des conditions illégales ».
+
+  De là, la règle de cet écran : le taux retenu est le plus élevé des deux,
+  celui de la grille et celui du SMIC. Quand la grille est en dessous du SMIC,
+  la page le dit au lieu de recopier la grille.
+
+  La grille elle-même, les garanties annuelles et le SMIC viennent de
+  « contrats-transport.js », avec leur source et leur date : rien n'est saisi
+  ici en double. Les salariés viennent du registre du personnel, et leur
+  coefficient est repris de la qualification qui y est écrite quand elle en
+  porte un. Le profil d'emploi, lui, se choisit : un intitulé de poste ne dit
+  pas à quelle annexe un salarié appartient, et la page ne le devine pas.
+
+  L'alerte à l'avenant : le contrôle garde la date de la grille sur laquelle
+  il a été fait. Quand la grille change, tous les contrôles antérieurs sont
+  signalés comme à refaire, au lieu de rester verts sur un barème périmé.
+-->
+
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .filtres{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
+  .filtres button{flex:1 1 auto;min-height:40px;padding:0 12px;border:1px solid var(--filet);
+    border-radius:var(--r2);background:var(--surface);color:var(--encre,#16181d);
+    cursor:pointer;font:15px system-ui}
+  .filtres button.actif{background:var(--accent,#1f3864);color:#fff;border-color:var(--accent,#1f3864)}
+  .compte{margin:8px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .sal{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);margin:10px 0 0}
+  .sal .tete{padding:12px 14px;cursor:pointer}
+  .sal .tete b{display:block;font:600 17px/1.3 system-ui;color:var(--encre)}
+  .sal .resume{margin:4px 0 0;font-size:14.5px;color:var(--texte-2)}
+  .sal .verdict{margin:8px 0 0;font:600 15px/1.35 system-ui;color:var(--encre)}
+  .jauge{display:inline-block;margin:6px 0 0;padding:2px 8px;border-radius:999px;
+    font:600 13px/1.6 system-ui}
+  .jauge.ok{background:var(--vert-clair);color:var(--vert)}
+  .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
+  .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
+  .sal .corps{display:none;padding:0 14px 14px}
+  .sal.ouverte .corps{display:block}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ch{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texte-2)}
+  .ch.pleine{grid-column:1 / -1}
+  .ch input,.ch select{min-height:44px;padding:8px 10px;border:1px solid var(--filet);
+    border-radius:var(--r2);font:16px system-ui;background:#fff;color:var(--encre)}
+  .ch input.rempli,.ch select.rempli{border-color:var(--accent)}
+  .sous{font-size:12.5px;color:var(--texte-3)}
+  .avis{margin:12px 0 0;border-radius:var(--r2);padding:12px 14px;font-size:14.5px;line-height:1.55}
+  .avis b{display:block;margin-bottom:4px}
+  .avis.non{background:var(--rouge-clair);color:var(--rouge)}
+  .avis.att{background:var(--ambre-clair);color:var(--ambre)}
+  .avis.ok{background:var(--vert-clair);color:var(--vert)}
+  .avis.info{background:var(--creux);color:var(--texte-2)}
+  .avis ul{margin:6px 0 0;padding-left:20px}
+  .detail{margin:10px 0 0;font-size:14px;color:var(--texte-2);line-height:1.6}
+  .detail span{display:block}
+  .detail b{color:var(--encre)}
+  .barre{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+  .barre button{flex:1 1 auto;min-height:46px;padding:0 14px;border-radius:var(--r2);cursor:pointer;
+    font:600 15px system-ui;border:1px solid var(--filet);background:var(--surface);color:var(--encre)}
+  .barre button.p{background:var(--accent);border-color:var(--accent);color:#fff}
+  .suite{margin:var(--e5) 0 0}
+  .suite a{display:block;padding:14px 0;border-bottom:1px solid var(--filet);
+    color:var(--encre);text-decoration:none;font:400 17px/1.3 system-ui}
+  .loi{margin:var(--e5) 0 0}
+  .loi .ident{font:12px/1 ui-monospace,monospace;color:var(--texte-3)}
+  @media (max-width:430px){ .champs{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Minima conventionnels</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <p class="rappel-fiche" id="rappel"></p>
+
+  <div id="alertes"></div>
+
+  <div class="filtres" id="filtres">
+    <button type="button" data-f="voir" class="actif">À revoir</button>
+    <button type="button" data-f="tous">Tous</button>
+  </div>
+  <p class="compte" id="compte"></p>
+
+  <div id="liste"></div>
+
+  <div class="barre">
+    <button type="button" class="p" id="btn-word">Télécharger le tableau en Word</button>
+  </div>
+
+  <div class="suite">
+    <a href="registre.html">Le registre du personnel, où se saisissent les salariés</a>
+    <a href="contrats-transport.html">Les contrats du transport, où se calcule un salaire d'embauche</a>
+    <a href="gerer.html">La gestion du quotidien</a>
+  </div>
+
+  <details class="loi"><summary>Voir le texte de loi</summary><div id="textes"></div></details>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script src="convention.js"></script>
+<script src="contrats-transport.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function ech(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function net(v) { return String(v == null ? "" : v).trim(); }
+
+  var CT = window.ContratsTransport;
+  var CLE_REG = "registre-personnel";
+  var CLE = "remunerations";
+  var AUJOURDHUI = new Date();
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+
+  var profil = {};
+  try {
+    profil = (window.Profil && window.Profil.lire) ? (window.Profil.lire() || {}) : {};
+  } catch (e) { profil = {}; }
+
+  /* ──────────────────────────────── les textes lus ───────────────────── */
+  var TEXTES = {
+    "L2253-1": { id: "LEGIARTI000036761771",
+      dit: "la convention de branche définit les garanties applicables aux salariés, au premier rang desquelles les salaires minima hiérarchiques" },
+    "L2251-1": { id: "LEGIARTI000006901772",
+      dit: "une convention ou un accord peut comporter des stipulations plus favorables que la loi ; ils ne peuvent déroger aux dispositions qui revêtent un caractère d'ordre public" },
+    "R3233-1": { id: "LEGIARTI000018533820",
+      dit: "payer des salaires inférieurs au salaire minimum de croissance est puni de l'amende des contraventions de la cinquième classe, appliquée autant de fois qu'il y a de salariés rémunérés dans des conditions illégales" }
+  };
+  function art(c) {
+    var m = /^([A-Z]+)(\d+)-(.+)$/.exec(c);
+    return m ? m[1] + ". " + m[2] + "-" + m[3] : c;
+  }
+
+  /* ──────────────────────────────── les nombres ──────────────────────── */
+  function eur(n) {
+    if (n === null || n === undefined || !isFinite(n)) return "";
+    var x = Math.round(Number(n) * 100) / 100;
+    var s = x.toFixed(2).replace(".", ",");
+    return s.replace(/\B(?=(\d{3})+(?!\d),)/g, " ") + " €";
+  }
+  function nb(v) {
+    var x = parseFloat(String(v == null ? "" : v).replace(/\s/g, "").replace(",", "."));
+    return isFinite(x) ? x : null;
+  }
+  function dateFr(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(net(v));
+    if (!m) return net(v);
+    var j = Number(m[3]);
+    return (j === 1 ? "1er" : j) + " " + MOIS[Number(m[2]) - 1] + " " + m[1];
+  }
+  function slug(s) {
+    try {
+      return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
+  }
+
+  /* ─────────────────────── les salariés, et ce qui est saisi ─────────── */
+  /* LE COEFFICIENT SE LIT DANS LA QUALIFICATION, IL NE SE DEVINE PAS.
+     Le registre porte « Niveau 2, coefficient 140 » ou « 138 M » : ce qui est
+     écrit est repris, et rien d'autre. Un registre qui ne dit rien laisse le
+     champ vide. */
+  function coefDuTexte(t) {
+    var s = net(t);
+    if (!s) return "";
+    var m = /(\d{2,3}(?:[.,]\d)?)\s*M\b/i.exec(s);
+    if (m) return m[1].replace(".", ",") + " M";
+    m = /coefficient\s*:?\s*(\d{2,3}(?:[.,]\d)?)/i.exec(s);
+    if (m) return m[1].replace(".", ",");
+    return "";
+  }
+
+  function salaries() {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem(CLE_REG) || "null"); } catch (e) { E = null; }
+    return ((E && E.salaries) || []).filter(function (s) {
+      return !s.ex && !net(s.sor) && (net(s.nom) || net(s.pre));
+    }).map(function (s) {
+      var nom = (net(s.nom) + " " + net(s.pre)).trim();
+      return { id: slug(nom), nom: nom, emp: net(s.emp), qua: net(s.qua), ent: net(s.ent) };
+    });
+  }
+  function fiches() {
+    try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; }
+    catch (e) { return {}; }
+  }
+  function fiche(id) { return fiches()[id] || {}; }
+  function ecrire(id, champ, valeur) {
+    var t = fiches();
+    t[id] = t[id] || {};
+    if (net(valeur)) t[id][champ] = net(valeur); else delete t[id][champ];
+    /* LE CONTRÔLE GARDE LA GRILLE SUR LAQUELLE IL A ÉTÉ FAIT.
+       C'est elle qui permet de dire, à l'avenant suivant, que le contrôle
+       date d'avant. */
+    if (net(t[id].salaire)) {
+      t[id].grille = CT.CCN.salaires.depuis;
+      t[id].smic = CT.CCN.smic.depuis;
+      t[id].vuLe = AUJOURDHUI.getFullYear() + "-" +
+        String(AUJOURDHUI.getMonth() + 1).padStart(2, "0") + "-" +
+        String(AUJOURDHUI.getDate()).padStart(2, "0");
+    }
+    try { localStorage.setItem(CLE, JSON.stringify(t)); } catch (e) {}
+  }
+
+  /* ─────────────────────────── le minimum, et l'écart ────────────────── */
+  function profilDe(cle) {
+    var p = null;
+    CT.PROFILS.forEach(function (x) { if (x.cle === cle) p = x; });
+    return p;
+  }
+
+  /* LE TAUX RETENU EST LE PLUS ÉLEVÉ DES DEUX.
+     La grille de branche peut se retrouver sous le SMIC entre deux avenants ;
+     le SMIC est d'ordre public (L. 2251-1), et le payer en dessous est une
+     contravention (R. 3233-1). La page retient donc le plus élevé, et dit
+     lequel. */
+  function mesurer(s) {
+    var f = fiche(s.id);
+    var p = profilDe(net(f.profil));
+    var coef = net(f.coef);
+    var paye = nb(f.salaire);
+    var out = { f: f, p: p, coef: coef, paye: paye, etat: "", manque: null };
+    if (!p) { out.etat = "att"; out.court = "à compléter"; out.dit = "Profil d'emploi à préciser"; return out; }
+    if (!coef) { out.etat = "att"; out.court = "à compléter"; out.dit = "Coefficient à préciser"; return out; }
+    var tauxConv = CT.tauxDe(coef, p.cle);
+    if (tauxConv === null) {
+      out.etat = "att";
+      out.court = "coefficient inconnu";
+      out.dit = "Le coefficient « " + coef + " » ne figure pas dans la grille servie";
+      return out;
+    }
+    var smic = CT.CCN.smic.valeur;
+    out.tauxConv = tauxConv;
+    out.smic = smic;
+    out.taux = Math.max(tauxConv, smic);
+    out.parSmic = smic > tauxConv;
+    out.heures = p.mensuel;
+    var m = CT.salaire(p, p.mensuel, out.taux);
+    out.minimum = m.total;
+    out.detail = m;
+    var g = CT.garantie(p, coef, p.mensuel);
+    out.garantie = g;
+    if (paye === null) { out.etat = "att"; out.court = "à compléter"; out.dit = "Salaire à saisir"; return out; }
+    out.manque = out.minimum - paye;
+    out.manqueAn = g ? (g.montant - paye * 12) : null;
+    if (out.manque > 0.005 || (out.manqueAn !== null && out.manqueAn > 0.005)) {
+      out.etat = "non";
+      out.court = "sous le minimum";
+      out.dit = out.manque > 0.005
+        ? "Sous le minimum mensuel de " + eur(out.manque)
+        : "Sous la garantie annuelle de " + eur(out.manqueAn);
+      return out;
+    }
+    /* L'ALERTE À L'AVENANT : le contrôle a été fait, mais sur une grille qui
+       n'est plus celle en vigueur. */
+    if (net(f.grille) && f.grille !== CT.CCN.salaires.depuis) {
+      out.etat = "att";
+      out.perime = true;
+      out.court = "à refaire";
+      out.dit = "Contrôlé sur la grille du " + dateFr(f.grille) + ", à refaire";
+      return out;
+    }
+    if (net(f.smic) && f.smic !== CT.CCN.smic.depuis) {
+      out.etat = "att";
+      out.perime = true;
+      out.court = "à refaire";
+      out.dit = "Contrôlé avec le SMIC du " + dateFr(f.smic) + ", à refaire";
+      return out;
+    }
+    out.etat = "ok";
+    out.court = "conforme";
+    out.dit = "Au-dessus du minimum";
+    return out;
+  }
+
+  /* ──────────────────────────────── l'écran ──────────────────────────── */
+  var FILTRE = "voir";
+  var ouvert = {};
+
+  function rendre() {
+    var L = salaries();
+    var mesures = L.map(function (s) { return { s: s, m: mesurer(s) }; });
+    var aVoir = mesures.filter(function (x) { return x.m.etat !== "ok"; });
+    var sous = mesures.filter(function (x) { return x.m.etat === "non"; });
+
+    var cartes = mesures.map(function (x) {
+      if (FILTRE === "voir" && x.m.etat === "ok") return "";
+      return carte(x.s, x.m);
+    }).join("");
+
+    $("liste").innerHTML = cartes || '<div class="avis ok"><b>Rien à revoir</b>' +
+      "Tous les salariés du registre sont au-dessus du minimum de leur coefficient, " +
+      "sur la grille en vigueur. Le filtre « Tous » montre l'ensemble.</div>";
+    $("compte").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") +
+      " en poste au registre · " + sous.length + " sous le minimum · " +
+      (aVoir.length - sous.length) + " à compléter ou à refaire";
+    rendreAlertes(sous, aVoir, L.length);
+    cabler();
+  }
+
+  function carte(s, m) {
+    var f = m.f;
+    return '<div class="sal' + (ouvert[s.id] ? " ouverte" : "") + '" data-sal="' + ech(s.id) + '">' +
+      '<div class="tete" data-ouvrir="' + ech(s.id) + '"><b>' + ech(s.nom) + "</b>" +
+      '<p class="resume">' + ech([s.emp, s.qua].filter(Boolean).join(" · ") ||
+        "aucun emploi écrit au registre") + "</p>" +
+      '<p class="verdict">' + ech(m.dit) + "</p>" +
+      '<span class="jauge ' + (m.etat || "att") + '">' + ech(m.court || "à compléter") + "</span>" +
+      '</div><div class="corps">' + champsDe(s, m) + detailDe(m) + "</div></div>";
+  }
+
+  function champsDe(s, m) {
+    var f = m.f;
+    var coefLu = coefDuTexte(s.qua);
+    var coefs = m.p ? m.p.coefs : [];
+    var ch = function (id, nom, dedans, sous) {
+      return '<label class="ch' + (sous ? " pleine" : "") + '"><span>' + ech(nom) + "</span>" +
+        dedans + (sous ? '<span class="sous">' + ech(sous) + "</span>" : "") + "</label>";
+    };
+    var opt = function (v, lib, choisi) {
+      return '<option value="' + ech(v) + '"' + (v === choisi ? " selected" : "") + ">" +
+        ech(lib) + "</option>";
+    };
+    var selProfil = '<select data-id="' + ech(s.id) + '" data-c="profil"' +
+      (net(f.profil) ? ' class="rempli"' : "") + ">" +
+      opt("", "- à préciser -", net(f.profil)) +
+      CT.PROFILS.map(function (p) { return opt(p.cle, p.nom, net(f.profil)); }).join("") +
+      "</select>";
+    var selCoef = '<select data-id="' + ech(s.id) + '" data-c="coef"' +
+      (net(f.coef) ? ' class="rempli"' : "") + ">" +
+      opt("", "- à préciser -", net(f.coef)) +
+      coefs.map(function (c) { return opt(c, c, net(f.coef)); }).join("") +
+      "</select>";
+    var inpSal = '<input type="number" inputmode="decimal" step="0.01" min="0" data-id="' +
+      ech(s.id) + '" data-c="salaire" value="' + ech(net(f.salaire)) + '"' +
+      (net(f.salaire) ? ' class="rempli"' : "") + ">";
+    return '<div class="champs">' +
+      ch("profil", "Profil d'emploi", selProfil,
+        "Il décide de l'annexe, de la durée de référence et des coefficients ouverts. " +
+        "Un intitulé de poste ne le dit pas : c'est à vous de le choisir.") +
+      ch("coef", "Coefficient", selCoef,
+        coefLu ? "Le registre écrit « " + coefLu + " » dans la qualification."
+               : "La qualification du registre ne porte pas de coefficient.") +
+      ch("salaire", "Salaire mensuel brut, en euros", inpSal) +
+      "</div>";
+  }
+
+  function detailDe(m) {
+    if (!m.p || !m.coef || m.tauxConv === undefined)
+      return '<div class="avis info"><b>Le calcul attend le profil et le coefficient</b>' +
+        "Tant qu'ils ne sont pas choisis, aucun minimum n'est affiché : la page ne " +
+        "décide pas à quelle annexe un salarié appartient.</div>";
+    var L = [];
+    L.push("<span>Taux de la grille au coefficient " + ech(m.coef) + " : <b>" +
+      eur(m.tauxConv) + "</b> de l'heure (" + ech(CT.CCN.salaires.source) + ", en vigueur au " +
+      ech(dateFr(CT.CCN.salaires.depuis)) + ").</span>");
+    L.push("<span>SMIC horaire : <b>" + eur(m.smic) + "</b> (" + ech(CT.CCN.smic.source) +
+      ", depuis le " + ech(dateFr(CT.CCN.smic.depuis)) + ").</span>");
+    L.push("<span>Taux retenu : <b>" + eur(m.taux) + "</b>, " +
+      (m.parSmic ? "celui du SMIC, la grille étant en dessous" : "celui de la grille") + ".</span>");
+    if (m.p.roulant)
+      L.push("<span>Durée de référence : <b>" + ech(String(m.heures).replace(".", ",")) +
+        " heures</b>, dont " + ech(String(m.detail.m25).replace(".", ",")) + " majorées de 25 % et " +
+        ech(String(m.detail.m50).replace(".", ",")) + " majorées de 50 % (" +
+        ech(CT.CCN.majorations.source) + ").</span>");
+    else
+      L.push("<span>Durée de référence : <b>" + ech(String(m.heures).replace(".", ",")) +
+        " heures</b> par mois.</span>");
+    L.push("<span>Minimum mensuel brut : <b>" + eur(m.minimum) + "</b>.</span>");
+    if (m.garantie)
+      L.push("<span>Garantie annuelle de rémunération, barème " + ech(m.garantie.pour) +
+        " heures : <b>" + eur(m.garantie.montant) + "</b>" +
+        (m.garantie.exact ? "" : ", barème immédiatement inférieur à la durée du poste") + ".</span>");
+    var h = '<div class="detail">' + L.join("") + "</div>";
+    if (m.paye === null) return h;
+    if (m.etat === "non") {
+      var dits = [];
+      if (m.manque > 0.005)
+        dits.push("Le salaire saisi, " + eur(m.paye) + " par mois, est inférieur de " +
+          eur(m.manque) + " au minimum mensuel.");
+      if (m.manqueAn !== null && m.manqueAn > 0.005)
+        dits.push("Sur l'année, " + eur(m.paye * 12) + " contre une garantie de " +
+          eur(m.garantie.montant) + ", soit " + eur(m.manqueAn) + " de moins.");
+      return h + '<div class="avis non"><b>Salaire inférieur au minimum</b>' +
+        ech(dits.join(" ")) + " Payer en dessous du SMIC est une contravention de la " +
+        "cinquième classe, appliquée autant de fois qu'il y a de salariés concernés (R. 3233-1).</div>";
+    }
+    if (m.perime)
+      return h + '<div class="avis att"><b>Contrôle fait sur une grille qui a changé</b>' +
+        "Le salaire de " + ech(eur(m.paye)) + " a été vérifié le " + ech(dateFr(m.f.vuLe)) +
+        ", sur la grille du " + ech(dateFr(m.f.grille)) + ". Ressaisissez le salaire pour " +
+        "le contrôler sur celle du " + ech(dateFr(CT.CCN.salaires.depuis)) + ".</div>";
+    return h + '<div class="avis ok"><b>Au-dessus du minimum</b>' +
+      ech(eur(m.paye) + " par mois, contre un minimum de " + eur(m.minimum) + ".") +
+      (m.garantie ? ech(" Sur l'année, " + eur(m.paye * 12) + " contre une garantie de " +
+        eur(m.garantie.montant) + ".") : "") + "</div>";
+  }
+
+  function rendreAlertes(sous, aVoir, total) {
+    if (!total) {
+      $("alertes").innerHTML = '<div class="avis non"><b>Le registre du personnel ne porte aucun salarié</b>' +
+        "C'est lui qui donne les noms de cet écran : ouvrez le registre et inscrivez-les.</div>";
+      return;
+    }
+    var h = "";
+    if (sous.length)
+      h += '<div class="avis non"><b>' + sous.length + " salarié" + (sous.length > 1 ? "s" : "") +
+        " sous le minimum</b><ul><li>" +
+        sous.slice(0, 8).map(function (x) {
+          return ech(x.s.nom + " : " + x.m.dit);
+        }).join("</li><li>") + "</li></ul>" +
+        (sous.length > 8 ? "… et " + (sous.length - 8) + " autre(s)." : "") + "</div>";
+    var perimes = aVoir.filter(function (x) { return x.m.perime; });
+    if (perimes.length)
+      h += '<div class="avis att"><b>La grille a changé depuis ' + perimes.length +
+        " contrôle" + (perimes.length > 1 ? "s" : "") + "</b>" +
+        "La grille en vigueur est celle du " + ech(dateFr(CT.CCN.salaires.depuis)) +
+        ". Ressaisissez les salaires concernés pour les contrôler dessus.</div>";
+    if (!sous.length && !perimes.length && aVoir.length)
+      h += '<div class="avis info"><b>' + aVoir.length + " fiche" + (aVoir.length > 1 ? "s" : "") +
+        " à compléter</b>Le profil, le coefficient ou le salaire manquent : " +
+        "sans eux, aucun minimum n'est calculé.</div>";
+    if (!aVoir.length)
+      h = '<div class="avis ok"><b>Tous les salariés sont au-dessus du minimum</b>' +
+        "Contrôlé sur la grille du " + ech(dateFr(CT.CCN.salaires.depuis)) + " et le SMIC du " +
+        ech(dateFr(CT.CCN.smic.depuis)) + ".</div>";
+    $("alertes").innerHTML = h;
+  }
+
+  function cabler() {
+    Array.prototype.forEach.call($("liste").querySelectorAll("[data-ouvrir]"), function (t) {
+      t.addEventListener("click", function () {
+        var id = t.getAttribute("data-ouvrir");
+        if (ouvert[id]) delete ouvert[id]; else ouvert[id] = true;
+        t.parentNode.classList.toggle("ouverte", !!ouvert[id]);
+      });
+    });
+    Array.prototype.forEach.call($("liste").querySelectorAll("[data-c]"), function (el) {
+      el.addEventListener("change", function () {
+        var id = el.getAttribute("data-id"), c = el.getAttribute("data-c");
+        ecrire(id, c, el.value);
+        /* Changer de profil peut rendre le coefficient impossible : on le
+           retire plutôt que de le garder sous un profil qui ne l'ouvre pas. */
+        if (c === "profil") {
+          var p = profilDe(el.value), f = fiche(id);
+          if (net(f.coef) && (!p || p.coefs.indexOf(net(f.coef)) < 0)) ecrire(id, "coef", "");
+        }
+        ouvert[id] = true;
+        rendre();
+      });
+    });
+  }
+
+  /* ──────────────────────────────── le tableau en Word ───────────────── */
+  $("btn-word").addEventListener("click", function () {
+    if (!window.AuditExport) return;
+    var L = salaries();
+    var rows = L.map(function (s) {
+      var m = mesurer(s);
+      return [s.nom, s.emp || "", m.coef || "", m.p ? m.p.nom : "",
+        m.minimum ? eur(m.minimum) : "", m.paye === null ? "" : eur(m.paye),
+        m.etat === "non" ? eur(m.manque > 0 ? m.manque : m.manqueAn) : (m.etat === "ok" ? "conforme" : m.dit)];
+    });
+    var items = [];
+    items.push({ k: "sur", t: net(profil.denomination) || "[dénomination]" });
+    items.push({ k: "t1", t: "Minima conventionnels, contrôle des salaires" });
+    items.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI.getFullYear() + "-" +
+      String(AUJOURDHUI.getMonth() + 1).padStart(2, "0") + "-" +
+      String(AUJOURDHUI.getDate()).padStart(2, "0")) + "." });
+    items.push({ k: "p", t: CT.CCN.nom + ", IDCC " + CT.CCN.idcc + "." });
+    items.push({ k: "p", t: "Grille retenue : " + CT.CCN.salaires.source + ", en vigueur au " +
+      dateFr(CT.CCN.salaires.depuis) + ". SMIC horaire : " + eur(CT.CCN.smic.valeur) + " (" +
+      CT.CCN.smic.source + ", depuis le " + dateFr(CT.CCN.smic.depuis) + ")." });
+    items.push({ k: "p", t: "Le taux retenu pour chaque coefficient est le plus élevé des deux : " +
+      "une convention ne peut déroger aux dispositions d'ordre public (L. 2251-1), et payer " +
+      "en dessous du salaire minimum de croissance est une contravention de la cinquième " +
+      "classe, appliquée autant de fois qu'il y a de salariés concernés (R. 3233-1)." });
+    items.push({ k: "table", paysage: true,
+      head: ["Nom", "Emploi", "Coefficient", "Profil", "Minimum mensuel", "Salaire payé", "Écart"],
+      proportions: [18, 16, 11, 19, 13, 12, 11],
+      rows: rows });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Minima conventionnels"),
+      "minima-conventionnels-" + AUJOURDHUI.getFullYear() + "-" +
+        String(AUJOURDHUI.getMonth() + 1).padStart(2, "0") + "-" +
+        String(AUJOURDHUI.getDate()).padStart(2, "0") + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* ──────────────────────────────── le reste de l'écran ──────────────── */
+  Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      FILTRE = b.getAttribute("data-f");
+      Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (x) {
+        x.classList.toggle("actif", x === b);
+      });
+      rendre();
+    });
+  });
+
+  $("rappel").textContent = [net(profil.denomination),
+    CT.CCN.nom + ", IDCC " + CT.CCN.idcc,
+    "grille du " + dateFr(CT.CCN.salaires.depuis) + ", SMIC du " + dateFr(CT.CCN.smic.depuis)]
+    .filter(Boolean).join(" · ");
+
+  $("textes").innerHTML = Object.keys(TEXTES).map(function (c) {
+    return "<p><b>" + ech(art(c)) + "</b> <span class=\"ident\">" + ech(TEXTES[c].id) + "</span><br>" +
+      ech(TEXTES[c].dit) + "</p>";
+  }).join("");
+
+  rendre();
+
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+})();
+</script>
+</body>
+</html>
