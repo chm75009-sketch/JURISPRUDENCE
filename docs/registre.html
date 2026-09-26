@@ -1052,16 +1052,27 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   /* ═════════════════════════════════════════ LA PARTIE SPÉCIFIQUE
 
      L. 1221-13 énonce lui-même ce qu'elle porte : les nom et prénoms, dans
-     l'ordre d'arrivée. Les indications complémentaires propres aux stagiaires
-     et aux volontaires sont renvoyées au pouvoir réglementaire, et ce texte
-     n'a pas été capté dans ce dépôt : aucune autre colonne n'est demandée
-     ici. Ce qui n'est pas lu n'est pas exigé. */
+     l'ordre d'arrivée, et renvoie au pouvoir réglementaire les indications
+     complémentaires. Ce texte est D. 1221-23-1 (LEGIARTI000029814209), lu le
+     26 septembre 2026 : pour chaque stagiaire, les nom et prénoms, les dates
+     de début et de fin du stage, les nom et prénoms du tuteur et le lieu de
+     présence. Il ne vise que le stagiaire ; rien de tel n'y est écrit pour le
+     volontaire en service civique, et rien de plus ne lui est donc demandé
+     ici. */
   function teteAccueilli(a, num) {
     var m = [];
     if (vide(a.nom)) m.push("Nom");
     if (vide(a.pre)) m.push("Prénoms");
     if (vide(a.qualite)) m.push("Qualité");
     if (vide(a.arr)) m.push("Date d'arrivée");
+    /* D. 1221-23-1 ne vise que le stagiaire : les quatre indications qui
+       suivent ne sont demandées que de lui. */
+    if (a.qualite === "stagiaire") {
+      if (vide(a.deb)) m.push("Début du stage");
+      if (vide(a.fin)) m.push("Fin du stage");
+      if (vide(a.tuteur)) m.push("Tuteur");
+      if (vide(a.lieu)) m.push("Lieu de présence");
+    }
     return "<b>" + (vide(a.arr) ? "Sans date d'arrivée" : "N° " + num) + " · " +
       ech(vide(a.nom) && vide(a.pre) ? "(sans nom)" : (a.nom + " " + a.pre).trim()) + "</b>" +
       (m.length ? '<span class="jauge non">' + ech(m.join(", ")) + "</span>"
@@ -1082,10 +1093,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       : "";
     var h = "";
     L.forEach(function (a, i) {
-      var champA = function (c, lib, type) {
+      var champA = function (c, lib, type, plus) {
         return '<label class="ch"><span class="nom">' + lib + '</span><input type="' + (type || "text") +
           '" data-aid="' + ech(a.id) + '" data-c="' + c + '" value="' + ech(a[c] || "") + '"' +
-          (vide(a[c]) ? "" : ' class="rempli"') + "></label>";
+          (plus ? " " + plus : "") + (vide(a[c]) ? "" : ' class="rempli"') + "></label>";
       };
       h += '<div class="sal" data-acc="' + ech(a.id) + '" data-num="' + (i + 1) + '">' +
         '<div class="tete">' + teteAccueilli(a, i + 1) + "</div>" +
@@ -1093,7 +1104,25 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         '<label class="ch"><span class="nom">Qualité</span><select data-aid="' + ech(a.id) + '" data-c="qualite">' +
           [["", "?"], ["stagiaire", "Stagiaire"], ["volontaire", "Volontaire en service civique"]].map(function (o) {
             return '<option value="' + o[0] + '"' + ((a.qualite || "") === o[0] ? " selected" : "") + ">" + o[1] + "</option>"; }).join("") +
-        "</select></label>" + champA("arr", "Date d'arrivée", "date") + "</div>" +
+        "</select></label>" + champA("arr", "Date d'arrivée", "date") +
+        /* LES QUATRE INDICATIONS DU STAGIAIRE (D. 1221-23-1).
+           Elles ne s'affichent que pour un stagiaire : l'article ne vise que
+           lui, et rien de tel n'est écrit pour le volontaire. */
+        (a.qualite === "stagiaire"
+          ? champA("deb", "Début du stage", "date") + champA("fin", "Fin du stage", "date") +
+            champA("tuteur", "Nom et prénoms du tuteur") +
+            /* Le lieu de présence est un site de l'entreprise, pas une
+               commune : la liste des villes n'a rien à y faire. */
+            champA("lieu", "Lieu de présence du stagiaire", "text", "data-sans-liste")
+          : "") + "</div>" +
+        (a.qualite === "stagiaire"
+          ? '<p class="sous-choix">Dates de début et de fin, nom et prénoms du tuteur, lieu de présence : ' +
+            "D. 1221-23-1, 2° et 3°.</p>"
+          : (a.qualite === "volontaire"
+            ? '<p class="sous-choix">Pour le volontaire en service civique, L. 1221-13 demande les nom et ' +
+              "prénoms dans l'ordre d'arrivée. D. 1221-23-1 ne vise que le stagiaire : aucune autre " +
+              "indication n'est exigée ici.</p>"
+            : "")) +
         '<div class="barre"><button type="button" class="second" data-asup="' + ech(a.id) + '">Retirer</button></div></div>';
     });
     $("accueillis").innerHTML = h;
@@ -1110,6 +1139,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         var id = el.getAttribute("data-aid");
         var a = null;
         E.accueillis.forEach(function (x) { if (x.id === id) a = x; });
+        /* La qualité commande l'affichage des indications du stagiaire :
+           elle seule redessine la fiche. */
+        if (el.getAttribute("data-c") === "qualite") { rendreAccueillis(); return; }
         var carte = $("accueillis").querySelector('[data-acc="' + id + '"]');
         if (a && carte && carte.querySelector(".tete"))
           carte.querySelector(".tete").innerHTML = teteAccueilli(a, carte.getAttribute("data-num"));
@@ -1134,7 +1166,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
   $("a-ajouter").addEventListener("click", function () {
     E.accueillis.push({ id: "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      nom: "", pre: "", qualite: "", arr: "" });
+      nom: "", pre: "", qualite: "", arr: "", deb: "", fin: "", tuteur: "", lieu: "" });
     garder(); rendreAccueillis();
   });
 
