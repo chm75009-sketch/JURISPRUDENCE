@@ -521,6 +521,54 @@
 
   $("imprimer").addEventListener("click", function () { window.print(); });
 
+  /* L'EMBAUCHE ÉCRITE UNE FOIS, REPRISE PARTOUT.
+
+     Le contrat produit ici ne remontait nulle part : le registre du
+     personnel, la fiche conducteur et l'agenda ignoraient le nouvel
+     embauché, et la déclaration préalable, la visite d'information et la fin
+     de la période d'essai n'étaient rappelées nulle part. Relevé le
+     26 septembre 2026.
+
+     Le bouton fait les trois, et il dit ce qu'il a fait : une ligne ajoutée
+     ou complétée, une fiche ouverte, des échéances posées. Il n'écrase jamais
+     une donnée déjà écrite ailleurs. */
+  function finEssai() {
+    if (!V.entree || !window.EcheancesSalaries) return "";
+    var d = String(V.essai || "").trim();
+    if (!d) d = (PROFIL && PROFIL.annexe === "II") ? CT.CCN.annexeII.essai
+      : ((PROFIL && PROFIL.conduite) ? CT.CCN.annexeI.essaiConduite : CT.CCN.annexeI.essaiAutres);
+    var m = String(d).match(/(\d+)\s*(mois|semaines?|jours?)/i);
+    if (!m) return "";
+    var n = parseInt(m[1], 10);
+    if (/mois/i.test(m[2])) return window.EcheancesSalaries.plusMois(V.entree, n);
+    if (/semaine/i.test(m[2])) return window.EcheancesSalaries.plusJours(V.entree, n * 7);
+    return window.EcheancesSalaries.plusJours(V.entree, n);
+  }
+
+  $("inscrire").addEventListener("click", function () {
+    if (!window.EcheancesSalaries) return;
+    var nom = String(V.nom || "").trim();
+    if (!nom) { $("etat").textContent = "Le nom du salarié manque : rien n'a été inscrit."; return; }
+    var morceaux = nom.split(/\s+/);
+    var r = window.EcheancesSalaries.inscrire({
+      nom: morceaux[0], pre: morceaux.slice(1).join(" "),
+      nat: V.nationalite, nais: V.naissance, emp: V.emploi,
+      qua: V.coef ? "Coefficient " + V.coef : "", ent: V.entree,
+      nature: NATURE === "cdd" ? "cdd" : "cdi", part: PARTIEL ? "partiel" : "complet",
+      essai: finEssai(), terme: NATURE === "cdd" ? V.terme : "",
+    });
+    if (!r) { $("etat").textContent = "Rien n'a été inscrit."; return; }
+    var dits = [];
+    dits.push(r.nouveau ? "inscrit au registre du personnel"
+      : (r.complets.length ? "complété au registre (" + r.complets.length + " renseignement" +
+          (r.complets.length > 1 ? "s" : "") + ")" : "déjà au registre, rien à compléter"));
+    if (r.fiche) dits.push("fiche conducteur ouverte dans Flotte");
+    dits.push("échéances posées dans l'agenda : déclaration préalable, visite d'information et de prévention, entretien de parcours" +
+      (finEssai() ? ", fin de période d'essai" : "") +
+      (NATURE === "cdd" && V.terme ? ", terme du contrat" : ""));
+    $("etat").textContent = nom + " : " + dits.join(" ; ") + ".";
+  });
+
   $("garder").addEventListener("click", function () {
     if (!window.Documents || !window.AuditExport) return;
     var titre = (NATURE === "cdd" ? "CDD" : "CDI") + " - " + (V.nom || "salarié");

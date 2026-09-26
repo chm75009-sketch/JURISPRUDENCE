@@ -51,6 +51,16 @@
   .pli-org>summary span{display:block;font:400 14px/1.35 system-ui;color:var(--texte-2);margin-top:3px}
   .pli-org>div{padding:0 16px 16px}
   .pli-org .aide-champ{font-size:14px;line-height:1.4;color:var(--texte-2)}
+  /* La semaine : des lignes courtes, la date à gauche, le retard en rouge. */
+  .semaine{margin:0 0 18px;padding:14px 16px;border:1px solid var(--filet);border-radius:12px;background:var(--surface)}
+  .semaine h2{font:600 17px/1.3 system-ui;margin:0 0 10px}
+  .sem-l{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--filet)}
+  .sem-l:first-child{border-top:0}
+  .sem-d{flex:0 0 auto;min-width:74px;font:600 13px/1.4 system-ui;color:var(--texte-2)}
+  .sem-l.passe .sem-d{color:#b3261e}
+  .sem-q{font-size:15px;line-height:1.35}
+  .sem-plus{margin:8px 0 0;font-size:13.5px;color:var(--texte-2)}
+  .semaine-tout{display:inline-block;margin-top:10px;font-size:14.5px}
   .fiche .idcc-liste{font-size:16px}
   .fiche .idcc-liste .idcc-o{min-height:44px}
   .btn-suite{display:block;width:100%;margin:22px 0 0;font:600 19px system-ui;padding:16px;
@@ -136,6 +146,17 @@
     <div class="rappel">
       <div class="texte"><b id="rail-ent"></b> <span id="rail-ent-txt"></span></div>
     </div>
+    <!-- CE QUI EST À FAIRE CETTE SEMAINE, AVANT LES BOUTONS.
+         L'accueil offrait cinq portes et aucune date : le dirigeant n'avait
+         nulle part une liste de ce qui vient. Ce bloc ramasse les échéances
+         des sept prochains jours, et celles qui sont dépassées, de la flotte,
+         des conducteurs et des salariés. Il ne s'affiche que s'il y a
+         quelque chose. Demande du 26 septembre 2026. -->
+    <section id="semaine" class="semaine" hidden>
+      <h2>Cette semaine</h2>
+      <div id="semaine-liste"></div>
+      <a class="semaine-tout" href="agenda.html">Tout l'agenda social</a>
+    </section>
     <p class="chapeau"><b>Audit</b> : une question par obligation, oui ou non ; à non, le document
     manquant est écrit pour vous ; à oui, vous déposez le vôtre et il est contrôlé.
     <b>Gérer</b> : les documents du quotidien, de l'embauche à la rupture, contrat, sanction,
@@ -175,6 +196,9 @@
 <script src="version.js"></script>
 <script src="idcc.js"></script>
 <script src="profil.js"></script>
+<!-- Lues, jamais écrites : les échéances de la flotte et des salariés. -->
+<script src="flotte.js"></script>
+<script src="echeances-salaries.js"></script>
 <script>
 (function () {
   "use strict";
@@ -313,11 +337,58 @@
     $("continuer-fiche").disabled = !complet(profil());
     window.scrollTo(0, 0);
   }
+  /* CE QUI VIENT DANS LES SEPT JOURS, ET CE QUI EST DÉJÀ DÉPASSÉ.
+
+     Les deux sources qui portent des dates : la flotte (contrôle technique,
+     limiteur, chronotachygraphe, permis, FCO, carte conducteur) et les
+     salariés (déclaration préalable, visite d'information et de prévention,
+     entretien de parcours, fin d'essai, terme d'un contrat à durée
+     déterminée). Rien n'est calculé ici : les deux modules rendent leurs
+     échéances, l'accueil les range par date. */
+  function enFrCourt(iso) {
+    var d = new Date(iso + "T12:00:00");
+    if (isNaN(d)) return iso;
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
+  }
+  function semaine() {
+    var L = [];
+    try {
+      if (window.Flotte && window.Flotte.echeances) L = L.concat(window.Flotte.echeances());
+    } catch (e) {}
+    try {
+      if (window.EcheancesSalaries && window.EcheancesSalaries.echeances)
+        L = L.concat(window.EcheancesSalaries.echeances());
+    } catch (e) {}
+    var limite = new Date();
+    limite.setDate(limite.getDate() + 7);
+    var bout = limite.toISOString().slice(0, 10);
+    L = L.filter(function (e) { return e.date && (e.etat === "passe" || e.date <= bout); });
+    L.sort(function (a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
+    var hote = document.getElementById("semaine");
+    if (!hote) return;
+    if (!L.length) { hote.hidden = true; return; }
+    hote.hidden = false;
+    var MAX = 8;
+    document.getElementById("semaine-liste").innerHTML =
+      L.slice(0, MAX).map(function (e) {
+        return '<div class="sem-l ' + (e.etat === "passe" ? "passe" : "proche") + '">' +
+          '<span class="sem-d">' + (e.etat === "passe" ? "en retard" : enFrCourt(e.date)) + "</span>" +
+          '<span class="sem-q"><b>' + esc(e.quoi) + "</b> " + esc(e.qui) + "</span></div>";
+      }).join("") +
+      (L.length > MAX ? '<p class="sem-plus">et ' + (L.length - MAX) + " autre" +
+        (L.length - MAX > 1 ? "s" : "") + ".</p>" : "");
+  }
+  function esc(t) {
+    return String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   function montrerPortes() {
     var p = profil();
     majRappel(p);
     $("ecran-fiche").hidden = true;
     $("ecran-portes").hidden = false;
+    semaine();
     window.scrollTo(0, 0);
   }
 

@@ -1579,28 +1579,42 @@
       L.push("");
       L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");
-      L.push("AVANT DE DÉPOSER, TROIS VÉRIFICATIONS");
+      /* CE QUE L'APPLICATION FAIT, ELLE NE DIT PAS LE CONTRAIRE.
+
+         Ce bloc annonçait que « l'application ne lit pas les conventions
+         collectives » deux pages avant un article qui cite le délai de
+         l'article 15 de la convention des transports routiers, et renvoyait
+         le lecteur à un avocat pour un document qu'il vient de produire ici.
+         Relevé le 26 septembre 2026 : l'outil perdait sa crédibilité sur sa
+         propre page. Ce qui reste est ce qui est vrai : la convention est lue
+         quand le dépôt la porte, les accords d'entreprise ne le sont pas, et
+         l'inspecteur du travail peut exiger le retrait d'une clause. */
+      L.push("AVANT DE DÉPOSER, DEUX VÉRIFICATIONS");
       L.push("");
-      L.push("Votre convention collective d'abord" +
-        (String(p.conventionCollective || "").trim()
-          ? ", soit celle que votre fiche désigne : " + String(p.conventionCollective).trim() + ". "
-          : ". ") +
-        "Elle peut imposer des mentions que ce texte ne porte pas, encadrer la");
-      L.push("procédure disciplinaire plus strictement que la loi, ou prévoir une");
-      L.push("commission de discipline. L'application ne lit pas les conventions");
-      L.push("collectives : cette lecture vous revient, et elle est indispensable.");
+      var ccNom = String(p.conventionCollective || "").trim();
+      var idcc16 = idccDe(p) === "16";
+      L.push("Votre convention collective d'abord" + (ccNom ? ", " + ccNom + "." : "."));
+      if (idcc16) {
+        L.push("Les clauses qui en dépendent sont écrites ici d'après son texte : le délai");
+        L.push("de convocation de l'article 15, celui de l'article 16 pour l'arrêt de");
+        L.push("travail, et l'obligation de déclarer une suspension de permis. Vérifiez");
+        L.push("qu'aucun avenant postérieur ne les a modifiés.");
+      } else {
+        L.push("Elle peut imposer des mentions que ce texte ne porte pas, encadrer la");
+        L.push("procédure disciplinaire plus strictement que la loi, ou prévoir une");
+        L.push("commission de discipline. Les clauses conventionnelles ne sont écrites");
+        L.push("ici que pour les conventions que l'application a lues à la source ;");
+        L.push("pour la vôtre, cette lecture reste à faire.");
+      }
       L.push("");
       L.push("Vos accords d'entreprise et vos usages ensuite. Un accord sur le temps de");
       L.push("travail, le télétravail ou le droit à la déconnexion peut contredire une");
-      L.push("clause écrite ici. C'est l'accord qui l'emporte.");
+      L.push("clause écrite ici. C'est l'accord qui l'emporte, et l'application ne le");
+      L.push("connaît pas.");
       L.push("");
-      L.push("Un avocat enfin, si le règlement doit fonder des sanctions. Ce document est");
-      L.push("un projet rédigé à partir des textes, non une consultation juridique : il");
-      L.push("ne tient compte ni de votre organisation, ni de vos contentieux en cours,");
-      L.push("ni des particularités de vos postes. Avant de déposer, faites-le relire par");
-      L.push("un avocat en droit du travail, et n'hésitez pas à le soumettre en amont à");
-      L.push("l'inspecteur du travail, qui peut à tout moment en exiger le retrait ou la");
-      L.push("modification (L. 1322-1).");
+      L.push("Enfin, vous pouvez soumettre le projet à l'inspecteur du travail avant de");
+      L.push("le déposer : il peut à tout moment exiger le retrait ou la modification");
+      L.push("d'une clause contraire à la loi (L. 1322-1).");
       L.push("");
       L.push("────────────────────────────────────────────────────────────────────────");
       L.push("");

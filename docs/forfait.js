@@ -1673,10 +1673,32 @@
     if (!GENS.length) { $("e-vide").hidden = false; return; }
     $("e-tout").hidden = false;
 
-    $("qui").innerHTML = GENS.map(function (s, i) {
-      return '<option value="' + i + '">' + ech(s.nom + (s.emp ? ", " + s.emp : "")) + "</option>";
-    }).join("");
-    qui = GENS[0];
+    /* QUI PEUT ÊTRE AU FORFAIT, ET QUI NE PEUT PAS.
+
+       La liste proposait les quatre-vingt-cinq salariés, conducteurs et
+       mécaniciens compris : un clic suffisait pour ouvrir une convention de
+       forfait illicite. L. 3121-58 réserve le forfait en jours aux cadres qui
+       disposent d'une autonomie dans l'organisation de leur emploi du temps
+       et aux salariés dont la durée du travail ne peut être prédéterminée.
+       L'application ne sait pas qui est autonome : elle sépare donc ce que la
+       fiche du registre dit du poste, met devant ceux dont l'intitulé porte
+       l'encadrement, et laisse les autres accessibles, en les annonçant pour
+       ce qu'ils sont. Relevé le 26 septembre 2026. */
+    var CADRE = /cadre|ingénieur|ingenieur|directeur|directrice|responsable|chef de service|chef d'agence|encadrement|attaché de direction/i;
+    var cadres = [], autres = [];
+    GENS.forEach(function (s, i) {
+      (CADRE.test(s.emp + " " + s.qua) ? cadres : autres).push(
+        '<option value="' + i + '">' + ech(s.nom + (s.emp ? ", " + s.emp : "")) + "</option>");
+    });
+    $("qui").innerHTML =
+      (cadres.length ? '<optgroup label="Cadres et postes d\'encadrement">' + cadres.join("") + "</optgroup>" : "") +
+      (autres.length ? '<optgroup label="Autres salariés : le forfait suppose que leur durée de travail ne puisse pas être prédéterminée (L. 3121-58)">' +
+        autres.join("") + "</optgroup>" : "");
+    /* Le premier de la liste est celui que le menu montre : un cadre s'il y
+       en a un, jamais un conducteur par défaut. */
+    var prem = $("qui").querySelector("option");
+    qui = GENS[prem ? (parseInt(prem.value, 10) || 0) : 0];
+    if (prem) $("qui").value = prem.value;
 
     var n = new Date();
     an = n.getFullYear(); mo = n.getMonth();

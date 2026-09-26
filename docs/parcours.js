@@ -478,7 +478,7 @@
     var n = String(P.conventionCollective || "").trim();
     return "À vérifier dans la convention collective " +
       (n ? "« " + n + " »" : "applicable (renseignez-la dans le profil ci-dessus)") +
-      " : " + quoi + ". L'application ne lit aucune convention, elle signale l'endroit où " +
+      " : " + quoi + ". Hors des conventions lues à la source par l'application, elle signale l'endroit où " +
       "la vôtre peut ajouter une obligation, elle n'affirme pas ce qu'elle contient. " +
       "L'assistant intégré peut vous aider à la dépouiller.";
   }
@@ -2548,7 +2548,7 @@
   /* ================================================================== */
   {
     cle: "embauche",
-    suite: { cle: "entretiens", pourquoi: "Le salarié embauché entre aussitôt dans le cycle des entretiens : la visite d'information et de prévention, puis l'entretien professionnel tous les deux ans." },
+    suite: { cle: "entretiens", pourquoi: "Le salarié embauché entre aussitôt dans le cycle des entretiens : la visite d'information et de prévention dans les trois mois (R. 4624-10), puis l'entretien de parcours professionnel, au cours de la première année puis tous les quatre ans (L. 6315-1, I, LEGIARTI000053279288, lu le 26 septembre 2026)." },
     nom: "Embaucher : les formalités obligatoires",
     resume: "De la déclaration préalable à la visite d'information et de prévention : ce qui se fait AVANT l'entrée, ce qui se remet au salarié et dans quels délais, ce que le contrat à durée déterminée exige de plus, et les deux formalités de sécurité que l'urgence fait le plus souvent oublier.",
     audit: { href: "audit-social.html", nom: "l'audit social (contrôle de l'existant)" },
@@ -2577,7 +2577,7 @@
       { id: "poste", g: "information", nom: "L'intitulé du poste, les fonctions, la classification et la rémunération",
         aide: "Ce sont des rubriques du document d'information de l'article R. 1221-34." },
       { id: "ccn", g: "document", nom: "La convention collective applicable, pour la classification, les minima et la durée d'essai",
-        aide: "L'application ne lit aucune convention : elle signale l'endroit où la vôtre peut ajouter une règle." },
+        aide: "Hors des conventions lues à la source par l'application, elle signale l'endroit où la vôtre peut ajouter une règle." },
       { id: "trame", g: "document", nom: "La trame de contrat de travail à jour des rubriques de l'article R. 1221-34" },
       { id: "spst", g: "information", nom: "Les coordonnées du service de prévention et de santé au travail auquel l'entreprise adhère" },
       { id: "duerp", g: "document", nom: "Le document unique, pour l'information sur les risques du poste",
@@ -3898,8 +3898,8 @@
       "chacune, filtre par nom du code et critère de contenu contre les homonymes. " +
       "Ce récapitulatif est produit par l'application Jurisprudence à partir des seules données saisies " +
       "sur ce poste ; il ne constitue pas une consultation juridique et ne se substitue ni au conseil " +
-      "d'un avocat, ni à la décision de l'administration ou du juge. L'application ne lit aucune " +
-      "convention collective : ce que la vôtre impose en plus de la loi reste à vérifier.</div>";
+      "d'un avocat, ni à la décision de l'administration ou du juge. Hors des conventions que " +
+      "l'application lit à la source, ce que la vôtre impose en plus de la loi reste à vérifier.</div>";
 
     $("recap").style.display = "block";
     $("recap").scrollIntoView({ behavior: "smooth", block: "start" });

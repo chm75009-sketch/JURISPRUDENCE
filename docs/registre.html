@@ -1788,7 +1788,12 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   var PLEIN = E.salaries.some(function (x) {
     return !x.ex && (!vide(x.nom) || !vide(x.pre));
   });
-  if (PLEIN && !REP) ouvrir("registre");
+  /* Et « oui » venu de la liste d'audit ne rouvre pas le dépôt non plus quand
+     le registre est déjà plein : la question posée était « avez-vous ce
+     document ? », et répondre oui à quelqu'un qui l'a déjà chargé ne peut pas
+     conduire à le lui redemander. Le registre s'ouvre, avec ses salariés, et
+     le dépôt reste à un bouton. Relevé le 26 septembre 2026. */
+  if (PLEIN) ouvrir("registre");
   else if (E.reponse === "oui") ouvrir("import");
   else if (E.reponse === "non") {
     if (!E.salaries.length || E.salaries.every(function (x) {

@@ -181,14 +181,31 @@
         .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
   }
-  function salaries() {
+  /* QUI CONDUIT, ET QUI NE CONDUIT PAS.
+
+     L'onglet « Conducteurs » listait tout le registre, mécaniciens et
+     assistante de direction compris : on y suivait un permis et une carte
+     conducteur pour des gens qui ne prennent pas le volant, et les manques
+     de ceux qui conduisent se perdaient dans la masse. Relevé le 26 septembre
+     2026. Le poste écrit au registre décide ; ceux qui sortis de l'entreprise
+     ne comptent plus. Celui dont le poste ne dit rien reste visible, avec les
+     autres, quand on demande la liste entière : l'application ne retire
+     personne sans le dire.                                                  */
+  var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|grutier|ambulancier|convoyeur/i;
+  function salaries(tous) {
     var r = lire(CLE_REG, {});
-    return ((r && r.salaries) || []).filter(function (s) {
+    var L = ((r && r.salaries) || []).filter(function (s) {
       return net(s.nom) || net(s.pre);
     }).map(function (s) {
       var nom = (net(s.nom) + " " + net(s.pre)).trim();
-      return { id: sansAccent(nom) || "salarie", nom: nom, emp: net(s.emp), ent: net(s.ent), sor: net(s.sor) };
+      return { id: sansAccent(nom) || "salarie", nom: nom, emp: net(s.emp), ent: net(s.ent), sor: net(s.sor),
+        conduit: CONDUIT.test(net(s.emp)) };
     });
+    if (tous) return L;
+    var C = L.filter(function (s) { return s.conduit && !net(s.sor); });
+    /* Aucun poste ne porte un intitulé de conduite : plutôt qu'un écran vide,
+       la liste entière, et c'est à l'utilisateur de voir. */
+    return C.length ? C : L.filter(function (s) { return !net(s.sor); });
   }
   function fiche(id) {
     var t = lire(CLE_C, {});
@@ -272,8 +289,15 @@
     return L;
   }
 
+  /* UNE DATE QUI MANQUE N'EST PAS UNE SITUATION SAINE.
+
+     « Aucune date encore renseignée » s'écrivait en gris, et le compteur du
+     haut annonçait « Aucune échéance proche » : quatre-vingt-sept véhicules
+     sans contrôle technique connu passaient pour en règle. Relevé le
+     26 septembre 2026. Ce qui manque s'affiche donc en rouge, et il est
+     compté à part. */
   function pastilles(L) {
-    if (!L.length) return '<span class="p">Aucune date encore renseignée</span>';
+    if (!L.length) return '<span class="p rouge">Aucune date renseignée : rien ne peut être contrôlé</span>';
     return L.map(function (e) {
       var texte;
       if (e.km) {
@@ -315,7 +339,7 @@
     } else if (ch.t === "salarie") {
       /* Le nom ne se retape pas : il vient du registre du personnel, comme
          partout ailleurs dans l'application. */
-      var G = salaries();
+      var G = salaries(true);
       h += '<select id="' + id + '" data-ch="' + ch.c + '"><option value="">- aucun -</option>' +
         G.map(function (s) {
           return '<option value="' + ech(s.id) + '"' + (s.id === net(valeur) ? " selected" : "") +
@@ -580,17 +604,25 @@
   }
 
   function rendreCompte() {
-    var n = { passe: 0, rouge: 0, ambre: 0 };
+    var n = { passe: 0, rouge: 0, ambre: 0 }, vides = 0;
     vehicules().forEach(function (v) {
-      echeancesVehicule(v).forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
+      var E = echeancesVehicule(v);
+      if (!E.length) vides++;
+      E.forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
     });
     salaries().forEach(function (s) {
-      echeancesConducteur(fiche(s.id)).forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
+      var E = echeancesConducteur(fiche(s.id));
+      if (!E.length) vides++;
+      E.forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
     });
     var h = "";
     if (n.passe) h += '<span class="c rouge">' + n.passe + " dépassée" + (n.passe > 1 ? "s" : "") + "</span>";
     if (n.rouge) h += '<span class="c rouge">' + n.rouge + " dans les 30 jours</span>";
     if (n.ambre) h += '<span class="c ambre">' + n.ambre + " dans les 60 jours</span>";
+    /* Une fiche sans aucune date ne se compte pas comme une fiche en règle :
+       elle se compte comme un contrôle impossible, et elle passe devant. */
+    if (vides) h = '<span class="c rouge">' + vides + " fiche" + (vides > 1 ? "s" : "") +
+      " sans aucune date</span>" + h;
     if (!h) h = '<span class="c vert">Aucune échéance proche</span>';
     h += '<span class="c">' + vehicules().length + " véhicule" + (vehicules().length > 1 ? "s" : "") + "</span>";
     $("compte").innerHTML = h;
@@ -811,7 +843,7 @@
       "Prochain limiteur", "Prochain chronotachygraphe", "Assurance", "Copie conforme",
       "Prochaine révision", "Extincteur", "Pièces déposées", "Ce qui manque", "Observations"]];
     var nomDe = {};
-    salaries().forEach(function (s) { nomDe[s.id] = s.nom; });
+    salaries(true).forEach(function (s) { nomDe[s.id] = s.nom; });
     vehicules().forEach(function (v) {
       var genre = "";
       GENRES.forEach(function (g) { if (g[0] === v.genre) genre = g[1]; });

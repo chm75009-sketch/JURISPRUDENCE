@@ -98,7 +98,7 @@
     { c: "secteur", nom: "Secteur d'activité", t: "select", options: SECTEURS, autre: true,
       aide: "Il oriente la convention applicable et le contenu des modèles (unités de travail du document unique, risques types)." },
     { c: "conventionCollective", nom: "Convention collective applicable (IDCC)", t: "idcc",
-      aide: "Elle s'identifie par l'activité réelle. L'application ne lit aucune convention : elle signale l'endroit où la vôtre peut ajouter une obligation, elle n'affirme jamais ce qu'elle contient." },
+      aide: "Elle s'identifie par l'activité réelle. L'application lit à la source les conventions qu'elle sert, la 16 des transports routiers aujourd'hui ; pour les autres, elle signale l'endroit où la vôtre peut ajouter une obligation, et n'affirme jamais ce qu'elle contient." },
     { c: "groupe", nom: "L'entreprise appartient-elle à un groupe ?", t: "oui-non",
       aide: "Le groupe déclenche le comité de groupe et pèse sur certains seuils des modules dédiés." },
     { c: "etablissementsDistincts", nom: "L'entreprise comporte-t-elle au moins deux établissements distincts ?", t: "oui-non",
