@@ -1785,8 +1785,18 @@
   /* Le bandeau qui ouvre tout exemple : demande du 9 septembre 2026,
      « commencer par un exemple en disant que c'est juste un exemple et que le
      document doit tenir compte des spécificités de l'entreprise ». */
-  var EXEMPLE = "EXEMPLE, À ADAPTER : ce document est un simple schéma, qui doit être adapté et " +
-    "complété en fonction des particularités de l'entreprise, de ses postes, de ses effectifs et de sa convention collective.";
+  /* LE BANDEAU DIT QUE CE QUI SUIT N'EST PAS LE DOCUMENT DU CLIENT.
+
+     Il disait « ce document est un simple schéma » : trop faible pour un
+     lecteur qui venait de voir l'en-tête de son entreprise deux lignes plus
+     haut. Une relecture du 26 septembre 2026 a pris l'exemple pour le
+     document de l'entreprise et y a lu des personnes qui n'existent pas. Le
+     bandeau nomme donc l'entreprise fictive, et dit où commence le document
+     à compléter. */
+  var EXEMPLE = "EXEMPLE : ce qui suit n'est pas votre document. C'est celui d'une entreprise " +
+    "fictive, donnée en illustration : ses personnes, ses dates, ses chiffres et ses faits ne " +
+    "concernent pas votre entreprise et ne doivent jamais être signés. Votre document à " +
+    "compléter vient après, à la ligne « À COMPLÉTER ».";
 
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,

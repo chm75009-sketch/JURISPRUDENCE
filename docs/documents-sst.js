@@ -794,17 +794,27 @@
   /* L'entreprise de l'exemple : celle du profil quand il en donne une, la
      fictive du secteur sinon. Les dates se comptent depuis aujourd'hui. */
   function exempleDe(ctx) {
-    var s = secteurDe(ctx), p = (ctx && ctx.profil) || {}, M = EXEMPLES[s];
-    var e = effectifDe(ctx), d0 = aujourd(ctx);
-    var ville = villeDe(ctx);
+    var s = secteurDe(ctx), M = EXEMPLES[s];
+    var d0 = aujourd(ctx);
     var ex = {
       secteur: s, unites: M.unites, activite: M.activite,
-      nom: String(p.denomination || p.entreprise || "").trim() || M.nom,
-      adresse: String(p.adresse || "").trim() || M.adresse,
-      siret: String(p.siret || "").trim() || M.siret,
-      ville: ville === "[ville]" ? M.ville : ville,
-      effectif: e.connu ? e.n : M.effectif, femmes: M.femmes,
-      signataire: String(p.responsable || "").trim() || M.signataire,
+      /* L'EXEMPLE RESTE À L'ENTREPRISE FICTIVE, ET N'EMPRUNTE PAS LE NOM DU
+         CLIENT.
+
+         La règle 3 de ce fichier dit que les faits ne s'inventent jamais, et
+         que l'exemple est celui « d'une entreprise fictive du secteur ». Le
+         code, lui, y mettait la dénomination, l'adresse, le SIRET, la ville,
+         l'effectif et le signataire du client : le document sortait au nom de
+         l'entreprise, signé de son dirigeant, avec des personnes et des faits
+         qui n'existent pas — un accident, un effectif, un avis du comité, un
+         chef d'atelier. Montré à l'inspection, c'était un faux. Relevé le
+         26 septembre 2026, et c'est la faute la plus grave du dépôt.
+
+         L'exemple garde donc son entreprise fictive de bout en bout. Le
+         document à compléter, lui, continue de porter les données réelles de
+         la fiche : les deux ne se mélangent plus. */
+      nom: M.nom, adresse: M.adresse, siret: M.siret, ville: M.ville,
+      effectif: M.effectif, femmes: M.femmes, signataire: M.signataire,
       redacteur: M.redacteur, spst: M.spst, designe: M.designe, pilote: M.pilote,
       d0: d0,
     };

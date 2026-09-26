@@ -203,7 +203,27 @@
         var prendre = function (ev) {
           if (!plein) ev.preventDefault();
           if (b.getAttribute("data-autre")) {
+            /* « AUTRE, SAISIE LIBRE » DOIT FERMER LA LISTE ET GARDER CE QUI A
+               ÉTÉ TAPÉ.
+
+               Sur téléphone, la liste s'ouvre en plein écran et le champ de
+               la page perd le focus. « Autre » lui rendait le focus, et le
+               gestionnaire de focus remettait `enLibre` à faux puis rouvrait
+               le plein écran : la liste se rouvrait sans fin, et le nom tapé
+               dans la recherche était perdu. On ne pouvait donc pas écrire le
+               contrat d'un nouvel embauché depuis un téléphone. Relevé le
+               26 septembre 2026.
+
+               Ce qui a été tapé dans la recherche devient la valeur du champ,
+               et la page en est avertie comme pour un choix dans la liste. */
+            var tape = (plein && champVoile) ? String(champVoile.value || "").trim() : "";
             enLibre = true; fermer(); fermerVoile();
+            if (tape) {
+              input.value = tape;
+              ignorer = true;
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+            }
             try { input.focus(); } catch (e) {}
             return;
           }
@@ -224,13 +244,18 @@
     }
 
     input.addEventListener("focus", function () {
-      enLibre = false;
+      /* La saisie libre tient tant qu'on n'a pas vidé le champ : sans cela,
+         revenir dans le champ rouvrait la liste par-dessus ce qu'on écrivait. */
+      if (enLibre) return;
       if (etroit()) { input.blur(); ouvrirVoile(); return; }
       try { input.select(); } catch (e) {}
       ouvrir();
     });
     input.addEventListener("input", function () {
       if (ignorer) { ignorer = false; return; }
+      /* Champ vidé à la main : on retrouve la liste. */
+      if (String(input.value || "").trim() === "") enLibre = false;
+      if (enLibre) return;
       ouvrir();
     });
     input.addEventListener("keydown", function (ev) {

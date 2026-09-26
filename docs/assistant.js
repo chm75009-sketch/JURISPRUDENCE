@@ -30,12 +30,28 @@
   var API_ANTHROPIC = "https://api.anthropic.com/v1/messages";
   var CLE_STOCKAGE = "assistant-cle-anthropic";   // clé personnelle (repli seulement)
   var CLE_MODELE = "assistant-modele";
+  /* CE QUI S'AFFICHE NE NOMME NI LE FOURNISSEUR NI SON MODÈLE.
+
+     Le menu montrait « Opus », « Sonnet », « Haiku », et portait l'identifiant
+     du modèle dans la page elle-même : une relecture du 26 septembre 2026 y a
+     lu « claude-opus-5 ». La consigne du dépôt ne souffre pas d'exception :
+     aucun marqueur du fournisseur nulle part, écrans compris. Le choix reste
+     entier, il se dit en français et par ce qu'il change pour l'utilisateur ;
+     l'identifiant, lui, ne sort plus du code. */
   var MODELE_DEFAUT = "claude-opus-5";
   var MODELES = [
-    { id: "claude-opus-5", nom: "Opus (défaut)" },
-    { id: "claude-sonnet-5", nom: "Sonnet" },
-    { id: "claude-haiku-4-5", nom: "Haiku" }
+    { cle: "approfondi", id: "claude-opus-5", nom: "Réponse approfondie (défaut)" },
+    { cle: "courant", id: "claude-sonnet-5", nom: "Réponse courante" },
+    { cle: "rapide", id: "claude-haiku-4-5", nom: "Réponse rapide" }
   ];
+  function idDuChoix(cle) {
+    for (var i = 0; i < MODELES.length; i++) if (MODELES[i].cle === cle) return MODELES[i].id;
+    return MODELE_DEFAUT;
+  }
+  function choixDeId(id) {
+    for (var i = 0; i < MODELES.length; i++) if (MODELES[i].id === id) return MODELES[i].cle;
+    return MODELES[0].cle;
+  }
   var MAX_TOKENS = 16000;
   var MAX_TOURS = 8;                              // garde-fou de la boucle d'outils
 
@@ -144,12 +160,18 @@
   var dernierTexte = null;    // pour « Réessayer » après une erreur
 
   function cle() { try { return localStorage.getItem(CLE_STOCKAGE) || ""; } catch (e) { return ""; } }
-  function modele() {
+  /* Ce qui est retenu sur l'appareil est le choix, « approfondi » ou
+     « rapide », jamais l'identifiant du modèle. Un ancien enregistrement qui
+     porte encore un identifiant est relu et traduit. */
+  function choix() {
     try {
-      var m = localStorage.getItem(CLE_MODELE);
-      return MODELES.some(function (x) { return x.id === m; }) ? m : MODELE_DEFAUT;
-    } catch (e) { return MODELE_DEFAUT; }
+      var c = localStorage.getItem(CLE_MODELE) || "";
+      if (MODELES.some(function (x) { return x.cle === c; })) return c;
+      if (MODELES.some(function (x) { return x.id === c; })) return choixDeId(c);
+    } catch (e) {}
+    return MODELES[0].cle;
   }
+  function modele() { return idDuChoix(choix()); }
 
   /* ------------------------------ Utilitaires ----------------------------- */
 
@@ -554,7 +576,15 @@
 
   var ui = {};   // références DOM
 
+  /* LE BOUTON NE RECOUVRE PLUS CE QU'ON EST EN TRAIN D'ÉCRIRE.
+
+     Relevé le 26 septembre 2026 : sur la fiche d'entreprise il couvrait le
+     champ de la convention collective, et sur le décompte des heures la
+     dernière ligne du tableau. La page reçoit donc, sous son contenu, la
+     hauteur du bouton : il flotte au-dessus du vide, plus au-dessus d'un
+     champ. */
   var STYLE =
+    "body{padding-bottom:88px}" +
     "#assist-bouton{position:fixed;right:18px;bottom:18px;z-index:9990;width:54px;height:54px;" +
     "border-radius:50%;border:none;background:#1F3864;color:#fff;font:600 22px/1 system-ui;" +
     "cursor:pointer;box-shadow:0 4px 14px rgba(22,24,29,.28);display:flex;align-items:center;" +
@@ -810,8 +840,8 @@
     panneau.innerHTML =
       '<div class="assist-tete">' +
       "<b>Assistant</b>" +
-      '<select id="assist-modele" aria-label="Modèle">' +
-      MODELES.map(function (m) { return '<option value="' + m.id + '">' + m.nom + "</option>"; }).join("") +
+      '<select id="assist-modele" aria-label="Longueur de la réponse">' +
+      MODELES.map(function (m) { return '<option value="' + m.cle + '">' + m.nom + "</option>"; }).join("") +
       "</select>" +
       '<button type="button" id="assist-nouvelle" title="Effacer la conversation">Nouvelle</button>' +
       '<button type="button" id="assist-fermer" aria-label="Fermer">&#10005;</button>' +
@@ -837,7 +867,7 @@
     ui.pied = panneau.querySelector(".assist-pied");
 
     var selecteur = document.getElementById("assist-modele");
-    selecteur.value = modele();
+    selecteur.value = choix();
     selecteur.addEventListener("change", function () {
       try { localStorage.setItem(CLE_MODELE, selecteur.value); } catch (e) {}
     });

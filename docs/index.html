@@ -243,12 +243,27 @@
     courriel: "Adresse e-mail",
     effectif: "Effectif (salariés)",
     secteur: "Secteur",
-    conventionCollective: "Convention collective (IDCC)"
+    conventionCollective: "Convention collective (IDCC)",
+    /* LA QUESTION DU COMITÉ SE POSE À L'ENTRÉE, PAS AILLEURS.
+
+       Elle commande le règlement intérieur (avis du comité ou procès-verbal
+       de carence), l'agenda, les consultations et la moitié des courriers, et
+       elle n'était posée que dans la fiche longue des parcours guidés : un
+       document sortait alors avec la note « votre fiche ne dit pas si un
+       comité est en place », sans dire où répondre. Relevé le 26 septembre
+       2026. */
+    cseExiste: "Comité social et économique en place ?"
   };
   /* Ce qui n'empêche pas de continuer. Le courriel est une coordonnée, non un
      élément d'identité : un document se dépose au greffe sans lui. */
-  var FACULTATIFS = { courriel: true };
-  var CHAMPS = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
+  var FACULTATIFS = { courriel: true, cseExiste: true };
+  /* Les champs de la fiche d'accueil qui ne sont pas dans l'identité : la
+     question du comité vit dans la fiche longue des parcours, et la voici
+     posée aussi à l'entrée. Même clé, même enregistrement. */
+  var HORS_IDENTITE = [
+    { c: "cseExiste", nom: "Comité social et économique en place ?", t: "oui-non", aide: "" },
+  ];
+  var CHAMPS = (window.Profil ? window.Profil.IDENTITE.concat(HORS_IDENTITE) : []).filter(function (ch) {
     return NOMS[ch.c] !== undefined;
   }).map(function (ch) {
     var c = {};

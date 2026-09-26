@@ -489,7 +489,14 @@
       " - " + (V.nom || "");
     var corps = blocsDeLEcran("contrat");
     if (ANNEXE.length) corps = corps.concat([{ k: "saut" }], blocsDeLEcran("annexe"));
-    var octets = window.AuditExport.docx(corps, titre);
+    /* Le fichier porte l'entreprise en pied de page et son dirigeant comme
+       auteur : la case Auteur restait vide, et rien ne disait de qui venait
+       le document. Relevé le 26 septembre 2026. */
+    var ent = profilEntreprise();
+    var octets = window.AuditExport.docx(corps, titre, {
+      auteur: String(ent.responsable || ent.denomination || "").trim(),
+      pied: String(ent.denomination || ent.entreprise || "").trim() + "  ·  " + titre,
+    });
     window.AuditExport.telecharger(octets, nomFichier());
     $("etat").textContent = ANNEXE.length
       ? "Contrat et annexe téléchargés. La note hors contrat est dans le second bouton."
@@ -501,9 +508,12 @@
      24 septembre 2026. */
   $("word-note").addEventListener("click", function () {
     if (!window.AuditExport || !HORS.length) return;
+    var entN = profilEntreprise();
     var octets = window.AuditExport.docx(
       HORS.filter(function (b) { return b.k !== "saut"; }),
-      "Réserve d'usage et observation - " + (PROFIL ? PROFIL.nom : ""));
+      "Réserve d'usage et observation - " + (PROFIL ? PROFIL.nom : ""),
+      { auteur: String(entN.responsable || entN.denomination || "").trim(),
+        pied: String(entN.denomination || entN.entreprise || "").trim() + "  ·  note hors contrat" });
     window.AuditExport.telecharger(octets, "Note-hors-contrat-" +
       (NATURE === "cdd" ? "CDD" : "CDI") + ".docx");
     $("etat").textContent = "Note téléchargée, séparément du contrat.";
