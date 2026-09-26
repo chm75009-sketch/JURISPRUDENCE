@@ -354,73 +354,227 @@
   });
 
   /* ===================================================================
-     DIS-CTL-RI-06 - CONSULTATION DU COMITÉ
+     DIS-CTL-RI-06 - LE DOSSIER DE CONSULTATION DU COMITÉ
+
+     Il ne portait qu'un exemple, sous l'en-tête du client, avec une réunion
+     au 15 septembre 2026 et un avis « FAVORABLE » déjà écrit : un dossier
+     que personne ne pouvait remettre. L'audit du 26 septembre 2026 demandait
+     les trois pièces et le rétroplanning ; les voici, datées du dossier.
+
+     Les quatre textes, lus à la source le 26 septembre 2026, deux lectures
+     concordantes chacun :
+
+       L. 1321-4   LEGIARTI000054140230  le règlement « ne peut être introduit
+                   qu'après avoir été soumis à l'avis du comité social et
+                   économique » ; il indique sa date d'entrée en vigueur,
+                   « postérieure d'un mois à l'accomplissement des formalités
+                   de publicité » ; en même temps que la publicité, il est
+                   communiqué à l'inspecteur du travail, accompagné de l'avis ;
+       R. 1321-3   LEGIARTI000018536913  ce délai « court à compter de la
+                   dernière en date des formalités de publicité et de dépôt » ;
+       R. 1321-4   LEGIARTI000018536911  la transmission à l'inspecteur du
+                   travail se fait en deux exemplaires ;
+       L. 2315-30  LEGIARTI000035624863  l'ordre du jour est communiqué aux
+                   membres du comité, à l'agent de contrôle de l'inspection du
+                   travail et à celui des services de prévention « trois jours
+                   au moins avant la réunion ».
      =================================================================== */
 
   DP.ajouter("DIS-CTL-RI-06", {
-    nom: "La consultation du comité social et économique sur le règlement intérieur",
-    detail: "Ordre du jour et procès-verbal qui recueille l'avis.",
+    nom: "Le dossier de consultation du comité sur le règlement intérieur",
+    detail: "Lettre de transmission, ordre du jour, extrait de procès-verbal, et le rétroplanning daté.",
     produire: function (ctx) {
       var p = ctx.profil || {};
+      var D = ctx.donnees || ctx.fiche || {};
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      var L = entete(ctx, "Consultation du comité social et économique sur le règlement intérieur",
-        "article L. 1321-4 du code du travail");
+      function deIso(v) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v || "").trim());
+        if (!m) return null;
+        var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12, 0, 0);
+        return isNaN(d.getTime()) ? null : d;
+      }
+      function moisApres(d, n) {
+        var r = new Date(d), j = r.getDate();
+        r.setMonth(r.getMonth() + n);
+        if (r.getDate() < j) r.setDate(0);
+        return r;
+      }
+      /* La réunion est celle du dossier quand elle y est ; sinon, une
+         proposition à dix jours, que l'employeur remplace. */
+      var reunion = deIso(D.dateAvisCSE);
+      var propose = !reunion;
+      if (!reunion) reunion = dansJours(d0, 10);
+      /* L'ordre du jour part trois jours au moins avant (L. 2315-30) : le
+         dossier retient cinq, pour que les élus aient le temps de lire. */
+      var envoi = dansJours(reunion, -5);
+      if (envoi < d0) envoi = d0;
+      var formalites = deIso(D.datePublicite) || deIso(D.dateDepotGreffe) || dansJours(reunion, 3);
+      var deuxFormalites = [deIso(D.datePublicite), deIso(D.dateDepotGreffe)].filter(Boolean);
+      if (deuxFormalites.length === 2)
+        formalites = deuxFormalites[0] > deuxFormalites[1] ? deuxFormalites[0] : deuxFormalites[1];
+      var vigueur = deIso(D.dateEntreeVigueur) || dansJours(moisApres(formalites, 1), 1);
+      var objet = D.operation === "modification" ? "projet de modification du règlement intérieur"
+        : (D.operation === "retrait de clauses" ? "projet de retrait de clauses du règlement intérieur"
+        : "projet de règlement intérieur");
 
+      var L = entete(ctx, "Dossier de consultation du comité social et économique sur le règlement intérieur",
+        "articles L. 1321-4 et L. 2315-30 du code du travail");
+
+      if (propose) {
+        L.push("La date de la réunion n'est pas renseignée dans le parcours : les dates qui");
+        L.push("suivent partent d'une réunion proposée au " + jj(reunion) + ". Saisissez la");
+        L.push("vôtre, et le dossier se recalcule autour d'elle.");
+        L.push("");
+      }
+
+      /* L'EXEMPLE D'ABORD, SOUS UN NOM QUI N'EST PAS CELUI DU CLIENT.
+         Un dossier vide ne dit pas à quoi il doit ressembler une fois rempli ;
+         un exemple sous l'en-tête du client se signe par mégarde. Celui-ci
+         porte une entreprise fictive, et le bandeau le dit. */
       L.push(DP.EXEMPLE);
       L.push("");
-      L.push("EXEMPLE - ORDRE DU JOUR ET PROCÈS-VERBAL");
+      L.push("EXEMPLE - UN DOSSIER COMPLET, CHEZ UNE ENTREPRISE FICTIVE");
       L.push("");
-      L.push("ORDRE DU JOUR - Réunion du 15 septembre 2026");
-      L.push("Point 1 : Consultation sur le projet de règlement intérieur");
+      L.push("SARL LES DEUX PONTS, 4 rue de la Gare, 45000 Orléans.");
       L.push("");
-      L.push("PROCÈS-VERBAL");
-      L.push("Réunion du 15 septembre 2026");
-      L.push("Présents : [NOMS DES MEMBRES]");
-      L.push("Absent : [NOMS]");
-      L.push("Le projet de règlement intérieur a été soumis à l'avis du comité.");
-      L.push("Avis du comité : FAVORABLE");
-      L.push("Signature du secrétaire : [NOM], le 15 septembre 2026");
+      L.push("Lettre du 2 mars 2026 aux membres du comité : « Vous trouverez ci-joint le");
+      L.push("projet de règlement intérieur de la SARL LES DEUX PONTS, 9 pages, soumis à");
+      L.push("votre avis en application de l'article L. 1321-4. Il sera inscrit à l'ordre du");
+      L.push("jour de la réunion du 7 mars 2026. »");
+      L.push("");
+      L.push("Ordre du jour du 2 mars 2026 : 1. approbation du procès-verbal précédent ;");
+      L.push("2. consultation sur le projet de règlement intérieur ; 3. questions diverses.");
+      L.push("");
+      L.push("Extrait du procès-verbal du 7 mars 2026 : « Le comité, consulté, rend un avis");
+      L.push("défavorable. Votants : 4. Pour : 1. Contre : 3. » Le règlement a été déposé le");
+      L.push("9 mars, affiché et communiqué à l'inspection du travail le même jour, et est");
+      L.push("entré en vigueur le 10 avril 2026.");
+      L.push("");
+      L = L.concat(tableau(["Étape", "Date", "Ce qui se garde"], [
+        ["Transmission du projet et de l'ordre du jour", "02/03/2026", "copie datée de l'envoi"],
+        ["Réunion du comité, avis recueilli", "07/03/2026", "procès-verbal signé"],
+        ["Dépôt au greffe", "09/03/2026", "récépissé daté"],
+        ["Publicité et communication à l'inspection", "09/03/2026", "photo de l'affichage, preuve d'envoi"],
+        ["Entrée en vigueur", "10/04/2026", "la date portée dans le règlement"]
+      ]));
+      L.push("");
+      L.push("L'avis défavorable n'a pas empêché l'introduction du règlement : ce qui est");
+      L.push("exigé est que le projet ait été soumis à l'avis, non qu'il soit approuvé.");
       L.push("");
 
       L.push("VOS PIÈCES, À COMPLÉTER");
       L.push("");
-      L.push("Même structure que l'exemple.");
+
+      L.push("PIÈCE 1 - LETTRE DE TRANSMISSION DU PROJET AUX MEMBRES DU COMITÉ");
       L.push("");
-      L.push("ORDRE DU JOUR");
-      L.push("Réunion du [DATE]");
-      L.push("Point 1 : Consultation sur [RÈGLEMENT OU AVENANT]");
+      L.push(cro(p.denomination, "dénomination"));
+      L.push(cro(p.adresse, "adresse"));
       L.push("");
-      L.push("PROCÈS-VERBAL");
-      L.push("Réunion du [DATE]");
-      L.push("Présents : [NOMS ET QUALITÉS]");
-      L.push("Le projet a été soumis à l'avis du comité.");
-      L.push("Avis du comité : [FAVORABLE / DÉFAVORABLE / SANS AVIS]");
-      L.push("Signature : [NOM], le [DATE]");
+      L.push("Aux membres de la délégation du personnel");
+      L.push("au comité social et économique");
+      L.push("");
+      L.push(cro(p.ville, "ville") + ", le " + jj(envoi));
+      L.push("");
+      L.push("Objet : consultation sur le " + objet + ".");
+      L.push("Pièce jointe : le " + objet + ", " + cro("", "nombre") + " pages.");
+      L.push("");
+      L.push("Mesdames, Messieurs,");
+      L.push("");
+      L.push("Vous trouverez ci-joint le " + objet + " de " + cro(p.denomination, "dénomination") + ",");
+      L.push("soumis à l'avis du comité en application de l'article L. 1321-4 du code du travail.");
+      L.push("");
+      L.push("Ce projet sera inscrit à l'ordre du jour de la réunion du " + jj(reunion) + ", dont");
+      L.push("l'ordre du jour vous est communiqué avec la présente lettre, trois jours au moins");
+      L.push("avant la réunion (L. 2315-30).");
+      L.push("");
+      L.push("Je me tiens à votre disposition pour tout élément que vous souhaiteriez obtenir");
+      L.push("avant la séance.");
+      L.push("");
+      L.push(cro(p.responsable, "nom et qualité du représentant légal"));
       L.push("");
 
-      L.push("VOTRE CALENDRIER");
+      L.push("PIÈCE 2 - ORDRE DU JOUR DE LA RÉUNION");
       L.push("");
-      L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
-        ["Transmission du projet", jj(d0), "courrier ou email"],
-        ["Réunion du comité", jj(dansJours(d0, 10)), "convocation"],
-        ["Avis rendu par écrit", jj(dansJours(d0, 14)), "procès-verbal signé"],
-        ["Communication à l'inspection", jj(dansJours(d0, 15)), "courrier"],
-        ["Publication", jj(dansJours(d0, 15)), "affichage"],
-        ["Dépôt au greffe", jj(dansJours(d0, 15)), "récépissé"]
+      L.push("Comité social et économique de " + cro(p.denomination, "dénomination"));
+      L.push("Réunion du " + jj(reunion) + ", à " + cro("", "heure") + ", " + cro("", "lieu") + ".");
+      L.push("");
+      L.push("Ordre du jour établi par le président, communiqué aux membres du comité, à");
+      L.push("l'agent de contrôle de l'inspection du travail et à l'agent des services de");
+      L.push("prévention des organismes de sécurité sociale le " + jj(envoi) + " (L. 2315-30).");
+      L.push("");
+      L.push("1. Approbation du procès-verbal de la réunion précédente.");
+      L.push("2. Consultation du comité sur le " + objet + " (L. 1321-4).");
+      L.push("3. Questions diverses.");
+      L.push("");
+      L.push("Le président du comité");
+      L.push(cro(p.responsable, "nom et qualité du représentant légal"));
+      L.push("");
+
+      L.push("PIÈCE 3 - EXTRAIT DE PROCÈS-VERBAL RECUEILLANT L'AVIS");
+      L.push("");
+      L.push("Comité social et économique de " + cro(p.denomination, "dénomination"));
+      L.push("Extrait du procès-verbal de la réunion du " + jj(reunion) + ".");
+      L.push("");
+      L.push("Présents : " + cro("", "noms et qualités des membres présents") + ".");
+      L.push("Absents excusés : " + cro("", "noms") + ".");
+      L.push("Président : " + cro(p.responsable, "nom et qualité") + ".");
+      L.push("Secrétaire : " + cro("", "nom du secrétaire") + ".");
+      L.push("");
+      L.push("Point " + cro("2", "numéro du point") + " de l'ordre du jour : consultation sur le " + objet + ".");
+      L.push("");
+      L.push("Le projet a été transmis aux membres du comité le " + jj(envoi) + ".");
+      L.push("Le président a présenté le projet et répondu aux questions des élus.");
+      L.push("Observations des élus : " + cro("", "à retranscrire, même brièvement") + ".");
+      L.push("");
+      L.push("Le comité, consulté, rend un avis " + cro("", "favorable / défavorable / le comité ne rend pas d'avis") + ".");
+      L.push("Votants : " + cro("", "nombre") + ". Pour : " + cro("", "nombre") +
+        ". Contre : " + cro("", "nombre") + ". Abstentions : " + cro("", "nombre") + ".");
+      L.push("");
+      L.push("Le secrétaire du comité : " + cro("", "nom et signature") + ".");
+      L.push("Le président : " + cro("", "nom et signature") + ".");
+      L.push("");
+      L.push("Ce que la loi exige est que le projet ait été soumis à l'avis, non que l'avis");
+      L.push("soit favorable : un avis défavorable, ou l'absence d'avis rendu, n'empêche pas");
+      L.push("l'introduction du règlement. C'est l'absence de consultation qui l'empêche.");
+      L.push("");
+
+      L.push("VOTRE RÉTROPLANNING");
+      L.push("");
+      var depot = deIso(D.dateDepotGreffe) || dansJours(reunion, 1);
+      var publicite = deIso(D.datePublicite) || dansJours(reunion, 1);
+      L = L.concat(tableau(["Étape", "Date", "Ce qui se garde"], [
+        ["Transmission du projet et de l'ordre du jour", jj(envoi), "copie datée de l'envoi"],
+        ["Réunion du comité, avis recueilli", jj(reunion), "procès-verbal signé"],
+        ["Dépôt au greffe du conseil de prud'hommes", jj(depot), "récépissé daté"],
+        ["Publicité, et communication à l'inspection du travail en deux exemplaires, avec l'avis",
+          jj(publicite), "photo de l'affichage, preuve d'envoi"],
+        ["Entrée en vigueur, au plus tôt", jj(vigueur), "la date portée dans le règlement"]
       ]));
+      L.push("");
+      L.push("La publicité et la communication à l'inspection du travail ont lieu en même");
+      L.push("temps (L. 1321-4). Le mois qui précède l'entrée en vigueur court à compter de");
+      L.push("la dernière en date des formalités de publicité et de dépôt (R. 1321-3) : ici");
+      L.push("le " + jj(formalites) + ".");
+      L.push("");
 
       L = L.concat(DP.liens(ctx, ["discipline", "cse"]));
 
       L.push("LES RÈGLES");
       L.push("");
       L.push("« Le règlement intérieur ne peut être introduit qu'après avoir été soumis");
-      L.push("à l'avis du comité social et économique » (L. 1321-4).");
+      L.push("à l'avis du comité social et économique » (L. 1321-4). La même formalité");
+      L.push("vaut en cas de modification ou de retrait de clauses.");
       L.push("");
-      L.push("Ce qui est exigé est que le projet ait été SOUMIS à l'avis, non que");
-      L.push("l'avis soit favorable. C'est l'absence de consultation qui empêche l'introduction.");
+      L.push("« L'ordre du jour des réunions du comité social et économique est communiqué");
+      L.push("par le président aux membres du comité, à l'agent de contrôle de l'inspection");
+      L.push("du travail [...] ainsi qu'à l'agent des services de prévention des organismes");
+      L.push("de sécurité sociale trois jours au moins avant la réunion » (L. 2315-30).");
+      L.push("");
+      L.push("« Le texte du règlement intérieur est transmis à l'inspecteur du travail en");
+      L.push("deux exemplaires » (R. 1321-4), accompagné de l'avis du comité.");
       L.push("");
 
-      return L.concat(pied("L. 1321-4, R. 1321-1, R. 1321-2, R. 1321-3, R. 1321-4")).join("\n");
+      return L.concat(pied("L. 1321-4, L. 2315-30, R. 1321-1, R. 1321-2, R. 1321-3, R. 1321-4")).join("\n");
     }
   });
 
