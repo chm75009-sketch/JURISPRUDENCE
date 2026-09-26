@@ -1097,8 +1097,9 @@
   function suitesEmbauche(e, cdd) {
     var s = [];
     s.push({ q: "Déclaration préalable à l'embauche",
-      d: e ? "du " + dateFr(jour(e, -8)) + " au " + dateFr(jour(e, -1)) : "[date d'entrée à saisir]",
-      f: "au plus tôt huit jours avant, et avant la prise de poste (" + ref(["L1221-10", "R1221-4"]) + ")", c: "tot" });
+      d: e ? "du " + dateFr(jour(e, -8)) + " au " + dateFr(e) + ", avant la prise de poste"
+           : "[date d'entrée à saisir]",
+      f: "au plus tôt huit jours avant (" + ref(["R1221-4"]) + "), et avant la prise de poste, l'embauche ne pouvant intervenir qu'après la déclaration (" + ref(["L1221-10"]) + ")", c: "tot" });
     s.push({ q: "Visite d'information et de prévention",
       d: e ? "au plus tard le " + dateFr(plusMois(e, 3)) : "[date d'entrée à saisir]",
       f: "trois mois à compter de la prise effective du poste (" + ref(["R4624-10"]) + ")", c: "tard" });
@@ -1228,10 +1229,57 @@
      doit les porter exactement. Ils se saisissent, et tant qu'ils manquent
      l'écran le dit en rouge. Demande du 16 septembre 2026. */
   var CHAMPS_ENTRETIEN = CHAMPS_SANCTION.concat([
+    /* Le mode de remise commande le point de départ des cinq jours ouvrables :
+       la remise en main propre se date du jour même, le recommandé se date de
+       sa présentation, que personne ne connaît à l'avance. Relevé le
+       26 septembre 2026, l'écran recopiait la date saisie sans rien vérifier. */
+    { id: "remise", nom: "Remise de la convocation", t: "select", opts: [
+      ["recommande", "Lettre recommandée avec avis de réception"],
+      ["main", "Remise en main propre contre décharge"]] },
     { id: "eDate", nom: "Date de l'entretien", t: "date" },
     { id: "eHeure", nom: "Heure de l'entretien", t: "text", ph: "10 h 00" },
     { id: "eLieu", nom: "Lieu de l'entretien", t: "text", pleine: true, ph: "au siège de la société, 23 avenue du Château" }
   ]);
+
+  /* LA DATE DE L'ENTRETIEN SE CONTRÔLE, ELLE NE SE RECOPIE PAS.
+
+     « L'entretien préalable ne peut avoir lieu moins de cinq jours ouvrables
+     après la présentation de la lettre recommandée ou la remise en main
+     propre de la lettre de convocation » (L. 1232-2, LEGIARTI000006901000 ;
+     même règle pour le licenciement économique, L. 1233-11). Un entretien
+     fixé trois jours après la convocation passait sans un mot, et le Word
+     sortait quand même. */
+  function presentationDe(v) {
+    if (String(v && v.remise || "") === "main") {
+      return { d: AUJOURDHUI, dit: "la remise en main propre, datée d'aujourd'hui", estimee: false };
+    }
+    return { d: prochainOuvrable(jour(AUJOURDHUI, 1)),
+      dit: "la présentation du recommandé, estimée au premier jour ouvrable qui suit l'envoi",
+      estimee: true };
+  }
+  function entretienAuPlusTot(v) { return apresJoursOuvrables(presentationDe(v).d, 5); }
+  /* Ce qui empêche de produire la lettre : une date d'entretien plus tôt que
+     ce que la loi permet. Le reste se dit en alerte, pas en refus. */
+  function refusEntretien(v, article) {
+    var saisie = dateDe(v.eDate);
+    if (!saisie) return null;
+    var tot = entretienAuPlusTot(v), pres = presentationDe(v);
+    if (saisie >= tot) return null;
+    return ["L'entretien est fixé au " + dateFrJour(saisie) + ", soit moins de cinq jours " +
+      "ouvrables après " + pres.dit + " (" + ref([article]) + ").",
+      "Au plus tôt : " + dateFrJour(tot) + "." +
+      (pres.estimee ? " La date réelle de présentation figure sur l'avis de réception : si elle " +
+        "est plus tardive, l'entretien recule d'autant." : "")];
+  }
+  function alerteJourDeRepos(v) {
+    var saisie = dateDe(v.eDate);
+    if (!saisie) return null;
+    if (saisie.getDay() === 0) return "L'entretien est fixé un dimanche : vérifiez que le salarié " +
+      "et son assistant peuvent s'y rendre, et que ce jour est bien travaillé dans l'entreprise.";
+    if (estFerie(saisie)) return "L'entretien est fixé un jour férié : vérifiez qu'il est bien " +
+      "travaillé dans l'entreprise.";
+    return null;
+  }
 
   /* Ce qui manque encore, nommé une fois pour toutes. */
   function manques(v, avecEntretien) {
@@ -1429,7 +1477,9 @@
     var civ = civiliteDe(nomS);
     var dm = deuxMois(v);
     var convocation = AUJOURDHUI;
-    var entretien = dateDe(v.eDate) || apresJoursOuvrables(convocation, 5);
+    var refuse = refusEntretien(v, "L1232-2");
+    if (refuse) return { refus: refuse, loi: ["L1232-2", "L1232-3", "L1232-4"] };
+    var entretien = dateDe(v.eDate) || entretienAuPlusTot(v);
     var quand = v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]";
     var heure = String(v.eHeure || "").trim() || "[heure]";
     var lieu = String(v.eLieu || "").trim() || "[lieu de l'entretien]";
@@ -1458,8 +1508,10 @@
     finDeContrat(b);
     formule(b, civ);
 
+    var pres = presentationDe(v);
     var dates = [carteDeuxMois(dm, "Dernier jour pour convoquer"),
-      { q: "Entretien au plus tôt", d: dateFrJour(entretien), f: "cinq jours ouvrables après la présentation de la convocation, datée d'aujourd'hui (" + ref(["L1232-2"]) + ")", c: "tot" },
+      { q: "Entretien au plus tôt", d: dateFrJour(entretienAuPlusTot(v)),
+        f: "cinq jours ouvrables après " + pres.dit + " (" + ref(["L1232-2"]) + ")", c: "tot" },
       { q: "Notification au plus tôt", d: dateFrJour(totNotif), f: "deux jours ouvrables après l'entretien (" + ref(["L1232-6"]) + ")", c: "tot" },
       { q: "Notification au plus tard", d: dateFrJour(tardNotif), f: "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", c: "tard" }];
     var alertes = [];
@@ -1467,6 +1519,11 @@
     if (m.length) alertes.push(alerteManques(m, "convocation"));
     var hors = alerteHorsTravail(v);
     if (hors) alertes.push(hors);
+    var repos = alerteJourDeRepos(v);
+    if (repos) alertes.push(repos);
+    if (pres.estimee) alertes.push("Les cinq jours ouvrables courent depuis la présentation du " +
+      "recommandé, non depuis son envoi : la date portée ici est estimée au premier jour ouvrable " +
+      "suivant. Reportez la date réelle de l'avis de réception avant de tenir l'entretien.");
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
     return { blocs: b, dates: dates, alertes: alertes,
@@ -1743,7 +1800,10 @@
     var civ = civiliteDe(nomS);
     var poste = v.poste || "[emploi]";
     var convocation = AUJOURDHUI;
-    var entretien = dateDe(v.eDate) || apresJoursOuvrables(convocation, 5);
+    var refuse = refusEntretien(v, "L1233-11");
+    if (refuse) return { refus: refuse, loi: ["L1233-11", "L1233-13"] };
+    var pres = presentationDe(v);
+    var entretien = dateDe(v.eDate) || entretienAuPlusTot(v);
     var quand = v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]";
     var heure = String(v.eHeure || "").trim() || "[heure]";
     var lieu = String(v.eLieu || "").trim() || "[lieu de l'entretien]";
@@ -1772,7 +1832,8 @@
     finDeContrat(b);
     formule(b, civ);
     var dates = [
-      { q: "Entretien au plus tôt", d: dateFrJour(entretien), f: "cinq jours ouvrables après la présentation de la convocation, datée d'aujourd'hui (" + ref(["L1233-11"]) + ")", c: "tot" },
+      { q: "Entretien au plus tôt", d: dateFrJour(entretienAuPlusTot(v)),
+        f: "cinq jours ouvrables après " + pres.dit + " (" + ref(["L1233-11"]) + ")", c: "tot" },
       { q: "Notification au plus tôt", d: dateFrJour(totNotif), f: "sept jours ouvrables à compter de la date prévue de l'entretien, quinze pour un cadre (" + ref(["L1233-15"]) + ")", c: "tot" }];
     var alertes = [];
     /* La convocation économique porte les mêmes trois mentions que les
@@ -1785,6 +1846,11 @@
     if (!String(v.eHeure || "").trim()) mq.push("l'heure de l'entretien");
     if (!String(v.eLieu || "").trim()) mq.push("le lieu de l'entretien");
     if (mq.length) alertes.push(alerteManques(mq, "convocation"));
+    var reposEco = alerteJourDeRepos(v);
+    if (reposEco) alertes.push(reposEco);
+    if (pres.estimee) alertes.push("Les cinq jours ouvrables courent depuis la présentation du " +
+      "recommandé, non depuis son envoi : la date portée ici est estimée au premier jour ouvrable " +
+      "suivant. Reportez la date réelle de l'avis de réception avant de tenir l'entretien.");
     if (effectif >= 50) alertes.push("À partir de cinquante salariés, un projet de dix licenciements ou plus sur trente jours relève du plan de sauvegarde de l'emploi : ces courriers ne valent que pour un licenciement individuel ou de moins de dix salariés (" + ref(["L1233-11", "L1233-15"]) + ").");
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
     return { blocs: b, dates: dates, alertes: alertes,
@@ -2090,7 +2156,12 @@
     dpae: { titre: "Déclaration d'embauche DPAE", ext: ["RH-CTL-EMB-03"], famille: "RH",
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: "Lucie MARTIN" }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
       loi: ["L1221-10", "R1221-1", "R1221-4"],
-      dates: function (v) { var e = dateDe(v.entree); return e ? [{ q: "Déclaration", d: "du " + dateFr(jour(e, -8)) + " au " + dateFr(jour(e, -1)), f: "au plus tôt huit jours avant l'embauche, et avant la prise de poste (" + ref(["L1221-10", "R1221-4"]) + ")", c: "tot" }] : []; } },
+      /* La déclaration se fait jusqu'au jour de l'embauche, avant la prise de
+         poste : la fenêtre s'arrêtait la veille, et le calendrier du Word
+         proposait le lendemain. Relevé le 26 septembre 2026. */
+      dates: function (v) { var e = dateDe(v.entree); return e ? [{ q: "Déclaration",
+        d: "du " + dateFr(jour(e, -8)) + " au " + dateFr(e) + ", avant la prise de poste",
+        f: "au plus tôt huit jours avant l'embauche (" + ref(["R1221-4"]) + "), et avant elle, l'embauche ne pouvant intervenir qu'après la déclaration (" + ref(["L1221-10"]) + ")", c: "tot" }] : []; } },
     mutuelle: { titre: "Complémentaire santé : la décision unilatérale",
       champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(AUJOURDHUI) }],
       produire: mutuelle },

@@ -43,6 +43,13 @@
     var m = d.getMonth() + 1, j = d.getDate();
     return (j < 10 ? "0" + j : j) + "/" + (m < 10 ? "0" + m : m) + "/" + d.getFullYear();
   }
+  /* Une date saisie à l'écran, « 2026-09-26 », lue sans décalage d'horaire. */
+  function dateDe(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v == null ? "" : v).trim());
+    if (!m) return null;
+    var d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10), 12, 0, 0);
+    return isNaN(d) ? null : d;
+  }
   function dans(d, jours) {
     var r = new Date(d);
     r.setDate(r.getDate() + jours);
@@ -705,9 +712,23 @@
 
       L.push("VOTRE CALENDRIER");
       L.push("");
+      /* LE CALENDRIER SE COMPTE DEPUIS L'EMBAUCHE, PAS DEPUIS AUJOURD'HUI.
+
+         Le tableau portait « avant le premier jour de travail » en face de
+         demain : pour une embauche le jour même, il faisait déclarer après.
+         Déclarer après l'embauche, c'est le travail dissimulé de L. 8221-5, 1°.
+         Relevé le 26 septembre 2026. L'embauche « ne peut intervenir qu'après
+         déclaration » (L. 1221-10, LEGIARTI000006900849) et la déclaration
+         s'adresse « au plus tôt dans les huit jours précédant la date
+         prévisible de l'embauche » (R. 1221-4, LEGIARTI000024214323). */
+      var emb = dateDe(d.dateEmbauche);
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
-        ["Réunion des informations de l'article R. 1221-1", jj(d0), "liste complétée"],
-        ["Déclaration à l'URSSAF ou MSA : avant le premier jour de travail du salarié", jj(dans(d0, 1)), "accusé de réception de la déclaration"],
+        ["Réunion des informations de l'article R. 1221-1",
+          emb ? "à partir du " + jj(dans(emb, -8)) : jj(d0), "liste complétée"],
+        ["Déclaration à l'URSSAF ou à la MSA, avant que le salarié ne prenne son poste",
+          emb ? "du " + jj(dans(emb, -8)) + " au " + jj(emb) + ", avant la prise de poste"
+              : "au plus tôt huit jours avant l'embauche, et avant la prise de poste",
+          "accusé de réception de la déclaration"],
         ["Conservation de la déclaration et de l'accusé", "en permanence", "au dossier du personnel"],
       ]));
 
