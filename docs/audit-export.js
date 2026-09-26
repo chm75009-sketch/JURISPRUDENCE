@@ -342,8 +342,8 @@
       ' xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
       /* LE TITRE NE S'ÉCRIT PAS DEUX FOIS.
 
-         Un document qui porte déjà son titre et son en-tête — le règlement
-         intérieur en est un — recevait en plus, tout en haut, le nom que
+         Un document qui porte déjà son titre et son en-tête, le règlement
+         intérieur en est un, recevait en plus, tout en haut, le nom que
          l'application donne au parcours : « Le règlement intérieur, et ses
          formalités - Le règlement ». `opts.sansTitre` laisse le document
          commencer par lui-même ; le pied de page et les propriétés, eux,

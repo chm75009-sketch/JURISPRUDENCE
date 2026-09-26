@@ -24,8 +24,8 @@
      Les propositions des moteurs offrent déjà un menu partout où le code
      discrimine sur une valeur. Restaient quelques questions dont le format
      énonce des valeurs sans que le moteur les compare : elles se répondaient
-     au clavier. Les listes ci-dessous ne vivent que dans le formulaire — aucun
-     moteur n'est modifié — et chaque valeur est exactement celle que les
+     au clavier. Les listes ci-dessous ne vivent que dans le formulaire, aucun
+     moteur n'est modifié, et chaque valeur est exactement celle que les
      moteurs impriment ou comparent (« accord » / « unilateral » sont celles du
      module PSE ; « je ne sais pas » celle des dossiers de référence). */
   var PROP_UI = {
@@ -36,7 +36,7 @@
     },
     MoteurBDESE: {
       "base.support": { valeurs: ["informatique", "papier"], libre: true,
-        aide: "« informatique » ou « papier » — ou décrivez le support réel par « — autre — »." },
+        aide: "« informatique » ou « papier », ou décrivez le support réel par «, autre, »." },
     },
   };
   (function () {
@@ -48,14 +48,14 @@
 
      « Quand on dit pas de liquidation, les questions en lien doivent
      disparaître. » Chaque règle nomme un pilote et les champs qui n'ont
-     indiscutablement plus d'objet au vu de sa réponse — la condition reprend
+     indiscutablement plus d'objet au vu de sa réponse, la condition reprend
      la garde du contrôle correspondant (état « sans objet » du moteur), jamais
      une supposition. Un pilote sans réponse ne masque rien : l'audit ne
      devine pas. Un champ masqué est vidé : le moteur le traite comme une
-     donnée absente, ce qu'il sait faire — jamais comme une donnée fantôme.
+     donnée absente, ce qu'il sait faire, jamais comme une donnée fantôme.
 
-     Deux formes : { si: { champ, vaut: [...] }, champs: [...] } — les champs
-     ne restent visibles que si le pilote est vide ou vaut l'une des valeurs —
+     Deux formes : { si: { champ, vaut: [...] }, champs: [...] }, les champs
+     ne restent visibles que si le pilote est vide ou vaut l'une des valeurs,
      et { si: fonction(txt, nb) → true (visible) / false (masqué) / null
      (indéterminé, donc visible), champs: [...] } pour les seuils d'effectif. */
   var DEPENDANCES = {
@@ -71,7 +71,7 @@
       { si: { champ: "fermetureEtablissement", vaut: ["oui"] }, champs: ["rechercheRepreneur"] },
       /* La recherche de repreneur (CTL-REP-01) n'est due qu'à partir de
          mille salariés : sous ce seuil le contrôle est sans objet, la
-         question aussi — la règle se combine avec la fermeture ci-dessus. */
+         question aussi, la règle se combine avec la fermeture ci-dessus. */
       { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 1000; },
         champs: ["rechercheRepreneur"] },
       { si: { champ: "cause", vaut: ["4"] }, champs: ["cessationComplete"] },
@@ -81,21 +81,21 @@
          économiques (cause 1). */
       { si: { champ: "cause", vaut: ["1"] }, champs: ["tresorerie"] },
       /* L'accord de périmètre (CTL-EFF-02) n'est lu que si le périmètre
-         d'application des critères d'ordre désigne l'établissement — même
+         d'application des critères d'ordre désigne l'établissement, même
          critère que le contrôle. */
       { si: function (txt) { var v = txt("perimetreOrdre");
           return v === "" ? null : /etablissement|établissement/i.test(v); },
         champs: ["accordPerimetreOrdre"] },
       /* L'ordonnance du juge-commissaire ne se demande qu'en redressement
-         ou liquidation — s'ajoute à la règle procédure collective. */
+         ou liquidation, s'ajoute à la règle procédure collective. */
       { si: { champ: "typeProcedure", vaut: ["redressement", "liquidation"] },
         champs: ["ordonnanceJugeCommissaire"] },
       /* Le CSE central (CTL-CSE-02) suppose au moins deux établissements
-         distincts — s'ajoute à la règle cseExistant. */
+         distincts, s'ajoute à la règle cseExistant. */
       { si: function (txt, nb) { var n = nb("etablissementsDistincts");
           return n === null ? null : n >= 2; },
         champs: ["cseCentralConsulte"] },
-      /* Le plan de sauvegarde n'est jamais dû sous cinquante salariés —
+      /* Le plan de sauvegarde n'est jamais dû sous cinquante salariés,
          et la règle anti-fractionnement (CTL-SEU-03) non plus. */
       { si: function (txt, nb) { var e = nb("effectif"); return e === null ? null : e >= 50; },
         champs: ["pse.voie", "pse.evitement", "pse.reclassementInterne", "pse.formation",
@@ -150,7 +150,7 @@
       { si: { champ: "etablissementsDistincts", vaut: ["oui"] },
         champs: ["consultation.centralEtEtablissements"] },
       /* En dessous de cinquante salariés, la base n'est pas due : L. 2312-1
-         réserve à la section 3 — donc aux entreprises d'au moins cinquante —
+         réserve à la section 3, donc aux entreprises d'au moins cinquante,
          les attributions dont L. 2312-18 fait relever la base, et L. 2312-2 ne
          les fait exercer qu'à partir de ce seuil. Les vingt-huit questions qui
          suivent l'effectif n'ont alors rien à recueillir : le moteur les rend
@@ -224,7 +224,7 @@
     ],
     MoteurDiscipline: [
       /* Sans règlement intérieur, ni son contenu ni ses formalités n'ont
-         d'objet — les contrôles rendent « sans objet » (garde siRI). La date
+         d'objet, les contrôles rendent « sans objet » (garde siRI). La date
          de franchissement du seuil, elle, RESTE demandée : c'est elle qui
          permet de dire si l'absence de règlement est déjà un manquement. */
       { si: { champ: "ri.existe", vaut: ["oui"] },
@@ -267,7 +267,7 @@
           "garantie.licenciementSubordonneSanctions"] },
       /* L'incidence sur la présence, la fonction, la carrière ou la rémunération
          n'est demandée que là où elle n'est pas établie par la nature même de la
-         sanction — mêmes lectures que M.NATURES. */
+         sanction, mêmes lectures que M.NATURES. */
       { si: { champ: "sanction.nature", vaut: ["avertissement", "blâme", "autre sanction"] },
         champs: ["sanction.incidence"] },
       { si: { champ: "sanction.nature", vaut: ["mise à pied disciplinaire"] },
@@ -302,7 +302,7 @@
   /* ---------------------------------------------------- la formule d'usage
 
      Écrite une fois, à trois endroits : un bouton toujours accessible en tête
-     de page, et le pied de tout rapport — à l'écran comme dans le Word et le
+     de page, et le pied de tout rapport, à l'écran comme dans le Word et le
      PDF. Un rapport se détache de l'application dès qu'il est exporté ; la
      réserve doit voyager avec lui, sinon elle ne protège rien. */
   var AVERTISSEMENT = [
@@ -350,26 +350,26 @@
     if (f.indexOf("aaaa-mm-jj") >= 0) return "date";
     /* Les listes d'abord : « liste de nombres » est une liste, pas un nombre. */
     if (f.indexOf("liste") >= 0 || f.indexOf("objet") >= 0 || f.indexOf("tableau") >= 0) return "json";
-    /* Puis les nombres, y compris qualifiés — « nombre de mois », « nombre
+    /* Puis les nombres, y compris qualifiés, « nombre de mois », « nombre
        d'années ». Sans cela ils arrivaient au moteur sous forme de chaîne, et
        les contrôles les tenaient pour non renseignés. */
     if (f.indexOf("nombre") === 0 || f === "euros" || f.indexOf("chiffres") >= 0) return "nombre";
     if (f === "1 à 4") return "cause";
     return "texte";
   }
-  var AUTRE = "— autre —";
+  var AUTRE = "- autre :";
 
   /* ------------------------------------------- les quatre valeurs fermées
 
      Toute question fermée de l'application offre désormais QUATRE réponses :
      oui, non, en cours, autre. C'est ce que le client a sous les yeux quand il
-     décrit sa situation — une régularisation engagée n'est ni un oui ni un
+     décrit sa situation, une régularisation engagée n'est ni un oui ni un
      non, et une situation hors cadre mérite d'être décrite.
 
      CE QUE LES MOTEURS EN REÇOIVENT. Rien. « en cours » et « autre » ne sont
      PAS transmis : la fiche remise au moteur ne porte pas le champ, exactement
      comme si la question n'avait pas été répondue. Le contrôle rend alors
-     « donnée manquante » — jamais « conforme », jamais « sans objet ». C'est
+     « donnée manquante », jamais « conforme », jamais « sans objet ». C'est
      la seule traduction honnête : le moteur ne connaît que « vrai » et
      « faux », et une réponse nuancée n'est ni l'un ni l'autre. Aucun moteur
      n'a été modifié pour cela.
@@ -393,12 +393,12 @@
   function estFerme(cle, t) {
     var p = PROP[cle];
     /* Sans proposition du moteur, c'est le format du questionnaire qui dit
-       si la question est fermée — comme avant ce changement. */
+       si la question est fermée, comme avant ce changement. */
     if (!p) return t === "oui-non" || t === "cause";
     /* Avec proposition : seules les propositions qui SONT « oui » et « non »
        deviennent des questions fermées à quatre valeurs. Une liste de causes
        de licenciement ou de supports de base de données garde la sienne, et un
-       menu qui offre déjà une troisième valeur — « je ne sais pas » — la garde
+       menu qui offre déjà une troisième valeur, « je ne sais pas », la garde
        aussi : elle a été mise là exprès. */
     if (p.multiple || !Array.isArray(p.valeurs)) return false;
     if ((p.autres || []).length) return false;
@@ -426,7 +426,7 @@
     var txt = s.value === AUTRE4 && libre && libre.value.trim() ? " (« " + libre.value.trim() + " »)" : "";
     n.textContent = "Réponse « " + s.value + " »" + txt +
       " : elle décrit votre situation, mais elle ne conclut pas. L'audit la traite comme une donnée " +
-      "non renseignée — le contrôle rendra « donnée manquante », jamais « conforme ». Répondez « oui » " +
+      "non renseignée, le contrôle rendra « donnée manquante », jamais « conforme ». Répondez « oui » " +
       "ou « non » lorsque la situation sera tranchée.";
     n.style.display = "";
   }
@@ -449,7 +449,7 @@
      Un .xlsx comme un .docx est une archive ZIP contenant du XML. Tout se fait
      ici, sans bibliothèque : le navigateur sait décompresser (DecompressionStream)
      et analyser du XML (DOMParser). C'est la seule façon de tenir la promesse
-     de la page — rien ne quitte le poste. Un fichier envoyé à un service tiers
+     de la page, rien ne quitte le poste. Un fichier envoyé à un service tiers
      pour y être converti serait un fichier sorti de l'entreprise. */
   function u16(d, o) { return d[o] | (d[o + 1] << 8); }
   function u32(d, o) { return (d[o] | (d[o + 1] << 8) | (d[o + 2] << 16) | (d[o + 3] << 24)) >>> 0; }
@@ -525,8 +525,8 @@
     });
   }
 
-  /* Un document Word : ses tableaux d'abord — c'est là que vivent les données
-     structurées — et, à défaut, ses paragraphes, une ligne par paragraphe. */
+  /* Un document Word : ses tableaux d'abord, c'est là que vivent les données
+     structurées, et, à défaut, ses paragraphes, une ligne par paragraphe. */
   function lireDocx(buf) {
     var zip = entreesZip(buf);
     return lireEntree(zip, "word/document.xml").then(function (s) {
@@ -554,7 +554,7 @@
 
      Un PDF n'est pas un tableau, c'est une mise en page : les colonnes n'y sont
      que des positions. On en tire donc le texte, et l'on retrouve les colonnes
-     à la séparation — tabulation, point-virgule, ou deux espaces et plus. C'est
+     à la séparation, tabulation, point-virgule, ou deux espaces et plus. C'est
      un secours, jamais aussi sûr qu'un tableur : le résultat est affiché pour
      être relu avant d'être utilisé.
 
@@ -602,7 +602,7 @@
     })).then(function (contenus) {
       /* Les tables de correspondance des polices, réunies. Réserve assumée :
          si deux polices se contredisent sur un même code, la dernière lue
-         l'emporte — c'est rare, et le résultat reste affiché avant usage. */
+         l'emporte, c'est rare, et le résultat reste affiché avant usage. */
       var uni = {};
       contenus.forEach(function (c) {
         if (c.indexOf("beginbfchar") < 0 && c.indexOf("beginbfrange") < 0) return;
@@ -632,7 +632,7 @@
         throw new Error("aucun texte : ce PDF est probablement une image scannée, ou son texte n'est pas extractible");
       var mauvais = lignes.join("").replace(/[^\uFFFD\u0000-\u001F]/g, "").length;
       if (mauvais > lignes.join("").length / 20)
-        throw new Error("le texte extrait est illisible — les polices de ce PDF n'embarquent pas leur table de correspondance");
+        throw new Error("le texte extrait est illisible, les polices de ce PDF n'embarquent pas leur table de correspondance");
       /* Les colonnes : tabulation, point-virgule, ou deux espaces et plus. */
       return lignes.map(function (l) {
         return l.indexOf("\t") >= 0 ? l.split("\t")
@@ -717,7 +717,7 @@
 
   /* Ce qu'une cellule veut dire. Le nombre et le booléen sont reconnus ; la date
      reste une chaîne, parce que le moteur l'attend au format AAAA-MM-JJ et
-     qu'un tableur en donne parfois un autre — mieux vaut la laisser visible et
+     qu'un tableur en donne parfois un autre, mieux vaut la laisser visible et
      fausse que la convertir en silence. */
   function cellule(v) {
     var s = String(v == null ? "" : v).trim();
@@ -735,7 +735,7 @@
     var l = lignes.filter(function (x) { return x.some(function (c) { return String(c).trim() !== ""; }); });
     if (!l.length) throw new Error("aucune ligne exploitable");
     /* Une colonne exportée d'un tableur porte souvent son intitulé en première
-       ligne. On ne le devine pas au vu de son texte — on le déduit de la forme :
+       ligne. On ne le devine pas au vu de son texte, on le déduit de la forme :
        si toutes les lignes suivantes sont homogènes, nombres ou dates, et que la
        première ne l'est pas, c'est un en-tête. Sinon on ne retire rien : mieux
        vaut une valeur de trop, visible et corrigible, qu'une valeur perdue. */
@@ -778,7 +778,7 @@
     else if (/\.xlsx$|\.xlsm$/.test(nom)) lecture = fichier.arrayBuffer().then(lireXlsx);
     else if (/\.docx$/.test(nom)) lecture = fichier.arrayBuffer().then(lireDocx);
     else if (/\.pdf$/.test(nom)) lecture = fichier.arrayBuffer().then(lirePdf);
-    else return Promise.reject(new Error("format non reconnu — déposez un .xlsx, un .csv, un .docx ou un .pdf"));
+    else return Promise.reject(new Error("format non reconnu, déposez un .xlsx, un .csv, un .docx ou un .pdf"));
     return lecture.then(function (lignes) { return versValeur(lignes, format); });
   }
 
@@ -787,12 +787,12 @@
     liste.forEach(function (v) {
       var o = document.createElement("option");
       o.value = v === vide ? "" : v;
-      o.textContent = v === vide ? "— non renseigné —" : v;
+      o.textContent = v === vide ? "- non renseigné :" : v;
       select.appendChild(o);
     });
   }
 
-  /* Les familles qui désignent un tableau — « pieces » et ses colonnes — sont
+  /* Les familles qui désignent un tableau, « pieces » et ses colonnes, sont
      regroupées en un éditeur de lignes. Les composer champ par champ produisait
      un objet unique là où le moteur attend un tableau : les huit cases se
      réunissaient en une pièce imaginaire, et le contrôle des pièces échouait. */
@@ -804,7 +804,7 @@
   /* Une réponse « oui » qui appelle une pièce : le document est demandé à la
      suite de la réponse, et la ligne correspondante est ajoutée au tableau des
      pièces. Sans cela l'utilisateur répond « oui » et rien ne lui dit qu'un
-     titre est attendu — c'est exactement ce que le contrôle lui reprochera. */
+     titre est attendu, c'est exactement ce que le contrôle lui reprochera. */
   var APPELEES = M.piecesAppelees || {};
   var TABLEAUX = LISTES.concat(Object.keys(COLONNES));
   var estColonne = function (cle) {
@@ -813,7 +813,7 @@
 
   /* Les rubriques se replient : un long formulaire ouvert d'un bloc décourage
      avant la première réponse. La première rubrique est ouverte, les autres
-     attendent — chacune affiche son remplissage, pour qu'on sache où l'on en
+     attendent, chacune affiche son remplissage, pour qu'on sache où l'on en
      est sans dérouler. Le style est injecté ici : il appartient au formulaire,
      pas aux cinq pages qui le chargent. */
   (function () {
@@ -826,7 +826,7 @@
       /* Repliée, la rubrique se réduisait à un cadre vide de cinquante et un
          pixels pour une légende de quatorze : sur téléphone, cinq rectangles
          blancs à la suite, qui ne disaient rien et n'appelaient aucun geste.
-         Elle épouse désormais sa légende, et le cadre entier est touchable —
+         Elle épouse désormais sa légende, et le cadre entier est touchable,
          on tapait dans le vide, et rien ne se passait. */
       "fieldset.repliable.replie{padding:0 18px 2px;cursor:pointer}" +
       "fieldset.repliable.replie>legend{padding-bottom:2px}" +
@@ -838,13 +838,13 @@
   })();
   /* Le bandeau de navigation, sur téléphone.
 
-     Il alignait dix liens — les huit audits, l'agenda, les guides — et occupait
+     Il alignait dix liens, les huit audits, l'agenda, les guides, et occupait
      le premier écran entier avant que la page n'ait dit un mot. C'était un
      palliatif : il n'existait pas d'accueil où se rendre. Il en existe un
      maintenant, avec ses quatre portes.
 
-     Sur écran étroit, le bandeau se réduit donc à l'essentiel — l'outil de la
-     page s'il y en a un, et l'accueil — et le reste attend derrière un bouton.
+     Sur écran étroit, le bandeau se réduit donc à l'essentiel, l'outil de la
+     page s'il y en a un, et l'accueil, et le reste attend derrière un bouton.
      Sur écran large, rien ne change : la place ne manque pas. */
   (function bandeauCompact() {
     var ou = document.querySelector(".retour-ou");
@@ -863,8 +863,8 @@
       "@media (min-width:701px){#autres-modules{display:none}}";
     document.head.appendChild(st);
 
-    /* Ce qui reste visible : le lien mis en avant par la page — celui de son
-       outil — et l'accueil. Ils sont marqués, pas déplacés : l'ordre du
+    /* Ce qui reste visible : le lien mis en avant par la page, celui de son
+       outil, et l'accueil. Ils sont marqués, pas déplacés : l'ordre du
        bandeau reste celui que la page a voulu. */
     var gras = ou.querySelector("b > a, b");
     if (gras) (gras.closest("b") || gras).classList.add("garde");
@@ -896,7 +896,7 @@
     lg.addEventListener("click", function () { fs.classList.toggle("replie"); });
     /* Repliée, la rubrique s'ouvre où qu'on la touche : viser la légende seule
        demande une précision que personne n'a sur un téléphone. Ouverte, le
-       cadre redevient inerte — sans quoi cliquer dans un champ la refermerait. */
+       cadre redevient inerte, sans quoi cliquer dans un champ la refermerait. */
     fs.addEventListener("click", function (ev) {
       if (!fs.classList.contains("replie")) return;
       if (ev.target === lg || lg.contains(ev.target)) return;
@@ -926,7 +926,7 @@
       var lab = document.createElement("label");
       lab.innerHTML = '<span class="nom">' + ech(libelle) +
         "</span>";
-        /* Le nom technique du champ — « accordRecherche » — n'apprend rien à
+        /* Le nom technique du champ, « accordRecherche », n'apprend rien à
            qui remplit le formulaire : c'est du chinois posé à côté d'une
            question française. Il reste dans le code, où il sert, et disparaît
            de l'écran, où il nuisait. */
@@ -964,8 +964,8 @@
 
          Deux chemins y menaient jusqu'ici. Les questions dont le moteur ne
          propose rien passaient par le format « oui / non » du questionnaire.
-         Celles dont le moteur propose exactement « oui » et « non » — la
-         plupart, dans les modules SST, discipline et NAO — passaient par le
+         Celles dont le moteur propose exactement « oui » et « non », la
+         plupart, dans les modules SST, discipline et NAO, passaient par le
          menu des propositions, et n'auraient reçu que deux valeurs. Elles
          prennent désormais le même chemin : la question fermée est une
          question fermée, quel que soit l'endroit d'où viennent ses valeurs. */
@@ -1003,7 +1003,7 @@
         var sel = document.createElement("select");
         sel.id = "s-" + cle;
         var o0 = document.createElement("option");
-        o0.value = ""; o0.textContent = "— non renseigné —"; sel.appendChild(o0);
+        o0.value = ""; o0.textContent = "- non renseigné :"; sel.appendChild(o0);
         offre.forEach(function (v) {
           var o = document.createElement("option");
           o.value = v;
@@ -1031,7 +1031,7 @@
       }
 
       /* La convention collective se choisit dans la liste officielle des IDCC
-         (menu filtrant, « Autre » en fin de liste) — la valeur stockée reste le
+         (menu filtrant, « Autre » en fin de liste), la valeur stockée reste le
          numéro à quatre chiffres que le moteur attend, et la saisie libre
          demeure : un brouillon existant s'affiche tel quel. */
       if (cle === "idcc") {
@@ -1051,8 +1051,8 @@
         e = document.createElement("textarea");
         /* Une liste se tape une par ligne. Le format JSON était la seule entrée
            possible, et il tenait lieu de barrière : personne ne compose des
-           accolades sur un téléphone. Il reste accepté — un tableau collé depuis
-           ailleurs doit continuer de fonctionner — mais il n'est plus demandé. */
+           accolades sur un téléphone. Il reste accepté, un tableau collé depuis
+           ailleurs doit continuer de fonctionner, mais il n'est plus demandé. */
         e.placeholder = "une par ligne\nou joignez un fichier ci-dessus";
         e.rows = 3;
       } else {
@@ -1070,7 +1070,7 @@
       /* Une question qui demande un document se répond en joignant le document,
          non en tapant son nom. Le fichier ne quitte pas le poste : la base ne
          lit pas son contenu, elle enregistre qu'il a été produit et sous quel
-         nom — ce que la question demandait déjà, en plus sûr. */
+         nom, ce que la question demandait déjà, en plus sûr. */
       if (/fichier/.test(String(format).toLowerCase())) lab.appendChild(piece(cle));
       if (APPELEES[cle]) lab.appendChild(appel(cle, APPELEES[cle]));
       g.appendChild(lab);
@@ -1079,7 +1079,7 @@
   });
 
   /* Un éditeur de tableau : une ligne par entrée, les colonnes étant les
-     sous-champs déclarés par le questionnaire. Rien n'est inventé ici — ni les
+     sous-champs déclarés par le questionnaire. Rien n'est inventé ici, ni les
      colonnes, ni les valeurs proposées dans chacune. */
   function tableau(fam, colonnes, libelle) {
     var enveloppe = document.createElement("div");
@@ -1087,7 +1087,7 @@
     enveloppe.setAttribute("data-liste", fam);
     var titre = document.createElement("p");
     titre.className = "nom";
-    titre.innerHTML = (libelle ? ech(libelle) + " — une ligne par entrée" : "Une ligne par entrée") +
+    titre.innerHTML = (libelle ? ech(libelle) + ", une ligne par entrée" : "Une ligne par entrée") +
       "";
     enveloppe.appendChild(titre);
 
@@ -1095,7 +1095,7 @@
     var thead = document.createElement("tr");
     colonnes.forEach(function (c) {
       var th = document.createElement("th");
-      /* Le nom de la colonne est ce qui suit la famille — et la famille peut
+      /* Le nom de la colonne est ce qui suit la famille, et la famille peut
          elle-même être composée : « plan.mesures.rubrique » donne « rubrique »,
          non « mesures ». Pris au deuxième segment, toutes les colonnes d'un
          tableau composé portaient le même nom, et la saisie se perdait. */
@@ -1113,7 +1113,7 @@
         var sous = c[0].split(".").pop(), p = PROP[c[0]], td = document.createElement("td"), e;
         if (p) {
           e = document.createElement("select");
-          var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "—";
+          var o0 = document.createElement("option"); o0.value = ""; o0.textContent = "-";
           e.appendChild(o0);
           (p.valeurs || []).concat(p.autres || []).forEach(function (v) {
             var o = document.createElement("option"); o.value = v; o.textContent = v; e.appendChild(o);
@@ -1121,7 +1121,7 @@
         } else if (typeDe(c[2]) === "oui-non") {
           e = document.createElement("select");
           [""].concat(VALEURS4).forEach(function (v) {
-            var o = document.createElement("option"); o.value = v; o.textContent = v || "—"; e.appendChild(o);
+            var o = document.createElement("option"); o.value = v; o.textContent = v || "-"; e.appendChild(o);
           });
         } else {
           e = document.createElement("input");
@@ -1180,12 +1180,12 @@
         });
         if (!tab.querySelectorAll("tr")[1]) ligne(null);
         etat.className = "etat-depot ok";
-        etat.textContent = fich.name + " \u2014 " + (r.valeur || []).length +
+        etat.textContent = fich.name + " - " + (r.valeur || []).length +
           " ligne(s) reprise(s). Colonnes reconnues : " + noms.join(", ") + ". Relisez avant de lancer l'audit.";
         compter();
       }).catch(function (err) {
         etat.className = "etat-depot ko";
-        etat.textContent = fich.name + " \u2014 " + err.message;
+        etat.textContent = fich.name + " - " + err.message;
       });
       i.value = "";
     });
@@ -1211,7 +1211,7 @@
         var t = typeDe(e.getAttribute("data-format") || "");
         /* Une cellule fermée répondue « en cours » ou « autre » ne conclut
            pas : la ligne compte comme renseignée, mais la cellule n'est pas
-           posée — le moteur la lira comme absente, jamais comme un « non ». */
+           posée, le moteur la lira comme absente, jamais comme un « non ». */
         if (t === "oui-non" && !conclut4(v)) return;
         o[e.getAttribute("data-sous")] = v === "oui" ? true : (v === "non" ? false
           : (t === "nombre" ? cellule(v) : v));
@@ -1252,7 +1252,7 @@
     var d = document.createElement("div");
     d.className = "depot appel"; d.id = "appel-" + cle; d.style.display = "none";
     var t = document.createElement("p"); t.className = "aide-champ";
-    t.textContent = "Cette réponse appelle un document : sans lui, l'audit ne peut pas conclure — une déclaration que rien ne justifie ne vaut pas conformité.";
+    t.textContent = "Cette réponse appelle un document : sans lui, l'audit ne peut pas conclure, une déclaration que rien ne justifie ne vaut pas conformité.";
     var b = document.createElement("button");
     b.type = "button"; b.className = "fichier"; b.textContent = "Joindre l'accord (Excel, Word, PDF…)";
     var i = document.createElement("input"); i.type = "file"; i.style.display = "none";
@@ -1264,7 +1264,7 @@
       var ok = ajouterPiece(code, f.name);
       etat.className = "etat-depot " + (ok ? "ok" : "ko");
       etat.textContent = ok
-        ? "joint : " + f.name + " — ajouté au tableau des pièces sous le code « " + code + " ». Complétez sa date et son périmètre."
+        ? "joint : " + f.name + ", ajouté au tableau des pièces sous le code « " + code + " ». Complétez sa date et son périmètre."
         : "le tableau des pièces est introuvable sur cette page.";
       i.value = "";
       compter();
@@ -1320,11 +1320,11 @@
           ? r.valeur.join("\n")
           : JSON.stringify(r.valeur, null, 1);
         etat.className = "etat-depot ok";
-        etat.textContent = f.name + " — " + r.note + ". Relisez le résultat avant de lancer l'audit.";
+        etat.textContent = f.name + " : " + r.note + ". Relisez le résultat avant de lancer l'audit.";
         compter();
       }).catch(function (err) {
         etat.className = "etat-depot ko";
-        etat.textContent = f.name + " — " + err.message;
+        etat.textContent = f.name + " : " + err.message;
       });
       i.value = "";
     });
@@ -1336,8 +1336,8 @@
 
      Les règles sont déclarées en tête de fichier ; ici, leur application.
      À chaque saisie : les pilotes sont relus, les champs sans objet masqués
-     ET VIDÉS — un champ invisible ne laisse aucune valeur derrière lui, sans
-     quoi le moteur conclurait sur des données fantômes —, et une rubrique dont
+     ET VIDÉS, un champ invisible ne laisse aucune valeur derrière lui, sans
+     quoi le moteur conclurait sur des données fantômes,, et une rubrique dont
      tous les champs sont masqués disparaît en bloc. Un pilote sans réponse ne
      masque rien. */
   function texteDeChamp(cle) {
@@ -1472,7 +1472,7 @@
     /* Les familles-tableaux sont lues d'un bloc, non colonne par colonne. */
     TABLEAUX.forEach(function (fam) {
       var v = valeurTableau(fam);
-      /* Un tableau peut porter un nom composé — « plan.mesures » : il se range
+      /* Un tableau peut porter un nom composé, « plan.mesures » : il se range
          sous son objet, comme n'importe quel champ composé. Écrit à plat, il
          créait une clé « plan.mesures » que le moteur ne lit jamais, et sept
          mesures saisies passaient pour un plan vide. */
@@ -1528,7 +1528,7 @@
      La reconstitution descend aussi loin que la clé le demande. Écrite pour
      deux segments, elle écrasait le troisième : « negos.egalite.issue » posait
      la valeur sur « negos.egalite » et détruisait au passage « depot » et
-     « planAction » déjà posés. Le pendant du formulaire — aplatir() — descend,
+     « planAction » déjà posés. Le pendant du formulaire, aplatir(), descend,
      lui, sans limite de profondeur : les deux doivent se répondre. */
   function poser(o, cle, val) {
     var p = cle.split("."), n = o;
@@ -1542,13 +1542,13 @@
   /* ------------------------------------------------------------ restitution */
   /* ------------------------------------------------- nommer les contrôles
 
-     Le rapport portait des identifiants nus — « CSE-CTL-SST-01 » — et il
+     Le rapport portait des identifiants nus, « CSE-CTL-SST-01 », et il
      fallait demander ce qu'ils désignaient. Un lecteur ne doit pas avoir à le
      demander : il doit le lire. Chaque identifiant est donc suivi de sa
      rubrique, en clair.
 
      La table n'est pas écrite ici : elle est construite depuis les contrôles du
-     moteur, qui portent chacun la leur. Elle ne peut donc pas dériver — un
+     moteur, qui portent chacun la leur. Elle ne peut donc pas dériver, un
      contrôle renommé se renomme partout, et un contrôle ajouté est nommé sans
      que personne ait à y penser. */
   var RUBRIQUE = (function () {
@@ -1573,7 +1573,7 @@
     h3: function (i) { return "<h3>" + ech(i.t) + "</h3>"; },
     p: function (i) { return "<p>" + nommer(ech(i.t)) + "</p>"; },
     note: function (i) { return '<p class="note">' + ech(i.t) + "</p>"; },
-    puce: function (i) { return '<p class="puce">— ' + nommer(ech(i.t)) + "</p>"; },
+    puce: function (i) { return '<p class="puce">- ' + nommer(ech(i.t)) + "</p>"; },
     saut: function () { return ""; },
     enc: function (i) {
       return '<div class="enc"><p class="sh">' + ech(i.titre) + '</p><p style="margin:0">' + ech(i.t) + "</p></div>";
@@ -1592,7 +1592,7 @@
       var pas = window.ParcoursLien ? ParcoursLien.lien(i.id) : "";
       return '<div class="acte a-' + ech(i.priorite) + '"><p class="t">' + ech(i.n) + ". " + ech(i.t) +
         '<span class="chip c-' + ech(i.priorite) + '">' + ech(i.priorite) + '</span></p><p class="w">' +
-        (i.etat ? "<b>" + ech(i.etat) + "</b> — " : "") + nommer(ech(i.pourquoi)) +
+        (i.etat ? "<b>" + ech(i.etat) + "</b> : " : "") + nommer(ech(i.pourquoi)) +
         ' · ' + ech(RUBRIQUE[i.id] || "") + ' <span class="ident">' + ech(i.id) + "</span>" +
         (pas ? "<br>" + pas : "") + "</p></div>";
     },
@@ -1603,7 +1603,7 @@
     },
     acquis: function (i) {
       return '<p class="acquis"><b>&#10003;</b> ' + ech(i.t) +
-        ' <span class="note">— ' + ech(i.base) + "</span></p>";
+        ' <span class="note">- ' + ech(i.base) + "</span></p>";
     },
     table: function (i) {
       return '<div class="tab"><table><tr>' + i.head.map(function (h) { return "<th>" + ech(h) + "</th>"; }).join("") +
@@ -1618,7 +1618,7 @@
      Un formulaire long sans retour en arrière est une menace permanente : une
      fausse manœuvre efface une demi-heure de saisie et rien ne la rend. La pile
      ci-dessous garde l'état complet avant chaque geste qui détruit ou remplace
-     — tout effacer, charger l'exemple, importer un fichier, retirer une ligne —
+     - tout effacer, charger l'exemple, importer un fichier, retirer une ligne,
      et la frappe est enregistrée par paliers, pour que « revenir en arrière »
      ne défasse pas une lettre à la fois.
 
@@ -1708,7 +1708,7 @@
     var d = PILE.pop();
     restaurer(d.e);
     majAnnuler();
-    signaler("Revenu en arrière — " + d.quoi + " a été annulé.");
+    signaler("Revenu en arrière : " + d.quoi + " a été annulé.");
   }
   function signaler(texte) {
     var z = document.getElementById("message");
@@ -1731,7 +1731,7 @@
        compte de « non conforme : 0 » qui se lisait comme un satisfecit. */
     if (!Object.keys(r.f).length) {
       sortie.innerHTML = '<div class="erreur">Vous n\'avez renseigné aucune donnée : ' +
-        "il n'y a rien à auditer. Décrivez la situation — même partiellement — puis relancez. " +
+        "il n'y a rien à auditer. Décrivez la situation, même partiellement, puis relancez. " +
         'Le bouton « Charger un dossier d\'exemple » montre ce que l\'outil produit.</div>';
       sortie.scrollIntoView({ behavior: "smooth" });
       return;
@@ -1740,7 +1740,7 @@
     try { items = M.audit(r.f); }
     catch (e) {
       sortie.innerHTML = '<div class="erreur">L\'audit n\'a pas pu être produit : ' + ech(e.message) +
-        ". Rien n'a été perdu — corrigez la saisie et relancez.</div>";
+        ". Rien n'a été perdu, corrigez la saisie et relancez.</div>";
       return;
     }
     /* Les réponses qui ne concluent pas sont dites au rapport, nommément :
@@ -1755,12 +1755,12 @@
       });
       items = items.concat([
         { k: "h1", t: "Ce sur quoi l'audit ne s'est pas prononcé" },
-        { k: "p", t: clesNuancees.length + " question(s) ont reçu une réponse qui ne conclut pas — " +
+        { k: "p", t: clesNuancees.length + " question(s) ont reçu une réponse qui ne conclut pas : " +
           "« en cours » ou « autre ». Elles décrivent votre situation, mais aucun contrôle ne peut " +
           "s'y appuyer : elles ont été remises au moteur comme des données non renseignées, et les " +
           "contrôles correspondants rendent « donnée manquante ». Aucun d'eux ne rend « conforme »." },
       ]).concat(clesNuancees.map(function (c) {
-        return { k: "puce", t: (libelles[c] || c) + " — réponse : « " + nuancees[c] + " »" };
+        return { k: "puce", t: (libelles[c] || c) + ", réponse : « " + nuancees[c] + " »" };
       }));
     }
     items = items.concat(PIED_RAPPORT);
@@ -1796,7 +1796,7 @@
 
   /* Le parcours en deux temps, sous le rapport.
 
-     Il ne s'affiche que si le module l'a prévu — son paquet expose alors
+     Il ne s'affiche que si le module l'a prévu, son paquet expose alors
      « audit.parcours ». Les modules qui ne l'exposent pas encore ne voient
      rien changer : la page s'arrête au rapport, comme avant. */
   var PARCOURS = null;
@@ -1831,7 +1831,7 @@
     if (!DERNIER || !global_export()) return;
     var titre = (document.querySelector("h1") || {}).textContent || "Audit";
     /* Le nom du fichier est ramené à l'ASCII : les accents font perdre le nom
-       proposé au téléchargement — le fichier arrive alors appelé « download ».
+       proposé au téléchargement, le fichier arrive alors appelé « download ».
        Mesuré, non supposé : « essai.docx » passe, « Audit-économique.docx » non. */
     var nom = titre.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "Audit";
@@ -1894,7 +1894,7 @@
       var replie = r.fs.classList.contains("replie");
       r.etat.className = "rempli" + (fait === 0 ? " vide" : (fait === tout ? " plein" : ""));
       r.etat.textContent = fait === 0
-        ? (replie ? "rien de renseigné — toucher pour ouvrir" : "rien de renseigné")
+        ? (replie ? "rien de renseigné, toucher pour ouvrir" : "rien de renseigné")
         : (fait === tout ? "complète (" + tout + ")" : fait + " sur " + tout + " renseignés");
     });
 
@@ -1930,7 +1930,7 @@
     if (n["donnée manquante"]) bouts.push(n["donnée manquante"] + " en attente de données");
     if (!bouts.length) return;
     var e = document.getElementById("compteur");
-    e.textContent = e.textContent.split(" — ")[0] + " — en l'état : " + bouts.join(" · ");
+    e.textContent = e.textContent.split(", ")[0] + ", en l'état : " + bouts.join(" · ");
   }
 
   /* --------------------------------------------------- remplir et effacer */
@@ -1998,7 +1998,7 @@
     if (p) {
       var s = document.getElementById("s-" + cle);
       if (!s) return;
-      /* Un brouillon d'avant le menu peut porter un booléen — l'ancien champ
+      /* Un brouillon d'avant le menu peut porter un booléen, l'ancien champ
          oui/non de « conventionAJour » : il se relit comme son libellé. */
       if (typeof v === "boolean") v = v ? "oui" : "non";
       var offre = (p.valeurs || []).concat(p.autres || []);
@@ -2063,8 +2063,8 @@
 
   /* Le brouillon reste sur le poste : on ne perd pas une saisie longue.
 
-     Il est enregistré sous la forme que le moteur lit — « negos » portant un
-     objet — alors que les champs de l'écran s'appellent « negos.remuneration ».
+     Il est enregistré sous la forme que le moteur lit, « negos » portant un
+     objet, alors que les champs de l'écran s'appellent « negos.remuneration ».
      Sans remise à plat, ces champs revenaient vides après un rechargement : la
      saisie était bien conservée, mais le formulaire ne la montrait plus, et
      l'audit relancé rendait « donnée manquante » là où il concluait la veille.
@@ -2160,7 +2160,7 @@
      Sur téléphone, cinq boutons empilés cachaient le formulaire : on saisissait
      par une fente. La barre se replie donc, et ne montre que « Lancer l'audit »
      et un bouton qui déplie le reste. Le pli est l'état par défaut sur petit
-     écran, et il se rouvre d'un doigt — jamais d'action supprimée. */
+     écran, et il se rouvre d'un doigt, jamais d'action supprimée. */
   (function barreCompacte(){
     var barre = document.querySelector(".barre");
     if (!barre || document.getElementById("plus")) return;
@@ -2190,19 +2190,19 @@
 
   /* Le pied disait trois choses fausses, et la dernière était la pire.
 
-     — « — règles » : seuls deux modules sur huit comptent des « règles » ;
+    , «, règles » : seuls deux modules sur huit comptent des « règles » ;
        les six autres n'en ont pas, et le tiret s'affichait comme un trou.
-     — « 0 de détection » : le compteur s'appelle « exposition » dans six
+     - « 0 de détection » : le compteur s'appelle « exposition » dans six
        modules sur huit. La page annonçait donc zéro contrôle d'exposition
        deux lignes après en avoir affiché un. Elle se contredisait seule.
-     — « articles relus sur Légifrance le 15 août 2026 » était ÉCRIT EN DUR,
+     - « articles relus sur Légifrance le 15 août 2026 » était ÉCRIT EN DUR,
        identique sur les huit pages, quelle que soit la date réelle. Or les
        modules ont été relus les 16, 21, 23 et 24 août. Une application dont
        toute la valeur tient à ce que chaque texte est lu à la source, avec sa
        date, ne peut pas inventer cette date : elle la lit dans le manifeste,
        ou elle se tait. */
   var m = M.manifeste || {}, c = m.compteurs || {};
-  var bouts = ["Moteur " + ech(m.empreinte || "—")];
+  var bouts = ["Moteur " + ech(m.empreinte || "-")];
   if (c.regles) bouts.push(ech(c.regles) + " règles");
   if (c.controles) {
     var det = c.detection !== undefined ? c.detection : c.exposition;
@@ -2216,7 +2216,7 @@
     var MOIS = ["janvier","février","mars","avril","mai","juin","juillet",
                 "août","septembre","octobre","novembre","décembre"];
     bouts.push("textes relus à la source le " + Number(d[2]) + " " + MOIS[Number(d[1]) - 1] +
-      " " + d[0] + (relus.articles ? " — " + ech(relus.articles) + " articles, " +
+      " " + d[0] + (relus.articles ? " : " + ech(relus.articles) + " articles, " +
       ech(relus.ecarts || 0) + " écart" + ((relus.ecarts || 0) > 1 ? "s" : "") : ""));
   } else {
     bouts.push("date de relecture des textes non consignée");

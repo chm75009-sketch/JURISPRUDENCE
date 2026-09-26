@@ -3,15 +3,15 @@
 
    L'audit dit ce qui manque. Il ne doit pas s'arrêter là : quand une pièce
    n'existe pas, l'utilisateur n'a pas besoin d'un second constat, il a besoin
-   de la procédure qui la fait naître — le modèle, la consultation du comité,
+   de la procédure qui la fait naître, le modèle, la consultation du comité,
    l'inspection du travail, le greffe du conseil de prud'hommes, l'affichage,
    l'entrée en vigueur. C'est ce que déroulent les parcours guidés
    (docs/parcours.html, docs/parcours.js).
 
    Ce fichier ne fait qu'une chose : dire, pour un identifiant de contrôle,
    quel parcours le régularise. La correspondance se fait sur la RUBRIQUE de
-   l'identifiant — « SST-CTL-DUE-04 » est un contrôle du document unique, quel
-   que soit son numéro —, jamais contrôle par contrôle : un contrôle ajouté
+   l'identifiant, « SST-CTL-DUE-04 » est un contrôle du document unique, quel
+   que soit son numéro,, jamais contrôle par contrôle : un contrôle ajouté
    demain à une rubrique déjà connue trouvera son parcours sans qu'on y touche.
 
    Le module social ne passe pas par ici : chacune de ses obligations porte
@@ -38,7 +38,7 @@
 
     /* Comité social et économique. Les élections elles-mêmes ne sont pas ici :
        elles se conduisent dans Juris Expert, et le parcours d'installation le
-       dit en tête — c'est donc lui qui reçoit les contrôles d'élection, avec
+       dit en tête, c'est donc lui qui reçoit les contrôles d'élection, avec
        le renvoi qu'il porte. */
     "CSE-CTL-ELE": { p: "installation", nom: "Installer le CSE : la première réunion" },
     "CSE-CTL-MEP": { p: "installation", nom: "Installer le CSE : la première réunion" },
@@ -73,7 +73,7 @@
     "NAO-CTL-PEN": { p: "index", nom: "Publier l'index de l'égalité professionnelle" },
 
     /* Plan de sauvegarde de l'emploi. Le PSE n'a pas de parcours qui lui soit
-       propre : ce qui s'y régularise passe par le comité — consultation,
+       propre : ce qui s'y régularise passe par le comité, consultation,
        réunions, expertise. On ne renvoie donc que là où le renvoi est exact,
        et rien ailleurs : un lien qui ne mène pas à la bonne procédure vaut
        moins que pas de lien du tout. */
@@ -81,7 +81,7 @@
     "PSE-CTL-CON": { p: "reunion", nom: "Tenir une réunion du CSE" },
   };
 
-  /* L'audit économique n'a pas de parcours qui lui soit propre — la procédure
+  /* L'audit économique n'a pas de parcours qui lui soit propre, la procédure
      de licenciement économique est elle-même l'objet de l'audit. Seule sa
      consultation du comité renvoie à un parcours existant. Ses identifiants
      n'ont pas de préfixe de module (« CTL-CSE-04 » et non « ECO-CTL-CSE-04 »),
@@ -109,7 +109,7 @@
     findecontrat: "Établir les documents de fin de contrat",
   };
 
-  /* Ce que l'utilisateur a à faire, dit comme il le dirait — « faire le
+  /* Ce que l'utilisateur a à faire, dit comme il le dirait, « faire le
      règlement intérieur », non « ouvrir le parcours n° 5 ». */
   var ACTIONS = {
     ri: "Faire le règlement intérieur →",
@@ -134,7 +134,7 @@
       var r = rubrique(id);
       return (r && RUBRIQUES[r]) || null;
     },
-    /* Le lien tout fait, ou une chaîne vide — à concaténer sans condition. */
+    /* Le lien tout fait, ou une chaîne vide, à concaténer sans condition. */
     lien: function (id, classe) {
       var p = this.pour(id);
       if (!p) return "";
@@ -165,12 +165,12 @@
 
     /* La question est toujours posée : elle est le point d'entrée, et on ne
        la supprime pas parce qu'on y a déjà répondu. C'est la RÉPONSE « non »
-       qui emmène construire — voir `bascule` ci-dessous. À la réouverture, la
+       qui emmène construire, voir `bascule` ci-dessous. À la réouverture, la
        réponse est là, et c'est le bouton de tête de la barre d'actions, collé
        en bas de l'écran, qui mène à la procédure.
 
        Essayé le 31 août 2026 et retiré aussitôt : rediriger dès le chargement.
-       L'audit ne posait alors plus aucune question — on ouvrait « discipline »
+       L'audit ne posait alors plus aucune question, on ouvrait « discipline »
        et on se retrouvait dans la procédure sans avoir rien demandé. */
     bascule: function (ev, table) {
       if (!ev || !ev.target) return false;
@@ -187,8 +187,8 @@
       if (typeof b.si === "function" && !b.si()) return false;
       /* « faire=1 » : on n'ouvre pas la procédure pour la lire, on l'ouvre
          pour l'écrire. Le parcours produit aussitôt le document de sa
-         première étape qui en porte un — le règlement intérieur, le document
-         unique — et l'utilisateur atterrit dedans, prêt à compléter.
+         première étape qui en porte un, le règlement intérieur, le document
+         unique, et l'utilisateur atterrit dedans, prêt à compléter.
          Demande du 31 août 2026 : « il ne doit pas parler, il doit faire ». */
       location.href = "parcours.html?p=" + b.p + "&faire=1";
       return true;

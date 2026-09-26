@@ -1,4 +1,4 @@
-/* Le parcours du client, en deux temps — l'écran.
+/* Le parcours du client, en deux temps, l'écran.
 
    Le moteur (moteur/commun/parcours-deux-temps.js, embarqué dans chaque
    paquet) dit ce qui manque et ce qui n'est que déclaré. Ce fichier le montre,
@@ -6,7 +6,7 @@
 
    L'ordre est la règle, et il est tenu par la page : le second temps reste
    fermé tant que le premier n'est pas achevé. Ce n'est pas une préférence de
-   présentation — c'est la consigne, et elle a une raison : on ne vérifie pas
+   présentation, c'est la consigne, et elle a une raison : on ne vérifie pas
    les déclarations de quelqu'un pendant qu'il a encore des manquements ouverts.
 
    Un seul fichier pour les huit modules. Il se monte tout seul dès que le
@@ -63,14 +63,14 @@
 
   Parcours.prototype.enTete = function (p) {
     return '<div class="pc-tete">' +
-      "<h2>Ce que vous en faites — en deux temps</h2>" +
+      "<h2>Ce que vous en faites, en deux temps</h2>" +
       "<p>D'abord ce qui manque : on le corrige, et on vérifie chaque correction. " +
       "Ensuite seulement, ce que vous déclarez avoir : on le contrôle pièce par pièce. " +
-      "<b>Un « oui » n'est pas une preuve</b> — rien ne passe pour acquis sans être vérifié.</p>" +
+      "<b>Un « oui » n'est pas une preuve</b>, rien ne passe pour acquis sans être vérifié.</p>" +
       '<div class="pc-compteurs">' +
       '<div><strong>' + p.compteurs.manquants + "</strong><span>manquants</span></div>" +
-      '<div><strong>' + p.compteurs.declares + "</strong><span>déclarés — à vérifier</span></div>" +
-      '<div><strong>' + p.compteurs.enRegle + "</strong><span>en règle — vérifiés</span></div>" +
+      '<div><strong>' + p.compteurs.declares + "</strong><span>déclarés, à vérifier</span></div>" +
+      '<div><strong>' + p.compteurs.enRegle + "</strong><span>en règle, vérifiés</span></div>" +
       "</div></div>";
   };
 
@@ -85,8 +85,8 @@
 
     if (!p.tempsA.points.length && !p.tempsA.refusesDuSecond.length) {
       h += '<p class="pc-vide">Aucun manquement constaté en l\'état de vos réponses. ' +
-        "Cela ne vaut pas quitus : les points sur lesquels l'audit n'a pas conclu — " +
-        "données manquantes, réponses « en cours » — restent à renseigner au questionnaire.</p>";
+        "Cela ne vaut pas quitus : les points sur lesquels l'audit n'a pas conclu : " +
+        "données manquantes, réponses « en cours », restent à renseigner au questionnaire.</p>";
     } else {
       h += '<ol class="pc-liste">';
       p.tempsA.points.forEach(function (pt, i) {
@@ -101,7 +101,7 @@
         "<p>Ces obligations étaient déclarées en place. La vérification ne les a pas confirmées : " +
         "elles redeviennent des manquements.</p><ul>";
       p.tempsA.refusesDuSecond.forEach(function (pt) {
-        h += "<li><b>" + ech(pt.objet) + "</b> — " + ech(pt.verdict.motif) + "</li>";
+        h += "<li><b>" + ech(pt.objet) + "</b> : " + ech(pt.verdict.motif) + "</li>";
       });
       h += "</ul></div>";
     }
@@ -120,8 +120,8 @@
      entier que l'application rédige. L'employeur refermait sans savoir ce qui
      l'attendait à l'intérieur.
 
-     La ligne dit donc désormais combien d'étapes la fiche contient, et — c'est
-     le point — que le document est écrit pour lui. C'est la seule information
+     La ligne dit donc désormais combien d'étapes la fiche contient, et, c'est
+     le point, que le document est écrit pour lui. C'est la seule information
      qui décide s'il ouvre ou non. */
   function annonce(pt) {
     var l = [];
@@ -156,8 +156,8 @@
 
        Dire « le document à produire : règlement intérieur » laisse l'employeur
        devant une page blanche. Quand l'application sait écrire ce document,
-       elle l'écrit — au nom de l'entreprise, avec ses courriers et son
-       calendrier — et le bouton le donne. Le reste des points garde la mention
+       elle l'écrit, au nom de l'entreprise, avec ses courriers et son
+       calendrier, et le bouton le donne. Le reste des points garde la mention
        du document attendu, faute de mieux, et c'est ce qui reste à combler. */
     var gen = window.DocumentsProduits && window.DocumentsProduits.pour(pt.id);
     if (gen) {
@@ -167,7 +167,7 @@
         "Produire le document</button></div>";
     } else if (pt.document) {
       h += '<p class="pc-doc"><b>Le document à produire.</b> ' + ech(pt.document) +
-        ' <i class="pc-apres">— l\'application ne le rédige pas encore.</i></p>';
+        ' <i class="pc-apres">- l\'application ne le rédige pas encore.</i></p>';
     }
 
     h += "<h5>La procédure, dans l'ordre</h5><ol class=\"pc-etapes\">";
@@ -177,7 +177,7 @@
     h += '<p class="pc-fondement">Fondement : ' + ech(pt.fondement.join(" · ")) + "</p>";
 
     h += '<div class="pc-declare"><label><input type="checkbox" data-fait="' + ech(pt.id) + '"' +
-      (pt.fait ? " checked" : "") + "> C'est fait — passer à la vérification</label></div>";
+      (pt.fait ? " checked" : "") + "> C'est fait, passer à la vérification</label></div>";
 
     if (pt.fait) {
       h += '<div class="pc-verif"><h5>La vérification de la correction</h5>' +
@@ -203,7 +203,7 @@
     if (refusees.length)
       return '<div class="pc-verdict pc-ref"><b>Refusé</b> ' +
         "La correction n'est pas établie : " +
-        ech(refusees.map(function (v) { return "« " + v.question + " » — attendu : " + v.attendu; }).join(" ; ")) +
+        ech(refusees.map(function (v) { return "« " + v.question + " », attendu : " + v.attendu; }).join(" ; ")) +
         ". Reprenez la procédure ci-dessus.</div>";
     if (manquantes.length)
       return '<div class="pc-verdict pc-att"><b>Ne conclut pas</b> ' +
@@ -221,7 +221,7 @@
     var h = '<section class="pc-temps' + (p.tempsB.ouvert ? "" : " pc-ferme") + '" id="pc-temps-b">' +
       '<div class="pc-bandeau"><span>Second temps</span><h3>Ce que vous dites avoir fait</h3>' +
       "<p>Les obligations que l'audit a retenues sur votre seule déclaration. Même procédure, " +
-      "même logique : on liste, on contrôle avec la grille du texte, on valide — ou on refuse, " +
+      "même logique : on liste, on contrôle avec la grille du texte, on valide, ou on refuse, " +
       "et le point retourne au premier temps.</p></div>";
 
     if (!p.tempsB.ouvert) {
@@ -294,13 +294,13 @@
       h += '<div class="pc-q"><p>' + ech(v.question) + "</p>" +
         '<p class="pc-attendu">Attendu : ' + ech(v.attendu) + "</p>" +
         '<select data-bac="' + ech(bac) + '" data-point="' + ech(id) + '" data-cle="' + ech(v.cle) + '">' +
-        '<option value="">— répondre —</option>' +
+        '<option value="">- répondre,</option>' +
         REPONSES.map(function (r) {
           return '<option value="' + ech(r) + '"' + (val === r ? " selected" : "") + ">" + ech(r) + "</option>";
         }).join("") +
         "</select>" +
         '<input type="text" class="pc-detail" data-bac="' + ech(bac) + '" data-point="' + ech(id) +
-        '" data-cle="' + ech(v.cle) + '__detail" placeholder="Date, référence, pièce — ce qui l\'établit" value="' +
+        '" data-cle="' + ech(v.cle) + '__detail" placeholder="Date, référence, pièce, ce qui l\'établit" value="' +
         ech(reponses[v.cle + "__detail"] || "") + '">' +
         "</div>";
     });
@@ -354,7 +354,7 @@
   };
 
   /* Produire le document d'un point. Il est écrit avec ce que l'application
-     sait déjà de l'entreprise — sa fiche —, et rien d'autre n'est demandé :
+     sait déjà de l'entreprise, sa fiche, et rien d'autre n'est demandé :
      ce qui manque sort entre crochets plutôt que d'ouvrir un formulaire de
      plus avant d'avoir rien donné. */
   Parcours.prototype.produire = function (id) {
@@ -381,7 +381,7 @@
     var l = [];
 
     if (temps === "A") {
-      l.push("COMPTE RENDU — PREMIER TEMPS : CE QUI N'A PAS ÉTÉ FAIT");
+      l.push("COMPTE RENDU, PREMIER TEMPS : CE QUI N'A PAS ÉTÉ FAIT");
       l.push("");
       l.push(nom + ". " + p.tempsA.points.length + " manquement(s) relevé(s) par l'audit, " +
         "classés du plus grave au moins grave. Chacun est repris ci-dessous avec l'acte à " +
@@ -389,33 +389,33 @@
       l.push("");
       p.tempsA.points.forEach(function (pt, i) {
         l.push((i + 1) + ". " + pt.objet.toUpperCase());
-        l.push("Constat de l'audit — " + pt.constat);
-        l.push("Fondement — " + pt.fondement.join(" · "));
-        l.push("Ce qu'il faut faire — " + pt.quoiFaire);
-        l.push("Ce que l'inaction expose — " + pt.risque);
-        l.push("Délai à prévoir — " + pt.delai);
-        if (pt.document) l.push("Document à produire — " + pt.document);
+        l.push("Constat de l'audit : " + pt.constat);
+        l.push("Fondement : " + pt.fondement.join(" · "));
+        l.push("Ce qu'il faut faire : " + pt.quoiFaire);
+        l.push("Ce que l'inaction expose : " + pt.risque);
+        l.push("Délai à prévoir : " + pt.delai);
+        if (pt.document) l.push("Document à produire : " + pt.document);
         l.push("Procédure :");
         pt.etapes.forEach(function (e, k) { l.push("   " + (k + 1) + ") " + e); });
-        l.push("État — " + (pt.fait ? "déclaré corrigé" : "à faire"));
+        l.push("État : " + (pt.fait ? "déclaré corrigé" : "à faire"));
         l.push("");
       });
       if (p.tempsA.refusesDuSecond.length) {
         l.push("REVENUS DU SECOND TEMPS");
         p.tempsA.refusesDuSecond.forEach(function (pt) {
-          l.push("- " + pt.objet + " — " + pt.verdict.motif);
+          l.push("- " + pt.objet + " : " + pt.verdict.motif);
         });
         l.push("");
       }
       /* Le second temps peut être ouvert alors que le premier ne l'est plus :
          c'est le cas quand un point en revient refusé. Ne pas annoncer alors
-         qu'il « ne s'ouvrira pas avant » — il est déjà ouvert. */
+         qu'il « ne s'ouvrira pas avant », il est déjà ouvert. */
       l.push(p.tempsA.acheve
         ? "Le premier temps est achevé : tous les manquements relevés sont déclarés corrigés."
         : "Le premier temps n'est pas achevé : " + p.tempsA.restants + " point(s) restent ouverts." +
           (p.tempsB.ouvert ? "" : " Le second temps ne s'ouvrira pas avant."));
     } else {
-      l.push("COMPTE RENDU — SECOND TEMPS : CE QUI EST DÉCLARÉ FAIT");
+      l.push("COMPTE RENDU, SECOND TEMPS : CE QUI EST DÉCLARÉ FAIT");
       l.push("");
       l.push(nom + ". " + p.tempsB.points.length + " obligation(s) retenue(s) par l'audit sur la " +
         "seule déclaration du client. Chacune a été reprise avec la grille du texte. " +
@@ -424,8 +424,8 @@
       l.push("");
       p.tempsB.points.forEach(function (pt, i) {
         l.push((i + 1) + ". " + pt.objet.toUpperCase());
-        l.push("Fondement — " + pt.fondement.join(" · "));
-        l.push("Déclaration — " + pt.declare);
+        l.push("Fondement : " + pt.fondement.join(" · "));
+        l.push("Déclaration : " + pt.declare);
         l.push("Grille d'analyse :");
         pt.verifs.forEach(function (v) {
           var rep = pt.reponses[v.cle] || "sans réponse";
@@ -433,7 +433,7 @@
           l.push("   - " + v.question + " → « " + rep + " »" + (det ? " (" + det + ")" : ""));
           l.push("     attendu : " + v.attendu);
         });
-        l.push("Verdict — " + pt.verdict.issue + ". " + pt.verdict.motif);
+        l.push("Verdict : " + pt.verdict.issue + ". " + pt.verdict.motif);
         l.push("");
       });
       if (p.tempsB.refuses)

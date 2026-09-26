@@ -1,23 +1,23 @@
-/* Assistant Claude — panneau de conversation présent sur toutes les pages.
+/* Assistant Claude, panneau de conversation présent sur toutes les pages.
 
    Une passerelle directe entre la juriste et Claude, avec le contexte de son
    travail : la page courante et son brouillon sont transmis au modèle, qui
-   dispose en outre de deux outils — lire un article du code du travail via le
+   dispose en outre de deux outils, lire un article du code du travail via le
    relais Légifrance, chercher dans Judilibre avec la clé déjà enregistrée.
 
    C'est l'APPLICATION qui porte la connexion à Claude, sur le modèle du
    relais Légifrance : la page appelle la fonction Netlify « assistant », qui
    détient la clé API Anthropic (variable d'environnement, jamais dans le code)
    et retransmet le flux SSE tel quel. Aucune clé n'est demandée à
-   l'utilisateur. En second recours seulement — relais non activé — une clé
+   l'utilisateur. En second recours seulement, relais non activé, une clé
    personnelle peut être saisie : elle vit alors dans CE navigateur
    (localStorage), n'est envoyée qu'à api.anthropic.com (accès direct officiel,
    en-tête anthropic-dangerous-direct-browser-access) et jamais journalisée.
 
    Règles non négociables :
-   — toute recherche Judilibre « relaxed » est écartée : une requête élargie
+   - toute recherche Judilibre « relaxed » est écartée : une requête élargie
      ramène des décisions sans rapport avec la demande (règle absolue du dépôt) ;
-   — le contenu d'un article fait foi sur son numéro : le relais Légifrance peut
+   - le contenu d'un article fait foi sur son numéro : le relais Légifrance peut
      servir un homonyme d'une autre partie du code.
 
    Le panneau exige la connexion ; le reste de l'application marche hors ligne. */
@@ -64,7 +64,7 @@
   /* --------------------------- Rôle et outils ----------------------------- */
 
   /* Le système est STABLE : rien de daté, rien de propre à la page. Le contexte
-     volatil (page, brouillon) vient après, dans le premier message — c'est ce
+     volatil (page, brouillon) vient après, dans le premier message, c'est ce
      qui permet au cache de préfixe de servir. */
   var SYSTEME =
     "Tu es l'assistant intégré de l'application Jurisprudence, au service d'une " +
@@ -93,7 +93,7 @@
         "Lit un article du code du travail sur Légifrance (relais de l'application) " +
         "et renvoie son texte avec son identifiant de version LEGIARTI. " +
         "ATTENTION : le relais peut servir un article homonyme d'une autre partie du " +
-        "code portant le même numéro — c'est le CONTENU qui fait foi, pas le numéro : " +
+        "code portant le même numéro, c'est le CONTENU qui fait foi, pas le numéro : " +
         "vérifie que le texte rendu parle bien du sujet cherché, et en cas de doute " +
         "signale-le au lieu de citer.",
       input_schema: {
@@ -160,7 +160,7 @@
   }
 
   /* Mise en forme minimale du texte de l'assistant : gras, code, sauts de
-     ligne. Tout est échappé d'abord — le modèle n'écrit jamais de HTML brut. */
+     ligne. Tout est échappé d'abord, le modèle n'écrit jamais de HTML brut. */
   function rendreTexte(s) {
     var t = echap(s);
     t = t.replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>");
@@ -211,11 +211,11 @@
   }
 
   /* Le contexte volatil : page courante et brouillons. Construit au début de
-     chaque conversation, placé APRÈS le système stable — bon pour le cache. */
+     chaque conversation, placé APRÈS le système stable, bon pour le cache. */
   function construireContexte() {
     var page = location.pathname.split("/").pop() || "index.html";
     var ctx = "Contexte de travail (généré par l'application, non écrit par l'utilisatrice).\n" +
-      "Page courante : " + page + " — " + (document.title || "");
+      "Page courante : " + page + " : " + (document.title || "");
     var cleBrouillon = window.__CLE ||
       (page.indexOf("agenda") === 0 ? "agenda-brouillon" : null);
     if (cleBrouillon) ctx += lireBrouillon(cleBrouillon, "Brouillon de la page");
@@ -233,7 +233,7 @@
     });
   }
 
-  /* Chaque exécuteur renvoie { content: string, is_error?: true } — jamais une
+  /* Chaque exécuteur renvoie { content: string, is_error?: true }, jamais une
      exception : une panne d'outil est un tool_result d'erreur, pas un plantage. */
   function outilArticle(entree) {
     var numero = String(entree && entree.numero || "").trim();
@@ -253,11 +253,11 @@
           return { content: "Article " + numero + " introuvable sur Légifrance" +
             (corps.date ? " à la date " + corps.date : "") +
             " : texte abrogé, renuméroté, ou numéro erroné.", is_error: true };
-        var tete = "Article " + (d.num || numero) + " — " + (d.code || "Code du travail") +
+        var tete = "Article " + (d.num || numero) + " : " + (d.code || "Code du travail") +
           "\nIdentifiant de version : " + (d.id || "inconnu") +
           (d.etat ? "\nÉtat : " + d.etat : "") +
           (d.elargi ? "\nATTENTION : introuvable dans le code du travail sous ce numéro ; " +
-            "l'article rendu vient d'un AUTRE code — ne le citer comme code du travail sous aucun prétexte." : "") +
+            "l'article rendu vient d'un AUTRE code, ne le citer comme code du travail sous aucun prétexte." : "") +
           "\nRappel : le relais peut servir un homonyme d'une autre partie du code ; " +
           "le contenu fait foi.";
         return { content: tete + "\n\n" + tronquer(d.texte || "(texte indisponible)", 14000) };
@@ -319,9 +319,9 @@
       if (!rep.ok) return { content: "Judilibre en erreur (HTTP " + rep.status + ").", is_error: true };
       return rep.json().then(function (d) {
         /* Règle absolue : une réponse élargie ramène des décisions sans rapport
-           avec la recherche — elle est écartée, jamais exploitée. */
+           avec la recherche, elle est écartée, jamais exploitée. */
         if (d && d.relaxed) return {
-          content: "Recherche élargie par l'API (relaxed) : résultats écartés — ils ne " +
+          content: "Recherche élargie par l'API (relaxed) : résultats écartés, ils ne " +
             "correspondent pas exactement à la requête. Reformuler avec des termes plus " +
             "proches du vocabulaire des juges, ou une expression plus courte.",
           is_error: true
@@ -332,7 +332,7 @@
           var jur = r.jurisdiction === "cc" ? "Cour de cassation" : (r.jurisdiction || "");
           return (i + 1) + ". " + [
             r.decision_date || "date inconnue",
-            [jur, r.chamber || ""].filter(Boolean).join(" — "),
+            [jur, r.chamber || ""].filter(Boolean).join(" : "),
             r.number ? "n° " + r.number : "",
             r.solution || ""
           ].filter(Boolean).join(" · ") +
@@ -340,7 +340,7 @@
             (r.id ? "\n   id Judilibre : " + r.id : "");
         });
         return {
-          content: "Judilibre — " + (d.total || resultats.length) + " décision(s), recherche exacte " +
+          content: "Judilibre : " + (d.total || resultats.length) + " décision(s), recherche exacte " +
             "(non élargie), " + resultats.length + " affichée(s) :\n" + lignes.join("\n")
         };
       });
@@ -483,7 +483,7 @@
         if (b.type === "text" && b.text) contenu.push({ type: "text", text: b.text });
         else if (b.type === "tool_use") {
           var entree = {};
-          /* L'entrée d'outil se parse toujours en JSON — jamais de lecture de la
+          /* L'entrée d'outil se parse toujours en JSON, jamais de lecture de la
              chaîne brute (l'échappement peut varier d'un modèle à l'autre). */
           try { entree = b.json ? JSON.parse(b.json) : {}; } catch (e) { entree = {}; }
           contenu.push({ type: "tool_use", id: b.id, name: b.name, input: entree });
@@ -530,7 +530,7 @@
         if (r.stop_reason !== "tool_use") return;   // end_turn : conversation rendue
 
         /* Exécuter TOUS les appels d'outils, puis renvoyer TOUS les résultats
-           dans UN SEUL message user — jamais éclatés. */
+           dans UN SEUL message user, jamais éclatés. */
         var appels = r.contenu.filter(function (b) { return b.type === "tool_use"; });
         if (!appels.length) return;
         return Promise.all(appels.map(function (a) {
@@ -634,7 +634,7 @@
     ui.fil.appendChild(d);
     defiler();
     return function (echec) {
-      d.textContent = libelle + (echec ? " — échec (transmis à l'assistant)" : " — reçu");
+      d.textContent = libelle + (echec ? ", échec (transmis à l'assistant)" : ", reçu");
     };
   }
 
@@ -670,7 +670,7 @@
         break;
       case "RESEAU":
         texte = "Connexion impossible à api.anthropic.com. L'assistant exige la connexion " +
-          "— le reste de l'application fonctionne hors ligne, pas ce panneau.";
+          "- le reste de l'application fonctionne hors ligne, pas ce panneau.";
         bouton = { libelle: "Réessayer", action: reessayer };
         break;
       default:
@@ -735,7 +735,7 @@
 
   /* --------------------------- Écran de la clé ----------------------------- */
 
-  /* L'écran de clé PERSONNELLE — un repli, jamais un préalable : par défaut,
+  /* L'écran de clé PERSONNELLE, un repli, jamais un préalable : par défaut,
      c'est le relais de l'application qui porte la connexion. */
   function montrerEcranCle(remplacement) {
     ui.fil.style.display = "none";
@@ -744,7 +744,7 @@
     ui.ecranCle.style.display = "block";
     ui.ecranCle.innerHTML =
       "<h2>" + (remplacement ? "Ressaisir la clé personnelle" : "Clé API personnelle (recours)") + "</h2>" +
-      "<p>Par défaut, l'assistant passe par la connexion de l'application — aucune clé " +
+      "<p>Par défaut, l'assistant passe par la connexion de l'application, aucune clé " +
       "à fournir. Cet écran sert de recours si cette connexion n'est pas activée&nbsp;: " +
       "avec une clé personnelle, le navigateur appelle alors l'API Anthropic directement. " +
       "La clé reste dans ce navigateur (stockage local), n'est envoyée qu'à " +

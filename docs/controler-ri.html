@@ -505,7 +505,7 @@
   var ARTICLES = [];
   function repererArticles(texte) {
     ARTICLES = [];
-    var re = /(?:^|\n)[ \t]*(?:(ARTICLE|Article|ARTICLE|Art\.?|ART\.?)[ \t]*(\d+(?:[.\-]\d+)*)|(\d+(?:\.\d+)+)[ \t]*[-–.)]?)[ \t]*/g;
+    var re = /(?:^|\n)[ \t]*(?:(ARTICLE|Article|ARTICLE|Art\.?|ART\.?)[ \t]*(\d+(?:[.\-]\d+)*)|(\d+(?:\.\d+)+)[ \t]*[--.)]?)[ \t]*/g;
     var m;
     while ((m = re.exec(texte)) !== null) {
       var num = m[2] || m[3];

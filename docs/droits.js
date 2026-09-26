@@ -1,4 +1,4 @@
-/* Équipe, droits et journal — le point unique d'autorisation de l'application.
+/* Équipe, droits et journal, le point unique d'autorisation de l'application.
 
    POURQUOI CE FICHIER EXISTE. Jusqu'ici l'application n'avait qu'un usager :
    celui qui ouvrait le navigateur. Une juriste qui travaille avec une équipe a
@@ -17,20 +17,20 @@
    « equipe-utilisateurs ». Les deux fonctions ci-dessus s'appuient sur un
    FOURNISSEUR interchangeable : aujourd'hui le fournisseur local, qui range
    tout dans le stockage du navigateur ; demain un fournisseur distant
-   (Supabase, fonction Netlify) qu'il suffira de brancher — `Droits.brancher(f)`
-   — sans toucher une seule page. Le contrat du fournisseur est décrit dans
+   (Supabase, fonction Netlify) qu'il suffira de brancher, `Droits.brancher(f)`
+   - sans toucher une seule page. Le contrat du fournisseur est décrit dans
    DROITS.md, dans le dossier docs/.
 
    CE QUE CES DROITS SONT, ET CE QU'ILS NE SONT PAS. Tant que l'application
    fonctionne sans serveur, ces droits sont ORGANISATIONNELS et non
    SÉCURITAIRES : ils répartissent le travail dans une équipe de bonne foi.
-   Quiconque a accès au poste peut les contourner — la console du navigateur
+   Quiconque a accès au poste peut les contourner, la console du navigateur
    suffit. Cette phrase est affichée en clair sur la page d'administration, et
    elle n'est pas une précaution de style : c'est la vérité du dispositif.
 
    LES CODES D'ACCÈS NE SONT PAS STOCKÉS EN CLAIR. Chaque utilisateur porte un
    sel tiré au hasard ; ce qui est enregistré est le condensat SHA-256 du sel et
-   du code. Cela protège de la lecture accidentelle — un collègue qui ouvre le
+   du code. Cela protège de la lecture accidentelle, un collègue qui ouvre le
    stockage local ne lit pas les codes de l'équipe. Cela ne protège pas d'un
    utilisateur déterminé : le condensat est sur le poste, et rien n'empêche de
    l'attaquer hors ligne ou de le remplacer.
@@ -60,14 +60,14 @@
      peut être réécrit sans conséquence. */
   var MODULES = [
     { id: "recherche",        nom: "Recherche de jurisprudence",        page: "recherche.html" },
-    { id: "audit-social",     nom: "Audit social — le point complet",   page: "audit-social.html" },
-    { id: "audit-economique", nom: "Audit — licenciement économique",   page: "audit.html" },
-    { id: "audit-cse",        nom: "Audit — comité social et économique", page: "audit-cse.html" },
-    { id: "audit-pse",        nom: "Audit — plan de sauvegarde de l'emploi", page: "audit-pse.html" },
-    { id: "audit-bdese",      nom: "Audit — base de données (BDESE)",   page: "audit-bdese.html" },
-    { id: "audit-nao",        nom: "Audit — négociation obligatoire",   page: "audit-nao.html" },
-    { id: "audit-sst",        nom: "Audit — santé-sécurité (SST)",      page: "audit-sst.html" },
-    { id: "audit-discipline", nom: "Audit — discipline et règlement intérieur", page: "audit-discipline.html" },
+    { id: "audit-social",     nom: "Audit social, le point complet",   page: "audit-social.html" },
+    { id: "audit-economique", nom: "Audit, licenciement économique",   page: "audit.html" },
+    { id: "audit-cse",        nom: "Audit, comité social et économique", page: "audit-cse.html" },
+    { id: "audit-pse",        nom: "Audit, plan de sauvegarde de l'emploi", page: "audit-pse.html" },
+    { id: "audit-bdese",      nom: "Audit, base de données (BDESE)",   page: "audit-bdese.html" },
+    { id: "audit-nao",        nom: "Audit, négociation obligatoire",   page: "audit-nao.html" },
+    { id: "audit-sst",        nom: "Audit, santé-sécurité (SST)",      page: "audit-sst.html" },
+    { id: "audit-discipline", nom: "Audit, discipline et règlement intérieur", page: "audit-discipline.html" },
     { id: "parcours",         nom: "Parcours guidés",                   page: "parcours.html" },
     { id: "documents",        nom: "Documents",                         page: "documents.html" },
     { id: "agenda",           nom: "Agenda social",                     page: "agenda.html" },
@@ -122,7 +122,7 @@
   };
 
   /* =====================================================================
-     2. OUTILS — condensat, échappement, identifiants
+     2. OUTILS, condensat, échappement, identifiants
      ===================================================================== */
 
   function e(s) {
@@ -157,7 +157,7 @@
      L'API Web Crypto n'existe que dans un contexte sécurisé : https, ou
      localhost. L'application s'ouvre aussi depuis un fichier local, où
      crypto.subtle est absent. Un condensat qui changerait selon le mode
-     d'ouverture rendrait les codes invérifiables d'un jour à l'autre — c'est
+     d'ouverture rendrait les codes invérifiables d'un jour à l'autre, c'est
      pourquoi la même implémentation sert partout. Elle rend exactement ce que
      rend Web Crypto : les deux ont été comparées sur les vecteurs d'essai. */
   var K256 = [
@@ -223,7 +223,7 @@
      3. LE FOURNISSEUR LOCAL
 
      Il implémente le contrat décrit dans DROITS.md. Toutes ses méthodes
-     rendent une promesse — y compris celles qui, ici, répondent
+     rendent une promesse, y compris celles qui, ici, répondent
      instantanément : le jour où elles passeront par le réseau, rien ne
      changera pour l'appelant.
 
@@ -330,7 +330,7 @@
   }
 
   /* =====================================================================
-     4. LE NOYAU — état, hydratation, abonnements
+     4. LE NOYAU, état, hydratation, abonnements
      ===================================================================== */
 
   var fournisseur = FournisseurLocal();
@@ -357,7 +357,7 @@
   function hydrater() {
     /* Le fournisseur local répond sans attendre : on prend sa photographie
        synchrone pour que `peut()` soit utilisable dès la lecture du script.
-       Un fournisseur distant ne l'offrira pas — la promesse ci-dessous fait
+       Un fournisseur distant ne l'offrira pas, la promesse ci-dessous fait
        alors seule le travail, et `quandPret` sert à l'attendre. */
     if (typeof fournisseur.instantane === "function") {
       try {
@@ -410,13 +410,13 @@
 
   function modeOuvert() { return etat.utilisateurs.length === 0; }
 
-  /* peut(module, action) — la seule question que les pages posent.
+  /* peut(module, action), la seule question que les pages posent.
 
      Elle répond sans attendre. Trois cas, dans cet ordre :
-       — aucun utilisateur n'existe : mode ouvert, tout est permis ;
-       — personne n'est connecté : rien n'est permis (l'écran de connexion
+       - aucun utilisateur n'existe : mode ouvert, tout est permis ;
+       - personne n'est connecté : rien n'est permis (l'écran de connexion
          est affiché par ailleurs) ;
-       — un utilisateur est connecté : administrateur, tout est permis ;
+       - un utilisateur est connecté : administrateur, tout est permis ;
          sinon, la case cochée fait foi.                                    */
   function peut(module, action) {
     if (modeOuvert()) return true;
@@ -429,7 +429,7 @@
     return d[action] === true;
   }
 
-  /* peutAdmin(action) — les gestes qui portent sur l'équipe elle-même. */
+  /* peutAdmin(action), les gestes qui portent sur l'équipe elle-même. */
   function peutAdmin(action) {
     if (modeOuvert()) return true;
     var u = utilisateurCourant();
@@ -525,7 +525,7 @@
   }
 
   /* =====================================================================
-     7. LES UTILISATEURS — création, modification, suppression, connexion
+     7. LES UTILISATEURS, création, modification, suppression, connexion
      ===================================================================== */
 
   function droitsVides() {
@@ -674,7 +674,7 @@
   }
 
   /* =====================================================================
-     8. LA PHOTO — choisie sur le poste, redimensionnée, encodée
+     8. LA PHOTO, choisie sur le poste, redimensionnée, encodée
      ===================================================================== */
 
   function photoDepuisFichier(fichier) {
@@ -719,12 +719,12 @@
      Aucune page ne teste un droit : c'est ici, et ici seulement, que le
      refus se traduit à l'écran. Trois applications générales :
 
-       — CONSULTER  : la page entière est remplacée par un refus lisible ;
-       — SAISIR     : les champs de la page passent en lecture seule ;
-       — EXPORTER   : l'impression et les téléchargements sont interrompus.
+       - CONSULTER  : la page entière est remplacée par un refus lisible ;
+       - SAISIR     : les champs de la page passent en lecture seule ;
+       - EXPORTER   : l'impression et les téléchargements sont interrompus.
 
-     PRODUIRE se rattache pour l'instant aux deux précédentes — un document
-     se saisit puis s'imprime — et à l'attribut `data-droit="produire"` que
+     PRODUIRE se rattache pour l'instant aux deux précédentes, un document
+     se saisit puis s'imprime, et à l'attribut `data-droit="produire"` que
      les pages pourront porter le jour où elles seront retouchées. Ce point
      est écrit tel quel dans DROITS.md : mieux vaut dire ce qui n'est pas
      encore intercepté que de le laisser croire.
@@ -993,7 +993,7 @@
     b.id = "droits-badge";
     b.setAttribute("data-droits-ui", "1");
     b.innerHTML = vignette(u, "dr-mini") +
-      '<span class="dr-b-nom" title="' + e(u.nom + (u.fonction ? " — " + u.fonction : "")) + '">' + e(u.nom) + "</span>" +
+      '<span class="dr-b-nom" title="' + e(u.nom + (u.fonction ? " : " + u.fonction : "")) + '">' + e(u.nom) + "</span>" +
       '<button type="button" id="droits-btn-changer" title="Se déconnecter et choisir un autre utilisateur">Changer</button>';
     document.body.appendChild(b);
     b.querySelector("#droits-btn-changer").addEventListener("click", function () {
@@ -1154,7 +1154,7 @@
         gelActif = true;
         gelerSaisie();
         surveillerGel();
-        afficherBandeau("Lecture seule — " + u.nom + " peut consulter ce module, non le modifier. " +
+        afficherBandeau("Lecture seule : " + u.nom + " peut consulter ce module, non le modifier. " +
           "L'administrateur de l'équipe peut ouvrir ce droit.");
       }
     }
@@ -1246,7 +1246,7 @@
     droitsComplets: droitsComplets,
     nomModule: nomModule,
 
-    /* le fournisseur — le jour de la bascule, une seule ligne change */
+    /* le fournisseur, le jour de la bascule, une seule ligne change */
     fournisseur: function () { return fournisseur; },
     brancher: function (f) {
       fournisseur = f;

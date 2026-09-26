@@ -1,11 +1,11 @@
-/* La fiche client — le tout premier écran du parcours, et la seule source du
+/* La fiche client, le tout premier écran du parcours, et la seule source du
    profil d'entreprise partagé par toutes les pages.
 
    POURQUOI CE FICHIER EXISTE. Trois pages écrivaient ou lisaient la clé
    « profil-entreprise » avec chacune sa liste de champs : les parcours
    guidés l'écrivaient, le générateur de documents et l'audit social la
    lisaient, l'assistant la joignait à son contexte. Personne ne demandait
-   l'adresse, le SIRET, le courriel, le responsable ni le téléphone — les
+   l'adresse, le SIRET, le courriel, le responsable ni le téléphone, les
    données qui identifient le client et permettent d'orienter l'application
    vers une interface adaptée à sa taille, à son secteur et à sa convention.
 
@@ -58,7 +58,7 @@
   var DEFAUT = {};
 
   /* Mots probables de l'intitulé d'une convention collective pour chaque
-     secteur — pas une correspondance officielle : une convention s'identifie
+     secteur, pas une correspondance officielle : une convention s'identifie
      par l'activité réelle de l'entreprise (le champ le rappelle), jamais par
      ce menu. Sert uniquement à faire remonter des candidats plausibles en
      tête d'une liste de 328, avant que l'utilisateur ne cherche par lui-même. */
@@ -77,7 +77,7 @@
   };
 
   /* La fiche d'inscription : ce que l'on demande au client avant tout audit.
-     L'ordre est celui d'une fiche que l'on remplit — l'entreprise, puis qui
+     L'ordre est celui d'une fiche que l'on remplit, l'entreprise, puis qui
      la représente, puis ce qui commande les obligations. */
   var IDENTITE = [
     { c: "denomination", nom: "Dénomination sociale", t: "text", pleine: true,
@@ -94,7 +94,7 @@
       aide: "Sert de coordonnée sur les documents produits. Il reste sur ce poste." },
     { c: "telephone", nom: "Téléphone", t: "tel" },
     { c: "effectif", nom: "Effectif de l'entreprise (salariés)", t: "number",
-      aide: "C'est lui qui ouvre ou ferme la plupart des obligations : 11, 20, 50, 250, 300, 1 000 sont des seuils du code du travail. Laissé vide, rien n'est conclu — l'application ne devine pas." },
+      aide: "C'est lui qui ouvre ou ferme la plupart des obligations : 11, 20, 50, 250, 300, 1 000 sont des seuils du code du travail. Laissé vide, rien n'est conclu, l'application ne devine pas." },
     { c: "secteur", nom: "Secteur d'activité", t: "select", options: SECTEURS, autre: true,
       aide: "Il oriente la convention applicable et le contenu des modèles (unités de travail du document unique, risques types)." },
     { c: "conventionCollective", nom: "Convention collective applicable (IDCC)", t: "idcc",
@@ -118,7 +118,7 @@
      « oui » et « non » concluent. « en cours » et « autre » NE CONCLUENT
      JAMAIS : ils sont remis aux moteurs comme une donnée absente, et le
      contrôle rend au mieux « risque à vérifier », jamais « conforme ». C'est
-     la règle du dépôt — cocher n'est pas prouver — étendue aux réponses
+     la règle du dépôt, cocher n'est pas prouver, étendue aux réponses
      nuancées : une régularisation commencée n'est pas une régularisation
      faite, et une réponse hors cadre n'est pas une réponse. */
   var VALEURS = ["oui", "non", "en cours", "autre"];
@@ -192,7 +192,7 @@
      ci-dessous met fin à ce doublon sans serveur, sans compte et sans
      synchronisation : un fichier JSON descend d'un côté, remonte de l'autre.
 
-     LE SCHÉMA — « profil-entreprise », version 1. Il est documenté au fichier
+     LE SCHÉMA, « profil-entreprise », version 1. Il est documenté au fichier
      PROFIL-PARTAGE.md, à la racine des deux dépôts, et il ne change pas sans
      changer de numéro de version.
 
@@ -212,7 +212,7 @@
 
      CE QUI EST INTERDIT. Un import n'efface jamais un champ renseigné avec
      une valeur vide : la fusion ne retient d'un fichier que ce qu'il porte
-     réellement. Et rien n'est deviné — un champ absent du fichier reste
+     réellement. Et rien n'est deviné, un champ absent du fichier reste
      absent, il ne prend pas de valeur par défaut.
 
      CE QUI NE VOYAGE PAS. Les réponses d'audit, les brouillons de documents,
@@ -220,7 +220,7 @@
      transporte que l'identité de l'entreprise. */
   var FORMAT = "profil-entreprise";
   var VERSION_FORMAT = 1;
-  var APPLICATION = "JURISPRUDENCE — audits et parcours";
+  var APPLICATION = "JURISPRUDENCE, audits et parcours";
 
   function champsEchanges() {
     return IDENTITE.map(function (ch) { return ch.c; });
@@ -261,7 +261,7 @@
     return true;
   }
 
-  /* La lecture d'un fichier reçu. Rend { ok, message, champs } — jamais une
+  /* La lecture d'un fichier reçu. Rend { ok, message, champs }, jamais une
      exception : un fichier illisible n'est pas une panne de l'application.
      Le format et la version sont vérifiés ; un fichier d'une version
      inconnue est refusé plutôt qu'interprété au jugé. */
@@ -307,7 +307,7 @@
   }
 
   /* La fiche est-elle assez remplie pour ouvrir un audit ? La dénomination et
-     l'effectif suffisent — le reste enrichit, il ne bloque pas. */
+     l'effectif suffisent, le reste enrichit, il ne bloque pas. */
   function suffisante(p) {
     p = p || lire();
     var eff = String(p.effectif == null ? "" : p.effectif).trim();
@@ -346,7 +346,7 @@
         (ch.options || []).map(function (o) {
           return '<option' + (val === o ? " selected" : "") + ">" + e(o) + "</option>";
         }).join("") +
-        (ch.autre ? '<option value="__autre"' + (val && !connu ? " selected" : "") + ">— autre —</option>" : "") +
+        (ch.autre ? '<option value="__autre"' + (val && !connu ? " selected" : "") + ">- autre,</option>" : "") +
         "</select>" +
         (ch.autre ? '<input type="text" id="' + id + '-libre" data-libre="' + e(ch.c) + '" ' +
           'placeholder="précisez" style="margin-top:6px' + (val && !connu ? "" : ";display:none") +
@@ -356,9 +356,9 @@
          « Coller / Remplir / Format », qui recouvre le début de la liste
          juste en dessous. autocomplete="off" ne suffit pas à lui seul à
          l'écarter : ces quatre attributs, ensemble, réduisent nettement sa
-         fréquence — Safari ne le supprime jamais tout à fait. */
+         fréquence, Safari ne le supprime jamais tout à fait. */
       dedans = '<input id="' + id + '" data-champ="' + e(ch.c) + '" type="text" value="' + e(val) +
-        '" placeholder="numéro IDCC ou intitulé — la liste s\'ouvre à la saisie" ' +
+        '" placeholder="numéro IDCC ou intitulé, la liste s\'ouvre à la saisie" ' +
         'autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">';
     } else {
       dedans = '<input id="' + id + '" data-champ="' + e(ch.c) + '" type="' + e(ch.t) + '"' +
@@ -371,7 +371,7 @@
   }
 
   /* Lire un champ rendu par champHtml : le menu, ou la saisie libre qu'il
-     ouvre. Rend la chaîne à enregistrer — jamais une valeur devinée. */
+     ouvre. Rend la chaîne à enregistrer, jamais une valeur devinée. */
   function lireChamp(ch, prefixe, racine) {
     racine = racine || document;
     var id = prefixe + "-" + String(ch.c).replace(/\./g, "_");
@@ -393,22 +393,22 @@
     var champs = options.champs || IDENTITE;
     var p = lire();
     conteneur.innerHTML = "<fieldset><legend>" +
-      e(options.legende || "Fiche client — l'entreprise auditée") + "</legend>" +
+      e(options.legende || "Fiche client, l'entreprise auditée") + "</legend>" +
       (options.aide ? '<p class="aide-champ" style="margin:0 0 12px">' + e(options.aide) + "</p>" : "") +
       '<div class="grille">' +
       champs.map(function (ch) { return champHtml(ch, p[ch.c], prefixe); }).join("") +
       "</div>" +
       /* L'échange avec l'autre application de la juriste. Deux boutons, un
          fichier, rien d'autre : ni serveur, ni compte, ni synchronisation.
-         `options.echange: false` les retire — une page qui ne veut pas de
+         `options.echange: false` les retire, une page qui ne veut pas de
          cette sortie n'a pas à l'afficher. */
       (options.echange === false ? "" :
         '<div class="echange-profil" style="margin:14px 0 0;padding-top:12px;' +
         'border-top:1px solid #dcdfe4">' +
         '<p class="aide-champ" style="margin:0 0 8px">Cette fiche s\'emporte : ' +
         'un fichier <b>.json</b> qui se télécharge ici et se relit dans Juris Expert, ' +
-        'et réciproquement. Il ne contient que l\'identité de l\'entreprise — ni réponses ' +
-        'd\'audit, ni brouillons, ni avancement — et ne part sur aucun réseau.</p>' +
+        'et réciproquement. Il ne contient que l\'identité de l\'entreprise, ni réponses ' +
+        'd\'audit, ni brouillons, ni avancement, et ne part sur aucun réseau.</p>' +
         '<button type="button" id="' + e(prefixe) + '-exporter">Télécharger la fiche (.json)</button> ' +
         '<button type="button" id="' + e(prefixe) + '-importer-ouvrir">Importer une fiche…</button>' +
         '<input type="file" accept="application/json,.json" id="' + e(prefixe) + '-importer" ' +
@@ -417,7 +417,7 @@
         "</div>") +
       "</fieldset>";
 
-    /* Les saisies libres : celles des menus « — autre — » et « autre ». */
+    /* Les saisies libres : celles des menus «, autre, » et « autre ». */
     champs.forEach(function (ch) {
       var id = prefixe + "-" + String(ch.c).replace(/\./g, "_");
       var sel = conteneur.querySelector("#" + CSS.escape(id));
@@ -433,7 +433,7 @@
     });
 
     /* « Nombre d'établissements » n'a de sens que si l'entreprise en compte
-       plusieurs — sinon la question qui vient de répondre « non » à « au
+       plusieurs, sinon la question qui vient de répondre « non » à « au
        moins deux » se voit aussitôt suivie d'une question sur leur nombre,
        ce qui ne se tient pas. Masqué tant que la réponse n'est pas « oui ». */
     var etabSel = conteneur.querySelector("#" + CSS.escape(prefixe + "-etablissementsDistincts"));
@@ -515,7 +515,7 @@
     lire: lire, ecrire: ecrire, effacer: effacer,
     suffisante: suffisante, manquants: manquants,
     champHtml: champHtml, lireChamp: lireChamp, rendre: rendre,
-    /* L'échange avec Juris Expert — format « profil-entreprise », version 1.
+    /* L'échange avec Juris Expert, format « profil-entreprise », version 1.
        Documenté dans PROFIL-PARTAGE.md, à la racine des deux dépôts. */
     FORMAT: FORMAT, VERSION_FORMAT: VERSION_FORMAT, APPLICATION: APPLICATION,
     champsEchanges: champsEchanges, exporter: exporter, importer: importer,

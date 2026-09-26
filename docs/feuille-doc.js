@@ -46,7 +46,7 @@
     });
   }
   function propre(t) {
-    return String(t == null ? "" : t).replace(/[—–]/g, "-").replace(/ /g, " ");
+    return String(t == null ? "" : t).replace(/[--]/g, "-").replace(/ /g, " ");
   }
   function estSeparateur(l) { return /^[\s|:\-─═]+$/.test(l) && l.indexOf("-") >= 0; }
   function cellules(l) {

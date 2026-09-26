@@ -173,7 +173,7 @@
     </label>
     <div class="boutons" style="margin:-6px 0 12px">
       <button class="second" id="btn-mots" type="button">Trouver les bons mots-clés</button>
-      <span class="note" style="align-self:center">Décrivez votre sujet en français courant —
+      <span class="note" style="align-self:center">Décrivez votre sujet en français courant,
         « faux CV », « salarié qui ment sur ses diplômes ». L'application ira lire les décisions
         pour vous dire quelles formules les juges emploient réellement, et combien il en existe.</span>
     </div>
@@ -231,8 +231,8 @@
           <label class="champ"><b>Trier par</b>
             <select id="tri">
               <option value="score">Pertinence</option>
-              <option value="date-desc">Date — récent d'abord</option>
-              <option value="date-asc">Date — ancien d'abord</option>
+              <option value="date-desc">Date, récent d'abord</option>
+              <option value="date-asc">Date, ancien d'abord</option>
             </select>
           </label>
         </div>
@@ -308,8 +308,8 @@
   <section class="carte" id="carte-ccn">
     <h2>Conventions collectives</h2>
     <p class="note">Le texte officiel des conventions collectives nationales, tel qu'il est publié
-      (fonds KALI de Légifrance). Une convention se désigne par son <b>numéro IDCC</b> —
-      16 pour les transports routiers, 1486 pour les bureaux d'études, 3248 pour la métallurgie —
+      (fonds KALI de Légifrance). Une convention se désigne par son <b>numéro IDCC</b>,
+      16 pour les transports routiers, 1486 pour les bureaux d'études, 3248 pour la métallurgie,
       ou se cherche par son intitulé. Chaque texte s'exporte en PDF et en Word, pour être versé aux débats.</p>
     <div class="duo" style="margin-top:12px">
       <label class="champ"><b>Numéro IDCC</b>
@@ -336,7 +336,7 @@
   <section class="carte" id="carte-loda">
     <h2>Lois et décrets</h2>
     <p class="note">Le texte des lois, ordonnances, décrets et arrêtés, tel qu'il est publié
-      (fonds LODA de Légifrance) — c'est là que vivent les lois de financement de la sécurité
+      (fonds LODA de Légifrance), c'est là que vivent les lois de financement de la sécurité
       sociale et les lois ordinaires, que ni les codes ni les conventions collectives ne portent.
       Un texte se cherche par ses mots, ou se désigne par son <b>NOR</b>, l'identifiant que la
       publication lui donne.</p>
@@ -419,7 +419,7 @@
 <script>
 "use strict";
 /* ==========================================================================
-   Jurisprudence — recherche Judilibre.
+   Jurisprudence, recherche Judilibre.
 
    PRINCIPE DIRECTEUR : fidélité. Aucune décision n'est affichée qui ne
    corresponde à la demande.
@@ -427,11 +427,11 @@
    Ce principe repose sur une mesure, pas sur une intuition. L'API Judilibre a
    été éprouvée sur des dizaines de décisions dont le texte intégral a été
    contrôlé mot à mot :
-     · lorsqu'elle ne signale pas d'élargissement, elle est fidèle — 49 décisions
+     · lorsqu'elle ne signale pas d'élargissement, elle est fidèle, 49 décisions
        vérifiées, aucun écart, y compris sur les flexions (« vice caché » ne
        ramène jamais « vices cachés ») ;
      · lorsqu'elle signale un élargissement (champ « relaxed »), elle a
-       silencieusement remplacé la demande par « au moins un mot » — 10 décisions
+       silencieusement remplacé la demande par « au moins un mot », 10 décisions
        vérifiées, 10 hors sujet.
    L'élargissement est donc l'unique source d'écart, et il est déclaré par l'API.
    D'où la règle appliquée ici : une réponse élargie n'est jamais présentée comme
@@ -441,7 +441,7 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "4.5 — 23 août 2026";
+const VERSION = "4.5, 23 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
 const RELAIS = "/.netlify/functions/legifrance";
@@ -536,11 +536,11 @@ function majEtat(){
   /* L'adresse doit pouvoir être transmise à un confrère sans la retaper :
      installée en plein écran, l'application n'a pas de barre d'adresse d'où
      la copier. Le lien copié est celui de l'accueil, sans recherche en cours
-     ni fragment — c'est l'application qu'on partage, pas son état. */
+     ni fragment, c'est l'application qu'on partage, pas son état. */
   $("btn-adresse").hidden = !location.protocol.startsWith("http");
 }
 
-/* Appel direct avec la clé personnelle du navigateur — le mode historique,
+/* Appel direct avec la clé personnelle du navigateur, le mode historique,
    conservé tel quel : c'est le repli, et le chemin de validation d'une clé. */
 async function appelApiDirect(chemin, params){
   const k = cle();
@@ -617,7 +617,7 @@ function messageErreur(e){
     case "PAS_DE_CLE":  return "Configurez d'abord votre clé Judilibre.";
     case "CLE_REFUSEE": return "Accès refusé : clé invalide, ou application PISTE non souscrite à l'API JUDILIBRE en production.";
     case "QUOTA":       return "Quota de requêtes atteint. Patientez quelques instants.";
-    case "TROP_LONG":   return "L'API n'a pas répondu en quinze secondes. Vérifiez la connexion — si vous êtes sur un réseau d'entreprise ou un VPN, il bloque peut-être api.piste.gouv.fr.";
+    case "TROP_LONG":   return "L'API n'a pas répondu en quinze secondes. Vérifiez la connexion, si vous êtes sur un réseau d'entreprise ou un VPN, il bloque peut-être api.piste.gouv.fr.";
     default: return (e instanceof TypeError)
       ? "Impossible de joindre l'API (connexion internet ?)."
       : "Erreur inattendue : "+e.message;
@@ -630,7 +630,7 @@ $("btn-tester").onclick = async ()=>{
   if(!k){ $("msg-cle").innerHTML = '<div class="msg err">Saisissez une clé.</div>'; return; }
   /* En navigation privée, le stockage local refuse l'écriture : l'ancienne
      version levait alors une exception avant d'avoir rien affiché, et le bouton
-     paraissait mort. Un bouton qui ne répond pas est le pire des messages —
+     paraissait mort. Un bouton qui ne répond pas est le pire des messages,
      l'utilisateur croit à une panne de l'application, et cherche du côté de sa
      clé, qui n'y est pour rien. */
   try{ localStorage.setItem(CLE_STOCKAGE, k); }
@@ -965,7 +965,7 @@ const PRESETS = [
   },
   {
     label: "Clause de non-concurrence · validité et contrepartie",
-    note: "Validité de la clause : limitation dans le temps et l'espace, spécificité à l'emploi, et contrepartie financière — condition posée par la chambre sociale depuis 2002.",
+    note: "Validité de la clause : limitation dans le temps et l'espace, spécificité à l'emploi, et contrepartie financière, condition posée par la chambre sociale depuis 2002.",
     c: {q:"clause de non-concurrence", mode:"exact", jur:["cc"], ch:["soc"], pub:["b"], tri:"date-desc"}
   },
   {
@@ -1058,7 +1058,7 @@ const PRESETS = [
   },
   {
     label: "Autorité parentale · exercice",
-    note: "Exercice de l'autorité parentale : résidence de l'enfant, décisions importantes, droit de visite. Peu de décisions sous cette formulation exacte — élargissez aux cours d'appel.",
+    note: "Exercice de l'autorité parentale : résidence de l'enfant, décisions importantes, droit de visite. Peu de décisions sous cette formulation exacte, élargissez aux cours d'appel.",
     c: {q: "exercice de l'autorité parentale", mode: "exact", jur: ["cc"], tri: "date-desc", ch: ["civ1"]}
   },
   {
@@ -1143,7 +1143,7 @@ const PRESETS = [
   },
   {
     label: "Motivation · défaut de base légale",
-    note: "Le grief tiré du défaut de base légale : la décision ne met pas la Cour en mesure d'exercer son contrôle. Recherche très large — resserrez avec un angle d'analyse ou une matière.",
+    note: "Le grief tiré du défaut de base légale : la décision ne met pas la Cour en mesure d'exercer son contrôle. Recherche très large, resserrez avec un angle d'analyse ou une matière.",
     c: {q: "défaut de base légale", mode: "exact", jur: ["cc"], tri: "date-desc"}
   },
   {
@@ -1258,7 +1258,7 @@ const PRESETS = [
    partageable, aux modèles et au rappel des filtres actifs : une seule
    source de vérité, donc aucun réglage ne peut agir en restant invisible. */
 /* La matière retenue s'affiche sous le champ de recherche : un filtre invisible
-   est un piège — on cherche, on ne trouve rien, et l'on ignore pourquoi. */
+   est un piège, on cherche, on ne trouve rien, et l'on ignore pourquoi. */
 function majMatiere(){
   let z = document.getElementById("matiere-active");
   if(!z){
@@ -1324,7 +1324,7 @@ function parametres(c, page, taille){
   if(c.au) p.set("date_end", c.au);
   /* Valeurs imposées par l'API : themes, text, introduction, expose, moyens,
      motivations, dispositif, annexes, visa, summary. « sommaire » et
-     « titrage » sont refusés (HTTP 400) — ce sont summary et themes. */
+     « titrage » sont refusés (HTTP 400), ce sont summary et themes. */
   if(c.zone === "sommaire"){ p.append("field","summary"); p.append("field","themes"); }
   else if(c.zone) p.append("field", c.zone);
   c.jur.forEach(j=>p.append("jurisdiction", j));
@@ -1344,8 +1344,8 @@ function remplirModeles(filtre){
   sel.innerHTML = "";
   const vide = document.createElement("option");
   vide.value = "";
-  vide.textContent = liste.length ? "— "+liste.length+" modèle"+(liste.length>1?"s":"")+" —"
-                                  : "— aucun modèle ne correspond —";
+  vide.textContent = liste.length ? "- "+liste.length+" modèle"+(liste.length>1?"s":"")+" :"
+                                  : "- aucun modèle ne correspond :";
   sel.appendChild(vide);
   for(const {p,i} of liste){
     const o = document.createElement("option");
@@ -1358,7 +1358,7 @@ function remplirLieux(filtre){
   const noms = {ca:"Cours d'appel", tj:"Tribunaux judiciaires", tcom:"Tribunaux de commerce"};
   sel.innerHTML = "";
   const vide = document.createElement("option");
-  vide.value = ""; vide.textContent = "— toutes celles cochées ci-dessus —";
+  vide.value = ""; vide.textContent = "- toutes celles cochées ci-dessus :";
   sel.appendChild(vide);
   for(const type of ["ca","tj","tcom"]){
     const e = Object.entries(JURIDICTIONS[type]).filter(([,n]) => !f || normaliser(n).includes(f));
@@ -1374,7 +1374,7 @@ function remplirLieux(filtre){
 /* --------------------- Rappel des réglages actifs ---------------------
    Les réglages vivent dans une section repliée : leur nombre est porté sur
    le titre, et le détail au-dessus des résultats. Un réglage ne peut donc
-   jamais agir sans être vu — c'est ce qui rendait l'outil déroutant. */
+   jamais agir sans être vu, c'est ce qui rendait l'outil déroutant. */
 function reglagesActifs(c){
   const l = [];
   if(c.exclure) l.push({cle:"exclure", nom:"Mots exclus", val:c.exclure});
@@ -1400,7 +1400,7 @@ function effacerReglage(k){
 }
 function majResumeAffiner(){
   const n = reglagesActifs(lire()).length;
-  $("resume-affiner").textContent = n ? "Affiner — "+n+" réglage"+(n>1?"s":"")+" actif"+(n>1?"s":"") : "Affiner";
+  $("resume-affiner").textContent = n ? "Affiner : "+n+" réglage"+(n>1?"s":"")+" actif"+(n>1?"s":"") : "Affiner";
 }
 function majFiltres(c){
   const zone = $("filtres"), l = reglagesActifs(c);
@@ -1495,7 +1495,7 @@ async function chercher(page){
       $("duree").textContent = "";
       /* Une phrase entière cherchée « au mot près » ne se trouve jamais : les
          juges n'écrivent pas comme on parle. C'est le premier conseil à donner,
-         avant toute explication technique — et il vaut mieux qu'il soit
+         avant toute explication technique, et il vaut mieux qu'il soit
          actionnable d'un doigt que formulé en principe. */
       const tropDeMots = c.mode === "exact" && c.q.trim().split(/\s+/).length >= 4;
       $("garantie").innerHTML = '<div class="msg info">'+
@@ -1557,7 +1557,7 @@ async function chercher(page){
 
     const nbPages = Math.max(1, Math.ceil(Math.min(etat.total, PLAFOND)/parPage()));
     $("page-txt").textContent = "Page "+(page+1)+" sur "+nbPages.toLocaleString("fr-FR")+
-      (etat.total>PLAFOND ? " — l'API s'arrête à 10 000 décisions, affinez par dates" : "");
+      (etat.total>PLAFOND ? ", l'API s'arrête à 10 000 décisions, affinez par dates" : "");
     $("btn-prec").disabled = page<=0;
     $("btn-suiv").disabled = !d.next_page || (page+1)>=nbPages;
     $("btn-csv").disabled = $("btn-html").disabled = etat.total===0;
@@ -1600,7 +1600,7 @@ let ouverte = null;
 
 /* Citations d'articles : « article L. 1154-1 du code du travail », « articles
    455 et 458 du code de procédure civile », renvois d'alinéas compris. Les
-   numéros sont décrits explicitement — le point de « L. » interdit toute
+   numéros sont décrits explicitement, le point de « L. » interdit toute
    approche fondée sur « tout sauf la ponctuation ». */
 const NUM_ART = "(?:[LRDAlrda]\\.?\\s*)?\\d+(?:-\\d+)*";
 const RE_CITATION = new RegExp(
@@ -1644,7 +1644,7 @@ function surligner(texteEchappe, q, mode){
 /* Les conventions collectives citées dans une décision.
 
    Le pont dans l'autre sens : depuis une décision, ouvrir la convention qu'elle
-   applique. Les juges la désignent presque toujours de la même façon —
+   applique. Les juges la désignent presque toujours de la même façon,
    « la convention collective nationale des transports routiers », « la
    convention collective des bureaux d'études techniques ». On capture ce
    groupe nominal, en s'arrêtant à la première ponctuation forte : au-delà,
@@ -1698,7 +1698,7 @@ async function ouvrirDecision(id){
     const d = await appelApi("/decision", new URLSearchParams({id}));
     ouverte = d;
     const n = numerosDe(d);
-    $("dlg-titre").textContent = juridictionDe(d)+" — "+dateFr(d.decision_date)+(n?" — n° "+n:"");
+    $("dlg-titre").textContent = juridictionDe(d)+", "+dateFr(d.decision_date)+(n?", n° "+n:"");
     $("dlg-sous").textContent = [d.ecli, d.solution].filter(Boolean).join(" · ");
     const c = etat.criteres || {q:"", mode:"exact"};
     $("dlg-corps").innerHTML =
@@ -1708,7 +1708,7 @@ async function ouvrirDecision(id){
     cites.forEach(b=>b.onclick = ()=>
       ouvrirArticle(b.dataset.nums.split("|"), b.dataset.code, d.decision_date));
     /* Le pont dans l'autre sens : de la décision vers la convention qu'elle
-       applique. On renseigne l'écran des conventions et l'on y conduit —
+       applique. On renseigne l'écran des conventions et l'on y conduit,
        plutôt que d'ouvrir une fenêtre de plus par-dessus celle-ci. */
     $("dlg-corps").querySelectorAll("button.ccnlien").forEach(b=>b.onclick = ()=>{
       $("dlg-decision").close();
@@ -1718,7 +1718,7 @@ async function ouvrirDecision(id){
       ccnChercher();
     });
     /* La consultation des textes ne se devine pas : on l'annonce, mais seulement
-       quand des articles ont réellement été repérés — sinon c'est une promesse
+       quand des articles ont réellement été repérés, sinon c'est une promesse
        en l'air. */
     if(cites.length) $("dlg-corps").insertAdjacentHTML("afterbegin",
       '<div class="msg info" style="margin-top:0">'+cites.length+" citation"+(cites.length>1?"s":"")+
@@ -1759,7 +1759,7 @@ function urlLegifrance(num, code){
 function replLegifrance(num, code, explication){
   return '<div class="msg info">'+explication+"</div>"+
     '<p style="margin-top:14px"><a href="'+echap(urlLegifrance(num, code))+'" target="_blank" rel="noopener">'+
-    "Ouvrir « article "+echap(num)+(code?" — "+echap(code):"")+" » sur Légifrance ↗</a></p>";
+    "Ouvrir « article "+echap(num)+(code?" : "+echap(code):"")+" » sur Légifrance ↗</a></p>";
 }
 
 async function ouvrirArticle(numeros, libelleCode, dateDecision){
@@ -1776,7 +1776,7 @@ async function ouvrirArticle(numeros, libelleCode, dateDecision){
     return;
   }
   const num = liste[0];
-  $("art-titre").textContent = "Article "+num+(code?" — "+code:"");
+  $("art-titre").textContent = "Article "+num+(code?" : "+code:"");
   $("art-sous").textContent = dateDecision ? "Version applicable au "+dateFr(dateDecision) : "Version en vigueur";
   if(relaisDispo === false){
     $("art-corps").innerHTML = replLegifrance(num, code,
@@ -1835,12 +1835,12 @@ $("dlg-article").addEventListener("click", e=>{ if(e.target===$("dlg-article")) 
    l'application : ne rien affirmer qui ne soit mesuré. On interroge la base
    avec les mots de l'utilisateur en « au moins un mot », on lit ce que les
    décisions renvoyées contiennent réellement, on en extrait les expressions
-   qui reviennent — puis on COMPTE chacune d'elles en expression exacte. Ce qui
+   qui reviennent, puis on COMPTE chacune d'elles en expression exacte. Ce qui
    est proposé n'est pas une suggestion : c'est un relevé, chiffré, vérifiable
    d'un clic.
 
-   Les expressions que l'API ne trouve pas en exact — celles pour lesquelles
-   elle élargit la recherche — sont écartées : les proposer reviendrait à
+   Les expressions que l'API ne trouve pas en exact, celles pour lesquelles
+   elle élargit la recherche, sont écartées : les proposer reviendrait à
    promettre des résultats inexistants.
    ------------------------------------------------------------------ */
 
@@ -1867,7 +1867,7 @@ const VIDES = new Set(("au aux avec ce ces dans de des du elle en et eux il ils 
 const estVide = m => m.length < 3 || VIDES.has(m);
 
 /* Expressions de 2 à 5 mots, comptées en nombre de décisions distinctes où
-   elles apparaissent — non en occurrences, pour qu'une décision bavarde ne
+   elles apparaissent, non en occurrences, pour qu'une décision bavarde ne
    pèse pas plus qu'une autre. */
 /* Les ligatures, et un défaut de la source.
 
@@ -1876,7 +1876,7 @@ const estVide = m => m.length < 3 || VIDES.has(m);
    « man » + « uvres ». On les développe donc.
 
    Mais il y a pire, et cela vient de la base elle-même : Judilibre renvoie
-   « man'uvres » — une apostrophe à la place du œ, séquelle d'un transcodage
+   « man'uvres », une apostrophe à la place du œ, séquelle d'un transcodage
    ancien. Vérifié caractère par caractère sur le texte reçu de l'API. Sans
    réparation, l'assistant proposerait « man uvres » comme formule employée par
    les juges, ce qui est faux et ridicule. La liste ci-dessous est celle des
@@ -1937,7 +1937,7 @@ async function compter(expression){
 /* ---- Le vocabulaire de la Cour, relevé une fois pour toutes ----
 
    L'assistant ci-dessous lit des décisions à chaque recherche, ce qui prend du
-   temps et dépend d'un échantillon tiré sur les mots de l'utilisateur — c'est-
+   temps et dépend d'un échantillon tiré sur les mots de l'utilisateur, c'est-
    à-dire précisément ceux qu'il ne faut pas employer. On a donc fait l'analyse
    une fois : pour chacune des rubriques du titrage officiel, un échantillon de
    décisions a été lu et les mots qui la caractérisent relevés. Le résultat est
@@ -1945,7 +1945,7 @@ async function compter(expression){
 
    Ce que cela permet : dire, INSTANTANÉMENT et sans aucune requête, sous quelle
    rubrique la Cour range un sujet décrit en français courant. Un titrage vaut
-   mieux qu'une formule approchée — il restreint la recherche à un champ du
+   mieux qu'une formule approchée, il restreint la recherche à un champ du
    droit, ce qu'aucune combinaison de mots ne sait faire. */
 let VOC = null, IDF = null;
 async function vocabulaire(){
@@ -1953,7 +1953,7 @@ async function vocabulaire(){
   try{
     VOC = await (await fetch("./vocabulaire.json", {cache: "force-cache"})).json();
   }catch(e){ VOC = {}; }
-  /* Un mot présent dans cent quarante rubriques — « procédure », « droit » —
+  /* Un mot présent dans cent quarante rubriques, « procédure », « droit »,
      ne désigne rien. Son poids est l'inverse de sa dispersion. */
   const dans = new Map();
   for(const k in VOC) for(const m of VOC[k].m) dans.set(m, (dans.get(m)||0) + 1);
@@ -2003,7 +2003,7 @@ function poserMatieres(sujet){
   if(!liste.length){ z.innerHTML = ""; return; }
   z.innerHTML = '<div class="fiche"><b>La Cour range ce sujet ici</b>'+
     '<div class="note" style="margin:4px 0 8px">Rubriques du titrage officiel, reconnues sur '+
-    "les mots de votre phrase — sans aucune requête. Touchez-en une : la recherche est "+
+    "les mots de votre phrase, sans aucune requête. Touchez-en une : la recherche est "+
     "restreinte à ce champ du droit.</div><div>"+
     liste.map(x => '<button class="second mat-v" type="button" data-t="'+echap(x.t)+'">'+
       echap(x.t)+' <span class="note">('+x.n.toLocaleString("fr-FR")+")</span></button>").join(" ")+
@@ -2033,7 +2033,7 @@ async function assistantMots(){
   zone.innerHTML = '<div class="msg info">Lecture des décisions en cours…</div>';
   try{
     /* 1. Constituer l'échantillon. « Tous les mots » d'abord : « au moins un
-       mot » ramasse n'importe quoi dès qu'un terme est ambigu — sur « faux CV »
+       mot » ramasse n'importe quoi dès qu'un terme est ambigu, sur « faux CV »
        il ramenait la taxe différentielle sur les véhicules, « CV » y valant
        cheval fiscal. On ne se rabat sur « au moins un mot » que si l'API n'a
        rien trouvé, ce qu'elle signale par son indicateur d'élargissement. */
@@ -2063,14 +2063,14 @@ async function assistantMots(){
       for(const m of (r.themes || [])) matieres.set(m, (matieres.get(m)||0) + 1);
     }
 
-    /* 3. Retenir les expressions récurrentes — mais seulement celles qui
+    /* 3. Retenir les expressions récurrentes, mais seulement celles qui
        parlent DU SUJET.
 
        Sans cette condition, le relevé remontait la langue commune à toutes les
        décisions : sur « demande de copie d'e-mail professionnel », il rendait
        « droits de l'homme » (163 décisions), « convention de sauvegarde des
        droits » (12 306) et « doit être » (6 763). Des expressions réelles,
-       comptées juste, et sans le moindre rapport avec la question posée — la
+       comptées juste, et sans le moindre rapport avec la question posée, la
        fréquence dans l'échantillon ne dit rien tant que l'échantillon lui-même
        est fait de décisions choisies sur des mots courants.
 
@@ -2114,7 +2114,7 @@ async function assistantMots(){
        palais, elle apparaît partout et n'apprend rien. « entrave au
        fonctionnement régulier » n'en compte que 40 : elle désigne le sujet.
        Le rang est donc donné par la fréquence dans l'échantillon rapportée à
-       la fréquence dans la base entière — ce qui est fréquent ici et rare
+       la fréquence dans la base entière, ce qui est fréquent ici et rare
        ailleurs caractérise la recherche. */
     /* Le rang : ce qui est fréquent ICI et rare AILLEURS.
 
@@ -2122,7 +2122,7 @@ async function assistantMots(){
        pas : une expression vue cinquante fois dans l'échantillon et présente
        dans six mille décisions passait devant une expression vue trois fois et
        présente dans quarante. C'est l'inverse qu'il faut. On pèse donc chaque
-       expression par sa rareté dans la base entière — la forme classique du
+       expression par sa rareté dans la base entière, la forme classique du
        rapport entre fréquence locale et fréquence globale. */
     const utiles = lignes.filter(l => !l.elargi && l.total > 0)
       .filter(l => l.total < 20000 || l.sien)      // au-delà, c'est de la langue de palais
@@ -2134,15 +2134,15 @@ async function assistantMots(){
 
     zone.innerHTML =
       '<div class="msg ok" style="margin-top:12px"><b>Relevé établi sur '+res.length+
-      " décisions lues"+(large ? ", trouvées avec au moins un de vos mots — vos termes ne "+
+      " décisions lues"+(large ? ", trouvées avec au moins un de vos mots, vos termes ne "+
         "coexistent dans aucune décision, le relevé est donc moins sûr" : ", contenant toutes "+
         "vos mots")+".</b> Les nombres sont ceux que l'API renvoie pour chaque expression prise "+
       "à la lettre, en Cour de cassation et cours d'appel. Les plus caractéristiques sont en "+
       "tête : une expression fréquente ici et rare ailleurs désigne le sujet. "+
       (horsSujet ? "<br><b>Réserve :</b> aucune des expressions relevées ne reprend vos mots. "+
-        "Les décisions lues parlent probablement d'autre chose — reformulez avec le terme "+
+        "Les décisions lues parlent probablement d'autre chose, reformulez avec le terme "+
         "central de votre question. " : "")+
-      "<b>Cliquez pour l'employer</b> — le relevé reste affiché, vous pouvez en essayer "+
+      "<b>Cliquez pour l'employer</b>, le relevé reste affiché, vous pouvez en essayer "+
       "plusieurs de suite. <button class=\"second\" id=\"mots-fermer\" type=\"button\" "+
       "style=\"margin-left:8px\">Masquer le relevé</button></div>"+
       (utiles.length ? '<div class="fiche"><b>Formules employées par les juges</b>'+
@@ -2150,21 +2150,21 @@ async function assistantMots(){
         utiles.map(l => '<tr><td style="padding:4px 8px 4px 0">'+
           '<button class="second mot-u" type="button" data-e="'+echap(l.e)+'">'+echap(l.e)+"</button></td>"+
           '<td class="note" style="padding:4px 0;white-space:nowrap">'+l.total.toLocaleString("fr-FR")+
-          " décision"+(l.total>1?"s":"")+(l.sien ? " — vos mots" : "")+"</td></tr>").join("")+
+          " décision"+(l.total>1?"s":"")+(l.sien ? ", vos mots" : "")+"</td></tr>").join("")+
         "</table></div>" : '<div class="msg err">Aucune des expressions relevées n\'existe telle quelle '+
         "dans la base. Le sujet est peut-être formulé autrement par les juges : essayez d'autres termes.</div>")+
       (vaines.length ? '<div class="fiche"><b>Écartées</b><div class="note">'+
-        vaines.map(l => echap(l.e)+" — "+(l.elargi ? "n'existe pas telle quelle" : "aucune décision")).join(" · ")+
+        vaines.map(l => echap(l.e)+" : "+(l.elargi ? "n'existe pas telle quelle" : "aucune décision")).join(" · ")+
         "</div></div>" : "")+
       (mat.length ? '<div class="fiche"><b>La matière de votre sujet, selon le titrage de la Cour</b>'+
         '<div class="note" style="margin:4px 0 8px">Ce sont les rubriques sous lesquelles la Cour de cassation '+
-        "range elle-même ces décisions. En toucher une restreint la recherche à ce champ du droit — "+
+        "range elle-même ces décisions. En toucher une restreint la recherche à ce champ du droit : "+
         "ce qu'aucune combinaison de mots ne sait faire.</div><div>"+
         mat.map(m => '<button class="second mat-u" type="button" data-t="'+echap(m[0])+'">'+
           echap(m[0])+' <span class="note">('+m[1]+")</span></button>").join(" ")+
         "</div></div>" : "");
 
-    /* Le relevé demeure après un clic — on essaie une formule, on regarde,
+    /* Le relevé demeure après un clic, on essaie une formule, on regarde,
        on en essaie une autre. L'effacer obligerait à tout refaire. */
     $("mots-fermer").onclick = ()=>{ zone.innerHTML = ""; $("mots-matieres").innerHTML = "";
       window.__THEME = ""; majMatiere(); };
@@ -2197,7 +2197,7 @@ $("btn-mots").onclick = assistantMots;
 
    Même relais, même abonnement que les codes : le fonds KALI de Légifrance.
    Une convention se désigne par son numéro IDCC ; elle contient des textes
-   — texte de base, annexes, avenants — eux-mêmes faits de sections et
+  , texte de base, annexes, avenants, eux-mêmes faits de sections et
    d'articles. Ce que l'application affiche est le texte officiel, daté, et
    rien d'autre : c'est la même exigence que pour les décisions.
    -------------------------------------------------------------------- */
@@ -2241,7 +2241,7 @@ async function ccnChercher(){
     if(!l.length) return ccnMessage("Aucune convention ne porte cet intitulé.", "info");
     ccnMessage("", "");
     $("ccn-sommaire").innerHTML = '<div class="msg ok" style="margin-top:12px">'+
-      l.length+" convention"+(l.length>1?"s":"")+" — cliquez pour ouvrir</div>"+
+      l.length+" convention"+(l.length>1?"s":"")+", cliquez pour ouvrir</div>"+
       l.map(c => '<div class="fiche"><b>'+echap(c.titre||"(sans intitulé)")+"</b>"+
         (c.idcc ? ' <span class="badge">IDCC '+echap(String(c.idcc))+"</span>" : "")+
         ' <button class="second ccn-o" type="button" data-idcc="'+echap(String(c.idcc||""))+
@@ -2264,11 +2264,11 @@ async function ccnOuvrir(idcc, id){
         (d.diag ? " (champs reçus : "+echap((d.diag.cles||[]).join(", "))+")" : ""), "err");
     ccnMessage("", "");
     ccnTextes = d.textes; ccnTitre = d.titre || "";
-    /* Une convention compte plusieurs centaines de textes — 500 pour les
+    /* Une convention compte plusieurs centaines de textes, 500 pour les
        transports routiers. Une liste brute serait inutilisable : le filtre
        est donc donné en même temps qu'elle, et non caché ailleurs. */
     $("ccn-sommaire").innerHTML =
-      '<div class="msg ok" style="margin-top:12px"><b>'+echap(d.titre||("IDCC "+idcc))+"</b> — "+
+      '<div class="msg ok" style="margin-top:12px"><b>'+echap(d.titre||("IDCC "+idcc))+"</b> : "+
       d.textes.length+" texte"+(d.textes.length>1?"s":"")+" : texte de base, annexes, avenants.</div>"+
       '<label class="champ"><b>Filtrer les textes</b>'+
       '<input id="ccn-fl" placeholder="ex. ingénieurs et cadres, ou annexe III" autocomplete="off"></label>'+
@@ -2284,7 +2284,7 @@ function ccnListe(filtre){
   const vus = l.slice(0, 60);
   $("ccn-liste").innerHTML =
     (l.length ? '<p class="note">'+l.length+" texte"+(l.length>1?"s":"")+
-      (l.length > vus.length ? " — les "+vus.length+" premiers sont affichés, affinez le filtre" : "")+
+      (l.length > vus.length ? ", les "+vus.length+" premiers sont affichés, affinez le filtre" : "")+
       "</p>" : '<p class="note">Aucun texte ne porte ces mots.</p>')+
     vus.map(t => '<div class="fiche"><b>'+echap(t.titre)+"</b>"+
       (t.date ? ' <span class="note">'+echap(t.date)+"</span>" : "")+
@@ -2293,7 +2293,7 @@ function ccnListe(filtre){
   [...document.querySelectorAll(".ccn-t")].forEach(b => b.onclick = ()=>ccnLire(b.dataset.id));
 }
 
-/* Le contenu des articles arrive en HTML — tableaux de coefficients compris,
+/* Le contenu des articles arrive en HTML, tableaux de coefficients compris,
    qu'il faut conserver tels quels. On les insère donc, mais après avoir retiré
    ce qui peut s'exécuter : le texte vient d'une source officielle, ce n'est pas
    une raison pour lui accorder les droits d'un script de la page. */
@@ -2323,7 +2323,7 @@ function htmlEnTexte(html){
 }
 
 /* Un article sans sa section peut être attribué à tort : dans une nomenclature
-   de classification, c'est le titre de la section — « Groupe 6 » — qui dit à
+   de classification, c'est le titre de la section, « Groupe 6 », qui dit à
    quel groupe la définition se rapporte, l'article n'en portant aucune trace.
    La section est donc rappelée sur chaque fiche, et le filtre ne peut jamais
    détacher un article de la sienne. */
@@ -2350,11 +2350,11 @@ function ccnHtml(blocs, filtre, base){
       : "";
     const situe = section
       ? '<div class="note">dans « '+echap(section.titre)+" »"+
-        (section.id ? " — "+echap(section.id) : "")+"</div>"
+        (section.id ? " : "+echap(section.id) : "")+"</div>"
       : "";
     /* Une décision qui applique un texte conventionnel le cite le plus souvent
        mot pour mot : chercher une phrase caractéristique de l'article est donc
-       le moyen le plus sûr de retrouver les décisions qui s'en sont servies —
+       le moyen le plus sûr de retrouver les décisions qui s'en sont servies,
        plus sûr que son numéro, qui se répète d'une convention à l'autre. */
     const phrase = phraseCaracteristique(b.html);
     const vers = phrase
@@ -2390,7 +2390,7 @@ async function ccnLire(id){
 }
 
 /* Le texte d'une convention se verse aux débats : mêmes sorties que pour une
-   décision — impression PDF par le navigateur, et vrai .docx. */
+   décision, impression PDF par le navigateur, et vrai .docx. */
 function ccnTexteBrut(){
   return (ccnCourant.blocs||[]).map(b => b.type==="section"
     ? "\n"+b.titre+(b.id ? "  ["+b.id+"]" : "")
@@ -2400,8 +2400,8 @@ function ccnTexteBrut(){
 }
 function ccnSource(){
   return (ccnCourant.titre||"Convention collective")+
-    (ccnCourant.date ? " — version du "+dateFr(ccnCourant.date) : "")+
-    " — Légifrance, fonds KALI, "+(ccnCourant.id||"");
+    (ccnCourant.date ? ", version du "+dateFr(ccnCourant.date) : "")+
+    ", Légifrance, fonds KALI, "+(ccnCourant.id||"");
 }
 function ccnNom(ext){
   return (normaliser(ccnCourant.titre||"convention").replace(/[^a-z0-9]+/g,"-")
@@ -2422,7 +2422,7 @@ function phraseCaracteristique(html){
 }
 
 /* Chercher dans Judilibre depuis un texte conventionnel : la recherche est
-   remplie et lancée, et l'on est amené aux résultats. Rien n'est deviné —
+   remplie et lancée, et l'on est amené aux résultats. Rien n'est deviné,
    l'expression cherchée est celle que l'utilisateur voit à l'écran. */
 function versJudilibre(expression){
   $("dlg-ccn").close();
@@ -2449,7 +2449,7 @@ async function ccnPleinTexte(){
     $("ccn-sommaire").innerHTML =
       '<div class="msg ok" style="margin-top:12px"><b>'+l.length+" texte"+(l.length>1?"s":"")+
       " de la convention "+echap(idcc)+" contien"+(l.length>1?"nent":"t")+" « "+echap(q)+" »"+
-      (d.total > l.length ? " — "+d.total+" au total, les "+l.length+" premiers sont affichés" : "")+
+      (d.total > l.length ? " : "+d.total+" au total, les "+l.length+" premiers sont affichés" : "")+
       ".</b></div>"+
       l.map(r => '<div class="fiche"><b>'+echap(r.titre||"(sans intitulé)")+"</b>"+
         (r.etat ? ' <span class="badge">'+echap(r.etat)+"</span>" : "")+
@@ -2508,14 +2508,14 @@ $("ccn-word").onclick = ()=>{
    dépendance d'obtenir un PDF fidèle ; l'impression se fait depuis un cadre
    masqué, ce qui évite les blocages de fenêtres surgissantes.
 
-   Le Word est un vrai .docx — une archive ZIP contenant du XML Office — et non
+   Le Word est un vrai .docx, une archive ZIP contenant du XML Office, et non
    un HTML renommé : un fichier renommé s'ouvre parfois, mais se corrompt au
    partage et n'est pas ce qui a été demandé. */
 
 function documentDecision(d){
   const n = numerosDe(d);
   return {
-    titre: juridictionDe(d)+" — "+dateFr(d.decision_date)+(n?" — n° "+n:""),
+    titre: juridictionDe(d)+", "+dateFr(d.decision_date)+(n?", n° "+n:""),
     sousTitre: [d.ecli, d.solution].filter(Boolean).join(" · "),
     citation: citationDe(d),
     sommaire: String(d.summary||"").replace(/\s+/g," ").trim(),
@@ -2536,7 +2536,7 @@ function imprimerDecision(d){
     '<div class="st">'+echap(o.sousTitre)+"</div>"+
     (o.sommaire ? '<div class="som"><b>Sommaire officiel.</b> '+echap(o.sommaire)+"</div>" : "")+
     "<pre>"+echap(o.texte)+"</pre>"+
-    '<div class="src">'+echap(o.citation)+" — source : "+echap(o.lien)+
+    '<div class="src">'+echap(o.citation)+", source : "+echap(o.lien)+
     " (Judilibre, Cour de cassation, open data, décision pseudonymisée)</div>"+
     "</body></html>";
   const cadre = document.createElement("iframe");
@@ -2604,7 +2604,7 @@ function paragraphe(texte, options){
     '<w:spacing w:after="120"/>'+(o.centre ? '<w:jc w:val="center"/>' : "")+"</w:pPr>";
   /* L'ordre des éléments de w:rPr est imposé par le schéma Office :
      w:b, puis w:color, puis w:sz. Word tolère un autre ordre, LibreOffice
-     refuse le fichier — vérifié. */
+     refuse le fichier, vérifié. */
   const rpr = "<w:rPr>"+(o.gras ? "<w:b/>" : "")+
     (o.gris ? '<w:color w:val="555555"/>' : "")+
     (o.taille ? '<w:sz w:val="'+o.taille+'"/>' : "")+"</w:rPr>";
@@ -2618,7 +2618,7 @@ function docxDecision(d){
     (o.sousTitre ? paragraphe(o.sousTitre, {gris:true, taille:18}) : "") +
     (o.sommaire ? paragraphe("Sommaire officiel. "+o.sommaire, {taille:20}) : "") +
     o.texte.split("\n").map(l => paragraphe(l)).join("") +
-    paragraphe(o.citation+" — source : "+o.lien+
+    paragraphe(o.citation+", source : "+o.lien+
       " (Judilibre, Cour de cassation, open data, décision pseudonymisée)", {gris:true, taille:16});
   return zipDocx(corps);
 }
@@ -2651,7 +2651,7 @@ function zipDocx(corps){
   ]);
 }
 
-/* Les deux mêmes sorties, pour un texte quelconque — un texte de convention
+/* Les deux mêmes sorties, pour un texte quelconque, un texte de convention
    collective aujourd'hui. Le PDF passe par l'impression du navigateur, seul
    moyen fidèle et sans dépendance ; le Word est un vrai .docx. */
 function imprimerTexte(titre, source, texte){
@@ -2662,7 +2662,7 @@ function imprimerTexte(titre, source, texte){
     '.src{margin-top:8mm;font-size:9pt;color:#444}'+
     "</style></head><body><h1>"+echap(titre)+"</h1>"+
     '<div class="st">'+echap(source)+"</div><pre>"+echap(texte)+"</pre>"+
-    '<div class="src">Source : '+echap(source)+" — Légifrance (DILA), open data.</div>"+
+    '<div class="src">Source : '+echap(source)+", Légifrance (DILA), open data.</div>"+
     "</body></html>";
   const cadre = document.createElement("iframe");
   cadre.style.cssText = "position:fixed;right:0;bottom:0;width:0;height:0;border:0";
@@ -2677,7 +2677,7 @@ function docxTexte(titre, source, texte){
     paragraphe(titre, {gras:true, taille:28}) +
     paragraphe(source, {gris:true, taille:18}) +
     texte.split("\n").map(l => paragraphe(l)).join("") +
-    paragraphe("Source : "+source+" — Légifrance (DILA), open data.", {gris:true, taille:16});
+    paragraphe("Source : "+source+", Légifrance (DILA), open data.", {gris:true, taille:16});
   return zipDocx(corps);
 }
 
@@ -2739,7 +2739,7 @@ function nomFichier(ext){
 }
 function pageHtml(lignes){
   const c = etat.criteres;
-  const titre = "Jurisprudence — « "+c.q+" » ("+MODES[c.mode]+") — "+new Date().toLocaleDateString("fr-FR");
+  const titre = "Jurisprudence, « "+c.q+" » ("+MODES[c.mode]+"), "+new Date().toLocaleDateString("fr-FR");
   return '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">'+
     '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'+echap(titre)+"</title><style>"+
     'body{font:14.5px/1.55 Georgia,"Times New Roman",serif;color:#1c2430;max-width:840px;margin:26px auto;padding:0 18px}'+
@@ -2835,7 +2835,7 @@ document.querySelectorAll("#affiner input, #affiner select").forEach(el=>{
 /* Installation sur l'appareil, mode hors connexion, et surtout : signalement
    d'une nouvelle version. Une application installée ne se recharge jamais
    d'elle-même ; sans cet avertissement, l'utilisateur peut rester des jours sur
-   une version dépassée sans le savoir — ce qui rend incompréhensible tout
+   une version dépassée sans le savoir, ce qui rend incompréhensible tout
    défaut déjà corrigé. */
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   window.addEventListener("load", async ()=>{
@@ -2843,7 +2843,7 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
       const reg = await navigator.serviceWorker.register("sw.js");
       /* Une nouvelle version prend la main : la page affichée a été chargée
          sous l'ancienne, elle peut donc être périmée. Exception, le tout
-         premier enregistrement : la page vient du réseau, elle est à jour —
+         premier enregistrement : la page vient du réseau, elle est à jour,
          d'où un drapeau qui bascule après cette première prise de contrôle,
          plutôt qu'un état figé au chargement. */
       let dejaControlee = !!navigator.serviceWorker.controller;
@@ -2865,7 +2865,7 @@ $("btn-adresse").onclick = ()=>{
 
    Même relais, même abonnement, troisième fonds. Ce qui change, c'est ce qu'on
    y cherche : une loi ne se désigne pas comme une convention. On la trouve par
-   ses mots, ou par son NOR — l'identifiant que la publication lui attribue et
+   ses mots, ou par son NOR, l'identifiant que la publication lui attribue et
    qui, lui, ne varie pas.
 
    L'assistant de mots-clés reprend la doctrine de celui des décisions, parce
@@ -2873,7 +2873,7 @@ $("btn-adresse").onclick = ()=>{
    a écrit « contribution due par les employeurs ». On ne devine pas cette
    formule, on la relève. On interrogne donc le fonds avec les mots de
    l'utilisateur, on lit ce que les textes trouvés contiennent réellement, on en
-   extrait les expressions récurrentes — puis on COMPTE chacune en expression
+   extrait les expressions récurrentes, puis on COMPTE chacune en expression
    exacte. Ce qui est proposé est un relevé chiffré, pas une suggestion.
    ==================================================================== */
 let lodaCourant = null;
@@ -2994,11 +2994,11 @@ async function assistantMotsLoda(){
         utiles.map(l => '<tr><td style="padding:4px 8px 4px 0">'+
           '<button class="second loda-mot" type="button" data-e="'+echap(l.e)+'">'+echap(l.e)+"</button></td>"+
           '<td class="note" style="padding:4px 0;white-space:nowrap">'+l.total.toLocaleString("fr-FR")+
-          " texte"+(l.total>1?"s":"")+(l.sien ? " — vos mots" : "")+"</td></tr>").join("")+
+          " texte"+(l.total>1?"s":"")+(l.sien ? ", vos mots" : "")+"</td></tr>").join("")+
         "</table></div>" : '<div class="msg err">Aucune des expressions relevées n\'existe telle '+
         "quelle dans le fonds. Essayez d'autres termes.</div>")+
       (vaines.length ? '<div class="fiche"><b>Écartées</b><div class="note">'+
-        vaines.map(l => echap(l.e)+" — aucun texte").join(" · ")+"</div></div>" : "");
+        vaines.map(l => echap(l.e)+", aucun texte").join(" · ")+"</div></div>" : "");
 
     $("loda-mots-fermer").onclick = ()=>{ zone.innerHTML = ""; };
     [...document.querySelectorAll(".loda-mot")].forEach(b => b.onclick = ()=>{
@@ -3015,7 +3015,7 @@ async function assistantMotsLoda(){
 }
 
 /* Une loi se verse aux débats comme une convention : mêmes sorties, mêmes
-   fonctions. Ce qui change tient au fonds cité en source — il faut pouvoir
+   fonctions. Ce qui change tient au fonds cité en source, il faut pouvoir
    remonter à ce qui a été lu, et savoir dans quel fonds le chercher. */
 function lodaTexteBrut(){
   return (lodaCourant.blocs||[]).map(b => b.type==="section"
@@ -3025,9 +3025,9 @@ function lodaTexteBrut(){
 }
 function lodaSource(){
   return (lodaCourant.titre||"Texte")+
-    (lodaCourant.date ? " — version du "+dateFr(lodaCourant.date) : "")+
-    (lodaCourant.nor ? " — NOR "+lodaCourant.nor : "")+
-    " — Légifrance, fonds LODA, "+(lodaCourant.id||"");
+    (lodaCourant.date ? ", version du "+dateFr(lodaCourant.date) : "")+
+    (lodaCourant.nor ? ", NOR "+lodaCourant.nor : "")+
+    ", Légifrance, fonds LODA, "+(lodaCourant.id||"");
 }
 function lodaNom(ext){
   return (normaliser(lodaCourant.titre||"texte").replace(/[^a-z0-9]+/g,"-")
@@ -3061,17 +3061,17 @@ remplirModeles(""); remplirLieux(""); majEtat(); majResumeAffiner();
   const m = location.hash.match(/^#r=(.+)$/);
   if(!m) return;
   /* Le relais de l'application peut porter la connexion : on tente la
-     recherche même sans clé personnelle — au pire, l'erreur se nomme. */
+     recherche même sans clé personnelle, au pire, l'erreur se nomme. */
   try{ ecrire(JSON.parse(decodeURIComponent(m[1]))); chercher(0); }catch(e){}
 })();
 
 /* Le bouton « Avertissement d'usage ».
 
    La première pose de ce gestionnaire avait été insérée avant le PREMIER
-   « </body> » du fichier — lequel se trouve à l'intérieur d'une chaîne du
+   « </body> » du fichier, lequel se trouve à l'intérieur d'une chaîne du
    script, celle qui construit la page imprimable d'une décision. La chaîne
    n'était plus fermée, tout le script de la page mourait au chargement, et plus
-   un seul bouton ne répondait — ni « Enregistrer » pour la clé, ni la recherche.
+   un seul bouton ne répondait, ni « Enregistrer » pour la clé, ni la recherche.
    Le symptôme était muet et la cause invisible à la relecture : il a fallu
    ouvrir la page dans un navigateur pour la voir. */
 document.getElementById("btn-avert").addEventListener("click", ()=>{

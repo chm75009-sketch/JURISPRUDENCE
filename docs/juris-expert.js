@@ -1,4 +1,4 @@
-/* Le pont vers Juris Expert — la table des outils qui produisent le document
+/* Le pont vers Juris Expert, la table des outils qui produisent le document
    final, et rien d'autre.
 
    POURQUOI CE FICHIER EXISTE. Deux applications de la même juriste font le
@@ -7,7 +7,7 @@
    jurisprudence les éclaire, dans quel ordre on les régularise. Juris Expert
    PRODUIT : le contrat, le règlement intérieur, le registre du personnel, les
    documents des élections professionnelles, les accords et procès-verbaux de
-   la négociation — imprimables, pré-remplis, prêts à signer.
+   la négociation, imprimables, pré-remplis, prêts à signer.
 
    Le partage a été arrêté par l'utilisatrice, et il tient en une phrase :
    ce qui se constate reste ici, ce qui s'imprime part là-bas. Les élections
@@ -16,7 +16,7 @@
    CE QUE CE FICHIER NE FAIT PAS. Il n'appelle rien, ne charge rien, n'envoie
    rien. Ce sont des liens, écrits en dur, vers un site public dont l'adresse
    a été VÉRIFIÉE (réponse 200 sur chacune des pages listées, le 22 août
-   2026) — pas devinée. Un outil dont l'adresse n'a pas été vérifiée n'entre
+   2026), pas devinée. Un outil dont l'adresse n'a pas été vérifiée n'entre
    pas dans cette table.
 
    L'ADRESSE. Juris Expert est publié par GitHub Pages sur le dépôt
@@ -30,7 +30,7 @@
      défense prud'homale) ont leur propre adresse : on y va directement.
    - Les modules qui vivent dans son index.html unique n'ont pas d'adresse
      propre aujourd'hui : le lien porte « #/<module> ». Tant que Juris Expert
-     ne lit pas ce fragment, il ouvre son accueil — le renvoi reste juste, il
+     ne lit pas ce fragment, il ouvre son accueil, le renvoi reste juste, il
      est seulement moins précis. Le jour où il le lit, le lien tombe pile.
      C'est délibéré : aucun lien de cette table ne peut casser.             */
 "use strict";
@@ -39,7 +39,7 @@
   var BASE = "https://chm75009-sketch.github.io/JURISTE-EXPERT-/";
 
   /* La table des outils. `cible` est relative à BASE. `quoi` dit ce que
-     l'outil imprime — c'est ce qui justifie le renvoi, et c'est ce que le
+     l'outil imprime, c'est ce qui justifie le renvoi, et c'est ce que le
      client lit. */
   var OUTILS = {
     "elections": {
@@ -108,7 +108,7 @@
       quoi: "invitation, ordre du jour, bordereau des informations, accords, procès-verbal de désaccord, plan d'action égalité",
     },
     "harcelement": {
-      nom: "Harcèlement — prévention et preuve",
+      nom: "Harcèlement, prévention et preuve",
       cible: "index.html#/harcele",
       quoi: "la procédure de signalement, l'enquête et le dossier de preuve imprimable",
     },
@@ -151,7 +151,7 @@
   function bandeau(cle, precision) {
     if (!existe(cle)) return "";
     return '<p class="renvoi-jx">La version complète et imprimable se génère dans ' +
-      '<a href="' + e(lien(cle)) + '" target="_blank" rel="noopener">Juris Expert — ' +
+      '<a href="' + e(lien(cle)) + '" target="_blank" rel="noopener">Juris Expert : ' +
       e(OUTILS[cle].nom) + "</a> : " + e(precision || OUTILS[cle].quoi) +
       ". Le modèle ci-dessous reste disponible ici : il montre la structure et " +
       "l'article qui la commande.</p>";

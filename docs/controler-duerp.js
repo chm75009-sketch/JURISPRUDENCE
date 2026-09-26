@@ -416,7 +416,7 @@
          […] et au plus tard à compter du 1er juillet 2024 » en dessous.
          L'obligation est donc entrée en vigueur ; ce qui manque est le
          portail qui doit la recevoir. Le document ne dit pas que ce portail
-         n'existe pas — ce serait un fait, et le document n'en rapporte aucun
+         n'existe pas, ce serait un fait, et le document n'en rapporte aucun
          qu'il n'ait vérifié : il écrit la condition, « tant que l'entreprise
          n'est pas en mesure d'y déposer le document ». Relecture du
          25 septembre 2026. */

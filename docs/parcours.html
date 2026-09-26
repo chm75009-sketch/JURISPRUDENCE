@@ -18,7 +18,7 @@
 
      L'audit dit ce qui ne va pas. Le parcours dit quoi faire, dans quel ordre,
      pour quand, et avec quel document. Chaque parcours pose d'abord la question
-     « êtes-vous prêt ? » — la liste de ce qu'il faut avoir réuni —, puis
+     « êtes-vous prêt ? », la liste de ce qu'il faut avoir réuni, puis
      déroule les étapes dans l'ordre, chacune avec son fondement lu à la source,
      son délai calculé depuis les dates du dossier, et le modèle de document
      correspondant, pré-rempli du profil de l'entreprise.
@@ -26,7 +26,7 @@
      Tout se passe dans le navigateur : le profil et l'avancement sont écrits
      dans le stockage local du poste, rien n'est envoyé.
 
-     TEXTES — 194 articles du code du travail lus au relais Légifrance, chacun
+     TEXTES, 194 articles du code du travail lus au relais Légifrance, chacun
      en deux lectures espacées concordantes, filtre par NOM du code (« Code du
      travail ») et critère de contenu contre les homonymes. Les captures et
      leurs journaux sont dans le dépôt :
@@ -40,8 +40,8 @@
        moteur/parcours/textes-regularisation.json      (32 confirmés, dont 28 nouveaux)
        moteur/parcours/textes-regularisation-non-confirmes.json (D. 1221-26)
      La seconde capture a redemandé les 29 articles déjà au référentiel : aucun
-     écart d'identifiant de version. Une lecture « élargie » — le relais ayant
-     relâché le filtre par nom du code — est écartée comme une réponse relaxée.
+     écart d'identifiant de version. Une lecture « élargie », le relais ayant
+     relâché le filtre par nom du code, est écartée comme une réponse relaxée.
      Un article que la capture n'a pas confirmé n'est pas cité ici.
 
      Deux homonymes historiques du dépôt ont été redressés au passage : sous le
@@ -50,16 +50,16 @@
      territoriales, et L. 2242-10 rend LEGIARTI000035627827 et non un article
      d'un autre code. Ce sont les versions citées ici.
 
-     NON CONFIRMÉ, ET DONC JAMAIS CITÉ : L. 2315-40 — le relais répond
+     NON CONFIRMÉ, ET DONC JAMAIS CITÉ : L. 2315-40, le relais répond
      « trouvé : faux » à deux lectures espacées. Aucune étape ne s'y appuie.
      Même réponse pour R. 2323-38, l'article qui imposait au comité d'entreprise
      sortant de rendre compte de sa gestion au nouveau comité et de lui remettre
      tous les documents : il n'est plus en vigueur, et aucun article lu ne le
      reprend pour le comité social et économique. Le parcours d'installation le
-     dit et renvoie au règlement intérieur du comité — il n'invente pas la règle
+     dit et renvoie au règlement intérieur du comité, il n'invente pas la règle
      manquante.
 
-     JURISPRUDENCE — 24 arrêts de la chambre sociale lus à la source par l'API
+     JURISPRUDENCE, 24 arrêts de la chambre sociale lus à la source par l'API
      Judilibre les 21 et 22 août 2026 ; aucune réponse « relaxed » n'a été
      retenue. Sommaires et identifiants :
        moteur/parcours/jurisprudence-parcours.json
@@ -90,12 +90,12 @@
     text-transform:uppercase;color:var(--gris)}
   .carte .avance.fini{color:var(--vert)}
   .carte .avance.retard{color:var(--rouge)}
-  /* Ce qui n'est pas dû à l'effectif : retiré de la liste, mais dit — on ne
+  /* Ce qui n'est pas dû à l'effectif : retiré de la liste, mais dit, on ne
      retire rien en silence. */
   .hors-seuil{grid-column:1/-1;margin:4px 0 0;font-size:13px;line-height:1.5;color:var(--gris)}
 
   /* La question fermée, avant tout le reste : avez-vous déjà le document ?
-     « Oui » ouvre le contrôle de l'existant, « non » ouvre la construction —
+     « Oui » ouvre le contrôle de l'existant, « non » ouvre la construction,
      et les deux issues sont visibles du même coup d'œil. */
   .controle-existant{border:1px solid var(--filet);border-left:3px solid var(--bleu);
     background:var(--surface);border-radius:4px;padding:14px 17px;margin:0 0 18px}
@@ -164,7 +164,7 @@
   .conv{border-left:3px solid var(--orange);background:var(--orange-f);border-radius:0 3px 3px 0;
     padding:9px 12px;margin:9px 0 0;font-size:13px;color:var(--orange)}
   /* Ce qu'on risque à ne pas franchir l'étape. Il n'y en a pas partout : là
-     où aucun texte ne sanctionne, la ligne dit la conséquence civile — et
+     où aucun texte ne sanctionne, la ligne dit la conséquence civile, et
      là où il n'y a ni l'une ni l'autre, elle ne s'affiche pas plutôt que
      d'inventer une peine. */
   .risque{border-left:3px solid var(--rouge);background:var(--rouge-f);border-radius:0 3px 3px 0;
@@ -267,7 +267,7 @@
     border:1px solid var(--bleu);color:var(--bleu);background:var(--surface)}
   .actions a.doc:hover{background:#eef2f9}
   /* Le renvoi vers Juris Expert : le document final s'y imprime. Le bouton
-     est volontairement plus sobre que celui du modèle interne — on sort de
+     est volontairement plus sobre que celui du modèle interne, on sort de
      l'application, et la sortie ne doit pas primer sur l'étape. */
   .actions a.jx{font:600 13.5px/1 system-ui;text-decoration:none;padding:9px 13px;border-radius:3px;
     border:1px dashed var(--gris);color:var(--corps);background:var(--gris-f)}
@@ -368,17 +368,17 @@
 
 <header>
   <p class="fil">Application Jurisprudence</p>
-  <h1>Parcours guidés — les procédures pas à pas</h1>
+  <h1>Parcours guidés, les procédures pas à pas</h1>
   <p class="chapo" id="chapo"><b>L'audit dit ce qui ne va pas ; le parcours dit quoi faire.</b> Douze procédures
   réelles, découpées en étapes datées : ce qu'il faut avoir réuni avant de commencer, les étapes dans
   l'ordre avec leur fondement lu à la source et leur délai calculé depuis vos dates, le document à
-  produire à chaque étape — pré-rempli de votre profil —, et un état d'avancement qui vous attend à la
+  produire à chaque étape, pré-rempli de votre profil, et un état d'avancement qui vous attend à la
   réouverture.<br>Tout se passe dans votre navigateur : rien n'est envoyé, rien n'est conservé
   ailleurs que sur ce poste.</p>
 </header>
 
 <!-- La barre compacte : ce qu'on voit quand un parcours est ouvert. Tout ce
-     qui précède — la présentation, la fiche client, les quinze vignettes — se
+     qui précède, la présentation, la fiche client, les quinze vignettes, se
      replie derrière elle. On vient ici pour une procédure, pas pour relire
      comment la page fonctionne. -->
 <div class="barre-parcours" id="barre-parcours" hidden>
@@ -393,35 +393,35 @@
   <p><b>1. Votre entreprise.</b> Effectif, secteur, convention, groupe, établissements, présence d'un
   comité et de sections syndicales. Ce profil est partagé avec les audits et le générateur de
   documents : renseigné ici, il est repris partout. Il sert surtout à <b>masquer les étapes sans
-  objet</b> — une commission de la formation n'a pas à figurer dans le parcours d'une entreprise de
+  objet</b>, une commission de la formation n'a pas à figurer dans le parcours d'une entreprise de
   quarante salariés.</p>
-  <p><b>2. Le parcours choisi, cette page se replie.</b> Il ne reste qu'une ligne — le nom de la
-  procédure et celui de votre entreprise — et, dessous, la procédure elle-même. Deux boutons rouvrent
+  <p><b>2. Le parcours choisi, cette page se replie.</b> Il ne reste qu'une ligne, le nom de la
+  procédure et celui de votre entreprise, et, dessous, la procédure elle-même. Deux boutons rouvrent
   ce qui est replié : changer de parcours, modifier la fiche.</p>
   <p><b>3. La procédure, étape par étape.</b> Dans l'ordre, chacune avec l'article qui la fonde
-  (numéro <i>et</i> identifiant de version — un article change sans changer de numéro), la
+  (numéro <i>et</i> identifiant de version, un article change sans changer de numéro), la
   jurisprudence lorsqu'elle éclaire l'étape, le délai calculé depuis vos dates, <b>ce qu'on risque à
   ne pas la franchir</b>, le conseil de pratique, et le courrier type que l'application écrit
   elle-même. Cochez les étapes franchies et datez-les : <b>une date qui consigne un acte se saisit
-  là, sur l'étape</b>, et jamais d'avance — on ne vous demande pas la date d'un dépôt qui n'a pas
+  là, sur l'étape</b>, et jamais d'avance, on ne vous demande pas la date d'un dépôt qui n'a pas
   encore eu lieu.</p>
   <p><b>4. Ce qu'il faut avoir réuni</b>, sous les étapes : cochez ce que vous avez, ce qui reste
-  décoché est repris nommément. <b>5. Les dates du dossier</b> : celles qui commandent les délais —
-  un franchissement de seuil, une date d'entrée en vigueur —, pas celles que les étapes consignent.</p>
+  décoché est repris nommément. <b>5. Les dates du dossier</b> : celles qui commandent les délais,
+  un franchissement de seuil, une date d'entrée en vigueur,, pas celles que les étapes consignent.</p>
   <p class="note"><b>Ce que cette page ne fait pas :</b> elle ne lit pas votre convention collective.
-  Partout où le conventionnel peut ajouter une étape — un conseil de discipline, un avis préalable, une
-  périodicité de négociation, une commission supplémentaire —, elle le signale et vous renvoie à votre
+  Partout où le conventionnel peut ajouter une étape, un conseil de discipline, un avis préalable, une
+  périodicité de négociation, une commission supplémentaire,, elle le signale et vous renvoie à votre
   texte, sans jamais affirmer ce qu'il contient. Elle ne remplace ni la négociation ni le conseil, et
   ne se substitue pas à la décision de l'administration ou du juge.</p>
 </div>
 
-<h2 class="titre-zone">1. Votre entreprise — la fiche client</h2>
+<h2 class="titre-zone">1. Votre entreprise, la fiche client</h2>
 <p class="aide">Dénomination, SIRET, adresse, responsable, coordonnées, effectif, secteur, convention,
 groupe, établissements : c'est la fiche que l'audit social remplit en première étape, et c'est la
-même. Renseignée ici, elle est reprise partout — audits, agenda, générateur de documents — et
+même. Renseignée ici, elle est reprise partout, audits, agenda, générateur de documents, et
 inversement. Elle ouvre les parcours et masque les étapes sans objet. Elle ne quitte pas ce poste.<br>
 <b>Toute réponse fermée offre quatre valeurs</b> : oui, non, en cours, autre. « oui » et « non »
-concluent ; « en cours » et « autre » ne concluent jamais — aucune étape n'est masquée sur une
+concluent ; « en cours » et « autre » ne concluent jamais, aucune étape n'est masquée sur une
 réponse nuancée.</p>
 <div id="zone-profil"><form id="form-profil" autocomplete="off"></form></div>
 
@@ -475,9 +475,9 @@ réponse nuancée.</p>
   sans changer de numéro. Les 194 articles de cette page ont été lus au relais Légifrance les 21 et
   22 août 2026, chacun en deux lectures espacées concordantes, filtre par nom du code et critère de
   contenu contre les homonymes. La capture du 22 août a redemandé dix-neuf articles déjà au dépôt :
-  aucun écart d'identifiant de version. Un article que la capture n'a pas confirmé — D. 1221-26 —
+  aucun écart d'identifiant de version. Un article que la capture n'a pas confirmé, D. 1221-26,
   n'est cité par aucune étape. Les 24 arrêts cités ont été lus à la source par l'API Judilibre les
-  mêmes jours ; aucune réponse relaxée n'a été retenue. Cette page ne cite rien qu'elle n'ait lu —
+  mêmes jours ; aucune réponse relaxée n'a été retenue. Cette page ne cite rien qu'elle n'ait lu,
   et lorsqu'elle n'a rien trouvé, comme sur la remise-reprise entre un comité sortant et le comité
   entrant, elle le dit au lieu de combler le vide.</p>
 </footer>

@@ -376,7 +376,7 @@
     return "b" + (h >>> 0).toString(36);
   }
   function blocsDeTexte(t) {
-    t = String(t || "").replace(/[\u2014\u2013]/g, "-").replace(/\u00a0/g, " ");
+    t = String(t || "").replace(/[--]/g, "-").replace(/\u00a0/g, " ");
     var lignes = t.split("\n"), b = [], i = 0;
     /* l'en-tête : dénomination, adresse, SIRET, puis le titre et son fondement */
     while (i < lignes.length && lignes[i].trim() !== "") { b.push({ k: "ent", t: lignes[i].trim() }); i++; }
