@@ -41,6 +41,27 @@
   .etiq{font:600 11px/1 system-ui;padding:6px 8px;border-radius:6px;white-space:nowrap;
     background:var(--creux);color:var(--texte-2)}
   .etiq.produit{background:var(--vert-clair);color:var(--vert)}
+  .filtres{display:grid;grid-template-columns:1fr;gap:10px;margin:16px 0 0}
+  @media (min-width:560px){.filtres{grid-template-columns:2fr 1fr 1fr}}
+  .filtres .ch{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texte-2)}
+  .filtres input,.filtres select{min-height:44px;padding:8px 10px;border:1px solid var(--filet);
+    border-radius:var(--r2);background:var(--surface);color:var(--encre);font:16px system-ui;
+    width:100%;box-sizing:border-box}
+  .compte{margin:10px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  #apercu{margin:16px 0 0;border:1px solid var(--filet);border-radius:var(--r2);
+    background:var(--surface);overflow:hidden}
+  #apercu .ap-tete{display:flex;gap:10px;align-items:center;justify-content:space-between;
+    padding:10px 12px;border-bottom:1px solid var(--filet)}
+  #apercu .ap-tete b{font:600 15px/1.3 system-ui;color:var(--encre);min-width:0;
+    overflow:hidden;text-overflow:ellipsis}
+  #apercu .ap-tete button{min-height:38px;padding:0 12px;border:1px solid var(--filet);
+    border-radius:8px;background:var(--surface);color:var(--encre);font:14.5px system-ui;cursor:pointer}
+  #apercu .ap-corps{padding:12px;max-height:70vh;overflow:auto;background:#fff}
+  #apercu img{max-width:100%;height:auto;display:block}
+  #apercu iframe{width:100%;height:60vh;border:0}
+  #apercu pre{white-space:pre-wrap;word-wrap:break-word;font:13.5px/1.55 ui-monospace,monospace;
+    color:var(--encre);margin:0}
+  #apercu .rien{font-size:14.5px;line-height:1.55;color:var(--texte-2);margin:0}
 </style>
 </head>
 <body>
@@ -55,7 +76,27 @@
 <main class="wrap">
   <p class="rappel-fiche" id="chapeau">Ce que vous avez déposé et ce que l'application a produit,
     gardés sur ce poste, rubrique par rubrique.</p>
+
+  <!-- CHERCHER PAR CE QU'ON CHERCHE : UN NOM, UNE PLAQUE.
+       La liste était rangée par rubrique, et rien d'autre : retrouver les
+       trois documents d'un conducteur demandait de parcourir douze rubriques.
+       Relevé le 26 septembre 2026. Les noms viennent du registre du personnel,
+       les plaques de la flotte : on choisit, on ne retape pas. -->
+  <div class="filtres" id="filtres">
+    <label class="ch"><span>Chercher</span>
+      <input type="search" id="f-texte" placeholder="un mot du nom du document"></label>
+    <label class="ch"><span>Par salarié</span><select id="f-salarie"></select></label>
+    <label class="ch"><span>Par véhicule</span><select id="f-vehicule"></select></label>
+  </div>
+  <p class="compte" id="f-dit"></p>
+
   <div id="liste"></div>
+
+  <div id="apercu" hidden>
+    <div class="ap-tete"><b id="ap-nom"></b>
+      <button type="button" id="ap-fermer">Fermer</button></div>
+    <div class="ap-corps" id="ap-corps"></div>
+  </div>
 </main>
 
 <script src="droits.js"></script>
@@ -106,7 +147,8 @@
       '<p class="quand">' + ech(window.Documents.enFrancais(d.date)) +
       (d.taille ? " · " + ech(window.Documents.poids(d.taille)) : "") +
       (d.note ? " · " + ech(d.note) : "") + "</p>" +
-      '<div class="barre"><button type="button" data-tel="' + d.id + '">Télécharger</button>' +
+      '<div class="barre"><button type="button" data-voir="' + d.id + '">Voir</button>' +
+      '<button type="button" data-tel="' + d.id + '">Télécharger</button>' +
       '<button type="button" class="second" data-del="' + d.id + '">Retirer</button></div></div>';
   }
 
@@ -152,6 +194,107 @@
     });
   }
 
+  /* ─────────────────────── L'APERÇU À L'ÉCRAN ─────────────────────────
+     On ne téléchargeait que pour savoir ce qu'on téléchargeait. Les images,
+     les PDF et les fichiers texte se regardent ici ; pour un .docx ou un
+     .xlsx, aucun navigateur ne sait les rendre, et l'écran le dit plutôt que
+     d'afficher une page blanche. Relevé le 26 septembre 2026. */
+  var URL_VUE = null;
+  function libererVue() {
+    if (URL_VUE) { try { URL.revokeObjectURL(URL_VUE); } catch (e) {} URL_VUE = null; }
+  }
+  function voir(id) {
+    window.Documents.lire(id).then(function (d) {
+      if (!d) return;
+      libererVue();
+      var type = String(d.type || "").toLowerCase();
+      var nom = String(d.nom || "");
+      var blob = (d.contenu && typeof d.contenu.size === "number")
+        ? d.contenu : new Blob([d.contenu], { type: type || "text/plain" });
+      $("ap-nom").textContent = nom;
+      var z = $("ap-corps");
+      if (/^image\//.test(type) || /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(nom)) {
+        URL_VUE = URL.createObjectURL(blob);
+        z.innerHTML = '<img alt="' + ech(nom) + '" src="' + URL_VUE + '">';
+      } else if (type === "application/pdf" || /\.pdf$/i.test(nom)) {
+        URL_VUE = URL.createObjectURL(blob);
+        z.innerHTML = '<iframe title="' + ech(nom) + '" src="' + URL_VUE + '"></iframe>';
+      } else if (/^text\//.test(type) || /\.(txt|csv|md|json|xml|html?)$/i.test(nom)) {
+        blob.text().then(function (t) {
+          z.innerHTML = "<pre>" + ech(t.slice(0, 40000)) +
+            (t.length > 40000 ? "\n\n[…] document tronqué à l'écran ; téléchargez-le pour le lire en entier." : "") +
+            "</pre>";
+        }).catch(function () {
+          z.innerHTML = '<p class="rien">Ce fichier n\'a pas pu être lu sur cet appareil.</p>';
+        });
+      } else {
+        z.innerHTML = '<p class="rien">Ce format ne se regarde pas dans un navigateur : ' +
+          "téléchargez-le pour l'ouvrir dans Word, dans un tableur ou dans le logiciel qui le lit.</p>";
+      }
+      $("apercu").hidden = false;
+      $("apercu").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+  }
+  $("ap-fermer").addEventListener("click", function () {
+    $("apercu").hidden = true;
+    $("ap-corps").innerHTML = "";
+    libererVue();
+  });
+
+  /* ──────────────── LES FILTRES : UN NOM, UNE PLAQUE ──────────────────
+     Un document porte le nom du salarié ou l'immatriculation dans son nom de
+     fichier ou dans sa note : c'est là que le filtre cherche, et nulle part
+     ailleurs. Il ne devine pas à qui un document se rapporte. */
+  function sansAccent(x) {
+    try {
+      return String(x == null ? "" : x).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    } catch (e) { return String(x == null ? "" : x).toLowerCase(); }
+  }
+  function lireLocal(cle, defaut) {
+    try { return JSON.parse(localStorage.getItem(cle) || "null") || defaut; }
+    catch (e) { return defaut; }
+  }
+  function salaries() {
+    var R = lireLocal("registre-personnel", null);
+    return ((R && R.salaries) || []).filter(function (x) {
+      return !x.ex && (String(x.nom || "").trim() || String(x.pre || "").trim());
+    }).map(function (x) {
+      return (String(x.nom || "").trim() + " " + String(x.pre || "").trim()).trim();
+    }).sort(function (a, b) { return a.localeCompare(b, "fr"); });
+  }
+  function vehicules() {
+    var L = lireLocal("flotte-vehicules", []);
+    return (L && L.length ? L : []).map(function (x) { return String(x.immat || "").trim(); })
+      .filter(Boolean).sort(function (a, b) { return a.localeCompare(b, "fr"); });
+  }
+  function remplirFiltres() {
+    var S = salaries(), V = vehicules();
+    $("f-salarie").innerHTML = '<option value="">tous les salariés</option>' +
+      S.map(function (n) { return '<option value="' + ech(n) + '">' + ech(n) + "</option>"; }).join("");
+    $("f-vehicule").innerHTML = '<option value="">tous les véhicules</option>' +
+      V.map(function (n) { return '<option value="' + ech(n) + '">' + ech(n) + "</option>"; }).join("");
+    if (!S.length) $("f-salarie").innerHTML = '<option value="">aucun salarié au registre</option>';
+    if (!V.length) $("f-vehicule").innerHTML = '<option value="">aucun véhicule à la flotte</option>';
+  }
+  /* Un nom de salarié se retrouve écrit de plusieurs façons dans un nom de
+     fichier : « DUPONT Jean », « dupont-jean », « Jean DUPONT ». Le filtre
+     retient un document dès que tous les mots du nom s'y trouvent. */
+  function porte(d, mots) {
+    var t = sansAccent(String(d.nom || "") + " " + String(d.note || ""));
+    for (var i = 0; i < mots.length; i++) if (t.indexOf(mots[i]) < 0) return false;
+    return true;
+  }
+  function filtrer(L) {
+    var q = sansAccent($("f-texte").value).trim();
+    var sal = sansAccent($("f-salarie").value).trim();
+    var veh = sansAccent($("f-vehicule").value).trim();
+    var out = L;
+    if (q) out = out.filter(function (d) { return porte(d, q.split(/\s+/)); });
+    if (sal) out = out.filter(function (d) { return porte(d, sal.split(/\s+/)); });
+    if (veh) out = out.filter(function (d) { return porte(d, [veh.replace(/\s+/g, "")]) || porte(d, [veh]); });
+    return out;
+  }
+
   function rendre() {
     if (!window.Documents || !window.Documents.disponible()) {
       $("liste").innerHTML = '<div class="avis att"><b>Ce navigateur ne garde pas les documents</b>' +
@@ -166,11 +309,33 @@
           "écrit : il viendra ici, daté.</div>";
         return;
       }
-      $("liste").innerHTML = pleines.map(function (x) {
+      var total = 0, gardees = [];
+      pleines.forEach(function (x) {
+        var F = filtrer(x.L);
+        total += F.length;
+        if (F.length) gardees.push({ r: x.r, L: F });
+      });
+      var actif = !!($("f-texte").value.trim() || $("f-salarie").value || $("f-vehicule").value);
+      $("f-dit").textContent = actif
+        ? total + " document" + (total > 1 ? "s" : "") + " sur " +
+          pleines.reduce(function (n, x) { return n + x.L.length; }, 0) + " répond" +
+          (total > 1 ? "ent" : "") + " au filtre"
+        : pleines.reduce(function (n, x) { return n + x.L.length; }, 0) + " document" +
+          (pleines.reduce(function (n, x) { return n + x.L.length; }, 0) > 1 ? "s" : "") + " gardés sur ce poste";
+      if (!gardees.length) {
+        $("liste").innerHTML = '<div class="avis info"><b>Aucun document ne répond à ce filtre</b>' +
+          "Le filtre cherche le nom ou la plaque dans le nom du document et dans sa note : " +
+          "un document qui ne les porte pas n'y répond pas.</div>";
+        return;
+      }
+      $("liste").innerHTML = gardees.map(function (x) {
         return '<section class="rub"><h2>' + ech(nomDe(x.r)) + "</h2>" +
           '<p class="compte">' + x.L.length + " document(s)</p>" +
           x.L.map(ligne).join("") + "</section>";
       }).join("");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-voir]"), function (b) {
+        b.addEventListener("click", function () { voir(b.getAttribute("data-voir")); });
+      });
       Array.prototype.forEach.call(document.querySelectorAll("[data-tel]"), function (b) {
         b.addEventListener("click", function () { telecharger(b.getAttribute("data-tel")); });
       });
@@ -183,6 +348,11 @@
     });
   }
 
+  remplirFiltres();
+  ["f-texte", "f-salarie", "f-vehicule"].forEach(function (id) {
+    $(id).addEventListener("input", rendre);
+    $(id).addEventListener("change", rendre);
+  });
   rendre();
 
   if ("serviceWorker" in navigator)
