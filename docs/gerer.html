@@ -65,6 +65,10 @@
 
   /* écran 4 : la liste */
   .groupe{font:600 13px system-ui;letter-spacing:.1em;text-transform:uppercase;color:var(--texte-2);margin:18px 0 0}
+  /* Une note qui explique pourquoi un document n'est peut-être pas dû :
+     elle se lit avant la liste, sans la remplacer. */
+  .doc-note{margin:0 0 10px;padding:11px 13px;border:1px solid var(--filet);border-radius:10px;
+    background:var(--creux);font-size:var(--t2);line-height:1.45;color:var(--texte-2)}
   .doc-ligne{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 0;
     border:0;border-bottom:1px solid var(--filet);border-radius:0;background:none;color:var(--encre);
     font:400 18px/1.3 system-ui;min-height:52px;text-align:left;cursor:pointer}
@@ -2491,6 +2495,7 @@
        n'apparaît que pour une entreprise du transport. */
     var h = "";
     var sect = String((profil && profil.secteur) || "");
+    var ds = String((profil && profil.delegueSyndical) || "").trim().toLowerCase();
     var idcc = String((profil && profil.conventionCollective) || "");
     if (/transport/i.test(sect) || /^0*16\b/.test(idcc.trim())) {
       h += '<p class="groupe">Embaucher dans le transport</p>' +
@@ -2549,6 +2554,25 @@
         h += ligne("parcours.html?p=installation",
           "Aucun comité en place : les élections d'abord",
           "information du personnel, protocole préélectoral, et procès-verbal de carence à défaut de candidat");
+      /* LA NÉGOCIATION ANNUELLE SUPPOSE UNE SECTION SYNDICALE.
+
+         L'accord et le procès-verbal de désaccord étaient proposés sans
+         qu'on sache s'il existe un délégué syndical, alors que l'obligation
+         de négocier ne pèse que sur « les entreprises où sont constituées
+         une ou plusieurs sections syndicales d'organisations
+         représentatives » (L. 2242-1). Relevé le 26 septembre 2026. La
+         réponse vient de la fiche ; tant qu'elle n'y est pas, les deux
+         documents restent accessibles, avec la question posée. */
+      if (g[0] === "Collectif" && ds !== "oui") {
+        h += '<p class="doc-note">' + (ds === "non"
+          ? "Votre fiche indique qu'aucun délégué syndical n'est désigné : la négociation annuelle " +
+            "obligatoire n'est pas due (L. 2242-1). L'accord et le procès-verbal de désaccord " +
+            "ci-dessous ne servent que si une section syndicale représentative se constitue."
+          : "Votre fiche ne dit pas si un délégué syndical est désigné. La négociation annuelle " +
+            "obligatoire n'est due que dans les entreprises où sont constituées une ou plusieurs " +
+            "sections syndicales d'organisations représentatives (L. 2242-1) : répondez sur la " +
+            "fiche d'entreprise avant d'écrire l'accord ou le procès-verbal.") + "</p>";
+      }
       g[1].forEach(function (cle) {
         if (transport16 && (cle === "cdi" || cle === "cdd" || cle === "partiel")) {
           if (cle === "cdi")
