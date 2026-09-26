@@ -810,6 +810,180 @@
     }
   }
 
+  /* ══════════ L'AMPLITUDE, LA NUIT, LES REPAS ET LES DÉCOUCHERS ═══════
+
+     Le relevé comptait des heures et rien d'autre. Or ce qui se paie en plus
+     des heures, dans le transport, ce sont l'amplitude, les heures de nuit,
+     les repas pris hors du domicile et les nuits passées dehors. L'audit du
+     26 septembre 2026 l'a relevé.
+
+     Ce qui se calcule est calculé depuis les horaires déjà saisis :
+     l'amplitude d'une journée est l'écart entre le début et la fin, pause
+     comprise, et les heures de nuit sont celles qui tombent dans la période
+     de nuit de la convention. Ce que seul l'employeur sait, combien de repas
+     ont été pris hors du domicile et combien de nuits dehors, se compte à la
+     main : aucune règle ne permet de le déduire d'une heure de départ.
+
+     Les montants viennent de contrats-transport.js, qui les porte avec leur
+     source et leur date : protocole du 30 avril 1974 et son avenant, accord
+     du 14 novembre 2001 pour la nuit, accord du 12 novembre 1998 pour
+     l'amplitude. Ils sont affichés avec cette source, et l'écran dit de les
+     vérifier au texte. */
+  function ccnTransport() {
+    return (window.ContratsTransport && window.ContratsTransport.CCN) || null;
+  }
+  function estTransport() {
+    var p = entreprise() || {};
+    var sec = sansAccent(String(p.secteur || ""));
+    if (sec.indexOf("transport") >= 0 || sec.indexOf("logistique") >= 0) return true;
+    var c = String(p.conventionCollective || "");
+    var m = c.match(/\d{3,4}/);
+    return !!(m && Number(m[0]) === 16);
+  }
+  /* Les heures d'une journée qui tombent entre deux bornes horaires, la
+     journée pouvant déborder sur le lendemain. */
+  function heuresEntre(debut, fin, borneA, borneB) {
+    var d = enMinutes(debut), f = enMinutes(fin);
+    if (d === null || f === null) return 0;
+    if (f <= d) f += 1440;
+    var total = 0;
+    for (var tour = 0; tour <= 1; tour++) {
+      var a = borneA + tour * 1440, b = borneB + tour * 1440;
+      if (b <= a) b += 1440;
+      var deb = Math.max(d, a), fi = Math.min(f, b);
+      if (fi > deb) total += fi - deb;
+    }
+    return total / 60;
+  }
+  function sujetionsDuMois() {
+    var C = ccnTransport();
+    var perNuit = (C && C.nuit && C.nuit.periode) || "de 21 heures à 6 heures";
+    var bornes = /(\d{1,2})\s*heures?\s*à\s*(\d{1,2})\s*heures?/.exec(perNuit);
+    var a = bornes ? Number(bornes[1]) * 60 : 21 * 60;
+    var b = bornes ? Number(bornes[2]) * 60 : 6 * 60;
+    var out = { jours: 0, amplitude: 0, amplitudeMax: 0, jourMax: null, nuit: 0,
+      nuits: 0, periode: perNuit, plafond: (C && C.amplitude && C.amplitude.plafondHeures) || null,
+      audelaPlafond: 0 };
+    lignes.forEach(function (l) {
+      if (l.n !== "travail") return;
+      var d = enMinutes(l.d), f = enMinutes(l.f);
+      if (d === null || f === null) return;
+      var fin = f <= d ? f + 1440 : f;
+      var amp = (fin - d) / 60;
+      if (amp <= 0) return;
+      out.jours++;
+      out.amplitude += amp;
+      if (amp > out.amplitudeMax) { out.amplitudeMax = amp; out.jourMax = l.j; }
+      var n = heuresEntre(l.d, l.f, a, b);
+      if (n > 0) { out.nuit += n; out.nuits++; }
+    });
+    out.amplitude = Math.round(out.amplitude * 100) / 100;
+    out.amplitudeMax = Math.round(out.amplitudeMax * 100) / 100;
+    out.nuit = Math.round(out.nuit * 100) / 100;
+    if (out.plafond && out.amplitude > out.plafond)
+      out.audelaPlafond = Math.round((out.amplitude - out.plafond) * 100) / 100;
+    return out;
+  }
+
+  /* Les indemnités qui se comptent, et le montant de chacune. */
+  function lignesFrais() {
+    var C = ccnTransport();
+    var f = (C && C.frais) || {};
+    return [
+      { c: "repas", nom: "Repas", montant: f.repas, sous: "repas pris hors du domicile" },
+      { c: "repasUnique", nom: "Repas unique", montant: f.repasUnique, sous: "un seul repas hors du domicile" },
+      { c: "repasUniqueNuit", nom: "Repas unique de nuit", montant: f.repasUniqueNuit, sous: "pris pendant la période de nuit" },
+      { c: "casseCroute", nom: "Casse-croûte", montant: f.casseCroute, sous: "prise de service avant 5 heures" },
+      { c: "speciale", nom: "Indemnité spéciale", montant: f.speciale, sous: "sujétion particulière" },
+      { c: "grandDeplacement1", nom: "Découcher, un repas", montant: f.grandDeplacement1, sous: "nuit dehors et un repas" },
+      { c: "grandDeplacement2", nom: "Découcher, deux repas", montant: f.grandDeplacement2, sous: "nuit dehors et deux repas" }
+    ].filter(function (x) { return typeof x.montant === "number"; });
+  }
+  function nombreFrais(m, c) {
+    var v = parseInt(String((m.frais && m.frais[c]) || "").replace(/[^0-9]/g, ""), 10);
+    return isFinite(v) ? v : 0;
+  }
+  function eur(n) {
+    return (Math.round(n * 100) / 100).toFixed(2).replace(".", ",") + " €";
+  }
+  function rendreSujetions() {
+    var bloc = $("bloc-sujetions");
+    if (!bloc) return;
+    if (!estTransport() || !ccnTransport()) { bloc.hidden = true; return; }
+    bloc.hidden = false;
+    var s = sujetionsDuMois(), C = ccnTransport(), m = moisDe(), verrou = !!(m.clos && m.clos.le);
+    var L = lignesFrais();
+    var total = 0;
+    L.forEach(function (x) { total += nombreFrais(m, x.c) * x.montant; });
+
+    $("sujetions").innerHTML =
+      '<div class="tuile"><span class="et">Amplitude du mois</span><div class="n">' +
+      ech(nbh(s.amplitude)) + "</div><small>" +
+      ech(s.jours + " journée" + (s.jours > 1 ? "s" : "") + " comptée" + (s.jours > 1 ? "s" : "") +
+        (s.jourMax ? ", la plus longue le " + s.jourMax + " avec " + nbh(s.amplitudeMax) : "")) +
+      "</small></div>" +
+      '<div class="tuile"><span class="et">Heures de nuit</span><div class="n">' +
+      ech(nbh(s.nuit)) + "</div><small>" +
+      ech(s.nuits + " journée" + (s.nuits > 1 ? "s" : "") + " touchée" + (s.nuits > 1 ? "s" : "") +
+        " · période " + s.periode + " (" + C.nuit.source + ")") + "</small></div>" +
+      '<div class="tuile"><span class="et">Frais et indemnités</span><div class="n">' +
+      ech(eur(total)) + "</div><small>" +
+      ech("somme des nombres saisis ci-dessous") + "</small></div>";
+
+    $("frais").innerHTML = L.map(function (x) {
+      return '<label class="champ"><span>' + ech(x.nom) +
+        "<small>" + ech(x.sous + " · " + eur(x.montant)) + "</small></span>" +
+        '<input type="number" min="0" step="1" inputmode="numeric" data-frais="' + ech(x.c) +
+        '" value="' + ech(nombreFrais(m, x.c) || "") + '" placeholder="0"' +
+        (verrou ? " disabled" : "") + "></label>";
+    }).join("");
+
+    $("frais-dit").textContent = "Les montants sont ceux de " + C.frais.source +
+      ", en vigueur au " + C.frais.depuis.split("-").reverse().join("/") +
+      ", et la période de nuit celle de " + C.nuit.source +
+      ". Vérifiez-les au texte : la convention n'est pas lue par l'application, ces valeurs y ont été " +
+      "recopiées avec leur date. Le nombre de repas et de découchers ne se déduit d'aucun horaire : " +
+      "c'est vous qui le comptez.";
+
+    Array.prototype.forEach.call($("frais").querySelectorAll("[data-frais]"), function (el) {
+      el.addEventListener("input", function () {
+        var mm = moisDe();
+        mm.frais = mm.frais || {};
+        var v = el.value.replace(/[^0-9]/g, "");
+        if (v) mm.frais[el.getAttribute("data-frais")] = v;
+        else delete mm.frais[el.getAttribute("data-frais")];
+        garderMois(mm);
+        rendreSujetions();
+      });
+    });
+  }
+
+  /* Les mêmes chiffres, en phrases, pour le relevé imprimé et pour le Word :
+     un décompte qui ne dit pas l'amplitude ni les frais n'est pas le décompte
+     du mois. */
+  function phrasesSujetions() {
+    if (!estTransport() || !ccnTransport()) return [];
+    var s = sujetionsDuMois(), C = ccnTransport(), m = moisDe();
+    var L = [];
+    L.push("Amplitude cumulée des journées travaillées : " + nbh(s.amplitude) +
+      (s.jourMax ? ", la plus longue le " + s.jourMax + " " + MOIS[mo] + " avec " + nbh(s.amplitudeMax) : "") + ".");
+    L.push("Heures comprises dans la période de nuit, " + s.periode + " : " + nbh(s.nuit) +
+      " sur " + s.nuits + " journée" + (s.nuits > 1 ? "s" : "") + " (" + C.nuit.source + ").");
+    var F = lignesFrais(), total = 0, dits = [];
+    F.forEach(function (x) {
+      var n = nombreFrais(m, x.c);
+      if (!n) return;
+      total += n * x.montant;
+      dits.push(n + " " + x.nom.toLowerCase() + " à " + eur(x.montant));
+    });
+    if (dits.length)
+      L.push("Frais et indemnités du mois : " + dits.join(", ") + ", soit " + eur(total) +
+        " (" + C.frais.source + ", en vigueur au " + C.frais.depuis.split("-").reverse().join("/") + ").");
+    else
+      L.push("Aucun repas ni découcher n'a été compté pour ce mois.");
+    return L;
+  }
+
   function calculer() {
     var total = 0, jours = 0, hebdo = hebdoContrat();
     lignes.forEach(function (l) {
@@ -852,6 +1026,7 @@
       $("l-motif").hidden = false;
     }
     rendreControles();
+    rendreSujetions();
     return total;
   }
 
@@ -1189,6 +1364,9 @@
     phrasesControles().forEach(function (x) {
       h += '<p class="tot">' + ech(x) + "</p>";
     });
+    phrasesSujetions().forEach(function (x) {
+      h += '<p class="tot">' + ech(x) + "</p>";
+    });
     h += '<div class="sign">Remis au salarié le ..............................<br>' +
       "Signature du salarié, précédée de la mention « reçu le » :<br><br>" +
       "Pour l'entreprise, " + ech(p.responsable || "") + "<br>" +
@@ -1286,7 +1464,9 @@
         : "en cours"],
       [],
       ["Heures supplémentaires et plafonds"],
-    ].concat(phrasesControles().map(function (p) { return [p]; })).concat([
+    ].concat(phrasesControles().map(function (p) { return [p]; }))
+      .concat(phrasesSujetions().length ? [[], ["Amplitude, nuit, repas et découchers"]] : [])
+      .concat(phrasesSujetions().map(function (p) { return [p]; })).concat([
       [],
       ["Établi en application des articles L. 3171-2 et D. 3171-8 du code du travail. " +
        "À conserver un an au moins à la disposition de l'inspection du travail (D. 3171-16)."],
@@ -1355,6 +1535,11 @@
         (m.motif ? " Motif de l'écart : " + m.motif + "." : "") },
       { k: "h2", t: "Heures supplémentaires et plafonds" },
     ].concat(phrasesControles().map(function (x) { return { k: "p", t: x }; }));
+    var suj = phrasesSujetions();
+    if (suj.length) {
+      items.push({ k: "h2", t: "Amplitude, nuit, repas et découchers" });
+      suj.forEach(function (x) { items.push({ k: "p", t: x }); });
+    }
     if (m.clos && m.clos.le) {
       items.push({ k: "note", t: "Mois clos le " + enFrancais(m.clos.le) + " à " + (m.clos.heure || "") +
         ". Empreinte des lignes : " + m.clos.empreinte + "." });

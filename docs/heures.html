@@ -179,6 +179,12 @@
     border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);
     color:var(--texte);width:100%;box-sizing:border-box}
   .champ textarea{min-height:84px;line-height:1.45;resize:vertical}
+  #frais{display:grid;gap:10px;margin:14px 0 0}
+  @media (min-width:560px){#frais{grid-template-columns:1fr 1fr 1fr}}
+  #frais .champ > span{text-transform:none;letter-spacing:0;font:600 13px/1.3 system-ui;color:var(--texte-2)}
+  #frais .champ small{display:block;font:400 12px/1.4 system-ui;color:var(--texte-3);margin-top:2px}
+  #frais input{min-height:44px}
+  #sujetions .tuile small{display:block;font:400 12px/1.4 system-ui;color:var(--texte-3);margin-top:5px}
 
   .barre{display:flex;flex-direction:column;gap:10px;margin:var(--e4) 0 0}
   @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
@@ -319,6 +325,20 @@
       <p class="ecart" id="ecart"></p>
       <label class="champ" id="l-motif" hidden style="margin-top:12px"><span>Motif de l'écart</span>
         <input type="text" id="t-motif" placeholder="pourquoi le total retenu diffère du calcul des jours"></label>
+    </div>
+
+    <!-- L'AMPLITUDE, LA NUIT, LES REPAS ET LES DÉCOUCHERS.
+         Le relevé comptait des heures et rien d'autre : ni l'amplitude des
+         journées, ni les heures de nuit, ni les repas et découchers qui se
+         paient. Relevé le 26 septembre 2026. Ce qui se calcule est calculé
+         depuis les horaires saisis ; ce que seul l'employeur sait, le nombre
+         de repas pris hors du domicile et de nuits passées dehors, se compte
+         à la main, et les montants viennent de la convention. -->
+    <div class="bloc" id="bloc-sujetions" hidden>
+      <h2>Amplitude, nuit, repas et découchers</h2>
+      <div class="bilan" id="sujetions"></div>
+      <div class="champs" id="frais"></div>
+      <p class="doux" id="frais-dit"></p>
     </div>
 
     <!-- CE QUE LE RELEVÉ DOIT DIRE AVANT D'ÊTRE SIGNÉ.
@@ -462,6 +482,10 @@
 <script src="lire-classeur.js"></script>
 <!-- La durée due par le contrat, écrite au moment où le contrat a été fait. -->
 <script src="echeances-salaries.js"></script>
+<!-- La convention des transports : ses montants de repas et de découcher, sa
+     période de nuit et sa garantie d'amplitude. C'est le même fichier que les
+     contrats, avec ses sources et ses dates. -->
+<script src="contrats-transport.js"></script>
 <script src="heures.js"></script>
 <script>
 (function () {
