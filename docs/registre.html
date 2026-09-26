@@ -1511,29 +1511,32 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         "Tant qu'aucune colonne n'est rapprochée, il n'y a rien à ajouter.</div>";
       return;
     }
-    var apercu = IMPORT.corps.map(ligneImportee).filter(function (o) {
+    /* Une ligne qui ne porte ni nom, ni prénom, ni emploi n'entrera pas au
+       registre : ce qu'elle contient ne se compte pas comme perdu. Le fichier
+       n'est lu qu'une fois : tout ce qui suit travaille sur cette liste. */
+    var toutes = IMPORT.corps.map(ligneImportee).filter(function (o) {
       return !(vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp));
-    }).slice(0, 5);
-    var datesKo = 0, natureKo = 0, tempsKo = 0, retenuesLignes = 0, doutes = 0;
+    });
+    var apercu = toutes.slice(0, 5);
+    var datesKo = 0, natureKo = 0, tempsKo = 0, retenuesLignes = toutes.length, doutes = 0;
     var dejaLa = [], nouvelles = 0;
-    IMPORT.corps.forEach(function (r) {
-      var o = ligneImportee(r);
-      /* Une ligne qui ne porte ni nom, ni prénom, ni emploi n'entrera pas au
-         registre : ce qu'elle contient ne se compte pas comme perdu. */
-      if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;
-      retenuesLignes++;
+    toutes.forEach(function (o) {
       datesKo += o.dateKo;
       if (o.doute) doutes++;
       if (o.brutNature && !o.s.nature && !tempsDe(o.brutNature)) natureKo++;
       if (o.brutTemps && !o.s.part) tempsKo++;
-      var v = rapprochee(o.s);
-      if (v) dejaLa.push(nomDe(o.s)); else nouvelles++;
+      if (rapprochee(o.s)) dejaLa.push(nomDe(o.s)); else nouvelles++;
     });
 
     var h = '<p class="groupe">L\'aperçu, cinq premières lignes</p>';
     apercu.forEach(function (o) {
       var s = o.s;
-      var bits = COLONNES.map(function (col) { return s[col.c] ? col.lib + " : " + s[col.c] : null; }).filter(Boolean);
+      var bits = COLONNES.map(function (col) {
+        if (!s[col.c]) return null;
+        /* Une date se relit en jour/mois/année : l'aperçu la montrait telle
+           qu'elle est rangée, « 1988-04-12 ». */
+        return col.lib + " : " + (col.t === "date" ? enFr(s[col.c]) : s[col.c]);
+      }).filter(Boolean);
       bits.push("Nature : " + (s.nature ? (NATURES.filter(function (n) { return n.v === s.nature; })[0] || {}).lib : "à établir"));
       bits.push("Temps : " + (s.part === "partiel" ? "partiel" : (s.part === "complet" ? "complet" : "à établir")));
       h += '<div class="apercu-ligne"><b>' + ech(nomDe(s)) + "</b><br>" + ech(bits.join(" · ")) + "</div>";
@@ -1566,6 +1569,33 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if ((d.c === "nom" || d.c === "pre") && retenues.indexOf("_np") >= 0) return false;
       return retenues.indexOf(d.c) < 0;
     });
+    /* UNE COLONNE PRÉSENTE N'EST PAS UNE COLONNE REMPLIE.
+
+       « Votre registre porte toutes les rubriques du décret » était écrit sur
+       un fichier où vingt-quatre nationalités étaient vides. Une rubrique
+       présente se compte donc ligne par ligne, et les cases vides sont dites
+       avec leur nombre. Relevé le 26 septembre 2026. */
+    var CASE = { _nat: "nature", _tps: "part" };
+    var creuses = [];
+    DUES.forEach(function (d) {
+      if (absentes.indexOf(d) >= 0) return;
+      /* La sortie manque à tous ceux qui sont présents : son absence n'est
+         pas un manque. */
+      if (d.c === "sor") return;
+      var champ = CASE[d.c] || d.c;
+      var n = toutes.filter(function (o) { return vide(o.s[champ]); }).length;
+      if (n) creuses.push({ n: n, lib: d.lib, fond: d.fond });
+    });
+    /* Le titre de travail, quand la colonne existe : D. 1221-24 veut la copie
+       annexée, et le 8° le type et le numéro. */
+    ["titT", "titN"].forEach(function (c) {
+      if (retenues.indexOf(c) < 0) return;
+      var n = toutes.filter(function (o) { return vide(o.s[c]); }).length;
+      if (n) creuses.push({ n: n,
+        lib: c === "titT" ? "Type du titre de travail" : "Numéro d'ordre du titre",
+        fond: "D. 1221-23, 8°" });
+    });
+
     var h0 = "";
     if (absentes.length)
       h0 = '<div class="avis non"><b>' + absentes.length +
@@ -1574,9 +1604,16 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         '<ul class="manque"><li>' + absentes.map(function (d) {
           return ech(d.lib) + ' <span class="art">(' + ech(d.fond) + ")</span>"; }).join("</li><li>") +
         "</li></ul></div>";
-    else
-      h0 = '<div class="avis ok"><b>Votre registre porte toutes les rubriques du décret</b>' +
-        "Reste à vérifier, ligne par ligne, que chacune est effectivement renseignée.</div>";
+    if (creuses.length)
+      h0 += '<div class="avis non"><b>Des rubriques présentes, mais vides sur ' +
+        "certaines lignes</b>Sur " + retenuesLignes + " ligne(s) reprise(s) :" +
+        '<ul class="manque"><li>' + creuses.map(function (d) {
+          return d.n + " sans " + ech(d.lib.toLowerCase()) +
+            ' <span class="art">(' + ech(d.fond) + ")</span>"; }).join("</li><li>") +
+        "</li></ul>Le registre le redira ligne par ligne, et chaque fiche dira ce qui lui manque.</div>";
+    if (!absentes.length && !creuses.length)
+      h0 += '<div class="avis ok"><b>Toutes les rubriques du décret sont portées et renseignées</b>' +
+        "Sur les " + retenuesLignes + " ligne(s) reprise(s), aucune case due n'est vide.</div>";
 
     var alertes = [];
     if (datesKo) alertes.push(datesKo + " date(s) illisible(s), attendu jj/mm/aaaa ou aaaa-mm-jj. Elles resteront vides.");
