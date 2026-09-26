@@ -151,11 +151,32 @@
   function bandeau(cle, precision) {
     if (!existe(cle)) return "";
     return '<p class="renvoi-jx">La version complète et imprimable se génère dans ' +
-      '<a href="' + e(lien(cle)) + '" target="_blank" rel="noopener">Juris Expert — ' +
+      '<a href="' + e(lien(cle)) + '" target="_blank" rel="noopener">Juris Expert, ' +
       e(OUTILS[cle].nom) + "</a> : " + e(precision || OUTILS[cle].quoi) +
       ". Le modèle ci-dessous reste disponible ici : il montre la structure et " +
-      "l'article qui la commande.</p>";
+      "l'article qui la commande." + laFiche() + "</p>";
   }
+
+  /* LA FICHE NE SUIT PAS LE LIEN, ET ON LE DIT.
+
+     « On quitte l'application et on perd la fiche de TEC » : relevé le
+     26 septembre 2026. C'est exact, les deux applications ne partagent pas
+     leur stockage. Elles partagent en revanche un format de fichier, décrit
+     dans PROFIL-PARTAGE.md, et la fiche se télécharge d'un bouton pour être
+     relue là-bas. Le lien le dit donc, et il propose le fichier. */
+  function laFiche() {
+    if (!window.Profil || !window.Profil.telecharger) return "";
+    return " Votre fiche d'entreprise ne suit pas le lien : " +
+      '<button type="button" class="jx-fiche">emportez-la en fichier</button> ' +
+      "et importez-la là-bas, elle y remplit les mêmes champs.";
+  }
+  /* Un seul écouteur, posé sur le document : les bandeaux sont écrits par
+     plusieurs modules, et chacun n'a pas à s'en occuper. */
+  document.addEventListener("click", function (ev) {
+    var b = ev.target;
+    if (!b || !b.classList || !b.classList.contains("jx-fiche")) return;
+    if (window.Profil && window.Profil.telecharger) window.Profil.telecharger();
+  });
 
   window.JurisExpert = {
     BASE: BASE, OUTILS: OUTILS,

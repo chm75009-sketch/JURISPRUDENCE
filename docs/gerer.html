@@ -258,6 +258,15 @@
       dit: "mentions de la déclaration préalable : employeur, salarié, date et heure d'embauche, nature et durée du contrat, période d'essai" },
     "R1221-4": { id: "LEGIARTI000024214323",
       dit: "la déclaration préalable est adressée au plus tôt dans les huit jours précédant la date prévisible de l'embauche" },
+    /* LA COMPLÉMENTAIRE SANTÉ, LUE À LA SOURCE LE 26 SEPTEMBRE 2026, DEUX
+       LECTURES CONCORDANTES CHACUNE. Le code de la sécurité sociale, et non
+       celui du travail : la mention est portée dans le document. */
+    "CSS-L911-1": { id: "LEGIARTI000006745463",
+      dit: "les garanties collectives sont déterminées par convention ou accord collectif, par ratification d'un projet d'accord, ou par une décision unilatérale du chef d'entreprise constatée dans un écrit remis à chaque intéressé" },
+    "CSS-L911-7": { id: "LEGIARTI000031686110",
+      dit: "couverture minimale obligatoire : ticket modérateur, forfait journalier, soins dentaires prothétiques et dispositifs médicaux ; l'employeur assure au minimum la moitié du financement ; dispense possible des contrats courts" },
+    "CSS-D911-2": { id: "LEGIARTI000038682723",
+      dit: "cas de dispense à l'initiative du salarié : complémentaire santé solidaire, assurance individuelle en cours, couverture au titre d'un autre emploi" },
     "L1221-13": { id: "LEGIARTI000033971569",
       dit: "registre unique du personnel ; les mentions sont portées au moment de l'embauche et de façon indélébile" },
     "D1221-23": { id: "LEGIARTI000018537878",
@@ -475,7 +484,14 @@
       dit: "autorisation de conduite délivrée par l'employeur pour certains équipements à risques particuliers ; sa validité suppose une attestation d'absence de contre-indication médicale, valable cinq ans, délivrée par le médecin du travail ; l'autorisation et une copie de l'attestation sont tenues à la disposition de l'inspection du travail" }
   };
   function ref(nums) {
-    return nums.map(function (n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }).join(", ");
+    return nums.map(function (n) {
+      /* « CSS-L911-1 » s'écrit « L. 911-1 du code de la sécurité sociale » :
+         un article d'un autre code ne se cite pas comme s'il était du code du
+         travail. Posé le 26 septembre 2026. */
+      var css = n.indexOf("CSS-") === 0;
+      var x = (css ? n.slice(4) : n).replace(/^([LRD])(\d)/, "$1. $2");
+      return css ? x + " du code de la sécurité sociale" : x;
+    }).join(", ");
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -1494,6 +1510,83 @@
       dates: [{ q: "Visite au plus tard le", d: limite ? dateFrJour(limite) : "[date d'entrée à saisir]", f: "trois mois à compter de la prise effective du poste (" + ref(["R4624-10"]) + ")", c: "tard" }] };
   }
 
+  /* LA COMPLÉMENTAIRE SANTÉ : LA DÉCISION, PAS UNE LISTE DE LIENS.
+
+     La ligne « Mutuelle d'entreprise » de l'audit renvoyait sur la liste
+     entière de Gérer : à la question « avez-vous mis en place la
+     complémentaire santé ? », répondre « non » ne donnait aucun document.
+     Relevé le 26 septembre 2026. Voici l'acte qui la met en place, et lui
+     seul : la décision unilatérale de l'employeur, que L. 911-1 du code de la
+     sécurité sociale veut « constatée dans un écrit remis par celui-ci à
+     chaque intéressé ».
+
+     Ce qui est écrit vient du texte, et rien d'autre : la couverture minimale
+     et la moitié du financement (L. 911-7), les cas de dispense (D. 911-2).
+     Le nom de l'organisme, les garanties et le montant de la cotisation
+     restent entre crochets : ils viennent du contrat que l'entreprise a
+     signé, et l'application ne le connaît pas. */
+  function mutuelle(v) {
+    var effet = dateDe(v.effet);
+    var org = String((profil && profil.orgSante) || "").trim();
+    var b = [];
+    b.push({ k: "t1", t: "Décision unilatérale de l'employeur instituant un régime de remboursement complémentaire de frais de santé" });
+    b.push({ k: "p", t: profil.denomination });
+    if (profil.adresse) b.push({ k: "p", t: profil.adresse });
+    if (profil.siret) b.push({ k: "p", t: "SIRET " + profil.siret });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "h1", t: "Article 1 - Objet" });
+    b.push({ k: "p", t: "La présente décision institue, au bénéfice des salariés définis à l'article 2, un régime " +
+      "collectif et obligatoire de remboursement complémentaire des frais occasionnés par une maladie, une " +
+      "maternité ou un accident. Elle est prise en application de " + ref(["CSS-L911-1"]) + ", aux termes duquel " +
+      "ces garanties peuvent être déterminées par une décision unilatérale du chef d'entreprise constatée dans " +
+      "un écrit remis à chaque intéressé." });
+    b.push({ k: "h1", t: "Article 2 - Bénéficiaires" });
+    b.push({ k: "p", t: "Le régime bénéficie à [l'ensemble du personnel / la catégorie objective suivante : cadres, " +
+      "non-cadres, ou toute autre catégorie définie par les critères de l'article R. 242-1-1 du code de la " +
+      "sécurité sociale], sans condition d'ancienneté." });
+    b.push({ k: "p", t: "L'adhésion est obligatoire. Les salariés qui remplissent l'un des cas prévus par " +
+      ref(["CSS-D911-2"]) + " peuvent s'en dispenser à leur initiative, par écrit : bénéficiaires de la " +
+      "complémentaire santé solidaire, salariés déjà couverts par une assurance individuelle jusqu'à son " +
+      "échéance, salariés couverts à un autre titre par un régime collectif et obligatoire, y compris comme " +
+      "ayants droit. Les salariés en contrat à durée déterminée ou en contrat de mission peuvent également se " +
+      "dispenser dans les conditions du III de " + ref(["CSS-L911-7"]) + ". La demande est conservée par " +
+      "l'employeur." });
+    b.push({ k: "h1", t: "Article 3 - Garanties" });
+    b.push({ k: "p", t: "Les garanties sont celles du contrat souscrit auprès de " +
+      (org || "[nom et adresse de l'organisme assureur]") + ", dont la notice d'information est remise à chaque " +
+      "salarié. Elles comprennent au moins la couverture minimale de " + ref(["CSS-L911-7"]) + " : la " +
+      "participation de l'assuré aux tarifs servant de base au calcul des prestations de la sécurité sociale, " +
+      "le forfait journalier hospitalier, et les frais exposés en sus des tarifs de responsabilité pour les " +
+      "soins dentaires prothétiques et d'orthopédie dentofaciale ainsi que pour certains dispositifs médicaux." });
+    b.push({ k: "p", t: "Référence du contrat : [numéro et date d'effet]. Niveau de garanties retenu : [intitulé]." });
+    b.push({ k: "h1", t: "Article 4 - Financement" });
+    b.push({ k: "p", t: "La cotisation mensuelle s'élève à [montant] euros pour le salarié seul. Elle est prise en " +
+      "charge par l'employeur à hauteur de [part employeur, au moins la moitié] et par le salarié à hauteur de " +
+      "[part salarié]. L'employeur assure au minimum la moitié du financement de la couverture (" +
+      ref(["CSS-L911-7"]) + ", III). La part salariale est précomptée sur le bulletin de paie." });
+    b.push({ k: "h1", t: "Article 5 - Date d'effet, durée et modification" });
+    b.push({ k: "p", t: "La présente décision prend effet le " + (effet ? dateFr(effet) : "[date d'effet]") +
+      ". Elle est conclue pour une durée indéterminée. Elle peut être modifiée ou dénoncée par l'employeur, " +
+      "après information individuelle des salariés et information du comité social et économique lorsqu'il " +
+      "existe ; la dénonciation ne prend effet qu'à l'issue d'un délai de prévenance suffisant." });
+    b.push({ k: "h1", t: "Article 6 - Remise" });
+    b.push({ k: "p", t: "Un exemplaire de la présente décision est remis à chaque salarié, contre émargement ou " +
+      "par tout moyen donnant date certaine, conformément à " + ref(["CSS-L911-1"]) + "." });
+    b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
+    b.push({ k: "saut", t: "" });
+    b.push({ k: "t1", t: "Remise au salarié" });
+    b.push({ k: "p", t: "Je soussigné(e) [nom et prénom du salarié] reconnais avoir reçu, le [date], un exemplaire " +
+      "de la décision unilatérale du " + (effet ? dateFr(effet) : "[date]") + " instituant le régime de " +
+      "remboursement complémentaire de frais de santé, ainsi que la notice d'information de l'organisme " +
+      "assureur." });
+    b.push({ k: "p", t: "Signature :" });
+    return { blocs: b, loi: ["CSS-L911-1", "CSS-L911-7", "CSS-D911-2"],
+      dates: effet ? [{ q: "Effet du régime", d: dateFrJour(effet),
+        f: "la décision est remise à chaque salarié avant cette date (" + ref(["CSS-L911-1"]) + ")", c: "tot" }] : [] };
+  }
+
   function avenant(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var effet = dateDe(v.effet);
@@ -1988,6 +2081,9 @@
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: "Lucie MARTIN" }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
       loi: ["L1221-10", "R1221-1", "R1221-4"],
       dates: function (v) { var e = dateDe(v.entree); return e ? [{ q: "Déclaration", d: "du " + dateFr(jour(e, -8)) + " au " + dateFr(jour(e, -1)), f: "au plus tôt huit jours avant l'embauche, et avant la prise de poste (" + ref(["L1221-10", "R1221-4"]) + ")", c: "tot" }] : []; } },
+    mutuelle: { titre: "Complémentaire santé : la décision unilatérale",
+      champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(AUJOURDHUI) }],
+      produire: mutuelle },
     vip: { titre: "Visite d'information et de prévention", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" }, { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }], produire: visite },
     registre: { titre: "Registre du personnel", ext: ["RH-CTL-REG-01"], famille: "RH",
       champs: [{ id: "ouverture", nom: "Date d'ouverture du registre", t: "date", crochet: "[DATE D'OUVERTURE]", defaut: iso(AUJOURDHUI) }],
@@ -2071,7 +2167,7 @@
   var GROUPES = [
     ["Transport", ["protocole", "autorisation"]],
     ["Embaucher", ["cdi", "cdd", "partiel", "dpae", "vip", "registre"]],
-    ["Pendant le contrat", ["avenant", "conges", "maladie", "at", "entretien"]],
+    ["Pendant le contrat", ["avenant", "mutuelle", "conges", "maladie", "at", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "fin"]],
     ["Collectif", ["convoc", "odj", "pv", "nao", "desaccord"]]

@@ -133,12 +133,25 @@
        premier salarié, avec la réserve qui dit quand elle concerne. */
     { cle: "forfait",    nom: "Forfait en jours",               seuil: 1,   cond: "si un salarié est au forfait",
       non: "forfait.html?rep=non", oui: "forfait.html?rep=oui" },
-    { cle: "mutuelle",   nom: "Mutuelle d'entreprise",          seuil: 1,   non: "gerer.html" },
-    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "gerer.html" },
+    /* « Non » ouvre le document, et non la liste entière de Gérer : à la
+       question « avez-vous la complémentaire santé ? », la réponse est la
+       décision unilatérale ; à celle des visites, la demande au service de
+       prévention et de santé au travail. Relevé le 26 septembre 2026. */
+    { cle: "mutuelle",   nom: "Complémentaire santé obligatoire", seuil: 1,   non: "gerer.html#mutuelle" },
+    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "gerer.html#vip",
+      oui: "agenda.html" },
     { cle: "cse",        nom: "Comité social et économique", seuil: 11, non: "parcours.html?p=installation&faire=1", oui: "controler-cse.html" },
     { cle: "egalite",    nom: "Égalité femmes-hommes", seuil: 50, non: "parcours.html?p=index&faire=1",        oui: "controler-egalite.html" },
     { cle: "nao",        nom: "Négociation annuelle (NAO)", seuil: 50, cond: "si délégué syndical", non: "parcours.html?p=nao&faire=1", oui: "controler-nao.html" },
-    { cle: "pse",        nom: "Licenciement économique et PSE", seuil: 50, cond: "si projet de licenciement", non: "audit.html" },
+    /* Le licenciement économique commence par le motif : il n'y a pas de
+       document à écrire avant de l'avoir qualifié, et audit.html est l'écran
+       qui le qualifie. Ce que « non » ouvrait donc n'était pas une question
+       de plus, c'était la première étape. La ligne le dit, plutôt que de
+       laisser croire à un document qui viendrait tout seul. Relevé le
+       26 septembre 2026. */
+    { cle: "pse",        nom: "Licenciement économique et PSE", seuil: 50, cond: "si projet de licenciement",
+      dit: "commence par la qualification du motif économique",
+      non: "audit.html", oui: "audit-pse.html" },
     /* La commission santé-sécurité n'obéit pas au seul effectif : L. 2315-36
        (LEGIARTI000035626455, deux lectures concordantes le 15 septembre 2026)
        la crée dans les entreprises d'au moins trois cents salariés, dans les
@@ -177,7 +190,7 @@
       var nom = document.createElement("span");
       nom.className = "nom";
       nom.textContent = l.nom;
-      var reserve = l.cond || (eff < l.seuil ? l.sousSeuil : "");
+      var reserve = [l.cond, l.dit].filter(Boolean).join(" ; ") || (eff < l.seuil ? l.sousSeuil : "");
       if (du && reserve) {
         var cond = document.createElement("span");
         cond.className = "du";

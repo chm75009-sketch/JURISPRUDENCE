@@ -178,6 +178,11 @@
     border:1px solid var(--bleu);color:var(--bleu);background:var(--surface);cursor:pointer}
   .actions button.courrier:hover{background:#eef2f9}
   .actions button.courrier:disabled{opacity:.55;cursor:default}
+  /* Le repli : une phrase et un bouton, là où s'étalait la procédure. */
+  #repli-parcours{margin:16px 0 8px;padding:14px 16px;border:1px solid var(--filet);border-radius:8px;
+    background:var(--creux,#f5f7fa)}
+  #repli-parcours .repli-dit{margin:0 0 10px;font-size:15px;line-height:1.45}
+  #repli-parcours button{min-height:44px;padding:0 14px;cursor:pointer}
   #dlg-courrier{max-width:82ch;width:93vw;border:1px solid var(--filet);border-radius:6px;padding:16px 18px}
   #dlg-courrier::backdrop{background:#0b111a99}
   #dlg-courrier .dt-barre{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
@@ -432,11 +437,25 @@ réponse nuancée.</p>
 <!-- L'ordre compte : la procédure d'abord. Ce qu'il faut réunir et les dates
      du dossier se remplissent en chemin, pas avant d'avoir vu ce qu'on a à
      faire. -->
-<div id="zone-progression"></div>
-<div id="zone-etapes"></div>
-<div id="zone-prealable"></div>
-<div id="zone-dates"></div>
-<div id="zone-suite"></div>
+<!-- VENU DE L'AUDIT, ON AGIT : ON NE LIT PAS.
+     La page d'audit promet « Non = le document rempli s'ouvre ». Le document
+     s'ouvrait bien, mais derrière lui s'étalait le parcours entier, onze
+     étapes et quarante-cinq mille caractères, « pourquoi et ce qu'on
+     risque » compris. Relevé le 26 septembre 2026. Quand on arrive par
+     « faire=1 », la procédure est repliée sous un bouton : le document
+     d'abord, le détail si on le demande. -->
+<div id="repli-parcours" hidden>
+  <p class="repli-dit">Le document est ouvert. Derrière lui, la procédure complète : les étapes,
+    ce qu'il faut réunir, les dates et les textes.</p>
+  <button type="button" id="repli-voir">Voir la procédure complète</button>
+</div>
+<div id="zone-procedure">
+  <div id="zone-progression"></div>
+  <div id="zone-etapes"></div>
+  <div id="zone-prealable"></div>
+  <div id="zone-dates"></div>
+  <div id="zone-suite"></div>
+</div>
 
 <div class="barre-outils" id="outils" style="display:none">
   <button type="button" id="btn-recap">Récapitulatif imprimable</button>

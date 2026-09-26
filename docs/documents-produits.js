@@ -1723,7 +1723,19 @@
   D["DIS-CTL-RI-01"].parties = partiesRi;
 
   /* Ce que la page demande : y a-t-il un document pour ce point ? */
-  function pour(id) { return Object.prototype.hasOwnProperty.call(D, id) ? D[id] : null; }
+  /* Le générateur rendu passe par le tri des bandeaux : c'est le seul endroit
+     par lequel tous les documents sortent, et il vaut mieux un tri qu'une
+     relecture de cent trente-six fichiers. `parties` et les autres propriétés
+     restent accessibles : on ne remplace que `produire`. */
+  function pour(id) {
+    if (!Object.prototype.hasOwnProperty.call(D, id)) return null;
+    var g = D[id];
+    if (!g || typeof g.produire !== "function" || g.__bandeau) return g;
+    var brut = g.produire;
+    g.produire = function (ctx) { return ajusterBandeau(brut.call(g, ctx)); };
+    g.__bandeau = true;
+    return g;
+  }
 
   /* Les modules déposent leurs générateurs ici, chacun dans son fichier :
      documents-cse.js, documents-pse.js… Un seul registre, huit sources : c'est
@@ -1811,6 +1823,29 @@
     "fictive, donnée en illustration : ses personnes, ses dates, ses chiffres et ses faits ne " +
     "concernent pas votre entreprise et ne doivent jamais être signés. Votre document à " +
     "compléter vient après, à la ligne « À COMPLÉTER ».";
+
+  /* DEUX BANDEAUX, PARCE QU'IL Y A DEUX SORTES DE DOCUMENTS.
+
+     Certains s'ouvrent sur l'exemple entièrement rempli d'une entreprise
+     fictive, et le bandeau ci-dessus dit de ne pas le signer. D'autres sont
+     le document de l'entreprise elle-même, avec ses blancs entre crochets :
+     leur dire « ce qui suit n'est pas votre document » serait faux, et le
+     règlement intérieur, qui est de ceux-là, l'affichait. Relevé et corrigé
+     le 26 septembre 2026, le jour même où le premier bandeau a été renforcé.
+
+     Le tri ne se fait pas à la main sur cent trente-six documents : il se
+     fait sur le texte produit. Un document qui nomme l'une des entreprises
+     fictives porte un exemple ; les autres reçoivent l'avertissement qui leur
+     convient, celui d'un modèle à adapter. */
+  var ADAPTER = "À ADAPTER : ce document est un modèle rédigé à partir des textes. " +
+    "Ce qui reste entre crochets est à compléter, et ce qui ne correspond pas à votre " +
+    "organisation est à corriger ou à supprimer avant signature.";
+  var FICTIVES = /TRANSPORTS EXEMPLE SARL|MÉCA EXEMPLE SAS|BÂTI EXEMPLE SARL|COMMERCE EXEMPLE SARL|SERVICES EXEMPLE SAS|Entreprise EXEMPLE SARL/;
+  function ajusterBandeau(t) {
+    var s = String(t == null ? "" : t);
+    if (s.indexOf(EXEMPLE) < 0) return s;
+    return FICTIVES.test(s) ? s : s.split(EXEMPLE).join(ADAPTER);
+  }
 
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,

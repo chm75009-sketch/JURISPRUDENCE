@@ -3686,14 +3686,18 @@
         ? '<div class="renvoi-jx">Les documents finaux de ce parcours, ' +
           e(window.JurisExpert.quoi(p.jx)) + ' - se génèrent, complets et prêts à imprimer, dans ' +
           '<a class="jx" href="' + e(window.JurisExpert.lien(p.jx)) + '" target="_blank" ' +
-          'rel="noopener">Juris Expert, ' + e(window.JurisExpert.nom(p.jx)) + "</a>.</div>"
+          'rel="noopener">Juris Expert, ' + e(window.JurisExpert.nom(p.jx)) + "</a>." +
+          ' Votre fiche d\'entreprise ne suit pas le lien : <button type="button" class="jx-fiche">' +
+          "emportez-la en fichier</button> et importez-la là-bas.</div>"
         : "") +
       (p.cle === "installation" && jxDispo("elections")
         ? '<div class="renvoi-jx">Ce parcours commence <b>après</b> la proclamation des résultats. ' +
           "Les élections elles-mêmes, " + e(window.JurisExpert.quoi("elections")) + " - se " +
           'conduisent dans <a class="jx" href="' + e(window.JurisExpert.lien("elections")) +
           '" target="_blank" rel="noopener">Juris Expert, ' +
-          e(window.JurisExpert.nom("elections")) + "</a>.</div>"
+          e(window.JurisExpert.nom("elections")) + "</a>." +
+          ' Votre fiche d\'entreprise ne suit pas le lien : <button type="button" class="jx-fiche">' +
+          "emportez-la en fichier</button> et importez-la là-bas.</div>"
         : "") +
       (p.suite && SUITE(p.suite.cle)
         ? '<div class="suite' + (c.total && c.faites >= c.total ? " prete" : "") + '">' +
@@ -4349,6 +4353,21 @@
       st0.etapes[aFaire.id].vu = true;
       enregistrer();
       produireCourrier(aFaire.docProduit, null);
+      /* La procédure se replie derrière le document : on est venu faire, non
+         lire. Elle revient d'un bouton, et l'intention de la page d'audit est
+         tenue. Relevé le 26 septembre 2026. */
+      var proc = document.getElementById("zone-procedure");
+      var repli = document.getElementById("repli-parcours");
+      var intro = document.getElementById("bloc-intro");
+      if (proc && repli) {
+        proc.hidden = true;
+        repli.hidden = false;
+        if (intro) intro.hidden = true;
+        document.getElementById("repli-voir").addEventListener("click", function () {
+          proc.hidden = false;
+          repli.hidden = true;
+        });
+      }
     }
   }
 
