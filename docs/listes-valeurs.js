@@ -171,8 +171,107 @@
     return out.sort(function (a, b) { return a.localeCompare(b, "fr"); });
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     UN PAYS N'EST PAS UNE NATIONALITÉ.
+
+     Un contrat sortait « de nationalité Serbie », parce que le registre
+     importé portait le nom du pays et que le document le recopiait tel quel.
+     Relevé le 26 septembre 2026. Deux réponses, dans cet ordre : la table des
+     pays les plus fréquents donne l'adjectif ; à défaut, la phrase change de
+     tournure et devient « ressortissant de Serbie », qui est juste sans rien
+     inventer. Ce qui est déjà un adjectif n'est pas touché.
+     ══════════════════════════════════════════════════════════════════════ */
+  var ADJECTIF = {
+    "france": "française", "algérie": "algérienne", "maroc": "marocaine",
+    "tunisie": "tunisienne", "mali": "malienne", "sénégal": "sénégalaise",
+    "côte d'ivoire": "ivoirienne", "cameroun": "camerounaise", "congo": "congolaise",
+    "république démocratique du congo": "congolaise", "guinée": "guinéenne",
+    "mauritanie": "mauritanienne", "niger": "nigérienne", "burkina faso": "burkinabée",
+    "tchad": "tchadienne", "togo": "togolaise", "bénin": "béninoise",
+    "gabon": "gabonaise", "madagascar": "malgache", "comores": "comorienne",
+    "portugal": "portugaise", "espagne": "espagnole", "italie": "italienne",
+    "allemagne": "allemande", "belgique": "belge", "pays-bas": "néerlandaise",
+    "luxembourg": "luxembourgeoise", "suisse": "suisse", "royaume-uni": "britannique",
+    "irlande": "irlandaise", "pologne": "polonaise", "roumanie": "roumaine",
+    "bulgarie": "bulgare", "hongrie": "hongroise", "croatie": "croate",
+    "serbie": "serbe", "bosnie-herzégovine": "bosnienne", "kosovo": "kosovare",
+    "macédoine du nord": "macédonienne", "albanie": "albanaise", "grèce": "grecque",
+    "turquie": "turque", "ukraine": "ukrainienne", "russie": "russe",
+    "moldavie": "moldave", "géorgie": "géorgienne", "arménie": "arménienne",
+    "lituanie": "lituanienne", "lettonie": "lettone", "estonie": "estonienne",
+    "slovaquie": "slovaque", "tchéquie": "tchèque", "république tchèque": "tchèque",
+    "slovénie": "slovène", "chine": "chinoise", "inde": "indienne",
+    "pakistan": "pakistanaise", "bangladesh": "bangladaise", "sri lanka": "srilankaise",
+    "viêt nam": "vietnamienne", "vietnam": "vietnamienne", "cambodge": "cambodgienne",
+    "philippines": "philippine", "brésil": "brésilienne", "argentine": "argentine",
+    "colombie": "colombienne", "pérou": "péruvienne", "haïti": "haïtienne",
+    "états-unis": "américaine", "canada": "canadienne", "égypte": "égyptienne",
+    "syrie": "syrienne", "liban": "libanaise", "irak": "irakienne", "iran": "iranienne",
+    "afghanistan": "afghane", "soudan": "soudanaise", "érythrée": "érythréenne",
+    "éthiopie": "éthiopienne", "somalie": "somalienne", "nigéria": "nigériane",
+    "ghana": "ghanéenne", "angola": "angolaise", "cap-vert": "cap-verdienne",
+  };
+  var MASCULIN = {
+    "française": "français", "algérienne": "algérien", "marocaine": "marocain",
+    "tunisienne": "tunisien", "malienne": "malien", "sénégalaise": "sénégalais",
+    "ivoirienne": "ivoirien", "camerounaise": "camerounais", "congolaise": "congolais",
+    "guinéenne": "guinéen", "mauritanienne": "mauritanien", "nigérienne": "nigérien",
+    "burkinabée": "burkinabé", "tchadienne": "tchadien", "togolaise": "togolais",
+    "béninoise": "béninois", "gabonaise": "gabonais", "comorienne": "comorien",
+    "portugaise": "portugais", "espagnole": "espagnol", "italienne": "italien",
+    "allemande": "allemand", "néerlandaise": "néerlandais",
+    "luxembourgeoise": "luxembourgeois", "irlandaise": "irlandais",
+    "polonaise": "polonais", "roumaine": "roumain", "hongroise": "hongrois",
+    "bosnienne": "bosnien", "macédonienne": "macédonien", "albanaise": "albanais",
+    "grecque": "grec", "ukrainienne": "ukrainien", "géorgienne": "géorgien",
+    "arménienne": "arménien", "lituanienne": "lituanien", "lettone": "letton",
+    "estonienne": "estonien", "chinoise": "chinois", "indienne": "indien",
+    "pakistanaise": "pakistanais", "bangladaise": "bangladais",
+    "srilankaise": "srilankais", "vietnamienne": "vietnamien",
+    "cambodgienne": "cambodgien", "brésilienne": "brésilien",
+    "colombienne": "colombien", "péruvienne": "péruvien", "haïtienne": "haïtien",
+    "américaine": "américain", "canadienne": "canadien", "égyptienne": "égyptien",
+    "syrienne": "syrien", "libanaise": "libanais", "irakienne": "irakien",
+    "iranienne": "iranien", "soudanaise": "soudanais", "érythréenne": "érythréen",
+    "éthiopienne": "éthiopien", "somalienne": "somalien", "nigériane": "nigérian",
+    "ghanéenne": "ghanéen", "angolaise": "angolais", "cap-verdienne": "cap-verdien",
+  };
+  function plat(x) {
+    return String(x == null ? "" : x).trim().toLowerCase();
+  }
+  /* Rend la phrase entière, accordée : « de nationalité française »,
+     « de nationalité serbe », ou « ressortissante de Serbie » quand
+     l'adjectif n'est pas connu ici. Rien n'est inventé. */
+  function nationalitePhrase(valeur, feminin) {
+    var v = String(valeur == null ? "" : valeur).trim();
+    if (!v) return "";
+    var bas = plat(v);
+    var adj = null;
+    if (NATIONALITES.indexOf(bas) >= 0) adj = bas;
+    else if (ADJECTIF[bas]) adj = ADJECTIF[bas];
+    /* Après « de nationalité », l'adjectif s'accorde avec le mot
+       « nationalité », qui est féminin, et non avec la personne : un homme
+       est « de nationalité portugaise ». La forme masculine ne sert qu'à la
+       tournure « il est portugais ». */
+    if (adj) return "de nationalité " + adj;
+    /* Un pays sans adjectif connu : on ne le décline pas, on tourne
+       autrement, avec l'élision quand elle s'impose. */
+    var de = /^[aeiouyâàéèêîïôöûüh]/i.test(v) ? "d'" : "de ";
+    return (feminin ? "ressortissante " : "ressortissant ") + de + v;
+  }
+  /* « Il est portugais », « elle est portugaise » : l'adjectif seul, accordé
+     à la personne. */
+  function nationaliteAdjectif(valeur, feminin) {
+    var bas = plat(valeur);
+    var adj = NATIONALITES.indexOf(bas) >= 0 ? bas : (ADJECTIF[bas] || "");
+    if (!adj) return "";
+    return (!feminin && MASCULIN[adj]) ? MASCULIN[adj] : adj;
+  }
+
   window.ListesValeurs = {
     salarie: salaries,
+    nationalitePhrase: nationalitePhrase,
+    nationaliteAdjectif: nationaliteAdjectif,
     nationalite: NATIONALITES,
     pays: PAYS,
     titreSejour: TITRES_SEJOUR,

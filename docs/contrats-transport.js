@@ -452,9 +452,92 @@
 
   /* ══════════════════ 4 · LE CONTRAT, ARTICLE PAR ARTICLE ═══════════ */
 
+  /* ACCORDER AU SEXE DU SALARIÉ, PAS AU MASCULIN PAR DÉFAUT.
+
+     Le contrat d'une assistante sortait « ZENNADI Naïma, né le ..., ci-après
+     désigné « le salarié » ... Le salarié est engagé ». Relevé le
+     26 septembre 2026 : ce sont des fautes dans la première phrase d'un acte
+     signé. Le sexe vient du registre du personnel, ou de la civilité écrite
+     devant le nom ; à défaut, rien ne change.
+
+     La règle est appliquée sur le texte fini, et seulement sur les tournures
+     qui désignent la personne du contrat : « le salarié remplacé » est écarté,
+     puisqu'il s'agit de quelqu'un d'autre. */
+  function estFeminin(v) {
+    var sexe = net(v && v.sexe).toUpperCase();
+    if (sexe === "F" || sexe === "FEMME" || sexe === "MME" || sexe === "MADAME") return true;
+    if (sexe === "M" || sexe === "H" || sexe === "HOMME" || sexe === "MONSIEUR") return false;
+    return /^\s*(madame|mme)\b/i.test(net(v && v.nom));
+  }
+  /* Les limites de mot de l'expression régulière ne valent rien après une
+     lettre accentuée : « \bsalarié\b » ne trouve pas « salarié » suivi d'un
+     espace, et trouve « désigné » au milieu de « désignée ». Chaque motif
+     porte donc sa propre suite, une lettre qui n'est pas du mot. */
+  var FIN = "(?![a-zA-ZÀ-ÿ])";
+  function motif(t) { return new RegExp(t + FIN, "g"); }
+  var ACCORDS = [
+    [motif("Le salarié remplacé"), "\u0001"],      /* mis de côté : autre personne */
+    [motif("du salarié remplacé"), "\u0002"],
+    [motif("Le salarié"), "La salariée"],
+    [motif("le salarié"), "la salariée"],
+    [motif("du salarié"), "de la salariée"],
+    [motif("au salarié"), "à la salariée"],
+    [/([\s(«'])né le/g, "$1née le"],
+    [motif("ci-après désigné"), "ci-après désignée"],
+    [motif("est engagé"), "est engagée"],
+    [motif("est rattaché"), "est rattachée"],
+    [motif("est affilié"), "est affiliée"],
+    /* Les pronoms et les participes qui suivent, phrase par phrase : « il »
+       ne se remplace qu'en tête de phrase ou après un point, là où il désigne
+       la personne du contrat, jamais dans « il a été convenu ». */
+    [motif("S'il est travailleur de nuit"), "Si elle est travailleuse de nuit"],
+    [motif("est travailleur de nuit"), "est travailleuse de nuit"],
+    [motif("Il exerce"), "Elle exerce"],
+    [motif("Il informe"), "Elle informe"],
+    [motif("où il prend"), "où elle prend"],
+    [motif("il a droit"), "elle a droit"],
+    [motif("Il bénéficie"), "Elle bénéficie"],
+    [motif("Il perçoit"), "Elle perçoit"],
+    [motif("Il reconnaît"), "Elle reconnaît"],
+    [motif("Il déclare"), "Elle déclare"],
+    [motif("Il est tenu"), "Elle est tenue"],
+    [motif("il est tenu"), "elle est tenue"],
+    [/\u0001/g, "Le salarié remplacé"],
+    [/\u0002/g, "du salarié remplacé"],
+  ];
+  function accorder(B, v) {
+    if (!estFeminin(v)) return B;
+    return B.map(function (b) {
+      if (!b || typeof b.t !== "string") return b;
+      var t = b.t;
+      ACCORDS.forEach(function (r) { t = t.replace(r[0], r[1]); });
+      return t === b.t ? b : Object.keys(b).reduce(function (o, k) {
+        o[k] = k === "t" ? t : b[k]; return o;
+      }, {});
+    });
+  }
+
+  /* UN SALARIÉ DÉJÀ EN POSTE NE SE FAIT PAS ESSAYER.
+
+     Pour un conducteur entré en 2014, le contrat sortait « engage le salarié à
+     compter du 21 juillet 2014 » avec un mois d'essai, une déclaration
+     préalable à l'embauche et une visite d'information à faire : un contrat
+     antidaté de douze ans. Relevé le 26 septembre 2026. Quand la date
+     d'entrée est passée, l'acte devient un contrat de régularisation : il
+     constate la relation en cours, il ne l'ouvre pas. Ni essai, ni
+     déclaration préalable, ni visite d'embauche, et il le dit en tête. */
+  function dejaEnPoste(v) {
+    var e = v && v.entree ? new Date(String(v.entree) + "T12:00:00") : null;
+    if (!e || isNaN(e)) return false;
+    var aujourd = new Date();
+    aujourd.setHours(0, 0, 0, 0);
+    return e < aujourd;
+  }
+
   function ecrire(v) {
     var p = profil(v.profil);
     var B = [];
+    var regularise = dejaEnPoste(v);
     var ent = v.entreprise || {};
     var cdd = v.nature === "cdd";
     var partiel = !!v.partiel;
@@ -472,6 +555,15 @@
     B.push({ k: "t1", t: p.nom });
     B.push({ k: "trait" });
 
+    if (regularise) {
+      B.push({ k: "enc", titre: "Contrat de régularisation",
+        t: "Le salarié est en poste depuis le " + dateFr(v.entree) + ". Le présent écrit constate " +
+          "la relation de travail existante ; il ne l'ouvre pas. Ni période d'essai, ni " +
+          "déclaration préalable à l'embauche, ni visite d'information et de prévention " +
+          "d'embauche ne s'y rattachent : ces formalités se rapportent à la date réelle de " +
+          "l'entrée, et leur absence se règle pour elle-même. Ne l'antidatez pas : il se signe " +
+          "à sa date, et c'est l'ancienneté qui remonte." });
+    }
     B.push({ k: "p", t: "Entre les soussignés :" });
     B.push({ k: "p", t: (ent.denomination || "[DÉNOMINATION]") + ", " +
       (ent.adresse ? "dont le siège est " + ent.adresse : "[ADRESSE DU SIÈGE]") + ", " +
@@ -479,9 +571,15 @@
       ", représentée par " + (ent.responsable || "[REPRÉSENTANT LÉGAL]") +
       ", ci-après désignée « l'entreprise »," });
     B.push({ k: "p", t: "d'une part," });
+    /* Un pays n'est pas une nationalité : « de nationalité Serbie » se
+       corrige en « de nationalité serbe », ou, faute d'adjectif connu, en
+       « ressortissant de Serbie ». Relevé le 26 septembre 2026. */
+    var natPhrase = (window.ListesValeurs && window.ListesValeurs.nationalitePhrase)
+      ? window.ListesValeurs.nationalitePhrase(v.nationalite, estFeminin(v))
+      : (net(v.nationalite) ? "de nationalité " + net(v.nationalite) : "");
     B.push({ k: "p", t: (v.nom || "[NOM ET PRÉNOM DU SALARIÉ]") + ", demeurant " +
-      (v.adresse || "[ADRESSE DU SALARIÉ]") + ", de nationalité " +
-      (v.nationalite || "[NATIONALITÉ]") + ", né le " + dateFr(v.naissance) + " à " +
+      (v.adresse || "[ADRESSE DU SALARIÉ]") + ", " +
+      (natPhrase || "de nationalité [NATIONALITÉ]") + ", né le " + dateFr(v.naissance) + " à " +
       (v.lieuNaissance || "[LIEU DE NAISSANCE]") + ", numéro de sécurité sociale " +
       (v.nir || "[NUMÉRO]") + ", ci-après désigné « le salarié »," });
     B.push({ k: "p", t: "d'autre part," });
@@ -748,7 +846,11 @@
 
     /* ── 8 · essai ──────────────────────────────────────────────────── */
     art("Période d'essai");
-    if (cdd) {
+    if (regularise) {
+      B.push({ k: "p", t: "Le présent contrat ne comporte pas de période d'essai : il constate " +
+        "une relation de travail en cours depuis le " + dateFr(v.entree) + ", et l'essai ne peut " +
+        "porter que sur un engagement nouveau." });
+    } else if (cdd) {
       B.push({ k: "p", t: "Le contrat comporte une période d'essai de " +
         (net(v.essai) || "[DURÉE]") + ", calculée à raison d'un jour par semaine de contrat, dans la " +
         "limite de deux semaines lorsque la durée initiale est au plus égale à six mois, et d'un " +
@@ -771,7 +873,8 @@
     /* ── 10 · rupture ───────────────────────────────────────────────── */
     if (!cdd) {
       art("Rupture du contrat");
-      B.push({ k: "p", t: "Après la période d'essai, le contrat peut être rompu dans les conditions " +
+      B.push({ k: "p", t: (regularise ? "Le contrat peut être rompu dans les conditions "
+        : "Après la période d'essai, le contrat peut être rompu dans les conditions ") +
         "légales, sous réserve du préavis fixé par la convention collective (" +
         (p.annexe === "II" ? CCN.annexeII.preavisArticle : CCN.annexeI.preavisArticle) + ") :" });
       B.push({ k: "puce", t: "démission : " +
@@ -844,7 +947,7 @@
     B.push({ k: "p", t: "Pour l'entreprise\t\t\tLe salarié" });
     B.push({ k: "p", t: "Signature précédée de la mention « lu et approuvé »." });
 
-    return B;
+    return accorder(B, v);
   }
 
   /* ══════════════════ 5 · L'ANNEXE, QUAND ELLE EST DUE ══════════════ */
@@ -1033,7 +1136,21 @@
   function formalites(v) {
     var p = profil(v.profil);
     var cdd = v && v.nature === "cdd";
-    var L = [
+    var regularise = dejaEnPoste(v);
+    /* Pour un salarié déjà en poste, les trois formalités d'embauche ne se
+       refont pas : elles se rapportent à la date réelle d'entrée. */
+    var L = regularise ? [
+      { quoi: "Vérifier que la déclaration préalable à l'embauche a bien été faite à l'entrée",
+        quand: "au dossier, à la date du " + dateFr(v.entree), ou: "URSSAF",
+        loi: "L. 1221-10 et R. 1221-4 du code du travail" },
+      { quoi: "Vérifier l'inscription au registre unique du personnel",
+        quand: "à la date d'entrée", ou: "dans l'entreprise",
+        loi: "L. 1221-13 et D. 1221-23 du code du travail" },
+      { quoi: "Vérifier le suivi médical, et demander la visite périodique si elle est échue",
+        quand: "périodicité fixée par le médecin du travail, cinq ans au plus",
+        ou: "service de prévention et de santé au travail",
+        loi: "R. 4624-16 du code du travail" },
+    ] : [
       { quoi: "Déclaration préalable à l'embauche (DPAE)",
         quand: "dans les huit jours qui précèdent l'embauche, et avant la prise de poste",
         ou: "URSSAF", loi: "L. 1221-10 et R. 1221-4 du code du travail" },

@@ -95,6 +95,9 @@
     if (s.emp) V.emploi = s.emp;
     if (s.ent) V.entree = s.ent;
     if (s.qua) V.groupe = s.qua;
+    /* Le sexe ne s'affiche pas dans le contrat, mais il l'accorde : sans lui,
+       une conductrice sortait « né le » et « désigné le salarié ». */
+    if (s.sexe) V.sexe = s.sexe;
     rendreChamps();
   });
 
@@ -532,8 +535,16 @@
      Le bouton fait les trois, et il dit ce qu'il a fait : une ligne ajoutée
      ou complétée, une fiche ouverte, des échéances posées. Il n'écrase jamais
      une donnée déjà écrite ailleurs. */
+  /* Un salarié déjà en poste n'a pas de fin d'essai à poser dans l'agenda :
+     le contrat qu'on écrit pour lui est un contrat de régularisation. */
+  function dejaEnPoste() {
+    if (!V.entree) return false;
+    var e = new Date(String(V.entree) + "T12:00:00"), a = new Date();
+    a.setHours(0, 0, 0, 0);
+    return !isNaN(e) && e < a;
+  }
   function finEssai() {
-    if (!V.entree || !window.EcheancesSalaries) return "";
+    if (!V.entree || !window.EcheancesSalaries || dejaEnPoste()) return "";
     var d = String(V.essai || "").trim();
     if (!d) d = (PROFIL && PROFIL.annexe === "II") ? CT.CCN.annexeII.essai
       : ((PROFIL && PROFIL.conduite) ? CT.CCN.annexeI.essaiConduite : CT.CCN.annexeI.essaiAutres);
@@ -578,9 +589,14 @@
       : (r.complets.length ? "complété au registre (" + r.complets.length + " renseignement" +
           (r.complets.length > 1 ? "s" : "") + ")" : "déjà au registre, rien à compléter"));
     if (r.fiche) dits.push("fiche conducteur ouverte dans Flotte");
-    dits.push("échéances posées dans l'agenda : déclaration préalable, visite d'information et de prévention, entretien de parcours" +
-      (finEssai() ? ", fin de période d'essai" : "") +
-      (NATURE === "cdd" && V.terme ? ", terme du contrat" : ""));
+    dits.push(dejaEnPoste()
+      ? "échéances posées dans l'agenda : entretien de parcours professionnel" +
+        (NATURE === "cdd" && V.terme ? ", terme du contrat" : "") +
+        ". La déclaration préalable et la visite d'embauche ne sont pas reposées : " +
+        "le salarié est en poste depuis le " + CT.dateFr(V.entree)
+      : "échéances posées dans l'agenda : déclaration préalable, visite d'information et de prévention, entretien de parcours" +
+        (finEssai() ? ", fin de période d'essai" : "") +
+        (NATURE === "cdd" && V.terme ? ", terme du contrat" : ""));
     $("etat").textContent = nom + " : " + dits.join(" ; ") + ".";
   });
 

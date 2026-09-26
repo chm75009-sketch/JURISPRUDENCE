@@ -940,8 +940,11 @@
     h1("Entre les soussignés");
     p("La société " + societe() + ",");
     p("ci-après dénommée « la Société », d'une part,");
+    var natDite = (window.ListesValeurs && window.ListesValeurs.nationalitePhrase)
+      ? window.ListesValeurs.nationalitePhrase(d.nationalite, /^\s*(madame|mme)\b/i.test(nomS))
+      : (d.nationalite ? "de nationalité " + d.nationalite : "");
     p("Et " + nomS + ", né(e) le " + (d.naissance ? dateFr(d.naissance) : "[date de naissance]") +
-      " à " + (d.lieuNaissance || "[lieu]") + ", de nationalité " + (d.nationalite || "[   ]") +
+      " à " + (d.lieuNaissance || "[lieu]") + ", " + (natDite || "de nationalité [   ]") +
       ", demeurant " + (d.adresse || "[adresse]") + ", numéro de sécurité sociale " + (d.secu || "[   ]") + ",");
     p("ci-après dénommé(e) « le salarié », d'autre part,");
     p("Il a été convenu ce qui suit.");
