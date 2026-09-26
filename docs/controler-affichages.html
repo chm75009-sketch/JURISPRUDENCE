@@ -26,7 +26,7 @@
   entièrement rédigée, remplie avec la fiche d'entreprise, prête à imprimer.
 
   Depuis « Non » (controler-affichages.html?depart=non), la page ouvre sur les
-  dix affiches, les unes sous les autres : les quelques cases à compléter en
+  onze affiches, les unes sous les autres : les quelques cases à compléter en
   tête de chacune, la feuille dessous, Imprimer et Télécharger en Word.
 
   Une affiche seule à l'écran : ses champs en tête, la feuille, Imprimer,
@@ -115,10 +115,16 @@
   .releve-ligne .e.fait{color:var(--vert)}
   .releve-ligne .deux{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .releve-ligne input{font-size:15px;padding:8px 10px;min-height:40px}
+  .releve-ligne .photo{margin:8px 0 0}
+  .releve-ligne .pj{display:inline-flex;flex-direction:column;gap:4px;font-size:13.5px;
+    color:var(--texte-2);width:100%}
+  .releve-ligne .pj input[type=file]{min-height:0;padding:6px 0;font-size:13.5px;width:100%}
+  .releve-ligne .pj-dit{display:block;margin:4px 0 0;font-size:13px;color:var(--texte-3)}
 
   @page{size:A4;margin:14mm}
   @media print{
     header.site,.barre,.champs,details,.rappel-fiche,.suite,.titre-affiche,.manque,textarea,#lecture,h2{display:none !important}
+    .releve-ligne .pj{display:none !important}
     body{background:#fff}
     .wrap{max-width:none;padding:0}
     .a4{border:0;border-radius:0;margin:0;padding:0;page-break-after:always;font-size:12pt}
@@ -154,7 +160,7 @@
     <div class="barre pile"><button type="button" class="btn" id="controler">Contrôler</button></div>
     <div id="diagnostic"></div>
     <div class="suite">
-      <button type="button" class="doc-ligne" data-va="toutes">Les dix affiches, prêtes à poser</button>
+      <button type="button" class="doc-ligne" data-va="toutes">Les onze affiches, prêtes à poser</button>
       <button type="button" class="doc-ligne" data-va="releve">Le relevé daté</button>
     </div>
   </section>
@@ -164,7 +170,7 @@
     <div id="affiche-seule"></div>
   </section>
 
-  <!-- ══════ LES DIX AFFICHES ══════ -->
+  <!-- ══════ LES ONZE AFFICHES ══════ -->
   <section id="e-toutes" hidden>
     <p class="rappel-fiche" id="rappel-toutes"></p>
     <div class="barre pile">
@@ -294,7 +300,7 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* LES DIX AFFICHES.
+  /* LES ONZE AFFICHES.
 
      Chacune porte ses propres champs, et une fonction qui rend la feuille.
      Un champ vide sort entre crochets : il se voit, il ne s'invente pas. */
@@ -360,6 +366,70 @@
           { k: "cle", l: "Modalités", x: val("spstRdv", "modalités de prise de rendez-vous à indiquer") },
           { k: "p", t: "Vous pouvez appeler le service directement, aux coordonnées ci-dessus. L'entreprise ne demande ni le motif de la demande, ni le contenu de l'échange avec le médecin." },
           { k: "note", t: "Cette affiche est vérifiée une fois par an et à chaque changement de service, de médecin ou de coordonnées." },
+        ];
+      } },
+
+    /* -------------------------------------------------------------- 2 bis */
+    /* LA CONSIGNE DE SÉCURITÉ INCENDIE.
+
+       Elle manquait, et c'est l'affiche que tout le monde cherche des yeux.
+       Son contenu est celui de l'article R. 4227-38 (LEGIARTI000024769384,
+       en vigueur), et les exercices semestriels celui de R. 4227-39
+       (LEGIARTI000024769386, en vigueur), lus à la source le 26 septembre
+       2026, deux lectures concordantes.
+
+       Une réserve, et elle est écrite sur l'affiche : l'article R. 4227-37,
+       qui commande l'établissement et l'affichage de la consigne, est rendu
+       par le relais dans l'état « abrogé à effet différé » à la date du
+       26 septembre 2026, sur trois lectures. L'application ne sait pas à
+       quelle date cette abrogation prend effet ni ce qui la remplace : elle
+       le dit, et elle laisse l'affiche, dont le contenu reste celui d'un
+       article en vigueur. */
+    { id: "incendie",
+      nom: "Consigne de sécurité incendie",
+      fond: ["R. 4227-38", "R. 4227-39"],
+      pourquoi: "L'article R. 4227-38 fixe ce que la consigne de sécurité incendie indique, et R. 4227-39 les exercices semestriels. L'article R. 4227-37, qui commande son affichage dans les établissements de l'article R. 4227-34, est rendu par le relais Légifrance dans l'état « abrogé à effet différé » au 26 septembre 2026 : ce point est à vérifier à la source avant de s'en prévaloir.",
+      champs: [
+        { c: "incLocal", n: "Local ou groupe de locaux visé", large: true, ph: "atelier, quai, bureaux du premier étage" },
+        { c: "incMateriel", n: "Matériel d'extinction et de secours, et son emplacement", large: true,
+          ph: "extincteurs à eau pulvérisée près de chaque issue, extincteur CO2 au local électrique, RIA au quai" },
+        { c: "incQuiMateriel", n: "Personnes chargées de mettre ce matériel en action", large: true, ph: "un par ligne : nom, poste" },
+        { c: "incQuiEvac", n: "Personnes chargées de diriger l'évacuation", large: true, ph: "un par ligne : nom, poste, zone" },
+        { c: "incHandicap", n: "Mesures liées à la présence de personnes handicapées, espaces d'attente sécurisés", large: true,
+          ph: "nombre et localisation des espaces d'attente sécurisés, ou « aucun, établissement de plain-pied »" },
+        { c: "incAlerte", n: "Moyens d'alerte", large: true, ph: "déclencheurs manuels aux issues, sirène, téléphone du poste de garde" },
+        { c: "incQuiPompiers", n: "Personnes chargées d'aviser les sapeurs-pompiers", large: true, ph: "un par ligne : nom, poste" },
+        { c: "incSecours", n: "Adresse et numéro du service de secours de premier appel", large: true, ph: "centre de secours, adresse, numéro" },
+        { c: "incPoint", n: "Point de rassemblement", ph: "le lieu exact" },
+        { c: "incExercice", n: "Date du dernier exercice", t: "date" },
+      ],
+      feuille: function () {
+        return [
+          { k: "titre", t: "CONSIGNE DE SÉCURITÉ INCENDIE" },
+          { k: "sous", t: "À afficher de manière très apparente" },
+          { k: "cle", l: "Local visé", x: val("incLocal", "local ou groupe de locaux à indiquer") },
+          { k: "gros", t: "18 sapeurs-pompiers  ·  112 numéro d'urgence européen" },
+          { k: "h", t: "Toute personne qui aperçoit un début d'incendie" },
+          { k: "puces", t: [
+            "Donne l'alarme immédiatement, sans attendre l'arrivée de qui que ce soit.",
+            "Met en œuvre les moyens de premier secours, si elle peut le faire sans se mettre en danger.",
+            "Ne combat pas seule un feu qui a pris de l'ampleur : elle évacue et ferme la porte derrière elle.",
+          ] },
+          { k: "h", t: "Le matériel, et qui le met en action" },
+          { k: "cle", l: "Matériel d'extinction et de secours", x: val("incMateriel", "matériel et emplacements à indiquer") },
+          { k: "liste", t: v("incQuiMateriel") || "[ personnes chargées de mettre le matériel en action à indiquer ]" },
+          { k: "h", t: "L'évacuation" },
+          { k: "liste", t: v("incQuiEvac") || "[ personnes chargées de diriger l'évacuation à indiquer ]" },
+          { k: "cle", l: "Point de rassemblement", x: val("incPoint", "point de rassemblement à indiquer") },
+          { k: "cle", l: "Personnes handicapées", x: val("incHandicap", "mesures et espaces d'attente sécurisés à indiquer") },
+          { k: "h", t: "L'alerte" },
+          { k: "cle", l: "Moyens d'alerte", x: val("incAlerte", "moyens d'alerte à indiquer") },
+          { k: "liste", t: v("incQuiPompiers") || "[ personnes chargées d'aviser les sapeurs-pompiers à indiquer ]" },
+          { k: "cle", l: "Service de secours de premier appel", x: val("incSecours", "adresse et numéro à indiquer") },
+          { k: "h", t: "Les exercices" },
+          { k: "cle", l: "Dernier exercice", x: val("incExercice", "date du dernier exercice à indiquer") },
+          { k: "p", t: "Les essais et visites périodiques du matériel et les exercices d'évacuation ont lieu au moins tous les six mois. Leur date et les observations auxquelles ils donnent lieu sont consignées sur un registre tenu à la disposition de l'inspection du travail (R. 4227-39)." },
+          { k: "note", t: "Le contenu de cette consigne est celui de l'article R. 4227-38, en vigueur. L'article R. 4227-37, qui en commande l'affichage, est rendu par le relais Légifrance dans l'état « abrogé à effet différé » au 26 septembre 2026 : vérifiez ce point à la source avant de vous en prévaloir." },
         ];
       } },
 
@@ -837,7 +907,7 @@
     montrer("affiche");
   }
 
-  /* Les dix affiches, les unes sous les autres. */
+  /* Les onze affiches, les unes sous les autres. */
   function aPoser() { return AFFICHES.filter(function (a) { return !E.faites[a.id]; }); }
   function rendreAffiches() {
     var liste = AFFICHES;
@@ -1010,7 +1080,7 @@
     });
     garder();
     cible.innerHTML = '<div class="avis ' + (manques ? "att" : "ok") + '"><b>' +
-      (manques ? manques + " affichage(s) introuvable(s) dans votre texte" : "Les dix affichages sont trouvés") +
+      (manques ? manques + " affichage(s) introuvable(s) dans votre texte" : "Les onze affichages sont trouvés") +
       "</b>La recherche est faite sur les mots : c'est votre lecture qui décide.</div>" + h;
     cible.scrollIntoView({ behavior: "smooth" });
   });
@@ -1022,6 +1092,12 @@
     { c: "relAuteur", n: "Relevé effectué par", ph: "nom et qualité" },
     { c: "relSupport", n: "Support de l'information due par tout moyen", large: true,
       ph: "affichage papier, intranet, livret remis à l'embauche, courriel nominatif" },
+    { c: "condComment", n: "Conducteurs : comment l'information leur parvient", large: true,
+      ph: "remise en main propre à la prise de service, livret de bord, courriel nominatif" },
+    { c: "condPreuve", n: "Conducteurs : ce qui le prouve", large: true,
+      ph: "émargement, accusé de réception, capture datée" },
+    { c: "condNb", n: "Nombre de conducteurs concernés", t: "number" },
+    { c: "condLe", n: "Dernière diffusion aux conducteurs", t: "date" },
   ];
 
   function rendreReleve() {
@@ -1030,14 +1106,35 @@
     tableauReleve();
   }
 
+  /* LA PHOTO DATÉE, ET PAS SEULEMENT LA PHRASE QUI DIT QU'ELLE EXISTE.
+     Le relevé affirmait qu'une photographie était jointe à chaque emplacement ;
+     rien ne permettait de la joindre. Elle se dépose ici, elle entre dans
+     « Mes documents » sous la rubrique des affichages, et le relevé porte son
+     nom et sa date. Relevé le 26 septembre 2026. */
+  function photoDe(id) {
+    var n = v("photo-" + id), d = v("photoLe-" + id);
+    if (!n) return null;
+    return { nom: n, le: d };
+  }
+  function direPhoto(id) {
+    var ph = photoDe(id);
+    return ph ? ("photographie « " + ph.nom + " »" + (ph.le ? ", du " + dateFr(ph.le) : ", sans date"))
+              : "aucune photographie déposée";
+  }
+
   function tableauReleve() {
     var lignes = AFFICHES.map(function (a) {
       var f = !!E.faites[a.id];
+      var ph = photoDe(a.id);
       return '<div class="releve-ligne"><div class="n">' + ech(a.nom) + "</div>" +
         '<div class="e' + (f ? " fait" : "") + '">' + (f ? "en place" : "à poser") + " · " +
         (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique") + "</div>" +
         '<div class="deux"><input data-rel="lieu-' + ech(a.id) + '" value="' + ech(v("lieu-" + a.id)) + '" placeholder="emplacement exact">' +
-        '<input data-rel="date-' + ech(a.id) + '" type="date" value="' + ech(v("date-" + a.id)) + '"></div></div>';
+        '<input data-rel="date-' + ech(a.id) + '" type="date" value="' + ech(v("date-" + a.id)) + '"></div>' +
+        '<div class="photo"><label class="pj"><span>' +
+        (ph ? "Remplacer la photographie" : "Joindre une photographie datée") + "</span>" +
+        '<input type="file" accept="image/*" data-photo="' + ech(a.id) + '"></label>' +
+        '<span class="pj-dit">' + ech(direPhoto(a.id)) + "</span></div></div>";
     }).join("");
 
     $("#releve").innerHTML =
@@ -1053,7 +1150,24 @@
       '<div class="cle"><span>Support de l\'information</span><span' + (v("relSupport") ? "" : ' class="vide"') + ">" +
       ech(v("relSupport") || "[ support à indiquer ]") + "</span></div>" +
       "<h2>Ce qui a été constaté, affichage par affichage</h2>" + lignes +
-      '<p class="note" style="margin-top:12px">Une photographie datée de chaque emplacement est jointe au présent relevé. ' +
+      /* LES CONDUCTEURS NE PASSENT PAS DEVANT LE PANNEAU.
+         Un affichage dans les locaux n'atteint pas un roulant qui prend son
+         camion le lundi et rentre le vendredi : la question n'est pas de
+         savoir si l'affiche est posée, mais comment l'information lui est
+         parvenue, et ce qui le prouve. Relevé le 26 septembre 2026. */
+      "<h2>Les conducteurs</h2>" +
+      '<p class="note">Un affichage dans les locaux n\'atteint pas un conducteur qui part le lundi et rentre le vendredi. ' +
+      "Pour eux, l'information passe autrement, et c'est ce passage qui se prouve.</p>" +
+      '<div class="cle"><span>Comment l\'information leur parvient</span><span' + (v("condComment") ? "" : ' class="vide"') + ">" +
+      ech(v("condComment") || "[ remise en main propre, livret, courriel nominatif, application de bord : à indiquer ]") + "</span></div>" +
+      '<div class="cle"><span>Ce qui le prouve</span><span' + (v("condPreuve") ? "" : ' class="vide"') + ">" +
+      ech(v("condPreuve") || "[ émargement, accusé de réception, capture datée : à indiquer ]") + "</span></div>" +
+      '<div class="cle"><span>Conducteurs concernés</span><span' + (v("condNb") ? "" : ' class="vide"') + ">" +
+      ech(v("condNb") || "[ nombre à indiquer ]") + "</span></div>" +
+      '<div class="cle"><span>Dernière diffusion</span><span' + (v("condLe") ? "" : ' class="vide"') + ">" +
+      ech(dateFr(v("condLe")) || "[ date à porter ]") + "</span></div>" +
+      '<p class="note" style="margin-top:12px">Une photographie datée de chaque emplacement est jointe au présent relevé : ' +
+      "elle est déposée en face de chaque affichage ci-dessus, et conservée dans « Mes documents ». " +
       "Pour ce qui est dû par tout moyen, la preuve du support en tient lieu : accusé de diffusion, " +
       "capture de l'intranet, émargement du livret d'accueil.</p>" +
       '<div class="signature">Date et signature</div>' +
@@ -1061,6 +1175,33 @@
 
     $("#releve").querySelectorAll("[data-rel]").forEach(function (i) {
       i.addEventListener("input", function () { E.v[i.getAttribute("data-rel")] = i.value; garder(); });
+    });
+    /* La photographie : son nom et sa date sont gardés avec le relevé, le
+       fichier lui-même entre dans « Mes documents ». Si la base des documents
+       ne répond pas, le nom reste et l'écran le dit : on ne perd pas le
+       constat parce que le stockage a refusé. */
+    $("#releve").querySelectorAll("[data-photo]").forEach(function (i) {
+      i.addEventListener("change", function () {
+        var id = i.getAttribute("data-photo");
+        var f = i.files && i.files[0];
+        if (!f) return;
+        E.v["photo-" + id] = f.name;
+        E.v["photoLe-" + id] = new Date().toISOString().slice(0, 10);
+        garder();
+        var dit = i.parentNode.parentNode.querySelector(".pj-dit");
+        if (dit) dit.textContent = direPhoto(id);
+        if (!window.Documents) return;
+        var nom = AFFICHES.filter(function (a) { return a.id === id; })[0];
+        window.Documents.enregistrer("affichages", {
+          nom: f.name, sorte: "depose", type: f.type || "",
+          note: "Photographie de l'affichage : " + (nom ? nom.nom : id),
+          contenu: f,
+        }).then(function () {
+          if (dit) dit.textContent = direPhoto(id) + ", conservée dans Mes documents";
+        }).catch(function () {
+          if (dit) dit.textContent = direPhoto(id) + ", non conservée sur cet appareil";
+        });
+      });
     });
   }
 
@@ -1073,13 +1214,22 @@
       { k: "p", t: "Lieux parcourus : " + (v("relLieux") || "[ lieux ]") },
       { k: "p", t: "Relevé effectué par : " + (v("relAuteur") || v("responsable") || "[ nom et qualité ]") },
       { k: "p", t: "Support de l'information due par tout moyen : " + (v("relSupport") || "[ support ]") },
-      { k: "table", head: ["Affichage", "Fondement", "État", "Emplacement", "Posé le"],
+      { k: "table", paysage: true,
+        head: ["Affichage", "Fondement", "État", "Emplacement", "Posé le", "Photographie"],
+        proportions: [26, 15, 11, 20, 12, 16],
         rows: AFFICHES.map(function (a) {
           return [a.nom, a.fond.length ? a.fond.join(", ") : "code de la santé publique",
             E.faites[a.id] ? "en place" : "à poser",
-            v("lieu-" + a.id) || "", dateFr(v("date-" + a.id)) || ""];
+            v("lieu-" + a.id) || "", dateFr(v("date-" + a.id)) || "",
+            v("photo-" + a.id) ? v("photo-" + a.id) + (v("photoLe-" + a.id) ? ", du " + dateFr(v("photoLe-" + a.id)) : "") : ""];
         }) },
-      { k: "note", t: "Une photographie datée de chaque emplacement est jointe au présent relevé." },
+      { k: "t1", t: "Les conducteurs" },
+      { k: "p", t: "Un affichage dans les locaux n'atteint pas un conducteur qui part le lundi et rentre le vendredi. Pour eux, l'information passe autrement, et c'est ce passage qui se prouve." },
+      { k: "p", t: "Comment l'information leur parvient : " + (v("condComment") || "[ à indiquer ]") },
+      { k: "p", t: "Ce qui le prouve : " + (v("condPreuve") || "[ à indiquer ]") },
+      { k: "p", t: "Conducteurs concernés : " + (v("condNb") || "[ nombre ]") },
+      { k: "p", t: "Dernière diffusion : " + (dateFr(v("condLe")) || "[ date ]") },
+      { k: "note", t: "Les photographies datées sont conservées dans « Mes documents », rubrique des affichages." },
       { k: "p", t: "Date et signature :" },
     ];
     window.AuditExport.telecharger(
@@ -1089,7 +1239,7 @@
   });
 
   /* ------------------------------------------------------------------ */
-  /* L'entrée. « non » (rien n'est en place) ouvre les dix affiches ;
+  /* L'entrée. « non » (rien n'est en place) ouvre les onze affiches ;
      tout le reste ouvre le dépôt. */
   var depart = new URLSearchParams(location.search).get("depart");
   if (depart === "non") { E.faites = {}; garder(); montrer("toutes", true); }
