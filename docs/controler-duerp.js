@@ -1104,6 +1104,10 @@
 
   function corrigeItems() {
     var groupes = inventaire(function (id) { return E.ins[id] !== false && (E.ins[id] || !E.trouve[id]); });
+    /* L'effectif commande les colonnes du tableau, ici comme dans le document
+       produit par le « non ». Il manquait : « eff is not defined » arrêtait
+       l'export Word de la version corrigée. Relevé le 26 septembre 2026. */
+    var eff = effectif();
     var items = [];
     items.push({ k: "sur", t: P.denomination + " · votre document, complété le " + dateFr(aujourdhui) });
     if (E.scan) {

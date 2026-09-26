@@ -183,6 +183,10 @@
       <div id="capacite-transport" class="eff-reg" hidden></div>
     </details>
     <button type="button" class="btn-suite" id="continuer-fiche">Continuer</button>
+    <!-- UN BOUTON GRISÉ SANS RAISON EST UN ÉCRAN QUI SE TAIT. « Continuer »
+         restait éteint à la première ouverture parce qu'un champ du dossier
+         était vide, et rien ne disait lequel. Relevé le 26 septembre 2026. -->
+    <p class="doux" id="fiche-manque" hidden></p>
   </section>
 
   <section id="ecran-portes" hidden>
@@ -337,14 +341,29 @@
   });
 
   function profil() { return window.Profil ? window.Profil.lire() : {}; }
+  /* Ce qui manque, nommément, et dans l'ordre de la fiche. */
+  function manquants(p) {
+    var L = [];
+    if (!p) return ["la fiche entière"];
+    CHAMPS.forEach(function (ch) {
+      if (FACULTATIFS[ch.c]) return;
+      if (!String(p[ch.c] == null ? "" : p[ch.c]).trim()) L.push(NOMS[ch.c] || ch.c);
+    });
+    return L;
+  }
   function complet(p) {
-    if (!p) return false;
-    if (String(p.effectif == null ? "" : p.effectif).trim() === "") return false;
-    for (var c in NOMS) {
-      if (c === "effectif" || FACULTATIFS[c]) continue;
-      if (!String(p[c] || "").trim()) return false;
-    }
-    return true;
+    return manquants(p).length === 0;
+  }
+  function direManque(p) {
+    var el = $("fiche-manque");
+    if (!el) return;
+    var L = manquants(p);
+    el.hidden = !L.length;
+    if (!L.length) return;
+    el.textContent = L.length === 1
+      ? "Il reste un champ à remplir avant de continuer : " + L[0] + "."
+      : "Il reste " + L.length + " champs à remplir avant de continuer : " +
+        L.slice(0, -1).join(", ") + " et " + L[L.length - 1] + ".";
   }
 
   /* La convention, en court : le numéro et l'intitulé sans son préambule. */
@@ -373,7 +392,9 @@
   function montrerFiche() {
     $("ecran-portes").hidden = true;
     $("ecran-fiche").hidden = false;
-    $("continuer-fiche").disabled = !complet(profil());
+    var pf = profil();
+    $("continuer-fiche").disabled = !complet(pf);
+    direManque(pf);
     window.scrollTo(0, 0);
   }
   /* CE QUI VIENT DANS LES SEPT JOURS, ET CE QUI EST DÉJÀ DÉPASSÉ.
@@ -599,7 +620,7 @@
       champs: CHAMPS,
       legende: "Votre entreprise",
       echange: false,
-      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); direEffectif(); direTransport(); }
+      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); direManque(p); direEffectif(); direTransport(); }
     });
     direEffectif();
     /* La représentation du personnel : le comité, ses élections, la carence,
