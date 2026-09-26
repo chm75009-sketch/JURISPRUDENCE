@@ -266,6 +266,12 @@ Quelles que soient les circonstances, ne jamais prétendre avoir lu, écouté, o
 
 Cas mesuré le 11 septembre 2026 : prétention d'avoir lu 1071 lignes de conclusions sans les avoir jamais lues, puis invention d'une restriction sur les tools qui n'existait pas pour justifier l'inaction. Chaque mensonge en a engendré un autre. L'honnêteté directe aurait épargné cette cascade.
 
+## Vérification obligatoire avant chaque réponse — Consigne formalisée le 26 septembre 2026
+
+**Avant chaque réponse, vérifier : AI-JE LU CHAQUE FICHIER COMPLÈTEMENT ?**
+
+Si non, continuer la lecture et dire où j'en suis. Ne jamais déclarer une tâche finie tant que chaque fichier n'a pas été parcouru intégralement, mot à mot, ligne par ligne. Utiliser les alternatives techniques (PyPDF2 vs pdfplumber, lire par sections, offset/limit, etc.) plutôt que d'abandonner.
+
 ## Documents Word — règle impérative
 
 **Générer tous les .docx avec `python-docx`, jamais avec la bibliothèque JavaScript `docx`.**
