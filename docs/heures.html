@@ -125,6 +125,8 @@
   .jour.change{box-shadow:inset 3px 0 0 var(--ambre)}
   /* La journée qui passe le plafond quotidien : liseré rouge, et l'heure du
      jour en rouge. Elle se voit dans la grille sans qu'on lise une liste. */
+  .jour.hc{opacity:.55}
+  .jour .quand .hcq{display:block;font-weight:400;color:var(--texte-3);font-size:11px;line-height:1.3}
   .jour.trop{box-shadow:inset 3px 0 0 var(--rouge)}
   .jour.trop .h{color:var(--rouge)}
   .jour.verrou select,.jour.verrou input{background:var(--creux);color:var(--texte-2)}
@@ -326,6 +328,13 @@
     <div class="bloc">
       <h2>Heures supplémentaires et plafonds</h2>
       <div id="controles"></div>
+      <!-- Un dépassement scellé sans un mot est une preuve contre
+           l'entreprise : le mois ne se clôt pas tant qu'il n'est pas expliqué.
+           Relevé le 26 septembre 2026. -->
+      <label class="champ" id="l-motif-dep" hidden style="margin-top:12px">
+        <span>Motif du dépassement</span>
+        <input type="text" id="t-motif-dep"
+          placeholder="ce qui explique le dépassement, et ce qui a été fait"></label>
     </div>
 
     <div class="bloc">
