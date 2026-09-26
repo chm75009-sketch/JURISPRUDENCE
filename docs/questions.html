@@ -78,6 +78,31 @@
     white-space:pre-wrap}
   .journal .q .p{font-size:13.5px;color:var(--texte-3);margin-top:6px}
   .journal .vide{font-size:14.5px;color:var(--texte-2);line-height:1.5}
+  /* LE FIL DES RÉPONSES. La réponse du cabinet se colle sous sa question :
+     décalée, d'une autre couleur, datée. Relevé le 26 septembre 2026. */
+  .journal .filtres{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+  .journal .filtres button{flex:1 1 auto;min-height:38px;padding:0 12px;border:1px solid var(--filet);
+    border-radius:8px;background:var(--carte);color:var(--encre);font:14.5px system-ui;cursor:pointer}
+  .journal .filtres button.actif{background:var(--accent);border-color:var(--accent);color:#fff}
+  .journal .rep{margin:8px 0 0 12px;padding:9px 11px;border-left:3px solid var(--accent);
+    background:var(--creux,#f3f5f8);border-radius:0 8px 8px 0}
+  .journal .rep .d{font-size:13px;color:var(--texte-3)}
+  .journal .rep .t{font-size:14.5px;line-height:1.5;color:var(--encre);margin-top:4px;
+    white-space:pre-wrap}
+  .journal .rep button{margin-top:6px;min-height:32px;padding:0 10px;border:1px solid var(--filet);
+    border-radius:8px;background:var(--carte);color:var(--texte-2);font:13.5px system-ui;cursor:pointer}
+  .journal .ajout{margin:8px 0 0 12px}
+  .journal .ajout summary{font:600 14.5px/1.4 system-ui;color:var(--accent);cursor:pointer}
+  .journal .ajout .ch{display:flex;flex-direction:column;gap:5px;margin:8px 0 0;
+    font-size:13.5px;color:var(--texte-2)}
+  .journal .ajout input,.journal .ajout textarea{width:100%;box-sizing:border-box;min-height:44px;
+    padding:9px 11px;border:1px solid var(--filet);border-radius:8px;background:var(--carte);
+    color:var(--encre);font:15px system-ui;font-family:inherit}
+  .journal .ajout textarea{min-height:96px;line-height:1.5}
+  .journal .ajout button{margin:8px 0 0;min-height:42px;padding:0 14px;border-radius:8px;
+    border:2px solid var(--accent);background:var(--accent);color:#fff;font:600 15px system-ui;
+    cursor:pointer}
+  .journal .sans{font-size:13.5px;color:var(--texte-3);margin-top:6px;font-style:italic}
 
   .adresse{margin:20px 0 0;font-size:13.5px;color:var(--texte-3);line-height:1.5}
   .adresse input{margin-top:6px;font-size:15px;padding:9px 11px;min-height:42px;width:100%;

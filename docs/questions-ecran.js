@@ -175,25 +175,105 @@
     $("txt-apres").innerHTML = h;
   }
 
-  /* ───────────────────────── le journal du mois ─────────────────────── */
+  /* ───────────────── le journal, et le fil des réponses ───────────────
+
+     Le journal ne montrait que le mois en cours, et rien de ce que le cabinet
+     avait répondu : la question partait, la réponse restait dans la
+     messagerie, et six mois plus tard plus rien ne les reliait. L'audit du
+     26 septembre 2026 l'a relevé. La réponse se colle sous sa question, avec
+     sa date, et le fil se garde ici comme le reste du dossier.
+
+     Rien n'arrive tout seul : l'application n'a pas de serveur. C'est le
+     client qui reporte ce qu'il a reçu, et l'écran le dit.                 */
+  var VUE = "mois";
+
+  function filtresHtml() {
+    return '<div class="filtres">' +
+      '<button type="button" data-vue="mois"' + (VUE === "mois" ? ' class="actif"' : "") +
+      ">Ce mois-ci</button>" +
+      '<button type="button" data-vue="tout"' + (VUE === "tout" ? ' class="actif"' : "") +
+      ">Tout le fil</button></div>";
+  }
+
+  function reponsesHtml(q) {
+    var L = q.reponses || [];
+    var h = L.map(function (r, i) {
+      return '<div class="rep"><div class="d">Réponse du cabinet, le ' +
+        ech(Q.jourEnFrancais(r.le)) + "</div>" +
+        '<div class="t">' + ech(r.texte) + "</div>" +
+        '<button type="button" data-oter="' + ech(q.id) + '" data-rang="' + i +
+        '">Retirer cette réponse</button></div>';
+    }).join("");
+    if (!L.length && q.etat !== "brouillon")
+      h += '<p class="sans">Aucune réponse notée pour cette question.</p>';
+    h += '<details class="ajout"><summary>Coller la réponse du cabinet</summary>' +
+      '<label class="ch">Date de la réponse' +
+      '<input type="date" data-date="' + ech(q.id) + '"></label>' +
+      '<label class="ch">Ce que le cabinet a répondu' +
+      '<textarea data-texte="' + ech(q.id) + '" placeholder="Collez ici le texte reçu, ou résumez-le."></textarea></label>' +
+      '<button type="button" data-noter="' + ech(q.id) + '">Ajouter au fil</button></details>';
+    return h;
+  }
+
+  function questionHtml(q) {
+    return '<div class="q"><div class="h"><span class="r">' + ech(q.id) + "</span>" +
+      '<span class="d">' + ech(Q.jourEnFrancais(q.date)) +
+      (q.etat === "brouillon" ? " · non confirmée, ne compte pas" : "") + "</span></div>" +
+      '<div class="o">' + ech(q.objet) + "</div>" +
+      '<div class="t">' + ech(q.texte) + "</div>" +
+      (q.pieces.length ? '<div class="p">Pièces : ' + q.pieces.map(ech).join(", ") + "</div>" : "") +
+      reponsesHtml(q) + "</div>";
+  }
+
   function rendreJournal() {
     var mois = Q.moisDe(new Date());
-    var L = Q.duMois(mois).slice().reverse();
-    var h = "<h2>Vos questions de " + ech(Q.moisEnFrancais(mois)) + "</h2>";
+    var L = VUE === "tout" ? Q.toutes() : Q.duMois(mois).slice().reverse();
+    var attente = Q.sansReponse().length;
+    var h = "<h2>" + (VUE === "tout" ? "Toutes vos questions et les réponses du cabinet"
+      : "Vos questions de " + ech(Q.moisEnFrancais(mois))) + "</h2>" + filtresHtml();
     if (!L.length) {
-      h += '<div class="vide">Aucune question posée ce mois-ci.</div>';
+      h += '<div class="vide">' + (VUE === "tout"
+        ? "Vous n'avez encore posé aucune question."
+        : "Aucune question posée ce mois-ci. « Tout le fil » montre les mois précédents.") +
+        "</div>";
     } else {
-      h += L.map(function (q) {
-        return '<div class="q"><div class="h"><span class="r">' + ech(q.id) + "</span>" +
-          '<span class="d">' + ech(Q.jourEnFrancais(q.date)) +
-          (q.etat === "brouillon" ? " · non confirmée, ne compte pas" : "") + "</span></div>" +
-          '<div class="o">' + ech(q.objet) + "</div>" +
-          '<div class="t">' + ech(q.texte) + "</div>" +
-          (q.pieces.length ? '<div class="p">Pièces : ' + q.pieces.map(ech).join(", ") + "</div>" : "") +
-          "</div>";
-      }).join("");
+      h += L.map(questionHtml).join("");
+      if (attente)
+        h += '<p class="sans">' + attente + " question" + (attente > 1 ? "s" : "") +
+          " envoyée" + (attente > 1 ? "s" : "") + " sans réponse notée. Les réponses " +
+          "n'arrivent pas toutes seules : collez ici celles que vous recevez.</p>";
     }
     $("journal").innerHTML = h;
+    cablerJournal();
+  }
+
+  function cablerJournal() {
+    var z = $("journal");
+    Array.prototype.forEach.call(z.querySelectorAll("[data-vue]"), function (b) {
+      b.addEventListener("click", function () {
+        VUE = b.getAttribute("data-vue");
+        rendreJournal();
+      });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-noter]"), function (b) {
+      b.addEventListener("click", function () {
+        var id = b.getAttribute("data-noter");
+        var t = z.querySelector('[data-texte="' + id + '"]');
+        var d = z.querySelector('[data-date="' + id + '"]');
+        if (!t || !t.value.trim()) {
+          if (t) t.focus();
+          return;
+        }
+        Q.repondre(id, { le: d ? d.value : "", texte: t.value });
+        rendreJournal();
+      });
+    });
+    Array.prototype.forEach.call(z.querySelectorAll("[data-oter]"), function (b) {
+      b.addEventListener("click", function () {
+        Q.retirerReponse(b.getAttribute("data-oter"), parseInt(b.getAttribute("data-rang"), 10));
+        rendreJournal();
+      });
+    });
   }
 
   /* ─────────────────────────── l'écran entier ───────────────────────── */

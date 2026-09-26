@@ -123,6 +123,53 @@
     return tout.questions.length !== avant;
   }
 
+  /* ═══════════════ LE FIL DES RÉPONSES DU CABINET ═══════════════════════
+
+     La question partait, la réponse arrivait dans la messagerie, et rien ne
+     les reliait : six mois plus tard, le client ne retrouvait ni ce qu'il
+     avait demandé ni ce qu'on lui avait répondu. L'audit du 26 septembre 2026
+     l'a relevé. La réponse se colle ici, sous sa question, avec sa date ; elle
+     reste sur l'appareil du client, comme le reste du dossier.
+
+     Rien n'arrive tout seul : l'application n'a pas de serveur, et c'est le
+     client qui reporte ce qu'il a reçu. L'écran le dit plutôt que de laisser
+     croire à un fil qui se remplirait de lui-même.                         */
+  function repondre(id, r) {
+    var tout = lire(), fait = null;
+    tout.questions.forEach(function (q) {
+      if (q.id !== id) return;
+      if (!q.reponses) q.reponses = [];
+      var v = { le: net(r && r.le) || new Date().toISOString().slice(0, 10),
+        texte: net(r && r.texte), notee: new Date().toISOString() };
+      if (!v.texte) return;
+      q.reponses.push(v);
+      fait = v;
+    });
+    if (fait) garder(tout);
+    return fait;
+  }
+  function retirerReponse(id, rang) {
+    var tout = lire(), fait = false;
+    tout.questions.forEach(function (q) {
+      if (q.id !== id || !q.reponses) return;
+      if (rang >= 0 && rang < q.reponses.length) { q.reponses.splice(rang, 1); fait = true; }
+    });
+    if (fait) garder(tout);
+    return fait;
+  }
+  /* Toutes les questions, du plus récent au plus ancien : le fil ne s'arrête
+     pas au mois civil, la réponse arrive souvent le mois suivant. */
+  function toutes() {
+    return lire().questions.slice().sort(function (a, b) {
+      return String(b.date).localeCompare(String(a.date));
+    });
+  }
+  function sansReponse() {
+    return toutes().filter(function (q) {
+      return q.etat !== "brouillon" && !(q.reponses && q.reponses.length);
+    });
+  }
+
   function identifiant(mois, rang) {
     return "Q" + String(mois).replace("-", "") + "-" + ("0" + rang).slice(-2);
   }
@@ -184,6 +231,8 @@
     PAR_MOIS: PAR_MOIS,
     lire: lire, duMois: duMois, envoyees: envoyees, reste: reste, poser: poser,
     confirmer: confirmer, retirer: retirer,
+    repondre: repondre, retirerReponse: retirerReponse,
+    toutes: toutes, sansReponse: sansReponse,
     courriel: courriel, lien: lien,
     reglage: reglage, reglerAdresse: reglerAdresse,
     moisDe: moisDe, moisEnFrancais: moisEnFrancais,
