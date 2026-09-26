@@ -137,17 +137,44 @@
 
   function idRisque(u, i) { return M.cle + "." + u.cle + "." + i; }
 
+  /* LES EMPLOIS DU REGISTRE QUE LE MÉTIER NE COUVRE PAS.
+
+     Le registre porte soixante-treize conducteurs, cinq mécaniciens et
+     quatre assistantes ; le document sortait avec les unités du métier et
+     rien de ce que le registre sait. Un emploi qu'aucune unité ne reconnaît
+     devient donc une unité de travail à son nom, avec son effectif, et ses
+     risques restent à décrire : rien n'y est supposé, l'évaluation est celle
+     de l'employeur. R. 4121-1 fait l'inventaire par unité de travail.
+     Relevé le 26 septembre 2026. */
+  function unitesDuRegistre() {
+    var r = emploisNonCouverts(M.unites.map(function (u) { return { u: u }; }));
+    if (!r || !r.manquants.length) return [];
+    return r.manquants.map(function (x) {
+      return {
+        cle: "reg-" + slug(x.emp),
+        nom: x.emp,
+        qui: x.n + " salarié" + (x.n > 1 ? "s" : "") + " à ce poste au registre du personnel. " +
+          "Unité ajoutée d'après le registre : ses risques sont à décrire, aucun n'est supposé ici.",
+        risques: [],
+        duRegistre: true,
+      };
+    });
+  }
+  var UNITES = M.unites.concat(unitesDuRegistre());
+
   /* Tous les risques du métier, avec leur cotation et leur échéance. */
   function inventaire(filtre) {
     var out = [];
-    M.unites.forEach(function (u) {
+    UNITES.forEach(function (u) {
       var l = [];
       u.risques.forEach(function (r, i) {
         var id = idRisque(u, i);
         if (filtre && !filtre(id)) return;
         l.push({ id: id, r: r, pr: DM.priorite(r.g, r.f), ech: plusMois(v("dateVersion"), r.mois) });
       });
-      if (l.length) out.push({ u: u, liste: l });
+      /* Une unité venue du registre n'a pas de risque écrit : elle figure
+         quand même, avec la ligne qui dit ce qui reste à faire. */
+      if (l.length || u.duRegistre) out.push({ u: u, liste: l });
     });
     return out;
   }
@@ -242,6 +269,10 @@
     groupes.forEach(function (g, ig) {
       var n = depart + ig;
       h += "<h3>" + n + ". " + ech(g.u.nom) + "</h3>" + '<p class="qui">' + ech(g.u.qui) + "</p>";
+      if (!g.liste.length)
+        h += '<p class="qui">[À COMPLÉTER pour cette unité : situation de travail, mesures ' +
+          "existantes, mesures à prendre, responsable et échéance. Aucun risque n'est écrit ici " +
+          "à votre place.]</p>";
       g.liste.forEach(function (x, ix) { h += risqueHtml(x, n + "." + (ix + 1)); });
     });
     return h;
@@ -525,6 +556,10 @@
       var n = depart + ig;
       items.push({ k: "h2", t: n + ". " + g.u.nom });
       items.push({ k: "note", t: g.u.qui });
+      if (!g.liste.length)
+        items.push({ k: "p", t: "[À COMPLÉTER pour cette unité : situation de travail, mesures " +
+          "existantes, mesures à prendre, responsable et échéance. Aucun risque n'est écrit ici " +
+          "à votre place.]" });
       g.liste.forEach(function (x, ix) { risqueItems(x, n + "." + (ix + 1), items); });
     });
   }
@@ -704,7 +739,7 @@
     var n = normaliser(t);
     E.trouve = {};
     E.indice = {};
-    M.unites.forEach(function (u) {
+    UNITES.forEach(function (u) {
       u.risques.forEach(function (r, i) {
         var id = idRisque(u, i);
         var cles = (r.m || "").split("|").concat([r.n || ""]);

@@ -1438,7 +1438,10 @@
     controle: { href: "controler-duerp.html?depart=oui", nom: "Contrôler le document existant",
       question: "Avez-vous un document unique d'évaluation des risques ?",
       oui: "Déposez-le : chaque unité de travail et chaque risque du métier y sont cherchés, et ce que la recherche ne retrouve pas vous est rendu rédigé, prêt à insérer.",
-      non: "Alors il n'y a rien à constater : le document unique vous est ouvert entièrement écrit, risques du métier, cotation, mesures, responsable et échéance datée.",
+      /* « Entièrement écrit » était faux : le document sortait avec deux cent
+         soixante-six crochets. On annonce ce qu'il fait. Relevé le
+         26 septembre 2026. */
+      non: "Alors il s'écrit ici : les risques du métier avec leur cotation, leurs mesures, leur responsable et leur échéance datée, plus une unité de travail par emploi du registre que le métier ne couvre pas, dont les risques restent à décrire.",
       hrefNon: "controler-duerp.html?depart=non", nomNon: "Écrire mon document unique" },
     donnees: [
       { c: "dateDerniereMaj", nom: "Date de la dernière mise à jour du document unique", t: "date" },
