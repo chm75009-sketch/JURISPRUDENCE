@@ -144,11 +144,12 @@
       non: "forfait.html?rep=non", oui: "forfait.html?rep=oui" },
     /* « Non » ouvre le document, et non la liste entière de Gérer : à la
        question « avez-vous la complémentaire santé ? », la réponse est la
-       décision unilatérale ; à celle des visites, la demande au service de
-       prévention et de santé au travail. Relevé le 26 septembre 2026. */
+       décision unilatérale ; à celle des visites, l'échéancier salarié par
+       salarié, d'où sortent la demande au service de prévention et de santé
+       au travail et la convocation. Relevé le 26 septembre 2026. */
     { cle: "mutuelle",   nom: "Complémentaire santé obligatoire", seuil: 1,   non: "gerer.html#mutuelle" },
-    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "gerer.html#vip",
-      oui: "agenda.html" },
+    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "visites.html",
+      oui: "visites.html" },
     /* « Non » veut dire : il n'y a pas de comité. Ce qui s'impose alors est
        le processus électoral (L. 2314-4, L. 2314-5), ou le procès-verbal de
        carence si personne ne se présente (L. 2314-9) ; pas l'installation

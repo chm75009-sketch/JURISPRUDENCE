@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visites médicales</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  LE SUIVI MÉDICAL, SALARIÉ PAR SALARIÉ.
+
+  Jusqu'au 26 septembre 2026, l'application ne savait produire qu'une demande
+  de visite d'embauche saisie à la main : aucun échéancier, rien sur le
+  renouvellement, rien sur la reprise après un arrêt. Un audit l'a relevé, et
+  c'est ce que cette page fait.
+
+  Ce qu'elle porte, et le texte qui le commande, chacun lu à la source le
+  26 septembre 2026, deux lectures concordantes :
+
+    R. 4624-10  LEGIARTI000033769085  la visite d'information et de
+                prévention, dans un délai qui n'excède pas trois mois à
+                compter de la prise effective du poste ;
+    R. 4624-16  LEGIARTI000033769063  son renouvellement, selon une
+                périodicité qui ne peut excéder cinq ans, fixée par le
+                médecin du travail dans le protocole ;
+    R. 4624-28  LEGIARTI000033769094  poste à risques particuliers : suivi
+                individuel renforcé, renouvellement par le médecin du travail
+                selon une périodicité qui ne peut être supérieure à quatre
+                ans, et visite intermédiaire au plus tard deux ans après ;
+    R. 4624-31  LEGIARTI000054250639  l'examen de reprise, après un congé de
+                maternité, une maladie professionnelle, trente jours d'arrêt
+                pour accident du travail, ou soixante jours pour maladie ou
+                accident non professionnel ; l'employeur saisit le service dès
+                qu'il connaît la date de fin de l'arrêt, et l'examen a lieu le
+                jour de la reprise, au plus tard dans les huit jours.
+
+  Les dates sont celles que l'employeur saisit : aucune n'est devinée. Ce qui
+  n'est pas renseigné s'affiche en rouge, et non en gris : une date qui manque
+  n'est pas une situation saine.
+
+  Le stockage est celui de la flotte, « flotte-conducteurs », rangé sous le
+  nom du salarié : la fiche conducteur et l'agenda lisent les mêmes dates, et
+  rien n'est saisi deux fois.
+-->
+
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  .rappel-fiche{margin:14px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .filtres{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
+  .filtres button{flex:1 1 auto;min-height:40px;padding:0 12px;border:1px solid var(--filet);
+    border-radius:var(--r2);background:var(--surface);color:var(--encre,#16181d);
+    cursor:pointer;font:15px system-ui}
+  .filtres button.actif{background:var(--accent,#1f3864);color:#fff;border-color:var(--accent,#1f3864)}
+  .compte{margin:8px 0 0;font-size:var(--t2);color:var(--texte-2)}
+  .sal{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);margin:10px 0 0}
+  .sal .tete{padding:12px 14px;cursor:pointer}
+  .sal .tete b{display:block;font:600 17px/1.3 system-ui;color:var(--encre)}
+  .sal .resume{margin:4px 0 0;font-size:14.5px;color:var(--texte-2)}
+  .sal .prochaine{margin:8px 0 0;font:600 15px/1.35 system-ui;color:var(--encre)}
+  .jauge{display:inline-block;margin:6px 0 0;padding:2px 8px;border-radius:999px;
+    font:600 13px/1.6 system-ui}
+  .jauge.ok{background:var(--vert-clair);color:var(--vert)}
+  .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
+  .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
+  .sal .corps{display:none;padding:0 14px 14px}
+  .sal.ouverte .corps{display:block}
+  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .ch{display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--texte-2)}
+  .ch.pleine{grid-column:1 / -1}
+  .ch input,.ch select{min-height:44px;padding:8px 10px;border:1px solid var(--filet);
+    border-radius:var(--r2);font:16px system-ui;background:#fff;color:var(--encre)}
+  .ch input.rempli,.ch select.rempli{border-color:var(--accent)}
+  .sous{font-size:12.5px;color:var(--texte-3)}
+  .avis{margin:12px 0 0;border-radius:var(--r2);padding:12px 14px;font-size:14.5px;line-height:1.55}
+  .avis b{display:block;margin-bottom:4px}
+  .avis.non{background:var(--rouge-clair);color:var(--rouge)}
+  .avis.att{background:var(--ambre-clair);color:var(--ambre)}
+  .avis.ok{background:var(--vert-clair);color:var(--vert)}
+  .avis.info{background:var(--creux);color:var(--texte-2)}
+  .avis ul{margin:6px 0 0;padding-left:20px}
+  .barre{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+  .barre button{min-height:44px;padding:0 14px;border-radius:var(--r2);cursor:pointer;
+    font:600 15px system-ui;border:1px solid var(--filet);background:var(--surface);color:var(--encre)}
+  .barre button.p{background:var(--accent);border-color:var(--accent);color:#fff}
+  .feuille{margin:14px 0 0;border:1px solid var(--filet);border-radius:var(--r2);
+    background:#fff;padding:16px}
+  .suite{margin:var(--e5) 0 0}
+  .suite a{display:block;padding:14px 0;border-bottom:1px solid var(--filet);
+    color:var(--encre);text-decoration:none;font:400 17px/1.3 system-ui}
+  @media (max-width:430px){ .champs{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Visites médicales</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <p class="rappel-fiche" id="rappel"></p>
+
+  <div id="alertes"></div>
+
+  <div class="filtres" id="filtres">
+    <button type="button" data-f="faire" class="actif">À faire</button>
+    <button type="button" data-f="tous">Tous</button>
+  </div>
+  <p class="compte" id="compte"></p>
+
+  <div id="liste"></div>
+
+  <div id="doc" hidden>
+    <div class="feuille" id="feuille"></div>
+    <div class="barre">
+      <button type="button" class="p" id="btn-word">Télécharger en Word</button>
+      <button type="button" id="btn-imprimer">Imprimer</button>
+      <button type="button" id="btn-fermer">Fermer</button>
+    </div>
+  </div>
+
+  <div class="suite">
+    <a href="registre.html">Le registre du personnel, où se saisissent les salariés</a>
+    <a href="flotte.html">La flotte et les conducteurs, pour les permis et les cartes</a>
+    <a href="gerer.html">La gestion du quotidien, où se trouvent les autres courriers</a>
+  </div>
+
+  <details class="loi"><summary>Voir le texte de loi</summary><div id="textes"></div></details>
+</main>
+
+<script src="profil.js"></script>
+<script src="audit-export.js"></script>
+<script src="feuille-doc.js"></script>
+<script src="droits.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function ech(s) {
+    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  var profil = {};
+  try {
+    profil = (window.Profil && window.Profil.lire) ? (window.Profil.lire() || {})
+      : (JSON.parse(localStorage.getItem("profil-entreprise") || "null") || {});
+  } catch (e) { profil = {}; }
+
+  var CLE_REG = "registre-personnel";
+  var CLE_FICHES = "flotte-conducteurs";
+  var AUJOURDHUI = new Date();
+  var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+
+  /* ──────────────────────────────── les textes lus ───────────────────── */
+  var TEXTES = {
+    "R4624-10": { id: "LEGIARTI000033769085",
+      dit: "tout travailleur bénéficie d'une visite d'information et de prévention dans un délai qui n'excède pas trois mois à compter de la prise effective du poste de travail" },
+    "R4624-16": { id: "LEGIARTI000033769063",
+      dit: "renouvellement de la visite d'information et de prévention selon une périodicité qui ne peut excéder cinq ans, fixée par le médecin du travail dans le protocole" },
+    "R4624-28": { id: "LEGIARTI000033769094",
+      dit: "poste à risques particuliers : renouvellement par le médecin du travail selon une périodicité qui ne peut être supérieure à quatre ans, et visite intermédiaire au plus tard deux ans après" },
+    "R4624-31": { id: "LEGIARTI000054250639",
+      dit: "examen de reprise après un congé de maternité, une maladie professionnelle, trente jours d'arrêt pour accident du travail ou soixante jours pour maladie ou accident non professionnel ; l'employeur saisit le service dès qu'il connaît la date de fin de l'arrêt, l'examen a lieu le jour de la reprise et au plus tard dans les huit jours" }
+  };
+  function ref(cles) {
+    return cles.map(function (c) { return "art. " + c.replace(/^([A-Z])(\d)/, "$1. $2").replace("-", "-"); }).join(", ");
+  }
+  function art(c) {
+    var m = /^([A-Z]+)(\d+)-(.+)$/.exec(c);
+    return m ? m[1] + ". " + m[2] + "-" + m[3] : c;
+  }
+
+  /* ──────────────────────────────── les dates ────────────────────────── */
+  function iso(d) {
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" +
+      String(d.getDate()).padStart(2, "0");
+  }
+  function deIso(v) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v || "").trim());
+    if (!m) return null;
+    var d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12, 0, 0);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function dateFr(v) {
+    var d = v instanceof Date ? v : deIso(v);
+    if (!d) return "";
+    return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
+  }
+  function plusMois(v, n) {
+    var d = v instanceof Date ? new Date(v.getTime()) : deIso(v);
+    if (!d) return null;
+    var j = d.getDate();
+    d.setMonth(d.getMonth() + n);
+    if (d.getDate() < j) d.setDate(0);
+    return d;
+  }
+  function plusJours(v, n) {
+    var d = v instanceof Date ? new Date(v.getTime()) : deIso(v);
+    if (!d) return null;
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+  function joursEntre(a, b) {
+    if (!a || !b) return null;
+    return Math.round((a.getTime() - b.getTime()) / 864e5);
+  }
+  function net(v) { return String(v == null ? "" : v).trim(); }
+  function slug(s) {
+    try {
+      return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
+  }
+
+  /* ──────────────────────────── les salariés et leurs fiches ─────────── */
+  function salaries() {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem(CLE_REG) || "null"); } catch (e) { E = null; }
+    return ((E && E.salaries) || []).filter(function (s) {
+      return !s.ex && !net(s.sor) && (net(s.nom) || net(s.pre));
+    }).map(function (s) {
+      var nom = (net(s.nom) + " " + net(s.pre)).trim();
+      return { id: slug(nom), nom: nom, emp: net(s.emp), ent: net(s.ent) };
+    });
+  }
+  function fiches() {
+    try { return JSON.parse(localStorage.getItem(CLE_FICHES) || "null") || {}; }
+    catch (e) { return {}; }
+  }
+  function fiche(id) { return fiches()[id] || {}; }
+  function ecrire(id, champ, valeur) {
+    var t = fiches();
+    t[id] = t[id] || {};
+    if (net(valeur)) t[id][champ] = net(valeur); else delete t[id][champ];
+    try { localStorage.setItem(CLE_FICHES, JSON.stringify(t)); } catch (e) {}
+  }
+
+  /* ──────────────────────────── ce qui est dû, et quand ──────────────── */
+  /* LES MOTIFS D'EXAMEN DE REPRISE, ET LEUR DURÉE D'ARRÊT.
+     R. 4624-31 : maternité et maladie professionnelle sans condition de
+     durée, accident du travail à partir de trente jours, maladie ou accident
+     non professionnel à partir de soixante jours. */
+  var MOTIFS = [
+    { v: "", lib: "- aucun arrêt en cours -", jours: null },
+    { v: "maternite", lib: "Congé de maternité", jours: 0 },
+    { v: "mp", lib: "Maladie professionnelle", jours: 0 },
+    { v: "at", lib: "Accident du travail", jours: 30 },
+    { v: "maladie", lib: "Maladie ou accident non professionnel", jours: 60 }
+  ];
+  function motifDe(v) {
+    var out = MOTIFS[0];
+    MOTIFS.forEach(function (m) { if (m.v === v) out = m; });
+    return out;
+  }
+
+  function echeances(s) {
+    var f = fiche(s.id), L = [];
+    var suivi = f.suivi === "sir" ? "sir" : "vip";
+    var derniere = net(f.visiteTravail);
+
+    /* 1. La visite d'information et de prévention, à l'embauche. */
+    if (!derniere && net(s.ent))
+      L.push({ quoi: "Visite d'information et de prévention", date: plusMois(s.ent, 3),
+        fond: "R4624-10", pour: "une visite d'information et de prévention",
+        dit: "dans un délai qui n'excède pas trois mois à compter de la prise effective du poste" });
+
+    /* 2. Le renouvellement, cinq ans au plus, quatre en suivi renforcé, avec
+          la visite intermédiaire à deux ans. */
+    if (derniere && suivi === "vip")
+      L.push({ quoi: "Renouvellement de la visite", date: plusMois(derniere, 60),
+        fond: "R4624-16", pour: "le renouvellement de votre visite d'information et de prévention",
+        dit: "périodicité qui ne peut excéder cinq ans, fixée par le médecin du travail" });
+    if (derniere && suivi === "sir") {
+      L.push({ quoi: "Renouvellement avec le médecin du travail", date: plusMois(derniere, 48),
+        fond: "R4624-28", pour: "le renouvellement de votre visite avec le médecin du travail",
+        dit: "périodicité qui ne peut être supérieure à quatre ans" });
+      L.push({ quoi: "Visite intermédiaire", date: plusMois(net(f.visiteInter) || derniere, net(f.visiteInter) ? 48 : 24),
+        fond: "R4624-28", pour: "une visite intermédiaire",
+        dit: "au plus tard deux ans après la visite avec le médecin du travail" });
+    }
+
+    /* 3. L'examen de reprise : il se compte depuis la fin de l'arrêt, et le
+          motif décide s'il est dû. */
+    var fin = net(f.arretFin), motif = motifDe(net(f.arretMotif));
+    if (fin && motif.v && !net(f.visiteReprise)) {
+      var deb = net(f.arretDebut);
+      var duree = deb ? joursEntre(deIso(fin), deIso(deb)) : null;
+      var du = motif.jours === 0 || duree === null || duree >= motif.jours;
+      if (du)
+        L.push({ quoi: "Examen de reprise", date: plusJours(fin, 8), fond: "R4624-31",
+          pour: "un examen de reprise",
+          dit: "l'examen a lieu le jour de la reprise et au plus tard dans les huit jours qui suivent ; " +
+            "l'employeur saisit le service dès qu'il connaît la date de fin de l'arrêt",
+          reprise: true });
+    }
+    return L.filter(function (x) { return !!x.date; });
+  }
+
+  function etatDe(jours) {
+    if (jours === null) return "non";
+    if (jours < 0) return "non";
+    if (jours <= 30) return "non";
+    if (jours <= 60) return "att";
+    return "ok";
+  }
+  function direDelai(jours) {
+    if (jours === null) return "date inconnue";
+    if (jours < 0) return "en retard de " + (-jours) + " jour" + (-jours > 1 ? "s" : "");
+    if (jours === 0) return "aujourd'hui";
+    return "dans " + jours + " jour" + (jours > 1 ? "s" : "");
+  }
+
+  /* ──────────────────────────────── l'écran ──────────────────────────── */
+  var FILTRE = "faire";
+  var ouvert = {};
+
+  function lignesDe(s) {
+    return echeances(s).map(function (e) {
+      var j = joursEntre(e.date, AUJOURDHUI);
+      return { e: e, jours: j, etat: etatDe(j) };
+    }).sort(function (a, b) { return (a.jours === null ? 1e9 : a.jours) - (b.jours === null ? 1e9 : b.jours); });
+  }
+
+  function rendre() {
+    var L = salaries();
+    var dus = [];
+    var cartes = L.map(function (s) {
+      var lg = lignesDe(s);
+      var pire = lg.length ? lg[0] : null;
+      if (pire && (pire.etat === "non" || pire.etat === "att"))
+        dus.push({ s: s, l: pire });
+      if (FILTRE === "faire" && !(pire && (pire.etat === "non" || pire.etat === "att"))) return "";
+      var f = fiche(s.id);
+      var suivi = f.suivi === "sir" ? "sir" : "vip";
+      return '<div class="sal' + (ouvert[s.id] ? " ouverte" : "") + '" data-sal="' + ech(s.id) + '">' +
+        '<div class="tete" data-ouvrir="' + ech(s.id) + '"><b>' + ech(s.nom) + "</b>" +
+        '<p class="resume">' + ech([s.emp, suivi === "sir" ? "suivi individuel renforcé" : "visite d'information et de prévention",
+          net(f.visiteTravail) ? "dernière visite le " + dateFr(f.visiteTravail) : "aucune visite enregistrée"]
+          .filter(Boolean).join(" · ")) + "</p>" +
+        (pire ? '<p class="prochaine">' + ech(pire.e.quoi) + '</p><span class="jauge ' + pire.etat + '">' +
+                ech(direDelai(pire.jours)) + "</span>"
+              : '<span class="jauge ok">rien à échéance</span>') +
+        "</div><div class=\"corps\">" + champsDe(s, f) + lignesHtml(lg) + boutonsDe(s) + "</div></div>";
+    }).join("");
+
+    $("liste").innerHTML = cartes || '<div class="avis info"><b>Rien à faire dans cette vue</b>' +
+      "Aucune échéance n'est due dans les soixante jours. Le filtre « Tous » montre l'ensemble des salariés.</div>";
+    $("compte").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") + " en poste au registre · " +
+      dus.length + " à traiter dans les soixante jours";
+    rendreAlertes(dus, L.length);
+    cabler();
+  }
+
+  function champsDe(s, f) {
+    var suivi = f.suivi === "sir" ? "sir" : "vip";
+    var ch = function (id, nom, type, valeur, sous, opts) {
+      var dedans;
+      if (opts) {
+        dedans = '<select data-id="' + ech(s.id) + '" data-c="' + id + '">' +
+          opts.map(function (o) {
+            return '<option value="' + ech(o[0]) + '"' + (o[0] === valeur ? " selected" : "") + ">" +
+              ech(o[1]) + "</option>";
+          }).join("") + "</select>";
+      } else {
+        dedans = '<input type="' + type + '" data-id="' + ech(s.id) + '" data-c="' + id +
+          '" value="' + ech(valeur) + '"' + (net(valeur) ? ' class="rempli"' : "") + ">";
+      }
+      return '<label class="ch' + (sous ? " pleine" : "") + '"><span>' + ech(nom) + "</span>" + dedans +
+        (sous ? '<span class="sous">' + ech(sous) + "</span>" : "") + "</label>";
+    };
+    return '<div class="champs">' +
+      ch("suivi", "Type de suivi", "", suivi, "R. 4624-28 : le suivi individuel renforcé vise les postes à risques particuliers.",
+        [["vip", "Visite d'information et de prévention"], ["sir", "Suivi individuel renforcé"]]) +
+      ch("visiteTravail", "Dernière visite, le", "date", net(f.visiteTravail)) +
+      (suivi === "sir" ? ch("visiteInter", "Dernière visite intermédiaire", "date", net(f.visiteInter)) : "") +
+      ch("arretMotif", "Arrêt de travail en cours", "", net(f.arretMotif),
+        "R. 4624-31 : maternité et maladie professionnelle sans condition de durée, trente jours pour un accident du travail, soixante pour une maladie ou un accident non professionnel.",
+        MOTIFS.map(function (m) { return [m.v, m.lib]; })) +
+      (net(f.arretMotif) ? ch("arretDebut", "Arrêt depuis le", "date", net(f.arretDebut)) : "") +
+      (net(f.arretMotif) ? ch("arretFin", "Fin de l'arrêt, le", "date", net(f.arretFin)) : "") +
+      (net(f.arretMotif) ? ch("visiteReprise", "Examen de reprise tenu le", "date", net(f.visiteReprise)) : "") +
+      "</div>";
+  }
+
+  function lignesHtml(lg) {
+    if (!lg.length) return '<div class="avis ok"><b>Aucune échéance en cours</b>' +
+      "Renseignez la date de la dernière visite pour que le renouvellement se calcule.</div>";
+    return lg.map(function (x) {
+      return '<div class="avis ' + x.etat + '"><b>' + ech(x.e.quoi + " : " +
+        (x.e.date ? dateFr(x.e.date) : "date inconnue") + ", " + direDelai(x.jours)) + "</b>" +
+        ech(x.e.dit) + " (" + ech(art(x.e.fond)) + ").</div>";
+    }).join("");
+  }
+
+  function boutonsDe(s) {
+    return '<div class="barre">' +
+      '<button type="button" class="p" data-doc="service" data-sal="' + ech(s.id) + '">Demande au service de santé au travail</button>' +
+      '<button type="button" data-doc="salarie" data-sal="' + ech(s.id) + '">Convocation du salarié</button>' +
+      "</div>";
+  }
+
+  function rendreAlertes(dus, total) {
+    if (!total) {
+      $("alertes").innerHTML = '<div class="avis non"><b>Le registre du personnel ne porte aucun salarié</b>' +
+        "C'est lui qui donne les noms de cet écran : ouvrez le registre et inscrivez-les.</div>";
+      return;
+    }
+    var retard = dus.filter(function (d) { return d.l.jours !== null && d.l.jours < 0; });
+    var proches = dus.filter(function (d) { return d.l.jours !== null && d.l.jours >= 0 && d.l.jours <= 30; });
+    var h = "";
+    if (retard.length)
+      h += '<div class="avis non"><b>' + retard.length + " salarié" + (retard.length > 1 ? "s" : "") +
+        " dont l'échéance est passée</b><ul><li>" +
+        retard.slice(0, 8).map(function (d) {
+          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours));
+        }).join("</li><li>") + "</li></ul>" +
+        (retard.length > 8 ? "… et " + (retard.length - 8) + " autre(s)." : "") + "</div>";
+    if (proches.length)
+      h += '<div class="avis att"><b>' + proches.length + " échéance" + (proches.length > 1 ? "s" : "") +
+        " dans les trente jours</b><ul><li>" +
+        proches.slice(0, 8).map(function (d) {
+          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours));
+        }).join("</li><li>") + "</li></ul>" +
+        (proches.length > 8 ? "… et " + (proches.length - 8) + " autre(s)." : "") + "</div>";
+    if (!retard.length && !proches.length)
+      h = '<div class="avis ok"><b>Aucune échéance dans les trente jours</b>' +
+        "Les dates saisies sont celles qui commandent : une date qui manque s'affiche en rouge sur la fiche du salarié.</div>";
+    $("alertes").innerHTML = h;
+  }
+
+  function cabler() {
+    Array.prototype.forEach.call($("liste").querySelectorAll("[data-ouvrir]"), function (t) {
+      t.addEventListener("click", function () {
+        var id = t.getAttribute("data-ouvrir");
+        if (ouvert[id]) delete ouvert[id]; else ouvert[id] = true;
+        t.parentNode.classList.toggle("ouverte", !!ouvert[id]);
+      });
+    });
+    Array.prototype.forEach.call($("liste").querySelectorAll("[data-c]"), function (el) {
+      el.addEventListener("change", function () {
+        ecrire(el.getAttribute("data-id"), el.getAttribute("data-c"), el.value);
+        rendre();
+      });
+    });
+    Array.prototype.forEach.call($("liste").querySelectorAll("[data-doc]"), function (b) {
+      b.addEventListener("click", function () {
+        ouvrirDoc(b.getAttribute("data-doc"), b.getAttribute("data-sal"));
+      });
+    });
+  }
+
+  /* ──────────────────────────────── les deux courriers ───────────────── */
+  var DOC = null;
+  function salarieDe(id) {
+    var out = null;
+    salaries().forEach(function (s) { if (s.id === id) out = s; });
+    return out;
+  }
+  function signataire() {
+    return net(profil.responsable) || "[nom et qualité du représentant légal]";
+  }
+  function ville() {
+    var m = /(\d{5})\s+([^,;]+)$/.exec(net(profil.adresse));
+    return m ? m[2].trim() : "[ville]";
+  }
+  function enTete() {
+    var L = [net(profil.denomination) || "[dénomination]"];
+    if (net(profil.adresse)) L.push(net(profil.adresse));
+    if (net(profil.siret)) L.push("SIRET " + net(profil.siret));
+    return L;
+  }
+
+  function docService(s) {
+    var f = fiche(s.id), lg = lignesDe(s);
+    var premiere = lg.length ? lg[0] : null;
+    var org = net(profil.orgSanteTravail) || "[nom et adresse du service de prévention et de santé au travail]";
+    var b = enTete().map(function (l) { return { k: "p", t: l }; });
+    b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
+    b.push({ k: "p", t: org });
+    b.push({ k: "t1", t: "Demande de visite médicale" });
+    b.push({ k: "p", t: "Objet : " + (premiere ? premiere.e.quoi.toLowerCase() : "suivi médical") +
+      " de " + s.nom + "." });
+    b.push({ k: "p", t: "Madame, Monsieur," });
+    if (premiere && premiere.e.reprise) {
+      b.push({ k: "p", t: "Le contrat de travail de " + s.nom + ", " + (s.emp || "[emploi]") +
+        ", a été suspendu pour " + motifDe(net(f.arretMotif)).lib.toLowerCase() +
+        (net(f.arretDebut) ? " depuis le " + dateFr(f.arretDebut) : "") +
+        ". L'arrêt prend fin le " + dateFr(f.arretFin) + "." });
+      b.push({ k: "p", t: "Nous vous saisissons dès connaissance de cette date afin que l'examen de " +
+        "reprise soit organisé le jour de la reprise effective, et au plus tard dans les huit jours " +
+        "qui suivent, soit le " + dateFr(plusJours(f.arretFin, 8)) + " (R. 4624-31)." });
+    } else if (premiere) {
+      b.push({ k: "p", t: "Nous sollicitons l'organisation de la visite suivante pour " + s.nom + ", " +
+        (s.emp || "[emploi]") + (net(s.ent) ? ", entré dans l'entreprise le " + dateFr(s.ent) : "") + " : " +
+        premiere.e.quoi.toLowerCase() + ", à tenir au plus tard le " + dateFr(premiere.e.date) + "." });
+      b.push({ k: "p", t: premiere.e.dit.charAt(0).toUpperCase() + premiere.e.dit.slice(1) +
+        " (" + art(premiere.e.fond) + ")." });
+    } else {
+      b.push({ k: "p", t: "Nous sollicitons l'organisation d'une visite pour " + s.nom + ", " +
+        (s.emp || "[emploi]") + " : [préciser la visite demandée et la date souhaitée]." });
+    }
+    b.push({ k: "p", t: "Le salarié relève " + (f.suivi === "sir"
+      ? "du suivi individuel renforcé, son poste présentant des risques particuliers au sens de l'article R. 4624-23."
+      : "de la visite d'information et de prévention.") });
+    b.push({ k: "p", t: "Nous vous remercions de nous communiquer la date retenue, que nous porterons à " +
+      "la connaissance de l'intéressé." });
+    b.push({ k: "p", t: "Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées." });
+    b.push({ k: "p", t: " " });
+    b.push({ k: "p", t: signataire() });
+    b.push({ k: "p", t: net(profil.denomination) });
+    return { titre: "Demande de visite médicale", blocs: b,
+      fichier: "demande-visite-" + s.id, loi: premiere ? [premiere.e.fond] : ["R4624-10"] };
+  }
+
+  function docSalarie(s) {
+    var f = fiche(s.id), lg = lignesDe(s);
+    var premiere = lg.length ? lg[0] : null;
+    var b = enTete().map(function (l) { return { k: "p", t: l }; });
+    b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
+    b.push({ k: "p", t: s.nom });
+    b.push({ k: "t1", t: "Convocation à une visite médicale" });
+    b.push({ k: "p", t: "Objet : " + (premiere ? premiere.e.quoi.toLowerCase() : "visite médicale") + "." });
+    b.push({ k: "p", t: "Madame, Monsieur," });
+    b.push({ k: "p", t: "Vous êtes convoqué pour " +
+      (premiere ? (premiere.e.pour || premiere.e.quoi.toLowerCase()) : "une visite médicale") +
+      " auprès de " + (net(profil.orgSanteTravail) || "[service de prévention et de santé au travail]") +
+      ", le [date] à [heure], [adresse]." });
+    if (premiere)
+      b.push({ k: "p", t: "Cette visite est due : " + premiere.e.dit + " (" + art(premiere.e.fond) + ")." });
+    b.push({ k: "p", t: "Le temps nécessité par cette visite et les déplacements qu'elle impose est pris " +
+      "sur les heures de travail, sans retenue de salaire." });
+    b.push({ k: "p", t: "Si la date ou l'heure ne vous convenait pas, prévenez-nous sans attendre : la " +
+      "visite sera reportée avec le service, et non annulée." });
+    b.push({ k: "p", t: "Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées." });
+    b.push({ k: "p", t: " " });
+    b.push({ k: "p", t: signataire() });
+    b.push({ k: "p", t: net(profil.denomination) });
+    return { titre: "Convocation à une visite médicale", blocs: b,
+      fichier: "convocation-visite-" + s.id, loi: premiere ? [premiere.e.fond] : ["R4624-10"] };
+  }
+
+  function ouvrirDoc(quoi, id) {
+    var s = salarieDe(id);
+    if (!s) return;
+    DOC = quoi === "service" ? docService(s) : docSalarie(s);
+    $("feuille").innerHTML = DOC.blocs.map(function (b) {
+      if (b.k === "t1") return "<h2>" + ech(b.t) + "</h2>";
+      return "<p>" + ech(b.t) + "</p>";
+    }).join("");
+    $("doc").hidden = false;
+    $("doc").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  $("btn-fermer").addEventListener("click", function () { $("doc").hidden = true; });
+  $("btn-imprimer").addEventListener("click", function () { window.print(); });
+  $("btn-word").addEventListener("click", function () {
+    if (!DOC || !window.AuditExport) return;
+    var items = DOC.blocs.map(function (b) { return { k: b.k === "t1" ? "t1" : "p", t: b.t }; });
+    var octets = window.AuditExport.docx(items, DOC.titre);
+    window.AuditExport.telecharger(octets,
+      DOC.fichier + "-" + iso(AUJOURDHUI) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* ──────────────────────────────── le reste de l'écran ──────────────── */
+  Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      FILTRE = b.getAttribute("data-f");
+      Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (x) {
+        x.classList.toggle("actif", x === b);
+      });
+      rendre();
+    });
+  });
+
+  $("rappel").textContent = [net(profil.denomination),
+    net(profil.orgSanteTravail) ? "service de santé au travail : " + net(profil.orgSanteTravail)
+      : "service de prévention et de santé au travail non renseigné sur la fiche d'entreprise"]
+    .filter(Boolean).join(" · ");
+
+  $("textes").innerHTML = Object.keys(TEXTES).map(function (c) {
+    return "<p><b>" + ech(art(c)) + "</b> <span class=\"ident\">" + ech(TEXTES[c].id) + "</span><br>" +
+      ech(TEXTES[c].dit) + "</p>";
+  }).join("");
+
+  rendre();
+})();
+</script>
+</body>
+</html>
