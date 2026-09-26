@@ -1031,8 +1031,8 @@
       L.push("conserve la faculté de s'adresser directement à l'autorité externe");
       L.push("compétente dans les conditions prévues par la même loi.");
       L.push("");
-      L.push("NOTE - Cette loi n'est pas au code du travail : l'application ne l'a pas lue");
-      L.push("à la source et n'en détaille donc pas le contenu ici. Si vous n'avez pas");
+      L.push("NOTE - Cette loi n'est pas au code du travail : elle n'a pas été lue à");
+      L.push("la source, et son contenu n'est pas détaillé ici. Si vous n'avez pas");
       L.push("encore de procédure interne de recueil des signalements, supprimez la");
       L.push("dernière phrase du troisième alinéa jusqu'à sa mise en place : l'existence");
       L.push("du dispositif, elle, doit être rappelée dans tous les cas (L. 1321-2, 3°).");
@@ -1603,13 +1603,13 @@
         L.push("Elle peut imposer des mentions que ce texte ne porte pas, encadrer la");
         L.push("procédure disciplinaire plus strictement que la loi, ou prévoir une");
         L.push("commission de discipline. Les clauses conventionnelles ne sont écrites");
-        L.push("ici que pour les conventions que l'application a lues à la source ;");
-        L.push("pour la vôtre, cette lecture reste à faire.");
+        L.push("ici que pour les conventions lues à la source ; pour la vôtre, cette");
+        L.push("lecture reste à faire.");
       }
       L.push("");
       L.push("Vos accords d'entreprise et vos usages ensuite. Un accord sur le temps de");
       L.push("travail, le télétravail ou le droit à la déconnexion peut contredire une");
-      L.push("clause écrite ici. C'est l'accord qui l'emporte, et l'application ne le");
+      L.push("clause écrite ici. C'est l'accord qui l'emporte, et ce document ne le");
       L.push("connaît pas.");
       L.push("");
       L.push("Enfin, vous pouvez soumettre le projet à l'inspecteur du travail avant de");
@@ -1723,6 +1723,35 @@
   D["DIS-CTL-RI-01"].parties = partiesRi;
 
   /* Ce que la page demande : y a-t-il un document pour ce point ? */
+  /* L'EXEMPLE RESTE À L'ÉCRAN, IL NE PART PAS DANS LE FICHIER.
+
+     Deux exigences opposées, et elles se concilient par le support. À l'écran,
+     l'exemple rempli sert : « un modèle vierge que personne n'a jamais vu
+     rempli ne dit pas comment le remplir », posé le 12 septembre 2026. Dans le
+     fichier que l'entreprise enregistre, imprime ou envoie, il est un danger :
+     « aucun exemple dans un fichier produit », relevé le 26 septembre 2026,
+     après qu'un document unique fictif est sorti signé au nom du client.
+
+     La coupe se fait sur deux repères que tous les documents portent : le
+     bandeau en tête, et la ligne « À COMPLÉTER » qui ouvre la partie du
+     client. Sans ces deux repères, rien n'est coupé : on ne devine pas où
+     commence un exemple. */
+  function sansExemple(texte) {
+    var L = String(texte == null ? "" : texte).split("\n");
+    var debut = -1, fin = -1;
+    for (var i = 0; i < L.length; i++) {
+      var t = L[i];
+      if (debut < 0 && (t.indexOf("EXEMPLE") === 0 || t.indexOf("À ADAPTER") === 0)) { debut = i; continue; }
+      if (debut >= 0 && /À COMPLÉTER\s*$/.test(t.trim())) { fin = i; break; }
+    }
+    if (debut < 0) return L.join("\n");
+    /* Le bandeau seul, sans exemple derrière : il s'en va, et rien d'autre. */
+    if (fin < 0) return L.slice(0, debut).concat(L.slice(debut + 1)).join("\n");
+    var avant = L.slice(0, debut);
+    while (avant.length && !String(avant[avant.length - 1]).trim()) avant.pop();
+    return avant.concat([""], L.slice(fin + 1)).join("\n");
+  }
+
   /* Le générateur rendu passe par le tri des bandeaux : c'est le seul endroit
      par lequel tous les documents sortent, et il vaut mieux un tri qu'une
      relecture de cent trente-six fichiers. `parties` et les autres propriétés
@@ -1851,6 +1880,6 @@
     pour: pour, tous: D, ajouter: ajouter,
     outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, identite: identite,
       liens: liens, EXEMPLE: EXEMPLE },
-    liens: liens, EXEMPLE: EXEMPLE,
+    liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple,
   };
 })(typeof window !== "undefined" ? window : this);

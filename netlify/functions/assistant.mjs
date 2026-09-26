@@ -29,7 +29,18 @@ const MODELES_PERMIS = ["claude-opus-5", "claude-sonnet-5", "claude-haiku-4-5"];
    évite qu'un tiers ne consomme le crédit API du propriétaire. */
 const ORIGINES_PAR_DEFAUT = [
   "https://chm75009-sketch.github.io",
+  /* L'ESPACE CLIENT EST SERVI PAR CLOUDFLARE, ET IL ÉTAIT REFUSÉ.
+
+     Mesuré le 26 septembre 2026 : depuis tec-direction.chm75009.workers.dev,
+     la recherche de jurisprudence, la convention collective et l'assistant
+     répondaient tous « origine refusée ». Trois fonctions de l'application y
+     sont donc mortes, et le dirigeant ne pouvait rien y faire. Les espaces
+     clients du même compte sont admis, et eux seuls : le filtre reste ce
+     qu'il est, une protection du quota PISTE contre un tiers. */
+  "https://tec-direction.chm75009.workers.dev",
 ];
+/* Les autres espaces clients du même compte, sur le même hébergeur. */
+const WORKERS_DU_COMPTE = /(^|\.)chm75009\.workers\.dev$/;
 function originesAutorisees(){
   const sup = (process.env.ORIGINES_AUTORISEES||"").split(",").map(s=>s.trim()).filter(Boolean);
   return ORIGINES_PAR_DEFAUT.concat(sup);
@@ -38,7 +49,8 @@ function enTetesCors(origine){
   const permis = originesAutorisees();
   const h = {"content-type":"application/json; charset=utf-8"};
   /* Une requête de même origine n'envoie pas d'en-tête Origin : rien à ajouter. */
-  if(origine && (permis.includes(origine) || /\.netlify\.app$/.test(new URL(origine).hostname))){
+  if(origine && (permis.includes(origine) || /\.netlify\.app$/.test(new URL(origine).hostname)
+      || WORKERS_DU_COMPTE.test(new URL(origine).hostname))){
     h["access-control-allow-origin"] = origine;
     h["vary"] = "Origin";
   }

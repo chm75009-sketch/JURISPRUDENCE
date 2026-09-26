@@ -196,8 +196,8 @@
       " jour, à quelle heure, où, avec qui, et en quoi cela contrevient à une",
       " obligation. Une formule générale - « votre comportement », « vos",
       " manquements répétés » - ne met pas le salarié en mesure de discuter, et",
-      " ne permet pas au conseil de prud'hommes d'apprécier. L'application ne",
-      " connaît pas vos faits et ne les inventera pas.]",
+      " ne permet pas au conseil de prud'hommes d'apprécier. Vos faits ne sont",
+      " pas connus ici et ne s'inventent pas.]",
       "",
     ];
   }
@@ -253,8 +253,8 @@
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
-    L.push("accords et votre règlement intérieur peuvent ajouter des exigences que");
-    L.push("l'application ne lit pas. Ne laissez aucun crochet dans le texte que");
+    L.push("accords et votre règlement intérieur peuvent ajouter des exigences qui");
+    L.push("ne sont pas reprises ici. Ne laissez aucun crochet dans le texte que");
     L.push("vous remettez, déposez ou envoyez.");
     return L;
   }
@@ -831,7 +831,7 @@
 
       return L.concat(pied("L. 1333-2, L. 1332-2, R. 1332-1, R. 1332-2, R. 1332-3, L. 1333-1",
         ["Jurisprudence : Soc., 8 septembre 2021, n° 19-15.039, publié ; Soc., 20 mars 2024, n° 22-17.292, publié.",
-         "La clause elle-même figure dans votre convention collective, que l'application ne lit pas."].concat(NOTE_ANNULATION))).join("\n");
+         "La clause elle-même figure dans votre convention collective, qui n'est pas lue ici."].concat(NOTE_ANNULATION))).join("\n");
     },
   });
 

@@ -254,15 +254,15 @@
     L.push("identifiant dit laquelle des versions successives a été lue.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
-    L.push("Aucune peine n'est annoncée dans ce document : le corpus du module ne porte");
-    L.push("aucun article de sanction pénale, et l'application n'annonce pas une sanction");
-    L.push("qu'elle n'a pas lue. Ce qui est dit du risque l'est sur le fondement des");
+    L.push("Aucune peine n'est annoncée dans ce document : les textes lus ne portent");
+    L.push("aucun article de sanction pénale, et aucune sanction n'est annoncée qui");
+    L.push("n'ait été lue. Ce qui est dit du risque l'est sur le fondement des");
     L.push("articles cités.");
     L.push("");
-    L.push("Réserve - ce document ne vaut pas consultation. L'application ne lit ni votre");
-    L.push("convention collective ni vos accords, qui peuvent fixer d'autres délais ou");
-    L.push("ajouter des exigences - l'article L. 1233-30 réserve expressément la");
-    L.push("convention ou l'accord collectif qui « peut prévoir des délais différents ».");
+    L.push("Réserve - ce document ne vaut pas consultation. Ni votre convention");
+    L.push("collective ni vos accords ne sont lus ici, et ils peuvent fixer d'autres");
+    L.push("délais ou ajouter des exigences - l'article L. 1233-30 réserve expressément");
+    L.push("la convention ou l'accord collectif qui « peut prévoir des délais différents ».");
   }
 
   /* ── ce que la fiche et le profil donnent ───────────────────────────────── */
@@ -368,8 +368,8 @@
     }
     L.push("  Le médecin du travail et l'agent de contrôle de l'inspection du travail,");
     L.push("  pour les points portant sur la santé, la sécurité et les conditions de");
-    L.push("  travail : [à compléter - l'application n'a pas lu au code du travail la");
-    L.push("  disposition qui règle cette convocation et ne l'affirme donc pas]");
+    L.push("  travail : [à compléter - la disposition du code du travail qui règle");
+    L.push("  cette convocation n'a pas été lue ici, et elle n'est donc pas affirmée]");
     L.push("");
     L.push("  Moyen d'envoi : [remise en main propre contre décharge · lettre");
     L.push("  recommandée · courriel avec accusé de réception] - le moyen doit conférer");
@@ -573,11 +573,11 @@
       L.push(pad(signataire(ctx), 40) + "[nom du secrétaire]");
       L.push("");
       L.push("");
-      L.push("L'application n'a pas lu, dans le corpus de ce module, la disposition du");
-      L.push("code du travail qui règle l'établissement de l'ordre du jour du comité :");
-      L.push("elle ne la cite donc pas et n'en énonce pas le contenu. Vérifiez-la, ainsi");
-      L.push("que le règlement intérieur de votre comité, avant d'envoyer - les deux");
-      L.push("emplacements de signature ci-dessus sont prévus pour cela.");
+      L.push("La disposition du code du travail qui règle l'établissement de l'ordre du");
+      L.push("jour du comité n'a pas été lue ici : elle n'est ni citée ni résumée.");
+      L.push("Vérifiez-la, ainsi que le règlement intérieur de votre comité, avant");
+      L.push("d'envoyer - les deux emplacements de signature ci-dessus sont prévus pour");
+      L.push("cela.");
       L.push("");
 
       titre(L, "IV. À qui la convocation est adressée");
@@ -759,7 +759,7 @@
       L.push("consulté. »");
       L.push("");
       L.push("Vérifiez donc votre convention et vos accords : ce sont les seuls textes");
-      L.push("qui peuvent déplacer ce délai, et l'application ne les lit pas.");
+      L.push("qui peuvent déplacer ce délai, et ils ne sont pas lus ici.");
       L.push("");
 
       titre(L, "II. Vos dates, et ce qu'elles donnent");
@@ -1004,8 +1004,8 @@
         "",
         "N'écrivez ici aucun fait que vous ne puissiez produire. Les raisons",
         "économiques se datent et se chiffrent ; les catégories professionnelles se",
-        "définissent ; le calendrier se donne en dates. L'application ne connaît ni",
-        "vos chiffres ni vos salariés et n'en invente aucun.",
+        "définissent ; le calendrier se donne en dates. Ni vos chiffres ni vos",
+        "salariés ne sont connus ici, et aucun n'est inventé.",
       ]);
 
       rappelDossier(L, ctx);
@@ -1167,7 +1167,7 @@
       L.push("");
       L.push("Le texte réserve enfin la convention ou l'accord collectif : les critères");
       L.push("légaux ne s'appliquent qu'« en l'absence de convention ou accord collectif");
-      L.push("de travail applicable ». Vérifiez le vôtre - l'application ne le lit pas.");
+      L.push("de travail applicable ». Vérifiez le vôtre - il n'est pas lu ici.");
       if (f.convention && f.convention.criteresOrdre === true) {
         L.push("La fiche déclare que votre convention porte des critères d'ordre : ce sont");
         L.push("eux qui s'appliquent, et le tableau ci-dessous doit être refait sur leur");
@@ -1610,8 +1610,8 @@
         L.push("");
         L.push("Pourquoi le lendemain et non le jour même : le texte fait courir la");
         L.push("présomption « à l'expiration » du délai, et la coïncidence exacte des deux");
-        L.push("dates n'est tranchée ni par le texte, ni par un arrêt publié du corpus de");
-        L.push("l'application. Décaler d'un jour supprime la difficulté ; la maintenir ne");
+        L.push("dates n'est tranchée ni par le texte, ni par un arrêt publié parmi ceux");
+        L.push("lus ici. Décaler d'un jour supprime la difficulté ; la maintenir ne");
         L.push("rapporte rien.");
         L.push("");
         if (memeJour) {
@@ -2042,7 +2042,7 @@
           L.push("=> " + d + " jours. Le code ne fixe pas de seuil ici : c'est le contenu du");
           L.push("   dossier remis qui dit si ce délai permettait de l'examiner. Vérifiez-le");
           L.push("   au regard du volume des pièces adressées, et de votre règlement");
-          L.push("   intérieur de comité, que l'application ne lit pas.");
+          L.push("   intérieur de comité, qui n'est pas lu ici.");
         }
         L.push("");
       }
@@ -2147,7 +2147,7 @@
       L.push("tiendrait le " + leJour(dans(d0, 15)) + " ; à trois semaines, le " +
         leJour(dans(d0, 21)) + ".");
       L.push("Ces dates sont des repères de travail, non des délais légaux : le code n'en");
-      L.push("fixe aucun ici, et l'application n'en invente pas.");
+      L.push("fixe aucun ici, et aucun n'est inventé.");
       L.push("");
       L.push("Attention à l'effet du report sur la suite : le délai d'avis court « à");
       L.push("compter de la date de la première réunion au cours de laquelle il est");
@@ -2473,9 +2473,9 @@
       L = L.concat(A.liens(ctx, ["economique"]));
       pied(L, ["L. 1233-9", "L. 1233-36", "L. 1233-30", "L. 1233-51"],
         "Le fondement du contrôle cite également l'article L. 2316-1, relatif aux\n" +
-        "attributions du comité social et économique central. Le corpus de textes du\n" +
-        "module ne le porte pas : l'application ne l'a pas lu, elle le nomme sans en\n" +
-        "reproduire ni en paraphraser le contenu.\n" +
+        "attributions du comité social et économique central. Cet article n'a pas\n" +
+        "été lu ici : il est nommé, sans que son contenu soit reproduit ni\n" +
+        "paraphrasé.\n" +
         "\n" +
         "Ce qui se joue : consulter la mauvaise instance équivaut à ne pas consulter.\n" +
         "L'article L. 1235-12 ouvre alors au salarié une indemnité calculée en fonction\n" +
@@ -2641,17 +2641,15 @@
 
       titre(L, "IV. S'il n'existe ni comité ni carence");
 
-      L.push("Il faut engager le processus électoral. L'application NE PRODUIT PAS ici");
-      L.push("les pièces de ce processus : les articles du code du travail qui règlent");
+      L.push("Il faut engager le processus électoral. LES PIÈCES DE CE PROCESSUS NE");
+      L.push("SONT PAS PRODUITES ICI : les articles du code du travail qui règlent");
       L.push("l'organisation des élections et l'établissement du procès-verbal de");
       L.push("carence - l'article L. 2314-9, auquel D. 1233-10 renvoie, et ceux qui");
-      L.push("l'entourent - ne figurent pas dans le corpus de textes de ce module.");
-      L.push("L'application les nomme ; elle ne les a pas lus, et elle n'en écrira donc");
-      L.push("ni le contenu ni les délais.");
+      L.push("l'entourent - n'ont pas été lus pour ce document. Ils sont nommés ; ni");
+      L.push("leur contenu ni leurs délais ne sont écrits.");
       L.push("");
-      L.push("Le module « comité social et économique » de cette application traite de");
-      L.push("l'organisation des élections et porte ces textes : c'est là qu'il faut");
-      L.push("aller, et non ici.");
+      L.push("Le module « comité social et économique » traite de l'organisation des");
+      L.push("élections et porte ces textes : c'est là qu'il faut aller, et non ici.");
       L.push("");
       L.push("Ce que ce document peut dire, en revanche, et qui suffit à décider :");
       L.push("");
@@ -2770,8 +2768,8 @@
       L.push("prévues à l'article L. 2315-81 » et « Le comité social et économique peut");
       L.push("également mandater un expert afin qu'il apporte toute analyse utile aux");
       L.push("organisations syndicales pour mener la négociation prévue à l'article");
-      L.push("L. 1233-24-1. » L'article L. 2315-81 n'est pas dans le corpus de ce module :");
-      L.push("l'application le nomme, elle ne l'a pas lu et n'en écrit pas le contenu.");
+      L.push("L. 1233-24-1. » L'article L. 2315-81 n'a pas été lu ici : il est nommé,");
+      L.push("et son contenu n'est pas écrit.");
       L.push("");
       L.push("L. 1233-35 enferme les échanges dans des délais courts, et symétriques :");
       L.push("« L'expert désigné par le comité social et économique demande à l'employeur,");
@@ -2829,8 +2827,8 @@
         L.push("Note - l'audit ne retient pas ici le régime dans lequel l'article");
         L.push("L. 1233-34 ouvre cette expertise (entreprise d'au moins cinquante salariés,");
         L.push("projet d'au moins dix licenciements sur trente jours). Vérifiez que");
-        L.push("l'expertise envisagée repose bien sur un autre fondement, que l'application");
-        L.push("n'a pas lu.");
+        L.push("l'expertise envisagée repose bien sur un autre fondement, qui n'a pas");
+        L.push("été lu ici.");
         L.push("");
       }
 
@@ -3070,8 +3068,8 @@
         L.push("");
       } else {
         L.push("Votre fiche ne porte rien à ce titre. L'exposé est donc entièrement à");
-        L.push("écrire - et il ne peut pas l'être par l'application, qui ne connaît ni vos");
-        L.push("postes, ni vos cadences, ni votre document unique d'évaluation des risques.");
+        L.push("écrire - et il ne peut pas l'être ici : ni vos postes, ni vos cadences, ni");
+        L.push("votre document unique d'évaluation des risques ne sont connus.");
         L.push("");
       }
 
@@ -3130,11 +3128,10 @@
       ]);
       L.push("");
       L.push("  [Le document unique d'évaluation des risques est la source naturelle de");
-      L.push("  ce tableau, et il devra être mis à jour de ce qui change. L'application");
-      L.push("  ne lit pas au code du travail les articles qui règlent cette évaluation");
-      L.push("  et cette mise à jour : ils ne figurent pas dans le corpus de ce module,");
-      L.push("  elle ne les cite donc pas. Le module « santé, sécurité et conditions de");
-      L.push("  travail » de cette application les porte.]");
+      L.push("  ce tableau, et il devra être mis à jour de ce qui change. Les articles");
+      L.push("  du code du travail qui règlent cette évaluation et cette mise à jour");
+      L.push("  n'ont pas été lus ici : ils ne sont donc pas cités. Le module « santé,");
+      L.push("  sécurité et conditions de travail » les porte.]");
       L.push("");
       L.push("5. SUIVI");
       L.push("");
@@ -3230,7 +3227,7 @@
       pied(L, ["L. 1233-10, 7°", "L. 1233-31, 7°", "L. 1233-30, I, 2°", "L. 1233-33"],
         "Les articles du code du travail relatifs à l'évaluation des risques et au\n" +
         "document unique ne figurent pas dans le corpus de textes de ce module :\n" +
-        "l'application ne les a pas lus et ne les cite pas.\n" +
+        "ils n'ont pas été lus et ne sont pas cités.\n" +
         "\n" +
         "Ce qui se joue : l'omission du septième renseignement vicie la consultation.\n" +
         "L'article L. 1235-12 ouvre au salarié compris dans le licenciement collectif\n" +
@@ -3609,7 +3606,7 @@
         "L'article L. 1441-13, dont le 2° définit le membre du personnel d'encadrement\n" +
         "auquel L. 1233-15 réserve le délai de quinze jours ouvrables, N'A PAS ÉTÉ LU :\n" +
         "il ne figure pas dans le corpus de textes du module. Il est nommé, et la\n" +
-        "qualification vient de votre fiche, non de l'application.\n" +
+        "qualification vient de votre fiche, non d'un texte lu ici.\n" +
         "\n" +
         "Ce qui se joue : se régler sur le mauvais calendrier conduit à notifier trop\n" +
         "tôt, et l'irrégularité est acquise dès l'envoi de la lettre. En régime\n" +
@@ -3687,7 +3684,7 @@
         "critères suivants : 1° Les moyens dont disposent l'entreprise, l'unité",
         "économique et sociale et le groupe ; 2° Les mesures d'accompagnement prévues",
         "au regard de l'importance du projet de licenciement ; 3° Les efforts de",
-        "formation et d'adaptation ». Un chiffre que l'application avancerait serait",
+        "formation et d'adaptation ». Un chiffre avancé ici serait",
         "un chiffre inventé.",
       ]);
 
@@ -4072,7 +4069,7 @@
         "« qui ne peut être inférieure aux salaires des six derniers mois »\n" +
         "(L. 1235-11).\n" +
         "\n" +
-        "Et l'application ne dit pas si votre plan est suffisant : aucun texte n'en fixe\n" +
+        "Et il n'est pas dit ici si votre plan est suffisant : aucun texte n'en fixe\n" +
         "le montant, et l'appréciation de sa proportionnalité aux moyens de\n" +
         "l'entreprise, de l'unité économique et sociale et du groupe appartient à\n" +
         "l'autorité administrative (L. 1233-57-3), puis au juge.");

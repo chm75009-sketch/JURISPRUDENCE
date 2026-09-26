@@ -150,7 +150,7 @@
     L.push("");
     L.push("Ce qui est écrit sans crochets est imposé par la loi et fondé sur l'article");
     L.push("cité en regard. Ce qui est ENTRE CROCHETS vous appartient : soit la loi vous");
-    L.push("en laisse le choix, soit l'application ne dispose pas de la donnée. Remplacez");
+    L.push("en laisse le choix, soit la donnée n'est pas connue ici. Remplacez");
     L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas - n'en");
     L.push("laissez aucun dans le document que vous signez, adoptez ou adressez.");
     L.push("");
@@ -177,9 +177,9 @@
     if (!sansReserve) {
       L.push("Ce document ne vaut pas consultation juridique. Votre convention collective,");
       L.push("vos accords d'entreprise, vos usages et vos engagements unilatéraux peuvent");
-      L.push("ajouter des exigences que l'application ne lit pas, et priment lorsqu'ils sont");
-      L.push("plus favorables. L'application n'apprécie pas ce que la loi confie à");
-      L.push("l'appréciation du juge.");
+      L.push("ajouter des exigences qui ne sont pas reprises ici, et priment lorsqu'ils");
+      L.push("sont plus favorables. Ce que la loi confie à l'appréciation du juge n'est");
+      L.push("pas apprécié ici.");
     }
     return L.join("\n");
   }
@@ -291,8 +291,8 @@
       L.push("OBJET, ET CE QUE CE DOCUMENT N'EST PAS");
       L.push("");
       L.push("Ce document ne prononce aucune règle de droit et ne constate aucun");
-      L.push("manquement. Il sert à une seule chose : rétablir des données que");
-      L.push("l'application a jugées impossibles ou mal formées - une date qui n'existe");
+      L.push("manquement. Il sert à une seule chose : rétablir des données jugées ici");
+      L.push("impossibles ou mal formées - une date qui n'existe");
       L.push("pas, un dénombrement fractionnaire, un montant négatif, une chronologie");
       L.push("inversée.");
       L.push("");
@@ -306,7 +306,7 @@
       L.push("");
 
       titre(L, "1 - Ce que le dossier porte aujourd'hui");
-      L.push("Reportez ci-dessous, champ par champ, ce que l'application a lu, ce qui a été");
+      L.push("Reportez ci-dessous, champ par champ, ce qui a été lu, ce qui a été");
       L.push("retenu après vérification, et la pièce sur laquelle la valeur retenue se lit.");
       L.push("");
       L.push("   Champ · valeur saisie · valeur retenue · pièce d'origine · relue le");
@@ -351,8 +351,8 @@
       L.push("");
 
       titre(L, "2 - L'ordre des dates");
-      L.push("Une chronologie inversée n'est pas un délai tenu, et l'application refuse de");
-      L.push("la lire comme tel. Vérifiez que chaque couple ci-dessous se suit dans l'ordre");
+      L.push("Une chronologie inversée n'est pas un délai tenu, et elle n'est pas lue");
+      L.push("comme tel ici. Vérifiez que chaque couple ci-dessous se suit dans l'ordre");
       L.push("où les actes ont eu lieu.");
       L.push("");
       [
@@ -442,8 +442,8 @@
       L.push("ne sont démontrables - et c'est du franchissement que court l'obligation");
       L.push("d'informer le personnel de l'organisation des élections (L. 2314-4).");
       L.push("");
-      L.push("L'application n'a pas lu l'article L. 1251-54, auquel L. 2311-2 renvoie pour");
-      L.push("les salariés temporaires : il n'appartient pas au corpus capté du module. Il");
+      L.push("L'article L. 1251-54, auquel L. 2311-2 renvoie pour les salariés");
+      L.push("temporaires, n'a pas été lu ici : il ne fait pas partie des textes lus. Il");
       L.push("est nommé ici pour que vous le vérifiiez, non résumé.");
       L.push("");
 
@@ -640,8 +640,8 @@
 
       titre(L, "1 - Trame de délégation de pouvoir");
       L.push("Une par établissement. Ce qui suit est une TRAME : les matières déléguées, la");
-      L.push("chose la plus importante du document, ne peuvent pas être devinées par");
-      L.push("l'application - elles dépendent de votre organisation réelle, et une");
+      L.push("chose la plus importante du document, ne peuvent pas être devinées ici :");
+      L.push("elles dépendent de votre organisation réelle, et une");
       L.push("délégation qui ne correspond pas aux faits ne prouve rien.");
       L.push("");
       L.push(nom(ctx));
@@ -1190,7 +1190,7 @@
       L.push("les membres de la délégation du personnel peuvent se réunir sur leur temps de");
       L.push("délégation.");
       L.push("[Les articles L. 2142-10 et L. 2142-11, auxquels L. 2315-26 renvoie, ne");
-      L.push("figurent pas dans le corpus lu par l'application : ils sont nommés, non");
+      L.push("figurent pas parmi les textes lus ici : ils sont nommés, non");
       L.push("résumés. Vérifiez-en le contenu avant d'écrire une règle d'invitation.]");
       L.push("");
       L.push("Article 4 - Déplacement et circulation (L. 2315-14)");
@@ -1664,8 +1664,8 @@
       L.push("        salariés.");
       L.push("   FINANCEMENT PRIS EN CHARGE PAR L'EMPLOYEUR (L. 2315-18, dernier alinéa).");
       L.push("");
-      L.push("   [L'article L. 2315-22-1, que L. 2315-18 réserve, ne figure pas dans le");
-      L.push("   corpus lu par l'application : il est nommé, non résumé.]");
+      L.push("   [L'article L. 2315-22-1, que L. 2315-18 réserve, ne figure pas parmi");
+      L.push("   les textes lus ici : il est nommé, non résumé.]");
       L.push("");
       L.push("B - LE STAGE DE FORMATION ÉCONOMIQUE (L. 2315-63)");
       L.push("Dans les entreprises d'au moins cinquante salariés, les MEMBRES TITULAIRES élus");
@@ -1763,7 +1763,7 @@
       L.push("   fonctionnaires (R. 2315-20) ......................................... [ ] €");
       L.push("");
       L.push("   [Le montant horaire du salaire minimum de croissance et l'indemnité de");
-      L.push("   mission des fonctionnaires ne sont pas dans le corpus lu par l'application :");
+      L.push("   mission des fonctionnaires ne figurent pas parmi les textes lus ici :");
       L.push("   ce sont des valeurs à jour à reporter, non des valeurs à deviner.]");
       L.push("");
       L.push("IMPUTATION - les dépenses de rémunération des organismes de formation et les");
@@ -1928,7 +1928,7 @@
       L.push("consommation, du travail et de l'emploi » (L. 2315-37).");
       L.push("");
       L.push("[Les articles L. 4521-1 et suivants, auxquels renvoie le 3° de L. 2315-36, ne");
-      L.push("figurent pas dans le corpus lu par l'application : ils sont nommés, non");
+      L.push("figurent pas parmi les textes lus ici : ils sont nommés, non");
       L.push("résumés. Si votre établissement relève d'une installation classée soumise à ce");
       L.push("régime, vérifiez-les - la commission est alors due quel que soit l'effectif.]");
       L.push("");
@@ -2562,7 +2562,7 @@
       L.push("");
       L.push("L'arrêt statuait sur L. 2314-33 dans sa version antérieure à la loi n° 2025-989");
       L.push("du 24 octobre 2025 ; les causes de fin anticipée qu'il énumère sont celles de");
-      L.push("la version lue par l'application.");
+      L.push("la version lue ici.");
       L.push("");
       L.push("LES QUATRE CAUSES, ET RIEN D'AUTRE - « Les membres de la délégation du");
       L.push("personnel du comité social et économique sont élus pour quatre ans. Les");
@@ -2757,8 +2757,8 @@
 
       titre(L, "1 - Ce qui peut être délégué, et ce qui ne peut pas l'être");
       L.push("PEUT ÊTRE DÉLÉGUÉ - tout ou partie des attributions du comité relatives à la");
-      L.push("santé, à la sécurité et aux conditions de travail. Parmi celles que le corpus");
-      L.push("lu par l'application nomme :");
+      L.push("santé, à la sécurité et aux conditions de travail. Parmi celles que les");
+      L.push("textes lus ici nomment :");
       L.push("");
       L.push("  · procéder, à intervalles réguliers, à des INSPECTIONS en matière de santé,");
       L.push("    de sécurité et des conditions de travail (L. 2312-13) ;");
@@ -2800,8 +2800,8 @@
       L.push("aux articles L. 4132-1 à L. 4132-5 et L. 4133-1 à L. 4133-4 (L. 2312-60). Ces");
       L.push("droits sont exercés INDIVIDUELLEMENT par le membre : une clause qui les");
       L.push("canaliserait par la commission les déplacerait. [Les articles L. 4132-1 à");
-      L.push("L. 4132-5 et L. 4133-1 à L. 4133-4 ne figurent pas au corpus lu par");
-      L.push("l'application, à l'exception de L. 4132-2 : ils sont nommés, non résumés.]");
+      L.push("L. 4132-5 et L. 4133-1 à L. 4133-4 ne figurent pas parmi les textes lus");
+      L.push("ici, à l'exception de L. 4132-2 : ils sont nommés, non résumés.]");
       L.push("");
 
       titre(L, "2 - Avenant délimitant la délégation");
@@ -3294,8 +3294,8 @@
       L.push("L'EMPLOYEUR dans des conditions prévues par décret en Conseil d'État »");
       L.push("(L. 2315-18).");
       L.push("");
-      L.push("[L'article L. 2315-22-1, que ce texte réserve, ne figure pas dans le corpus lu");
-      L.push("par l'application : il est nommé, non résumé.]");
+      L.push("[L'article L. 2315-22-1, que ce texte réserve, ne figure pas parmi les");
+      L.push("textes lus ici : il est nommé, non résumé.]");
       L.push("");
       L.push("CE QUE L'ACCORD PEUT, ET CE QU'IL NE PEUT PAS. L'acte qui organise la commission");
       L.push("fixe « les modalités de leur formation conformément aux articles L. 2315-16 à");

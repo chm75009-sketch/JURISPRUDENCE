@@ -402,8 +402,8 @@
     pousserPlie(L, "Ce que vous lisez est " + quoi + ", rédigé au nom de votre " +
       "entreprise.", 72, "", "");
     L.push("Ce qui est entre crochets vous appartient : ce sont vos chiffres, vos");
-    L.push("dates, vos propositions. L'application ne les connaît pas et ne les");
-    L.push("inventera pas - un document qui devinerait votre proposition salariale");
+    L.push("dates, vos propositions. Ils ne sont pas connus ici et ne s'inventent");
+    L.push("pas - un document qui devinerait votre proposition salariale");
     L.push("vous engagerait sur ce que vous n'avez pas voulu. Remplacez chaque");
     L.push("crochet, ou supprimez la ligne si elle ne vous concerne pas.");
     L.push("");
@@ -611,7 +611,7 @@
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
     L.push("accords d'entreprise et l'accord de méthode de L. 2242-11 s'il en existe");
-    L.push("un peuvent ajouter des exigences que l'application ne lit pas. Ne laissez");
+    L.push("un peuvent ajouter des exigences qui ne sont pas reprises ici. Ne laissez");
     L.push("aucun crochet dans le texte que vous signez, remettez ou déposez.");
     return L;
   }
@@ -1173,8 +1173,8 @@
       L.push("  Modalité de remise : [remise en main propre contre décharge / mise à");
       L.push("  disposition dans la base de données, avec information datée].");
       L.push("");
-      L.push("AUCUN CHIFFRE N'EST ÉCRIT CI-DESSUS, ET C'EST VOULU. L'application ne");
-      L.push("connaît ni votre masse salariale ni vos rémunérations : elle vous dit où");
+      L.push("AUCUN CHIFFRE N'EST ÉCRIT CI-DESSUS, ET C'EST VOULU. Ni votre masse");
+      L.push("salariale ni vos rémunérations ne sont connues ici : le document dit où");
       L.push("les prendre, pas ce qu'elles valent.");
       L.push("");
 
@@ -1351,7 +1351,7 @@
       citerMorceau(L, "L2242-17", "Cette négociation s'appuie sur les données", "Cette négociation porte également", "  ");
       L.push("  L'article L. 2312-36, auquel ce 2° renvoie, N'A PAS été lu à la source");
       L.push("  par ce module : il est nommé, non reproduit. Le module « base de données");
-      L.push("  (BDESE) » de cette application le lit et l'audite pour lui-même.");
+      L.push("  (BDESE) » le lit et l'audite pour lui-même.");
       L.push("");
       L.push("  Ce 2° porte aussi sur l'application de l'article L. 241-3-1 du code de la");
       L.push("  sécurité sociale et sur les conditions dans lesquelles l'employeur peut");
@@ -1576,8 +1576,8 @@
         L.push("    défaut d'accord de méthode (L. 2242-13, 3°).");
       } else {
         L.push("  → LE SEUIL NE PEUT PAS ÊTRE APPRÉCIÉ faute d'effectif renseigné.");
-        L.push("    Établissez-le avant de conclure quoi que ce soit : l'application ne");
-        L.push("    devine pas un effectif.");
+        L.push("    Établissez-le avant de conclure quoi que ce soit : un effectif ne se");
+        L.push("    devine pas.");
       }
       L.push("");
       L.push("Et une condition que le seuil ne remplace pas :");
@@ -1709,8 +1709,8 @@
       L.push("  L. 6324-9. Et le 1° renvoie aux matières des articles L. 1233-21 et");
       L.push("  L. 1233-22, selon les modalités prévues à ces mêmes articles. Ces trois");
       L.push("  articles n'ont pas été lus à la source par ce module : ils sont nommés,");
-      L.push("  non reproduits. Le module « licenciement économique » de cette");
-      L.push("  application traite des articles L. 1233-21 et L. 1233-22.");
+      L.push("  non reproduits. Le module « licenciement économique » traite des");
+      L.push("  articles L. 1233-21 et L. 1233-22.");
       L.push("");
       L.push("  Thèmes retenus pour cette négociation : [cocher]");
       L.push("    [ ] 1° matières des articles L. 1233-21 et L. 1233-22");
@@ -1859,7 +1859,7 @@
       L.push("  · L. 2242-8 ne vise que l'égalité professionnelle et les publications");
       L.push("    qui s'y rattachent.");
       L.push("");
-      L.push("Aucun ne nomme l'article L. 2242-2-1. Une application qui vous annoncerait");
+      L.push("Aucun ne nomme l'article L. 2242-2-1. Un document qui vous annoncerait");
       L.push("ici une amende vous ferait négocier sous une menace inexistante - et vous");
       L.push("découvririez le vide au premier contrôle.");
       L.push("");
@@ -1937,8 +1937,8 @@
       L.push("  [Aménagement des postes, horaires, charge de travail, aménagements de fin");
       L.push("  de carrière, temps partiel de fin de carrière, retraite progressive.");
       L.push("  Source des données de pénibilité : document unique d'évaluation des");
-      L.push("  risques - le module « santé, sécurité et conditions de travail » de cette");
-      L.push("  application l'audite pour lui-même.]");
+      L.push("  risques - le module « santé, sécurité et conditions de travail »");
+      L.push("  l'audite pour lui-même.]");
       L.push("");
       L.push("POINT 4 - LA CONSIDÉRATION DE L'ÂGE");
       L.push("  Le texte ajoute « en considération de leur âge » : la négociation");
@@ -2576,8 +2576,8 @@
       L.push("  [Écarts constatés par catégorie professionnelle, par niveau de");
       L.push("  classification et par tranche d'âge - source : base de données");
       L.push("  économiques, sociales et environnementales, déclaration sociale");
-      L.push("  nominative. Aucun chiffre n'est écrit ici par l'application : elle ne");
-      L.push("  connaît pas vos rémunérations et ne les inventera pas.]");
+      L.push("  nominative. Aucun chiffre n'est écrit ici : vos rémunérations ne sont");
+      L.push("  pas connues, et elles ne s'inventent pas.]");
       L.push("");
       L.push("2.2. Propositions de l'employeur");
       L.push("  · [Proposition 1 : ..................................]");
@@ -3123,7 +3123,7 @@
       L.push("  · [Proposition 2 : ...............................................]");
       L.push("  · [Proposition 3 : ...............................................]");
       L.push("");
-      L.push("[AUCUN CHIFFRE N'EST ÉCRIT ICI PAR L'APPLICATION. Vos propositions sont");
+      L.push("[AUCUN CHIFFRE N'EST ÉCRIT ICI, ET C'EST VOULU. Vos propositions sont");
       L.push("les vôtres : une proposition devinée vous engagerait sur ce que vous");
       L.push("n'avez pas voulu.]");
       L.push("");
@@ -3419,8 +3419,8 @@
       L.push("");
       L.push("[Toutes les données ci-dessous sortent de la base de données économiques,");
       L.push("sociales et environnementales, de la déclaration sociale nominative et du");
-      L.push("registre unique du personnel. L'application ne les connaît pas et ne les");
-      L.push("invente pas : elle vous dit où les prendre.]");
+      L.push("registre unique du personnel. Elles ne sont pas connues ici et ne");
+      L.push("s'inventent pas : le document dit seulement où les prendre.]");
       L.push("");
       L.push("  domaine                    | femmes  | hommes  | écart | source");
       L.push("  ─────────────────────────── |  ──────── |  ──────── |  ────── |  ─────────");
@@ -3685,8 +3685,8 @@
       L.push("  · quel niveau de résultat déclenche les mesures de correction ;");
       L.push("  · dans quel délai ces mesures doivent produire effet.");
       L.push("");
-      L.push("Une application qui vous donnerait ces cinq réponses de mémoire vous");
-      L.push("ferait publier sur des règles qu'elle n'a pas vérifiées. Allez les lire à");
+      L.push("Un document qui vous donnerait ces cinq réponses de mémoire vous ferait");
+      L.push("publier sur des règles non vérifiées. Allez les lire à");
       L.push("la source - ce sont cinq questions, et elles ont des réponses écrites.");
       L.push("");
       L.push("Ce que ce document fait, en revanche : il monte la pièce qui prouve que");
@@ -4354,14 +4354,14 @@
       L.push("par ce module. La liste exacte des données de son 2° n'est donc ni");
       L.push("reproduite ni résumée ici : elle ne sera pas devinée.");
       L.push("");
-      L.push("Deux sources la portent, et l'une est dans cette application :");
+      L.push("Deux sources la portent :");
       L.push("");
-      L.push("  · LE MODULE « BASE DE DONNÉES (BDESE) » de cette application lit");
-      L.push("    L. 2312-36 et les articles R. 2312-8 et R. 2312-9 à la source, et il");
-      L.push("    déploie la grille rubrique par rubrique. La rubrique « égalité");
-      L.push("    professionnelle entre les femmes et les hommes » y figure avec son");
-      L.push("    analyse des données chiffrées et sa stratégie d'action. C'est là qu'il");
-      L.push("    faut aller chercher la liste - et non ici.");
+      L.push("  · LE MODULE « BASE DE DONNÉES (BDESE) » lit L. 2312-36 et les");
+      L.push("    articles R. 2312-8 et R. 2312-9 à la source, et il déploie la grille");
+      L.push("    rubrique par rubrique. La rubrique « égalité professionnelle entre les");
+      L.push("    femmes et les hommes » y figure avec son analyse des données chiffrées");
+      L.push("    et sa stratégie d'action. C'est là qu'il faut aller chercher la liste,");
+      L.push("    et non ici.");
       L.push("  · VOTRE ACCORD, s'il en existe un au sens de L. 2312-21 : il peut");
       L.push("    définir l'organisation et le contenu de votre base.");
       L.push("");
@@ -4419,7 +4419,7 @@
       L.push("Si une donnée manque dans la base, le signaler plutôt que de la");
       L.push("reconstituer pour l'occasion : une donnée absente de la base est un");
       L.push("manquement à traiter pour lui-même, que le module « base de données »");
-      L.push("de l'application audite.");
+      L.push("audite.");
       L.push("");
       L.push("");
 
@@ -4531,8 +4531,8 @@
       return L.concat(pied("L. 2242-6, L. 2242-17, 2°",
         ["L'article L. 2312-36, auquel le 2° de L. 2242-17 renvoie, N'EST PAS dans le",
          "corpus lu par ce module : il est nommé, et la liste des données de son 2°",
-         "n'est ni reproduite ni résumée. Le module « base de données (BDESE) » de",
-         "cette application le lit à la source et déploie la grille correspondante.",
+         "n'est ni reproduite ni résumée. Le module « base de données (BDESE) » le",
+         "lit à la source et déploie la grille correspondante.",
          "",
          "Les rubriques du bordereau sont donc données entre crochets, comme des",
          "rubriques usuelles à confronter à votre base réelle - non comme la liste",

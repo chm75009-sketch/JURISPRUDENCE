@@ -266,7 +266,7 @@
     L.push("");
     L.push("CE QUE CE DOCUMENT NE DIT PAS. Il ne vaut pas consultation. Votre");
     L.push("convention collective, vos accords d'entreprise et vos usages peuvent");
-    L.push("ajouter des exigences que l'application ne lit pas, et qui priment");
+    L.push("ajouter des exigences qui ne sont pas reprises ici, et qui priment");
     L.push("lorsqu'elles sont plus favorables. Ne laissez aucun crochet dans le");
     L.push("texte que vous versez au dossier ou que vous remettez.");
     return L;
@@ -278,8 +278,8 @@
   var RESERVE_GROUPE =
     "La notion de groupe est définie par L. 1233-3 et L. 1233-4 par renvoi aux " +
     "articles L. 233-1, aux I et II de l'article L. 233-3 et à l'article " +
-    "L. 233-16 du code de commerce. L'application n'a pas lu ces articles : " +
-    "elle les nomme, elle n'en reproduit pas le contenu.";
+    "L. 233-16 du code de commerce. Ces articles n'ont pas été lus ici : ils " +
+    "sont nommés, leur contenu n'est pas reproduit.";
 
   /* Ce que chaque pièce doit ÉTABLIR - pas ce qu'elle est. C'est la
      différence entre un bordereau utile et une liste de fichiers. */
@@ -387,7 +387,7 @@
         L.push("   Version applicable : [à déterminer une fois la date renseignée]");
         L.push("   Ce que cette version porte : [à déterminer]");
         L.push("");
-        L.push("   Les trois états successifs que l'application distingue :");
+        L.push("   Les trois états successifs du texte :");
         L.push("     · avant le 1er décembre 2016 - « difficultés économiques », sans");
         L.push("       définition ni indicateur ;");
         L.push("     · du 1er décembre 2016 au 23 septembre 2017 - indicateurs et seuils,");
@@ -399,7 +399,7 @@
 
       L.push("3. CE QUE PORTE LA VERSION EN VIGUEUR, LUE À LA SOURCE");
       L.push("");
-      L.push("L'article L. 1233-3, dans sa version lue par l'application, définit le");
+      L.push("L'article L. 1233-3, dans la version lue ici, définit le");
       L.push("licenciement économique comme celui « effectué par un employeur pour un ou");
       L.push("plusieurs motifs non inhérents à la personne du salarié résultant d'une");
       L.push("suppression ou transformation d'emploi ou d'une modification, refusée par");
@@ -432,8 +432,8 @@
       L.push("");
       if (ancien === true) {
         L.push("LA VERSION APPLICABLE EST ABROGÉE. Le dossier doit être relu par un");
-        L.push("professionnel avant toute décision : l'application connaît les trois");
-        L.push("versions du texte, elle ne connaît pas la jurisprudence propre à chacune.");
+        L.push("professionnel avant toute décision : les trois versions du texte sont");
+        L.push("connues ici, la jurisprudence propre à chacune ne l'est pas.");
         L.push("");
         if (tresAncien) {
           L.push("· Le seuil trimestriel chiffré n'existait pas dans cette version : il n'est");
@@ -516,9 +516,9 @@
       return L.concat(pied("L. 1233-3, L. 1235-7, L. 1471-1",
         [RESERVE_GROUPE,
          "L'ordonnance du 22 septembre 2017 est nommée pour dater le changement de",
-         "version ; l'application n'en a pas lu le texte et n'en reproduit aucune",
-         "disposition. Ce qu'elle a lu, ce sont les états successifs de l'article",
-         "L. 1233-3 lui-même."])).join("\n");
+         "version ; son texte n'a pas été lu ici, et aucune de ses dispositions",
+         "n'est reproduite. Ce qui a été lu, ce sont les états successifs de",
+         "l'article L. 1233-3 lui-même."])).join("\n");
     },
   });
 
@@ -555,8 +555,8 @@
       L.push("fees, prix de transfert - ne sont pas nécessairement celles que le texte");
       L.push("vise ; elles peuvent procéder de l'organisation du groupe elle-même.");
       L.push("");
-      L.push("Ce tableau ne qualifie aucune fraude, et l'application n'en qualifiera");
-      L.push("jamais : elle rend le calcul VISIBLE et VÉRIFIABLE. Une reconstitution qui");
+      L.push("Ce tableau ne qualifie aucune fraude, et il n'en qualifiera jamais : il");
+      L.push("rend le calcul VISIBLE et VÉRIFIABLE. Une reconstitution qui");
       L.push("ne se recalcule pas ne démontre rien - c'est la seule chose que ce document");
       L.push("établit tout seul.");
       L.push("");
@@ -648,8 +648,8 @@
         L.push("");
       }
       L.push("Ce document ne conclut jamais à la conformité. L'appréciation d'une");
-      L.push("organisation artificielle des difficultés excède ce que l'application peut");
-      L.push("faire, et elle touche au « sauf fraude » de L. 1233-3 - c'est-à-dire à la");
+      L.push("organisation artificielle des difficultés excède ce qui peut être fait");
+      L.push("ici, et elle touche au « sauf fraude » de L. 1233-3 - c'est-à-dire à la");
       L.push("réserve qui, si elle joue, écarte la limitation du périmètre d'appréciation");
       L.push("au territoire national.");
       L.push("");
@@ -699,7 +699,7 @@
   DP.ajouter("CTL-COE-01", {
     nom: "Dossier de saisine d'un conseil sur le risque de co-emploi",
     detail: "Le relevé des faits d'immixtion, pièce par pièce, et la question " +
-            "posée au professionnel - l'application ne qualifie pas le co-emploi.",
+            "posée au professionnel - le co-emploi n'est pas qualifié ici.",
     produire: function (ctx) {
       var f = fic(ctx);
       var societes = liste(f.societes);
@@ -708,8 +708,8 @@
       L.push(DP.EXEMPLE);
       L.push("CE QUE CE DOCUMENT EST, ET CE QU'IL N'EST PAS");
       L.push("");
-      L.push("Ce n'est pas une note de qualification : l'application ne dit pas s'il y a");
-      L.push("co-emploi, et elle ne le dira jamais. Aucun article du code du travail lu");
+      L.push("Ce n'est pas une note de qualification : il n'est pas dit ici s'il y a");
+      L.push("co-emploi, et il ne le sera pas. Aucun article du code du travail lu");
       L.push("par ce module ne définit le co-emploi - la notion est jurisprudentielle, et");
       L.push("sa qualification excède ce qu'une base de textes peut faire.");
       L.push("");
@@ -830,8 +830,8 @@
       return L.concat(pied("aucun article ne fonde ce document",
         ["CE DOCUMENT NE CITE AUCUN ARTICLE, ET C'EST VOLONTAIRE. Le contrôle",
          "CTL-COE-01 ne repose sur aucun texte : son champ « fondement » est vide.",
-         "Le co-emploi est une construction jurisprudentielle, et l'application",
-         "n'écrit pas ce qu'elle n'a pas lu. La formule reprise au préambule est",
+         "Le co-emploi est une construction jurisprudentielle, et rien n'est écrit",
+         "ici qui n'ait été lu. La formule reprise au préambule est",
          "celle du contrôle lui-même, telle que le module la porte - elle sert à",
          "poser la question, pas à y répondre.",
          "",
@@ -1107,10 +1107,10 @@
       L.push("renvoie aux articles L. 1232-2 à L. 1232-14 et L. 1234-1 à L. 1234-11,");
       L.push("L. 1234-14, L. 1234-18, L. 1234-19 et L. 1234-20 - c'est-à-dire à");
       L.push("l'entretien préalable et au préavis du licenciement pour motif personnel.");
-      L.push("L'APPLICATION N'A PAS LU CES ARTICLES : elle les nomme parce que L. 2254-2");
-      L.push("les nomme, elle n'en reproduit pas le contenu et ne dit pas ce qu'ils");
-      L.push("imposent. Reportez-vous au module « discipline et procédure de");
-      L.push("licenciement » de cette application, ou au code du travail.");
+      L.push("CES ARTICLES N'ONT PAS ÉTÉ LUS ICI : ils sont nommés parce que L. 2254-2");
+      L.push("les nomme, leur contenu n'est pas reproduit et ce qu'ils imposent n'est");
+      L.push("pas dit. Reportez-vous au module « discipline et procédure de");
+      L.push("licenciement », ou au code du travail.");
       L.push("");
       L.push("Le VI de L. 2254-2, lu à la source, prévoit que le salarié « peut s'inscrire");
       L.push("et être accompagné comme demandeur d'emploi à l'issue du licenciement ».");
@@ -1167,7 +1167,7 @@
   DP.ajouter("CTL-CCN-01", {
     nom: "Bordereau de versement de la convention collective et des accords",
     detail: "Ce qu'il faut verser, ce que chaque texte doit établir, et le relevé " +
-            "des stipulations à renseigner - l'application ne lit pas votre convention.",
+            "des stipulations à renseigner - votre convention n'est pas lue ici.",
     produire: function (ctx) {
       var f = fic(ctx);
       var p = pro(ctx);
@@ -1178,11 +1178,11 @@
         "articles L. 1233-5 et L. 1233-39 du code du travail");
 
       L.push(DP.EXEMPLE);
-      L.push("POURQUOI CE BORDEREAU, ET CE QUE L'APPLICATION NE SAIT PAS");
+      L.push("POURQUOI CE BORDEREAU, ET CE QUI N'EST PAS SU ICI");
       L.push("");
-      L.push("L'APPLICATION NE CONNAÎT PAS LE TEXTE DE VOTRE CONVENTION COLLECTIVE. Elle");
-      L.push("ne le connaîtra pas davantage après ce document : ce qu'elle organise ici,");
-      L.push("c'est le RELEVÉ de vos stipulations, par vous, sur le texte que vous");
+      L.push("LE TEXTE DE VOTRE CONVENTION COLLECTIVE N'EST PAS CONNU ICI, et il ne le");
+      L.push("sera pas davantage après ce document : ce qu'il organise, c'est le RELEVÉ");
+      L.push("de vos stipulations, par vous, sur le texte que vous");
       L.push("appliquez. Aucune ligne de ce bordereau n'affirme ce que votre convention");
       L.push("dit. Chacune demande où c'est écrit.");
       L.push("");
@@ -1304,8 +1304,8 @@
       L.push("");
       return L.concat(pied("L. 1233-5, L. 1233-39",
         ["AUCUNE STIPULATION CONVENTIONNELLE N'EST REPRODUITE NI RÉSUMÉE DANS CE",
-         "DOCUMENT. L'application ne lit pas la convention collective du client :",
-         "elle ne peut donc ni la citer, ni dire ce qu'elle contient, ni affirmer",
+         "DOCUMENT. La convention collective du client n'est pas lue ici : elle ne",
+         "peut donc être ni citée, ni résumée, et rien ne permet d'affirmer",
          "qu'elle est muette. Tout ce qui la concerne est à renseigner, texte en",
          "main, par celui qui l'applique."])).join("\n");
     },
@@ -1362,9 +1362,9 @@
         consigne(L, [
           "AUCUNE CONVENTION N'EST ENREGISTRÉE COMME PIÈCE DATÉE.",
           "",
-          "Un IDCC déclaré n'est pas une convention versée. L'application peut",
-          "identifier une convention par son IDCC, mais rien n'établit alors que",
-          "c'est celle que vous appliquez, ni dans quelle version.",
+          "Un IDCC déclaré n'est pas une convention versée. Il permet d'identifier",
+          "une convention, mais rien n'établit alors que c'est celle que vous",
+          "appliquez, ni dans quelle version.",
           "",
           "Versez le texte intégral, avec sa date, sa source et sa version, puis",
           "revenez à ce relevé.",
@@ -1443,8 +1443,8 @@
          "n'a pas de fondement textuel - il vérifie que la pièce versée est bien",
          "celle qu'elle prétend être, ce qu'aucun article n'a besoin de dire.",
          "",
-         "L'APPLICATION NE LIT PAS VOTRE CONVENTION. Elle ne peut donc ni confirmer",
-         "ni infirmer une stipulation : tout ce qui figure ici est à établir sur le",
+         "VOTRE CONVENTION N'EST PAS LUE ICI. Aucune stipulation ne peut donc être",
+         "ni confirmée ni infirmée : tout ce qui figure ici est à établir sur le",
          "texte, par celui qui l'applique.",
          "La date de notification, qui commande la version applicable de la loi",
          "(CTL-TMP-01), commande de la même manière celle du texte conventionnel."])).join("\n");
@@ -1477,7 +1477,7 @@
       L.push("");
       L.push("Ce tableau confronte, matière par matière, ce que dit la loi et ce que");
       L.push("l'accord en fait. Il ne se remplit qu'accord en main. Comme partout ici,");
-      L.push("l'application ne connaît pas le texte de vos accords : la colonne « ce que");
+      L.push("le texte de vos accords n'est pas connu ici : la colonne « ce que");
       L.push("la loi dit » est écrite, lue à la source ; les deux autres sont à vous.");
       L.push("");
       L.push(TRAIT);
@@ -1630,7 +1630,7 @@
       L.push("");
       return L.concat(pied("L. 1233-21, L. 1233-24-1, L. 1233-24-2, L. 1233-57-3, L. 2254-2",
         ["AUCUNE STIPULATION DE VOS ACCORDS N'EST REPRODUITE ICI. Seules les",
-         "colonnes « ce que la loi dit » sont écrites par l'application, à partir des",
+         "colonnes « ce que la loi dit » sont écrites ici, à partir des",
          "textes lus à la source. Tout le reste est à établir, accord en main.",
          "Parmi les articles que ces textes nomment, L. 1233-4, L. 1233-5 et",
          "L. 1233-61 à L. 1233-63 ont été lus à la source par ce module ; L. 2321-9",
@@ -1652,12 +1652,12 @@
       var L = entete(ctx, "Constat d'usage d'entreprise et engagements unilatéraux", null);
 
       L.push(DP.EXEMPLE);
-      L.push("POURQUOI CE RECENSEMENT, ET POURQUOI L'APPLICATION NE PEUT PAS LE FAIRE");
+      L.push("POURQUOI CE RECENSEMENT, ET POURQUOI IL NE PEUT PAS SE FAIRE ICI");
       L.push("");
       L.push("Les usages d'entreprise, les engagements unilatéraux et les décisions");
       L.push("unilatérales de l'employeur NE FIGURENT DANS AUCUNE BASE PUBLIQUE. Ils ne");
-      L.push("sont ni publiés, ni déposés, ni recensés nulle part : l'application ne peut");
-      L.push("pas les connaître, et elle ne les devinera pas.");
+      L.push("sont ni publiés, ni déposés, ni recensés nulle part : ils ne peuvent pas");
+      L.push("être connus ici, et ils ne se devinent pas.");
       L.push("");
       L.push("Ils priment pourtant lorsqu'ils sont plus favorables. Les ignorer, c'est");
       L.push("appliquer aux salariés un régime moins favorable que celui auquel ils ont");
@@ -1740,7 +1740,7 @@
         "",
         "Un avantage accordé une fois à une personne n'est pas un usage. Un avantage",
         "accordé chaque année à toute une catégorie en est probablement un.",
-        "L'application ne tranche pas : elle demande que ce soit écrit.",
+        "Ce document ne tranche pas : il demande que ce soit écrit.",
       ]);
 
       L.push("4. LES ENGAGEMENTS UNILATÉRAUX ÉCRITS");
@@ -1762,8 +1762,8 @@
         "  · [ce qu'il coûte, chiffré, pour l'ensemble des salariés concernés]",
         "  · [s'il est maintenu, dénoncé, ou intégré aux mesures du projet]",
         "",
-        "L'ARTICULATION D'UN USAGE AVEC LA LOI ET LA CONVENTION EXCÈDE CE QUE CETTE",
-        "APPLICATION PEUT FAIRE. Ce constat, une fois rempli, se transmet au conseil",
+        "L'ARTICULATION D'UN USAGE AVEC LA LOI ET LA CONVENTION EXCÈDE CE QUI PEUT",
+        "SE FAIRE ICI. Ce constat, une fois rempli, se transmet au conseil",
         "de l'entreprise avec la convention et les accords : c'est lui qui dira ce",
         "qui prime et ce qui cède.",
       ]);
@@ -1790,7 +1790,7 @@
          "hiérarchie reviendrait à citer de mémoire - ce que ce fichier ne fait",
          "jamais.",
          "",
-         "Ce que l'application sait est plus modeste, et c'est ce qu'elle écrit :",
+         "Ce qui est su ici est plus modeste, et c'est ce qui est écrit :",
          "ces normes existent, elles ne sont nulle part publiées, elles priment",
          "lorsqu'elles sont plus favorables, et il faut donc les recenser."])).join("\n");
     },
@@ -1939,8 +1939,8 @@
          "sont au titre du point 2 seulement, pour dater ce qui court.",
          "",
          "Ce document ne conclut jamais à la conformité : l'incidence d'un",
-         "contentieux sur la stratégie d'un projet excède ce que cette application",
-         "peut apprécier."])).join("\n");
+         "contentieux sur la stratégie d'un projet excède ce qui peut être apprécié",
+         "ici."])).join("\n");
     },
   });
 
@@ -2729,10 +2729,9 @@
          "contrôle arithmétique. Les articles cités le sont pour dire ce que",
          "l'effectif commande, et chacun a été lu à la source.",
          "",
-         "L'APPLICATION NE CALCULE PAS VOTRE EFFECTIF et n'en connaît pas les règles",
-         "de décompte : elle reprend le nombre que vous avez saisi. Les règles de",
-         "calcul de l'effectif ne figurent pas dans le corpus de textes de ce",
-         "module."])).join("\n");
+         "VOTRE EFFECTIF N'EST PAS CALCULÉ ICI, et ses règles de décompte ne sont pas",
+         "connues : le nombre repris est celui que vous avez saisi. Les règles de",
+         "calcul de l'effectif n'ont pas été lues."])).join("\n");
     },
   });
 
@@ -2840,8 +2839,8 @@
         "statistiques du ministre chargé de l'emploi. Relevez le libellé et le code",
         "de la zone pour chaque commune d'implantation, et joignez l'extrait.",
         "",
-        "L'APPLICATION NE CONNAÎT PAS CET ATLAS et ne le consulte pas : elle sait",
-        "seulement que c'est lui qui fait foi, parce que D. 1233-2 le dit.",
+        "CET ATLAS N'EST PAS CONNU ICI et n'est pas consulté : ce qui est certain,",
+        "c'est qu'il fait foi, parce que D. 1233-2 le dit.",
         "",
         "  Périmètre retenu au terme de la délimitation : [ÉCRIRE ICI]",
         "  Salariés qui y entrent et qui n'y étaient pas : [liste nominative]",
@@ -2908,10 +2907,9 @@
       L = L.concat(DP.liens(ctx, ["economique"]));
       L.push("");
       return L.concat(pied("L. 1233-5, L. 1233-43, L. 1235-3, D. 1233-2",
-        ["L'atlas des zones d'emploi, auquel D. 1233-2 renvoie, n'est pas lu par",
-         "l'application : elle le nomme parce que le texte le nomme, elle n'en",
-         "reproduit aucune donnée et ne dit pas dans quelle zone se trouve votre",
-         "établissement.",
+        ["L'atlas des zones d'emploi, auquel D. 1233-2 renvoie, n'est pas lu ici :",
+        "il est nommé parce que le texte le nomme, aucune de ses données n'est",
+        "reproduite, et la zone où se trouve votre établissement n'est pas dite.",
          "",
          "Aucune peine n'est annoncée : le corpus de ce module ne contient aucun",
          "article de sanction pénale. Ce qui se joue est l'irrégularité de l'ordre",
@@ -3315,7 +3313,7 @@
          "sont des DÉCLARATIONS, non des faits établis. Chacune appelle la pièce du",
          "point 3.",
          "",
-         "L'application ne fixe aucun barème et n'en propose aucun : aucun texte",
+         "Aucun barème n'est fixé ici et aucun n'est proposé : aucun texte",
          "capté n'en fixe. Le barème est votre choix, et il est votre",
          "responsabilité."])).join("\n");
     },
@@ -3641,8 +3639,8 @@
       L.push("commodité : c'est lui qui transforme un silence en refus, et un délai trop");
       L.push("court prive ce refus de sa base.");
       L.push("");
-      L.push("Le décompte des jours francs n'est pas fait par l'application : elle lit le");
-      L.push("plancher dans le texte, elle ne calcule pas la date d'expiration.");
+      L.push("Le décompte des jours francs n'est pas fait ici : le plancher est lu dans");
+      L.push("le texte, la date d'expiration n'est pas calculée.");
       L.push("");
 
       L.push("5. CE QUE CHAQUE OFFRE DOIT PRÉCISER");
@@ -3716,8 +3714,8 @@
          "emploi sous deux libellés différents ne sont donc pas rapprochées : à vous",
          "de les voir.",
          "",
-         "L'application ne calcule pas les jours francs : elle lit dans D. 1233-2-1",
-         "les planchers de quinze et de quatre jours, et s'arrête là."])).join("\n");
+         "Les jours francs ne sont pas calculés ici : les planchers de quinze et de",
+         "quatre jours sont lus dans D. 1233-2-1, et rien de plus."])).join("\n");
     },
   });
 

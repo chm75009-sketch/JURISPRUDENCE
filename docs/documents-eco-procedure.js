@@ -204,7 +204,7 @@
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
     L.push("accords d'entreprise et, le cas échéant, votre accord de méthode peuvent");
-    L.push("ajouter des exigences que l'application ne lit pas. Ne laissez aucun crochet");
+    L.push("ajouter des exigences qui ne sont pas reprises ici. Ne laissez aucun crochet");
     L.push("dans la pièce que vous versez, remettez ou envoyez.");
     return L;
   }
@@ -272,13 +272,13 @@
       L.push("prouve alors que la recherche n'était pas faite à la date requise.");
       L.push("");
       L.push("Le groupe se lit dans L. 233-1, L. 233-3 et L. 233-16 du code de commerce :");
-      L.push("l'application n'a pas lu ces articles. Faites vérifier par votre conseil");
+      L.push("ces articles n'ont pas été lus ici. Faites vérifier par votre conseil");
       L.push("quelles sociétés y répondent.");
       L.push("");
 
       return L.concat(pied("L. 1233-4, D. 1233-2-1, L. 1233-2, L. 1235-1, L. 1235-3",
-        ["Le périmètre du groupe n'a pas été lu à la source : l'application nomme",
-         "les articles, elle n'en reproduit pas le contenu."])).join("\n");
+        ["Le périmètre du groupe n'a pas été lu à la source : les articles sont",
+         "nommés, leur contenu n'est pas reproduit."])).join("\n");
     },
   });
 
@@ -579,8 +579,8 @@
 
       return L.concat(pied("L. 1233-4, L. 1233-2, L. 1235-1, L. 1235-3",
         ["Le registre unique du personnel est nommé comme pièce d'appui. Aucun article",
-         "du corpus de ce module ne porte l'obligation de le tenir : l'application le",
-         "désigne, elle ne cite aucun texte à son sujet."])).join("\n");
+         "lu ici ne porte l'obligation de le tenir : il est désigné, sans qu'aucun",
+         "texte soit cité à son sujet."])).join("\n");
     },
   });
 
@@ -868,8 +868,8 @@
       L.push("");
 
       return L.concat(pied("L. 1233-4, L. 233-1, L. 233-3, L. 233-16 du code de commerce,",
-        ["Le groupe se lit dans des articles du code de commerce que l'application n'a",
-         "pas lus : elle les nomme, elle ne les interprète pas."])).join("\n");
+        ["Le groupe se lit dans des articles du code de commerce qui n'ont pas été",
+         "lus ici : ils sont nommés, ils ne sont pas interprétés."])).join("\n");
     },
   });
 

@@ -108,7 +108,7 @@
     note("Ces clauses viennent du code des transports, lu à la source le 14 septembre 2026. " +
       "Ce qui relève de la convention collective des transports routiers (IDCC 16), coefficient, " +
       "grille de salaires, indemnités de repas et de découcher, reste entre crochets : " +
-      "l'application ne l'a pas lu et n'invente pas un montant.");
+      "elle n'a pas été lue ici, et aucun montant ne s'invente.");
 
     h("Article : catégorie de personnel et temps de service");
     p("Le salarié relève de la catégorie suivante : " + c.nom.toLowerCase() + ".");
@@ -201,8 +201,8 @@
     p("[Indemnités de repas, de repas unique, de casse-croûte et de grand déplacement " +
       "(découcher) : montants à reprendre du protocole annexé à la convention collective, en " +
       "vigueur à la date de signature.]");
-    note("L'application ne lit pas les textes conventionnels : le relais Légifrance dont elle " +
-      "dispose ne sert que les codes. Les montants ci-dessus doivent être repris du texte " +
+    note("Les textes conventionnels ne sont pas lus ici : le relais Légifrance ne sert " +
+      "que les codes. Les montants ci-dessus doivent être repris du texte " +
       "lui-même, et vérifiés à sa dernière version.");
 
     return b;

@@ -4078,8 +4078,17 @@
   }
   /* Les blocs à emporter : ceux de l'onglet entier s'il est d'un seul tenant,
      ceux de la page sinon. */
+  /* CE QUI S'EMPORTE N'EST PAS CE QUI SE LIT.
+
+     À l'écran, l'exemple rempli montre comment remplir ; dans le fichier que
+     l'entreprise enregistre, imprime ou envoie, il n'a rien à faire, et il a
+     déjà fait sortir un document unique fictif signé au nom du client.
+     Relevé le 26 septembre 2026. La coupe est faite par le générateur, qui
+     sait où l'exemple s'arrête. */
   function blocsAEmporter() {
     var t = COURRIER ? texteEntier(COURRIER.partie || 0) : null;
+    if (t != null && window.DocumentsProduits && window.DocumentsProduits.sansExemple)
+      t = window.DocumentsProduits.sansExemple(t);
     return (t != null && window.FeuilleDoc) ? window.FeuilleDoc.blocs(t) : relireCorps();
   }
   $("dt-corps").addEventListener("input", function () {

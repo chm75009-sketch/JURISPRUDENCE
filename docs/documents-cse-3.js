@@ -212,7 +212,7 @@
     L.push("");
     L.push("Ce qui est écrit sans crochets est imposé par la loi et fondé sur l'article");
     L.push("cité en regard. Ce qui est ENTRE CROCHETS vous appartient : soit la loi vous");
-    L.push("en laisse le choix, soit l'application ne dispose pas de la donnée. Remplacez");
+    L.push("en laisse le choix, soit la donnée n'est pas connue ici. Remplacez");
     L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas - n'en");
     L.push("laissez aucun dans le document que vous signez, adoptez ou adressez.");
     L.push("");
@@ -234,16 +234,16 @@
     }
     if (nonLus && nonLus.length) {
       L.push("");
-      L.push("NOMMÉS MAIS NON LUS - l'application ne dispose pas de leur texte et ne les");
-      L.push("reproduit donc pas ; reportez-vous-y avant de conclure :");
+      L.push("NOMMÉS MAIS NON LUS - leur texte n'a pas été lu ici, et il n'est donc pas");
+      L.push("reproduit ; reportez-vous-y avant de conclure :");
       L.push(nonLus.join(" · ") + ".");
     }
     L.push("");
     L.push("Ce document ne vaut pas consultation juridique. Votre convention collective,");
     L.push("vos accords d'entreprise, vos usages et vos engagements unilatéraux peuvent");
-    L.push("ajouter des exigences que l'application ne lit pas, et priment lorsqu'ils sont");
-    L.push("plus favorables. L'application n'apprécie pas ce que la loi confie à");
-    L.push("l'appréciation du juge.");
+    L.push("ajouter des exigences qui ne sont pas reprises ici, et priment lorsqu'ils");
+    L.push("sont plus favorables. Ce que la loi confie à l'appréciation du juge n'est");
+    L.push("pas apprécié ici.");
     return L.join("\n");
   }
 
@@ -552,7 +552,7 @@
       L.push("membres de cette commission et les conditions de rémunération éventuelle des");
       L.push("conseillers sont fixés par décret (L. 2315-55) ; les conditions dans lesquelles");
       L.push("la commission est constituée le sont par décret en Conseil d'État (L. 2315-54).");
-      L.push("L'application n'a pas lu ces décrets : vérifiez-les avant d'arrêter le nombre.");
+      L.push("Ces décrets n'ont pas été lus ici : vérifiez-les avant d'arrêter le nombre.");
       L.push("");
       L.push("Vote : [ ] pour · [ ] contre · [ ] abstention.");
       L.push("");
@@ -652,7 +652,7 @@
       L.push("       comité pour inscription du rapport à l'ordre du jour ;");
       L.push("     · temps consacré aux réunions des commissions : [préciser le régime");
       L.push("       retenu dans l'entreprise et sa source - accord, usage, règlement");
-      L.push("       intérieur du comité. L'application ne tranche pas ce point ici : il");
+      L.push("       intérieur du comité. Ce point n'est pas tranché ici : il");
       L.push("       relève des moyens du comité, traités par les documents CSE-CTL-MOY de");
       L.push("       ce module.]");
       L.push("");
@@ -1076,7 +1076,7 @@
         L.push("");
       }
 
-      titre(L, "1 - Le texte, et ce que l'application n'a pas lu");
+      titre(L, "1 - Le texte, et ce qui n'a pas été lu ici");
       L.push("« Une commission des marchés est créée au sein du comité social et économique");
       L.push("qui dépasse, POUR AU MOINS DEUX DES TROIS CRITÈRES mentionnés au II de");
       L.push("l'article L. 2315-64, des seuils fixés par décret » (L. 2315-44-1).");
@@ -1093,15 +1093,15 @@
       L.push("total du bilan prévu au 3° de l'article R. 612-1 du code de commerce. Le seuil");
       L.push("mentionné à l'article L. 2315-44-2 est fixé à 30 000 euros. »");
       L.push("");
-      L.push("CE QUE L'APPLICATION NE PEUT PAS ÉCRIRE ICI, ET NE L'ÉCRIRA PAS :");
+      L.push("CE QUI NE PEUT PAS ÊTRE ÉCRIT ICI, ET NE LE SERA PAS :");
       L.push("");
       L.push("  · le MONTANT DE RESSOURCES ANNUELLES du 2° et le MONTANT DU TOTAL DU BILAN");
       L.push("    du 3° sont fixés par l'article R. 612-1 DU CODE DE COMMERCE. Ce texte");
-      L.push("    n'appartient pas au code du travail et le relais de l'application ne le");
+      L.push("    n'appartient pas au code du travail et le relais Légifrance ne le");
       L.push("    sert pas : il est NOMMÉ ici, et vous devez l'aller lire vous-même. Aucun");
       L.push("    chiffre n'est reproduit de mémoire ;");
       L.push("  · la DÉFINITION DES RESSOURCES ANNUELLES du comité est à l'article");
-      L.push("    D. 2315-34, que l'application n'a pas lu davantage. Ce point n'est pas");
+      L.push("    D. 2315-34, qui n'a pas été lu davantage. Ce point n'est pas");
       L.push("    accessoire : il commande ce qu'on additionne pour le critère 2°.");
       L.push("");
       L.push("Votre expert-comptable ou le commissaire aux comptes du comité, s'il en a un,");
@@ -1125,7 +1125,7 @@
       L.push("  ├────┼──────────────────────────────┼───────────────┼───────────────┼───────┤");
       L.push("  │ 2° │ Ressources annuelles         │ [        ] €  │ [montant du   │ [O/N] │");
       L.push("  │    │ (définies à D. 2315-34,      │               │ 2° de R.612-1 │       │");
-      L.push("  │    │ NON LU par l'application)    │               │ c. com. - À   │       │");
+      L.push("  │    │ NON LU ICI)                  │               │ c. com. - À   │       │");
       L.push("  │    │                              │               │ RELEVER]      │       │");
       L.push("  ├────┼──────────────────────────────┼───────────────┼───────────────┼───────┤");
       L.push("  │ 3° │ Total du bilan du comité     │ [        ] €  │ [montant du   │ [O/N] │");
@@ -1160,8 +1160,8 @@
         L.push("");
       }
       L.push("  UNE PRÉCISION QUE PORTE LE MÊME DÉCRET - D. 2315-29 fixe à 30 000 euros le");
-      L.push("  seuil mentionné à l'article L. 2315-44-2. L'application n'a pas lu");
-      L.push("  L. 2315-44-2 et ne dit donc pas à quoi ce seuil s'applique : reportez-vous-y");
+      L.push("  seuil mentionné à l'article L. 2315-44-2. Cet article n'a pas été lu");
+      L.push("  ici : à quoi ce seuil s'applique n'est donc pas dit. Reportez-vous-y");
       L.push("  avant de conclure sur les obligations qui s'y attachent.");
       L.push("");
 
@@ -1187,8 +1187,8 @@
       L.push("CRÉE en son sein une COMMISSION DES MARCHÉS.");
       L.push("");
       L.push("  Membres désignés : [noms ou matricules].");
-      L.push("  [La composition de cette commission n'est pas fixée par les textes que");
-      L.push("  l'application a lus : c'est au comité de l'arrêter, et la résolution doit");
+      L.push("  [La composition de cette commission n'est pas fixée par les textes lus");
+      L.push("  ici : c'est au comité de l'arrêter, et la résolution doit");
       L.push("  donc la porter.]");
       L.push("");
       L.push("  Modalités de fonctionnement : [à définir - les modalités de fonctionnement du");
@@ -1213,7 +1213,7 @@
       L.push("    définies à l'article L. 123-12 du code de commerce. Ses comptes annuels");
       L.push("    sont établis selon les modalités définies par un règlement de l'Autorité");
       L.push("    des normes comptables » (L. 2315-64, I). L'article L. 123-12 du code de");
-      L.push("    commerce est NOMMÉ : l'application ne l'a pas lu.");
+      L.push("    commerce est NOMMÉ : il n'a pas été lu ici.");
       L.push("  · Le comité dont les ressources annuelles n'excèdent pas un seuil fixé par");
       L.push("    décret peut s'acquitter de ses obligations comptables en tenant un LIVRE");
       L.push("    retraçant chronologiquement les montants et l'origine des dépenses et des");
@@ -1235,7 +1235,7 @@
 
       courrier(L, 1, "demande des deux montants au professionnel des comptes du comité", [
         "Sans les seuils du 2° et du 3°, le test ne peut pas être achevé : ces deux",
-        "montants viennent de R. 612-1 du code de commerce, que l'application n'a pas lu.",
+        "montants viennent de R. 612-1 du code de commerce, qui n'a pas été lu ici.",
       ]);
       papier(L, ctx, ["À l'attention de [expert-comptable / commissaire aux comptes]",
                       "du comité social et économique"]);
@@ -1331,9 +1331,9 @@
     L.push("  et elle vise la rupture du CDI : ce que le texte ne nomme pas, il ne");
     L.push("  l'exclut pas.");
     L.push("");
-    L.push("  CE QUE L'APPLICATION N'A PAS LU - l'article L. 242-1 du code de la sécurité");
+    L.push("  CE QUI N'A PAS ÉTÉ LU ICI - l'article L. 242-1 du code de la sécurité");
     L.push("  sociale et l'article L. 741-10 du code rural. Ils n'appartiennent pas au code");
-    L.push("  du travail et le relais de l'application ne les sert pas. Ils sont donc");
+    L.push("  du travail et le relais Légifrance ne les sert pas. Ils sont donc");
     L.push("  NOMMÉS ici, jamais paraphrasés. Le périmètre exact de ce qui est « soumis à");
     L.push("  cotisations » se lit dans ces textes et dans vos déclarations sociales");
     L.push("  nominatives - pas dans ce document.");
@@ -1524,7 +1524,7 @@
       L.push("    DE L'EXCÉDENT ANNUEL du budget de fonctionnement au financement des");
       L.push("    activités sociales et culturelles, dans des conditions et limites fixées");
       L.push("    par décret en Conseil d'État (L. 2315-61) - le décret n'est pas cité ici :");
-      L.push("    l'application ne l'a pas lu, et la limite ne s'invente pas ;");
+      L.push("    il n'a pas été lu, et la limite ne s'invente pas ;");
       L.push("  · MAIS lorsque le financement des frais d'expertise est pris en charge par");
       L.push("    l'employeur en application du 3° de l'article L. 2315-80, LE COMITÉ NE PEUT");
       L.push("    PAS DÉCIDER DE TRANSFÉRER D'EXCÉDENTS du budget de fonctionnement au");
@@ -2250,7 +2250,7 @@
       L.push("");
       L.push("Article 3 - [Le cas échéant : les modalités d'attribution, notamment les");
       L.push("critères de modulation retenus par le comité, sont maintenues. Attention :");
-      L.push("l'application ne se prononce pas ici sur la licéité d'un critère de");
+      L.push("rien ici ne se prononce sur la licéité d'un critère de");
       L.push("modulation, qui est une question distincte de celle de l'ancienneté et que le");
       L.push("texte lu ne tranche pas. Faites-la examiner.]");
       L.push("");
@@ -2586,7 +2586,7 @@
         leJour(dans(d0, 1095)) + " environ.");
       L.push("  [Le texte dit « les trois années suivantes » sans préciser s'il s'agit");
       L.push("  d'années civiles ou d'exercices : c'est une question d'interprétation que");
-      L.push("  l'application ne tranche pas. Retenez la lecture la plus prudente.]");
+      L.push("  ce document ne tranche pas. Retenez la lecture la plus prudente.]");
       L.push("");
       L.push("  À PORTER AU DOSSIER DU COMITÉ - cette interdiction pèse sur le comité, pas");
       L.push("  sur l'employeur. Elle doit donc être écrite au procès-verbal de la réunion");
@@ -2792,7 +2792,7 @@
       L.push("  └────┴─────────────────────────────┴──────────────────────────────────────┘");
       L.push("");
       L.push("  L'article L. 2315-81-1, auquel le 3° renvoie pour le contenu des");
-      L.push("  informations notifiées, N'A PAS ÉTÉ LU par l'application : il est nommé ici,");
+      L.push("  informations notifiées, N'A PAS ÉTÉ LU ICI : il est nommé,");
       L.push("  et son contenu n'est ni reproduit ni paraphrasé. Reportez-vous-y pour savoir");
       L.push("  ce que la notification doit comporter - c'est de sa complétude que dépend le");
       L.push("  point de départ.");
@@ -2827,8 +2827,8 @@
       L.push("  COMPUTATION - le module retient que le délai exprimé en jours ne commence à");
       L.push("  courir QUE LE LENDEMAIN de l'acte qui le fait courir, par application des");
       L.push("  ARTICLES 641 ET 642 DU CODE DE PROCÉDURE CIVILE. Ces deux articles sont");
-      L.push("  NOMMÉS : ils n'appartiennent pas au code du travail et l'application ne les");
-      L.push("  a pas lus. Vérifiez-les avant de compter au jour près - un jour d'écart");
+      L.push("  NOMMÉS : ils n'appartiennent pas au code du travail et n'ont pas été lus");
+      L.push("  ici. Vérifiez-les avant de compter au jour près - un jour d'écart");
       L.push("  suffit ici.");
       L.push("");
       L.push("  LA DATE DE SAISINE s'entend de celle de l'ASSIGNATION devant le président du");
@@ -2882,8 +2882,8 @@
       L.push("(R. 2315-50).");
       L.push("");
       L.push("L'ACTE LUI-MÊME est une assignation, qui se rédige et se délivre par un");
-      L.push("commissaire de justice : l'application n'en produit pas la forme, qui relève");
-      L.push("du code de procédure civile qu'elle n'a pas lu. Ce qui suit est LA MATIÈRE que");
+      L.push("commissaire de justice : sa forme n'est pas produite ici, elle relève du");
+      L.push("code de procédure civile, qui n'a pas été lu. Ce qui suit est LA MATIÈRE que");
       L.push("votre conseil y fera figurer, et le rappel des mentions qui, si elles");
       L.push("manquent, feront perdre la contestation avant tout débat.");
       L.push("");
@@ -2893,7 +2893,7 @@
         cro(((ctx.profil) || {}).adresse, "adresse du siège") + " ;");
       L.push("     le défendeur : LE COMITÉ SOCIAL ET ÉCONOMIQUE de " + nom(ctx) + ", pris");
       L.push("     en la personne de son secrétaire. [L'expert désigné est-il appelé à la");
-      L.push("     cause ? À décider avec votre conseil : l'application ne tranche pas.]");
+      L.push("     cause ? À décider avec votre conseil : ce document ne tranche pas.]");
       L.push("");
       L.push("  2. LA JURIDICTION - Monsieur le Président du tribunal judiciaire de [ville],");
       L.push("     statuant selon la procédure accélérée au fond (R. 2315-50, L. 2315-86).");
@@ -2915,8 +2915,8 @@
       L.push("  6. LES MOYENS - [ce que vous soutenez : selon le cas, que le fondement");
       L.push("     invoqué n'est pas réuni, que le coût prévisionnel est disproportionné à");
       L.push("     l'objet, que l'étendue excède le cas de recours, que la durée n'est pas");
-      L.push("     justifiée. L'application ne rédige pas vos moyens : ils dépendent des");
-      L.push("     faits, qu'elle ne connaît pas.]");
+      L.push("     justifiée. Vos moyens ne sont pas rédigés ici : ils dépendent des");
+      L.push("     faits, qui ne sont pas connus ici.]");
       L.push("");
       L.push("  7. LES PIÈCES - procès-verbal de la délibération · lettre de désignation ·");
       L.push("     cahier des charges et informations notifiés, avec la preuve de leur date");
@@ -3096,7 +3096,7 @@
       }
       L.push("  c) LE MOMENT DE LA DÉCISION - la décision se prend LORS DE LA PREMIÈRE");
       L.push("     RÉUNION PRÉVUE À L'ARTICLE L. 1233-30. L'article L. 1233-30 n'a pas été");
-      L.push("     lu par l'application : il est NOMMÉ, et vous devez y vérifier de quelle");
+      L.push("     lu ici : il est NOMMÉ, et vous devez y vérifier de quelle");
       L.push("     réunion il s'agit et à quelle date elle se tient.");
       L.push("");
       L.push("     Date de la première réunion de L. 1233-30 ......... [DATE]");
@@ -3623,8 +3623,8 @@
 
       L.push("CE QUE CETTE NOTE FAIT, ET CE QU'ELLE NE FAIT PAS");
       L.push("");
-      L.push("Elle ne lit pas vos accords : l'application ne dispose que de leur existence,");
-      L.push("jamais de leurs stipulations. Elle fait deux choses, et elles sont utiles :");
+      L.push("Elle ne lit pas vos accords : leur existence est connue ici, jamais");
+      L.push("leurs stipulations. Elle fait deux choses, et elles sont utiles :");
       L.push("");
       L.push("  · elle relève LES DEUX DATES qui ouvrent le délai de deux mois de");
       L.push("    L. 2262-14, parce que ce délai court sans qu'on s'en aperçoive et qu'il");
@@ -3654,7 +3654,7 @@
       L.push("(L. 2262-14).");
       L.push("");
       L.push("  Les articles L. 2231-5 et L. 2231-5-1, qui définissent cette notification et");
-      L.push("  cette publication, N'ONT PAS ÉTÉ LUS par l'application : ils sont nommés, et");
+      L.push("  cette publication, N'ONT PAS ÉTÉ LUS ICI : ils sont nommés, et");
       L.push("  leur contenu n'est ni reproduit ni paraphrasé. De même pour L. 1233-24,");
       L.push("  L. 1235-7-1 et L. 1237-19-8, que le dernier alinéa réserve.");
       L.push("");
@@ -3874,10 +3874,10 @@
       L.push("      litige où la clause est opposée. C'est la voie qui reste, et elle n'est");
       L.push("      pas enfermée dans ce délai.");
       L.push("");
-      L.push("        [L'application ne dispose ici d'aucun texte lu qui organise l'exception");
-      L.push("        d'illégalité : elle en signale la possibilité parce que le fondement du");
-      L.push("        contrôle la retient, et laisse au professionnel le soin d'en apprécier");
-      L.push("        les conditions et la portée.]");
+      L.push("        [Aucun texte lu ici n'organise l'exception d'illégalité : la");
+      L.push("        possibilité en est signalée parce que le fondement du contrôle la");
+      L.push("        retient, et le soin d'en apprécier les conditions et la portée reste");
+      L.push("        au professionnel.]");
       L.push("");
       L.push("  C - CE QU'IL FAUT FAIRE DANS TOUS LES CAS, et tout de suite : NE PLUS SE");
       L.push("      FONDER SUR LA CLAUSE. Une clause qui prive le comité d'une prérogative");
@@ -4009,7 +4009,7 @@
       L.push("");
       L.push("L'entrave est une INFRACTION PÉNALE. La qualifier suppose d'apprécier des");
       L.push("faits, une intention et un contexte : c'est l'office du juge répressif, et");
-      L.push("l'affaire d'un professionnel avant lui. L'application détecte, elle ne");
+      L.push("l'affaire d'un professionnel avant lui. Ce document signale, il ne");
       L.push("qualifie pas - et un document qui écrirait « il y a entrave » ou « il n'y a");
       L.push("pas entrave » serait faux dans les deux sens.");
       L.push("");

@@ -441,10 +441,20 @@
 /* Version affichée en tête. Elle change à chaque déploiement : c'est le seul
    moyen pour le lecteur de savoir ce qu'il utilise, une application installée
    pouvant rester ouverte plusieurs jours sur une version périmée. */
-const VERSION = "4.5 — 23 août 2026";
+const VERSION = "4.5 - 23 août 2026";
 
 const API = "https://api.piste.gouv.fr/cassation/judilibre/v1.0";
-const RELAIS = "/.netlify/functions/legifrance";
+/* LE RELAIS S'APPELLE À SON ADRESSE COMPLÈTE HORS DE NETLIFY.
+
+   « Cette adresse ne dispose pas du relais Légifrance » : mesuré le
+   26 septembre 2026 depuis l'espace client, qui est servi par Cloudflare. La
+   page appelait « /.netlify/functions/legifrance » en chemin relatif, qui n'y
+   existe pas et rend 404. La convention collective du client était donc
+   illisible. Le relais Judilibre, deux lignes plus bas, faisait déjà le bon
+   choix : les deux le font maintenant. */
+const RELAIS = /\.netlify\.app$/.test(location.hostname)
+  ? "/.netlify/functions/legifrance"
+  : "https://jurisprudence-recherche.netlify.app/.netlify/functions/legifrance";
 /* Le relais Judilibre de l'application : la clé peut être portée par le site
    (variable d'environnement Netlify), auquel cas rien n'est demandé ici. */
 const RELAIS_JUDI = /\.netlify\.app$/.test(location.hostname)

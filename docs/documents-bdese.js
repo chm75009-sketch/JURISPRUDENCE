@@ -1063,8 +1063,8 @@
     L.push("");
     L.push("Ce que vous lisez est " + quoi + ", rédigé au nom de votre entreprise.");
     L.push("Ce qui est entre crochets vous appartient : ce sont vos chiffres, vos");
-    L.push("dates, vos choix. L'application ne les connaît pas et ne les inventera");
-    L.push("pas, un document qui devinerait la masse salariale ou les effectifs par");
+    L.push("dates, vos choix. Ils ne sont pas connus ici, et rien ne les inventera :");
+    L.push("un document qui devinerait la masse salariale ou les effectifs par");
     L.push("catégorie serait pire qu'absent. Remplacez chaque crochet, ou supprimez");
     L.push("la ligne si elle ne vous concerne pas.");
     L.push("");
@@ -1393,7 +1393,7 @@
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
     L.push("accords et l'accord de l'article L. 2312-21 s'il en existe un peuvent");
-    L.push("ajouter des exigences que l'application ne lit pas. Ne laissez aucun");
+    L.push("ajouter des exigences qui ne sont pas reprises ici. Ne laissez aucun");
     L.push("crochet dans le texte que vous mettez à disposition ou que vous déposez.");
     return L;
   }

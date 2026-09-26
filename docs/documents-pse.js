@@ -248,9 +248,9 @@
     L.push("identifiant LEGIARTI.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
-    L.push("Réserve - ce document ne vaut pas consultation. L'application ne lit ni");
-    L.push("votre convention collective ni vos accords, qui peuvent ajouter des");
-    L.push("exigences ou fixer d'autres délais. Et elle ne dit pas si votre plan est");
+    L.push("Réserve - ce document ne vaut pas consultation. Ni votre convention");
+    L.push("collective ni vos accords ne sont lus ici, et ils peuvent ajouter des");
+    L.push("exigences ou fixer d'autres délais. Et il ne dit pas si votre plan est");
     L.push("suffisant : aucun texte n'en fixe le montant, l'appréciation de sa");
     L.push("proportionnalité aux moyens de l'entreprise, de l'unité économique et");
     L.push("sociale et du groupe appartient à l'autorité administrative, puis au juge");
@@ -2131,8 +2131,8 @@
         L.push(signataire(ctx));
         L.push("");
         L.push("Arrêtez avec le conseil de l'entreprise la conduite à tenir salarié par");
-        L.push("salarié : l'application ne dit pas ce que devient l'adhésion recueillie");
-        L.push("sur la première proposition, et elle ne l'inventera pas.");
+        L.push("salarié : ce document ne dit pas ce que devient l'adhésion recueillie");
+        L.push("sur la première proposition, et il ne l'inventera pas.");
         L.push("");
       }
 
@@ -2173,8 +2173,8 @@
       L.push("");
 
       pied(L, ["L. 1233-66", "L. 1233-65", "L. 1233-57-4", "L. 1233-39", "L. 1233-24-2", "L. 1233-24-4"],
-        "L'application ne lit pas les textes qui fixent le délai de réflexion du\n" +
-        "salarié ni le contenu du document d'information : ils ne sont pas au code du\n" +
+        "Les textes qui fixent le délai de réflexion du salarié et le contenu du\n" +
+        "document d'information ne sont pas lus ici : ils ne sont pas au code du\n" +
         "travail. Le document renvoie donc aux pièces remises, sans en détailler le\n" +
         "contenu.");
       return L.join("\n");
@@ -2493,7 +2493,7 @@
       L.push("");
       L.push("Autre voie de signature ouverte par le texte : l'accord peut aussi être");
       L.push("signé par le conseil d'entreprise, dans les conditions prévues à l'article");
-      L.push("L. 2321-9 (L. 1233-24-1). L'application ne lit pas cet article : si vous");
+      L.push("L. 2321-9 (L. 1233-24-1). Cet article n'est pas lu ici : si vous");
       L.push("empruntez cette voie, faites-la vérifier.");
       L.push("");
 
@@ -2590,8 +2590,8 @@
 
       pied(L, ["L. 1233-24-1", "L. 1233-24-2", "L. 1233-24-4", "L. 1233-57-4"],
         "L'article L. 2321-9, auquel L. 1233-24-1 renvoie pour la signature par le\n" +
-        "conseil d'entreprise, n'est pas au dépôt de textes du module : l'application\n" +
-        "le cite parce que L. 1233-24-1 le cite, sans en dire le contenu.");
+        "conseil d'entreprise, n'a pas été lu à la source : il est cité ici parce\n" +
+        "que L. 1233-24-1 le cite, sans que son contenu soit rapporté.");
       return L.join("\n");
     });
 
@@ -2840,9 +2840,9 @@
       }
       L.push("");
       L.push("VOIES ET DÉLAIS DE RECOURS");
-      L.push("[Reproduire ici les voies et délais de recours applicables. L'application");
-      L.push("ne les rédige pas : les articles qui les fixent ne sont pas au dépôt de");
-      L.push("textes du module, et une mention de recours inexacte est pire qu'absente.");
+      L.push("[Reproduire ici les voies et délais de recours applicables. Ils ne sont");
+      L.push("pas rédigés ici : les articles qui les fixent n'ont pas été lus à la");
+      L.push("source, et une mention de recours inexacte est pire qu'absente.");
       L.push("Reprenez-les de la décision elle-même lorsqu'elle a été notifiée, ou");
       L.push("faites-les vérifier.]");
       L.push("");
@@ -2891,9 +2891,9 @@
       L.push("");
 
       pied(L, ["L. 1233-57-4", "L. 1233-39", "L. 1233-24-1", "L. 1233-24-4"],
-        "Les voies et délais de recours ne sont pas rédigés par l'application : les\n" +
-        "textes qui les fixent ne sont pas au dépôt du module, et rien n'est écrit ici\n" +
-        "qui n'ait été lu à la source.");
+        "Les voies et délais de recours ne sont pas rédigés ici : les textes qui les\n" +
+        "fixent n'ont pas été lus à la source, et rien n'est écrit ici qui ne vienne\n" +
+        "d'un texte lu.");
       return L.join("\n");
     });
 
@@ -3064,7 +3064,7 @@
       L.push("  · La conduite à tenir est arrêtée avec [conseil de l'entreprise] le");
       L.push("    [DATE].");
       L.push("");
-      L.push("L'application s'arrête ici et le dit : elle ne se prononce pas sur le sort");
+      L.push("Ce document s'arrête ici et le dit : il ne se prononce pas sur le sort");
       L.push("de ces ruptures. Cette question relève du conseil de l'entreprise, sur");
       L.push("pièces, dossier par dossier.");
       L.push("");
@@ -3584,8 +3584,8 @@
       L.push("");
       L.push("  Conduite à tenir arrêtée avec [conseil de l'entreprise] le [DATE].");
       L.push("");
-      L.push("L'application s'arrête ici : elle ne dit pas ce que coûte un poste pourvu");
-      L.push("sans information, et elle ne l'inventera pas. Cette question relève du");
+      L.push("Ce document s'arrête ici : il ne dit pas ce que coûte un poste pourvu");
+      L.push("sans information, et il ne l'inventera pas. Cette question relève du");
       L.push("conseil de l'entreprise, dossier par dossier.");
       L.push("");
       L.push("Fait à " + ville(ctx) + ", le " + leJour(d0) + ".");
@@ -3723,8 +3723,8 @@
         }
         L.push("");
         L.push("  Ajoutez à cette date le délai de convocation que votre règlement");
-        L.push("  intérieur de comité ou vos usages imposent : l'application ne les lit");
-        L.push("  pas, et un ordre du jour communiqué trop tard ferait naître une seconde");
+        L.push("  intérieur de comité ou vos usages imposent : ils ne sont pas lus");
+        L.push("  ici, et un ordre du jour communiqué trop tard ferait naître une seconde");
         L.push("  irrégularité par-dessus la première.");
       } else {
         L.push("  [Aucune réunion n'étant renseignée, la date au plus tôt ne peut pas être");
@@ -3915,7 +3915,7 @@
         "consulté ».",
         "",
         "Un accord invoqué mais non versé n'est opposable à personne : ni",
-        "l'administration ni l'application ne peuvent vérifier le délai que vous",
+        "l'administration ni un tiers ne peuvent vérifier le délai que vous",
         "appliquez. Versez-le, ou le plafond légal reste la seule référence.",
       ]);
 

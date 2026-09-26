@@ -77,8 +77,8 @@
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
-    L.push("accords et votre règlement intérieur peuvent ajouter des exigences que");
-    L.push("l'application ne lit pas. Ne laissez aucun crochet dans le texte que");
+    L.push("accords et votre règlement intérieur peuvent ajouter des exigences qui");
+    L.push("ne sont pas reprises ici. Ne laissez aucun crochet dans le texte que");
     L.push("vous remettez, déposez ou envoyez.");
     return L;
   }

@@ -193,8 +193,8 @@
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
     L.push("accords, votre règlement intérieur et la réglementation technique propre");
-    L.push("à votre activité peuvent ajouter des exigences que l'application ne lit");
-    L.push("pas. Ne laissez aucun crochet dans le texte que vous adoptez, affichez ou");
+    L.push("à votre activité peuvent ajouter des exigences qui ne sont pas reprises");
+    L.push("ici. Ne laissez aucun crochet dans le texte que vous adoptez, affichez ou");
     L.push("transmettez.");
     return L;
   }
@@ -204,9 +204,9 @@
      note de bas de page. */
   function blocRenvoi(articles, quoi) {
     return [
-      "[ARTICLE NON LU PAR L'APPLICATION, " + articles + " " +
-        (quoi || "est nommé ici parce qu'un texte lu y renvoie") + ".",
-      " L'application ne l'a pas capté et n'en reproduit donc pas le contenu.",
+      "[ARTICLE NON LU ICI, " + articles + " " +
+      (quoi || "est nommé ici parce qu'un texte lu y renvoie") + ".",
+      " Son contenu n'est donc pas reproduit.",
       " Allez le lire avant de vous en servir.]",
       "",
     ];
@@ -1400,8 +1400,8 @@
       L.push("plus tard à compter du 1er juillet 2024 », aux autres ; jusqu'à l'entrée en");
       L.push("vigueur de ce dépôt, « l'employeur conserve les versions successives du");
       L.push("document unique au sein de l'entreprise sous la forme d'un document papier");
-      L.push("ou dématérialisé » (R. 4121-4). L'application ne sait pas où en est le");
-      L.push("déploiement de ce portail : vérifiez-le, et conservez en tout état de cause");
+      L.push("ou dématérialisé » (R. 4121-4). Où en est le déploiement de ce portail");
+      L.push("n'est pas dit ici : vérifiez-le, et conservez en tout état de cause");
       L.push("vos versions dans l'entreprise.");
 
       return L.concat(pied(
@@ -1953,8 +1953,8 @@
          "et R. 4121-2, est puni de l'amende prévue pour les contraventions de la",
          "cinquième classe. La récidive est réprimée conformément aux articles 132-11",
          "et 132-15 du code pénal » (R. 4741-1). Les deux articles du code pénal qu'il",
-         "nomme n'ont pas été lus par l'application : elle ne dit donc pas ce que la",
-         "récidive emporte."])).join("\n");
+         "nomme n'ont pas été lus ici : ce que la récidive emporte n'est donc pas",
+         "dit."])).join("\n");
     },
   });
 
@@ -2718,7 +2718,7 @@
       L.push("2024 », aux autres. Jusqu'à l'entrée en vigueur de ce dépôt, « l'employeur");
       L.push("conserve les versions successives du document unique au sein de");
       L.push("l'entreprise sous la forme d'un document papier ou dématérialisé »");
-      L.push("(R. 4121-4). L'application ne sait pas où en est ce déploiement :");
+      L.push("(R. 4121-4). Où en est ce déploiement n'est pas dit ici :");
       L.push("vérifiez-le, et conservez en tout état de cause vos versions dans");
       L.push("l'entreprise.");
 
@@ -2932,7 +2932,7 @@
          "leur fonctionnement régulier est puni d'une amende de 7 500 € » (L. 2317-1).",
          "Une consultation que la loi impose et qui n'a pas eu lieu expose l'employeur",
          "à cette qualification, qu'il appartient au juge de retenir ou d'écarter, et",
-         "que l'application n'anticipe pas. Le module « comité social et économique »",
+         "et qui n'est pas anticipée ici. Le module « comité social et économique »",
          "cite le même texte dans les mêmes termes."])).join("\n");
     },
   });
@@ -3406,7 +3406,7 @@
       L.push("");
       L.push("Conclusion tirée de votre dossier : " + fond.phrase + (fond.texte ? " (" + fond.texte + ")" : "") + ".");
       if (fond.due === null) {
-        L.push("L'application ne tranche pas : portez les quatre réponses (effectif,");
+        L.push("Ce document ne tranche pas : portez les quatre réponses (effectif,");
         L.push("établissement distinct, établissement à hauts risques, création imposée");
         L.push("par l'inspecteur) avant de conclure.");
       }
@@ -3516,8 +3516,8 @@
       L.push("n° 23-22.270, publié).");
       L.push("");
       L = L.concat(blocRenvoi("L. 2315-16 et L. 2315-17",
-        "sont nommés par L. 2315-41, 4°, aux côtés de L. 2315-18, seul des trois que " +
-        "l'application ait lu"));
+        "sont nommés par L. 2315-41, 4°, aux côtés de L. 2315-18, seul des trois " +
+        "qui ait été lu ici"));
       L.push("Ni le délai de convocation, ni celui de transmission de l'ordre du jour, ni");
       L.push("le rédacteur du procès-verbal ne sont fixés par les textes lus : ils");
       L.push("relèvent de l'article 4 du texte constitutif, « leurs modalités de");
@@ -3535,8 +3535,8 @@
          "LA COMMISSION ABSENTE LÀ OÙ ELLE EST DUE N'EST PAS UN MANQUEMENT SEULEMENT",
          "CIVIL. « Le fait d'apporter une entrave à leur fonctionnement régulier est",
          "puni d'une amende de 7 500 € » (L. 2317-1). Il appartient au juge de retenir",
-         "ou d'écarter cette qualification ; l'application ne l'anticipe pas. Elle ne",
-         "l'invoque pas non plus pour les autres contrôles de la commission, la",
+         "ou d'écarter cette qualification ; elle n'est pas anticipée ici, et elle",
+         "n'est pas invoquée non plus pour les autres contrôles de la commission, la",
          "composition, les modalités, la délégation, la formation, le remplacement",
          "des membres, qui sont des irrégularités que le juge annule, non des faits",
          "que ce texte pénal désigne."])).join("\n");
@@ -3648,7 +3648,7 @@
         C.push("l'obligation de discrétion.");
         C.push("");
         C.push(X(E, "Les informations présentées comme confidentielles par l'employeur, et celles relatives aux procédés de fabrication, ne sont divulguées ni à l'extérieur ni aux salariés non membres.",
-          "Le contenu de l'article L. 2315-3 n'a pas été lu par l'application : reportez-vous en au texte avant de préciser ici l'étendue de ces obligations."));
+          "Le contenu de l'article L. 2315-3 n'a pas été lu ici : reportez-vous en au texte avant de préciser ici l'étendue de ces obligations."));
         C.push("");
         C.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma");
         C.push("considération distinguée.");
@@ -3765,7 +3765,7 @@
       L.push("");
       L = L.concat(blocRenvoi("L. 2315-3",
         "est nommé par L. 2315-39 pour le secret professionnel et l'obligation de " +
-        "discrétion ; l'application ne l'a pas capté et n'en écrit donc pas le régime"));
+        "discrétion ; il n'a pas été lu ici, et son régime n'est donc pas écrit"));
 
       return L.concat(pied("L. 2315-39, L. 2315-32, L. 2314-11, L. 2315-38",
         ["Décisions citées, lues à la source dans la base Judilibre de la Cour de",
@@ -3949,7 +3949,7 @@
       L.push("délégation ne peut porter ni sur le recours à un expert prévu à la");
       L.push("sous-section 10, ni sur les attributions consultatives du comité");
       L.push("(L. 2315-38), texte d'ordre public (Soc., 13 mai 2026, n° 25-12.560).");
-      L.push("L. 2315-18, seul des trois articles de formation que l'application ait lu,");
+      L.push("L. 2315-18, seul des trois articles de formation qui ait été lu ici,");
       L.push("fixe des durées minimales : cinq jours lors du premier mandat des membres");
       L.push("de la délégation du personnel ; en cas de renouvellement, trois jours pour");
       L.push("chaque membre quelle que soit la taille de l'entreprise, et cinq jours");
@@ -3959,11 +3959,11 @@
       L.push("qui n'est pas écrit ne sera pas dû, et ce qui est écrit le sera.");
       L.push("");
       L = L.concat(blocRenvoi("L. 2315-16 et L. 2315-17",
-        "sont nommés par L. 2315-41, 4° ; l'application ne les a pas captés et n'en " +
-        "écrit donc rien"));
+        "sont nommés par L. 2315-41, 4° ; ils n'ont pas été lus ici, et rien n'en " +
+        "est écrit"));
       L.push("Les règles d'adoption et de modification du règlement intérieur du comité");
-      L.push("relèvent du module « comité social et économique » de l'application : ce");
-      L.push("module-ci ne les a pas lues et ne les écrit pas.");
+      L.push("relèvent du module « comité social et économique » : ce module-ci ne les");
+      L.push("a pas lues et ne les écrit pas.");
 
       return L.concat(pied(
         "L. 2315-41, L. 2315-42, L. 2315-43, L. 2315-44, L. 2315-38, L. 2315-39, L. 2315-18",
@@ -4168,7 +4168,7 @@
       L.push("");
       L = L.concat(blocRenvoi("L. 1233-34 et la sous-section 10 relative au recours à l'expert",
         "sont nommés, le premier par la décision citée, la seconde par L. 2315-38 ; " +
-        "l'application ne les a pas captés et n'en écrit donc pas le régime"));
+        "ils n'ont pas été lus ici, et leur régime n'est donc pas écrit"));
       L.push("OÙ VOUS EN ÊTES");
       L.push("");
       L.push("  - commission : " + etat(c.existe, "existante", "INEXISTANTE"));
@@ -4375,7 +4375,7 @@
       L.push("");
       L = L.concat(blocRenvoi("L. 2315-22-1",
         "est nommé par L. 2315-18 pour la prise en charge du financement ; " +
-        "l'application ne l'a pas capté et n'en écrit donc rien"));
+        "il n'a pas été lu ici, et rien n'en est écrit"));
       L.push("DEUX BÉNÉFICIAIRES : les membres de la délégation du personnel du comité,");
       L.push("et le référent en matière de lutte contre le harcèlement sexuel et les");
       L.push("agissements sexistes désigné par le comité (L. 2314-1, dernier alinéa),");
@@ -4999,8 +4999,8 @@
       f.p("..........................................................................");
       f.p("Signature du représentant : ....................................");
       f.note("Les trois rubriques et la signature sont celles que D. 4132-1 exige de l'avis. " +
-        "Elles se remplissent à la main, sur le registre : l'application n'écrit pas l'avis " +
-        "d'un représentant.");
+        "Elles se remplissent à la main, sur le registre : l'avis d'un représentant " +
+        "ne s'écrit pas ici.");
 
       f.h1("Suites données par l'employeur");
       f.p("Date et heure de l'enquête menée avec le représentant : ........................");
@@ -5012,7 +5012,7 @@
       f.note("L. 4132-2 : l'enquête est immédiate et se mène avec le représentant qui a " +
         "signalé le danger. En cas de divergence sur la réalité du danger ou sur la façon de " +
         "le faire cesser, la suite de la procédure relève des articles suivants du même " +
-        "chapitre, que l'application n'a pas lus : allez les lire avant de vous en servir.");
+        "chapitre, qui n'ont pas été lus ici : allez les lire avant de vous en servir.");
       return f.L;
     },
     attendus: [
@@ -5130,7 +5130,7 @@
       f.h1("3. Postes relevant d'un suivi individuel renforcé");
       f.p(val(ctx, "renforce", "postes exposant aux risques mentionnés à l'article R. 4624-23"));
       f.note("D. 4622-22 renvoie, pour ces postes, aux risques mentionnés à l'article " +
-        "R. 4624-23, que l'application ne reproduit pas : allez le lire pour dresser cette " +
+        "R. 4624-23, qui n'est pas reproduit ici : allez le lire pour dresser cette " +
         "liste, elle commande le suivi individuel renforcé de vos salariés.");
       f.h1("4. Avis recueillis");
       f.p("Avis du médecin du travail, le " + dateVal(ctx, "avisMedecin", "date") + ".");
@@ -5242,8 +5242,8 @@
         "conditions prévues aux articles L. 2315-16 à L. 2315-18 du code du travail. Formation " +
         "prévue : " + val(ctx, "formation", "organisme et dates") + ".");
       f.note("L. 4644-1, I, deuxième phrase, renvoie aux articles L. 2315-16 à L. 2315-18 pour " +
-        "les conditions de cette formation. L'application ne les a pas lus et n'en reproduit " +
-        "donc ni la durée ni le financement : allez les lire avant de commander la formation.");
+        "les conditions de cette formation. Ils n'ont pas été lus ici : ni leur durée " +
+        "ni leur financement ne sont reproduits, allez les lire avant de commander la formation.");
 
       if (exterieur) {
         f.h1("Le recours à des compétences extérieures");
@@ -5389,8 +5389,8 @@
           "de prouver ce qui a été arrêté en commun.");
       f.note("R. 4512-7 : l'écrit est obligatoire dans deux cas, l'un tenant aux 400 heures - y " +
         "compris s'il apparaît en cours d'exécution que ce nombre doit être atteint -, l'autre " +
-        "aux travaux dangereux d'une liste fixée par arrêté. L'application n'a pas lu cet " +
-        "arrêté et ne dit pas si vos travaux y figurent.");
+        "aux travaux dangereux d'une liste fixée par arrêté. Cet arrêté n'a pas été lu " +
+        "ici, et il n'est pas dit si vos travaux y figurent.");
 
       f.h1("L'inspection commune préalable");
       f.p("Une inspection commune des lieux de travail, des installations qui s'y trouvent et " +
@@ -5421,8 +5421,8 @@
       f.h1("5. Participation de travailleurs d'une entreprise aux travaux d'une autre");
       f.p(val(ctx, "participation", "conditions de la participation et organisation du commandement"));
       f.note("Ces cinq points sont les dispositions que R. 4512-8 exige au moins. Ce qui les " +
-        "remplit vient de votre opération : l'application ne connaît ni vos lieux, ni vos " +
-        "matériels, ni vos co-activités.");
+        "remplit vient de votre opération : ni vos lieux, ni vos matériels, ni vos " +
+        "co-activités ne sont connus ici.");
 
       f.h1("Pièces jointes");
       f.p(String(v.amiante || "") === "oui"
@@ -5436,7 +5436,7 @@
         "amiante prévus aux articles R. 1334-29-4 à R. 1334-29-6 du code de la santé publique " +
         "et à l'article R. 126-10 du code de la construction et de l'habitation ou, le cas " +
         "échéant, le rapport de repérage prévu à l'article R. 4412-97-5 du code du travail. Ces " +
-        "articles-là n'ont pas été lus par l'application : allez les lire.");
+        "articles-là n'ont pas été lus ici : allez les lire.");
 
       f.trait();
       f.sign("Fait à " + villeDe(ctx) + ", le " + leJourDu(ctx) + ", avant le commencement des " +

@@ -1943,6 +1943,16 @@
     var blocs = [], tableau = null, texteRegles = "";
     gens.forEach(function (g, i) {
       var t = g.produire(ctx);
+      /* L'EXEMPLE N'A PAS SA PLACE DANS UN DOCUMENT DU QUOTIDIEN.
+
+         Les fichiers de la déclaration d'embauche, des congés, de l'entretien
+         professionnel, du certificat de travail ou de la convocation du
+         comité s'ouvraient sur un exemple rempli au nom d'une entreprise
+         inventée. Ici on vient chercher un document à signer, pas une leçon :
+         relevé le 26 septembre 2026. L'exemple reste dans les parcours, où il
+         sert à apprendre. */
+      if (window.DocumentsProduits && window.DocumentsProduits.sansExemple)
+        t = window.DocumentsProduits.sansExemple(t);
       crochets.forEach(function (c) { t = t.split(c[0]).join(c[1]); });
       if (i) blocs.push({ k: "saut", t: "" });
       blocs = blocs.concat(blocsDeTexte(t));
@@ -2085,9 +2095,6 @@
       champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(AUJOURDHUI) }],
       produire: mutuelle },
     vip: { titre: "Visite d'information et de prévention", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" }, { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }], produire: visite },
-    registre: { titre: "Registre du personnel", ext: ["RH-CTL-REG-01"], famille: "RH",
-      champs: [{ id: "ouverture", nom: "Date d'ouverture du registre", t: "date", crochet: "[DATE D'OUVERTURE]", defaut: iso(AUJOURDHUI) }],
-      loi: ["L1221-13", "D1221-23"] },
 
     avenant: { titre: "Avenant", champs: [NOM, { id: "effet", nom: "Date d'effet", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "objet", nom: "Ce qui change", t: "textarea", pleine: true, ph: "La durée du travail est portée à 35 heures par semaine et la rémunération mensuelle brute à 2 100 euros." }], produire: avenant },
@@ -2166,7 +2173,14 @@
 
   var GROUPES = [
     ["Transport", ["protocole", "autorisation"]],
-    ["Embaucher", ["cdi", "cdd", "partiel", "dpae", "vip", "registre"]],
+    /* LE REGISTRE N'EST PAS UN DOCUMENT À PRODUIRE ICI.
+
+       L'entrée produisait un Word vide, avec « YYYYY Jean » et « ZZZZZ Sofia »
+       à la place des quatre-vingt-cinq salariés, et faisait doublon avec le
+       vrai registre, qui les porte et les exporte. Relevé le 26 septembre
+       2026. La ligne du haut, « Registre unique du personnel », mène au vrai
+       registre : c'est la seule. */
+    ["Embaucher", ["cdi", "cdd", "partiel", "dpae", "vip"]],
     ["Pendant le contrat", ["avenant", "mutuelle", "conges", "maladie", "at", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "fin"]],

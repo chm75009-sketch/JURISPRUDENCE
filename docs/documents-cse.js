@@ -121,7 +121,7 @@
     L.push("");
     L.push("Ce qui est écrit sans crochets est imposé par la loi et fondé sur l'article");
     L.push("cité en regard. Ce qui est ENTRE CROCHETS vous appartient : soit la loi vous");
-    L.push("en laisse le choix, soit l'application ne dispose pas de la donnée. Remplacez");
+    L.push("en laisse le choix, soit la donnée n'est pas connue ici. Remplacez");
     L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas - n'en");
     L.push("laissez aucun dans le document que vous signez, adressez ou déposez.");
     L.push("");
@@ -142,9 +142,9 @@
     if (!sansReserve) {
       L.push("Ce document ne vaut pas consultation juridique. Votre convention collective,");
       L.push("vos accords d'entreprise, vos usages et vos engagements unilatéraux peuvent");
-      L.push("ajouter des exigences que l'application ne lit pas, et priment lorsqu'ils sont");
-      L.push("plus favorables. L'application n'apprécie pas ce que la loi confie à");
-      L.push("l'appréciation du juge.");
+      L.push("ajouter des exigences qui ne sont pas reprises ici, et priment lorsqu'ils");
+      L.push("sont plus favorables. Ce que la loi confie à l'appréciation du juge n'est");
+      L.push("pas apprécié ici.");
     }
     return L.join("\n");
   }
@@ -926,7 +926,7 @@
       L.push("");
       L.push("Le présent avenant entre en vigueur le [DATE].");
       L.push("[Il est déposé et publié dans les conditions applicables à l'accord qu'il");
-      L.push("modifie. L'application ne lit pas les articles relatifs au dépôt des accords :");
+      L.push("modifie. Les articles relatifs au dépôt des accords ne sont pas lus ici :");
       L.push("reportez-vous à eux, ou faites-les vérifier.]");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le [DATE], en [nombre] exemplaires originaux.");
@@ -1058,9 +1058,9 @@
       L.push("ARTICLE 4 - DURÉE, RÉVISION, DÉPÔT");
       L.push("");
       L.push("Le présent accord est conclu pour [durée]. Il entre en vigueur le [date].");
-      L.push("[Modalités de révision et de dénonciation. Dépôt et publicité : l'application");
-      L.push("ne lit pas les articles relatifs au dépôt des accords collectifs - reportez-");
-      L.push("vous à eux.]");
+      L.push("[Modalités de révision et de dénonciation. Dépôt et publicité : les");
+      L.push("articles relatifs au dépôt des accords collectifs ne sont pas lus ici -");
+      L.push("reportez-vous à eux.]");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le [DATE], en [nombre] exemplaires.");
       L.push("");
@@ -2285,8 +2285,8 @@
       L.push("cahier des charges, ne sont pas repris ici : le dépôt n'en a capté que les");
       L.push("articles R. 2314-5 et R. 2314-6. Faites vérifier le cahier des charges au");
       L.push("regard de l'ensemble du paragraphe avant de le publier, ainsi qu'au regard des");
-      L.push("obligations relatives aux traitements de données personnelles, que");
-      L.push("l'application ne lit pas.");
+      L.push("obligations relatives aux traitements de données personnelles, qui ne");
+      L.push("sont pas lues ici.");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le [DATE].");
       L.push("");
@@ -2500,7 +2500,7 @@
       L.push("les obtenir et de les vérifier, dès lors que l'entreprise remplit l'une des");
       L.push("conditions que pose l'article L. 2312-17.");
       L.push("   [Votre entreprise est-elle soumise à ces obligations du code de commerce ?");
-      L.push("    L'application ne lit pas le code de commerce : faites vérifier.]");
+      L.push("    Le code de commerce n'est pas lu ici : faites vérifier.]");
       L.push("   Consultation retenue pour ce point : [ ]");
       L.push("");
       L.push("NIVEAUX, à défaut d'accord (L. 2312-22) - les consultations sur les");

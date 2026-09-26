@@ -203,15 +203,15 @@
     L.push("identifiant dit laquelle des versions successives a été lue.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
-    L.push("Aucune peine n'est annoncée dans ce document : le corpus du module ne porte");
-    L.push("aucun article de sanction pénale, et l'application n'annonce pas une sanction");
-    L.push("qu'elle n'a pas lue. Ce qui est dit du risque l'est sur le fondement des");
+    L.push("Aucune peine n'est annoncée dans ce document : les textes lus ne portent");
+    L.push("aucun article de sanction pénale, et aucune sanction n'est annoncée qui");
+    L.push("n'ait été lue. Ce qui est dit du risque l'est sur le fondement des");
     L.push("articles cités.");
     L.push("");
-    L.push("Réserve - ce document ne vaut pas consultation. L'application ne lit ni votre");
-    L.push("convention collective ni vos accords, qui peuvent fixer d'autres délais ou");
-    L.push("ajouter des exigences - l'article L. 1233-30 réserve expressément la");
-    L.push("convention ou l'accord collectif qui « peut prévoir des délais différents ».");
+    L.push("Réserve - ce document ne vaut pas consultation. Ni votre convention");
+    L.push("collective ni vos accords ne sont lus ici, et ils peuvent fixer d'autres");
+    L.push("délais ou ajouter des exigences - l'article L. 1233-30 réserve expressément");
+    L.push("la convention ou l'accord collectif qui « peut prévoir des délais différents ».");
   }
 
   /* ── ce que la fiche et le profil donnent ───────────────────────────────── */
@@ -313,9 +313,9 @@
      autant l'écrire une fois. */
   var NON_LUS_57_9 =
     "Les articles L. 1233-57-9 à L. 1233-57-16, auxquels L. 1233-57-2 et\n" +
-    "L. 1233-57-3 renvoient, ne figurent dans aucun corpus lu par l'application.\n" +
-    "Ils sont donc NOMMÉS ici, jamais reproduits ni résumés : l'application ne\n" +
-    "dit pas ce qu'elle n'a pas lu. Leur contenu se vérifie à la source.";
+    "L. 1233-57-3 renvoient, ne figurent pas parmi les textes lus ici.\n" +
+    "Ils sont donc NOMMÉS ici, jamais reproduits ni résumés : rien n'est écrit\n" +
+    "de ce qui n'a pas été lu. Leur contenu se vérifie à la source.";
 
   function doc(id, nomDoc, detail, produire) {
     A.ajouter(id, { nom: nomDoc, detail: detail, produire: produire });
@@ -362,7 +362,7 @@
         "sociale et le groupe ; 2° Les mesures d'accompagnement prévues au regard de",
         "l'importance du projet de licenciement ; 3° Les efforts de formation et",
         "d'adaptation tels que mentionnés aux articles L. 1233-4 et L. 6321-1 ». Un",
-        "chiffre que l'application avancerait serait un chiffre inventé.",
+        "chiffre avancé ici serait un chiffre inventé.",
         "",
         "Ce que vous pouvez faire, en revanche, c'est RENDRE LE CALIBRAGE VISIBLE.",
         "Un plan dont on ne sait pas à quels moyens il est rapporté n'est pas",
@@ -1390,7 +1390,7 @@
         "séparée se détache du document déposé ; un tableau intégré au plan est le",
         "plan.",
         "",
-        "L'application ne propose aucun montant. Aucun texte n'en fixe, et un chiffre",
+        "Aucun montant n'est proposé ici. Aucun texte n'en fixe, et un chiffre",
         "avancé ici serait un chiffre inventé.",
       ]);
 
@@ -2308,11 +2308,11 @@
 
       modeEmploi(L, [
         "Ce document ne dit pas comment se conduit l'instruction d'une demande",
-        "d'autorisation : l'application n'a pas lu à la source les articles qui la",
-        "règlent - forme et contenu de la demande, consultation préalable du comité",
-        "pour certains mandats, enquête contradictoire, délais d'instruction, recours",
-        "hiérarchique. Ils ne sont pas au corpus de ce module, et l'application",
-        "n'énonce pas ce qu'elle n'a pas lu. Faites vérifier ce point.",
+        "d'autorisation : les articles qui la règlent n'ont pas été lus à la source",
+        "- forme et contenu de la demande, consultation préalable du comité pour",
+        "certains mandats, enquête contradictoire, délais d'instruction, recours",
+        "hiérarchique. Rien n'est énoncé ici de ce qui n'a pas été lu. Faites",
+        "vérifier ce point.",
         "",
         "Ce qu'il fait, en revanche, il le fait entièrement : il recense, il rédige la",
         "demande, il tient le registre, et il DATE - parce que c'est la date qui se",
@@ -2357,7 +2357,7 @@
       L.push("    redressement ou de liquidation judiciaire » - le texte l'écrit, et");
       L.push("    l'urgence d'une procédure collective n'en dispense pas ;");
       L.push("  - les mentions abrégées ci-dessus par des points de suspension renvoient à");
-      L.push("    des articles d'autres codes que l'application n'a pas lus : vérifiez le");
+      L.push("    des articles d'autres codes, qui n'ont pas été lus ici : vérifiez le");
       L.push("    texte intégral si l'un de vos salariés relève des 8°, 9° ou 10°.");
       L.push("");
       L.push("L. 2411-5 : « Le licenciement d'un membre élu de la délégation du personnel du");
@@ -2374,9 +2374,9 @@
       L.push("salarié dont le mandat s'est achevé il y a quatre mois, s'il était désigné");
       L.push("depuis deux ans et n'a pas été reconduit, est encore protégé.");
       L.push("");
-      L.push("Ce que le document n'énonce pas : l'application n'a pas lu l'article qui fixe");
-      L.push("la conséquence d'une notification intervenue sans autorisation ou malgré un");
-      L.push("refus. Elle ne l'affirme donc pas. Ce qui est certain et lu, c'est la");
+      L.push("Ce que le document n'énonce pas : l'article qui fixe la conséquence d'une");
+      L.push("notification intervenue sans autorisation ou malgré un refus n'a pas été");
+      L.push("lu. Rien n'est donc affirmé là-dessus. Ce qui est certain et lu, c'est la");
       L.push("condition : le licenciement « ne peut intervenir qu'après autorisation ».");
       L.push("Une lettre expédiée sans elle ne remplit pas cette condition, et la suite");
       L.push("appartient à votre conseil.");
@@ -2478,8 +2478,8 @@
       L.push("MOTIF ÉCONOMIQUE INVOQUÉ - [exposer ici, daté et chiffré, le motif au sens de");
       L.push("l'article L. 1233-3 : difficultés économiques, mutations technologiques,");
       L.push("réorganisation nécessaire à la sauvegarde de la compétitivité, cessation");
-      L.push("d'activité. Joindre les pièces qui l'établissent. L'application n'écrit pas");
-      L.push("ce motif : il est propre à votre entreprise, et c'est sur lui que la décision");
+      L.push("d'activité. Joindre les pièces qui l'établissent. Ce motif n'est pas écrit");
+      L.push("ici : il est propre à votre entreprise, et c'est sur lui que la décision");
       L.push("se prendra.]");
       L.push("");
       L.push("SUPPRESSION DE POSTE - [préciser le poste supprimé, l'effectif de la catégorie");
@@ -2506,8 +2506,8 @@
       L.push("élections ou lettre de désignation · éléments du motif économique · le cas");
       L.push("échéant, plan de sauvegarde de l'emploi et décision administrative]");
       L.push("");
-      L.push("  [AVANT D'ENVOYER - l'application n'a pas lu les articles qui règlent la");
-      L.push("  procédure de cette demande. Certaines catégories de mandats supposent une");
+      L.push("  [AVANT D'ENVOYER - les articles qui règlent la procédure de cette demande");
+      L.push("  n'ont pas été lus ici. Certaines catégories de mandats supposent une");
       L.push("  consultation préalable du comité, et la demande obéit à des formes et à des");
       L.push("  délais que ce document n'énonce pas. Faites vérifier ces points avant");
       L.push("  l'envoi : une demande irrégulière fait perdre le temps de son instruction.]");
@@ -2560,8 +2560,8 @@
 
       L.push("Aujourd'hui, " + leJour(d0) + " - vous recensez et vous déposez les demandes.");
       L.push("");
-      L.push("La durée de l'instruction n'est pas fixée par un texte que l'application ait");
-      L.push("lu : elle ne l'annonce donc pas. Ce qui est certain, c'est que la");
+      L.push("La durée de l'instruction n'est fixée par aucun texte lu ici : elle n'est");
+      L.push("donc pas annoncée. Ce qui est certain, c'est que la");
       L.push("notification est suspendue jusqu'à la décision, et que ce délai s'ajoute au");
       L.push("calendrier du projet au lieu de courir en parallèle.");
       L.push("");
@@ -2591,8 +2591,8 @@
         "\n" +
         "Ce que ce document N'ÉNONCE PAS : les articles qui règlent la procédure de la\n" +
         "demande d'autorisation et la conséquence d'un licenciement notifié sans elle\n" +
-        "ne sont lus dans aucun corpus de l'application. Ils ne sont ni reproduits ni\n" +
-        "paraphrasés, et aucune sanction n'est annoncée de ce chef.");
+        "n'ont pas été lus ici. Ils ne sont ni reproduits ni paraphrasés, et aucune\n" +
+        "sanction n'est annoncée de ce chef.");
         L.push("À COMPLÉTER");
 
         L.push("");
@@ -2639,11 +2639,10 @@
         "",
         "L'arrêt de travail, le congé de maternité et l'inaptitude constatée par le",
         "médecin du travail obéissent chacun à un régime propre, qui peut interdire ou",
-        "retarder la notification. Ces régimes ne sont pas au corpus du module :",
-        "l'application ne les a pas lus à la source, et elle n'écrira donc ni leurs",
-        "articles, ni leurs conditions, ni leurs exceptions. Un document qui les",
-        "résumerait de mémoire serait pire qu'absent - il ferait croire à un examen",
-        "qui n'a pas eu lieu.",
+        "retarder la notification. Ces régimes n'ont pas été lus à la source :",
+        "rien n'est écrit ici ni de leurs articles, ni de leurs conditions, ni de",
+        "leurs exceptions. Un document qui les résumerait de mémoire serait pire",
+        "qu'absent - il ferait croire à un examen qui n'a pas eu lieu.",
         "",
         "Ce qu'il fait : il recense, il rassemble les pièces, il pose les questions à",
         "poser, il commande l'examen à qui peut le conduire, et il consigne la",
@@ -2664,7 +2663,7 @@
       L.push("  - la question n'est pas renseignée : donnée manquante ;");
       L.push("  - des salariés le sont : chacun doit faire l'objet d'un examen distinct.");
       L.push("");
-      L.push("Ce que l'application sait avec certitude, et qui suffit à justifier la");
+      L.push("Ce qui est certain, et qui suffit à justifier la");
       L.push("prudence : la date de notification n'est pas libre. L'article L. 1233-39");
       L.push("l'enferme déjà dans un délai courant à compter de la notification du projet à");
       L.push("l'autorité administrative dans les entreprises de moins de cinquante");
@@ -2858,10 +2857,10 @@
       pied(L, ["L. 1233-39"],
         "Ce contrôle n'a aucun article au champ « fondement », et ce document n'en\n" +
         "invente pas. Les régimes propres à l'arrêt de travail, au congé de maternité\n" +
-        "et à l'inaptitude ne sont dans aucun corpus lu par l'application : ils ne\n" +
-        "sont ni cités, ni résumés, ni paraphrasés ici.\n" +
+        "et à l'inaptitude n'ont pas été lus ici : ils ne sont ni cités, ni\n" +
+        "résumés, ni paraphrasés.\n" +
         "\n" +
-        "Ce qui se joue : l'application ne le dit pas, parce qu'elle ne l'a pas lu.\n" +
+        "Ce qui se joue n'est pas dit ici, faute d'avoir été lu.\n" +
         "C'est précisément pourquoi ce document commande un examen extérieur au lieu\n" +
         "de conclure.");
         L.push("À COMPLÉTER");
@@ -3683,7 +3682,7 @@
       L.push("  isolé en projet de dix salariés. Le plan de sauvegarde de l'emploi, lui,");
       L.push("  reste commandé par le seuil propre de L. 1233-61 : « au moins dix salariés");
       L.push("  dans une même période de trente jours ». Faites trancher ce point par votre");
-      L.push("  conseil : l'application dit ce que les textes disent, elle ne comble pas");
+      L.push("  conseil : ce document dit ce que les textes disent, il ne comble pas");
       L.push("  leur articulation.]");
       L.push("");
 
@@ -3917,7 +3916,7 @@
         L.push("Cela ne dit rien de leur EXACTITUDE. « 84 salariés » est lisible et cohérent");
         L.push("même si l'entreprise en compte 148. Servez-vous du tableau du IV pour");
         L.push("rapprocher chaque valeur de la pièce qui la porte : c'est le seul contrôle");
-        L.push("qui vaille, et l'application ne peut pas le faire à votre place.");
+        L.push("qui vaille, et ce document ne peut pas le faire à votre place.");
         L.push("");
       } else {
         if (lisib.length) {
@@ -4435,8 +4434,8 @@
         "L. 1233-60, « avant de procéder à des licenciements ». Elle est due même",
         "quand l'ordonnance a été obtenue, et l'ordonnance ne la dispense pas.",
         "",
-        "L'application n'a pas lu à la source les articles du code de commerce",
-        "auxquels L. 1233-60 renvoie - L. 631-17, L. 631-19 (II), L. 641-4 dernier",
+        "Les articles du code de commerce auxquels L. 1233-60 renvoie n'ont pas",
+        "été lus à la source - L. 631-17, L. 631-19 (II), L. 641-4 dernier",
         "alinéa, L. 641-10 troisième alinéa, L. 642-5. Ils sont NOMMÉS ici tels que le",
         "texte lu les nomme, jamais reproduits ni résumés : c'est là que se trouvent",
         "les conditions et la forme de la requête, et elles doivent être vérifiées à",
@@ -4544,7 +4543,7 @@
       L.push("");
       L.push("  [AVANT DE DÉPOSER - la forme, le contenu et le circuit de cette requête");
       L.push("  sont réglés par les articles du code de commerce que L. 1233-60 nomme, et");
-      L.push("  que l'application n'a pas lus. Faites-les vérifier. Ce modèle organise le");
+      L.push("  qui n'ont pas été lus ici. Faites-les vérifier. Ce modèle organise le");
       L.push("  fond de la démonstration ; il ne garantit pas la forme.]");
       L.push("");
 
@@ -4584,7 +4583,7 @@
       L.push("code de commerce. »");
       L.push("");
       L.push("Ces cinq articles du code de commerce fixent les conditions de cette");
-      L.push("information. L'application ne les a pas lus et ne les énonce pas : vérifiez-y");
+      L.push("information. Ils n'ont pas été lus ici et ne sont pas énoncés : vérifiez-y");
       L.push("la forme et le moment exacts.");
       L.push("");
       L.push(nom(ctx));
@@ -4672,8 +4671,8 @@
       L.push("Aujourd'hui, " + leJour(d0) + " - vous déposez la requête et vous préparez");
       L.push("l'information de l'administration.");
       L.push("");
-      L.push("L'application n'annonce aucun délai d'obtention de l'ordonnance : elle n'a");
-      L.push("pas lu le texte qui le fixerait, et un délai inventé ferait plus de mal");
+      L.push("Aucun délai d'obtention de l'ordonnance n'est annoncé ici : le texte qui");
+      L.push("le fixerait n'a pas été lu, et un délai inventé ferait plus de mal");
       L.push("qu'une case vide. Demandez-le au greffe, et inscrivez-le ici : [  ].");
       L.push("");
       L.push("L'information de l'autorité administrative, elle, est immédiate : elle part");
@@ -4697,7 +4696,7 @@
       pied(L, ["L. 1233-46", "L. 1233-58", "L. 1233-60", "L. 3253-8", "D. 1233-14"],
         "Les articles L. 631-17, L. 631-19 (II), L. 641-4 dernier alinéa, L. 641-10\n" +
         "troisième alinéa et L. 642-5 du code de commerce, auxquels L. 1233-60\n" +
-        "renvoie, ne sont dans aucun corpus lu par l'application. Ils sont nommés tels\n" +
+        "renvoie, n'ont pas été lus ici. Ils sont nommés tels\n" +
         "que le texte lu les nomme, et ni reproduits ni paraphrasés. C'est là que se\n" +
         "trouvent les conditions de l'ordonnance et de l'information : vérifiez-les à\n" +
         "la source.\n" +
@@ -5069,11 +5068,11 @@
       modeEmploi(L, [
         "Une précision qui commande la lecture de tout ce document : les articles",
         "L. 1233-57-9 à L. 1233-57-16, qui portent l'obligation elle-même, NE SONT",
-        "DANS AUCUN CORPUS LU PAR L'APPLICATION. Ils sont nommés - les textes lus les",
+        "PAS LUS ICI. Ils sont nommés - les textes lus les",
         "nomment -, mais ni reproduits, ni résumés, ni paraphrasés. Le contenu exact",
         "de l'obligation, ses conditions et ses exceptions se vérifient à la source.",
         "",
-        "Ce que l'application a lu, en revanche, ce sont les deux articles qui",
+        "Ce qui a été lu, en revanche, ce sont les deux articles qui",
         "referment la procédure : L. 1233-57-19, sur la consultation du comité",
         "relative à une offre de reprise, et L. 1233-57-20, sur le rapport à",
         "présenter avant la fin de la procédure d'information et de consultation. Ces",
@@ -5108,8 +5107,8 @@
         L.push("");
         L.push("  Ce document reste utile à deux titres. D'abord parce que l'effectif du");
         L.push("  groupe peut compter : vérifiez le périmètre exact que les articles");
-        L.push("  L. 1233-57-9 et suivants retiennent - l'application ne les a pas lus et ne");
-        L.push("  le dit donc pas. Ensuite parce qu'une recherche de repreneur conduite");
+        L.push("  L. 1233-57-9 et suivants retiennent - ils n'ont pas été lus ici, et rien");
+        L.push("  n'en est dit. Ensuite parce qu'une recherche de repreneur conduite");
         L.push("  volontairement se documente de la même manière, et sert alors la");
         L.push("  démonstration des mesures d'évitement du plan.");
         L.push("");
@@ -5145,8 +5144,8 @@
       L.push("s'appliquait - d'où l'intérêt de documenter aussi le cas où elle ne");
       L.push("s'appliquait pas.");
       L.push("");
-      L.push("  [Ce que ces obligations contiennent exactement, l'application ne le dit");
-      L.push("  pas : elle n'a pas lu les articles L. 1233-57-9 à L. 1233-57-16. Le mandat,");
+      L.push("  [Ce que ces obligations contiennent exactement n'est pas dit ici : les");
+      L.push("  articles L. 1233-57-9 à L. 1233-57-16 n'ont pas été lus. Le mandat,");
       L.push("  le journal et les motifs d'écartement organisés ci-dessous sont ce qui");
       L.push("  permet d'établir une mise en œuvre effective, quelle qu'en soit la");
       L.push("  définition précise. Faites vérifier cette définition à la source.]");
