@@ -561,8 +561,12 @@
     var s = String(((ctx && ctx.profil) || {}).secteur || "").trim().toLowerCase();
     return EXEMPLES[s] ? s : "services";
   }
-  /* L'entreprise de l'exemple : celle du profil quand il en donne une, la
-     fictive du secteur sinon. Les dates se comptent depuis aujourd'hui, et
+  /* L'entreprise de l'exemple est toujours la fictive du secteur, jamais
+     celle du profil. Mesuré le 26 septembre 2026 : l'exemple prenait le nom,
+     l'adresse et le gérant du client et gardait ses personnes inventées, si
+     bien que le document de la SARL TEC portait une pilote, un chef
+     d'atelier, un médecin du travail et un avis du comité qui n'existent
+     pas, sous la signature de son gérant. Les dates se comptent depuis aujourd'hui, et
      les « D28 » des faits signalés deviennent des dates réelles, vingt-huit
      jours avant aujourd'hui. */
   function exempleDe(ctx) {
@@ -571,12 +575,12 @@
     var ville = villeDe(ctx);
     var ex = {
       secteur: s, activite: M.activite,
-      nom: String(p.denomination || p.entreprise || "").trim() || M.nom,
-      adresse: String(p.adresse || "").trim() || M.adresse,
-      siret: String(p.siret || "").trim() || M.siret,
-      ville: ville === "[ville]" ? M.ville : ville,
-      effectif: e.connu ? e.n : M.effectif, femmes: M.femmes,
-      signataire: String(p.responsable || "").trim() || M.signataire,
+      nom: M.nom,
+      adresse: M.adresse,
+      siret: M.siret,
+      ville: M.ville,
+      effectif: M.effectif, femmes: M.femmes,
+      signataire: M.signataire,
       recoit: M.recoit, remplacant: M.remplacant, referent: M.referent,
       cse: CSE_EX, cseAdresse: M.cseAdresse, cseTel: M.cseTel,
       spst: M.spst, inspection: M.inspection, lieux: M.lieux, encadrement: M.encadrement,
