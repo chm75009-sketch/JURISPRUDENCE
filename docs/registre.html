@@ -619,6 +619,14 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (isFinite(n) && String(E.cadre.effectif == null ? "" : E.cadre.effectif).trim() !== "")
       t += (t ? " · " : "") + n + " salarié" + (n > 1 ? "s" : "");
     if (!vide(E.cadre.etab)) t += " · " + E.cadre.etab;
+    /* Le registre compte aussi ceux qui sont sortis : l'effectif de la fiche
+       (82) et les lignes du registre (85) ne se contredisent pas, ils ne
+       comptent pas la même chose. On dit les deux. */
+    var reels = E.salaries.filter(function (x) { return !x.ex && (!vide(x.nom) || !vide(x.pre)); });
+    if (reels.length) {
+      var enPoste = reels.filter(function (x) { return vide(x.sor); }).length;
+      t += " · " + reels.length + " au registre, dont " + enPoste + " en poste";
+    }
     $("rappel-registre").textContent = t;
   }
 
@@ -1788,7 +1796,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   var PLEIN = E.salaries.some(function (x) {
     return !x.ex && (!vide(x.nom) || !vide(x.pre));
   });
-  if (PLEIN && !REP) ouvrir("registre");
+  /* Le « oui » de l'audit ne rouvre pas le dépôt quand le registre est
+     plein : mesuré le 26 septembre 2026, il redemandait de coller un registre
+     de quatre-vingt-cinq salariés déjà chargé. Il ouvre le registre, où
+     chaque ligne dit ce qui lui manque ; le dépôt reste à un bouton. */
+  if (PLEIN && REP !== "non") ouvrir("registre");
   else if (E.reponse === "oui") ouvrir("import");
   else if (E.reponse === "non") {
     if (!E.salaries.length || E.salaries.every(function (x) {
