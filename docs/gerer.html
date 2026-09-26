@@ -284,7 +284,10 @@
     "CSS-L911-7": { id: "LEGIARTI000031686110",
       dit: "couverture minimale obligatoire : ticket modérateur, forfait journalier, soins dentaires prothétiques et dispositifs médicaux ; l'employeur assure au minimum la moitié du financement ; dispense possible des contrats courts" },
     "CSS-D911-2": { id: "LEGIARTI000038682723",
-      dit: "cas de dispense à l'initiative du salarié : complémentaire santé solidaire, assurance individuelle en cours, couverture au titre d'un autre emploi" },
+      dit: "cas de dispense à l'initiative du salarié : complémentaire santé solidaire, assurance individuelle en cours, couverture au titre d'un autre emploi ; dans tous les cas, l'employeur doit être en mesure de produire la demande de dispense" },
+    /* Lu à la source le 26 septembre 2026, deux lectures concordantes. */
+    "CSS-L911-8": { id: "LEGIARTI000027549338",
+      dit: "maintien gratuit des garanties après la rupture non consécutive à une faute lourde ouvrant droit au chômage, pendant une durée égale à la période d'indemnisation dans la limite du dernier contrat et de douze mois ; l'employeur signale ce maintien dans le certificat de travail et informe l'organisme assureur de la cessation du contrat" },
     "L1221-13": { id: "LEGIARTI000033971569",
       dit: "registre unique du personnel ; les mentions sont portées au moment de l'embauche et de façon indélébile" },
     "D1221-23": { id: "LEGIARTI000018537878",
@@ -1761,6 +1764,82 @@
      Le nom de l'organisme, les garanties et le montant de la cotisation
      restent entre crochets : ils viennent du contrat que l'entreprise a
      signé, et l'application ne le connaît pas. */
+  /* Le bloc de portabilité, ajouté au certificat de travail, et la lettre à
+     l'organisme assureur. */
+  function portabilite(v) {
+    var org = String((profil && profil.orgSante) || "").trim();
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var sortie = dateDe(v.sortie);
+    return [
+      { k: "saut", t: "" },
+      { k: "t1", t: "Maintien des garanties de frais de santé et de prévoyance après la rupture" },
+      { k: "p", t: "À porter sur le certificat de travail de " + nomS + " : « Conformément à " +
+        ref(["CSS-L911-8"]) + ", l'intéressé bénéficie du maintien à titre gratuit des garanties de " +
+        "frais de santé et de prévoyance en vigueur dans l'entreprise, pour une durée égale à la " +
+        "période d'indemnisation du chômage, dans la limite de la durée du dernier contrat de travail " +
+        "et de douze mois, sous réserve que la rupture ouvre droit à la prise en charge par le régime " +
+        "d'assurance chômage et qu'elle ne résulte pas d'une faute lourde. »" },
+      { k: "p", t: "Ce maintien ne vaut que si les droits à remboursements complémentaires étaient " +
+        "ouverts chez l'employeur au jour de la rupture. Il s'étend aux ayants droit qui bénéficiaient " +
+        "effectivement des garanties à cette date. L'ancien salarié justifie auprès de l'organisme, à " +
+        "l'ouverture puis en cours de maintien, qu'il remplit les conditions." },
+      { k: "h1", t: "L'information de l'organisme assureur, le jour de la sortie" },
+      { k: "p", t: "À " + (org || "[nom et adresse de l'organisme assureur]") + "." },
+      { k: "p", t: "Objet : cessation du contrat de travail de " + nomS + " et maintien des garanties " +
+        "(" + ref(["CSS-L911-8"]) + ")." },
+      { k: "p", t: "Nous vous informons que le contrat de travail de " + nomS + " a pris fin le " +
+        dateFr(sortie) + ". La rupture ouvre droit à la prise en charge par le régime d'assurance " +
+        "chômage et ne résulte pas d'une faute lourde : les garanties sont maintenues à titre gratuit " +
+        "dans les conditions de " + ref(["CSS-L911-8"]) + ", pour [durée en mois, égale à la durée du " +
+        "dernier contrat, douze mois au plus]." },
+      { k: "p", t: "Dernier contrat : du [date d'entrée] au " + dateFr(sortie) + ". Garanties en " +
+        "vigueur : [intitulé du contrat et du niveau de garanties]." },
+      { k: "sign", t: "\n" + signataire() + "\n" + profil.denomination },
+    ];
+  }
+
+  /* LA DEMANDE DE DISPENSE, ÉCRITE ET CONSERVÉE.
+
+     « Dans tous les cas, l'employeur doit être en mesure de produire la
+     demande de dispense des salariés concernés » (D. 911-2, dernier alinéa,
+     LEGIARTI000038682723, lu à la source le 26 septembre 2026, deux lectures
+     concordantes). Sans cet écrit, la dispense ne se prouve pas, et le
+     redressement porte sur les cotisations. */
+  function dispenseMutuelle(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var org = String((profil && profil.orgSante) || "").trim();
+    var b = [];
+    b.push({ k: "t1", t: "Demande de dispense d'adhésion au régime de frais de santé" });
+    b.push({ k: "p", t: "À remettre par le salarié à l'employeur, qui la conserve (" +
+      ref(["CSS-D911-2"]) + ")." });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: "Je soussigné " + nomS + ", " + (v.poste || "[emploi]") + " au sein de " +
+      profil.denomination + ", demande à être dispensé de l'adhésion au régime collectif et " +
+      "obligatoire de remboursement complémentaire de frais de santé souscrit auprès de " +
+      (org || "[organisme assureur]") + "." });
+    b.push({ k: "p", t: "Je me trouve dans le cas suivant, prévu par l'article D. 911-2 du code de la " +
+      "sécurité sociale (cocher un seul cas) :" });
+    b.push({ k: "puce", t: "[ ] bénéficiaire de la complémentaire santé solidaire (L. 861-3) ; la " +
+      "dispense cesse à la date où j'en perds le bénéfice ;" });
+    b.push({ k: "puce", t: "[ ] couvert par une assurance individuelle de frais de santé au moment de " +
+      "la mise en place des garanties ou de mon embauche ; la dispense cesse à l'échéance du contrat " +
+      "individuel, soit le [date d'échéance] ;" });
+    b.push({ k: "puce", t: "[ ] couvert pour les mêmes risques, y compris comme ayant droit, au titre " +
+      "d'un autre emploi, par l'un des dispositifs énumérés au 3° de D. 911-2 : [préciser lequel, et " +
+      "joindre l'attestation de l'organisme]." });
+    b.push({ k: "p", t: "Je joins la pièce qui justifie ce cas, et je m'engage à informer l'employeur " +
+      "dès qu'il prend fin : la dispense cesse alors, et l'adhésion devient obligatoire." });
+    b.push({ k: "p", t: "Je reconnais avoir été informé des conséquences de ce choix : je ne bénéficie " +
+      "ni des garanties du régime, ni de la participation de l'employeur à son financement." });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: "Fait à ........................, le ........................" });
+    b.push({ k: "p", t: "Signature du salarié :" });
+    b.push({ k: "vide", t: "" });
+    b.push({ k: "p", t: "Reçue par l'employeur le ........................ et conservée au dossier du " +
+      "salarié (" + ref(["CSS-D911-2"]) + ")." });
+    return { blocs: b, loi: ["CSS-D911-2", "CSS-L911-7"] };
+  }
+
   function mutuelle(v) {
     var effet = dateDe(v.effet);
     var org = String((profil && profil.orgSante) || "").trim();
@@ -2359,6 +2438,9 @@
       dates: function (v) { var e = dateDe(v.entree); return e ? [{ q: "Déclaration",
         d: "du " + dateFr(jour(e, -8)) + " au " + dateFr(e) + ", avant la prise de poste",
         f: "au plus tôt huit jours avant l'embauche (" + ref(["R1221-4"]) + "), et avant elle, l'embauche ne pouvant intervenir qu'après la déclaration (" + ref(["L1221-10"]) + ")", c: "tot" }] : []; } },
+    dispense: { titre: "Complémentaire santé : la demande de dispense",
+      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "conducteur" }],
+      produire: dispenseMutuelle },
     mutuelle: { titre: "Complémentaire santé : la décision unilatérale",
       champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(AUJOURDHUI) }],
       produire: mutuelle },
@@ -2445,7 +2527,14 @@
       apres: function (v) {
         return [{ k: "saut", t: "" }, { k: "t1", t: "Attestation destinée à France Travail" },
           { k: "p", t: "L'attestation qui permet à " + (v.nom || "[nom et prénom du salarié]") + " d'exercer ses droits à l'assurance chômage est délivrée au moment de la rupture du contrat, le " + dateFr(dateDe(v.sortie)) + ", et transmise sans délai à France Travail" + (effectif >= 11 ? ", par voie électronique, l'entreprise employant au moins onze salariés" : "") + " (" + ref(["R1234-9"]) + ")." },
-          { k: "p", t: "Elle s'établit sur le service en ligne de France Travail ou par la déclaration sociale nominative ; ce document en garde la trace : transmise le [date], sous la référence [numéro]." }];
+          { k: "p", t: "Elle s'établit sur le service en ligne de France Travail ou par la déclaration sociale nominative ; ce document en garde la trace : transmise le [date], sous la référence [numéro]." }]
+          /* LA PORTABILITÉ SE SIGNALE SUR LE CERTIFICAT, ET NULLE PART
+             AILLEURS. L. 911-8, 6° : « L'employeur signale le maintien de ces
+             garanties dans le certificat de travail et informe l'organisme
+             assureur de la cessation du contrat. » Rien ne le disait, et la
+             sortie d'un salarié ne produisait aucune de ces deux pièces.
+             Relevé le 26 septembre 2026. */
+          .concat(portabilite(v));
       } },
 
     convoc: { titre: "Convocation du CSE", ext: ["CSE-CTL-CON-05"], famille: "CSE",
@@ -2468,7 +2557,7 @@
        2026. La ligne du haut, « Registre unique du personnel », mène au vrai
        registre : c'est la seule. */
     ["Embaucher", ["cdi", "cdd", "partiel", "dpae", "vip"]],
-    ["Pendant le contrat", ["avenant", "mutuelle", "conges", "maladie", "at", "entretien"]],
+    ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "fin"]],
     ["Collectif", ["convoc", "odj", "pv", "nao", "desaccord"]]
