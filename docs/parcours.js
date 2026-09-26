@@ -1307,11 +1307,19 @@
           if (!D.dateDepotGreffe) return null;
           return { iso: D.dateDepotGreffe, libelle: "Déposé le " + dateFr(D.dateDepotGreffe) };
         } },
-      { id: "i7", nom: "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité",
+      /* SANS COMITÉ, C'EST LE PROCÈS-VERBAL DE CARENCE QUI ACCOMPAGNE LE
+         TEXTE. L'étape parlait de l'avis du comité à une entreprise dont la
+         fiche répond « non » : relevé le 26 septembre 2026. La pièce change,
+         l'obligation ne change pas. */
+      { id: "i7", nom: function (P) {
+          return P && P.cseExiste === "non"
+            ? "Communiquer à l'inspecteur du travail, en deux exemplaires, avec le procès-verbal de carence"
+            : "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité";
+        },
         champDate: "dateCommunicationInspection",
         docProduit: "DIS-CTL-RI-09",
-        conseil: "Envoyez les deux exemplaires accompagnés de l'avis du comité et gardez la preuve d'envoi. Faites-le le jour même de la publicité : le texte veut que les deux aient lieu en même temps, et deux dates différentes se remarquent.",
-        quoi: "En même temps qu'il fait l'objet des mesures de publicité, le règlement intérieur, accompagné de l'avis du comité, est communiqué à l'inspecteur du travail. Le texte lui est transmis en deux exemplaires.",
+        conseil: "Envoyez les deux exemplaires accompagnés de l'avis du comité, ou du procès-verbal de carence si aucun comité n'a pu être mis en place, et gardez la preuve d'envoi. Faites-le le jour même de la publicité : le texte veut que les deux aient lieu en même temps, et deux dates différentes se remarquent.",
+        quoi: "En même temps qu'il fait l'objet des mesures de publicité, le règlement intérieur, accompagné de l'avis du comité, est communiqué à l'inspecteur du travail. Le texte lui est transmis en deux exemplaires. À défaut de comité, c'est le procès-verbal de carence qui l'accompagne (L. 2314-9).",
         fond: ["L1321-4", "R1321-4"],
         risque: "Cette carence se répare par un envoi et ne prive pas le salarié de se prévaloir du règlement, mais elle ouvre la voie à l'exigence de retrait ou de modification de L. 1322-1 sur un texte que l'inspection n'a jamais vu, et, au pénal, L. 1321-4 et R. 1321-4 sont dans l'énumération de R. 1323-1.",
         quand: function (D) {
@@ -3217,6 +3225,12 @@
      La table des outils vit dans docs/juris-expert.js. Si elle n'est pas
      chargée, rien ne s'affiche et rien ne casse, aucune étape ne dépend de
      ce renvoi. */
+  /* Le nom d'une étape peut dépendre de la fiche : « avec l'avis du comité »
+     ou « avec le procès-verbal de carence ». Une seule lecture, partout. */
+  function nomEtape(s) {
+    return typeof s.nom === "function" ? s.nom(PROFIL || {}) : s.nom;
+  }
+
   function jxDispo(cle) {
     return !!(cle && window.JurisExpert && window.JurisExpert.existe(cle));
   }
@@ -3534,7 +3548,7 @@
         return '<div class="etape' + classe + '" data-bloc="' + e(s.id) + '" data-rang="' + rang +
           '" id="etape-' + p.cle + "-" + s.id + '">' +
           '<div class="etape-tete"><span class="etape-num">' + n + "</span>" +
-          '<span class="etape-titre">' + e(s.nom) + "</span>" +
+          '<span class="etape-titre">' + e(nomEtape(s)) + "</span>" +
           /* Sur l'étape courante, « à faire maintenant » remplace le badge
              d'état : les deux côte à côte disaient deux fois la même chose. */
           (rang === iCourante ? '<span class="maintenant">à faire maintenant</span>'
@@ -3866,7 +3880,7 @@
       (s.fond || []).forEach(function (a) { articles[a] = true; });
       var etat = x.faite ? "faite le " + (dateFr((st.etapes[s.id] || {}).le) || "- ")
         : (x.retard ? '<span class="en-retard">en retard</span>' : "à faire");
-      return "<tr><td>" + n + "</td><td>" + e(s.nom) + "<br><span style='font-size:12px;color:#666'>" +
+      return "<tr><td>" + n + "</td><td>" + e(nomEtape(s)) + "<br><span style='font-size:12px;color:#666'>" +
         (s.fond || []).map(refArt).join(" · ") + "</span></td><td>" +
         (x.ech ? e(x.ech.libelle) : "- ") + "</td><td>" + etat + "</td></tr>";
     }).join("");

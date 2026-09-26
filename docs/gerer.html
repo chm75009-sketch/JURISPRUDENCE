@@ -2241,8 +2241,21 @@
        déplacement et le temps de service de la grille, et c'est lui qui est
        juste. Ailleurs, rien ne change. */
     var transport16 = /^0*16\b/.test(idcc.trim());
+    /* SANS COMITÉ, ON N'ÉCRIT PAS SA CONVOCATION.
+
+       La liste offrait convocation, ordre du jour et procès-verbal à une
+       entreprise dont la fiche répond « non » : relevé le 26 septembre 2026.
+       Les trois restent accessibles, parce qu'on prépare une première
+       réunion avant de l'avoir, mais ce qui vient d'abord est ce qui est dû,
+       les élections, et le procès-verbal de carence si elles ne donnent
+       aucun candidat. */
+    var sansCse = String((profil && profil.cseExiste) || "").trim().toLowerCase() === "non";
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
+      if (g[0] === "Collectif" && sansCse)
+        h += ligne("parcours.html?p=installation",
+          "Aucun comité en place : les élections d'abord",
+          "information du personnel, protocole préélectoral, et procès-verbal de carence à défaut de candidat");
       g[1].forEach(function (cle) {
         if (transport16 && (cle === "cdi" || cle === "cdd" || cle === "partiel")) {
           if (cle === "cdi")
