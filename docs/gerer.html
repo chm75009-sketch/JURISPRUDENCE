@@ -223,6 +223,10 @@
            quatre-vingt-cinq après, et la déclaration préalable s'ouvrait
            vide. Relevé le 26 septembre 2026. -->
       <button type="button" class="second" id="btn-inscrire" hidden>Inscrire au registre</button>
+      <!-- L'autorisation de conduite tient à une attestation médicale de cinq
+           ans (R. 4323-56) : la date se portait ici et ne remontait ni à la
+           fiche conducteur ni à l'agenda. Relevé le 26 septembre 2026. -->
+      <button type="button" class="second" id="btn-conducteur" hidden>Porter à la fiche conducteur</button>
     </div>
     <p class="doux" id="d-inscrit" hidden></p>
     <details class="loi"><summary>Voir le texte de loi</summary><div id="d-loi"></div></details>
@@ -2750,6 +2754,9 @@
     var embauche = !!DOCS_EMBAUCHE[ACTIF] && !r.refus && !!window.EcheancesSalaries;
     $("btn-inscrire").hidden = !embauche;
     if (!embauche) $("d-inscrit").hidden = true;
+    var conduite = ACTIF === "autorisation" && !r.refus &&
+      !!String(V.nom || "").trim() && !!String(V.attestation || "").trim();
+    $("btn-conducteur").hidden = !conduite;
     $("d-loi").innerHTML = loiHtml(r.loi || []);
   }
 
@@ -2794,6 +2801,33 @@
     });
     return out;
   }
+  /* LA FICHE CONDUCTEUR, LUE ET ÉCRITE D'ICI.
+
+     Elle vit dans « flotte-conducteurs », rangée sous le nom du salarié tel
+     que le registre l'écrit. C'est elle qui porte l'attestation médicale de
+     conduite, et c'est d'elle que l'agenda tire l'échéance de cinq ans de
+     R. 4323-56. */
+  var CLE_CONDUCTEURS = "flotte-conducteurs";
+  function ficheConducteur(nom) {
+    var id = sansAccentSimple(nom);
+    if (!id) return null;
+    var t = null;
+    try { t = JSON.parse(localStorage.getItem(CLE_CONDUCTEURS) || "null"); } catch (e) { t = null; }
+    return (t && t[id]) || null;
+  }
+  function ecrireConducteur(nom, champ, valeur) {
+    var id = sansAccentSimple(nom);
+    if (!id || !valeur) return false;
+    var t = null;
+    try { t = JSON.parse(localStorage.getItem(CLE_CONDUCTEURS) || "null"); } catch (e) { t = null; }
+    t = t || {};
+    t[id] = t[id] || {};
+    if (t[id][champ] === valeur) return "déjà";
+    t[id][champ] = valeur;
+    try { localStorage.setItem(CLE_CONDUCTEURS, JSON.stringify(t)); } catch (e) { return false; }
+    return true;
+  }
+
   /* Le champ du formulaire, et ce qui le remplit dans le registre. */
   var DU_REGISTRE = {
     entree: "ent", sortie: "sor", fin: "sor", poste: "emp", emploi: "emp",
@@ -2845,6 +2879,21 @@
       }
       VENU_DU_REGISTRE.statut = true;
       pris.push("le statut d'ouvrier, d'après la qualification");
+    }
+    /* L'attestation médicale de conduite vient de la fiche conducteur : elle
+       est déjà saisie dans Flotte, elle ne se retape pas ici. */
+    if (champs.attestation) {
+      var fc = ficheConducteur(sal.nom);
+      var deja = String(V.attestation == null ? "" : V.attestation);
+      if (fc && fc.attestConduite && (deja === "" || VENU_DU_REGISTRE.attestation)) {
+        if (deja !== fc.attestConduite) {
+          V.attestation = fc.attestConduite;
+          var ea = $("d-champs").querySelector('[data-ch="attestation"]');
+          if (ea) ea.value = fc.attestConduite;
+        }
+        VENU_DU_REGISTRE.attestation = true;
+        pris.push("l'attestation médicale de conduite, d'après la fiche conducteur");
+      }
     }
     var z = $("d-registre");
     if (!pris.length) {
@@ -2950,6 +2999,24 @@
     dire(nom + " : " + dits.join(" ; ") + ". La déclaration préalable et la visite d'information " +
       "se retrouvent maintenant par son nom.");
     function dire(t) { $("d-inscrit").textContent = t; $("d-inscrit").hidden = false; }
+  });
+
+  $("btn-conducteur").addEventListener("click", function () {
+    var nom = String(V.nom || "").trim();
+    var att = String(V.attestation || "").trim();
+    var z = $("d-inscrit");
+    if (!nom || !att) {
+      z.textContent = "Le nom du salarié ou la date de l'attestation manque : rien n'a été porté.";
+      z.hidden = false; return;
+    }
+    var sal = salarieDuRegistre(nom);
+    var r = ecrireConducteur(sal ? sal.nom : nom, "attestConduite", att);
+    z.textContent = r === "déjà"
+      ? "La fiche conducteur de " + nom + " portait déjà cette attestation : l'échéance des cinq ans est à l'agenda."
+      : (r ? "Attestation du " + dateFr(dateDe(att)) + " portée à la fiche conducteur de " + nom +
+             " : l'échéance des cinq ans (R. 4323-56) passe dans Flotte et dans l'agenda."
+           : "La fiche conducteur n'a pas pu être écrite sur cet appareil.");
+    z.hidden = false;
   });
 
   /* Une correction faite à la main dans le document est retenue sur le texte
