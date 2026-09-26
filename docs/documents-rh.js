@@ -43,11 +43,29 @@
     var m = d.getMonth() + 1, j = d.getDate();
     return (j < 10 ? "0" + j : j) + "/" + (m < 10 ? "0" + m : m) + "/" + d.getFullYear();
   }
-  /* Une date saisie à l'écran, « 2026-09-26 », lue sans décalage d'horaire. */
+  /* Une date, lue sans décalage d'horaire, dans les deux écritures qui
+     arrivent ici : « 2026-09-26 » depuis un champ de formulaire, et
+     « 26/09/2026 » depuis l'écran qui met déjà en français avant d'appeler le
+     générateur. La seconde manquait, et la date d'entrée se perdait. */
+  var MOIS_LUS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
   function dateDe(v) {
-    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v == null ? "" : v).trim());
-    if (!m) return null;
-    var d = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10), 12, 0, 0);
+    var t = String(v == null ? "" : v).trim();
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t);
+    if (m) return jourDe(m[1], m[2], m[3]);
+    m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(t);
+    if (m) return jourDe(m[3], m[2], m[1]);
+    /* « 15 mars 2021 », et « 1er avril 2021 » : c'est la forme que l'écran
+       passe au générateur, et celle qui manquait. */
+    m = /^(\d{1,2})(?:er)?\s+([a-zà-ÿ]+)\s+(\d{4})$/i.exec(t);
+    if (m) {
+      var k = MOIS_LUS.indexOf(m[2].toLowerCase());
+      if (k >= 0) return jourDe(m[3], String(k + 1), m[1]);
+    }
+    return null;
+  }
+  function jourDe(a, mo, j) {
+    var d = new Date(parseInt(a, 10), parseInt(mo, 10) - 1, parseInt(j, 10), 12, 0, 0);
     return isNaN(d) ? null : d;
   }
   function dans(d, jours) {
@@ -832,9 +850,21 @@
 
       L.push("VOTRE CALENDRIER");
       L.push("");
+      /* LE CALENDRIER SE COMPTE DEPUIS L'ENTRÉE, PAS DEPUIS AUJOURD'HUI.
+
+         Pour une salariée entrée en 2021, le document annonçait un « premier
+         entretien » un an après la date d'édition. La date d'entrée vient du
+         registre ; sans elle, la ligne dit d'où elle se compte au lieu
+         d'inventer un jour. Relevé le 26 septembre 2026. */
+      var ent = dateDe(d.entree || d.dateEmbauche);
+      var quatre = ent ? new Date(ent.getFullYear() + 4, ent.getMonth(), ent.getDate(), 12) : null;
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
-        ["Premier entretien : première année d'emploi", jj(dans(d0, 365)), "document signé et remis"],
-        ["Entretien tous les 4 ans", "à la même date", "document signé et remis"],
+        ["Premier entretien, au cours de la première année suivant l'embauche",
+          ent ? "avant le " + jj(dans(ent, 365)) : "un an après l'entrée, date d'entrée à porter",
+          "document signé et remis"],
+        ["Puis tous les quatre ans",
+          quatre ? "prochain repère : " + jj(quatre) : "quatre ans après le précédent",
+          "document signé et remis"],
         ["Remise d'une copie au salarié le jour même", jj(d0), "signature du salarié sur l'original"],
       ]));
 
@@ -842,8 +872,14 @@
 
       L.push("LES RÈGLES");
       L.push("");
-      L.push("« Un entretien de parcours professionnel est organisé au cours de la première année, puis " +
-             "au cours de la quatrième année suivant l'embauche, et tous les quatre ans » (L. 6315-1, I).");
+      /* LA CITATION ÉTAIT FABRIQUÉE. « au cours de la quatrième année suivant
+         l'embauche » ne figure pas dans le texte : relevé le 26 septembre
+         2026. L'article, lu à la source le même jour (LEGIARTI000053279288),
+         dit ceci, mot pour mot. */
+      L.push("« A l'occasion de son embauche, le salarié est informé qu'il bénéficie d'un entretien " +
+             "de parcours professionnel avec son employeur au cours de la première année suivant " +
+             "son embauche. Tout salarié restant employé dans la même entreprise bénéficie d'un " +
+             "entretien de parcours professionnel tous les quatre ans » (L. 6315-1, I).");
       L.push("");
       L.push("LES CINQ SUJETS OBLIGATOIRES :");
       L.push("  1. Compétences et qualifications mobilisées dans l'emploi actuel");

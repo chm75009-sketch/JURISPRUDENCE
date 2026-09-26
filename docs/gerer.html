@@ -346,6 +346,8 @@
     "L3123-29": { id: "LEGIARTI000033019947",
       dit: "à défaut d'accord, majoration de 10 % jusqu'au dixième et de 25 % entre le dixième et le tiers" },
     /* Lus à la source le 26 septembre 2026, deux lectures concordantes. */
+    "R1231-1": { id: "LEGIARTI000018537730",
+      dit: "les délais du titre qui expirent un samedi, un dimanche ou un jour férié ou chômé sont prorogés jusqu'au premier jour ouvrable suivant" },
     "L5221-8": { id: "LEGIARTI000018766932",
       dit: "l'employeur s'assure auprès des administrations compétentes de l'existence du titre autorisant l'étranger à exercer une activité salariée en France" },
     "R5221-2": { id: "LEGIARTI000053963834",
@@ -688,6 +690,20 @@
     var d = new Date(depart.getTime()), compte = 0;
     while (compte < n) { d = jour(d, 1); if (estOuvrable(d)) compte++; }
     return d;
+  }
+  /* LE DÉLAI QUI EXPIRE UN SAMEDI NE FINIT PAS LE SAMEDI.
+
+     « Lorsque les délais prévus par les dispositions légales du présent titre
+     expirent un samedi, un dimanche ou un jour férié ou chômé, ils sont
+     prorogés jusqu'au premier jour ouvrable suivant » (R. 1231-1,
+     LEGIARTI000018537730, lu à la source le 26 septembre 2026, deux lectures
+     concordantes). La rupture conventionnelle annonçait « homologation
+     acquise samedi 31 octobre » et une rupture le dimanche : l'homologation
+     est alors refusée si la date de rupture est trop tôt. */
+  function proroger(d) {
+    var x = new Date(d.getTime());
+    while (x.getDay() === 0 || x.getDay() === 6 || estFerie(x)) x = jour(x, 1);
+    return x;
   }
   function plusMois(d, n) {
     var x = new Date(d.getTime()), voulu = x.getDate();
@@ -1881,9 +1897,9 @@
   function ruptureConventionnelle(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var entree = dateDe(v.entree), signature = dateDe(v.signature) || AUJOURDHUI, salaire = Number(v.salaire) || 0;
-    var finRetractation = jour(signature, 15);
-    var demande = jour(signature, 16);
-    var finInstruction = finJoursOuvrables(demande, 15);
+    var finRetractation = proroger(jour(signature, 15));
+    var demande = jour(finRetractation, 1);
+    var finInstruction = proroger(finJoursOuvrables(demande, 15));
     var rupture = jour(finInstruction, 1);
     var mois = entree ? moisAnnees(entree, rupture) : 0;
     var ind = entree && salaire > 0 ? indemniteDe(mois, salaire, false) : null;
@@ -1905,7 +1921,7 @@
     b.push({ k: "h1", t: "Article 3 - Date de la rupture" });
     b.push({ k: "p", t: "Le contrat de travail prendra fin le " + dateFr(rupture) + ", date qui ne peut être antérieure au lendemain du jour de l'homologation (" + ref(["L1237-13"]) + "). Jusqu'à cette date, le contrat s'exécute normalement." });
     b.push({ k: "h1", t: "Article 4 - Rétractation" });
-    b.push({ k: "p", t: "À compter de la signature de la présente convention, chacune des parties dispose d'un délai de quinze jours calendaires pour exercer son droit de rétractation, soit jusqu'au " + dateFr(finRetractation) + " inclus, par lettre adressée par tout moyen attestant de sa date de réception par l'autre partie (" + ref(["L1237-13"]) + ")." });
+    b.push({ k: "p", t: "À compter de la signature de la présente convention, chacune des parties dispose d'un délai de quinze jours calendaires pour exercer son droit de rétractation, soit jusqu'au " + dateFr(finRetractation) + " inclus, ce délai étant prorogé jusqu'au premier jour ouvrable suivant lorsqu'il expire un samedi, un dimanche ou un jour férié ou chômé (" + ref(["L1237-13", "R1231-1"]) + "), par lettre adressée par tout moyen attestant de sa date de réception par l'autre partie." });
     b.push({ k: "h1", t: "Article 5 - Homologation" });
     b.push({ k: "p", t: "À l'issue du délai de rétractation, la partie la plus diligente adresse la demande d'homologation à l'autorité administrative, avec un exemplaire de la présente convention, sur le modèle fixé par arrêté. L'autorité administrative dispose de quinze jours ouvrables à compter de la réception pour s'assurer du respect des conditions légales et de la liberté du consentement ; à défaut de notification dans ce délai, l'homologation est réputée acquise (" + ref(["L1237-14"]) + ")." });
     b.push({ k: "p", t: "La validité de la convention est subordonnée à son homologation. Tout litige relève du conseil de prud'hommes, saisi avant l'expiration d'un délai de douze mois à compter de la date d'homologation (" + ref(["L1237-14"]) + ")." });
@@ -1915,11 +1931,11 @@
     b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(signature) + ", en trois exemplaires originaux : un pour chaque partie, un joint à la demande d'homologation." });
     b.push({ k: "sign", t: "\nLe salarié                                                    Pour la Société\n(signature précédée de la mention                             " + signataire() + "\n« lu et approuvé »)" });
     var dates = [
-      { q: "Fin du délai de rétractation", d: dateFrJour(finRetractation), f: "quinze jours calendaires à compter de la signature du " + dateFr(signature) + " (" + ref(["L1237-13"]) + ")", c: "" },
+      { q: "Fin du délai de rétractation", d: dateFrJour(finRetractation), f: "quinze jours calendaires à compter de la signature du " + dateFr(signature) + ", reporté au premier jour ouvrable s'il expire un samedi, un dimanche ou un jour férié (" + ref(["L1237-13", "R1231-1"]) + ")", c: "" },
       { q: "Demande d'homologation au plus tôt", d: dateFrJour(demande), f: "à l'issue du délai de rétractation (" + ref(["L1237-14"]) + ")", c: "tot" },
-      { q: "Homologation acquise sans réponse", d: dateFrJour(finInstruction), f: "quinze jours ouvrables à compter de la réception de la demande, si elle est reçue le " + dateFr(demande) + " (" + ref(["L1237-14"]) + ")", c: "" },
+      { q: "Homologation acquise sans réponse", d: dateFrJour(finInstruction), f: "quinze jours ouvrables à compter de la réception de la demande, si elle est reçue le " + dateFr(demande) + ", reporté au premier jour ouvrable s'il expire un samedi, un dimanche ou un jour férié (" + ref(["L1237-14", "R1231-1"]) + ")", c: "" },
       { q: "Rupture au plus tôt", d: dateFrJour(rupture), f: "le lendemain du jour de l'homologation (" + ref(["L1237-13"]) + ")", c: "tot" }];
-    return { blocs: b, dates: dates, loi: ["L1237-11", "L1237-12", "L1237-13", "L1237-14", "L1234-9", "R1234-1", "R1234-2", "L1234-19", "L1234-20", "R1234-9"] };
+    return { blocs: b, dates: dates, loi: ["L1237-11", "L1237-12", "L1237-13", "L1237-14", "R1231-1", "L1234-9", "R1234-1", "R1234-2", "L1234-19", "L1234-20", "R1234-9"] };
   }
 
   function demission(v) {
@@ -2351,7 +2367,12 @@
     at: { titre: "Accident du travail", champs: [NOM, { id: "date", nom: "Date de l'accident", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "circonstances", nom: "Circonstances", t: "textarea", pleine: true, ph: "En portant un carton de la réserve à la cuisine, a glissé sur le sol mouillé et est tombé sur le poignet droit." }], produire: accident },
     entretien: { titre: "Entretien professionnel", ext: ["RH-CTL-ENT-01"], famille: "RH",
-      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarie", ph: "Lucie MARTIN" }, { id: "date", nom: "Date de l'entretien", t: "date", cle: "dateEntretien", defaut: iso(AUJOURDHUI) }],
+      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarie", ph: "Lucie MARTIN" },
+        /* Sans la date d'entrée, le calendrier de l'entretien se comptait
+           depuis le jour de l'édition : un « premier entretien » en 2027 pour
+           une salariée entrée en 2021. Elle se reprend du registre. */
+        { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date", cle: "entree" },
+        { id: "date", nom: "Date de l'entretien", t: "date", cle: "dateEntretien", defaut: iso(AUJOURDHUI) }],
       loi: ["L6315-1"] },
 
     protocole: { titre: "Protocole de sécurité, chargement ou déchargement",
