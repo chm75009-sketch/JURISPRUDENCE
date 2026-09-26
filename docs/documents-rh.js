@@ -49,6 +49,23 @@
      générateur. La seconde manquait, et la date d'entrée se perdait. */
   var MOIS_LUS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
     "août", "septembre", "octobre", "novembre", "décembre"];
+  /* Le comité, tel que la fiche ou le parcours l'ont noté : « oui, élu »,
+     « non, procès-verbal de carence », ou simplement « oui » et « non ». */
+  /* Une date saisie se lit en toutes lettres, jamais sous sa forme rangée :
+     « 2027-05-01 » sortait tel quel dans l'avis affiché au personnel.
+     Relevé le 26 septembre 2026. */
+  function croDate(v, quoi) {
+    var d = dateDe(v);
+    return d ? leJour(d) : cro(v, quoi);
+  }
+
+  function sansComiteCtx(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var v = String(p.cseExiste || ((ctx && ctx.fiche) || {}).cseExiste ||
+      ((ctx && ctx.donnees) || {}).cseExiste || "").trim().toLowerCase();
+    return v.indexOf("non") === 0;
+  }
+
   function dateDe(v) {
     var t = String(v == null ? "" : v).trim();
     var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(t);
@@ -1041,13 +1058,22 @@
       L.push("AVIS AU PERSONNEL - PÉRIODE DE PRISE DES CONGÉS PAYÉS");
       L.push("");
       L.push("La période de prise des congés payés est fixée du " +
-        cro(d.debutPeriode, "DATE DE DÉBUT") + " au " + cro(d.finPeriode, "DATE DE FIN") + ".");
+        croDate(d.debutPeriode, "DATE DE DÉBUT") + " au " + croDate(d.finPeriode, "DATE DE FIN") + ".");
       L.push("");
       L.push("Cette période comprend la période du 1er mai au 31 octobre (L. 3141-13).");
       L.push("");
       L.push("[LE CAS ÉCHÉANT : Cette période est celle que fixe l'accord d'entreprise du [DATE].]");
-      L.push("[À DÉFAUT D'ACCORD : Cette période est fixée par l'employeur après avis du " +
-             "comité social et économique, recueilli le [DATE].]");
+      /* « Définit après avis, LE CAS ÉCHÉANT, du comité social et économique »
+         (L. 3141-16, LEGIARTI000035652687, lu à la source le 26 septembre
+         2026, deux lectures concordantes) : sans comité, il n'y a pas d'avis
+         à recueillir, et la phrase qui en suppose un rendait l'avis faux. */
+      if (sansComiteCtx(ctx))
+        L.push("[À DÉFAUT D'ACCORD : Cette période est fixée par l'employeur. Aucun comité social " +
+               "et économique n'étant en place, l'avis prévu « le cas échéant » par L. 3141-16 " +
+               "n'a pas lieu d'être recueilli.]");
+      else
+        L.push("[À DÉFAUT D'ACCORD : Cette période est fixée par l'employeur après avis, le cas " +
+               "échéant, du comité social et économique, recueilli le [DATE].]");
       L.push("");
       L.push("Les demandes de congés sont adressées à [DESTINATAIRE] avant le [DATE].");
       L.push("L'ordre des départs sera communiqué à chaque salarié un mois au moins avant son départ.");
@@ -1058,10 +1084,24 @@
 
       L.push("VOTRE CALENDRIER");
       L.push("");
+      /* LE CALENDRIER SE COMPTE DEPUIS LA PÉRIODE, PAS DEPUIS AUJOURD'HUI.
+
+         Pour une période de mai à octobre 2027, l'écran annonçait des
+         demandes « avant le 25/11/2026 » : les trois dates partaient du jour
+         de l'édition. Elles se comptent depuis l'ouverture de la période
+         saisie, et quand elle ne l'est pas, elles restent à compléter.
+         Relevé le 26 septembre 2026. */
+      var deb = dateDe(d.debutPeriode), finP = dateDe(d.finPeriode);
       L = L.concat(tableau(["Étape", "Date", "Trace conservée"], [
-        ["Rédaction et affichage de l'avis : au moins deux mois avant l'ouverture", jj(d0), "affichage daté, photographie"],
-        ["Demandes de congés par les salariés : avant la date fixée", jj(dans(d0, 60)), "demandes reçues"],
-        ["Communication de l'ordre des départs : un mois avant chaque départ", jj(dans(d0, 90)), "notification datée par salarié"],
+        ["Affichage de l'avis : au moins deux mois avant l'ouverture (D. 3141-5)",
+          deb ? jj(dans(deb, -60)) : "[à compléter : deux mois avant l'ouverture]",
+          "affichage daté, photographie"],
+        ["Ouverture de la période de prise", deb ? jj(deb) : "[date de début à saisir]",
+          "avis affiché"],
+        ["Clôture de la période de prise", finP ? jj(finP) : "[date de fin à saisir]",
+          "congés soldés ou reportés selon l'accord"],
+        ["Communication de l'ordre des départs : un mois avant le départ de chaque salarié (D. 3141-6)",
+          "par salarié, un mois avant sa date", "notification datée par salarié"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
@@ -1129,7 +1169,7 @@
              "de modifier moins d'un mois avant la date prévue.");
       L.push("");
       L.push("ORDRE DES DÉPARTS EN CONGÉ");
-      L.push("Période de prise : " + cro(d.debutPeriode, "DATE") + " - " + cro(d.finPeriode, "DATE"));
+      L.push("Période de prise : du " + croDate(d.debutPeriode, "DATE") + " au " + croDate(d.finPeriode, "DATE"));
       L.push("");
       L = L.concat(tableau(["Salarié", "Dates demandées", "Dates accordées", "Décision", "Critère appliqué", "Notifié le"],
         [["[NOM]", "[du] au [du]", "[du] au [du]", "[accordé / décalé / refusé]", "[lequel]", "[date]"]]));
@@ -1147,10 +1187,17 @@
 
       L.push("VOTRE CALENDRIER");
       L.push("");
+      /* Les deux délais se comptent par salarié, depuis SA date de départ :
+         une date unique pour tout le personnel n'aurait pas de sens. */
+      var debOrdre = dateDe(d.debutPeriode);
       L = L.concat(tableau(["Étape", "Date", "Trace conservée"], [
         ["Fixation de l'ordre des départs", jj(d0), "ordre établi"],
-        ["Communication à chaque salarié : UN MOIS avant son départ", jj(dans(d0, 30)), "notification datée individuellement"],
-        ["Absence de modification moins d'un mois avant le départ : sauf circonstances exceptionnelles", jj(dans(d0, 30)), "preuve d'absence de modification"],
+        ["Ouverture de la période de prise", debOrdre ? jj(debOrdre) : "[date de début à saisir]",
+          "avis de période affiché"],
+        ["Communication à chaque salarié : un mois avant SON départ (D. 3141-6)",
+          "par salarié, un mois avant sa date", "notification datée individuellement"],
+        ["Aucune modification moins d'un mois avant le départ, sauf circonstances exceptionnelles",
+          "par salarié, un mois avant sa date", "preuve d'absence de modification"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
