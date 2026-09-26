@@ -200,6 +200,7 @@
       <b id="d-titre"></b>
     </div>
     <form class="champs" id="d-champs" autocomplete="off" onsubmit="return false"></form>
+    <p class="doux" id="d-registre" hidden></p>
     <div class="dates" id="d-dates"></div>
     <div id="d-avis"></div>
     <!-- Un document qui est un tableau (le registre du personnel) s'affiche en
@@ -749,8 +750,19 @@
     var m = preavisMot(jours);
     return (/^[aeiouyâêîôûéèh]/i.test(m) ? "d'" : "de ") + m;
   }
-  var STATUTS = [["employe", "Employé"], ["maitrise", "Agent de maîtrise"], ["cadre", "Cadre"]];
-  function statutMot(s) { return s === "cadre" ? "cadre" : (s === "maitrise" ? "agent de maîtrise" : "employé"); }
+  /* L'OUVRIER MANQUAIT. Sur quatre-vingt-cinq salariés d'un transporteur,
+     soixante-dix-neuf sont ouvriers, et le menu n'offrait que l'employé,
+     l'agent de maîtrise et le cadre : un conducteur sortait « statut employé ».
+     Relevé le 26 septembre 2026. Les grilles conventionnelles lues ici ne
+     distinguent pas l'ouvrier de l'employé pour le préavis : la ligne de
+     l'employé sert alors, et le document ne prétend pas autre chose. */
+  var STATUTS = [["ouvrier", "Ouvrier"], ["employe", "Employé"],
+    ["maitrise", "Agent de maîtrise"], ["cadre", "Cadre"]];
+  function statutMot(s) {
+    return s === "cadre" ? "cadre"
+      : (s === "maitrise" ? "agent de maîtrise" : (s === "ouvrier" ? "ouvrier" : "employé"));
+  }
+  function statutCcn(s) { return s === "ouvrier" ? "employe" : (s || "employe"); }
 
   /* ═══════════════════════════════════════════════════════════════════════
      LE RENDU. Un document est une liste de blocs. Chaque bloc devient une
@@ -1061,7 +1073,7 @@
       A("Rupture du contrat");
       p("Après la période d'essai, le contrat pourra être rompu par l'une ou l'autre des parties dans les conditions prévues par la loi et par la convention collective.");
       if (ccn && ccn.preavis) {
-        var pr = ccn.preavis.licenciement[d.statut], de = ccn.preavis.demission[d.statut];
+        var pr = ccn.preavis.licenciement[statutCcn(d.statut)], de = ccn.preavis.demission[statutCcn(d.statut)];
         p("Conformément à l'article 30 de la convention collective, le préavis applicable au statut " + statutMot(d.statut) + " est, en cas de licenciement, sauf faute grave ou lourde, " +
           dePreavis(pr[0]) + " pour une ancienneté inférieure à six mois, " + dePreavis(pr[1]) + " de six mois à moins de deux ans et " + dePreavis(pr[2]) + " au-delà ; en cas de démission, " +
           dePreavis(de[0]) + ", " + preavisMot(de[1]) + " et " + preavisMot(de[2]) + " selon les mêmes tranches.");
@@ -1449,7 +1461,7 @@
     var tranche = mois < 6 ? 0 : (mois < 24 ? 1 : 2);
     var legal = [0, 30, 60][tranche];
     if (ccn && ccn.preavis) {
-      var conv = ccn.preavis.licenciement[statut][tranche];
+      var conv = ccn.preavis.licenciement[statutCcn(statut)][tranche];
       return { jours: Math.max(legal, conv), source: "article 30 de la convention collective et article " + ref(["L1234-1"]) };
     }
     if (tranche === 0) return { jours: 0, source: "moins de six mois d'ancienneté : la durée est celle de la convention collective ou des usages (" + ref(["L1234-1"]) + " 1°)" };
@@ -1774,7 +1786,7 @@
     var mois = entree ? moisAnnees(entree, reception) : null;
     var jours = null, source = "";
     if (ccn && ccn.preavis && mois !== null) {
-      jours = ccn.preavis.demission[v.statut || "employe"][mois < 6 ? 0 : (mois < 24 ? 1 : 2)];
+      jours = ccn.preavis.demission[statutCcn(v.statut)][mois < 6 ? 0 : (mois < 24 ? 1 : 2)];
       source = "article 30 de la convention collective, statut " + statutMot(v.statut) + ", ancienneté de " + anciennetePhrase(mois);
     }
     var fin = jours ? jour(reception, jours) : null;
@@ -2515,6 +2527,102 @@
     $("d-loi").innerHTML = loiHtml(r.loi || []);
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     CE QUE LE REGISTRE SAIT, ON NE LE REDEMANDE PAS.
+
+     Un salarié entré le 3 août recevait une visite d'information calculée sur
+     la date du jour, et un salarié sorti le 31 août un certificat de travail
+     « sorti le 26 septembre » : les valeurs par défaut des formulaires
+     n'étaient jamais remplacées par celles du registre. Relevé le
+     26 septembre 2026. Le nom s'y choisit maintenant dans une liste, et le
+     choix pose les dates, l'emploi, la qualification, la nature du contrat et
+     l'état civil. Ce qui vient du registre est dit sous les champs ; ce que
+     l'utilisateur a tapé lui-même n'est jamais écrasé.
+     ══════════════════════════════════════════════════════════════════════ */
+  function salariesRegistre() {
+    var reg = null;
+    try { reg = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
+    return ((reg && reg.salaries) || []).filter(function (x) {
+      return String(x.nom || "").trim() || String(x.pre || "").trim();
+    }).map(function (x) {
+      return {
+        nom: (String(x.nom || "").trim() + " " + String(x.pre || "").trim()).trim(),
+        ent: String(x.ent || "").trim(), sor: String(x.sor || "").trim(),
+        emp: String(x.emp || "").trim(), qua: String(x.qua || "").trim(),
+        nat: String(x.nat || "").trim(), nais: String(x.nais || "").trim(),
+        sexe: String(x.sexe || "").trim(), secu: String(x.secu || "").trim(),
+        adresse: String(x.adresse || "").trim(),
+        nature: String(x.nature || "").trim(), part: String(x.part || "").trim(),
+      };
+    });
+  }
+  function salarieDuRegistre(nom) {
+    var c = sansAccentSimple(nom);
+    if (!c) return null;
+    var out = null;
+    salariesRegistre().forEach(function (x) {
+      if (out) return;
+      var a = sansAccentSimple(x.nom);
+      var b = sansAccentSimple(x.nom.split(" ").reverse().join(" "));
+      if (a === c || b === c) out = x;
+    });
+    return out;
+  }
+  /* Le champ du formulaire, et ce qui le remplit dans le registre. */
+  var DU_REGISTRE = {
+    entree: "ent", sortie: "sor", fin: "sor", poste: "emp", emploi: "emp",
+    nationalite: "nat", naissance: "nais", secu: "secu", adresse: "adresse",
+  };
+  var DIT_REGISTRE = {
+    ent: "la date d'entrée", sor: "la date de sortie", emp: "l'emploi",
+    nat: "la nationalité", nais: "la date de naissance",
+    secu: "le numéro de sécurité sociale", adresse: "l'adresse",
+    qua: "la qualification",
+  };
+  function reprendreDuRegistre(doc) {
+    var sal = salarieDuRegistre(V.nom);
+    if (!sal) { $("d-registre").hidden = true; return; }
+    var pris = [], champs = {};
+    (doc.champs || []).forEach(function (c) { champs[c.id] = c; });
+    Object.keys(DU_REGISTRE).forEach(function (id) {
+      var c = champs[id];
+      if (!c) return;
+      var valeur = sal[DU_REGISTRE[id]];
+      if (!valeur) return;
+      var actuel = String(V[id] == null ? "" : V[id]);
+      var defaut = String(c.defaut == null ? "" : c.defaut);
+      /* On ne remplace que le vide et la valeur par défaut : ce qui a été
+         tapé à la main reste. */
+      if (actuel !== "" && actuel !== defaut && actuel !== valeur) return;
+      if (actuel !== valeur) {
+        V[id] = valeur;
+        var el = $("d-champs").querySelector('[data-ch="' + id + '"]');
+        if (el) el.value = valeur;
+      }
+      /* La phrase dit ce qui vient du registre, pas ce que le dernier
+         évènement a changé : sinon elle s'efface au second appel. */
+      pris.push(DIT_REGISTRE[DU_REGISTRE[id]] || c.nom.toLowerCase());
+    });
+    /* Le statut suit la qualification quand elle nomme l'ouvrier. */
+    if (champs.statut && sal.qua && /ouvrier|conducteur|chauffeur|m[ée]canicien/i.test(sal.qua + " " + sal.emp)
+        && (V.statut === "" || V.statut === (champs.statut.defaut || "") || V.statut === "ouvrier")) {
+      if (V.statut !== "ouvrier") {
+        V.statut = "ouvrier";
+        var es = $("d-champs").querySelector('[data-ch="statut"]');
+        if (es) es.value = "ouvrier";
+      }
+      pris.push("le statut d'ouvrier, d'après la qualification");
+    }
+    var z = $("d-registre");
+    if (!pris.length) {
+      z.textContent = sal.nom + " est au registre du personnel ; rien à en reprendre ici.";
+    } else {
+      z.textContent = "Repris du registre pour " + sal.nom + " : " + pris.join(", ") + ".";
+    }
+    z.hidden = false;
+    return pris.length;
+  }
+
   function ouvrir(cle) {
     var doc = DOCS[cle]; if (!doc) return;
     function montrer() {
@@ -2523,6 +2631,17 @@
       $("d-titre").textContent = doc.titre;
       $("d-champs").innerHTML = doc.champs.map(champHtml).join("");
       $("d-champs").hidden = !doc.champs.length;
+      $("d-registre").hidden = true;
+      /* Le nom se choisit dans le registre : on ne retape pas
+         « ZENNADI Naïma » pour la quatrième fois. */
+      var eNom = $("d-champs").querySelector('[data-ch="nom"]');
+      var gens = salariesRegistre();
+      if (eNom && gens.length && window.ListeChoix) {
+        window.ListeChoix.attacher(eNom, {
+          valeurs: gens.map(function (x) { return x.nom; }),
+          libelle: "un salarié du registre",
+        });
+      }
       rendreDoc();
       $("e-liste").hidden = true;
       $("e-doc").hidden = false;
@@ -2558,6 +2677,7 @@
     var el = ev.target; if (!el || !el.getAttribute) return;
     var id = el.getAttribute("data-ch"); if (!id) return;
     V[id] = el.value;
+    if (id === "nom" && DOCS[ACTIF]) reprendreDuRegistre(DOCS[ACTIF]);
     rendreDoc();
   }
   $("d-champs").addEventListener("input", surChamp);
