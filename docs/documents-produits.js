@@ -260,6 +260,16 @@
       var nom = cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE");
       var eff = p.effectif;
       var sect = secteurDe(p);
+      /* LE RÈGLEMENT NE PARLE PAS D'UN COMITÉ QUI N'EXISTE PAS.
+
+         Sans comité, le texte gardait le référent désigné par le comité et
+         la consultation préalable du comité sur les dispositifs
+         informatiques : des clauses inapplicables dans un règlement qu'on
+         signe. Elles sont écrites autrement quand la fiche répond non.
+         Relevé le 26 septembre 2026. */
+      var repCseRi = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
+        (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
+      var sansCseRi = repCseRi.indexOf("non") === 0;
       var L = [];
 
       L = L.concat(entete(ctx, "Règlement intérieur",
@@ -755,8 +765,13 @@
       L.push("L'entreprise met en œuvre les dispositifs de sécurité et de journalisation");
       L.push("nécessaires à la protection de ses systèmes. Ces dispositifs, leur finalité et");
       L.push("la durée de conservation des données sont portés à la connaissance du personnel");
-      L.push("avant leur mise en service (L. 1222-4), et le comité social et économique est");
-      L.push("informé et consulté préalablement.");
+      if (sansCseRi) {
+        L.push("avant leur mise en service (L. 1222-4). Dès qu'un comité social et économique");
+        L.push("sera élu, il sera informé et consulté préalablement à leur mise en œuvre.");
+      } else {
+        L.push("avant leur mise en service (L. 1222-4), et le comité social et économique est");
+        L.push("informé et consulté préalablement.");
+      }
       L.push("");
       L.push("Les fichiers et messages que le salarié identifie comme personnels ne sont pas");
       L.push("ouverts par l'employeur hors de sa présence ou sans qu'il ait été appelé, sauf");
@@ -990,7 +1005,9 @@
       L.push("souhaite pas, à l'un des interlocuteurs suivants :");
       L.push("");
       L.push("  - son responsable hiérarchique ou la direction ;");
-      L.push("  - le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes désigné par le comité social et économique parmi ses membres : [NOM ET COORDONNÉES] ;");
+      L.push(sansCseRi
+        ? "  - [DÈS QU'UN COMITÉ SOCIAL ET ÉCONOMIQUE SERA ÉLU : le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes qu'il désigne parmi ses membres] ;"
+        : "  - le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes désigné par le comité social et économique parmi ses membres : [NOM ET COORDONNÉES] ;");
       L.push("  - [SI L'ENTREPRISE ATTEINT 250 SALARIÉS : le référent désigné par l'employeur : NOM ET COORDONNÉES] ;");
       L.push("  - le médecin du travail ou le service de prévention et de santé au travail : [COORDONNÉES] ;");
       L.push("  - l'inspection du travail : [COORDONNÉES DE LA SECTION COMPÉTENTE].");
@@ -1201,9 +1218,21 @@
       L.push("");
       L.push("Cinq formalités, chacune avec le document qui l'accomplit. Rien ne");
       L.push("s'affiche, ne se dépose ni n'entre en vigueur avant la première : le");
-      L.push("règlement ne peut être introduit qu'après " +
-        (sansCse ? "l'établissement du procès-verbal de carence"
-                 : "avoir été soumis à l'avis du comité") + " (L. 1321-4).");
+      /* L. 1321-4 ne dit rien du procès-verbal de carence : il exige l'avis
+         du comité. Sans comité, cet avis est sans objet, et c'est le
+         procès-verbal de carence (L. 2314-9) qui établit qu'il n'y avait
+         personne à consulter. Attribuer à L. 1321-4 une règle qu'il ne porte
+         pas a été relevé le 26 septembre 2026. */
+      L.push(sansCse
+        ? "règlement ne peut être introduit qu'après avoir été soumis à l'avis du"
+        : "règlement ne peut être introduit qu'après avoir été soumis à l'avis du");
+      L.push(sansCse
+        ? "comité social et économique (L. 1321-4) ; sans comité, cet avis est sans"
+        : "comité social et économique (L. 1321-4).");
+      if (sansCse) {
+        L.push("objet, et c'est le procès-verbal de carence qui établit qu'il n'y avait");
+        L.push("personne à consulter (L. 2314-9).");
+      }
       L.push("");
       L.push("");
 
@@ -1211,7 +1240,8 @@
       L.push(sansCse ? "ÉTAPE 1 - SANS COMITÉ : LE PROCÈS-VERBAL DE CARENCE"
                      : "ÉTAPE 1 - L'AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE");
       L.push("");
-      L.push("(L. 1321-4 ; L. 2314-9 à défaut de comité) - à faire en premier,");
+      L.push("(L. 1321-4 pour l'avis du comité ; L. 2314-9 pour le procès-verbal de");
+      L.push("carence, à défaut de comité) - à faire en premier,");
       L.push("avant toute autre formalité");
       L.push("");
       /* LA QUESTION D'ABORD, TOUJOURS, ET LES TROIS RÉPONSES ÉCRITES.
