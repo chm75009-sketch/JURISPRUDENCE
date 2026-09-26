@@ -267,6 +267,7 @@
 
 <script src="profil.js"></script>
 <script src="audit-export.js"></script>
+<script src="feuille-doc.js"></script>
 <script src="base-documents.js"></script>
 <script>
 (function () {
@@ -1003,18 +1004,14 @@
     L.push(f.nom + (f.siret !== "[SIRET]" ? ", SIRET " + f.siret : ""));
     L.push("Année couverte : " + (f.annee || "[ANNÉE]") + ". Version établie le " + jourFr(new Date()) + ".");
     L.push("");
-    L.push("========================================================================");
     L.push("TEXTE DÉPOSÉ, REPRIS MOT POUR MOT");
-    L.push("========================================================================");
     L.push("");
     L.push(etat.texte);
     var r = retenus();
     if (r.length) {
       L.push("");
-      L.push("========================================================================");
-      L.push("ARTICLES AJOUTÉS - DOMAINES D'ACTION DE L'ARTICLE R. 2242-2");
-      L.push("========================================================================");
-      L.push("");
+        L.push("ARTICLES AJOUTÉS - DOMAINES D'ACTION DE L'ARTICLE R. 2242-2");
+        L.push("");
       L.push("À déplacer à leur rang dans le corps du texte. Les valeurs entre crochets");
       L.push("sont à compléter : elles sont vôtres, l'application ne les invente pas.");
       L.push("");
@@ -1278,10 +1275,13 @@
       nomFichier("egalite-version-revisee", "txt"), "text/plain;charset=utf-8");
   });
 
+  /* Le Word passe par la feuille : titres, paragraphes et tableaux, au lieu
+     d'une ligne de texte par ligne d'écran. Relevé le 26 septembre 2026. */
   function versWord(texte, titre, nom) {
-    var items = [];
-    texte.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
-    window.AuditExport.telecharger(window.AuditExport.docx(items, titre), nom,
+    var octets = (window.FeuilleDoc && window.FeuilleDoc.docx)
+      ? window.FeuilleDoc.docx(window.FeuilleDoc.blocs(texte), titre)
+      : window.AuditExport.docx(texte.split(/\n/).map(function (l) { return { k: "p", t: l }; }), titre);
+    window.AuditExport.telecharger(octets, nom,
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
 
