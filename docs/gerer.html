@@ -2547,7 +2547,10 @@
        réunion avant de l'avoir, mais ce qui vient d'abord est ce qui est dû,
        les élections, et le procès-verbal de carence si elles ne donnent
        aucun candidat. */
-    var sansCse = String((profil && profil.cseExiste) || "").trim().toLowerCase() === "non";
+    /* La fiche répond « non, procès-verbal de carence » ou « non, aucune
+       élection organisée » ; le parcours écrit « non ». Le premier mot
+       suffit, et l'égalité stricte ne reconnaissait plus rien. */
+    var sansCse = String((profil && profil.cseExiste) || "").trim().toLowerCase().indexOf("non") === 0;
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       if (g[0] === "Collectif" && sansCse)

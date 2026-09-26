@@ -1337,8 +1337,11 @@
       L.push("");
       L.push("");
 
+      /* « oui, élu » ou « oui », « non, procès-verbal de carence » ou
+         « non » : on ne retient que le premier mot. */
       var cse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
         (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
+      cse = cse.indexOf("oui") === 0 ? "oui" : (cse.indexOf("non") === 0 ? "non" : cse);
 
       L.push("ÉTAPE 0 - À QUI LA BASE EST-ELLE DUE ?");
       L.push("");

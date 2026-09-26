@@ -1189,8 +1189,11 @@
          jours à l'inspection. C'est lui qui accompagne alors le règlement.  */
       var repCse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
         (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
-      var sansCse = repCse === "non";
-      var avecCse = repCse === "oui";
+      /* La fiche répond « oui, élu », « non, procès-verbal de carence » ou
+         « non, aucune élection organisée » ; le parcours, lui, écrit « oui »
+         ou « non ». On lit le premier mot, qui est le même dans les deux. */
+      var sansCse = repCse.indexOf("non") === 0;
+      var avecCse = repCse.indexOf("oui") === 0;
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
       var pieceAvis = sansCse ? "procès-verbal de carence" : "avis du comité social et économique";
 

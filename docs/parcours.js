@@ -439,6 +439,13 @@
     { c: "etablissementsDistincts", nom: "Plusieurs établissements distincts ?", t: "oui-non" },
   ];
 
+  /* Le comité, tel que la fiche ou ce parcours l'ont noté : « oui, élu »,
+     « non, procès-verbal de carence », ou simplement « oui » et « non ». Le
+     premier mot décide, et lui seul. */
+  function sansComite(P) {
+    return String((P && P.cseExiste) || "").trim().toLowerCase().indexOf("non") === 0;
+  }
+
   var CHAMPS_PARCOURS = [
     { c: "cseExiste", nom: "Un comité social et économique est-il en place ?", t: "oui-non" },
     { c: "sectionsSyndicales", nom: "Une ou plusieurs sections syndicales d'organisations représentatives ?", t: "oui-non",
@@ -1212,7 +1219,7 @@
         si: function (P) { return seuil(P, 50); },
         aide: "L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs (art. R. 1321-5)." },
       { c: "dateAvisCSE", nom: "Date de l'avis du comité social et économique", t: "date",
-        si: function (P) { return P.cseExiste === "non" ? false : true; } },
+        si: function (P) { return sansComite(P) ? false : true; } },
       { c: "dateDepotGreffe", nom: "Date de dépôt au greffe du conseil de prud'hommes", t: "date" },
       { c: "datePublicite", nom: "Date des mesures de publicité", t: "date" },
       { c: "dateCommunicationInspection", nom: "Date de communication à l'inspecteur du travail", t: "date" },
@@ -1229,7 +1236,7 @@
         aide: "Les droits de la défense peuvent y être définis (art. L. 1321-2, 1°), et elle peut ajouter une procédure disciplinaire." },
       { id: "cseri", g: "information", nom: "La date de la réunion du comité qui rendra l'avis",
         aide: "Le règlement ne peut être introduit qu'après avis du comité (art. L. 1321-4).",
-        si: function (P) { return P.cseExiste === "non" ? false : true; } },
+        si: function (P) { return sansComite(P) ? false : true; } },
       { id: "greffe", g: "information", nom: "Les coordonnées du greffe du conseil de prud'hommes du ressort",
         aide: "C'est là que le règlement est déposé (art. R. 1321-2)." },
       { id: "inspection", g: "information", nom: "Les coordonnées de l'inspection du travail compétente",
@@ -1279,7 +1286,7 @@
         quoi: "Le règlement intérieur ne peut être introduit qu'après avoir été soumis à l'avis du comité. C'est une formalité substantielle : son défaut ouvre au syndicat la voie du référé en suspension.",
         fond: ["L1321-4"], juris: ["21-10.718", "22-19.726"],
         risque: "Introduit sans l'avis du comité, le règlement l'a été en méconnaissance de L. 1321-4 : amende des contraventions de la quatrième classe (R. 1323-1), suspension en référé ouverte au syndicat, et la consultation omise expose à la qualification d'entrave, 7 500 euros d'amende (L. 2317-1).",
-        si: function (P) { return P.cseExiste === "non" ? false : true; },
+        si: function (P) { return sansComite(P) ? false : true; },
         quand: function (D) {
           if (!D.dateAvisCSE) return null;
           return { iso: D.dateAvisCSE, libelle: "Avis rendu le " + dateFr(D.dateAvisCSE) };
@@ -1312,7 +1319,7 @@
          fiche répond « non » : relevé le 26 septembre 2026. La pièce change,
          l'obligation ne change pas. */
       { id: "i7", nom: function (P) {
-          return P && P.cseExiste === "non"
+          return P && sansComite(P)
             ? "Communiquer à l'inspecteur du travail, en deux exemplaires, avec le procès-verbal de carence"
             : "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité";
         },
@@ -1405,7 +1412,7 @@
       { c: "dateEvenement", nom: "Date de cet événement", t: "date",
         si: function (P, D) { return D.evenement === "oui" ? true : (D.evenement === "non" ? false : null); } },
       { c: "dateReunionCSE", nom: "Date de la réunion du comité où le document est présenté", t: "date",
-        si: function (P) { return P.cseExiste === "non" ? false : true; } },
+        si: function (P) { return sansComite(P) ? false : true; } },
       { c: "spst", nom: "Le document a-t-il été mis à disposition du service de prévention et de santé au travail ?", t: "oui-non" },
     ],
     prealable: [
@@ -1495,7 +1502,7 @@
         quoi: "Dans le cadre de la consultation sur la politique sociale, l'employeur présente au comité le rapport annuel écrit faisant le bilan de la santé, de la sécurité et des conditions de travail, et le programme annuel de prévention. Le document unique sert à établir ce rapport. Les mesures prévues et non prises doivent être motivées en annexe.",
         fond: ["L2312-27", "R4121-3"],
         risque: "La consultation omise expose à la qualification d'entrave au fonctionnement régulier du comité, 7 500 euros d'amende (L. 2317-1), et le programme adopté sans avis est contestable.",
-        si: function (P) { return P.cseExiste === "non" ? false : true; },
+        si: function (P) { return sansComite(P) ? false : true; },
         quand: function (D) {
           if (!D.dateReunionCSE) return null;
           return { iso: D.dateReunionCSE, libelle: "Présentation en réunion du " + dateFr(D.dateReunionCSE) };
