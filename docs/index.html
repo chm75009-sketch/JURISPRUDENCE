@@ -41,6 +41,17 @@
     border:1px solid var(--filet-2);border-radius:10px;background:var(--surface);color:var(--texte)}
   /* Le pli des organismes : fermé, il ne pèse qu'une ligne sur la fiche ;
      ouvert, il est la fiche des organismes, et il n'y en a qu'une. */
+  /* L'effectif du registre, sous le champ : un fait, pas une alerte, sauf
+     quand les deux chiffres ne se rejoignent pas. */
+  .eff-reg{margin:14px 0 0;padding:13px 14px;border:1px solid var(--filet);border-radius:12px;
+    background:var(--creux);font-size:var(--t2);line-height:1.45;color:var(--texte-2)}
+  .eff-reg p{margin:0 0 8px}
+  .eff-reg .er-ecart{color:var(--ambre);font-weight:600}
+  .eff-reg .er-boutons button{font:600 15px/1 system-ui;padding:10px 14px;min-height:44px;
+    border:1px solid var(--filet);border-radius:10px;background:var(--surface);color:var(--texte);cursor:pointer}
+  .eff-reg .er-motif{display:flex;flex-direction:column;gap:5px;margin:10px 0 0}
+  .eff-reg .er-motif input{font-size:16px;padding:11px 12px;min-height:46px;width:100%;
+    box-sizing:border-box;border:1px solid var(--filet);border-radius:10px}
   .pli-org{margin:18px 0 0;border:1px solid var(--filet);border-radius:12px;background:var(--surface)}
   /* `display:block` retire la boîte du marqueur : sans elle, le titre et sa
      précision se rangeaient en deux colonnes étroites sur un téléphone. */
@@ -133,10 +144,23 @@
   <section class="fiche" id="ecran-fiche" hidden>
     <h1>Votre entreprise</h1>
     <div id="fiche-accueil"></div>
+    <!-- L'effectif du registre, en face de l'effectif saisi. -->
+    <div id="effectif-registre" class="eff-reg" hidden></div>
+
+    <!-- LA REPRÉSENTATION DU PERSONNEL, POSÉE UNE FOIS.
+         Le comité, ses élections, le procès-verbal de carence, le délégué
+         syndical : quatre réponses qui commandent ce qui est dû, et que la
+         fiche ne demandait nulle part. Repliées, comme les organismes.
+         Relevé le 26 septembre 2026. -->
+    <details id="pli-representation" class="pli-org">
+      <summary>Représentation du personnel <span>comité, élections, délégué syndical</span></summary>
+      <div id="fiche-representation"></div>
+    </details>
+
     <!-- CE QUI NE CHANGE JAMAIS SE SAISIT ICI, ET UNE SEULE FOIS.
-         Les organismes de l'entreprise — retraite complémentaire, prévoyance,
+         Les organismes de l'entreprise, retraite complémentaire, prévoyance,
          frais de santé, caisse, santé au travail, OPCO, inspection, conseil de
-         prud'hommes — étaient redemandés à chaque contrat et laissés en rouge
+         prud'hommes, étaient redemandés à chaque contrat et laissés en rouge
          dans les courriers. Repliés par défaut : la fiche reste courte, et ils
          ne se remplissent qu'une fois. Demande du 26 septembre 2026. -->
     <details id="pli-organismes" class="pli-org">
@@ -268,30 +292,28 @@
     denomination: "Dénomination",
     siret: "SIRET",
     adresse: "Adresse du siège",
-    responsable: "Représentant légal (nom, qualité)",
+    responsableNom: "Représentant légal (nom)",
+    responsableQualite: "Sa qualité",
     courriel: "Adresse e-mail",
     effectif: "Effectif (salariés)",
     secteur: "Secteur",
     conventionCollective: "Convention collective (IDCC)",
-    /* LA QUESTION DU COMITÉ SE POSE À L'ENTRÉE, PAS AILLEURS.
-
-       Elle commande le règlement intérieur (avis du comité ou procès-verbal
-       de carence), l'agenda, les consultations et la moitié des courriers, et
-       elle n'était posée que dans la fiche longue des parcours guidés : un
-       document sortait alors avec la note « votre fiche ne dit pas si un
-       comité est en place », sans dire où répondre. Relevé le 26 septembre
-       2026. */
-    cseExiste: "Comité social et économique en place ?"
   };
+  /* LA QUESTION DU COMITÉ SE POSE À L'ENTRÉE, DANS SON PROPRE PLI.
+
+     Elle commande le règlement intérieur (avis du comité ou procès-verbal de
+     carence), l'agenda, les consultations et la moitié des courriers. Posée
+     d'abord ici en oui-non, elle a rejoint le pli « Représentation du
+     personnel » le 26 septembre 2026, avec ses trois réponses, la date des
+     élections, celle du procès-verbal de carence et le délégué syndical : une
+     seule case pour une seule clé, et le reste avec elle. */
   /* Ce qui n'empêche pas de continuer. Le courriel est une coordonnée, non un
      élément d'identité : un document se dépose au greffe sans lui. */
-  var FACULTATIFS = { courriel: true, cseExiste: true };
+  var FACULTATIFS = { courriel: true };
   /* Les champs de la fiche d'accueil qui ne sont pas dans l'identité : la
      question du comité vit dans la fiche longue des parcours, et la voici
      posée aussi à l'entrée. Même clé, même enregistrement. */
-  var HORS_IDENTITE = [
-    { c: "cseExiste", nom: "Comité social et économique en place ?", t: "oui-non", aide: "" },
-  ];
+  var HORS_IDENTITE = [];
   var CHAMPS = (window.Profil ? window.Profil.IDENTITE.concat(HORS_IDENTITE) : []).filter(function (ch) {
     return NOMS[ch.c] !== undefined;
   }).map(function (ch) {
@@ -397,13 +419,108 @@
     window.scrollTo(0, 0);
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     L'EFFECTIF SAISI, ET CELUI DU REGISTRE.
+
+     Il était saisi à la main et jamais rapproché du registre : l'agenda
+     affichait « Effectif retenu : 41 » et « 85 salariés au registre » sur le
+     même écran, et tous les seuils reposaient sur un chiffre libre. Relevé le
+     26 septembre 2026. Le registre calcule maintenant le sien selon
+     L. 1111-2, avec sa date ; l'écart s'affiche, se reprend d'un bouton, et
+     se garde s'il est motivé. Rien n'est imposé : c'est l'employeur qui
+     arrête son effectif, mais il le fait en connaissance de cause. */
+  function direEffectif() {
+    var z = $("effectif-registre");
+    if (!z || !window.Profil.effectifRegistre) return;
+    var e = window.Profil.effectifRegistre();
+    if (!e.lignes) { z.hidden = true; return; }
+    var champ = $("fc-effectif");
+    var saisi = champ ? parseFloat(String(champ.value).replace(",", ".")) : NaN;
+    var calcule = e.total;
+    var dit = "Registre du personnel au " + jourFr(e.date) + " : " +
+      nombreFr(calcule) + " salarié" + (calcule > 1 ? "s" : "") + " au sens de L. 1111-2 (" +
+      e.plein + " à temps plein" +
+      (e.cdd ? ", " + nombreFr(e.cdd) + " au titre des contrats à durée déterminée, au prorata de leur présence" : "") +
+      (e.partiel ? ", " + nombreFr(e.partiel) + " au titre des temps partiels, au prorata de leur horaire" : "") +
+      ").";
+    if (e.sansHoraire.length) {
+      dit += " " + (e.sansHoraire.length > 1
+        ? e.sansHoraire.length + " salariés à temps partiel sans horaire au registre ne sont pas comptés"
+        : "Un salarié à temps partiel sans horaire au registre n'est pas compté") +
+        " : " + e.sansHoraire.join(", ") + ".";
+    }
+    if (e.remplacement) {
+      dit += " " + e.remplacement + " remplacement" + (e.remplacement > 1 ? "s" : "") +
+        " de salarié absent exclu" + (e.remplacement > 1 ? "s" : "") + " du décompte.";
+    }
+    var ecart = isFinite(saisi) && Math.abs(saisi - calcule) >= 0.5;
+    z.innerHTML = '<p class="er-dit">' + ech(dit) + "</p>" +
+      (ecart ? '<p class="er-ecart">Vous avez saisi ' + ech(nombreFr(saisi)) +
+        " : l'écart avec le registre est de " + ech(nombreFr(Math.abs(saisi - calcule))) +
+        ". Reprenez le registre, ou dites pourquoi vous retenez un autre chiffre.</p>" : "") +
+      '<div class="er-boutons"><button type="button" id="er-reprendre">Reprendre ' +
+      ech(nombreFr(calcule)) + "</button></div>" +
+      (ecart ? '<label class="er-motif"><span>Pourquoi ce chiffre plutôt que celui du registre</span>' +
+        '<input type="text" id="er-motif" value="' + ech(lireMotif()) +
+        '" placeholder="le registre ne porte pas encore les entrées du mois"></label>' : "");
+    z.hidden = false;
+    var b = $("er-reprendre");
+    if (b) b.addEventListener("click", function () {
+      if (!champ) return;
+      /* Le champ est de type nombre : il refuse la virgule, et se vide. */
+      champ.value = String(calcule);
+      champ.dispatchEvent(new Event("input", { bubbles: true }));
+      champ.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    var m = $("er-motif");
+    if (m) m.addEventListener("input", function () {
+      var p = window.Profil.lire();
+      p.effectifMotif = m.value;
+      window.Profil.ecrire(p);
+    });
+  }
+  function lireMotif() {
+    var p = window.Profil ? window.Profil.lire() : {};
+    return String(p.effectifMotif || "");
+  }
+  function nombreFr(n) {
+    var x = Math.round(Number(n) * 100) / 100;
+    return String(x % 1 === 0 ? x : x.toFixed(2)).replace(".", ",");
+  }
+  function jourFr(d) {
+    var M = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+      "août", "septembre", "octobre", "novembre", "décembre"];
+    var j = d.getDate();
+    return (j === 1 ? "1er" : j) + " " + M[d.getMonth()] + " " + d.getFullYear();
+  }
+  function ech(t) {
+    return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
   if (window.Profil && CHAMPS.length === Object.keys(NOMS).length) {
     window.Profil.rendre($("fiche-accueil"), {
       champs: CHAMPS,
       legende: "Votre entreprise",
       echange: false,
-      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); }
+      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); direEffectif(); }
     });
+    direEffectif();
+    /* La représentation du personnel : le comité, ses élections, la carence,
+       le délégué syndical. Ces quatre réponses commandent ce qui s'affiche
+       dans presque tous les modules. */
+    if ($("fiche-representation") && window.Profil.REPRESENTATION) {
+      window.Profil.rendre($("fiche-representation"), {
+        champs: window.Profil.REPRESENTATION,
+        prefixe: "fr",
+        legende: "Représentation du personnel",
+        aide: "Elles décident de ce qui vous est dû : la consultation du comité, " +
+          "le procès-verbal de carence, la négociation annuelle. Laissées vides, " +
+          "aucun module ne conclut à votre place.",
+        echange: false
+      });
+    }
     window.Profil.rendre($("fiche-organismes"), {
       champs: window.Profil.ORGANISMES,
       prefixe: "fo",

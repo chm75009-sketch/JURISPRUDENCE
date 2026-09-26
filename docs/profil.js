@@ -88,8 +88,20 @@
       aide: "Elle écarte ce qui ne concerne pas l'entreprise : la base de données économiques et sociales ne demande le montant global des plus hautes rémunérations (L. 225-115 du code de commerce) qu'aux sociétés anonymes et aux sociétés en commandite par actions." },
     { c: "adresse", nom: "Adresse du siège", t: "text", pleine: true,
       aide: "Elle figure en tête des courriers produits (convocations, notifications, dépôts)." },
-    { c: "responsable", nom: "Responsable du dossier (nom, qualité)", t: "text",
-      aide: "La personne qui signe : gérant, président, directeur des ressources humaines, responsable du personnel." },
+    /* LE NOM ET LA QUALITÉ NE SONT PAS LA MÊME CHOSE.
+
+       Un seul champ « nom, qualité » donnait « Chadi EL AFAI » sans qualité,
+       et ce nom partait tel quel dans chaque document signé et dans les
+       métadonnées. Relevé le 26 septembre 2026. Les deux se saisissent
+       séparément ; le champ « responsable », que quatre-vingts endroits du
+       dépôt lisent, est recomposé à l'enregistrement, « nom, qualité ». */
+    { c: "responsableNom", nom: "Représentant légal (nom et prénom)", t: "text",
+      aide: "La personne qui signe les documents. Elle apparaît en bas de chaque courrier et dans les propriétés des fichiers produits." },
+    { c: "responsableQualite", nom: "Sa qualité", t: "select", autre: true,
+      options: ["gérant", "gérante", "président", "présidente", "directeur général",
+        "directrice générale", "directeur des ressources humaines",
+        "directrice des ressources humaines", "responsable du personnel"],
+      aide: "Elle se lit dans les statuts ou le Kbis. Elle suit le nom dans la signature : « Monsieur Untel, gérant »." },
     { c: "courriel", nom: "Courriel de contact", t: "email",
       aide: "Sert de coordonnée sur les documents produits. Il reste sur ce poste." },
     { c: "telephone", nom: "Téléphone", t: "tel" },
@@ -127,6 +139,33 @@
      celle-là, et elle se vérifie avant d'ajouter un champ : si la réponse
      peut différer d'un document à l'autre, elle n'a rien à faire dans la
      fiche.                                                                 */
+  /* ═══════════════════════════════════════════════════════════════════════
+     QUI REPRÉSENTE LE PERSONNEL, ET DEPUIS QUAND.
+
+     La fiche ne posait aucune question sur le comité : ni son existence, ni
+     un procès-verbal de carence, ni un délégué syndical. Les modules du
+     règlement intérieur, de la base de données, du document unique, du
+     collectif, de l'agenda et des notes de service supposaient tous un comité
+     en place, et le cas sans comité était inatteignable. Relevé le
+     26 septembre 2026, sur une entreprise de quatre-vingt-deux salariés, où
+     le comité est dû (L. 2311-2) ou son absence constatée par un procès-verbal
+     de carence (L. 2314-9).
+
+     Ces trois réponses ne changent ni d'un document à l'autre ni d'un jour à
+     l'autre : elles sont à leur place ici, et chaque module les reprend.
+     ══════════════════════════════════════════════════════════════════════ */
+  var REPRESENTATION = [
+    { c: "cseExiste", nom: "Comité social et économique en place ?", t: "select",
+      options: ["oui, élu", "non, procès-verbal de carence", "non, aucune élection organisée"],
+      aide: "À partir de onze salariés pendant douze mois consécutifs, le comité est dû (L. 2311-2). Quand les élections n'ont donné aucun candidat, c'est un procès-verbal de carence qui le constate (L. 2314-9)." },
+    { c: "cseElections", nom: "Date des dernières élections", t: "date",
+      aide: "Le mandat dure quatre ans (L. 2314-33) : c'est cette date qui dit quand recommencer." },
+    { c: "cseCarence", nom: "Date du procès-verbal de carence", t: "date",
+      aide: "À renseigner si aucun candidat ne s'est présenté : le procès-verbal se transmet à l'inspection du travail." },
+    { c: "delegueSyndical", nom: "Un délégué syndical est-il désigné ?", t: "oui-non",
+      aide: "La négociation annuelle obligatoire n'est due que si une ou plusieurs sections syndicales représentatives sont constituées (L. 2242-1)." },
+  ];
+
   var ORGANISMES = [
     { c: "orgRetraite", nom: "Retraite complémentaire (AGIRC-ARRCO)", t: "text", pleine: true,
       aide: "Nom et adresse de l'institution dont relève l'entreprise. Portée à l'article Protection sociale des contrats de travail." },
@@ -145,6 +184,107 @@
     { c: "orgPrudhommes", nom: "Conseil de prud'hommes du ressort (ville)", t: "text",
       aide: "Son greffe reçoit le dépôt du règlement intérieur (R. 1321-2)." },
   ];
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     L'EFFECTIF SE CALCULE, IL NE SE DÉCLARE PAS.
+
+     Il était saisi à la main et jamais rapproché du registre : l'agenda
+     affichait « Effectif retenu : 41 » et « 85 salariés au registre » sur le
+     même écran, et tous les seuils reposaient sur un chiffre libre. Relevé le
+     26 septembre 2026.
+
+     L'article L. 1111-2 (LEGIARTI000019353569, lu à la source le
+     26 septembre 2026, deux lectures concordantes) pose trois règles :
+       1° le contrat à durée indéterminée à temps plein compte pour un ;
+       2° le contrat à durée déterminée compte « à due proportion de [son]
+          temps de présence au cours des douze mois précédents », et il est
+          exclu lorsqu'il remplace un salarié absent ;
+       3° le temps partiel compte « en divisant la somme totale des horaires
+          inscrits dans leurs contrats de travail par la durée légale ou la
+          durée conventionnelle du travail ».
+
+     Ce qui se calcule ici se calcule ; ce qui manque au registre est nommé,
+     jamais deviné : un temps partiel sans horaire écrit n'est pas compté
+     pour une moitié au hasard. */
+  function effectifRegistre(aujourdhui) {
+    var reg = null;
+    try { reg = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (_) {}
+    var refs = null;
+    try { refs = JSON.parse(localStorage.getItem("heures-reference") || "null"); } catch (_) {}
+    var L = (reg && reg.salaries) || [];
+    var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
+    var ilYaUnAn = new Date(d0.getFullYear() - 1, d0.getMonth(), d0.getDate());
+    var out = { total: 0, plein: 0, cdd: 0, partiel: 0, sansHoraire: [], remplacement: 0,
+      lignes: L.length, date: d0 };
+
+    function jourDe(v) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(v == null ? "" : v).trim());
+      if (!m) return null;
+      var x = new Date(+m[1], +m[2] - 1, +m[3], 12);
+      return isNaN(x) ? null : x;
+    }
+    function heuresSemaine(s) {
+      var id = sansAccentSimple((String(s.nom || "") + " " + String(s.pre || "")).trim());
+      var r = refs && refs[id];
+      if (!r || !r.sem) return null;
+      var total = 0, vu = false;
+      for (var j = 0; j < 7; j++) {
+        var c = r.sem[j];
+        if (!c) continue;
+        var paires = [[c.d1, c.f1], [c.d2, c.f2]];
+        paires.forEach(function (x) {
+          var a = minutes(x[0]), b = minutes(x[1]);
+          if (a === null || b === null) return;
+          if (b <= a) b += 1440;
+          total += b - a; vu = true;
+        });
+        total -= parseInt(c.p, 10) || 0;
+      }
+      return vu && total > 0 ? total / 60 : null;
+    }
+    function minutes(t) {
+      var m = /^(\d{1,2})[:hH.]?(\d{2})?$/.exec(String(t == null ? "" : t).trim());
+      return m ? parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0) : null;
+    }
+
+    L.forEach(function (s) {
+      if (s.ex) return;
+      var ent = jourDe(s.ent), sor = jourDe(s.sor);
+      if (sor && sor < d0) return;                    /* parti : hors effectif */
+      if (String(s.remplacement || "").trim() === "oui") { out.remplacement++; return; }
+      var partiel = String(s.part || "").trim() === "partiel";
+      var cdd = String(s.nature || "").trim() === "cdd";
+      if (partiel) {
+        var h = heuresSemaine(s);
+        if (h === null) { out.sansHoraire.push((String(s.nom || "") + " " + String(s.pre || "")).trim()); return; }
+        out.partiel += h / 35;
+        out.total += h / 35;
+        return;
+      }
+      if (cdd) {
+        /* À due proportion du temps de présence sur les douze mois
+           précédents : on compte les jours effectivement passés. */
+        var debut = ent && ent > ilYaUnAn ? ent : ilYaUnAn;
+        var fin = sor && sor < d0 ? sor : d0;
+        var jours = Math.max(0, Math.round((fin - debut) / 86400000));
+        var part = Math.min(1, jours / 365);
+        out.cdd += part;
+        out.total += part;
+        return;
+      }
+      out.plein++; out.total++;
+    });
+    out.total = Math.round(out.total * 100) / 100;
+    out.partiel = Math.round(out.partiel * 100) / 100;
+    out.cdd = Math.round(out.cdd * 100) / 100;
+    return out;
+  }
+  function sansAccentSimple(x) {
+    try {
+      return String(x == null ? "" : x).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (_) { return String(x == null ? "" : x).toLowerCase(); }
+  }
 
   /* Les quatre valeurs de toute réponse fermée de l'application.
 
@@ -182,6 +322,14 @@
     if (!p.conventionCollective) p.conventionCollective = p.convention || p.idcc || "";
     if (!p.secteur) p.secteur = p.activite || "";
     if (!p.adresse) p.adresse = p.siege || "";
+    /* Une fiche écrite avant la séparation porte « nom, qualité » dans un
+       seul champ : on le coupe à la première virgule, sans rien réécrire sur
+       le poste. */
+    if (!p.responsableNom && p.responsable) {
+      var v = String(p.responsable), i = v.indexOf(",");
+      p.responsableNom = (i < 0 ? v : v.slice(0, i)).trim();
+      p.responsableQualite = i < 0 ? "" : v.slice(i + 1).trim();
+    }
     return p;
   }
 
@@ -193,6 +341,12 @@
     var p = lire();
     for (var k in patch) if (Object.prototype.hasOwnProperty.call(patch, k)) p[k] = patch[k];
     if (p.denomination) p.entreprise = p.denomination;
+    /* « responsable » reste la signature composée : c'est elle que les
+       documents lisent depuis le début. */
+    if (p.responsableNom || p.responsableQualite) {
+      p.responsable = [String(p.responsableNom || "").trim(),
+        String(p.responsableQualite || "").trim()].filter(Boolean).join(", ");
+    }
     try { localStorage.setItem(CLE, JSON.stringify(p)); } catch (_) {}
     return p;
   }
@@ -267,7 +421,7 @@
      l'autre côté. Champs facultatifs, la version du format ne change pas,
      comme le prévoit PROFIL-PARTAGE.md. 26 septembre 2026. */
   function champsEchanges() {
-    return IDENTITE.concat(ORGANISMES).map(function (ch) { return ch.c; });
+    return IDENTITE.concat(REPRESENTATION).concat(ORGANISMES).map(function (ch) { return ch.c; });
   }
 
   /* L'objet à écrire dans le fichier. Un champ vide n'y figure pas : on
@@ -554,8 +708,9 @@
   }
 
   window.Profil = {
-    CLE: CLE, IDENTITE: IDENTITE, ORGANISMES: ORGANISMES, SECTEURS: SECTEURS,
-    organisme: organisme,
+    CLE: CLE, IDENTITE: IDENTITE, REPRESENTATION: REPRESENTATION,
+    ORGANISMES: ORGANISMES, SECTEURS: SECTEURS,
+    organisme: organisme, effectifRegistre: effectifRegistre,
     VALEURS: VALEURS, conclut: conclut,
     lire: lire, ecrire: ecrire, effacer: effacer,
     suffisante: suffisante, manquants: manquants,
