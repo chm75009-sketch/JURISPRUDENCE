@@ -581,7 +581,7 @@
          code, lui, y mettait la dénomination, l'adresse, le SIRET, la ville,
          l'effectif et le signataire du client : le document sortait au nom de
          l'entreprise, signé de son dirigeant, avec des personnes et des faits
-         qui n'existent pas — un accident, un effectif, un avis du comité, un
+         qui n'existent pas : un accident, un effectif, un avis du comité, un
          chef d'atelier. Montré à l'inspection, c'était un faux. Relevé le
          26 septembre 2026, et c'est la faute la plus grave du dépôt.
 
