@@ -1666,11 +1666,31 @@
 
   /* ──────────────────────────────── branchements ────────────────────────── */
 
+  /* QUI PEUT ÊTRE AU FORFAIT. Mesuré le 26 septembre 2026 : l'écran
+     proposait les quatre-vingt-cinq salariés du registre, conducteurs et
+     mécaniciens compris, et les sortis. Le forfait en jours vise des
+     salariés autonomes dans l'organisation de leur temps : un conducteur,
+     dont le temps de service est enregistré au chronotachygraphe, ni un
+     ouvrier au poste n'y ont leur place. Ne restent que les salariés en
+     poste qui ne sont ni conducteurs ni ouvriers. */
+  var HORS_FORFAIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
+  function eligibles(L) {
+    return L.filter(function (s) {
+      return !s.sor && !HORS_FORFAIT.test(s.emp) && !/^ouvrier/i.test(s.qua);
+    });
+  }
+
   function demarrer() {
-    GENS = salaries();
+    var tous = salaries();
+    GENS = eligibles(tous);
     var p = entreprise();
     if ($("ent")) $("ent").textContent = p.denomination || "";
-    if (!GENS.length) { $("e-vide").hidden = false; return; }
+    if (!GENS.length) {
+      if (tous.length) $("e-vide").innerHTML = '<p class="rien">Aucun salarié du registre ne peut être au ' +
+        "forfait en jours : les conducteurs, les ouvriers et les salariés sortis en sont écartés. " +
+        'Un cadre ou un salarié autonome se déclare au <a href="registre.html">registre du personnel</a>.</p>';
+      $("e-vide").hidden = false; return;
+    }
     $("e-tout").hidden = false;
 
     $("qui").innerHTML = GENS.map(function (s, i) {
