@@ -25,8 +25,20 @@
     try { return (window.Profil && window.Profil.lire()) || {}; } catch (e) { return {}; }
   }
 
+  /* L'ADRESSE VIENT DU DOSSIER. Elle est saisie une fois sur la fiche
+     d'entreprise, avec les autres interlocuteurs ; le champ libre de cet
+     écran ne sert plus qu'au dépannage, quand la fiche n'en porte pas.
+     Relevé le 26 septembre 2026. */
+  function adresseFiche() {
+    var p = null;
+    try {
+      p = (window.Profil && window.Profil.lire) ? window.Profil.lire()
+        : JSON.parse(localStorage.getItem("profil-entreprise") || "null");
+    } catch (e) { p = null; }
+    return String((p && p.cabinetCourriel) || "").trim();
+  }
   function adresse() {
-    return (Q.reglage().adresse || "").trim();
+    return adresseFiche() || (Q.reglage().adresse || "").trim();
   }
 
   /* ───────────────────────────── le compteur ────────────────────────── */
@@ -127,10 +139,34 @@
     if (DERNIERE) ouvrirCourriel(DERNIERE);
   });
 
+  $("envoyee").addEventListener("click", function () {
+    if (!DERNIERE) return;
+    Q.confirmer(DERNIERE.id);
+    $("txt-apres").innerHTML = "<b>Question " + ech(DERNIERE.id) + " notée comme envoyée.</b>" +
+      "Elle figure dans le journal du mois, avec ses pièces.";
+    DERNIERE = null;
+    rendreTout();
+  });
+
+  $("pas-envoyee").addEventListener("click", function () {
+    if (!DERNIERE) return;
+    Q.retirer(DERNIERE.id);
+    $("txt-apres").innerHTML = "<b>Question retirée.</b>Elle ne compte pas, et son texte " +
+      "n'est plus gardé. Reposez-la quand vous voudrez.";
+    DERNIERE = null;
+    rendreTout();
+  });
+
   function montrerApres(q) {
     $("e-apres").classList.remove("cache");
-    var h = "<b>Question " + ech(q.id) + " envoyée à " + ech(adresse()) + ".</b>" +
-      "Votre messagerie s'est ouverte avec l'objet et le texte : il reste à appuyer sur envoyer.";
+    /* « Envoyée » était écrit alors que rien n'était parti : la messagerie
+       s'ouvre, et c'est tout. Le texte le dit, et le compteur attend la
+       réponse. Relevé le 26 septembre 2026. */
+    var h = "<b>Question " + ech(q.id) + " : votre messagerie s'est ouverte, adressée à " +
+      ech(adresse()) + ".</b>" +
+      "Il reste à appuyer sur envoyer dans votre messagerie. Dites-le ici ensuite : " +
+      "tant que vous ne l'avez pas confirmé, cette question ne compte pas dans vos " +
+      Q.PAR_MOIS + " du mois.";
     if (q.pieces.length) {
       h += '<div class="rappel">Joignez au message ' +
         (q.pieces.length > 1 ? "les " + q.pieces.length + " pièces" : "la pièce") + " : " +
@@ -149,7 +185,8 @@
     } else {
       h += L.map(function (q) {
         return '<div class="q"><div class="h"><span class="r">' + ech(q.id) + "</span>" +
-          '<span class="d">' + ech(Q.jourEnFrancais(q.date)) + "</span></div>" +
+          '<span class="d">' + ech(Q.jourEnFrancais(q.date)) +
+          (q.etat === "brouillon" ? " · non confirmée, ne compte pas" : "") + "</span></div>" +
           '<div class="o">' + ech(q.objet) + "</div>" +
           '<div class="t">' + ech(q.texte) + "</div>" +
           (q.pieces.length ? '<div class="p">Pièces : ' + q.pieces.map(ech).join(", ") + "</div>" : "") +
@@ -182,7 +219,21 @@
     if (e.denomination) bits.push(e.denomination);
     if (e.effectif) bits.push(e.effectif + " salariés");
     $("ent").textContent = bits.join(" · ");
-    $("adr").value = adresse();
+    /* Quand la fiche porte l'adresse du conseil, elle s'affiche et ne se
+       ressaisit pas ici. Sinon, le champ reste, et dit où l'inscrire. */
+    var deLaFiche = adresseFiche();
+    if (deLaFiche) {
+      $("adr").hidden = true;
+      $("dit-adresse").innerHTML = "Vos questions partent à <b>" + ech(deLaFiche) +
+        "</b>, l'adresse de votre conseil inscrite sur la fiche d'entreprise. " +
+        '<a href="index.html">La changer sur la fiche</a>.';
+    } else {
+      $("adr").hidden = false;
+      $("adr").value = (Q.reglage().adresse || "").trim();
+      $("dit-adresse").textContent = "L'adresse de votre conseil n'est pas inscrite sur la " +
+        "fiche d'entreprise : saisissez-la ici pour cet appareil, ou portez-la à la fiche, " +
+        "où elle sera gardée avec le reste du dossier.";
+    }
     rendreTout();
   })();
 

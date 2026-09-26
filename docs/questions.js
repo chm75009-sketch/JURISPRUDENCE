@@ -93,8 +93,34 @@
     var mois = m || moisDe(new Date());
     return lire().questions.filter(function (q) { return q.mois === mois; });
   }
+  /* UNE QUESTION NON ENVOYÉE NE SE DÉCOMPTE PAS.
+
+     Le lien mailto ouvre la messagerie ; il n'envoie rien. L'écran annonçait
+     pourtant « envoyée » et le compteur passait de cinq à quatre, sans que
+     personne n'ait cliqué sur envoyer. Le décompte ne retient donc que les
+     questions confirmées par l'utilisateur. Relevé le 26 septembre 2026. */
+  function envoyees(m) {
+    return duMois(m).filter(function (q) { return q.etat !== "brouillon"; });
+  }
   function reste(m) {
-    return Math.max(0, PAR_MOIS - duMois(m).length);
+    return Math.max(0, PAR_MOIS - envoyees(m).length);
+  }
+  /* La question est écrite dès qu'on ouvre la messagerie, pour garder son
+     texte et ses pièces ; elle attend sa confirmation pour compter. */
+  function confirmer(id) {
+    var tout = lire(), fait = false;
+    tout.questions.forEach(function (q) {
+      if (q.id === id && q.etat === "brouillon") { q.etat = "posée"; q.envoyeeLe = new Date().toISOString(); fait = true; }
+    });
+    if (fait) garder(tout);
+    return fait;
+  }
+  function retirer(id) {
+    var tout = lire();
+    var avant = tout.questions.length;
+    tout.questions = tout.questions.filter(function (q) { return !(q.id === id && q.etat === "brouillon"); });
+    if (tout.questions.length !== avant) garder(tout);
+    return tout.questions.length !== avant;
   }
 
   function identifiant(mois, rang) {
@@ -107,7 +133,7 @@
     var mois = moisDe(new Date());
     if (reste(mois) <= 0) return null;
     var tout = lire();
-    var rang = duMois(mois).length + 1;
+    var rang = envoyees(mois).length + 1;
     var q = {
       id: identifiant(mois, rang),
       mois: mois,
@@ -116,7 +142,7 @@
       objet: net(o.objet),
       texte: net(o.texte),
       pieces: (o.pieces || []).map(function (p) { return net(p); }).filter(Boolean),
-      etat: "posée",
+      etat: "brouillon",
     };
     tout.questions.push(q);
     garder(tout);
@@ -156,7 +182,8 @@
 
   window.QuestionsAbonnement = {
     PAR_MOIS: PAR_MOIS,
-    lire: lire, duMois: duMois, reste: reste, poser: poser,
+    lire: lire, duMois: duMois, envoyees: envoyees, reste: reste, poser: poser,
+    confirmer: confirmer, retirer: retirer,
     courriel: courriel, lien: lien,
     reglage: reglage, reglerAdresse: reglerAdresse,
     moisDe: moisDe, moisEnFrancais: moisEnFrancais,

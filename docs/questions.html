@@ -142,17 +142,22 @@
     <div class="ferme" id="txt-ferme"></div>
   </section>
 
+  <!-- LE DÉCOMPTE ATTEND LA CONFIRMATION. Le lien mailto ouvre la
+       messagerie, il n'envoie rien : c'est l'utilisateur qui dit si le
+       message est parti. Relevé le 26 septembre 2026. -->
   <section id="e-apres" class="cache">
     <div class="apres" id="txt-apres"></div>
     <div class="barre">
-      <button type="button" class="p" id="rouvrir">Rouvrir le message</button>
+      <button type="button" class="p" id="envoyee">Je l'ai envoyée</button>
+      <button type="button" class="s" id="rouvrir">Rouvrir le message</button>
+      <button type="button" class="s" id="pas-envoyee">Je ne l'ai pas envoyée</button>
     </div>
   </section>
 
   <div class="journal" id="journal"></div>
 
-  <div class="adresse">
-    Adresse à laquelle vos questions sont envoyées. Elle est gardée sur cet appareil.
+  <div class="adresse" id="bloc-adresse">
+    <span id="dit-adresse"></span>
     <input type="email" id="adr" placeholder="cabinet@exemple.fr" autocomplete="off">
   </div>
 

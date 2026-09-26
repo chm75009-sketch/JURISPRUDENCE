@@ -183,6 +183,14 @@
       aide: "L'adresse où partent le règlement intérieur, les notes de service et les courriers de l'employeur." },
     { c: "orgPrudhommes", nom: "Conseil de prud'hommes du ressort (ville)", t: "text",
       aide: "Son greffe reçoit le dépôt du règlement intérieur (R. 1321-2)." },
+    /* L'ADRESSE DU CABINET EST AU DOSSIER, PAS DANS UN CHAMP LIBRE.
+
+       L'écran des questions la demandait à chaque fois, vide, et acceptait
+       n'importe quoi : une question pouvait partir n'importe où. Elle est
+       ici, saisie une fois, avec le reste de ce qui ne change pas. Relevé le
+       26 septembre 2026. */
+    { c: "cabinetCourriel", nom: "Adresse de votre conseil, pour vos questions", t: "text", pleine: true,
+      aide: "C'est à cette adresse que partent les questions de l'écran « Mes questions ». Elle est saisie une fois ici." },
   ];
 
   /* ═══════════════════════════════════════════════════════════════════════
