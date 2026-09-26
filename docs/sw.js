@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.45";
+const CACHE = "jurisprudence-12.46";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -99,7 +99,7 @@ const ESSENTIELS = [
   "./forfait.html", "./forfait.js",
   /* La flotte et les conducteurs : les échéances se regardent sur le quai,
      souvent sans réseau. */
-  "./flotte.html", "./flotte.js",
+  "./flotte.html", "./flotte.js", "./echeances-salaries.js",
   /* Lire un classeur du client, sans réseau comme le reste. */
   "./lire-classeur.js",
   /* Le formulaire est commun aux pages d'audit : sans lui, elles s'ouvrent vides. */

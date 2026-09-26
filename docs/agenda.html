@@ -398,8 +398,30 @@
         w: "L. 2311-2 : le comité est mis en place dans les entreprises d'au moins onze salariés. " +
           "Effectif retenu : " + effectif + ". Ni réunions, ni consultations, ni élections à inscrire." });
 
+    /* QUAND IL N'Y A PAS DE COMITÉ, ON N'EN PRÉPARE PAS LES RÉUNIONS.
+
+       L'agenda inscrivait « Réunions ordinaires du CSE » et les trois
+       consultations récurrentes à une entreprise dont la fiche dit qu'aucun
+       comité n'est en place : le dirigeant préparait les réunions d'une
+       instance qui n'existe pas. Relevé le 26 septembre 2026. Ce qui est dû
+       alors, c'est l'organisation des élections, ou le procès-verbal de
+       carence si elles n'ont donné aucun candidat : L. 2314-4 pour
+       l'information du personnel, L. 2314-9 pour la carence. */
+    var repCse = String(((window.Profil && window.Profil.lire()) || {}).cseExiste || "").trim().toLowerCase();
+    var pasDeComite = !sansComite && repCse === "non";
+    if (pasDeComite) {
+      attentes.push({ t: "Aucun comité en place : ce sont les élections qui sont dues, pas les réunions.",
+        w: "Votre fiche répond « non » à la question du comité social et économique, et votre effectif " +
+          "l'impose (L. 2311-2). L'employeur informe le personnel de l'organisation des élections par tout " +
+          "moyen donnant date certaine, le premier tour se tenant au plus tard le quatre-vingt-dixième jour " +
+          "suivant cette information (L. 2314-4). Si aucun candidat ne se présente, le procès-verbal de " +
+          "carence est établi et transmis à l'inspection du travail dans les quinze jours (L. 2314-9). " +
+          "Les réunions, les consultations récurrentes et la base de données ne se préparent qu'une fois " +
+          "le comité élu." });
+    }
+
     /* --- réunions du CSE : une cadence, pas une date --- */
-    if (effectif !== null && !sansComite) {
+    if (effectif !== null && !sansComite && !pasDeComite) {
       var mensuel = effectif >= 300;
       cadences.push({
         titre: "Réunions ordinaires du CSE",
@@ -500,8 +522,20 @@
       }
     }
 
+    /* Ce qui vient à la place : l'organisation des élections. */
+    if (pasDeComite) {
+      cadences.push({
+        titre: "Organiser les élections du comité social et économique",
+        rythme: "premier tour au plus tard le quatre-vingt-dixième jour suivant l'information du personnel",
+        fondement: "L. 2314-4 : l'employeur informe le personnel de l'organisation des élections par tout moyen donnant date certaine",
+        docs: "la note d'information du personnel, l'invitation des organisations syndicales, le protocole d'accord préélectoral ; à défaut de candidat, le procès-verbal de carence (L. 2314-9)",
+        prov: "profil",
+        detail: "Votre fiche indique qu'aucun comité n'est en place. Les documents s'écrivent dans Audit, puis Comité social et économique.",
+      });
+    }
+
     /* --- consultations récurrentes du CSE --- */
-    if ((effectif !== null || d.bdeseDerniereMaj) && !sansComite) {
+    if ((effectif !== null || d.bdeseDerniereMaj) && !sansComite && !pasDeComite) {
       var CONSULTATIONS = ["les orientations stratégiques de l'entreprise",
         "la situation économique et financière de l'entreprise",
         "la politique sociale de l'entreprise, les conditions de travail et l'emploi"];

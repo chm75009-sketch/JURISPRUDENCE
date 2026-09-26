@@ -2133,9 +2133,27 @@
          Demande du 15 septembre 2026. */
       ligne("flotte.html", "Flotte et conducteurs",
         "contrôle technique, assurance, permis, FCO, cartes, visites médicales");
+    /* DEUX CONTRATS POUR LE MÊME POSTE, DONT UN FAUX.
+
+       Le contrat générique écrit « 35 heures » à son article 5 pour un grand
+       routier dont la fin du contrat porte 43 heures, n'offre pas le statut
+       d'ouvrier, et donne quarante-huit heures pour l'envoi de l'arrêt de
+       travail quand la convention en donne deux jours francs. Relevé le
+       26 septembre 2026. Sous la convention des transports routiers, ces
+       trois entrées ne s'ouvrent donc plus : le module du transport écrit le
+       contrat avec le coefficient, la garantie annuelle, les frais de
+       déplacement et le temps de service de la grille, et c'est lui qui est
+       juste. Ailleurs, rien ne change. */
+    var transport16 = /^0*16\b/.test(idcc.trim());
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       g[1].forEach(function (cle) {
+        if (transport16 && (cle === "cdi" || cle === "cdd" || cle === "partiel")) {
+          if (cle === "cdi")
+            h += ligne("contrats-transport.html", "Contrat de travail",
+              "sous la convention 16, le contrat s'écrit dans le module du transport : CDI, CDD, temps partiel");
+          return;
+        }
         h += '<button type="button" class="doc-ligne" data-doc="' + cle + '">' + ech(DOCS[cle].titre) + "</button>";
       });
     });

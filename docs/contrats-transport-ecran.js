@@ -557,6 +557,15 @@
       nature: NATURE === "cdd" ? "cdd" : "cdi", part: PARTIEL ? "partiel" : "complet",
       essai: finEssai(), terme: NATURE === "cdd" ? V.terme : "",
     });
+    /* La durée de service du poste part avec l'embauche : c'est elle que le
+       décompte des heures compare au mois compté, et sans elle il retombait
+       sur une semaine de bureau. */
+    if (r && PROFIL) window.EcheancesSalaries.poser(r.id, {
+      heuresSemaine: String(PROFIL.hebdo || ""),
+      heuresMois: String(PROFIL.mensuel || ""),
+      dureeQuoi: "temps de service du poste " + String(PROFIL.nom || "") +
+        ", convention collective des transports routiers",
+    });
     if (!r) { $("etat").textContent = "Rien n'a été inscrit."; return; }
     var dits = [];
     dits.push(r.nouveau ? "inscrit au registre du personnel"

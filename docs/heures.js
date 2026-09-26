@@ -479,7 +479,32 @@
     lignes.forEach(function (l) { t += duree(l); });
     return t;
   }
+  /* CE QUE LE CONTRAT DIT, QUAND IL A ÉTÉ ÉCRIT ICI.
+
+     Le module des contrats du transport écrit la durée de service du poste,
+     hebdomadaire et mensuelle : 39 heures et 169 heures pour un conducteur
+     de courte distance, 43 et 186 pour un grand routier. Le décompte les
+     ignorait et pré-remplissait une semaine de bureau, 9 heures à 17 heures
+     du lundi au vendredi : le relevé signé annonçait 154 heures là où le
+     contrat en porte 169. Relevé le 26 septembre 2026.
+
+     Rien n'est inventé pour autant : l'horaire de chaque journée reste à
+     saisir, parce que personne ici ne sait à quelle heure le camion est
+     parti. Ce qui est repris du contrat, c'est la durée due, en face de
+     laquelle le mois compté se lit. */
+  function duContrat() {
+    if (!qui || !window.EcheancesSalaries) return null;
+    var su = window.EcheancesSalaries.suite(qui.id) || {};
+    var sem = parseFloat(String(su.heuresSemaine || "").replace(",", "."));
+    var mois = parseFloat(String(su.heuresMois || "").replace(",", "."));
+    if (!isFinite(sem) && !isFinite(mois)) return null;
+    return { sem: isFinite(sem) ? sem : 0, mois: isFinite(mois) ? mois : 0,
+      quoi: String(su.dureeQuoi || "durée du contrat") };
+  }
+
   function hebdoContrat() {
+    var c = duContrat();
+    if (c && c.sem > 0) return c.sem;
     var r = refDe(qui.id), t = 0;
     for (var k = 0; k < 7; k++) {
       var b = baseDuJour(r.sem[k]);
@@ -502,6 +527,15 @@
     });
     $("t-jours").textContent = jours;
     $("t-calcule").textContent = nbh(total);
+    var ct = duContrat();
+    var tc = $("tuile-contrat");
+    if (tc) {
+      tc.hidden = !(ct && ct.mois > 0);
+      if (ct && ct.mois > 0) {
+        $("t-contrat").textContent = nbh(ct.mois);
+        tc.title = ct.quoi;
+      }
+    }
 
     var m = moisDe();
     var n = nombre(m.retenu);
@@ -1194,6 +1228,91 @@
       garderMois(m);
       $("c-motif").value = ""; $("c-h").value = "";
       rendreListes(m);
+    });
+
+    /* ─────────────────────── le relevé de la machine ─────────────────── */
+    /* CE QUE LA MACHINE A ENREGISTRÉ SE REPREND, IL NE SE RETAPE PAS.
+
+       Un tableau, quelle que soit sa provenance : une ligne par jour, avec la
+       date, le début, la fin et la pause. On ne devine pas l'ordre des
+       colonnes au hasard : la date est cherchée en premier, les deux heures
+       ensuite dans l'ordre où elles viennent, la pause est le nombre restant.
+       Seuls les jours du mois affiché sont repris, et l'écran dit combien.
+       Relevé le 26 septembre 2026, « importer le chronotachygraphe ». */
+    function jourDeLaLigne(cellules) {
+      for (var i = 0; i < cellules.length; i++) {
+        var c = String(cellules[i] == null ? "" : cellules[i]).trim();
+        var m = c.match(/^(\d{1,2})[\/\.\-](\d{1,2})(?:[\/\.\-](\d{2,4}))?$/);
+        if (m) {
+          var jj = parseInt(m[1], 10), mm = parseInt(m[2], 10);
+          var aa = m[3] ? parseInt(m[3].length === 2 ? "20" + m[3] : m[3], 10) : an;
+          if (mm === mo + 1 && aa === an && jj >= 1 && jj <= 31) return { j: jj, i: i };
+          return null;
+        }
+        var iso2 = c.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (iso2) {
+          if (parseInt(iso2[1], 10) === an && parseInt(iso2[2], 10) === mo + 1)
+            return { j: parseInt(iso2[3], 10), i: i };
+          return null;
+        }
+        if (/^\d{1,2}$/.test(c) && i === 0) return { j: parseInt(c, 10), i: i };
+      }
+      return null;
+    }
+    function heuresDeLaLigne(cellules, depuis) {
+      var H = [];
+      for (var i = depuis + 1; i < cellules.length; i++) {
+        var c = String(cellules[i] == null ? "" : cellules[i]).trim();
+        if (/^\d{1,2}\s*[:hH.]\s*\d{2}$/.test(c)) H.push(normaliser(c));
+      }
+      return H;
+    }
+    function pauseDeLaLigne(cellules, depuis) {
+      for (var i = cellules.length - 1; i > depuis; i--) {
+        var c = String(cellules[i] == null ? "" : cellules[i]).trim();
+        if (/^\d{1,3}$/.test(c)) return String(parseInt(c, 10));
+      }
+      return null;
+    }
+    function reprendre(table) {
+      var m = moisDe(), n = 0, hors = 0;
+      table.forEach(function (cellules) {
+        if (!cellules || !cellules.length) return;
+        var d = jourDeLaLigne(cellules);
+        if (!d) { hors++; return; }
+        var H = heuresDeLaLigne(cellules, d.i);
+        if (H.length < 2) { hors++; return; }
+        var p = pauseDeLaLigne(cellules, d.i);
+        m.jours[String(d.j)] = { n: "travail", d: H[0], f: H[1], p: p == null ? "0" : p };
+        n++;
+      });
+      if (n) { garderMois(m); construire(); tout(); }
+      $("imp-etat").textContent = n
+        ? n + " jour" + (n > 1 ? "s" : "") + " repris dans le mois affiché" +
+          (hors ? ", " + hors + " ligne" + (hors > 1 ? "s" : "") + " laissée" + (hors > 1 ? "s" : "") +
+            " de côté (autre mois, ou ni début ni fin)" : "") + "."
+        : "Aucun jour du mois affiché n'a été trouvé dans ce relevé.";
+    }
+    $("imp-lire").addEventListener("click", function () {
+      var colle = $("imp-colle").value.trim();
+      var f = $("imp-fichier").files && $("imp-fichier").files[0];
+      if (!window.LireClasseur) { $("imp-etat").textContent = "Le lecteur de tableaux n'a pas pu être chargé."; return; }
+      if (colle) { reprendre(window.LireClasseur.texte(colle)); return; }
+      if (!f) { $("imp-etat").textContent = "Choisissez un fichier, ou collez le tableau."; return; }
+      if (/\.(csv|txt|tsv)$/i.test(f.name)) {
+        f.text().then(function (t) { reprendre(window.LireClasseur.texte(t)); });
+        return;
+      }
+      if (!window.LireClasseur.possible()) {
+        $("imp-etat").textContent = "Ce navigateur ne sait pas ouvrir un .xlsx : enregistrez le relevé en .csv, ou collez le tableau.";
+        return;
+      }
+      $("imp-etat").textContent = "Lecture du fichier…";
+      window.LireClasseur.fichier(f).then(function (lignes) {
+        reprendre(lignes.filter(function (l) { return l.some(function (c) { return String(c || "").trim(); }); }));
+      }, function () {
+        $("imp-etat").textContent = "Ce fichier n'a pas pu être lu.";
+      });
     });
 
     $("b-imprimer").addEventListener("click", imprimer);

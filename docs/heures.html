@@ -257,6 +257,28 @@
       <div class="barre"><button type="button" class="second" id="r-appliquer">Remettre tout le mois à cet horaire</button></div>
     </div>
 
+    <!-- LE RELEVÉ DE LA MACHINE PLUTÔT QUE LA SAISIE À LA MAIN.
+         Un conducteur a son chronotachygraphe, un atelier a sa pointeuse :
+         leurs exports portent déjà, pour chaque jour, l'heure de début, celle
+         de fin et la pause. Les retaper à la main, trente fois par mois et
+         par salarié, était le vrai travail. Relevé le 26 septembre 2026.
+         Ce qui est importé s'écrit dans les jours du mois affiché, et rien
+         n'est écrasé en silence : l'écran dit combien de jours ont été
+         repris. -->
+    <div class="bloc">
+      <h2>Importer un relevé</h2>
+      <p class="doux">Le fichier du chronotachygraphe, de la pointeuse ou un tableau à vous :
+        une ligne par jour, avec le jour, l'heure de début, l'heure de fin et la pause en minutes.
+        Formats lus : .xlsx, .csv, .txt. Seuls les jours du mois affiché sont repris.</p>
+      <label class="champ"><span>Fichier du relevé</span>
+        <input type="file" id="imp-fichier" accept=".xlsx,.csv,.txt,.tsv"></label>
+      <p class="doux">ou collez le tableau :</p>
+      <label class="champ"><span>Tableau collé</span>
+        <textarea id="imp-colle" rows="3" placeholder="01/10/2026	06:00	16:30	45"></textarea></label>
+      <div class="barre"><button type="button" class="second" id="imp-lire">Reprendre ces jours</button></div>
+      <p class="etat" id="imp-etat"></p>
+    </div>
+
     <div class="bloc">
       <h2>Jours du mois</h2>
       <p class="doux">Les jours travaillés arrivent déjà remplis par l'horaire de référence : il n'y a
@@ -270,6 +292,14 @@
       <div class="bilan">
         <div class="tuile"><span class="et">Jours travaillés</span><div class="n" id="t-jours">0</div></div>
         <div class="tuile"><span class="et">Calculé par les jours</span><div class="n" id="t-calcule">0,00 h</div></div>
+        <!-- LE MOIS DU CONTRAT, EN FACE DU MOIS COMPTÉ.
+             Un conducteur était pré-rempli à 35 heures et 9 h à 17 h, soit
+             154 heures au mois, quand son contrat porte 169 heures de temps
+             de service : le relevé signé contredisait le contrat. La tuile
+             n'apparaît que si le contrat écrit ici a donné la durée.
+             Relevé le 26 septembre 2026. -->
+        <div class="tuile" id="tuile-contrat" hidden><span class="et">Dû au contrat</span>
+          <div class="n" id="t-contrat">0,00 h</div></div>
         <div class="tuile aremplir"><span class="et">Total retenu</span>
           <input type="text" id="t-retenu" inputmode="decimal" placeholder="à remplir" autocomplete="off"
             aria-label="Total retenu par l'entreprise, en heures"></div>
@@ -399,6 +429,10 @@
 <script src="tableur-export.js"></script>
 <script src="profil.js"></script>
 <script src="version.js"></script>
+<!-- La lecture des classeurs, pour le relevé du chronotachygraphe. -->
+<script src="lire-classeur.js"></script>
+<!-- La durée due par le contrat, écrite au moment où le contrat a été fait. -->
+<script src="echeances-salaries.js"></script>
 <script src="heures.js"></script>
 <script>
 (function () {

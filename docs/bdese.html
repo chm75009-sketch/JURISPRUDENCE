@@ -188,7 +188,18 @@
              Demande du 16 septembre 2026. -->
         <div class="barre pile">
           <button type="button" class="second" id="p-registre">Reprendre le registre du personnel</button>
+          <!-- CE QUE LE REGISTRE SAIT DÉJÀ N'EST PAS À RETAPER.
+               La base s'ouvrait entièrement vide, des centaines de cases à
+               remplir à la main, alors que le registre porte les contrats, le
+               sexe, la date de naissance et la date d'entrée de chacun.
+               Relevé le 26 septembre 2026. Ce bouton remplit les lignes qui se
+               calculent sans aucune supposition : effectif au 31 décembre,
+               mois par mois, par sexe, par âge, par ancienneté, contrats à
+               durée indéterminée et déterminée, embauches et départs de
+               l'année. Il ne touche jamais une case déjà remplie. -->
+          <button type="button" id="p-poser">Remplir ce que le registre suffit à calculer</button>
         </div>
+        <p id="p-dit-poser" class="vers"></p>
         <p id="p-dit-registre" class="vers"></p>
         <textarea id="p-source" placeholder="Un libellé, puis une valeur, par ligne&#10;Effectif total au 31/12&#9;412&#10;Nombre de salariés en contrat à durée indéterminée&#9;376"></textarea>
         <div class="barre pile">
@@ -461,7 +472,8 @@
                 mere: !!v, bornes: mois ? "avenir" : null, hors: hors });
               if (v) v.forEach(function (lib, j) {
                 lignes.push({ cle: base + k + "/" + j, section: sec, secNue: !!s.sansTitre,
-                  sujet: suj, info: lib, sous: true, bornes: mois ? "passe" : null, hors: hors });
+                  sujet: suj, info: lib, mere2: i, sous: true,
+                  bornes: mois ? "passe" : null, hors: hors });
               });
             });
             /* CE QUE LE SUJET DEMANDE ET QUE SES LIGNES NE PORTENT PAS.
@@ -489,7 +501,7 @@
                 info: ax.nom, mere: true, hors: null });
               ax.lib.forEach(function (lib, j) {
                 lignes.push({ cle: cle2 + "/" + j, section: sec, secNue: !!s.sansTitre,
-                  sujet: suj2, info: lib, sous: true, hors: null });
+                  sujet: suj2, info: lib, mere2: ax.nom, sous: true, hors: null });
               });
             });
           });
@@ -1066,6 +1078,149 @@
     ];
     return lignes.map(function (l) { return l[0] + "\t" + l[1]; }).join("\n");
   }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     CE QUE LE REGISTRE CALCULE, ET CE QU'IL NE CALCULE PAS.
+
+     Chaque règle ci-dessous dit à quelle ligne de la base elle répond et
+     comment elle se compte. Il n'y en a aucune qui suppose : la catégorie
+     professionnelle, par exemple, n'y est pas, parce que le registre porte
+     une qualification en texte libre et qu'en déduire « ouvrier » ou
+     « cadre » serait une supposition. Ce qui n'est pas calculable reste à
+     remplir à la main, et c'est tant mieux : une case fausse est pire qu'une
+     case vide. Posé le 26 septembre 2026.                                  */
+  var MOIS_NOMS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+
+  function registreBrut() {
+    try { return JSON.parse(localStorage.getItem("registre-personnel") || "null"); }
+    catch (e) { return null; }
+  }
+  function presentsAu(L, jour) {
+    return L.filter(function (s) {
+      var e = String(s.ent || "").slice(0, 10), so = String(s.sor || "").slice(0, 10);
+      if (!e || e > jour) return false;
+      return !so || so > jour;
+    });
+  }
+  function ageAu(s, jour) {
+    var n = String(s.nais || "").slice(0, 10);
+    if (!n) return null;
+    var a = new Date(n + "T12:00:00"), b = new Date(jour + "T12:00:00");
+    if (isNaN(a) || isNaN(b)) return null;
+    var x = b.getFullYear() - a.getFullYear();
+    var m = b.getMonth() - a.getMonth();
+    if (m < 0 || (m === 0 && b.getDate() < a.getDate())) x--;
+    return x;
+  }
+  function ancienneteAu(s, jour) {
+    var e = String(s.ent || "").slice(0, 10);
+    if (!e) return null;
+    var a = new Date(e + "T12:00:00"), b = new Date(jour + "T12:00:00");
+    if (isNaN(a) || isNaN(b)) return null;
+    return (b - a) / (365.25 * 86400000);
+  }
+  function calculsDuRegistre(annee) {
+    var E = registreBrut();
+    var L = ((E && E.salaries) || []).filter(function (s) { return !s.ex; });
+    if (!L.length) return null;
+    var fin = annee + "-12-31", debut = annee + "-01-01";
+    var au31 = presentsAu(L, fin);
+    var c = function (liste, f) { return liste.filter(f).length; };
+    var sexe = function (v) { return function (s) { return String(s.sexe || "").toLowerCase().indexOf(v) === 0; }; };
+    var nat = function (v) { return function (s) { return s.nature === v; }; };
+    var R = [];
+    function regle(quand, valeur) { R.push({ quand: quand, valeur: String(valeur) }); }
+
+    /* L'effectif mois par mois : compté au dernier jour de chaque mois. */
+    MOIS_NOMS.forEach(function (nom, i) {
+      var dernier = new Date(annee, i + 1, 0);
+      var jour = dernier.toISOString().slice(0, 10);
+      regle(function (l) {
+        return l.sous && String(l.info).trim().toLowerCase() === nom &&
+          /effectif/i.test(String(l.mere2 || ""));
+      }, presentsAu(L, jour).length);
+    });
+
+    /* Les six tranches d'âge et les cinq d'ancienneté, au 31 décembre. */
+    var AGES = [[null, 25], [25, 30], [30, 40], [40, 50], [50, 55], [55, null]];
+    ["Moins de 25 ans", "De 25 à 29 ans", "De 30 à 39 ans", "De 40 à 49 ans",
+     "De 50 à 54 ans", "55 ans et plus"].forEach(function (lib, i) {
+      var bas = AGES[i][0], haut = AGES[i][1];
+      regle(function (l) { return l.sous && l.info === lib && /[âa]ge/i.test(String(l.mere2 || "")); },
+        c(au31, function (s) {
+          var a = ageAu(s, fin);
+          if (a === null) return false;
+          return (bas === null || a >= bas) && (haut === null || a < haut);
+        }));
+    });
+    var ANC = [[null, 1], [1, 3], [3, 6], [6, 10], [10, null]];
+    ["Moins d'un an", "De 1 à moins de 3 ans", "De 3 à moins de 6 ans",
+     "De 6 à moins de 10 ans", "10 ans et plus"].forEach(function (lib, i) {
+      var bas = ANC[i][0], haut = ANC[i][1];
+      regle(function (l) { return l.sous && l.info === lib && /anciennet/i.test(String(l.mere2 || "")); },
+        c(au31, function (s) {
+          var a = ancienneteAu(s, fin);
+          if (a === null) return false;
+          return (bas === null || a >= bas) && (haut === null || a < haut);
+        }));
+    });
+
+    /* Les répartitions par sexe : celles dont la ligne mère parle de
+       l'effectif, non celles qui portent sur les promotions ou la formation,
+       que le registre ne connaît pas. */
+    [["Femmes", "f"], ["Hommes", "m"]].forEach(function (x) {
+      regle(function (l) {
+        return l.sous && l.info === x[0] && /effectif/i.test(String(l.mere2 || ""));
+      }, c(au31, sexe(x[1])));
+    });
+
+    /* Les lignes entières du décret que le registre suffit à remplir. */
+    regle(function (l) { return /nombre de salari[ée]s titulaires d'un contrat de travail à dur[ée]e ind[ée]termin[ée]e/i.test(l.info); },
+      c(au31, nat("cdi")));
+    regle(function (l) { return /nombre de salari[ée]s titulaires d'un contrat de travail à dur[ée]e d[ée]termin[ée]e/i.test(l.info); },
+      c(au31, nat("cdd")));
+    regle(function (l) { return /^nombre de salari[ée]s temporaires$/i.test(String(l.info).trim()); },
+      c(au31, nat("temporaire")));
+    regle(function (l) { return /effectif total au 31\/12|effectif total au 31 d[ée]cembre/i.test(l.info); },
+      au31.length);
+    regle(function (l) { return /nombre d'embauches/i.test(l.info) && !/cdi|dur[ée]e ind/i.test(l.info); },
+      c(L, function (s) { var e = String(s.ent || "").slice(0, 10); return e >= debut && e <= fin; }));
+    regle(function (l) { return /total des d[ée]parts|nombre de d[ée]parts/i.test(l.info); },
+      c(L, function (s) { var so = String(s.sor || "").slice(0, 10); return so >= debut && so <= fin; }));
+    return R;
+  }
+
+  $("#p-poser").addEventListener("click", function () {
+    var annee = $("#p-annee").value;
+    var R = calculsDuRegistre(annee);
+    if (!R) {
+      $("#p-dit-poser").textContent = "Le registre du personnel ne porte encore aucun salarié : " +
+        "il s'ouvre depuis Gérer, puis Registre unique du personnel.";
+      return;
+    }
+    var n = 0, dejà = 0;
+    rubriques(CTX).forEach(function (r) {
+      r.lignes.forEach(function (l) {
+        if (l.mere && !l.bornes) return;
+        if (l.hors) return;
+        for (var i = 0; i < R.length; i++) {
+          if (!R[i].quand(l)) continue;
+          E.valeurs[l.cle] = E.valeurs[l.cle] || {};
+          if (String(E.valeurs[l.cle][annee] || "").trim()) { dejà++; return; }
+          E.valeurs[l.cle][annee] = R[i].valeur;
+          n++;
+          return;
+        }
+      });
+    });
+    if (n) { garder(); rendre(); }
+    $("#p-dit-poser").textContent = n
+      ? n + " case" + (n > 1 ? "s" : "") + " remplie" + (n > 1 ? "s" : "") + " pour " + annee +
+        " à partir du registre" + (dejà ? ", " + dejà + " déjà renseignée" + (dejà > 1 ? "s" : "") + " et laissée" + (dejà > 1 ? "s" : "") + " telle" + (dejà > 1 ? "s" : "") + " quelle" + (dejà > 1 ? "s" : "") : "") +
+        ". Le reste, le registre ne le sait pas : il reste à remplir."
+      : "Rien à reprendre : ces lignes sont déjà remplies, ou le registre ne les calcule pas.";
+  });
 
   $("#p-registre").addEventListener("click", function () {
     var annee = $("#p-annee").value;
