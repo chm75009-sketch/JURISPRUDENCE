@@ -134,7 +134,10 @@
     { cle: "forfait",    nom: "Forfait en jours",               seuil: 1,   cond: "si un salarié est au forfait",
       non: "forfait.html?rep=non", oui: "forfait.html?rep=oui" },
     { cle: "mutuelle",   nom: "Mutuelle d'entreprise",          seuil: 1,   non: "gerer.html" },
-    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "gerer.html" },
+    /* Les visites médicales se suivent salarié par salarié dans « Flotte et
+       conducteurs », qui en calcule les échéances : le non y mène, et non plus
+       à toute la liste de Gérer (mesuré le 26 septembre 2026). */
+    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "flotte.html" },
     { cle: "cse",        nom: "Comité social et économique", seuil: 11, non: "parcours.html?p=installation&faire=1", oui: "controler-cse.html" },
     { cle: "egalite",    nom: "Égalité femmes-hommes", seuil: 50, non: "parcours.html?p=index&faire=1",        oui: "controler-egalite.html" },
     { cle: "nao",        nom: "Négociation annuelle (NAO)", seuil: 50, cond: "si délégué syndical", non: "parcours.html?p=nao&faire=1", oui: "controler-nao.html" },

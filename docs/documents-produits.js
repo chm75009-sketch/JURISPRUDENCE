@@ -103,7 +103,16 @@
   /* L'adresse publique de l'application. Un document emporté en Word ou
      imprimé quitte le navigateur : un lien relatif n'y mène plus nulle part.
      C'est la même base que juris-expert.js emploie pour ses renvois. */
-  var SITE = "https://chm75009-sketch.github.io/JURISPRUDENCE/docs/";
+  var SITE = (function () {
+    /* L'adresse où l'application est ouverte, et non une adresse figée :
+       ouverte sur le site d'un client, elle renvoie à ce site-là, où sont
+       sa fiche et ses données. */
+    try {
+      if (window.location && /^https?:$/.test(window.location.protocol))
+        return window.location.origin + window.location.pathname.replace(/[^\/]*$/, "");
+    } catch (e) {}
+    return "https://chm75009-sketch.github.io/JURISPRUDENCE/docs/";
+  })();
 
   var D = {};
 

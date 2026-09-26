@@ -3217,8 +3217,16 @@
      La table des outils vit dans docs/juris-expert.js. Si elle n'est pas
      chargée, rien ne s'affiche et rien ne casse — aucune étape ne dépend de
      ce renvoi. */
+  /* CE QUE L'APPLICATION ÉCRIT ELLE-MÊME NE S'ENVOIE PAS AILLEURS. Mesuré le
+     26 septembre 2026 : le parcours du règlement intérieur disait que ses
+     documents finaux « se génèrent dans Juris Expert », un autre site qui
+     n'a ni la fiche ni les données de l'entreprise et ouvre son accueil,
+     alors que le règlement complet s'écrit ici, dans la fenêtre du parcours.
+     Le renvoi ne reste que pour ce que l'application ne rédige pas. */
+  var JX_ICI = { ri: 1, discipline: 1, registre: 1, embauche: 1, "cse-installation": 1,
+    "cse-reunion": 1, "cse-budgets": 1, "cse-reclamations": 1, nego: 1, harcelement: 1 };
   function jxDispo(cle) {
-    return !!(cle && window.JurisExpert && window.JurisExpert.existe(cle));
+    return !!(cle && !JX_ICI[cle] && window.JurisExpert && window.JurisExpert.existe(cle));
   }
   function lienJX(cle, libelle) {
     return jxDispo(cle) ? window.JurisExpert.ancre(cle, libelle) : "";
