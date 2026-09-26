@@ -453,7 +453,7 @@
          […] et au plus tard à compter du 1er juillet 2024 » en dessous.
          L'obligation est donc entrée en vigueur ; ce qui manque est le
          portail qui doit la recevoir. Le document ne dit pas que ce portail
-         n'existe pas — ce serait un fait, et le document n'en rapporte aucun
+         n'existe pas, ce serait un fait, et le document n'en rapporte aucun
          qu'il n'ait vérifié : il écrit la condition, « tant que l'entreprise
          n'est pas en mesure d'y déposer le document ». Relecture du
          25 septembre 2026. */
@@ -802,7 +802,10 @@
       fond: "R. 4121-2", m: "mise a jour|mis a jour|actualisation|revision annuelle|version du",
       quoi: "Mise à jour au moins chaque année à partir de onze salariés, et à chaque aménagement important ou information nouvelle." },
     { cle: "acces", nom: "Mise à disposition et avis d'affichage",
-      fond: "R. 4121-4", m: "tenu a la disposition|mise a disposition|avis indiquant les modalites|affiche|consultation du document",
+      /* « mise à disposition » et « affiché » trouvaient l'eau fraîche mise à
+         disposition des conducteurs (mesuré le 26 septembre 2026) : on ne
+         cherche plus que ce qui dit l'accès au document lui-même. */
+      fond: "R. 4121-4", m: "tenu a la disposition|tenus a la disposition|avis indiquant les modalites|modalites d acces|acces des travailleurs au document|consultation du document",
       quoi: "Le document est tenu à la disposition des travailleurs et des personnes désignées ; un avis affiché dit comment y accéder." },
     /* L. 4121-2, 7° (LEGIARTI000033019913, lu à la source le 26 septembre
        2026, deux lectures concordantes) : la prévention se planifie « en y
@@ -815,7 +818,9 @@
       m: "harcelement moral|harcelement sexuel|harcelement|agissement sexiste|agissements sexistes",
       quoi: "La planification de la prévention intègre les risques liés au harcèlement moral et au harcèlement sexuel, définis aux articles L. 1152-1 et L. 1153-1." },
     { cle: "spst", nom: "Transmission au service de prévention et de santé au travail",
-      fond: "L. 4121-3-1, VI", m: "service de prevention et de sante au travail|medecine du travail|spst|sist|transmis au service",
+      /* Le nom du service ne prouve pas la transmission : il est cité dans
+         toutes les mesures qui y renvoient. On cherche la transmission. */
+      fond: "L. 4121-3-1, VI", m: "transmis au service|transmise au service|transmis a chaque mise a jour|transmission au service|transmis au medecin du travail",
       quoi: "Le document est transmis au service de prévention et de santé au travail à chaque mise à jour." },
   ];
 
@@ -846,12 +851,17 @@
       if (jours.indexOf(isoL) < 0) jours.push(isoL);
     }
     jours.sort();
+    /* Les échéances du programme sont des dates à venir : elles ne datent
+       pas le document. La plus récente date passée fait foi. */
+    var auj = new Date(), aujIso = auj.getFullYear() + "-" + ("0" + (auj.getMonth() + 1)).slice(-2) + "-" + ("0" + auj.getDate()).slice(-2);
+    var passees = jours.filter(function (j) { return j <= aujIso; });
     var annees = [], a;
     var ra = /\b(19[89]\d|20[0-4]\d)\b/g;
     while ((a = ra.exec(t)) !== null) if (annees.indexOf(a[1]) < 0) annees.push(a[1]);
     annees.sort();
     return { jours: jours, annees: annees,
-      derniere: jours.length ? Number(jours[jours.length - 1].slice(0, 4))
+      derniere: passees.length ? Number(passees[passees.length - 1].slice(0, 4))
+        : jours.length ? Number(jours[0].slice(0, 4))
                              : (annees.length ? Number(annees[annees.length - 1]) : null),
       precise: jours.length > 0 };
   }

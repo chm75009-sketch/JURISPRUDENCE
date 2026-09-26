@@ -181,7 +181,7 @@
     }
     return prec[long.length] <= max;
   }
-  var NUM_SEUL = /^[-–—\s]*(?:page\s*)?\d+(?:\s*(?:\/|sur|of|de)\s*\d+)?[-–—\s.]*$/i;
+  var NUM_SEUL = /^[---\s]*(?:page\s*)?\d+(?:\s*(?:\/|sur|of|de)\s*\d+)?[---\s.]*$/i;
 
   function sansEnTetes(pages) {
     if (!pages || pages.length < 3) return pages || [];

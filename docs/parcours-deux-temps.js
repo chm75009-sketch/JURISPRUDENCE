@@ -101,7 +101,7 @@
         "<p>Ces obligations étaient déclarées en place. La vérification ne les a pas confirmées : " +
         "elles redeviennent des manquements.</p><ul>";
       p.tempsA.refusesDuSecond.forEach(function (pt) {
-        h += "<li><b>" + ech(pt.objet) + "</b>, " + ech(pt.verdict.motif) + "</li>";
+        h += "<li><b>" + ech(pt.objet) + "</b> : " + ech(pt.verdict.motif) + "</li>";
       });
       h += "</ul></div>";
     }
@@ -294,7 +294,7 @@
       h += '<div class="pc-q"><p>' + ech(v.question) + "</p>" +
         '<p class="pc-attendu">Attendu : ' + ech(v.attendu) + "</p>" +
         '<select data-bac="' + ech(bac) + '" data-point="' + ech(id) + '" data-cle="' + ech(v.cle) + '">' +
-        '<option value="">, répondre, </option>' +
+        '<option value="">Répondre</option>' +
         REPONSES.map(function (r) {
           return '<option value="' + ech(r) + '"' + (val === r ? " selected" : "") + ">" + ech(r) + "</option>";
         }).join("") +
@@ -389,21 +389,21 @@
       l.push("");
       p.tempsA.points.forEach(function (pt, i) {
         l.push((i + 1) + ". " + pt.objet.toUpperCase());
-        l.push("Constat de l'audit, " + pt.constat);
-        l.push("Fondement, " + pt.fondement.join(" · "));
-        l.push("Ce qu'il faut faire, " + pt.quoiFaire);
-        l.push("Ce que l'inaction expose, " + pt.risque);
-        l.push("Délai à prévoir, " + pt.delai);
-        if (pt.document) l.push("Document à produire, " + pt.document);
+        l.push("Constat de l'audit : " + pt.constat);
+        l.push("Fondement : " + pt.fondement.join(" · "));
+        l.push("Ce qu'il faut faire : " + pt.quoiFaire);
+        l.push("Ce que l'inaction expose : " + pt.risque);
+        l.push("Délai à prévoir : " + pt.delai);
+        if (pt.document) l.push("Document à produire : " + pt.document);
         l.push("Procédure :");
         pt.etapes.forEach(function (e, k) { l.push("   " + (k + 1) + ") " + e); });
-        l.push("État, " + (pt.fait ? "déclaré corrigé" : "à faire"));
+        l.push("État : " + (pt.fait ? "déclaré corrigé" : "à faire"));
         l.push("");
       });
       if (p.tempsA.refusesDuSecond.length) {
         l.push("REVENUS DU SECOND TEMPS");
         p.tempsA.refusesDuSecond.forEach(function (pt) {
-          l.push("- " + pt.objet + " - " + pt.verdict.motif);
+          l.push("- " + pt.objet + " : " + pt.verdict.motif);
         });
         l.push("");
       }
@@ -424,8 +424,8 @@
       l.push("");
       p.tempsB.points.forEach(function (pt, i) {
         l.push((i + 1) + ". " + pt.objet.toUpperCase());
-        l.push("Fondement, " + pt.fondement.join(" · "));
-        l.push("Déclaration, " + pt.declare);
+        l.push("Fondement : " + pt.fondement.join(" · "));
+        l.push("Déclaration : " + pt.declare);
         l.push("Grille d'analyse :");
         pt.verifs.forEach(function (v) {
           var rep = pt.reponses[v.cle] || "sans réponse";
@@ -433,7 +433,7 @@
           l.push("   - " + v.question + " → « " + rep + " »" + (det ? " (" + det + ")" : ""));
           l.push("     attendu : " + v.attendu);
         });
-        l.push("Verdict, " + pt.verdict.issue + ". " + pt.verdict.motif);
+        l.push("Verdict : " + pt.verdict.issue + ". " + pt.verdict.motif);
         l.push("");
       });
       if (p.tempsB.refuses)

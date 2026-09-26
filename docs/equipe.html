@@ -110,7 +110,7 @@
     <b>Ce que ces droits font, et ce qu'ils ne font pas.</b> Tant que l'application fonctionne sans
     serveur, <b>les droits sont organisationnels et non sécuritaires</b> : ils répartissent le travail
     dans une équipe de bonne foi, ils ne protègent pas les données. Quiconque a accès à ce poste peut
-    les contourner — la console du navigateur suffit. Les codes d'accès ne sont pas enregistrés en
+    les contourner, la console du navigateur suffit. Les codes d'accès ne sont pas enregistrés en
     clair (condensat SHA-256 avec un sel par utilisateur), ce qui protège de la lecture accidentelle,
     non d'un utilisateur déterminé. Le passage à un serveur est prévu : il est décrit dans
     <b>docs/DROITS.md</b>, et il ne demandera de retoucher aucune page.
@@ -119,10 +119,10 @@
 
 <!-- ================================================== premier lancement -->
 <section id="sec-premier" hidden>
-  <h2>Premier lancement — créer l'administrateur</h2>
+  <h2>Premier lancement, créer l'administrateur</h2>
   <p class="note">Aucun utilisateur n'existe. Le premier créé est administrateur : il a tous les
   droits sur tous les modules et lui seul pourra ensuite constituer l'équipe. Notez son code
-  d'accès : il n'est pas récupérable — un code perdu se remplace en effaçant l'équipe (voir
+  d'accès : il n'est pas récupérable, un code perdu se remplace en effaçant l'équipe (voir
   DROITS.md).</p>
   <div class="carte">
     <label class="champ"><span>Nom</span>
@@ -172,7 +172,7 @@
     <p class="aide">Cochez, module par module, ce que cette personne peut faire. Une case décochée
     n'est pas une panne : le module refuse proprement et le dit.</p>
     <label class="champ" style="margin-top:10px">
-      <span><input type="checkbox" id="c-admin"> Administrateur — tous les droits, sur tous les modules</span></label>
+      <span><input type="checkbox" id="c-admin"> Administrateur, tous les droits, sur tous les modules</span></label>
     <div class="barre-act" style="margin-top:8px">
       <button type="button" class="act" id="c-tout">Tout cocher</button>
       <button type="button" class="act" id="c-rien">Tout décocher</button>
@@ -198,7 +198,7 @@
 <section id="sec-journal" hidden>
   <h2>Journal</h2>
   <p class="note">Deux journaux dans un seul : les <b>connexions</b> (qui, quel jour, à quelle heure)
-  et les <b>actes</b> (qui a fait quoi, quand, sur quel module). Les refus y figurent aussi — ils
+  et les <b>actes</b> (qui a fait quoi, quand, sur quel module). Les refus y figurent aussi, ils
   disent quel droit manque à qui.</p>
 
   <div class="filtres">
@@ -238,8 +238,8 @@
 </section>
 
 <footer class="note">
-  Le contrat technique — schéma des données, interface du fournisseur, marche à suivre le jour de la
-  bascule sur un serveur — est écrit dans <b>docs/DROITS.md</b>.
+  Le contrat technique, schéma des données, interface du fournisseur, marche à suivre le jour de la
+  bascule sur un serveur, est écrit dans <b>docs/DROITS.md</b>.
 </footer>
 
 </div>
@@ -284,7 +284,7 @@
       var l = "<tr><td>" + e(m.nom) + "</td>";
       Droits.ACTIONS.forEach(function (a) {
         l += '<td><input type="checkbox" data-m="' + e(m.id) + '" data-a="' + e(a.id) +
-             '" aria-label="' + e(m.nom + " — " + a.nom) + '"></td>';
+             '" aria-label="' + e(m.nom + " : " + a.nom) + '"></td>';
       });
       return l + "</tr>";
     }).join("");
@@ -375,7 +375,7 @@
   function ouvrirCreation(u) {
     editeId = u ? u.id : null;
     photoCourante = u ? (u.photo || "") : "";
-    $("titre-creation").textContent = u ? "Modifier — " + u.nom : "Nouvel utilisateur";
+    $("titre-creation").textContent = u ? "Modifier : " + u.nom : "Nouvel utilisateur";
     $("c-nom").value = u ? u.nom : "";
     $("c-fonction").value = u ? (u.fonction || "") : "";
     $("c-code").value = "";
@@ -469,7 +469,7 @@
             (u.admin ? '<span class="etiq admin">administrateur</span>' : "") +
             (moi && moi.id === u.id ? '<span class="etiq moi">vous</span>' : "") +
           "</div>" +
-          '<div class="fonction">' + e(u.fonction || "fonction non précisée") + " — " +
+          '<div class="fonction">' + e(u.fonction || "fonction non précisée") + " : " +
             (u.admin ? "tous les modules" : modules + " module" + (modules > 1 ? "s" : "") + " ouvert" + (modules > 1 ? "s" : "")) +
           "</div></div>" +
           '<div class="barre-act" style="margin:0">' +
@@ -533,10 +533,10 @@
         return "<tr>" +
           '<td class="h">' + e(isNaN(d) ? x.horodatage : d.toLocaleDateString("fr-FR")) + "</td>" +
           '<td class="h">' + e(isNaN(d) ? "" : d.toLocaleTimeString("fr-FR")) + "</td>" +
-          "<td>" + e(x.nom || x.utilisateur || "—") + "</td>" +
+          "<td>" + e(x.nom || x.utilisateur || "-") + "</td>" +
           '<td class="t-' + e(x.type) + '">' + e(x.type) + "</td>" +
-          "<td>" + e(Droits.nomModule(x.module) || "—") + "</td>" +
-          "<td>" + e(x.action || "—") + "</td>" +
+          "<td>" + e(Droits.nomModule(x.module) || "-") + "</td>" +
+          "<td>" + e(x.action || "-") + "</td>" +
           "<td>" + e(x.detail || "") + "</td>" +
           "</tr>";
       }).join("");
@@ -619,7 +619,7 @@
       return Promise.resolve();
     }
     $("equipe-etat").textContent = moi
-      ? "Connecté : " + moi.nom + (moi.fonction ? " — " + moi.fonction : "") +
+      ? "Connecté : " + moi.nom + (moi.fonction ? " : " + moi.fonction : "") +
         (moi.admin ? " (administrateur)" : "")
       : "Personne n'est connecté.";
     $("btn-nouveau").disabled = !Droits.peutAdmin("creerUtilisateur");

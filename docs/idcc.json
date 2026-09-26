@@ -1,5 +1,5 @@
 {
- "source": "DILA — jeu de données « KALI : Conventions collectives nationales » sur data.gouv.fr, ressource « Liste des conventions collectives » (Dila_Kali_Liste_correspondances_conventions-idcc-20230306.xlsx). Conventions en vigueur seulement ; la mention d'extension par arrêté, qui n'est pas l'intitulé, est retirée.",
+ "source": "DILA, jeu de données « KALI : Conventions collectives nationales » sur data.gouv.fr, ressource « Liste des conventions collectives » (Dila_Kali_Liste_correspondances_conventions-idcc-20230306.xlsx). Conventions en vigueur seulement ; la mention d'extension par arrêté, qui n'est pas l'intitulé, est retirée.",
  "url": "https://www.data.gouv.fr/fr/datasets/kali-conventions-collectives-nationales/",
  "extraitLe": "2026-08-19",
  "filtre": "lignes CC_TI = IDCC dont l'état KALI est en vigueur (VIGUEUR_ETEN, VIGUEUR_NON_ETEN, VIGUEUR, MODIFIE) ; conventions abrogées, remplacées, périmées ou dénoncées écartées",
@@ -238,7 +238,7 @@
   },
   {
    "idcc": "2002",
-   "intitule": "Convention collective nationale de la blanchisserie – teinturerie et nettoyage (blanchisserie, laverie, location de linge, nettoyage à sec, pressing et teinturerie) du 17 novembre 1997"
+   "intitule": "Convention collective nationale de la blanchisserie - teinturerie et nettoyage (blanchisserie, laverie, location de linge, nettoyage à sec, pressing et teinturerie) du 17 novembre 1997"
   },
   {
    "idcc": "0992",
@@ -734,7 +734,7 @@
   },
   {
    "idcc": "1539",
-   "intitule": "Convention collective nationale des entreprises du bureau et du numérique – Commerces et services du 15 décembre 1988"
+   "intitule": "Convention collective nationale des entreprises du bureau et du numérique - Commerces et services du 15 décembre 1988"
   },
   {
    "idcc": "2198",

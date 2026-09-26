@@ -152,6 +152,11 @@
         listeVoile = voile.querySelector(".lc-liste-voile");
         voile.querySelector(".lc-voile-fermer").addEventListener("click", fermerVoile);
         champVoile.addEventListener("input", function () { montrer(champVoile.value); });
+        champVoile.addEventListener("keydown", function (ev) {
+          if (ev.key !== "Enter" || !libre) return;
+          var autre = listeVoile.querySelector(".lc-autre");
+          if (autre && String(champVoile.value || "").trim()) { ev.preventDefault(); autre.click(); }
+        });
       }
       voile.hidden = false;
       doc.body.style.overflow = "hidden";
@@ -179,7 +184,8 @@
       });
       if (libre)
         h += '<button type="button" class="lc-o lc-autre" role="option" data-autre="1">' +
-          "Autre, saisie libre</button>";
+          (String(q || "").trim() && cadre === listeVoile
+            ? "Garder « " + ech(String(q).trim()) + " »" : "Autre, saisie libre") + "</button>";
       cadre.innerHTML = h;
       cadre.hidden = false;
       if (cadre === boite) placer();
@@ -224,6 +230,7 @@
               input.dispatchEvent(new Event("input", { bubbles: true }));
               input.dispatchEvent(new Event("change", { bubbles: true }));
             }
+
             try { input.focus(); } catch (e) {}
             return;
           }

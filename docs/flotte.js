@@ -504,14 +504,24 @@
     });
   }
 
+  /* LES CONDUCTEURS D'ABORD, ET SANS LES SORTIS. Mesuré le 26 septembre
+     2026 : la liste mêlait aux conducteurs le mécanicien, le responsable
+     d'atelier et l'assistante de direction, et gardait les salariés sortis.
+     Les sortis ne sont plus suivis ; les conducteurs viennent en tête, les
+     autres salariés suivent, pour leurs seules visites médicales. */
+  var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
   function rendreConducteurs() {
-    var G = salaries(), hote = $("conducteurs");
+    var G = salaries().filter(function (s) { return !s.sor; });
+    G = G.filter(function (s) { return CONDUIT.test(s.emp); })
+      .concat(G.filter(function (s) { return !CONDUIT.test(s.emp); }));
+    var hote = $("conducteurs");
     $("con-vide").hidden = !!G.length;
     if (!G.length) { hote.innerHTML = ""; return; }
     hote.innerHTML = G.map(function (s) {
       var f = fiche(s.id), E = echeancesConducteur(f), p = pire(E);
       var est = !!ouvert["c" + s.id];
-      var sous = [s.emp, f.permisCat ? "permis " + f.permisCat : ""].filter(Boolean).join(" · ");
+      var sous = [s.emp, f.permisCat ? "permis " + f.permisCat : "",
+        CONDUIT.test(s.emp) ? "" : "sédentaire : visites médicales"].filter(Boolean).join(" · ");
       return '<div class="carte-v' + (p === "passe" ? " urgent" : "") + '" data-c="' + ech(s.id) + '">' +
         '<div class="tt" data-plier="c' + ech(s.id) + '">' +
         '<span class="nom">' + ech(s.nom) +
@@ -604,25 +614,27 @@
   }
 
   function rendreCompte() {
-    var n = { passe: 0, rouge: 0, ambre: 0 }, vides = 0;
+    var n = { passe: 0, rouge: 0, ambre: 0 };
     vehicules().forEach(function (v) {
       var E = echeancesVehicule(v);
-      if (!E.length) vides++;
       E.forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
     });
     salaries().forEach(function (s) {
       var E = echeancesConducteur(fiche(s.id));
-      if (!E.length) vides++;
       E.forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
     });
     var h = "";
     if (n.passe) h += '<span class="c rouge">' + n.passe + " dépassée" + (n.passe > 1 ? "s" : "") + "</span>";
     if (n.rouge) h += '<span class="c rouge">' + n.rouge + " dans les 30 jours</span>";
     if (n.ambre) h += '<span class="c ambre">' + n.ambre + " dans les 60 jours</span>";
-    /* Une fiche sans aucune date ne se compte pas comme une fiche en règle :
-       elle se compte comme un contrôle impossible, et elle passe devant. */
-    if (vides) h = '<span class="c rouge">' + vides + " fiche" + (vides > 1 ? "s" : "") +
-      " sans aucune date</span>" + h;
+    /* « Aucune échéance proche » ne se dit que de ce qui a une date.
+       Mesuré le 26 septembre 2026 : quatre-vingt-sept véhicules sans aucune
+       date affichaient cette pastille verte, qui rassurait à tort. */
+    var sansVeh = vehicules().filter(function (v) { return !echeancesVehicule(v).length; }).length;
+    var sansCond = salaries().filter(function (x) {
+      return !x.sor && CONDUIT.test(x.emp) && !echeancesConducteur(fiche(x.id)).length; }).length;
+    if (sansVeh) h += '<span class="c rouge">' + sansVeh + " véhicule" + (sansVeh > 1 ? "s" : "") + " sans date</span>";
+    if (sansCond) h += '<span class="c rouge">' + sansCond + " conducteur" + (sansCond > 1 ? "s" : "") + " sans date</span>";
     if (!h) h = '<span class="c vert">Aucune échéance proche</span>';
     h += '<span class="c">' + vehicules().length + " véhicule" + (vehicules().length > 1 ? "s" : "") + "</span>";
     $("compte").innerHTML = h;

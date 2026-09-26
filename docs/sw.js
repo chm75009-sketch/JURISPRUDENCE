@@ -24,8 +24,8 @@ const ESSENTIELS = [
   /* Les trois outils : ils tiennent la donnée que les audits se bornaient à contrôler. */
   "./duerp.html",
   /* La branche « oui » du règlement intérieur : le document existant, déposé
-     et confronté au texte. Le fichier est lu dans la page — rien ne sort du
-     poste —, donc la page doit s'ouvrir hors connexion comme les autres. */
+     et confronté au texte. Le fichier est lu dans la page, rien ne sort du
+     poste,, donc la page doit s'ouvrir hors connexion comme les autres. */
   "./controler-ri.html",
   "./controler-discipline.html",
   "./controler-egalite.html",
@@ -45,48 +45,48 @@ const ESSENTIELS = [
   /* Le générateur de documents des relations collectives : autonome, tout est dans la page. */
   "./documents.html",
   /* Les parcours guidés : la couche opératoire au-dessus des audits. La page
-     et son moteur ne dépendent d'aucun réseau — le profil et l'avancement sont
+     et son moteur ne dépendent d'aucun réseau, le profil et l'avancement sont
      lus dans le stockage local du poste, les délais se calculent sur place.
      Une procédure engagée hors connexion est justement le cas où l'échéance
      compte le plus : elle doit s'ouvrir.
      Quinze parcours depuis le 23 août 2026 : aux sept premiers se sont
      ajoutés les cinq parcours de régularisation appelés par le guide de
-     l'audit social — affichages obligatoires, registre unique du personnel,
+     l'audit social, affichages obligatoires, registre unique du personnel,
      base de données, index de l'égalité professionnelle, entretiens de
-     parcours professionnel —, puis les trois nés de l'harmonisation avec
+     parcours professionnel,, puis les trois nés de l'harmonisation avec
      Juris Expert : embaucher, organiser les congés payés, établir les
      documents de fin de contrat. */
   "./parcours.html", "./parcours.js", "./parcours-lien.js",
   /* L'équipe, ses droits et son journal. Le module est chargé par TOUTES les
      pages : sans lui hors connexion, elles s'ouvriraient sans identification
-     et sans journal — c'est-à-dire autrement qu'en ligne. La page
+     et sans journal, c'est-à-dire autrement qu'en ligne. La page
      d'administration suit, pour que les droits se règlent aussi sans réseau. */
   "./droits.js", "./equipe.html", "./DROITS.md",
   "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-180.png",
   /* Les audits et leurs moteurs. Ils pèsent ensemble un peu plus d'un
      mégaoctet, et c'est délibéré : une page d'audit installée qui échouerait
      hors connexion serait pire que pas d'installation du tout. L'audit se
-     calcule entièrement sur le poste — il n'a besoin d'aucun réseau. */
+     calcule entièrement sur le poste, il n'a besoin d'aucun réseau. */
   "./audit.html", "./moteur-eco.js",
   "./audit-cse.html", "./moteur-cse.js",
   "./audit-pse.html", "./moteur-pse.js",
   "./audit-bdese.html", "./bdese.html", "./moteur-bdese.js",
   "./audit-nao.html", "./moteur-nao.js",
   /* Le plan d'action pour l'égalité professionnelle : l'outil, pas l'audit. La
-     page est autonome — les textes qu'elle cite sont dans son code, le plan
+     page est autonome, les textes qu'elle cite sont dans son code, le plan
      vit dans le stockage local. Elle doit donc s'ouvrir hors connexion comme
      le reste. */
   "./egalite.html",
   "./audit-sst.html", "./moteur-sst.js",
   /* Le premier module côté relations individuelles : discipline et règlement
-     intérieur. Même raison que les autres — un audit installé qui échouerait
+     intérieur. Même raison que les autres, un audit installé qui échouerait
      hors connexion serait pire que pas d'installation du tout. */
   "./audit-discipline.html", "./moteur-discipline.js",
   /* L'audit social chapeau : le point d'entrée des obligations, qui renvoie
      aux modules détaillés. */
   "./audit-social.html", "./moteur-social.js",
   /* Le registre unique du personnel : l'outil, pas l'audit. Tout est dans la
-     page — les six articles qui la commandent y sont reproduits, et les lignes
+     page, les six articles qui la commandent y sont reproduits, et les lignes
      du registre vivent dans le stockage local du poste. Une entreprise qui
      tient son registre sans réseau doit pouvoir l'ouvrir : c'est justement le
      document qu'un agent de contrôle demande sur place. */
@@ -129,13 +129,13 @@ const ESSENTIELS = [
   "./profil.js",
   /* La table des outils de Juris Expert : l'autre application de la juriste,
      celle qui imprime le document final. Ce fichier ne contient que des liens
-     — il ne charge rien, il n'appelle rien. Il est mis en cache parce que le
+     - il ne charge rien, il n'appelle rien. Il est mis en cache parce que le
      guide de régularisation, les parcours et le générateur de documents le
      lisent : sans lui, les renvois disparaissent silencieusement au lieu de
      s'afficher. */
   "./juris-expert.js",
   /* Le sélecteur de convention collective et la liste officielle des IDCC
-     (54 Ko) : sans eux, le champ convention retombe en saisie libre — il
+     (54 Ko) : sans eux, le champ convention retombe en saisie libre, il
      fonctionne, mais la liste doit être là hors connexion comme le reste. */
   "./idcc.js", "./idcc.json",
   /* L'assistant Claude, présent sur toutes les pages. Son code se met en cache
@@ -181,7 +181,7 @@ self.addEventListener("fetch", e => {
   /* GitHub Pages sert index.html (et le reste) avec un en-tête
      « cache-control: max-age=600 » : sans ce qui suit, fetch(req) peut être
      satisfait par le cache HTTP du navigateur lui-même, sans passer par le
-     réseau — le repli hors connexion n'a jamais lieu, mais l'utilisateur voit
+     réseau, le repli hors connexion n'a jamais lieu, mais l'utilisateur voit
      quand même une page vieille de dix minutes, malgré le commentaire
      ci-dessus. { cache: "reload" } force la vérification réseau à chaque
      requête ; le résultat continue d'alimenter le cache du service worker. */
@@ -198,13 +198,13 @@ self.addEventListener("fetch", e => {
 
          La version précédente renvoyait « ./index.html » dès qu'une page
          n'était pas en cache. Conséquence : l'icône de l'audit du comité,
-         ouverte sans réseau, affichait la recherche de jurisprudence — quatre
+         ouverte sans réseau, affichait la recherche de jurisprudence, quatre
          applications installées, une seule qui s'ouvrait. Le repli était plus
          nuisible que l'absence de repli : il ne signalait pas la panne, il
          servait autre chose à sa place, ce qui est la pire des réponses.
 
          Chaque page se replie désormais sur ELLE-MÊME, et sur rien d'autre.
-         Si elle n'a jamais été mise en cache, on le dit — au lieu de faire
+         Si elle n'a jamais été mise en cache, on le dit, au lieu de faire
          croire que l'application demandée est celle qui s'affiche. */
       .catch(() => caches.match(req).then(r => {
         if (r) return r;

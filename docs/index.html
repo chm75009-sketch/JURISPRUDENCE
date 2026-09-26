@@ -103,6 +103,9 @@
     border:2px solid var(--accent);background:var(--accent-clair);color:var(--accent);
     font:600 26px/1.2 system-ui;text-decoration:none}
   .grand:hover{background:var(--accent);color:#fff}
+  /* Sur ordinateur, deux colonnes. Mesuré le 26 septembre 2026 : sur une
+     seule ligne, les cinq portes débordaient de la colonne à droite. Audit
+     et Gérer gardent la grande taille, les trois autres sont plus basses. */
   @media (min-width:700px){
     main.wrap{max-width:720px}
     /* CINQ PORTES SUR UNE SEULE RANGÉE DÉBORDAIENT DE LA COLONNE.
@@ -293,7 +296,7 @@
     });
   })();
 
-  /* Les huit champs de la fiche, sans texte d'aide, avec des intitulés courts.
+  /* Les neuf champs de la fiche, sans texte d'aide, avec des intitulés courts.
      Le SIRET, l'adresse et le représentant légal en font partie depuis le
      12 septembre 2026 : ils sont l'en-tête et la signature de tout document
      produit, et sans eux chaque courrier sortait avec trois crochets à
@@ -310,6 +313,7 @@
     effectif: "Effectif (salariés)",
     secteur: "Secteur",
     conventionCollective: "Convention collective (IDCC)",
+    cseExiste: "Comité social et économique en place"
   };
   /* LA QUESTION DU COMITÉ SE POSE À L'ENTRÉE, DANS SON PROPRE PLI.
 
@@ -321,12 +325,8 @@
      seule case pour une seule clé, et le reste avec elle. */
   /* Ce qui n'empêche pas de continuer. Le courriel est une coordonnée, non un
      élément d'identité : un document se dépose au greffe sans lui. */
-  var FACULTATIFS = { courriel: true };
-  /* Les champs de la fiche d'accueil qui ne sont pas dans l'identité : la
-     question du comité vit dans la fiche longue des parcours, et la voici
-     posée aussi à l'entrée. Même clé, même enregistrement. */
-  var HORS_IDENTITE = [];
-  var CHAMPS = (window.Profil ? window.Profil.IDENTITE.concat(HORS_IDENTITE) : []).filter(function (ch) {
+  var FACULTATIFS = { courriel: true, cseExiste: true };
+  var CHAMPS = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
     return NOMS[ch.c] !== undefined;
   }).map(function (ch) {
     var c = {};

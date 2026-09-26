@@ -12,7 +12,7 @@
 
    Il ouvre un .xlsx et rend un tableau de lignes de texte. Rien d'autre : ni
    formules, ni styles, ni dates typées. Une date lue rend le nombre de jours
-   d'Excel si la cellule est numérique, et le texte tel quel sinon — le
+   d'Excel si la cellule est numérique, et le texte tel quel sinon, le
    rapprochement se fait ailleurs, sur des valeurs.
 
    COMMENT

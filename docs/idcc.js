@@ -260,7 +260,7 @@
       if (!v) return false;
       /* L'ancien séparateur, le tiret long, peut encore être dans une fiche
          enregistrée avant le 8 septembre 2026 : on l'accepte à la lecture. */
-      var v2 = v.replace(/\s[\u2014\u2013]\s/, " - ");
+      var v2 = v.replace(/\s[--]\s/, " - ");
       for (var i = 0; i < liste.length; i++) if (valeurDe(liste[i]) === v2) return true;
       return false;
     }

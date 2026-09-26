@@ -111,6 +111,13 @@
       aide: "Il oriente la convention applicable et le contenu des modèles (unités de travail du document unique, risques types)." },
     { c: "conventionCollective", nom: "Convention collective applicable (IDCC)", t: "idcc",
       aide: "Elle s'identifie par l'activité réelle. L'application lit à la source les conventions qu'elle sert, la 16 des transports routiers aujourd'hui ; pour les autres, elle signale l'endroit où la vôtre peut ajouter une obligation, et n'affirme jamais ce qu'elle contient." },
+    /* Le comité social et économique, dans la fiche elle-même. Demandé le
+       26 septembre 2026 : la question n'était posée que dans les parcours,
+       si bien que l'accueil, l'agenda, Gérer et l'audit proposaient les
+       réunions et les consultations d'un comité que l'entreprise n'a pas. */
+    { c: "cseExiste", nom: "Un comité social et économique est-il en place ?", t: "select",
+      options: ["oui, élu", "non, procès-verbal de carence", "non, aucune élection organisée"],
+      aide: "À partir de onze salariés pendant douze mois consécutifs, le comité est dû (L. 2311-2). Quand les élections n'ont donné aucun candidat, c'est un procès-verbal de carence qui le constate (L. 2314-9). Sans comité, le procès-verbal de carence remplace son avis, et ses réunions et consultations ne sont plus proposées." },
     { c: "groupe", nom: "L'entreprise appartient-elle à un groupe ?", t: "oui-non",
       aide: "Le groupe déclenche le comité de groupe et pèse sur certains seuils des modules dédiés." },
     { c: "etablissementsDistincts", nom: "L'entreprise comporte-t-elle au moins deux établissements distincts ?", t: "oui-non",
@@ -155,9 +162,6 @@
      l'autre : elles sont à leur place ici, et chaque module les reprend.
      ══════════════════════════════════════════════════════════════════════ */
   var REPRESENTATION = [
-    { c: "cseExiste", nom: "Comité social et économique en place ?", t: "select",
-      options: ["oui, élu", "non, procès-verbal de carence", "non, aucune élection organisée"],
-      aide: "À partir de onze salariés pendant douze mois consécutifs, le comité est dû (L. 2311-2). Quand les élections n'ont donné aucun candidat, c'est un procès-verbal de carence qui le constate (L. 2314-9)." },
     { c: "cseElections", nom: "Date des dernières élections", t: "date",
       aide: "Le mandat dure quatre ans (L. 2314-33) : c'est cette date qui dit quand recommencer." },
     { c: "cseCarence", nom: "Date du procès-verbal de carence", t: "date",
@@ -695,7 +699,7 @@
         (ch.options || []).map(function (o) {
           return '<option' + (val === o ? " selected" : "") + ">" + e(o) + "</option>";
         }).join("") +
-        (ch.autre ? '<option value="__autre"' + (val && !connu ? " selected" : "") + ">, autre, </option>" : "") +
+        (ch.autre ? '<option value="__autre"' + (val && !connu ? " selected" : "") + ">Autre, saisie libre</option>" : "") +
         "</select>" +
         (ch.autre ? '<input type="text" id="' + id + '-libre" data-libre="' + e(ch.c) + '" ' +
           'placeholder="précisez" style="margin-top:6px' + (val && !connu ? "" : ";display:none") +
