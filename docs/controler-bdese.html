@@ -206,7 +206,7 @@
   var ech = function (s) { return String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
 
-  var CTX = null, CHOIX = {}, PRESENTES = {};
+  var CTX = null, CHOIX = {}, PRESENTES = {}, MESURES = {};
 
   var profil = P ? (P.lire() || {}) : {};
   var effProfil = (profil.effectif !== undefined && profil.effectif !== null && String(profil.effectif).trim() !== "")
@@ -418,11 +418,40 @@
     return n >= 2;
   }
 
+  /* UNE RUBRIQUE PRÉSENTE N'EST PAS UNE RUBRIQUE RENSEIGNÉE.
+
+     « 0 rubrique à insérer » s'affichait sur une base dont toutes les cases
+     portaient « à renseigner » : le repérage ne regardait que les titres.
+     On mesure donc, ligne à ligne, ce qui suit l'information dans le texte
+     déposé : un chiffre, un « à renseigner », ou rien. Une rubrique dont
+     rien n'est chiffré est proposée comme les absentes. L. 2312-36 veut une
+     base « mise régulièrement à jour ». Relevé le 26 septembre 2026. */
+  var SANS_VALEUR = /(a renseigner|non renseigne|a completer|neant|sans objet|non disponible|n\/a)/;
+  function mesurer(rb, t) {
+    var trouvees = 0, chiffrees = 0, aRenseigner = 0;
+    rb.lignes.forEach(function (l) {
+      var k = normaliser(l.info);
+      if (k.length < 14) return;
+      var i = t.indexOf(k);
+      if (i < 0) return;
+      trouvees++;
+      var suite = t.slice(i + k.length, i + k.length + 160);
+      if (SANS_VALEUR.test(suite)) { aRenseigner++; return; }
+      if (/\d/.test(suite)) chiffrees++;
+    });
+    return { trouvees: trouvees, chiffrees: chiffrees, aRenseigner: aRenseigner,
+      total: rb.lignes.length };
+  }
+
   function classer() {
     var t = normaliser($("#texte").value);
-    CHOIX = {}; PRESENTES = {};
+    CHOIX = {}; PRESENTES = {}; MESURES = {};
     rubriques(CTX).forEach(function (rb) {
-      PRESENTES[rb.id] = reperee(rb, t);
+      var m = mesurer(rb, t);
+      MESURES[rb.id] = m;
+      /* Repérée par ses titres, et renseignée sur au moins une ligne : sinon
+         elle est à reprendre, comme si elle manquait. */
+      PRESENTES[rb.id] = reperee(rb, t) && m.chiffrees > 0;
       CHOIX[rb.id] = !PRESENTES[rb.id];
     });
   }
@@ -447,8 +476,15 @@
     var mis = liste.filter(function (rb) { return CHOIX[rb.id]; }).length;
     var lignes = liste.reduce(function (n, rb) { return n + (CHOIX[rb.id] ? rb.lignes.length : 0); }, 0);
 
+    var trouvees = 0, chiffrees = 0, aRens = 0, totalLignes = 0;
+    liste.forEach(function (rb) {
+      var m = MESURES[rb.id] || { trouvees: 0, chiffrees: 0, aRenseigner: 0, total: rb.lignes.length };
+      trouvees += m.trouvees; chiffrees += m.chiffrees; aRens += m.aRenseigner; totalLignes += m.total;
+    });
     $("#etat").textContent = mis + " rubrique" + (mis > 1 ? "s" : "") + " à insérer, " +
-      lignes + " ligne" + (lignes > 1 ? "s" : "");
+      lignes + " ligne" + (lignes > 1 ? "s" : "") + " · " + chiffrees + " ligne" +
+      (chiffrees > 1 ? "s" : "") + " chiffrée" + (chiffrees > 1 ? "s" : "") + " sur " + totalLignes +
+      " dans votre base" + (aRens ? ", " + aRens + " portée" + (aRens > 1 ? "s" : "") + " « à renseigner »" : "");
 
     var aPoser = liste.filter(function (rb) { return !PRESENTES[rb.id]; });
     var deja = liste.filter(function (rb) { return PRESENTES[rb.id]; });
@@ -491,8 +527,15 @@
       corps += '<tr><td class="info">' + ech(l.info) + "</td>" +
         CTX.mil.map(function () { return '<td class="vide"></td>'; }).join("") + '<td class="vide"></td></tr>';
     });
+    var m = MESURES[rb.id] || null;
+    var dit = m ? (m.trouvees
+      ? m.trouvees + " ligne" + (m.trouvees > 1 ? "s" : "") + " retrouvée" + (m.trouvees > 1 ? "s" : "") +
+        " dans votre base, " + m.chiffrees + " chiffrée" + (m.chiffrees > 1 ? "s" : "") +
+        (m.aRenseigner ? ", " + m.aRenseigner + " « à renseigner »" : "")
+      : "aucune ligne de cette rubrique n'a été retrouvée dans votre base") : "";
     return '<div class="rb' + (pris ? "" : " retire") + '"><div class="tt"><h3>' + rb.n + ". " + ech(rb.titre) +
-      '<span class="n">' + ech(rb.fond) + " · " + rb.lignes.length + " ligne" + (rb.lignes.length > 1 ? "s" : "") + "</span></h3>" +
+      '<span class="n">' + ech(rb.fond) + " · " + rb.lignes.length + " ligne" + (rb.lignes.length > 1 ? "s" : "") +
+      (dit ? " · " + ech(dit) : "") + "</span></h3>" +
       '<button type="button" class="btn-ins' + (pris ? "" : " mis") + '" data-ins="' + ech(rb.id) + '">' +
       (pris ? "Retirer" : "Insérer") + "</button></div>" +
       '<div class="grille-tab"><table class="g"><thead>' + head + "</thead><tbody>" + corps +
