@@ -446,6 +446,24 @@
     return String((P && P.cseExiste) || "").trim().toLowerCase().indexOf("non") === 0;
   }
 
+  /* LA COMMISSION SANTÉ-SÉCURITÉ N'EST PAS DUE À TOUT LE MONDE.
+
+     Elle est créée dans les entreprises et les établissements distincts d'au
+     moins trois cents salariés, et dans les établissements mentionnés aux
+     articles L. 4521-1 et suivants, quel que soit l'effectif (L. 2315-36) ;
+     en deçà, l'inspecteur du travail peut l'imposer (L. 2315-37). Le parcours
+     produisait ses documents sans avoir demandé laquelle de ces causes
+     s'applique. Les deux questions sont posées, et tant qu'on répond non aux
+     deux sous trois cents salariés, les étapes de cette commission ne
+     s'ouvrent pas. Relevé le 26 septembre 2026. */
+  function commissionSstDue(P, D) {
+    if (seuil(P, 300) === true) return true;
+    var d = D || {};
+    if (d.siteClasse === "oui" || d.inspecteurImpose === "oui") return true;
+    if (d.siteClasse === "non" && d.inspecteurImpose === "non" && sousSeuil(P, 300) === true) return false;
+    return null;
+  }
+
   var CHAMPS_PARCOURS = [
     { c: "cseExiste", nom: "Un comité social et économique est-il en place ?", t: "oui-non" },
     { c: "sectionsSyndicales", nom: "Une ou plusieurs sections syndicales d'organisations représentatives ?", t: "oui-non",
@@ -848,6 +866,12 @@
     resume: "L'accord d'abord, le régime supplétif ensuite : seuils de 300 et de 1 000, commission santé-sécurité obligatoire, désignations par résolution, formation des élus, première réunion et compte rendu au comité.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
     donnees: [
+      { c: "siteClasse", nom: "Un établissement relève-t-il des articles L. 4521-1 et suivants (installation classée) ?", t: "oui-non",
+        si: function (P) { return sousSeuil(P, 300) === true; },
+        aide: "Dans ces établissements, la commission santé, sécurité et conditions de travail est créée quel que soit l'effectif (art. L. 2315-36, 3°)." },
+      { c: "inspecteurImpose", nom: "L'inspecteur du travail a-t-il imposé la création de la commission santé-sécurité ?", t: "oui-non",
+        si: function (P) { return sousSeuil(P, 300) === true; },
+        aide: "En dessous de trois cents salariés, il peut l'imposer lorsque cette mesure est nécessaire, notamment en raison de la nature des activités, de l'agencement ou de l'équipement des locaux (art. L. 2315-37). Gardez sa décision et sa date." },
       { c: "accordCommissions", nom: "Un accord fixe-t-il les modalités de mise en place des commissions ?", t: "oui-non",
         aide: "Accord d'entreprise de l'article L. 2313-2, ou, en l'absence de délégué syndical, accord entre l'employeur et le comité adopté à la majorité des titulaires (art. L. 2315-41 et L. 2315-42)." },
       { c: "riComite", nom: "Le règlement intérieur du comité définit-il ces modalités ?", t: "oui-non",
@@ -894,13 +918,25 @@
         conseil: "Le seuil se constate sur douze mois consécutifs et sur des relevés mensuels, non sur une déclaration d'effectif : sortez les états de paie et datez le franchissement avant de vous demander si la commission est due. Vérifiez ensuite le seuil au niveau de l'entreprise puis, séparément, au niveau de chaque établissement distinct : une même entreprise peut devoir plusieurs commissions, et c'est l'oubli courant. Conservez la décision de l'inspecteur du travail lorsqu'il y en a une, ainsi que sa date : c'est elle qui fixe l'obligation et son point de départ.",
         quoi: "Elle est créée dans les entreprises et les établissements distincts d'au moins trois cents salariés, et dans les établissements des articles L. 4521-1 et suivants. En deçà, l'inspecteur du travail peut l'imposer ; et rien n'interdit de la créer par accord.",
         fond: ["L2315-36", "L2315-37", "L2315-43"] },
+      /* Quand les trois causes sont écartées, on le dit, et les étapes de
+         cette commission ne s'ouvrent pas. L. 2315-36 (LEGIARTI000035626455),
+         L. 2315-37 (LEGIARTI000036262445) et L. 2315-43 (LEGIARTI000035626471),
+         lus à la source le 26 septembre 2026, deux lectures concordantes. */
+      { id: "c2bis", nom: "Ici, la commission santé-sécurité n'est pas obligatoire",
+        si: function (P, D) { return commissionSstDue(P, D) === false; },
+        quoi: "L'effectif est inférieur à trois cents salariés, aucun établissement ne relève des articles L. 4521-1 et suivants, et l'inspecteur du travail n'a pas imposé la création : la commission n'est pas obligatoire. Rien n'interdit de la créer par accord, qui en fixe alors le nombre, le périmètre et les modalités (L. 2315-43). À défaut, les attributions en matière de santé, de sécurité et de conditions de travail restent exercées par le comité lui-même.",
+        conseil: "Gardez trace de ce constat : la liste des établissements et leur classement au titre des articles L. 4521-1 et suivants, et l'absence de décision de l'inspecteur du travail. C'est ce qui répondra à la question le jour où elle sera posée. Si l'effectif approche des trois cents salariés, datez le franchissement mois par mois plutôt que de le constater après coup.",
+        risque: "Constituer la commission n'expose à rien ; ne pas la constituer là où elle est due expose à l'entrave au fonctionnement régulier du comité. C'est l'effectif de chaque établissement distinct, et non le seul effectif de l'entreprise, qui doit être vérifié.",
+        fond: ["L2315-36", "L2315-37", "L2315-43"] },
       { id: "c3", nom: "Fixer la composition de la commission santé-sécurité",
+        si: function (P, D) { return commissionSstDue(P, D) !== false; },
         docProduit: "CSE-CTL-SST-01",
         risque: "La commission est présidée par l'employeur ou son représentant et comprend au minimum trois membres représentants du personnel, dont au moins un représentant du second collège ou, le cas échéant, du troisième collège prévu à l'article L. 2314-11 (L. 2315-39). Ces dispositions sont d'ordre public : lorsqu'un troisième collège est institué, un siège au moins doit être attribué à un élu le représentant, l'arrêt qui n'y voyait qu'une alternative entre le second et le troisième collège ayant été cassé (Soc., 26 février 2025, n° 24-12.295). Une composition irrégulière expose la désignation à l'annulation.",
         conseil: "Avant le vote, dressez la liste des élus avec, en regard de chaque nom, le collège dans lequel il a été élu : c'est cette colonne, et non l'intitulé du poste occupé, qui décide. Comptez les collaborateurs dont le président entend se faire assister, car ensemble ils ne peuvent pas être en nombre supérieur à celui des représentants du personnel titulaires ; arrêtez cette liste avant la réunion plutôt que dans la salle. Portez au procès-verbal la composition retenue avec le collège de chacun : c'est la pièce qui répondra à la contestation.",
         quoi: "Présidence par l'employeur ou son représentant ; au minimum trois membres représentants du personnel, dont au moins un du second collège ou, le cas échéant, du troisième collège. L'employeur peut se faire assister de collaborateurs, sans dépasser le nombre des représentants du personnel titulaires.",
         fond: ["L2315-39"], juris: ["24-12.295", "24-16.408"] },
       { id: "c4", nom: "Désigner les membres par une résolution du comité",
+        si: function (P, D) { return commissionSstDue(P, D) !== false; },
         champDate: "dateReunionDesignation",
         docProduit: "CSE-CTL-SST-03",
         risque: "La désignation des membres de la commission, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote des membres du comité à la majorité des voix des membres présents, sans qu'il soit besoin d'une résolution préalable fixant les modalités de l'élection (Soc., 27 novembre 2019, n° 19-14.224), par application des articles L. 2315-39 et L. 2315-32 ; une désignation opérée autrement est irrégulière. Le mandat des membres prend fin avec celui des membres élus du comité (L. 2315-39), et sauf dans les cas de fin anticipée énumérés à l'article L. 2314-33, décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible, le comité ne peut pas remplacer les membres initialement désignés avant ce terme, aucun accord d'entreprise ne pouvant y déroger (Soc., 28 mai 2026, n° 24-22.914).",
@@ -920,6 +956,7 @@
             troisiemeCollege: D.troisiemeCollege === "oui"
               ? ["Un troisième collège est institué : un siège au moins revient à un élu le représentant"] : [] }; } } },
       { id: "c5", nom: "Délimiter les attributions déléguées, et ce qui ne se délègue pas",
+        si: function (P, D) { return commissionSstDue(P, D) !== false; },
         docProduit: "CSE-CTL-SST-05",
         risque: "La commission se voit confier, par délégation du comité, tout ou partie des attributions relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert et des attributions consultatives du comité (L. 2315-38), disposition d'ordre public (Soc., 13 mai 2026, n° 25-12.560). Un avis rendu par la seule commission, ou une expertise qu'elle aurait décidée, est irrégulier, et l'accord qui l'aurait prévu ne peut pas y suppléer.",
         conseil: "Écrivez la délégation en deux colonnes : ce qui est confié, et ce qui reste au comité. Relisez l'accord ou le règlement intérieur du comité sous cet angle, car les clauses qui débordent sont rarement explicites, elles se glissent dans un « la commission est consultée sur… ». Reprenez, s'il y en a, les avis rendus et les expertises décidées par la seule commission : ils se refont au comité, et mieux vaut le faire avant qu'un tiers ne le relève.",
