@@ -73,6 +73,24 @@
     return (j === 1 ? "1er" : j) + " " + MOIS[parseInt(m[2], 10) - 1] + " " + m[1];
   }
 
+  /* Les mentions de nature du registre, en toutes lettres : ce sont celles
+     que D. 1221-23, 9° à 13° fait porter, et celles que les lettres citent. */
+  var NATURES = {
+    cdi: "à durée indéterminée", cdd: "à durée déterminée",
+    temporaire: "de travail temporaire",
+    groupement: "de mise à disposition par un groupement d'employeurs",
+    apprenti: "d'apprentissage", pro: "de professionnalisation",
+  };
+
+  /* Le registre écrit le sexe « Masculin », « Féminin », « M », « F », ou
+     rien. Rien ne se devine : sans réponse, les deux formes sont écrites. */
+  function accord(sexe, masculin, feminin) {
+    var v = net(sexe).toLowerCase();
+    if (v.charAt(0) === "f") return feminin;
+    if (v.charAt(0) === "m" || v.charAt(0) === "h") return masculin;
+    return masculin + "(e)";
+  }
+
   function salaries() {
     var E = null;
     try { E = JSON.parse(window.localStorage.getItem(CLE_REGISTRE) || "null"); } catch (e) {}
@@ -85,7 +103,12 @@
       var nom = (net(s.nom) + " " + net(s.pre)).trim();
       var lignes = [nom];
       if (net(s.emp)) lignes.push(net(s.emp));
-      if (net(s.adresse)) lignes.push(net(s.adresse));
+      /* Le registre range l'adresse du salarié sous « adr » : elle était
+         cherchée sous « adresse », donc jamais trouvée, et les lettres
+         sortaient avec « [adresse du salarié] » en toutes lettres. Relevé le
+         26 septembre 2026. */
+      var adresse = net(s.adr) || net(s.adresse);
+      if (adresse) adresse.split("\n").forEach(function (l) { if (net(l)) lignes.push(net(l)); });
       var sortie = net(s.sor);
       return {
         id: "reg:" + (s.id || nom),
@@ -105,6 +128,16 @@
           "QUALIFICATION": net(s.qua),
           "DATE D'ENTRÉE": enFrancais(s.ent),
           "DATE DE SORTIE": enFrancais(s.sor),
+          "ADRESSE": adresse,
+          "ADRESSE DU SALARIÉ": adresse,
+          /* La nature du contrat est au registre (D. 1221-23, 9° à 13°) : une
+             attestation d'emploi n'a pas à la redemander. */
+          "NATURE DU CONTRAT": NATURES[net(s.nature)] || "",
+          /* Le sexe est au registre (D. 1221-23, 3°) : une lettre nominative
+             n'a pas de raison d'écrire « est employé » à une femme. Quand il
+             n'est pas renseigné, les deux formes sont écrites. */
+          "EMPLOYÉ": accord(s.sexe, "employé", "employée"),
+          "L'INTÉRESSÉ": accord(s.sexe, "l'intéressé", "l'intéressée"),
         },
         duRegistre: true,
       };

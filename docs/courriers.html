@@ -255,6 +255,8 @@
   /* Vrai quand on est alle chercher un destinataire depuis la lettre : on y
      revient alors directement, sans repasser par la liste des modeles. */
   var RETOUR_LETTRE = false;
+  /* La lettre mise de côté le temps d'aller chercher un destinataire. */
+  var GARDE = null;
 
   function ecran(id) {
     ["e-familles", "e-qui", "e-modeles", "e-lettre"].forEach(function (x) {
@@ -341,7 +343,8 @@
   function suite() {
     if (RETOUR_LETTRE && MOD) {
       RETOUR_LETTRE = false;
-      ouvrirModele(MOD.id);
+      ouvrirModele(MOD.id, GARDE);
+      GARDE = null;
       $("etat").textContent = DEST
         ? "Destinataire ajouté : " + DEST.nom + "."
         : "Lettre sans destinataire.";
@@ -360,6 +363,8 @@
 
   $("dest-lettre").addEventListener("click", function () {
     if (!FAM) return;
+    /* La lettre telle qu'elle est à cet instant, avec ce qui y a été écrit. */
+    GARDE = { objet: $("objet").innerHTML, lettre: $("lettre").innerHTML };
     RETOUR_LETTRE = true;
     rendreQui();
     $("titre-haut").textContent = MOD ? MOD.nom : FAM.nom;
@@ -460,12 +465,19 @@
     };
   }
 
+  /* « en qualité de Assistante ». La préposition qui précède un crochet
+     s'élide quand la valeur commence par une voyelle : c'est au moment du
+     remplacement qu'on le sait, et nulle part ailleurs. Relevé le
+     26 septembre 2026. */
+  var VOYELLE = /^[aeiouyàâäéèêëîïôöùûüh]/i;
   function remplir(l) {
     var fiche = champsFiche();
     var dest = (DEST && DEST.champs) || {};
-    return String(l).replace(/\[([^\]]+)\]/g, function (tout, dedans) {
+    return String(l).replace(/(\bde\s+)?\[([^\]]+)\]/g, function (tout, avant, dedans) {
       var v = dest[dedans] || fiche[dedans];
-      return v ? v : tout;
+      if (!v) return tout;
+      if (avant && VOYELLE.test(v)) return "d'" + v;
+      return (avant || "") + v;
     });
   }
 
@@ -490,13 +502,57 @@
     return h;
   }
 
-  function ouvrirModele(id) {
+  /* CHANGER DE DESTINATAIRE NE RÉÉCRIT PAS LA LETTRE.
+
+     « Ajouter le destinataire » rouvrait le modèle : tout ce qui avait été
+     complété dans le texte était perdu sans un mot, « 4 250,00 » redevenait
+     « [MONTANT] ». On garde donc la lettre telle qu'elle est, on remplace le
+     seul bloc d'adresse, et on remplit au passage les crochets que le
+     nouveau destinataire permet de remplir, sans toucher au reste. Relevé le
+     26 septembre 2026. */
+  function majDestinataire() {
+    var L = $("lettre");
+    Array.prototype.forEach.call(L.querySelectorAll("p.dest"), function (p) {
+      p.parentNode.removeChild(p);
+    });
+    if (DEST && DEST.lignes && DEST.lignes.length) {
+      var h = DEST.lignes.map(function (l, i) {
+        return '<p class="dest' + (i === 0 ? " premiere" : "") +
+          (i === DEST.lignes.length - 1 ? " derniere" : "") + '">' + ech(l) + "</p>";
+      }).join("");
+      var date = L.querySelector("p.date");
+      if (date) date.insertAdjacentHTML("beforebegin", h);
+      else L.insertAdjacentHTML("afterbegin", h);
+    }
+    var fiche = champsFiche();
+    var dest = (DEST && DEST.champs) || {};
+    var combler = function (html) {
+      return String(html).replace(
+        /(\bde\s+)?(?:<span class="a-remplir">\[([^\]<>]+)\]<\/span>|\[([^\]<>]+)\])/g,
+        function (tout, avant, a, b) {
+          var v = dest[a || b] || fiche[a || b];
+          if (!v) return tout;
+          if (avant && VOYELLE.test(v)) return "d'" + ech(v);
+          return (avant || "") + ech(v);
+        });
+    };
+    L.innerHTML = combler(L.innerHTML);
+    $("objet").innerHTML = combler($("objet").innerHTML);
+  }
+
+  function ouvrirModele(id, garde) {
     MOD = null;
     CM.MODELES.forEach(function (m) { if (m.id === id) MOD = m; });
     if (!MOD) return;
     $("titre-haut").textContent = MOD.nom;
-    $("objet").innerHTML = rouge(remplir(MOD.objet));
-    $("lettre").innerHTML = corpsHtml(MOD);
+    if (garde && garde.lettre) {
+      $("objet").innerHTML = garde.objet || "";
+      $("lettre").innerHTML = garde.lettre;
+      majDestinataire();
+    } else {
+      $("objet").innerHTML = rouge(remplir(MOD.objet));
+      $("lettre").innerHTML = corpsHtml(MOD);
+    }
     $("note").classList.toggle("cache", !MOD.note);
     if (MOD.note) $("note").innerHTML = "<b>À vérifier avant d'envoyer.</b> " + ech(MOD.note);
     $("etat").textContent = "";

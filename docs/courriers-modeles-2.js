@@ -63,11 +63,11 @@
 
   a("salarie", "sal-attestation", "Attestation d'emploi",
     "Votre attestation d'emploi",
-    ["Je soussigné [REPRÉSENTANT LÉGAL], agissant en qualité de [QUALITÉ] de la société [DÉNOMINATION], atteste que [CIVILITÉ NOM PRÉNOM] est employé dans notre entreprise depuis le [DATE], en qualité de [EMPLOI], dans le cadre d'un contrat [NATURE DU CONTRAT].",
+    ["Je soussigné [REPRÉSENTANT LÉGAL], agissant en qualité de [QUALITÉ] de la société [DÉNOMINATION], atteste que [CIVILITÉ NOM PRÉNOM] est [EMPLOYÉ] dans notre entreprise depuis le [DATE D'ENTRÉE], en qualité de [EMPLOI], dans le cadre d'un contrat [NATURE DU CONTRAT].",
      "",
      "Sa rémunération mensuelle brute s'élève à [MONTANT] euros.",
      "",
-     "Cette attestation est établie à la demande de l'intéressé pour faire valoir ce que de droit.",
+     "Cette attestation est établie à la demande de [L'INTÉRESSÉ] pour faire valoir ce que de droit.",
      "",
      "Fait à [LIEU], le [DATE]."]);
 
