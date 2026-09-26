@@ -347,6 +347,14 @@
     /* LA PROMESSE D'EMBAUCHE, LE CDD D'USAGE ET LE CONTRAT DE
        PROFESSIONNALISATION. Aucun des trois n'existait. Textes lus à la source
        le 26 septembre 2026, deux lectures concordantes chacun. */
+    /* LES TITRES D'UN CONDUCTEUR, À CONTRÔLER AVANT LA PRISE DE POSTE.
+       Lus à la source le 26 septembre 2026, deux lectures concordantes. */
+    "TR-R3314-1": { id: "LEGIARTI000044326162", code: "Code des transports",
+      dit: "tout conducteur visé à l'article L. 3314-2 doit, avant de débuter son activité de conduite, avoir suivi une formation professionnelle initiale théorique et pratique et avoir subi avec succès l'examen final" },
+    "TR-R3314-10": { id: "LEGIARTI000044326235", code: "Code des transports",
+      dit: "tout conducteur doit suivre une formation continue obligatoire tous les cinq ans, la première dans les cinq années qui suivent l'obtention de la qualification initiale" },
+    "TR-R3411-13": { id: "LEGIARTI000048629458", code: "Code des transports",
+      dit: "tout véhicule exécutant en France un transport routier de marchandises est accompagné du titre administratif de transport, de la lettre de voiture, le cas échéant du justificatif de location, et de l'attestation de conducteur lorsque le transport international ou de cabotage est exécuté sous licence communautaire par un conducteur ressortissant d'un État tiers" },
     "CIV-1114": { id: "LEGIARTI000032040891", code: "Code civil",
       dit: "l'offre comprend les éléments essentiels du contrat envisagé et exprime la volonté de son auteur d'être lié en cas d'acceptation ; à défaut, il y a seulement invitation à entrer en négociation" },
     "CIV-1124": { id: "LEGIARTI000032040818", code: "Code civil",
@@ -556,6 +564,8 @@
       var css = n.indexOf("CSS-") === 0;
       var civ = n.indexOf("CIV-") === 0;
       if (civ) return "article " + n.slice(4) + " du code civil";
+      if (n.indexOf("TR-") === 0)
+        return n.slice(3).replace(/^([LRD])(\d)/, "$1. $2") + " du code des transports";
       var x = (css ? n.slice(4) : n).replace(/^([LRD])(\d)/, "$1. $2");
       return css ? x + " du code de la sécurité sociale" : x;
     }).join(", ");
@@ -2237,6 +2247,129 @@
       loi: ["CIV-1114", "CIV-1124", "L1221-10", "R1221-4"] };
   }
 
+  /* ═══════════════ LES TITRES D'UN CONDUCTEUR, À L'EMBAUCHE ════════════
+
+     Un conducteur ne se recrute pas comme un autre salarié : il faut avoir vu
+     ses titres avant de le laisser partir avec un camion. L'écran n'en avait
+     aucune liste, et rien ne remontait à la flotte. Relevé le 26 septembre
+     2026.
+
+     Ce qui fonde chaque ligne, lu à la source le 26 septembre 2026, deux
+     lectures concordantes :
+
+       R. 3314-1 du code des transports (LEGIARTI000044326162) : la formation
+       professionnelle initiale est requise « avant de débuter son activité de
+       conduite » ;
+       R. 3314-10 (LEGIARTI000044326235) : la formation continue obligatoire
+       tous les cinq ans ;
+       R. 3411-13 (LEGIARTI000048629458) : les documents qui accompagnent le
+       véhicule, dont l'attestation de conducteur pour un ressortissant d'un
+       État tiers en transport international ou de cabotage sous licence
+       communautaire ;
+       L. 5221-8 du code du travail (LEGIARTI000018766932) : l'employeur
+       s'assure auprès des administrations compétentes de l'existence du titre
+       autorisant l'étranger à exercer une activité salariée.
+
+     Le permis de conduire et la carte de conducteur n'ont pas d'article cité
+     ici : ce sont des titres dont l'existence ne se discute pas, et
+     l'application ne prétend pas avoir lu le règlement européen qui organise
+     la carte. La ligne les demande, sans les fonder sur un texte qu'elle
+     n'aurait pas lu.                                                        */
+  var TITRES_CONDUCTEUR = [
+    { c: "permisNum", nom: "Permis de conduire, numéro", t: "text",
+      quoi: "Permis de conduire, catégorie exigée par le véhicule confié" },
+    { c: "permisCat", nom: "Catégories du permis", t: "text" },
+    { c: "permisFin", nom: "Permis valable jusqu'au", t: "date" },
+    { c: "fco", nom: "Dernière FIMO ou FCO, le", t: "date",
+      quoi: "Formation initiale et formation continue obligatoire",
+      fond: ["TR-R3314-1", "TR-R3314-10"] },
+    { c: "carteCond", nom: "Carte de conducteur, échéance", t: "date",
+      quoi: "Carte de conducteur pour le chronotachygraphe" },
+    { c: "carteQualif", nom: "Carte de qualification, échéance", t: "date",
+      quoi: "Carte de qualification de conducteur" },
+    { c: "attestConducteur", nom: "Attestation de conducteur, échéance", t: "date",
+      quoi: "Attestation de conducteur, pour un ressortissant d'un État tiers en transport international ou de cabotage",
+      fond: ["TR-R3411-13"] },
+    { c: "titreSejour", nom: "Titre de séjour, type et numéro", t: "text",
+      quoi: "Titre autorisant l'exercice d'une activité salariée, pour un salarié étranger",
+      fond: ["L5221-8"] },
+    { c: "titreSejourFin", nom: "Titre de séjour valable jusqu'au", t: "date" }
+  ];
+
+  /* « R. 3314-1 du code des transports, R. 3314-10 du code des transports »
+     se lit mal : le nom du code s'écrit une fois, à la fin. */
+  function fondementDe(liste) {
+    var tr = liste.filter(function (n) { return n.indexOf("TR-") === 0; });
+    var autres = liste.filter(function (n) { return n.indexOf("TR-") !== 0; });
+    var bouts = [];
+    if (tr.length)
+      bouts.push(tr.map(function (n) { return n.slice(3).replace(/^([LRD])(\d)/, "$1. $2"); })
+        .join(" et ") + " du code des transports");
+    if (autres.length) bouts.push(ref(autres) + " du code du travail");
+    return bouts.join(", ");
+  }
+
+  function titresConducteur(v) {
+    var nomS = String(v.nom || "").trim() || "[nom et prénom du conducteur]";
+    var b = [], dates = [], alertes = [];
+    var manquants = [];
+    b.push({ k: "t1", t: "Contrôle des titres du conducteur" });
+    b.push({ k: "st", t: nomS });
+    b.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI) + " par " + societe() + "." });
+    b.push({ k: "p", t: "Les titres ci-dessous ont été présentés par le salarié et vérifiés avant sa prise de poste. Une copie de chacun est conservée au dossier." });
+    TITRES_CONDUCTEUR.forEach(function (x) {
+      if (!x.quoi) return;
+      var lignes = [x];
+      /* Les lignes de détail qui suivent la ligne principale : le permis a sa
+         catégorie et son échéance, le titre de séjour la sienne. */
+      if (x.c === "permisNum") lignes = lignes.concat([TITRES_CONDUCTEUR[1], TITRES_CONDUCTEUR[2]]);
+      if (x.c === "titreSejour") lignes = lignes.concat([TITRES_CONDUCTEUR[8]]);
+      var vals = lignes.map(function (l) {
+        var val = String(v[l.c] == null ? "" : v[l.c]).trim();
+        if (!val) return null;
+        return l.nom + " : " + (l.t === "date" ? dateFr(dateDe(val)) : val);
+      }).filter(Boolean);
+      if (!vals.length) { manquants.push(x.quoi); return; }
+      b.push({ k: "h1", t: x.quoi });
+      vals.forEach(function (l) { b.push({ k: "puce", t: l }); });
+      if (x.fond) b.push({ k: "p", t: "Fondement : " + fondementDe(x.fond) + "." });
+    });
+    if (manquants.length) {
+      b.push({ k: "h1", t: "Ce qui n'a pas été renseigné" });
+      manquants.forEach(function (m) { b.push({ k: "puce", t: m + " : non renseigné." }); });
+      b.push({ k: "p", t: "Un titre non renseigné n'est pas un titre absent : il n'a pas été porté ici. Ce qui manque se contrôle avant la prise de poste." });
+    }
+    b.push({ k: "trait", t: "" });
+    b.push({ k: "sign", t: "\nLe conducteur                                                 Pour la Société\n(signature)                                                   " + signataire() });
+    /* Les échéances, pour celles qui sont renseignées. */
+    TITRES_CONDUCTEUR.forEach(function (x) {
+      if (x.t !== "date") return;
+      var val = String(v[x.c] == null ? "" : v[x.c]).trim();
+      if (!val) return;
+      var d = dateDe(val);
+      if (!d) return;
+      if (x.c === "fco") {
+        var cinq = new Date(d); cinq.setFullYear(cinq.getFullYear() + 5);
+        dates.push({ q: "Prochaine formation continue obligatoire", d: dateFrJour(cinq),
+          f: "cinq ans après la précédente (" + ref(["TR-R3314-10"]) + ")",
+          c: cinq < AUJOURDHUI ? "tard" : "" });
+        return;
+      }
+      dates.push({ q: x.nom.replace(", échéance", "").replace(" valable jusqu'au", ""),
+        d: dateFrJour(d), f: "échéance portée sur le titre",
+        c: d < AUJOURDHUI ? "tard" : "" });
+    });
+    if (String(v.titreSejour || "").trim())
+      alertes.push("L'employeur s'assure auprès des administrations territorialement compétentes " +
+        "de l'existence du titre autorisant l'étranger à exercer une activité salariée (" +
+        ref(["L5221-8"]) + ") : la copie du titre ne suffit pas, la vérification se demande.");
+    if (!String(v.fco || "").trim())
+      alertes.push("La formation initiale doit avoir été suivie avant que le conducteur ne " +
+        "débute son activité de conduite (" + ref(["TR-R3314-1"]) + ") : sa date n'est pas portée ici.");
+    return { blocs: b, dates: dates, alertes: alertes,
+      loi: ["TR-R3314-1", "TR-R3314-10", "TR-R3411-13", "L5221-8"] };
+  }
+
   /* ═══════════════ LE CONTRAT DE PROFESSIONNALISATION ═══════════════════
 
      Dans le transport, c'est la voie par laquelle un conducteur se forme et
@@ -3034,6 +3167,13 @@
         { id: "tuteur", nom: "Tuteur", t: "text", pleine: true, ph: "nom et fonction" },
         { id: "salaire", nom: "Rémunération mensuelle brute (euros)", t: "number", ph: "1 400" }],
       produire: professionnalisation },
+    /* LES TITRES D'UN CONDUCTEUR, VÉRIFIÉS AVANT LA PRISE DE POSTE, ET
+       VERSÉS DANS LA FLOTTE. */
+    titres: { titre: "Titres du conducteur, à contrôler", champs: [
+        { id: "nom", nom: "Nom et prénom du conducteur", t: "text", ph: "Monsieur Karim BENALI" }
+      ].concat(TITRES_CONDUCTEUR.map(function (x) {
+        return { id: x.c, nom: x.nom, t: x.t, pleine: x.c === "titreSejour" };
+      })), produire: titresConducteur },
     dpae: { titre: "Déclaration d'embauche DPAE", ext: ["RH-CTL-EMB-03"], famille: "RH",
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: "Lucie MARTIN" }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
       loi: ["L1221-10", "R1221-1", "R1221-4"],
@@ -3203,7 +3343,7 @@
        vrai registre, qui les porte et les exporte. Relevé le 26 septembre
        2026. La ligne du haut, « Registre unique du personnel », mène au vrai
        registre : c'est la seule. */
-    ["Embaucher", ["promesse", "cdi", "cdd", "partiel", "pro", "dpae", "vip"]],
+    ["Embaucher", ["promesse", "cdi", "cdd", "partiel", "pro", "titres", "dpae", "vip"]],
     ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "conservatoire", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
@@ -3511,8 +3651,9 @@
     var embauche = !!DOCS_EMBAUCHE[ACTIF] && !r.refus && !!window.EcheancesSalaries;
     $("btn-inscrire").hidden = !embauche;
     if (!embauche) $("d-inscrit").hidden = true;
-    var conduite = ACTIF === "autorisation" && !r.refus &&
-      !!String(V.nom || "").trim() && !!String(V.attestation || "").trim();
+    var conduite = (ACTIF === "autorisation" && !r.refus &&
+      !!String(V.nom || "").trim() && !!String(V.attestation || "").trim()) ||
+      (ACTIF === "titres" && !!String(V.nom || "").trim() && titresRemplis().length > 0);
     $("btn-conducteur").hidden = !conduite;
     $("d-loi").innerHTML = loiHtml(r.loi || []);
   }
@@ -3758,10 +3899,40 @@
     function dire(t) { $("d-inscrit").textContent = t; $("d-inscrit").hidden = false; }
   });
 
+  /* LES TITRES RENSEIGNÉS, ET RIEN D'AUTRE. Un champ vide ne s'écrit pas
+     dans la flotte : il n'efface pas ce qui y est déjà. */
+  function titresRemplis() {
+    return TITRES_CONDUCTEUR.filter(function (x) {
+      return String(V[x.c] == null ? "" : V[x.c]).trim() !== "";
+    });
+  }
+
   $("btn-conducteur").addEventListener("click", function () {
     var nom = String(V.nom || "").trim();
-    var att = String(V.attestation || "").trim();
     var z = $("d-inscrit");
+    if (ACTIF === "titres") {
+      var L = titresRemplis();
+      if (!nom || !L.length) {
+        z.textContent = "Le nom du conducteur ou les titres manquent : rien n'a été porté.";
+        z.hidden = false; return;
+      }
+      var salT = salarieDuRegistre(nom);
+      var cible = salT ? salT.nom : nom;
+      var ecrits = 0, deja = 0, rates = 0;
+      L.forEach(function (x) {
+        var r = ecrireConducteur(cible, x.c, String(V[x.c]).trim());
+        if (r === "déjà") deja++; else if (r) ecrits++; else rates++;
+      });
+      var dits = [];
+      if (ecrits) dits.push(ecrits + " titre" + (ecrits > 1 ? "s" : "") + " porté" + (ecrits > 1 ? "s" : "") + " à la fiche conducteur");
+      if (deja) dits.push(deja + " déjà à la même valeur");
+      if (rates) dits.push(rates + " n'a pas pu être écrit sur cet appareil");
+      z.textContent = cible + " : " + dits.join(" ; ") +
+        ". Les échéances passent dans Flotte et dans l'agenda.";
+      z.hidden = false;
+      return;
+    }
+    var att = String(V.attestation || "").trim();
     if (!nom || !att) {
       z.textContent = "Le nom du salarié ou la date de l'attestation manque : rien n'a été porté.";
       z.hidden = false; return;
