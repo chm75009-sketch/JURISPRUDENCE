@@ -260,6 +260,9 @@
 
 <script src="profil.js"></script>
 <script src="audit-export.js"></script>
+<!-- La feuille met en forme le procès-verbal exporté : titres, paragraphes,
+     tableaux, au lieu d'une ligne de texte par ligne d'écran. -->
+<script src="feuille-doc.js"></script>
 <script src="base-documents.js"></script>
 <script>
 (function () {
@@ -1195,18 +1198,14 @@
     L.push("Établi en application de l'article L. 2242-5 du code du travail : au terme");
     L.push("de la négociation, aucun accord n'a été conclu.");
     L.push("");
-    L.push("========================================================================");
     L.push("LE PROCÈS-VERBAL DÉPOSÉ, REPRIS MOT POUR MOT");
-    L.push("========================================================================");
     L.push("");
     L.push(etat.texte);
     var r = retenus();
     if (r.length) {
       L.push("");
-      L.push("========================================================================");
-      L.push("PARAGRAPHES AJOUTÉS");
-      L.push("========================================================================");
-      L.push("");
+        L.push("PARAGRAPHES AJOUTÉS");
+        L.push("");
       L.push("À déplacer à leur rang. Les valeurs entre crochets sont à compléter :");
       L.push("aucune proposition, aucun chiffre n'est écrit à votre place.");
       L.push("");
@@ -1217,9 +1216,7 @@
         L.push("");
       });
     }
-    L.push("========================================================================");
     L.push("LE DÉSACCORD ET SON DÉPÔT");
-    L.push("========================================================================");
     L.push("");
     L.push("Au terme de la négociation, aucun accord n'a été conclu. Le présent");
     L.push("procès-verbal consigne, en leur dernier état, les propositions respectives");
@@ -1275,18 +1272,14 @@
     L.push("de l'article " + N.fondement + " du code du travail, dont le contenu est fixé par");
     L.push("l'article " + N.contenu + ".");
     L.push("");
-    L.push("========================================================================");
     L.push("CE QUI A ÉTÉ NÉGOCIÉ, REPRIS MOT POUR MOT DU PROCÈS-VERBAL DÉPOSÉ");
-    L.push("========================================================================");
     L.push("");
     L.push(etat.texte);
     var r = retenus();
     if (r.length) {
       L.push("");
-      L.push("========================================================================");
-      L.push("ARTICLES AJOUTÉS");
-      L.push("========================================================================");
-      L.push("");
+        L.push("ARTICLES AJOUTÉS");
+        L.push("");
       r.forEach(function (e) {
         L.push(etat.redige[e.it.cle]);
         L.push("");
@@ -1294,9 +1287,7 @@
         L.push("");
       });
     }
-    L.push("========================================================================");
     L.push("ARTICLES DE FORME");
-    L.push("========================================================================");
     L.push("");
     L.push("ARTICLE - CHAMP D'APPLICATION");
     L.push("Le présent accord s'applique à l'ensemble des salariés de " + f.nom + ",");
@@ -1462,10 +1453,17 @@
     bouton.textContent = "Copié";
     setTimeout(function () { bouton.textContent = avant; }, 1600);
   }
+  /* LE WORD N'EST PAS UNE COPIE D'ÉCRAN.
+
+     Chaque ligne du texte devenait un paragraphe : un procès-verbal en texte
+     brut, coupé à la largeur de la fenêtre, avec ses bandeaux de signes
+     égal. Il passe par la feuille, qui reconnaît les titres, les paragraphes
+     et les tableaux. Relevé le 26 septembre 2026. */
   function versWord(texte, titre, nom) {
-    var items = [];
-    texte.split(/\n/).forEach(function (l) { items.push({ k: "p", t: l }); });
-    window.AuditExport.telecharger(window.AuditExport.docx(items, titre), nom,
+    var octets = (window.FeuilleDoc && window.FeuilleDoc.docx)
+      ? window.FeuilleDoc.docx(window.FeuilleDoc.blocs(texte), titre)
+      : window.AuditExport.docx(texte.split(/\n/).map(function (l) { return { k: "p", t: l }; }), titre);
+    window.AuditExport.telecharger(octets, nom,
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
 
