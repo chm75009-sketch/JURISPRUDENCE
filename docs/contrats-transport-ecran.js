@@ -99,12 +99,38 @@
        une conductrice sortait « né le » et « désigné le salarié ». */
     if (s.sexe) V.sexe = s.sexe;
     rendreChamps();
+    direSiLeProfilNeVaPas(s);
   });
+
+  /* L'EMPLOI DU REGISTRE CONTRE LE PROFIL CHOISI.
+
+     Le profil commande le permis, la FIMO, la FCO, la carte de conducteur et
+     le temps de service : posé sur une assistante de direction, il écrit un
+     contrat faux de bout en bout. On ne change rien à la place de
+     l'utilisateur, on le dit et on propose le bon profil. */
+  var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier/i;
+  function direSiLeProfilNeVaPas(s) {
+    var z = $("alerte-profil");
+    if (!z) return;
+    var emploi = String(s && s.emp || "").trim();
+    if (!emploi || !PROFIL) { z.classList.add("cache"); return; }
+    var conduit = CONDUIT.test(emploi);
+    if (conduit === !!PROFIL.conduite) { z.classList.add("cache"); return; }
+    z.textContent = conduit
+      ? "Le registre porte « " + emploi + " », qui est un emploi de conduite, alors que le profil "
+        + "choisi est « " + PROFIL.nom + " » : le contrat n'écrira ni le temps de service du "
+        + "transport, ni les titres de conduite. Changez d'emploi si c'est une erreur."
+      : "Le registre porte « " + emploi + " », qui n'est pas un emploi de conduite, alors que le "
+        + "profil choisi est « " + PROFIL.nom + " » : le contrat exigera le permis, la FIMO, la FCO "
+        + "et la carte de conducteur. Changez d'emploi avec le bouton ci-dessous.";
+    z.classList.remove("cache");
+  }
 
   function ouvrirProfil(cle) {
     PROFIL = CT.profil(cle);
     $("titre-haut").textContent = PROFIL.nom;
     V = {};
+    if ($("alerte-profil")) $("alerte-profil").classList.add("cache");
     rendreRegistre();
     $("aide-champs").textContent = "Ce qu'il faut savoir pour écrire le contrat. Ce qui reste " +
       "entre crochets sera à compléter à la main.";
@@ -560,9 +586,9 @@
     if (!window.EcheancesSalaries) return;
     var nom = String(V.nom || "").trim();
     if (!nom) { $("etat").textContent = "Le nom du salarié manque : rien n'a été inscrit."; return; }
-    var morceaux = nom.split(/\s+/);
+    var parts = window.EcheancesSalaries.couper(nom);
     var r = window.EcheancesSalaries.inscrire({
-      nom: morceaux[0], pre: morceaux.slice(1).join(" "),
+      nom: parts.nom, pre: parts.pre,
       nat: V.nationalite, nais: V.naissance, emp: V.emploi,
       qua: V.coef ? "Coefficient " + V.coef : "", ent: V.entree,
       nature: NATURE === "cdd" ? "cdd" : "cdi", part: PARTIEL ? "partiel" : "complet",

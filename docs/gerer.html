@@ -214,7 +214,13 @@
     <div class="barre">
       <button type="button" id="btn-word">Télécharger en Word</button>
       <button type="button" class="second" id="btn-imprimer">Imprimer</button>
+      <!-- LE CONTRAT ÉCRIT INSCRIT LE SALARIÉ. Un CDI produit ici ne
+           remontait nulle part : quatre-vingt-cinq lignes au registre avant,
+           quatre-vingt-cinq après, et la déclaration préalable s'ouvrait
+           vide. Relevé le 26 septembre 2026. -->
+      <button type="button" class="second" id="btn-inscrire" hidden>Inscrire au registre</button>
     </div>
+    <p class="doux" id="d-inscrit" hidden></p>
     <details class="loi"><summary>Voir le texte de loi</summary><div id="d-loi"></div></details>
   </section>
 
@@ -230,6 +236,9 @@
 <script src="tableur-export.js"></script>
 <script src="feuille-doc.js"></script>
 <script src="profil.js"></script>
+<!-- Les échéances du salarié : l'inscription au registre depuis le contrat,
+     et les dates qui suivent une embauche. -->
+<script src="echeances-salaries.js"></script>
 <script>
 (function () {
   "use strict";
@@ -2690,6 +2699,9 @@
     }
     $("btn-word").disabled = !!r.refus;
     $("btn-imprimer").disabled = !!r.refus;
+    var embauche = !!DOCS_EMBAUCHE[ACTIF] && !r.refus && !!window.EcheancesSalaries;
+    $("btn-inscrire").hidden = !embauche;
+    if (!embauche) $("d-inscrit").hidden = true;
     $("d-loi").innerHTML = loiHtml(r.loi || []);
   }
 
@@ -2863,6 +2875,34 @@
     exporterDocx(doc.titre, slug(doc.titre) + (V.nom ? "-" + slug(V.nom) : "") + "-" + iso(AUJOURDHUI) + ".docx");
   });
   $("btn-imprimer").addEventListener("click", function () { window.print(); });
+
+  /* L'inscription au registre, la fiche conducteur et les échéances de
+     l'agenda, d'un seul geste, depuis le contrat qu'on vient d'écrire. Rien
+     n'est écrasé : un salarié déjà inscrit est complété. */
+  var DOCS_EMBAUCHE = { cdi: "cdi", cdd: "cdd", partiel: "cdi" };
+  $("btn-inscrire").addEventListener("click", function () {
+    if (!window.EcheancesSalaries) return;
+    var nom = String(V.nom || "").trim();
+    if (!nom) { dire("Le nom du salarié manque : rien n'a été inscrit."); return; }
+    var parts = window.EcheancesSalaries.couper(nom);
+    var r = window.EcheancesSalaries.inscrire({
+      nom: parts.nom, pre: parts.pre,
+      nat: V.nationalite, nais: V.naissance, emp: V.poste,
+      qua: V.classe ? "Niveau " + V.classe : (V.statut ? statutMot(V.statut) : ""),
+      ent: V.entree || iso(AUJOURDHUI),
+      nature: DOCS_EMBAUCHE[ACTIF] === "cdd" ? "cdd" : "cdi",
+      part: ACTIF === "partiel" ? "partiel" : "complet",
+      terme: ACTIF === "cdd" ? V.terme : "",
+    });
+    if (!r) { dire("Rien n'a été inscrit."); return; }
+    var dits = [r.nouveau ? "inscrit au registre du personnel"
+      : (r.complets.length ? "complété au registre" : "déjà au registre, rien à compléter")];
+    if (r.fiche) dits.push("fiche conducteur ouverte dans Flotte");
+    dits.push("échéances posées dans l'agenda");
+    dire(nom + " : " + dits.join(" ; ") + ". La déclaration préalable et la visite d'information " +
+      "se retrouvent maintenant par son nom.");
+    function dire(t) { $("d-inscrit").textContent = t; $("d-inscrit").hidden = false; }
+  });
 
   /* Une correction faite à la main dans le document est retenue sur le texte
      d'origine du bloc : elle survit à la réécriture des autres. */

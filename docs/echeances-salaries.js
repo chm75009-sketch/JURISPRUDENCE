@@ -222,7 +222,29 @@
     return { id: id, nouveau: neuf, complets: complets, fiche: ficheNeuve };
   }
 
+  /* NOM ET PRÉNOM : QUI EST QUI.
+
+     « Madame Lucie MARTIN » était coupé au premier espace : Lucie devenait le
+     nom et MARTIN le prénom. Le nom de famille s'écrit presque toujours en
+     capitales dans un registre ; quand rien ne le distingue, le premier mot
+     fait le nom, comme avant. La civilité, elle, ne fait partie ni de l'un ni
+     de l'autre. Relevé le 26 septembre 2026. */
+  function couper(entier) {
+    var t = net(entier).replace(/^\s*(madame|mademoiselle|monsieur|mme|mlle|m\.)\s+/i, "");
+    var mots = t.split(/\s+/).filter(function (x) { return x; });
+    if (!mots.length) return { nom: "", pre: "" };
+    var capitales = mots.filter(function (m) {
+      return m.length > 1 && m === m.toUpperCase() && /[A-ZÀ-Ý]/.test(m);
+    });
+    if (capitales.length && capitales.length < mots.length) {
+      return { nom: capitales.join(" "),
+        pre: mots.filter(function (m) { return capitales.indexOf(m) < 0; }).join(" ") };
+    }
+    return { nom: mots[0], pre: mots.slice(1).join(" ") };
+  }
+
   global.EcheancesSalaries = {
+    couper: couper,
     CLE: CLE_SUITES, idDe: idDe, poser: poser, suite: suite,
     echeances: echeances, inscrire: inscrire, plusMois: plusMois, plusJours: plusJours,
   };
