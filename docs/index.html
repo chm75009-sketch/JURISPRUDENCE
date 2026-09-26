@@ -70,10 +70,14 @@
     border:2px solid var(--accent);background:var(--accent-clair);color:var(--accent);
     font:600 26px/1.2 system-ui;text-decoration:none}
   .grand:hover{background:var(--accent);color:#fff}
+  /* Sur ordinateur, deux colonnes. Mesuré le 26 septembre 2026 : sur une
+     seule ligne, les cinq portes débordaient de la colonne à droite. Audit
+     et Gérer gardent la grande taille, les trois autres sont plus basses. */
   @media (min-width:700px){
     main.wrap{max-width:720px}
-    .portes{flex-direction:row}
-    .grand{flex:1;min-height:110px;justify-content:center}
+    .portes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grand{min-height:110px;justify-content:center;text-align:center}
+    .grand.second{min-height:72px;font-size:20px}
   }
 
   footer{margin:40px 0 32px;padding-top:14px;border-top:1px solid var(--filet);
