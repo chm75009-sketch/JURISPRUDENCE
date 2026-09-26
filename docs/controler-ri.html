@@ -429,6 +429,53 @@
     return "présent";
   }
 
+  var MOIS_LUS = ["janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet",
+    "aout", "septembre", "octobre", "novembre", "decembre"];
+  function sansAccentBas(t) {
+    try { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
+    catch (e) { return String(t || "").toLowerCase(); }
+  }
+  /* La date d'entrée en vigueur, telle que le texte la porte : un chiffre ou
+     des lettres, et rien d'autre. Un crochet n'est pas une date. */
+  function dateEntreeVigueur(texte) {
+    var n = sansAccentBas(texte);
+    var i = n.indexOf("entre en vigueur");
+    if (i < 0) i = n.indexOf("entree en vigueur");
+    if (i < 0) return { dit: false };
+    var suite = texte.slice(i, i + 220);
+    var m = /(0?[1-9]|[12]\d|3[01])[\/.\-](0?[1-9]|1[0-2])[\/.\-](19[89]\d|20[0-4]\d)/.exec(suite);
+    if (m) return { dit: true, date: m[0], extrait: suite.split("\n")[0] };
+    var ml = /(0?[1-9]|[12]\d|3[01])(?:er)?\s+(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)\s+(19[89]\d|20[0-4]\d)/.exec(sansAccentBas(suite));
+    if (ml) return { dit: true, date: ml[0], extrait: suite.split("\n")[0] };
+    return { dit: false, extrait: suite.split("\n")[0] };
+  }
+  function etatDuTexteHtml(texte) {
+    var crochets = (String(texte || "").match(/\[[^\]\n]{1,120}\]/g) || []).map(function (x) {
+      return x.replace(/\s+/g, " ").trim();
+    });
+    var v = dateEntreeVigueur(texte);
+    var h = "";
+    if (!v.dit)
+      h += '<div class="pt rouge"><div class="tt"><span class="etat ko">à compléter</span>' +
+        '<span><span class="obj">La date d\'entrée en vigueur</span>' +
+        '<span class="fond">L. 1321-4</span></span><span></span></div><div class="c">' +
+        "<p>Votre document n'indique pas de date d'entrée en vigueur lisible" +
+        (v.extrait ? ' : « ' + ech(v.extrait.slice(0, 120)) + " »" : "") + ". " +
+        "Le règlement intérieur indique la date de son entrée en vigueur, postérieure d'un mois à " +
+        "l'accomplissement des formalités de publicité (L. 1321-4). Tant qu'elle manque, aucune " +
+        "sanction ne se fonde sur ce règlement.</p></div></div>";
+    if (crochets.length)
+      h += '<div class="pt rouge"><div class="tt"><span class="etat ko">' + crochets.length +
+        '</span><span><span class="obj">Mentions restées entre crochets</span>' +
+        '<span class="fond">à compléter avant diffusion</span></span><span></span></div><div class="c">' +
+        "<p>Un règlement qui porte des crochets n'est pas diffusable : ils seront lus comme des " +
+        "blancs.</p>" +
+        crochets.slice(0, 12).map(function (x) { return "<blockquote>" + ech(x) + "</blockquote>"; }).join("") +
+        (crochets.length > 12 ? "<p>… et " + (crochets.length - 12) + " autre" +
+          (crochets.length - 12 > 1 ? "s" : "") + ".</p>" : "") + "</div></div>";
+    return h;
+  }
+
   function rendreDiagnostic() {
     var rouges = analyse.points.filter(estRouge);
     var verts = analyse.points.filter(estVert);
@@ -451,7 +498,14 @@
         '<span class="d">Traité dans votre règlement. Le contrôle établit que le sujet y est, ' +
         "jamais que la clause est complète ni bien rédigée.</span></div>";
 
-    var h = "";
+    /* LA DATE ET LES CROCHETS, AVANT TOUT LE RESTE.
+
+       Un règlement dont la date d'entrée en vigueur reste « [DATE D'ENTRÉE
+       EN VIGUEUR] » ne fonde aucune sanction : L. 1321-4 veut que le
+       règlement indique cette date, postérieure d'un mois aux formalités de
+       publicité. L'écran l'a lue comme un mot ordinaire, et n'a rien dit des
+       neuf autres crochets. Relevé le 26 septembre 2026. */
+    var h = etatDuTexteHtml(analyse.texte);
     if (rouges.length) {
       var articlesEnCause = [];
       rouges.forEach(function (p) {
@@ -579,6 +633,16 @@
         h += "<p>… et " + (p.passages.length - 6) + " autre" + (p.passages.length - 6 > 1 ? "s" : "") + " passage" + (p.passages.length - 6 > 1 ? "s" : "") + ".</p>";
     }
 
+    /* Les passages qui rappellent l'interdiction au lieu de la méconnaître :
+       ils se disent, mais ils ne sont pas mis en cause. */
+    if (p.rappels && p.rappels.length) {
+      h += '<p class="art">' + p.rappels.length + " passage" + (p.rappels.length > 1 ? "s" : "") +
+        " de votre règlement rappelle" + (p.rappels.length > 1 ? "nt" : "") +
+        " cette interdiction : ils ne sont pas mis en cause.</p>";
+      p.rappels.slice(0, 3).forEach(function (q) {
+        h += "<blockquote>" + ech(q.texte) + "</blockquote>";
+      });
+    }
     if (p.critere) h += "<p><b>Ce que le juge vérifie.</b> " + ech(p.critere) + "</p>";
     if (p.remplacement) h += "<p><b>Ce qu'il faut faire.</b> " + ech(p.remplacement) + "</p>";
 

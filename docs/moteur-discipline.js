@@ -2725,9 +2725,25 @@ function reperer(P, marqueurs) {
   const trouves = [];
   for (const p of P) {
     const vus = marqueurs.filter(m => contient(p.replie, m));
-    if (vus.length) trouves.push({ texte: p.texte, debut: p.debut, marques: vus });
+    if (vus.length) trouves.push({ texte: p.texte, debut: p.debut, marques: vus, replie: p.replie });
   }
   return trouves;
+}
+
+/* UNE PHRASE QUI INTERDIT N'EST PAS UNE CLAUSE INTERDITE.
+
+   L'article qui écrivait « Aucune amende ni sanction pécuniaire ne peut être
+   infligée » était rendu comme une clause de la famille des sanctions
+   pécuniaires, à retirer ; « Aucune fouille n'est pratiquée » comme une
+   restriction aux libertés. Le rappel de l'interdiction est le contraire de
+   sa violation. Une phrase qui porte l'une de ces tournures est donc mise à
+   part, et dite pour ce qu'elle est. Relevé le 26 septembre 2026. */
+const NIE = ["aucun", "aucune", "interdit", "interdite", "interdits", "interdites",
+  "interdiction", "proscrit", "proscrite", "prohibe", "prohibee", "ne peut", "ne peuvent",
+  "ne sera", "ne seront", "n est pas", "ne sont pas", "n est autorise", "sans etre",
+  "est exclue", "sont exclues", "reputee non ecrite", "reputees non ecrites"];
+function rappelleLInterdiction(replie) {
+  return NIE.some(x => replie.indexOf(x) >= 0);
 }
 
 function analyser(texte) {
@@ -2760,12 +2776,17 @@ function analyser(texte) {
     const trouves = reperer(P, g.marqueurs);
 
     if (g.prohibe) {
+      const rappels = trouves.filter(p => rappelleLInterdiction(p.replie));
+      const vrais = trouves.filter(p => !rappelleLInterdiction(p.replie));
       points.push({ ...vue(g),
-        etat: trouves.length ? ACONTROLER : ABSENT,
-        passages: trouves.map(p => ({ texte: p.texte, debut: p.debut, marques: p.marques })),
-        motif: trouves.length
-          ? `${trouves.length} passage${trouves.length > 1 ? "s font" : " fait"} apparaître une clause de cette famille. Le module ne conclut pas à son illicéité : il rend le passage et le critère que le juge applique.`
-          : "Aucun passage de cette famille n'a été repéré. Cela ne vaut pas quitus : une clause peut être rédigée en termes que ce repérage ne connaît pas.",
+        etat: vrais.length ? ACONTROLER : ABSENT,
+        passages: vrais.map(p => ({ texte: p.texte, debut: p.debut, marques: p.marques })),
+        rappels: rappels.map(p => ({ texte: p.texte, debut: p.debut, marques: p.marques })),
+        motif: vrais.length
+          ? `${vrais.length} passage${vrais.length > 1 ? "s font" : " fait"} apparaître une clause de cette famille. Le module ne conclut pas à son illicéité : il rend le passage et le critère que le juge applique.`
+          : (rappels.length
+            ? `${rappels.length} passage${rappels.length > 1 ? "s rappellent" : " rappelle"} l'interdiction plutôt que de la méconnaître : le module ne les tient pas pour des clauses de cette famille. Lisez-les tout de même, une tournure négative peut en cacher une autre.`
+            : "Aucun passage de cette famille n'a été repéré. Cela ne vaut pas quitus : une clause peut être rédigée en termes que ce repérage ne connaît pas."),
       });
       continue;
     }
@@ -2827,8 +2848,26 @@ function corriger(analyse, choix) {
   }
   marques.sort((a, b) => b.debut - a.debut);
 
+  /* LA MARQUE SE POSE EN FIN DE PARAGRAPHE, PAS EN FIN DE PHRASE.
+
+     Le découpage en phrases coupe sur un point de numérotation : la marque
+     tombait au milieu du texte, « qu'au 7. [À CONTRÔLER…]5. ». Elle est
+     maintenant portée à la fin du paragraphe où le passage se trouve, et une
+     même famille n'y est écrite qu'une fois. Relevé le 26 septembre 2026. */
   let corps = analyse.texte;
+  const finParagraphe = (t, i) => { const k = t.indexOf("\n", i); return k < 0 ? t.length : k; };
+  /* Les places sont calculées sur le texte d'origine, puis les marques sont
+     posées de la fin vers le début : une insertion ne déplace jamais une
+     place qui reste à servir. Une même famille n'est écrite qu'une fois par
+     paragraphe. */
+  const places = [];
   for (const m of marques) {
+    const fin = finParagraphe(analyse.texte, m.fin);
+    if (places.some(x => x.fin === fin && x.id === m.id)) continue;
+    places.push({ fin: fin, id: m.id, objet: m.objet });
+  }
+  places.sort((a, b) => b.fin - a.fin);
+  for (const m of places) {
     corps = corps.slice(0, m.fin) +
       `  [À CONTRÔLER - ${m.id} : ${m.objet}]` +
       corps.slice(m.fin);
