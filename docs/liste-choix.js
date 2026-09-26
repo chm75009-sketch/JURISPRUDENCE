@@ -112,7 +112,7 @@
     boite.setAttribute("role", "listbox");
     input.insertAdjacentElement("afterend", boite);
 
-    var enLibre = false, ignorer = false, cadre = boite;
+    var enLibre = false, ignorer = false, cadre = boite, retourLibre = false;
     var voile = null, champVoile = null, listeVoile = null;
 
     function fermer() { boite.hidden = true; }
@@ -152,6 +152,11 @@
         listeVoile = voile.querySelector(".lc-liste-voile");
         voile.querySelector(".lc-voile-fermer").addEventListener("click", fermerVoile);
         champVoile.addEventListener("input", function () { montrer(champVoile.value); });
+        champVoile.addEventListener("keydown", function (ev) {
+          if (ev.key !== "Enter" || !libre) return;
+          var autre = listeVoile.querySelector(".lc-autre");
+          if (autre && String(champVoile.value || "").trim()) { ev.preventDefault(); autre.click(); }
+        });
       }
       voile.hidden = false;
       doc.body.style.overflow = "hidden";
@@ -179,7 +184,8 @@
       });
       if (libre)
         h += '<button type="button" class="lc-o lc-autre" role="option" data-autre="1">' +
-          "Autre, saisie libre</button>";
+          (String(q || "").trim() && cadre === listeVoile
+            ? "Garder « " + ech(String(q).trim()) + " »" : "Autre, saisie libre") + "</button>";
       cadre.innerHTML = h;
       cadre.hidden = false;
       if (cadre === boite) placer();
@@ -203,7 +209,22 @@
         var prendre = function (ev) {
           if (!plein) ev.preventDefault();
           if (b.getAttribute("data-autre")) {
-            enLibre = true; fermer(); fermerVoile();
+            /* LA SAISIE LIBRE, SUR TÉLÉPHONE AUSSI.
+
+               Mesuré le 26 septembre 2026 : sur un écran étroit, « Autre,
+               saisie libre » rendait le focus au champ, et le focus rouvrait
+               aussitôt la liste en plein écran. Le nom d'un nouvel embauché
+               ne pouvait pas s'écrire, et ce qui avait été tapé dans la
+               recherche se perdait. Ce qui a été tapé devient la valeur du
+               champ, et le retour au champ n'ouvre plus la liste. */
+            var tape = (plein && champVoile) ? String(champVoile.value || "").trim() : "";
+            if (tape) {
+              input.value = tape;
+              ignorer = true;
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              input.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+            enLibre = true; retourLibre = true; fermer(); fermerVoile();
             try { input.focus(); } catch (e) {}
             return;
           }
@@ -224,6 +245,7 @@
     }
 
     input.addEventListener("focus", function () {
+      if (retourLibre) { retourLibre = false; return; }
       enLibre = false;
       if (etroit()) { input.blur(); ouvrirVoile(); return; }
       try { input.select(); } catch (e) {}
