@@ -94,8 +94,13 @@
   .grand:hover{background:var(--accent);color:#fff}
   @media (min-width:700px){
     main.wrap{max-width:720px}
-    .portes{flex-direction:row}
-    .grand{flex:1;min-height:110px;justify-content:center}
+    /* CINQ PORTES SUR UNE SEULE RANGÉE DÉBORDAIENT DE LA COLONNE.
+       « flex-direction:row » sans retour à la ligne poussait les deux
+       dernières hors de la page, à droite : mesuré le 26 septembre 2026, la
+       colonne fait 688 pixels et les boutons allaient jusqu'à 1218. Elles
+       reviennent à la ligne, deux par deux. */
+    .portes{flex-direction:row;flex-wrap:wrap}
+    .grand{flex:1 1 calc(50% - 7px);min-height:110px;justify-content:center;font-size:23px}
   }
 
   footer{margin:40px 0 32px;padding-top:14px;border-top:1px solid var(--filet);
