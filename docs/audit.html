@@ -351,6 +351,49 @@
     while (compte < n) { d = jour(d, 1); if (estOuvrable(d)) compte++; }
     return prochainOuvrable(jour(d, 1));
   }
+  /* La présentation : le jour de la remise en main propre, ou deux jours
+     après l'envoi du recommandé, délai que l'application ne peut pas
+     connaître et qu'elle prend pour hypothèse, en le disant. */
+  function presentationDe(envoi, mode) {
+    return mode === "main" ? new Date(envoi.getTime()) : jour(envoi, 2);
+  }
+  function entretienAuPlusTot(envoi, mode) {
+    return apresJoursOuvrables(presentationDe(envoi, mode), 5);
+  }
+  /* Les salariés du registre, présents, dont l'emploi correspond à la
+     catégorie saisie ; tous les présents quand elle ne correspond à
+     personne, puisqu'il vaut mieux une liste à trier qu'une liste fausse. */
+  function salariesDuRegistre() {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { E = null; }
+    return ((E && E.salaries) || []).filter(function (x) {
+      return !x.ex && !String(x.sor || "").trim() &&
+        (String(x.nom || "").trim() || String(x.pre || "").trim());
+    });
+  }
+  function ancienneteAnnees(ent) {
+    var d = deIso(ent);
+    if (!d) return 0;
+    var n = Math.floor((Date.now() - d.getTime()) / 31557600000);
+    return n > 0 ? n : 0;
+  }
+  function ligneOrdreDuRegistre(poste) {
+    var L = salariesDuRegistre();
+    var p = String(poste || "").trim().toLowerCase();
+    if (p) {
+      var dans = L.filter(function (x) {
+        return String(x.emp || "").trim().toLowerCase().indexOf(p) >= 0 ||
+          p.indexOf(String(x.emp || "").trim().toLowerCase()) >= 0;
+      });
+      if (dans.length) L = dans;
+    }
+    if (!L.length) return "[nom du salarié] ; 0 ; n ; 0 ; n ; 0";
+    return L.map(function (x) {
+      var nom = (String(x.nom || "").trim() + " " + String(x.pre || "").trim()).trim();
+      return nom + " ; 0 ; n ; " + ancienneteAnnees(x.ent) + " ; n ; 0";
+    }).join("\n");
+  }
+
   function plusMois(d, n) {
     var x = new Date(d.getTime()), voulu = x.getDate();
     x.setMonth(x.getMonth() + n);
@@ -450,6 +493,15 @@
   };
   var CHAMPS = {
     nom: { nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" },
+    /* L. 1233-11 (LEGIARTI000006901023, lu à la source le 26 septembre 2026,
+       deux lectures concordantes) : « L'entretien préalable ne peut avoir
+       lieu moins de cinq jours ouvrables après la présentation de la lettre
+       recommandée ou la remise en main propre. » Le délai court donc de la
+       PRÉSENTATION, non de l'envoi : la date proposée partait du jour même
+       et tombait un samedi. */
+    remise: { nom: "La convocation est", t: "select", pleine: true, opts: [
+      ["recommande", "envoyée en lettre recommandée (présentation comptée deux jours après l'envoi)"],
+      ["main", "remise en main propre contre décharge (présentation le jour même)"]] },
     entretien: { nom: "Date de l'entretien préalable", t: "date" },
     lieu: { nom: "Heure et lieu de l'entretien", t: "duo", pleine: true },
     entree: { nom: "Date d'entrée dans l'entreprise", t: "date" },
@@ -469,7 +521,8 @@
   (function valeursDeDepart() {
     var a = new Date();
     etat.nom = ""; etat.poste = ""; etat.faits = "";
-    etat.entretien = iso(apresJoursOuvrables(a, 5));
+    etat.remise = "recommande";
+    etat.entretien = iso(entretienAuPlusTot(a, "recommande"));
     etat.heure = "10:00"; etat.lieu = "au siège de la société";
     etat.entree = "";
     etat.publication = iso(a);
@@ -482,9 +535,15 @@
       "la situation du salarié dont les caractéristiques sociales rendent la réinsertion professionnelle particulièrement difficile"
     ].join("\n");
     etat.nombre = "1";
-    var n = Math.max(1, Math.min(effectif || 1, 25)), lignes = [];
-    for (var i = 1; i <= n; i++) lignes.push("[Salarié " + i + "] ; 0 ; n ; 0 ; n ; 0");
-    etat.ordre = lignes.join("\n");
+    /* LA CATÉGORIE SE PREND AU REGISTRE, PAS À UN COMPTEUR.
+
+       Vingt-cinq lignes « [Salarié 1] » étaient écrites d'avance, et le
+       document en concluait « la catégorie en compte 25 ». Les salariés de
+       la catégorie viennent du registre du personnel, avec leur ancienneté
+       calculée depuis leur date d'entrée ; le reste, charges de famille et
+       qualités professionnelles, n'est pas au registre et reste à zéro, à
+       compléter. Relevé le 26 septembre 2026. */
+    etat.ordre = ligneOrdreDuRegistre("");
     etat.cause = "difficultes";
   })();
 
@@ -498,6 +557,7 @@
       cause: CAUSES[etat.cause] || CAUSES.difficultes,
       faits: String(etat.faits || "").trim(),
       convocation: new Date(),
+      remise: etat.remise === "main" ? "main" : "recommande",
       entretien: entretien,
       heure: etat.heure,
       lieu: String(etat.lieu || "").trim() || "au siège de la société",
@@ -583,9 +643,14 @@
     b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant " +
       "au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
       "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée " +
-      "par l'autorité administrative ; cette liste est tenue à votre disposition à la direction " +
-      "départementale de l'emploi, du travail et des solidarités de [département] et à la mairie de " +
-      ville() + "." });
+      /* D. 1232-5 (LEGIARTI000018537714, lu à la source le 26 septembre 2026,
+         deux lectures concordantes) : la liste « est tenue à la disposition
+         des salariés dans chaque section d'inspection du travail et dans
+         chaque mairie ». La lettre renvoyait à la direction départementale,
+         que le texte ne désigne pas. */
+      "par l'autorité administrative ; cette liste est tenue à votre disposition à la section " +
+      "d'inspection du travail dont relève l'établissement et à la mairie de " +
+      ville() + " (D. 1232-5)." });
     b.push({ k: "p", t: mille
       ? "Nous vous informerons, lors de cet entretien, des conditions de mise en oeuvre du congé de " +
         "reclassement que nous sommes tenus de vous proposer."
@@ -782,12 +847,22 @@
      lit sous « Voir le texte de loi » : les dates calculées, puis les
      articles avec leur identifiant de version. */
   var ONGLETS = [
-    { cle: "convocation", nom: "Convocation", champs: ["nom", "entretien", "lieu"], doc: docConvocation,
+    { cle: "convocation", nom: "Convocation", champs: ["nom", "remise", "entretien", "lieu"], doc: docConvocation,
       fichier: "convocation-entretien-prealable",
       dates: function (d) {
-        return ["Entretien au plus tôt le " + dateFrJour(apresJoursOuvrables(d.convocation, 5)) +
-          " : cinq jours ouvrables après la présentation de la convocation, datée du " +
-          dateFr(d.convocation) + " (" + ref(["L1233-11"]) + ")."];
+        var pres = presentationDe(d.convocation, d.remise);
+        var tot = entretienAuPlusTot(d.convocation, d.remise);
+        var L = ["Convocation datée du " + dateFr(d.convocation) + ", présentée le " +
+          dateFrJour(pres) + (d.remise === "main" ? " (remise en main propre)"
+            : " (deux jours après l'envoi du recommandé, à vérifier sur l'avis de réception)") + ".",
+          "Entretien au plus tôt le " + dateFrJour(tot) +
+          " : cinq jours ouvrables après la présentation (" + ref(["L1233-11"]) + ")."];
+        /* La date choisie est comparée à ce minimum : un entretien trop tôt
+           rend la procédure irrégulière, et rien ne le disait. */
+        if (d.entretien && d.entretien < tot)
+          L.push("ATTENTION : la date retenue, " + dateFrJour(d.entretien) +
+            ", est antérieure à ce minimum. Reportez l'entretien au " + dateFrJour(tot) + " au plus tôt.");
+        return L;
       },
       textes: function () { return ["L1233-11", "L1233-12", "L1233-13"].concat(
         effectif >= 1000 ? ["L1233-71", "R1233-19"] : ["L1233-66"]); } },
@@ -853,6 +928,11 @@
     var h = '<label class="ch' + (c.pleine ? " pleine" : "") + '"><span class="nom">' + ech(c.nom) + "</span>";
     if (c.t === "textarea") {
       h += '<textarea data-c="' + cle + '" placeholder="' + ech(c.ph || "") + '">' + ech(v) + "</textarea>";
+    } else if (c.t === "select" && c.opts) {
+      h += '<select data-c="' + cle + '">' + c.opts.map(function (o) {
+        return '<option value="' + ech(o[0]) + '"' + (o[0] === v ? " selected" : "") + ">" +
+          ech(o[1]) + "</option>";
+      }).join("") + "</select>";
     } else if (c.t === "select") {
       h += '<select data-c="' + cle + '">' + Object.keys(CAUSES).map(function (k) {
         var t = CAUSES[k].t.replace(/^(des|une|la) /, "");
@@ -914,7 +994,26 @@
   $("#champs").addEventListener("input", function (ev) {
     var el = ev.target, c = el && el.getAttribute ? el.getAttribute("data-c") : null;
     if (!c) return;
+    var avant = etat[c];
     etat[c] = el.value;
+    /* La catégorie professionnelle change : la liste des salariés se refait
+       depuis le registre, tant qu'elle n'a pas été modifiée à la main. */
+    if (c === "poste" && etat.ordre === ligneOrdreDuRegistre(avant)) {
+      etat.ordre = ligneOrdreDuRegistre(el.value);
+      var z = $("#champs").querySelector('[data-c="ordre"]');
+      if (z) z.value = etat.ordre;
+    }
+    /* Le mode de remise décale la présentation, donc le minimum de
+       L. 1233-11 : la date proposée suit, tant qu'elle n'a pas été fixée à
+       la main. */
+    if (c === "remise") {
+      var a = new Date();
+      if (!etat.entretien || etat.entretien === iso(entretienAuPlusTot(a, avant))) {
+        etat.entretien = iso(entretienAuPlusTot(a, el.value));
+        var e = $("#champs").querySelector('[data-c="entretien"]');
+        if (e) e.value = etat.entretien;
+      }
+    }
     rendreDoc();
   });
 
@@ -1008,8 +1107,8 @@
           "personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
           "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste " +
           "dressée par l'autorité administrative ; cette liste est tenue à votre disposition à la " +
-          "direction départementale de l'emploi, du travail et des solidarités de [département] et à " +
-          "la mairie de [commune]." },
+          "section d'inspection du travail dont relève l'établissement et à la mairie de [commune] " +
+          "(D. 1232-5)." },
       { id: "csp", objet: effectif >= 1000 ? "La proposition d'un congé de reclassement"
                                            : "La proposition d'un contrat de sécurisation professionnelle",
         fond: effectif >= 1000 ? [ref(["L1233-71"])] : [ref(["L1233-66"])],
