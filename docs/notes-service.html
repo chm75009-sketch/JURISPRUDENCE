@@ -97,6 +97,16 @@
   .barre button[disabled]{opacity:.5;cursor:default}
   @media (min-width:520px){.barre{grid-template-columns:1fr 1fr}}
   .etat{margin:10px 0 0;font-size:14.5px;color:var(--vert);min-height:20px}
+  .emarge{margin:14px 0 0;padding:12px 14px;border:1px solid var(--filet);
+    border-radius:10px;background:var(--surface)}
+  .emarge label{display:block;font:600 15px/1.3 system-ui;color:var(--encre);margin:0 0 6px}
+  .emarge select{width:100%;min-height:44px;padding:0 10px;border:1px solid var(--filet);
+    border-radius:8px;background:#fff;font:15px system-ui;color:var(--encre)}
+  .emarge button{width:100%;min-height:48px;margin:10px 0 0;border-radius:10px;
+    font:600 16.5px system-ui;cursor:pointer;background:var(--surface);color:var(--accent);
+    border:2px solid var(--accent)}
+  .emarge button[disabled]{opacity:.5;cursor:default}
+  .emarge-dit{margin:8px 0 0;font-size:14px;color:var(--texte-2)}
 
   .registre{margin:var(--e5) 0 0;border-top:1px solid var(--filet);padding-top:12px}
   .registre h2{font:600 16px/1.3 system-ui;margin:0 0 8px;color:var(--encre)}
@@ -155,6 +165,21 @@
       <button type="button" class="s" id="word">Télécharger en Word</button>
       <button type="button" class="s" id="imprimer">Imprimer</button>
       <button type="button" class="s" id="modele">Revenir au modèle</button>
+    </div>
+
+    <!-- LA PREUVE DE LA REMISE, TIRÉE DU REGISTRE.
+         Une note affichée n'est pas une note remise : l'audit du 26 septembre
+         2026 demandait la feuille d'émargement par conducteur. Les noms
+         viennent du registre du personnel, personne n'est saisi deux fois, et
+         c'est l'employeur qui dit à qui la note s'adresse. -->
+    <div class="emarge" id="emarge">
+      <label for="qui-emarge">La note est remise à</label>
+      <select id="qui-emarge">
+        <option value="tous">tous les salariés en poste</option>
+        <option value="conducteurs">ses conducteurs seulement</option>
+      </select>
+      <button type="button" class="s" id="emargement">Feuille d'émargement</button>
+      <p class="emarge-dit" id="emarge-dit"></p>
     </div>
     <p class="etat" id="etat"></p>
   </section>
@@ -434,7 +459,12 @@
        numérotée, l'autre non. Relevé le 26 septembre 2026. */
     $("word").disabled = true;
     $("word").title = "La note se télécharge une fois validée et numérotée.";
+    /* La feuille porte la référence de la note : elle attend le numéro, comme
+       le Word, pour qu'une seule version circule. */
+    $("emargement").disabled = true;
+    $("emargement").title = "La feuille se télécharge une fois la note validée et numérotée.";
     $("etat").textContent = "";
+    direEmargement();
     ecran("e-texte");
   }
 
@@ -489,6 +519,8 @@
     $("valider").textContent = "Numérotée : " + EMISE.reference;
     $("word").disabled = false;
     $("word").title = "";
+    $("emargement").disabled = false;
+    $("emargement").title = "";
     $("etat").textContent = "Note inscrite au registre sous la référence " + EMISE.reference + ".";
     rendreRegistre();
   });
@@ -517,6 +549,85 @@
       (nom || "note-de-service") + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
     $("etat").textContent = "Téléchargée en Word.";
+  });
+
+  /* ─────────────────────── LA FEUILLE D'ÉMARGEMENT ──────────────────────
+     Une note affichée n'est pas une note remise. Pour l'adjonction au
+     règlement intérieur, l'affichage à la place prévue est la formalité
+     (L. 1321-4, L. 1321-5) ; l'émargement ne la remplace pas, il prouve la
+     remise en main propre, ce qui est autre chose et se demande devant le
+     conseil de prud'hommes. La feuille ne porte donc aucun article : elle
+     porte des noms, une date, et une colonne vide à signer.
+
+     Les noms viennent du registre du personnel. Ceux qui sont sortis n'y
+     figurent pas. Qui conduit se lit au poste écrit au registre, comme dans
+     la flotte : c'est l'employeur qui choisit à qui la note est remise, la
+     feuille ne le décide pas. */
+  var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|grutier|ambulancier|convoyeur/i;
+  function salariesDuRegistre(conducteursSeuls) {
+    var R = null;
+    try { R = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { R = null; }
+    var L = ((R && R.salaries) || []).filter(function (s) {
+      var nom = String(s && s.nom || "").trim(), pre = String(s && s.pre || "").trim();
+      return (nom || pre) && !s.ex && !String(s && s.sor || "").trim();
+    }).map(function (s) {
+      return { nom: (String(s.nom || "").trim() + " " + String(s.pre || "").trim()).trim(),
+        emp: String(s.emp || "").trim() };
+    });
+    if (conducteursSeuls) L = L.filter(function (s) { return CONDUIT.test(s.emp); });
+    L.sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); });
+    return L;
+  }
+
+  function direEmargement() {
+    var seuls = $("qui-emarge").value === "conducteurs";
+    var L = salariesDuRegistre(seuls);
+    var tous = salariesDuRegistre(false);
+    var z = $("emarge-dit");
+    if (!tous.length) {
+      z.textContent = "Le registre du personnel ne porte aucun salarié en poste : " +
+        "la feuille sortirait vide. Ouvrez le registre et inscrivez-les.";
+      return;
+    }
+    if (seuls && !L.length) {
+      z.textContent = "Aucun poste du registre ne porte un intitulé de conduite : " +
+        "la feuille sortirait vide.";
+      return;
+    }
+    z.textContent = L.length + " ligne" + (L.length > 1 ? "s" : "") + ", " +
+      (seuls ? "les conducteurs du registre" : "les salariés en poste au registre") + ".";
+  }
+  $("qui-emarge").addEventListener("change", direEmargement);
+
+  $("emargement").addEventListener("click", function () {
+    if (!window.AuditExport) { $("etat").textContent = "Le module d'export ne s'est pas chargé."; return; }
+    var seuls = $("qui-emarge").value === "conducteurs";
+    var L = salariesDuRegistre(seuls);
+    if (!EMISE) { $("etat").textContent = "Validez et numérotez la note : la feuille porte sa référence."; return; }
+    if (!L.length) { direEmargement(); return; }
+    var titre = $("objet").textContent.trim() || (MOD ? MOD.titre : "Note de service");
+    var items = entete().map(function (l) { return { k: "sur", t: l }; });
+    items.push({ k: "t1", t: "Feuille d'émargement" });
+    items.push({ k: "h2", t: "Note de service n° " + EMISE.numero + " · " + EMISE.reference });
+    items.push({ k: "p", t: "Objet : " + titre + "." });
+    items.push({ k: "p", t: "Les salariés désignés ci-dessous reconnaissent avoir reçu un " +
+      "exemplaire de cette note de service et en avoir pris connaissance." });
+    items.push({ k: "table",
+      head: ["Nom et prénom", "Emploi", "Date de remise", "Signature"],
+      proportions: [34, 26, 18, 22],
+      rows: L.map(function (s) { return [s.nom, s.emp || "", "", ""]; }) });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: "Fait à " + ville() + ", le " + leJour() + "." });
+    signature().forEach(function (l) { items.push({ k: "p", t: l }); });
+    var base = ((EMISE ? EMISE.reference + "-" : "") + "emargement-" + titre)
+      .normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase().slice(0, 70);
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Feuille d'émargement"),
+      (base || "feuille-emargement") + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    $("etat").textContent = "Feuille d'émargement téléchargée, " + L.length + " ligne" +
+      (L.length > 1 ? "s" : "") + ".";
   });
 
   $("imprimer").addEventListener("click", function () { window.print(); });
