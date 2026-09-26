@@ -145,6 +145,19 @@
   }
   function estOui(v) { return v === true || v === "oui"; }
   function estNon(v) { return v === false || v === "non"; }
+  /* Le comité selon le questionnaire, et à défaut selon la fiche de
+     l'accueil, qui porte la réponse depuis le 26 septembre 2026. */
+  function cseDe(ctx) {
+    var f = (ctx && ctx.fiche) || {}, c = f.cse || {};
+    if (c.existe === undefined || c.existe === null || c.existe === "") {
+      var v = String(((ctx && ctx.profil) || {}).cseExiste || "").trim().toLowerCase();
+      if (v === "oui" || v === "non") {
+        var d = {}; for (var k in c) if (Object.prototype.hasOwnProperty.call(c, k)) d[k] = c[k];
+        d.existe = v; c = d;
+      }
+    }
+    return c;
+  }
 
   function nomDe(ctx) {
     var p = (ctx && ctx.profil) || {};
@@ -962,7 +975,7 @@
           ]));
         } else {
           C = C.concat(tableau(contrib[0], [
-            ["Comité social et économique" + (estNon((f.cse || {}).existe) ? " (aucun comité déclaré, sans objet)" : ""), "[réunion, référence du procès-verbal]", "[date]"],
+            ["Comité social et économique" + (estNon(cseDe(ctx).existe) ? " (aucun comité déclaré, sans objet)" : ""), "[réunion, référence du procès-verbal]", "[date]"],
             ["Salarié désigné (L. 4644-1) : [nom, ou « aucun désigné »]", "[ce qu'il a fait]", "[date]"],
             ["Service de prévention et de santé au travail : [nom du service]", "[visite, échange, fiche d'entreprise]", "[date]"],
           ]));
@@ -2102,7 +2115,7 @@
       L.push("");
       L.push("VOTRE MISE À JOUR, À COMPLÉTER");
       L.push("");
-      if (estNon((f.cse || {}).existe)) {
+      if (estNon(cseDe(ctx).existe)) {
         L.push("Le dossier n'indique aucun comité social et économique : la consultation");
         L.push("de L. 4121-3, 1°, n'a pas d'objet en l'état. Le courrier de la pièce 3 est");
         L.push("écrit pour le jour où le comité existera ; la transmission au service de");
@@ -2194,7 +2207,9 @@
       var pa = f.programmeAnnuel || {}, la = f.listeActions || {};
       var d0 = aujourd(ctx);
       var s50 = seuil(ctx, 50);
-      var cseExiste = (f.cse || {}).existe;
+      /* La fiche de l'accueil porte la réponse depuis le 26 septembre 2026 :
+         elle vaut quand le questionnaire ne dit rien. */
+      var cseExiste = cseDe(ctx).existe;
       var ex = exempleDe(ctx);
       var annee = d0.getFullYear() + 1;
       var L = entete(ctx, "Suites de l'évaluation des risques, programme annuel de prévention ou liste d'actions",
@@ -2738,7 +2753,7 @@
     detail: "Le courrier de transmission, le point d'ordre du jour rédigé, la " +
             "trame de procès-verbal et le suivi des mises à jour successives.",
     produire: function (ctx) {
-      var f = ctx.fiche || {}, du = f.duerp || {}, cse = f.cse || {};
+      var f = ctx.fiche || {}, du = f.duerp || {}, cse = cseDe(ctx);
       var d0 = aujourd(ctx);
       var ex = exempleDe(ctx);
       var L = entete(ctx, "Consultation du comité social et économique sur le document unique",
@@ -3194,7 +3209,7 @@
             "résolution de désignation, la convocation, l'ordre du jour type et " +
             "la trame de procès-verbal.",
     produire: function (ctx) {
-      var f = ctx.fiche || {}, c = f.cssct || {}, cse = f.cse || {};
+      var f = ctx.fiche || {}, c = f.cssct || {}, cse = cseDe(ctx);
       var d0 = aujourd(ctx);
       var fond = fondementCommission(ctx);
       var ex = exempleDe(ctx), K = ex.cssct;
@@ -4198,7 +4213,7 @@
     detail: "Les bénéficiaires recensés, la durée due élu par élu, la demande à " +
             "l'organisme, les courriers et le registre des attestations.",
     produire: function (ctx) {
-      var f = ctx.fiche || {}, cse = f.cse || {}, c = f.cssct || {};
+      var f = ctx.fiche || {}, cse = cseDe(ctx), c = f.cssct || {};
       var d0 = aujourd(ctx);
       var s300 = seuil(ctx, 300);
       var ex = exempleDe(ctx), K = ex.cssct;

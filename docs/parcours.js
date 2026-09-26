@@ -1307,7 +1307,7 @@
           if (!D.dateDepotGreffe) return null;
           return { iso: D.dateDepotGreffe, libelle: "Déposé le " + dateFr(D.dateDepotGreffe) };
         } },
-      { id: "i7", nom: "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité",
+      { id: "i7", nom: "Communiquer à l'inspecteur du travail, en deux exemplaires, avec l'avis du comité ou, sans comité, le procès-verbal de carence",
         champDate: "dateCommunicationInspection",
         docProduit: "DIS-CTL-RI-09",
         conseil: "Envoyez les deux exemplaires accompagnés de l'avis du comité et gardez la preuve d'envoi. Faites-le le jour même de la publicité : le texte veut que les deux aient lieu en même temps, et deux dates différentes se remarquent.",

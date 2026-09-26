@@ -160,6 +160,19 @@
   }
   function estOui(v) { return v === true || v === "oui"; }
   function estNon(v) { return v === false || v === "non"; }
+  /* Le comité selon le questionnaire, et à défaut selon la fiche de
+     l'accueil, qui porte la réponse depuis le 26 septembre 2026. */
+  function cseDe(ctx) {
+    var f = (ctx && ctx.fiche) || {}, c = f.cse || {};
+    if (c.existe === undefined || c.existe === null || c.existe === "") {
+      var v = String(((ctx && ctx.profil) || {}).cseExiste || "").trim().toLowerCase();
+      if (v === "oui" || v === "non") {
+        var d = {}; for (var k in c) if (Object.prototype.hasOwnProperty.call(c, k)) d[k] = c[k];
+        d.existe = v; c = d;
+      }
+    }
+    return c;
+  }
 
   function nomDe(ctx) {
     var p = (ctx && ctx.profil) || {};
@@ -744,7 +757,7 @@
      dues dépendent de l'effectif et du comité, et le reste est à crochets. */
   function tableauCoordonnees(ctx, E) {
     var T = ["Interlocuteur (D. 1151-1)", "Adresse", "Numéro d'appel", "Nom, quand le texte l'exige"];
-    var f = (ctx && ctx.fiche) || {}, cse = f.cse || {};
+    var f = (ctx && ctx.fiche) || {}, cse = cseDe(ctx);
     var au250 = E ? E.au250 : seuil(ctx, 250);
     var R = [];
     if (E) {
@@ -1151,7 +1164,7 @@
             "résolution, la formation due au référent et la mise à jour de l'affichage.",
     produire: function (ctx) {
       var f = ctx.fiche || {};
-      var cse = f.cse || {};
+      var cse = cseDe(ctx);
       var d0 = aujourd(ctx);
       var ex = exempleDe(ctx);
       var L = entete(ctx, "Désignation du référent harcèlement par le comité social et économique",
@@ -1725,7 +1738,7 @@
             "note de diffusion et le calendrier.",
     produire: function (ctx) {
       var f = ctx.fiche || {};
-      var cse = f.cse || {};
+      var cse = cseDe(ctx);
       var d0 = aujourd(ctx);
       var au250 = seuil(ctx, 250);
       var ex = exempleDe(ctx);
@@ -2155,7 +2168,7 @@
     produire: function (ctx) {
       var f = ctx.fiche || {};
       var s = f.signalement || {};
-      var cse = f.cse || {};
+      var cse = cseDe(ctx);
       var d0 = aujourd(ctx);
       var au250 = seuil(ctx, 250);
       var L = entete(ctx, "Signalement de harcèlement, enquête interne et suites",

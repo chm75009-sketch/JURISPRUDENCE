@@ -99,6 +99,12 @@
       aide: "Il oriente la convention applicable et le contenu des modèles (unités de travail du document unique, risques types)." },
     { c: "conventionCollective", nom: "Convention collective applicable (IDCC)", t: "idcc",
       aide: "Elle s'identifie par l'activité réelle. L'application ne lit aucune convention : elle signale l'endroit où la vôtre peut ajouter une obligation, elle n'affirme jamais ce qu'elle contient." },
+    /* Le comité social et économique, dans la fiche elle-même. Demandé le
+       26 septembre 2026 : la question n'était posée que dans les parcours,
+       si bien que l'accueil, l'agenda, Gérer et l'audit proposaient les
+       réunions et les consultations d'un comité que l'entreprise n'a pas. */
+    { c: "cseExiste", nom: "Un comité social et économique est-il en place ?", t: "oui-non",
+      aide: "Non : le procès-verbal de carence remplace l'avis du comité, et les réunions et consultations du comité ne sont plus proposées." },
     { c: "groupe", nom: "L'entreprise appartient-elle à un groupe ?", t: "oui-non",
       aide: "Le groupe déclenche le comité de groupe et pèse sur certains seuils des modules dédiés." },
     { c: "etablissementsDistincts", nom: "L'entreprise comporte-t-elle au moins deux établissements distincts ?", t: "oui-non",

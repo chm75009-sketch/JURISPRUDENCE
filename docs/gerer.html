@@ -2133,9 +2133,31 @@
          Demande du 15 septembre 2026. */
       ligne("flotte.html", "Flotte et conducteurs",
         "contrôle technique, assurance, permis, FCO, cartes, visites médicales");
+    /* DEUX CONTRATS POUR UN MÊME POSTE, C'ÉTAIT UN DE TROP. Mesuré le
+       26 septembre 2026 : pour un conducteur grand routier, le contrat CDI
+       d'ici écrivait « 35 heures » à l'article 5 et « 43 heures » plus bas,
+       sans statut ouvrier ni coefficient. Dans le transport, les trois
+       contrats renvoient au module qui applique la convention.
+
+       SANS COMITÉ, PAS DE CONVOCATION DU COMITÉ. La fiche dit désormais si
+       un comité social et économique est en place ; quand elle répond non,
+       la convocation, l'ordre du jour et le procès-verbal du comité cèdent
+       la place aux élections et au procès-verbal de carence. */
+    var transport = /transport/i.test(sect) || /^0*16\b/.test(idcc.trim());
+    var sansCse = String((profil && profil.cseExiste) || "").trim().toLowerCase() === "non";
+    var VERS_TRANSPORT = { cdi: 1, cdd: 1, partiel: 1 };
+    var DU_CSE = { convoc: 1, odj: 1, pv: 1 };
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
+      if (g[0] === "Collectif" && sansCse)
+        h += ligne("parcours.html?p=installation&faire=1", "Pas de comité en place",
+          "organiser les élections, ou le procès-verbal de carence et sa transmission");
       g[1].forEach(function (cle) {
+        if (sansCse && DU_CSE[cle]) return;
+        if (transport && VERS_TRANSPORT[cle]) {
+          h += ligne("contrats-transport.html", DOCS[cle].titre, "conducteur, grand routier, ADR, sédentaire : le contrat de la convention");
+          return;
+        }
         h += '<button type="button" class="doc-ligne" data-doc="' + cle + '">' + ech(DOCS[cle].titre) + "</button>";
       });
     });

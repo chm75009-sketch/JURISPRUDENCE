@@ -193,17 +193,22 @@
   /* Le moteur pose deux boutons sur chaque ligne. Sur celles que l'effectif
      ne rend pas dues, les boutons cèdent la place au seuil. Le moteur
      réécrit la liste après chaque document : on repasse à chaque fois. */
-  var eff = effectif(window.Profil && window.Profil.lire ? window.Profil.lire() : {});
+  var fichePf = window.Profil && window.Profil.lire ? window.Profil.lire() : {};
+  var eff = effectif(fichePf);
+  /* Sans comité selon la fiche, la consultation du comité sur le document
+     unique ne se demande pas : elle est remplacée par le procès-verbal de
+     carence, que le parcours du comité écrit. */
+  var sansCse = String((fichePf || {}).cseExiste || "").trim().toLowerCase() === "non";
   function griser() {
-    if (eff === null) return;
     QUESTIONS.forEach(function (q) {
-      if (!q.seuil || eff >= q.seuil) return;
+      var carence = sansCse && q.id === "SST-CTL-DUE-07";
+      if (!carence && (eff === null || !q.seuil || eff >= q.seuil)) return;
       var b = document.querySelector('#ecran [data-non="' + q.id + '"]');
       if (!b) return;
       var boutons = b.parentNode, ligne = boutons.parentNode;
       var du = document.createElement("span");
       du.className = "du";
-      du.textContent = "pas dû avant " + q.seuil;
+      du.textContent = carence ? "pas de comité : procès-verbal de carence" : "pas dû avant " + q.seuil;
       boutons.parentNode.replaceChild(du, boutons);
       ligne.className += " pasdu";
     });

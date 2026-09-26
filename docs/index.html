@@ -206,7 +206,7 @@
     });
   })();
 
-  /* Les huit champs de la fiche, sans texte d'aide, avec des intitulés courts.
+  /* Les neuf champs de la fiche, sans texte d'aide, avec des intitulés courts.
      Le SIRET, l'adresse et le représentant légal en font partie depuis le
      12 septembre 2026 : ils sont l'en-tête et la signature de tout document
      produit, et sans eux chaque courrier sortait avec trois crochets à
@@ -221,11 +221,12 @@
     courriel: "Adresse e-mail",
     effectif: "Effectif (salariés)",
     secteur: "Secteur",
-    conventionCollective: "Convention collective (IDCC)"
+    conventionCollective: "Convention collective (IDCC)",
+    cseExiste: "Comité social et économique en place"
   };
   /* Ce qui n'empêche pas de continuer. Le courriel est une coordonnée, non un
      élément d'identité : un document se dépose au greffe sans lui. */
-  var FACULTATIFS = { courriel: true };
+  var FACULTATIFS = { courriel: true, cseExiste: true };
   var CHAMPS = (window.Profil ? window.Profil.IDENTITE : []).filter(function (ch) {
     return NOMS[ch.c] !== undefined;
   }).map(function (ch) {

@@ -390,10 +390,26 @@
        douze mois consécutifs n'est pas vérifiée ici : la fiche ne porte que
        l'effectif du jour. */
     var sansComite = effectif !== null && effectif < 11;
+    /* LA FICHE DIT S'IL Y A UN COMITÉ. Mesuré le 26 septembre 2026 : une
+       entreprise sans comité recevait quand même les réunions ordinaires et
+       les trois consultations annuelles. Quand la fiche répond non, rien de
+       ce qui suppose un comité ne s'inscrit, et l'agenda renvoie aux
+       élections ou au procès-verbal de carence. */
+    var carence = false;
+    try {
+      var pf = (window.Profil && window.Profil.lire) ? window.Profil.lire()
+        : JSON.parse(localStorage.getItem("profil-entreprise") || "{}");
+      carence = String((pf || {}).cseExiste || "").trim().toLowerCase() === "non";
+    } catch (e) { carence = false; }
+    if (carence && !sansComite)
+      attentes.push({ t: "Pas de comité social et économique en place, selon la fiche.",
+        w: "Ni réunions ni consultations du comité à inscrire. À tenir : l'organisation des élections " +
+          "ou le procès-verbal de carence et sa transmission, dans le parcours « Mise en place du comité »." });
     if (sansComite)
       attentes.push({ t: "Comité social et économique : pas dû avant onze salariés.",
         w: "L. 2311-2 : le comité est mis en place dans les entreprises d'au moins onze salariés. " +
           "Effectif retenu : " + effectif + ". Ni réunions, ni consultations, ni élections à inscrire." });
+    if (carence) sansComite = true;
 
     /* --- réunions du CSE : une cadence, pas une date --- */
     if (effectif !== null && !sansComite) {
