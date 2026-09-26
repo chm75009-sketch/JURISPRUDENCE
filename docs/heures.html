@@ -185,6 +185,14 @@
   #frais .champ small{display:block;font:400 12px/1.4 system-ui;color:var(--texte-3);margin-top:2px}
   #frais input{min-height:44px}
   #sujetions .tuile small{display:block;font:400 12px/1.4 system-ui;color:var(--texte-3);margin-top:5px}
+  .tableau-etat{margin:14px 0 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tableau-etat table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+  .tableau-etat th,.tableau-etat td{border-bottom:1px solid var(--filet);padding:8px 10px;
+    text-align:left;vertical-align:top;white-space:nowrap}
+  .tableau-etat th{font:600 12px/1.2 system-ui;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--texte-3);background:var(--creux)}
+  .tableau-etat td small{color:var(--texte-3)}
+  .tableau-etat tr.vide td{color:var(--texte-3);font-style:italic}
 
   .barre{display:flex;flex-direction:column;gap:10px;margin:var(--e4) 0 0}
   @media (min-width:640px){.barre{flex-direction:row}.barre button{flex:1}}
@@ -440,6 +448,22 @@
     <div class="barre">
       <button type="button" id="b-excel">Télécharger le classeur Excel</button>
       <button type="button" class="second" id="b-word">Récapitulatif à signer, en Word</button>
+    </div>
+
+    <!-- L'ÉTAT DU MOIS, POUR TOUS LES SALARIÉS.
+         Le décompte se tenait salarié par salarié, et rien ne donnait la vue
+         du mois entier : il fallait ouvrir quatre-vingt-deux fiches pour
+         savoir où en était la paie. Relevé le 26 septembre 2026. Le tableau
+         ne calcule rien de neuf : il reprend ce que chaque mois tenu a
+         enregistré, et dit lesquels ne l'ont pas été. -->
+    <div class="bloc">
+      <h2>L'état du mois, tous les salariés</h2>
+      <p class="doux" id="etat-tous-dit"></p>
+      <div class="barre">
+        <button type="button" class="second" id="b-etat">Voir l'état du mois</button>
+        <button type="button" class="second" id="b-etat-excel" hidden>Export pour la paie</button>
+      </div>
+      <div id="etat-tous"></div>
     </div>
 
     <details class="loi" style="margin-top:24px">

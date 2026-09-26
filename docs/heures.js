@@ -1439,6 +1439,132 @@
     setTimeout(function () { lien.remove(); }, 1000);
   }
 
+  /* ══════════ L'ÉTAT DU MOIS, POUR TOUS LES SALARIÉS ═══════════════════
+
+     Le décompte se tenait salarié par salarié : pour savoir où en était la
+     paie du mois, il fallait ouvrir autant de fiches qu'il y a de salariés.
+     L'audit du 26 septembre 2026 l'a relevé.
+
+     Ce tableau ne recalcule rien. Il reprend, pour le mois affiché, ce que
+     chaque mois tenu a enregistré : le total calculé, le total retenu, les
+     heures supplémentaires, l'état de clôture. Un salarié dont le mois n'a
+     jamais été ouvert n'a pas de chiffre, et la ligne le dit : elle ne met
+     pas zéro, qui se lirait comme un mois à zéro heure. */
+  function etatDuMois() {
+    var t = lireCle(CLE_DEC, {});
+    var cleM = an + "-" + ("0" + (mo + 1)).slice(-2);
+    var trimestre = Math.floor(mo / 3);
+    return salaries().map(function (s) {
+      var m = t[s.id + "|" + cleM];
+      var o = { id: s.id, nom: s.nom, emp: s.emp || "", tenu: !!m };
+      if (!m) return o;
+      o.calcul = typeof m.calcul === "number" ? m.calcul : null;
+      o.retenu = nombre(m.retenu);
+      o.hs = typeof m.hs === "number" ? m.hs : null;
+      o.clos = !!(m.clos && m.clos.le);
+      o.closLe = o.clos ? m.clos.le : "";
+      o.motif = m.motif || "";
+      o.motifDep = m.motifDep || "";
+      /* Le repos compensateur se compte par trimestre : on additionne les
+         mois du trimestre qui ont été tenus, et on dit ceux qui manquent. */
+      var hsT = 0, manquants = [];
+      for (var k = trimestre * 3; k < trimestre * 3 + 3; k++) {
+        var mm = t[s.id + "|" + an + "-" + ("0" + (k + 1)).slice(-2)];
+        if (mm && typeof mm.hs === "number") hsT += mm.hs;
+        else manquants.push(MOIS[k]);
+      }
+      o.hsTrimestre = Math.round(hsT * 100) / 100;
+      o.repos = reposTrimestre(o.hsTrimestre);
+      o.trimestreManquants = manquants;
+      /* Les frais du mois, s'il y en a. */
+      var F = lignesFrais(), tot = 0;
+      F.forEach(function (x) {
+        var n = parseInt(String((m.frais && m.frais[x.c]) || "").replace(/[^0-9]/g, ""), 10);
+        if (isFinite(n)) tot += n * x.montant;
+      });
+      o.frais = Math.round(tot * 100) / 100;
+      return o;
+    });
+  }
+
+  function rendreEtatTous() {
+    var L = etatDuMois();
+    var tenus = L.filter(function (x) { return x.tenu; });
+    var clos = tenus.filter(function (x) { return x.clos; });
+    $("etat-tous-dit").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") +
+      " au registre · " + tenus.length + " mois tenu" + (tenus.length > 1 ? "s" : "") +
+      " pour " + MOIS[mo] + " " + an + " · " + clos.length + " clos";
+    if (!L.length) {
+      $("etat-tous").innerHTML = "";
+      $("b-etat-excel").hidden = true;
+      return;
+    }
+    var h = '<div class="tableau-etat"><table><thead><tr>' +
+      ["Salarié", "Calculé", "Retenu", "Heures sup.", "Repos trimestre", "Frais", "État"]
+        .map(function (c) { return "<th>" + ech(c) + "</th>"; }).join("") +
+      "</tr></thead><tbody>";
+    L.forEach(function (x) {
+      if (!x.tenu) {
+        h += '<tr class="vide"><td>' + ech(x.nom) + "</td>" +
+          '<td colspan="6">mois non tenu</td></tr>';
+        return;
+      }
+      h += "<tr><td>" + ech(x.nom) + "</td>" +
+        "<td>" + ech(x.calcul === null ? "" : nbh(x.calcul)) + "</td>" +
+        "<td>" + ech(x.retenu === null ? "à remplir" : nbh(x.retenu)) + "</td>" +
+        "<td>" + ech(x.hs === null ? "" : nbh(x.hs)) + "</td>" +
+        "<td>" + ech(x.repos ? x.repos + " j" : "aucun") +
+        (x.trimestreManquants.length ? " <small>(" + ech(x.trimestreManquants.join(", ")) +
+          " non tenu" + (x.trimestreManquants.length > 1 ? "s" : "") + ")</small>" : "") + "</td>" +
+        "<td>" + ech(x.frais ? eur(x.frais) : "") + "</td>" +
+        "<td>" + (x.clos ? "clos le " + ech(enFrancais(x.closLe)) : "en cours") + "</td></tr>";
+    });
+    h += "</tbody></table></div>";
+    $("etat-tous").innerHTML = h;
+    $("b-etat-excel").hidden = false;
+  }
+
+  /* L'EXPORT POUR LA PAIE. Une ligne par salarié, les colonnes que la paie
+     reprend, et rien de deviné : un mois non tenu sort vide, non à zéro. */
+  function etatClasseur() {
+    if (!window.TableurExport) return;
+    var p = entreprise(), L = etatDuMois();
+    var lignes = [
+      ["État mensuel des heures, tous les salariés"],
+      ["Entreprise", p.denomination || ""],
+      ["Mois", MOIS[mo] + " " + an],
+      ["Établi le", enFrancais(iso(new Date()))],
+      [],
+      ["Salarié", "Emploi", "Heures calculées", "Heures retenues", "Heures supplémentaires",
+       "Heures sup. du trimestre", "Repos compensateur (jours)", "Frais et indemnités (euros)",
+       "État du mois", "Motif de l'écart", "Motif du dépassement"],
+    ];
+    L.forEach(function (x) {
+      if (!x.tenu) {
+        lignes.push([x.nom, x.emp, "", "", "", "", "", "", "mois non tenu", "", ""]);
+        return;
+      }
+      lignes.push([x.nom, x.emp,
+        x.calcul === null ? "" : x.calcul,
+        x.retenu === null ? "" : x.retenu,
+        x.hs === null ? "" : x.hs,
+        x.hsTrimestre, x.repos, x.frais,
+        x.clos ? "clos le " + enFrancais(x.closLe) : "en cours",
+        x.motif || "", x.motifDep || ""]);
+    });
+    lignes.push([]);
+    lignes.push(["Un mois non tenu sort vide, et non à zéro : personne n'a compté ses heures, " +
+      "ce qui n'est pas la même chose qu'un mois sans heures."]);
+    lignes.push(["Établi en application des articles L. 3171-2 et D. 3171-8 du code du travail."]);
+    var octets = window.TableurExport.xlsx([{
+      titre: "État du mois",
+      lignes: lignes,
+      largeurs: [24, 18, 14, 14, 16, 16, 16, 18, 20, 26, 26],
+    }]);
+    window.TableurExport.telecharger(octets,
+      "etat-heures-" + an + "-" + ("0" + (mo + 1)).slice(-2) + ".xlsx");
+  }
+
   function classeur() {
     if (!window.TableurExport) return;
     var p = entreprise(), m = moisDe();
@@ -1922,6 +2048,8 @@
     });
     $("b-excel").addEventListener("click", classeur);
     $("b-word").addEventListener("click", word);
+    $("b-etat").addEventListener("click", rendreEtatTous);
+    $("b-etat-excel").addEventListener("click", etatClasseur);
     $("b-decl").addEventListener("click", declarationWord);
     $("b-decl-imp").addEventListener("click", declarationImprimer);
 
