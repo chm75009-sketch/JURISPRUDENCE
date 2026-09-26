@@ -3627,9 +3627,21 @@
       L.push("");
       L.push("INDICATEURS DES ÉCARTS DE RÉMUNÉRATION - EXEMPLE");
       L.push("");
-      L.push("Tableau des indicateurs de l'article L. 1142-8 :");
-      L.push("  Écart de rémunération globale | Écart de répartition | Écart d'augmentation");
-      L.push("  [% écart femmes/hommes]      | [% présence femmes]  | [% augmentation femmes]");
+      /* Ces trois colonnes étaient inventées : ni leurs intitulés ni leur
+         nombre ne viennent d'un texte. Les quatre indicateurs des entreprises
+         de cinquante à deux cent cinquante salariés sont ceux de D. 1142-2-1,
+         lu à la source le 26 septembre 2026 (LEGIARTI000038026015). */
+      L.push("Les quatre indicateurs de l'article D. 1142-2-1, pour une entreprise de cinquante à");
+      L.push("deux cent cinquante salariés :");
+      L.push("");
+      L.push("  indicateur                                             | résultat | points");
+      L.push("  Écart de rémunération femmes-hommes, par tranche d'âge  | [      ] | [    ]");
+      L.push("  et par catégorie de postes équivalents                  |          |");
+      L.push("  Écart de taux d'augmentations individuelles             | [      ] | [    ]");
+      L.push("  Augmentation au retour de congé de maternité            | [      ] | [    ]");
+      L.push("  Sexe sous-représenté parmi les dix plus hautes          | [      ] | [    ]");
+      L.push("  rémunérations                                           |          |");
+      L.push("  NIVEAU DE RÉSULTAT, sur 100                             |          | [    ]");
       L.push("");
       L.push("");
       L.push("À COMPLÉTER");
@@ -3821,15 +3833,49 @@
 
       L.push("LES RÈGLES");
       L.push("");
-      L.push("Les écarts de rémunération se mesurent par les indicateurs des articles L. 1142-8 et L. 1142-9. Au-delà de 10%, un plan d'action est requis.");
+      /* LA RÈGLE DES 10 % N'EXISTE PAS.
+
+         « Au-delà de 10 %, un plan d'action est requis » : cette phrase ne
+         vient d'aucun texte, et elle était écrite dans un document remis au
+         client. Relevé le 26 septembre 2026. Ce qui est écrit ci-dessous a
+         été lu à la source le même jour, deux lectures concordantes chacune :
+         D. 1142-2-1 (LEGIARTI000038026015), D. 1142-4 (LEGIARTI000045250060)
+         et D. 1142-6 (LEGIARTI000045250040). */
+      L.push("LES QUATRE INDICATEURS, de cinquante à deux cent cinquante salariés (D. 1142-2-1) :");
+      L.push("  1. l'écart de rémunération entre les femmes et les hommes, calculé à partir de la");
+      L.push("     moyenne de la rémunération des femmes comparée à celle des hommes, par tranche");
+      L.push("     d'âge et par catégorie de postes équivalents ;");
+      L.push("  2. l'écart de taux d'augmentations individuelles de salaire entre les femmes et les");
+      L.push("     hommes ;");
+      L.push("  3. le pourcentage de salariées ayant bénéficié d'une augmentation dans l'année");
+      L.push("     suivant leur retour de congé de maternité, si des augmentations sont intervenues");
+      L.push("     au cours de la période pendant laquelle le congé a été pris ;");
+      L.push("  4. le nombre de salariés du sexe sous-représenté parmi les dix salariés ayant perçu");
+      L.push("     les plus hautes rémunérations.");
+      L.push("");
+      L.push("Ces indicateurs se calculent selon les modalités de l'annexe II du chapitre, qui n'a");
+      L.push("pas été lue ici : les points de chaque indicateur et les barèmes s'y trouvent.");
+      L.push("");
+      L.push("LA PUBLICATION - le niveau de résultat et le résultat de chaque indicateur sont");
+      L.push("publiés « annuellement, au plus tard le 1er mars de l'année en cours, au titre de");
+      L.push("l'année précédente, de manière visible et lisible, sur le site internet de");
+      L.push("l'entreprise lorsqu'il en existe un » ; à défaut de site, ils sont portés à la");
+      L.push("connaissance des salariés par tout moyen (D. 1142-4).");
+      L.push("");
+      L.push("LES MESURES DE CORRECTION - elles sont dues « dès lors que le niveau de résultat");
+      L.push("[...] est inférieur à soixante-quinze points » (D. 1142-6), avec, le cas échéant, la");
+      L.push("programmation de mesures financières de rattrapage salarial. Elles se publient sur la");
+      L.push("même page que le résultat, jusqu'à ce que l'entreprise atteigne soixante-quinze");
+      L.push("points.");
       L.push("");
 
-      return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
-        ["Les articles L. 1142-8 et L. 1142-9 sont NOMMÉS parce que L. 2242-8 les",
-         "nomme. Ils n'ont PAS été lus à la source par ce module : ni les indicateurs,",
-         "ni leur calcul, ni la date limite de publication, ni le seuil de résultat qui",
-         "déclenche les mesures de correction ne figurent dans ce document. Toute",
-         "affirmation sur ces cinq points doit être vérifiée à la source."])).join("\n");
+      return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17, D. 1142-2-1, D. 1142-4, D. 1142-6",
+        ["Les quatre indicateurs, la date de publication et le seuil de soixante-quinze",
+         "points ont été lus à la source le 26 septembre 2026 : D. 1142-2-1, D. 1142-4 et",
+         "D. 1142-6. L'annexe II du chapitre, qui donne le barème de points de chaque",
+         "indicateur, n'a pas été lue ici : le calcul du niveau de résultat s'y fait, et",
+         "il n'est pas reproduit. Les articles L. 1142-8 et L. 1142-9 sont nommés parce",
+         "que L. 2242-8 les nomme."])).join("\n");
     },
   });
 
