@@ -110,6 +110,9 @@
   .verdict.ok{border-color:var(--vert);background:var(--vert-clair)}
   .verdict.tiede{border-color:var(--ambre);background:var(--ambre-clair)}
   .verdict.ko{border-color:var(--rouge);background:var(--rouge-clair)}
+  /* Tant que rien n'est coché, rien n'est jugé : ni vert, ni rouge. */
+  .verdict.attente{border-color:var(--filet);background:var(--surface)}
+  .verdict.attente .t{color:var(--texte-2)}
   .verdict .t{font:700 var(--t5)/1.25 system-ui}
   .verdict.ok .t{color:var(--vert)}
   .verdict.tiede .t{color:var(--ambre)}

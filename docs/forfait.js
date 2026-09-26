@@ -691,11 +691,26 @@
   function majVerdictControle() {
     var f = fiche(), c = f.ctrl;
     var v = $("ct-verdict");
+    /* RIEN DE COCHÉ N'EST PAS UN VERDICT.
+
+       À l'ouverture, aucune case n'est cochée, et l'écran annonçait
+       « Convention nulle » avec, parmi les motifs, « le nombre de jours
+       dépasse » alors que la fiche portait 218. Une case non cochée dit
+       qu'on ne sait pas encore, pas que le contraire est établi. Relevé le
+       26 septembre 2026. */
+    if (!CONTROLES.some(function (x) { return !!c[x.c]; })) {
+      v.className = "verdict attente";
+      v.querySelector(".t").textContent = "À contrôler.";
+      v.querySelector(".d").textContent = "Aucune case n'est encore cochée : cochez ce qui est vrai " +
+        "de cette convention, une par une. Chacune dit en dessous ce que son absence emporte, et le " +
+        "verdict se forme à mesure.";
+      return;
+    }
     var nulle = [];
     if (!c.accord) nulle.push("aucun accord collectif ne la fonde (L. 3121-63)");
     if (!c.ecrit) nulle.push("il n'y a pas d'écrit signé (L. 3121-55)");
-    if (!c.elig) nulle.push("le salarié n'est pas autonome au sens de L. 3121-58");
-    if (!c.nombre) nulle.push("le nombre de jours dépasse ce qui est permis");
+    if (!c.elig) nulle.push("l'autonomie du salarié au sens de L. 3121-58 n'est pas établie");
+    if (!c.nombre) nulle.push("le nombre de jours n'est pas confirmé conforme, 218 au plus (L. 3121-64)");
     var suivi = [];
     if (!c.entretien) suivi.push("l'entretien annuel");
     if (!c.doc) suivi.push("le document de contrôle");
@@ -839,12 +854,21 @@
 
   /* Remplir le mois d'un geste : travaillé du lundi au vendredi, repos
      hebdomadaire le samedi et le dimanche, férié chômé quand la date en est
-     un. Les jours déjà qualifiés à la main ne bougent pas. */
+     un. Les jours déjà qualifiés à la main ne bougent pas.
+
+     ON NE REMPLIT PAS L'AVENIR. Le 26 septembre, les 28, 29 et 30 sortaient
+     « travaillés » et entraient dans le compte : un document de contrôle qui
+     dit d'avance ce qui sera fait ne prouve rien (L. 3121-65, I, 1°). Le
+     remplissage s'arrête donc la veille. Relevé le 26 septembre 2026. */
   function remplirMois() {
     var x = moisDe(an, mo);
     if (x.clos && x.clos.le) return;
     var dernier = new Date(an, mo + 1, 0).getDate();
+    var hier = new Date();
+    hier.setHours(0, 0, 0, 0);
+    hier.setDate(hier.getDate() - 1);
     for (var j = 1; j <= dernier; j++) {
+      if (new Date(an, mo, j) > hier) break;
       if (x.j[String(j)] != null) continue;
       var d = new Date(an, mo, j), js = d.getDay();
       if (estFerie(an, iso(d))) x.j[String(j)] = "f";
