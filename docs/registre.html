@@ -858,44 +858,32 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return vide(s.nom) && vide(s.pre) ? "(sans nom)" : (s.nom + " " + s.pre).trim();
   }
 
-  function rendreRegistre() {
-    rappelFiche();
-    /* Une ligne à ajouter, toujours : un registre vide ouvre sur une carte
-       vierge, prête à remplir. */
-    if (!E.salaries.length) { var s0 = neuf(); E.salaries.push(s0); ouverts[s0.id] = true; garder(); }
-    var nbEx = E.salaries.filter(function (s) { return s.ex; }).length;
+  /* L'EN-TÊTE D'UNE LIGNE, À PART.
+
+     Il se redessine seul, sans toucher aux champs. C'est ce qui permet de
+     rafraîchir la jauge et le nom pendant la saisie sans détruire la case où
+     l'on écrit : redessiner tout le registre au passage du nom aux prénoms
+     faisait perdre le curseur, et les frappes suivantes n'allaient nulle
+     part. Défaut relevé le 26 septembre 2026. */
+  function teteHtml(s, num) {
+    var et = etat(s);
+    var resume = [s.emp, vide(s.ent) ? "" : "entré le " + s.ent.split("-").reverse().join("/"),
+      vide(s.sor) ? "" : "sorti le " + s.sor.split("-").reverse().join("/")]
+      .filter(function (x) { return String(x || "").trim(); }).join(" · ");
+    return "<b>" + (vide(s.ent) ? "Sans date d'entrée" : "N° " + num) + " · " + ech(nomDe(s)) + "</b>" +
+      '<span class="jauge ' + et.cls + '">' + ech(et.txt) + "</span>" +
+      (resume ? '<p class="resume">' + ech(resume) + "</p>" : "");
+  }
+
+  /* Le compte et la synthèse, eux aussi à part, pour la même raison. */
+  function rendreSynthese() {
     var L = filtrees(ordonnes());
-    var h = "";
-    L.forEach(function (s, i) {
-      var et = etat(s), ouvert = !!ouverts[s.id];
-      var resume = [s.emp, vide(s.ent) ? "" : "entré le " + s.ent.split("-").reverse().join("/"),
-        vide(s.sor) ? "" : "sorti le " + s.sor.split("-").reverse().join("/")].filter(function (x) { return String(x || "").trim(); }).join(" · ");
-      h += '<div class="sal' + (s.ex ? " exemple" : "") + (deplie[s.id] ? " ouverte" : "") +
-        '" data-sal="' + ech(s.id) + '"><div class="tete" data-ouvrir="' + ech(s.id) + '"><b>' +
-        (vide(s.ent) ? "Sans date d'entrée" : "N° " + (i + 1)) + " · " + ech(nomDe(s)) + "</b>" +
-        '<span class="jauge ' + et.cls + '">' + ech(et.txt) + "</span>" +
-        (resume ? '<p class="resume">' + ech(resume) + "</p>" : "") + "</div>" +
-        '<div class="corps">' +
-        '<div class="champs">' + COLONNES.map(function (col) { return champ(s, col); }).join("") + "</div>" +
-        '<details class="loi"' + (ouvert ? " open" : "") + ' data-plier="' + ech(s.id) + '"><summary>Mentions particulières (D. 1221-23, 7° à 13°)</summary>' +
-        detail(s) + "</details>" +
-        '<div class="barre"><button type="button" class="second" data-sup="' + ech(s.id) + '">Retirer cette ligne</button></div>' +
-        "</div></div>";
-    });
-    $("registre").innerHTML = h;
     var tous = E.salaries.filter(function (x) { return !x.ex && (!vide(x.nom) || !vide(x.pre)); });
     var nbManques = tous.filter(incomplete).length;
     if ($("reg-compte"))
       $("reg-compte").textContent = L.length + " ligne" + (L.length > 1 ? "s" : "") + " affichée" +
         (L.length > 1 ? "s" : "") + " sur " + tous.length + " au registre" +
         (nbManques ? " · " + nbManques + " à compléter" : " · aucune mention manquante");
-
-    if (nbEx)
-      $("registre").insertAdjacentHTML("afterbegin",
-        '<div class="avis info"><b>' + nbEx + " ligne(s) d'exemple</b>" +
-        "Elles sont fictives et servent de modèle : remplacez-les par vos salariés, ou retirez-les " +
-        '<button type="button" class="second" id="r-sans-exemples" ' +
-        'style="margin-left:8px;min-height:36px;padding:6px 12px;width:auto">Retirer les exemples</button></div>');
 
     var incompletes = L.filter(function (s) { return manques(s).length; });
     var indecises = L.filter(function (s) { return !manques(s).length && aEtablir(s).length; });
@@ -911,8 +899,40 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       sh += '<div class="avis att"><b>' + indecises.length + " ligne(s) dont la situation n'est pas tranchée</b>" +
         ech(indecises.map(nomDe).join(" · ")) + ". Ouvrez leurs mentions particulières.</div>";
     $("synthese-registre").innerHTML = sh;
+  }
 
+  /* Ce qu'on rafraîchit quand un champ vient d'être quitté : l'en-tête de sa
+     ligne, la synthèse, et les mentions particulières seulement si c'est une
+     liste déroulante qui a changé, parce qu'elle commande l'apparition
+     d'autres champs. */
+  function rafraichirLigne(s, el) {
+    var carte = $("registre").querySelector('[data-sal="' + s.id + '"]');
+    if (!carte) return;
+    var t = carte.querySelector(".tete");
+    if (t) t.innerHTML = teteHtml(s, carte.getAttribute("data-num"));
+    var d = carte.querySelector("[data-plier]");
+    if (d && el && el.tagName === "SELECT" && d.contains(el)) {
+      var sm = d.querySelector("summary");
+      var quoi = el.getAttribute("data-c");
+      d.innerHTML = (sm ? sm.outerHTML : "") + detail(s);
+      cablerChamps();
+      var r = d.querySelector('[data-c="' + quoi + '"]');
+      if (r) r.focus();
+    }
+    rendreSynthese();
+  }
+
+  /* LE CÂBLAGE DES CHAMPS.
+
+     Une frappe écrit, rien de plus. C'est au moment où le champ est quitté que
+     l'en-tête et la synthèse se remettent à jour, et la liste entière ne se
+     redessine qu'une fois le registre quitté pour de bon : sinon l'ordre des
+     lignes changerait sous les doigts. Le drapeau évite de recâbler deux fois
+     un champ déjà câblé. */
+  function cablerChamps() {
     Array.prototype.forEach.call($("registre").querySelectorAll("[data-c]"), function (el) {
+      if (el.dataset.cable) return;
+      el.dataset.cable = "1";
       var ecrire = function () {
         var s = parId(el.getAttribute("data-id"));
         if (!s) return;
@@ -921,8 +941,52 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         garder();
       };
       el.addEventListener("input", ecrire);
-      el.addEventListener("change", function () { ecrire(); rendreRegistre(); });
+      el.addEventListener("change", function () {
+        ecrire();
+        var s = parId(el.getAttribute("data-id"));
+        if (s) rafraichirLigne(s, el);
+      });
+      el.addEventListener("blur", function () {
+        setTimeout(function () {
+          var a = document.activeElement;
+          if (a && a.closest && a.closest("#registre")) return;
+          rendreRegistre();
+        }, 0);
+      });
     });
+  }
+
+  function rendreRegistre() {
+    rappelFiche();
+    /* Une ligne à ajouter, toujours : un registre vide ouvre sur une carte
+       vierge, prête à remplir. */
+    if (!E.salaries.length) { var s0 = neuf(); E.salaries.push(s0); ouverts[s0.id] = true; garder(); }
+    var nbEx = E.salaries.filter(function (s) { return s.ex; }).length;
+    var L = filtrees(ordonnes());
+    var h = "";
+    L.forEach(function (s, i) {
+      var ouvert = !!ouverts[s.id];
+      h += '<div class="sal' + (s.ex ? " exemple" : "") + (deplie[s.id] ? " ouverte" : "") +
+        '" data-sal="' + ech(s.id) + '" data-num="' + (i + 1) + '">' +
+        '<div class="tete" data-ouvrir="' + ech(s.id) + '">' + teteHtml(s, i + 1) + "</div>" +
+        '<div class="corps">' +
+        '<div class="champs">' + COLONNES.map(function (col) { return champ(s, col); }).join("") + "</div>" +
+        '<details class="loi"' + (ouvert ? " open" : "") + ' data-plier="' + ech(s.id) + '"><summary>Mentions particulières (D. 1221-23, 7° à 13°)</summary>' +
+        detail(s) + "</details>" +
+        '<div class="barre"><button type="button" class="second" data-sup="' + ech(s.id) + '">Retirer cette ligne</button></div>' +
+        "</div></div>";
+    });
+    $("registre").innerHTML = h;
+    rendreSynthese();
+
+    if (nbEx)
+      $("registre").insertAdjacentHTML("afterbegin",
+        '<div class="avis info"><b>' + nbEx + " ligne(s) d'exemple</b>" +
+        "Elles sont fictives et servent de modèle : remplacez-les par vos salariés, ou retirez-les " +
+        '<button type="button" class="second" id="r-sans-exemples" ' +
+        'style="margin-left:8px;min-height:36px;padding:6px 12px;width:auto">Retirer les exemples</button></div>');
+
+    cablerChamps();
     Array.prototype.forEach.call($("registre").querySelectorAll("[data-plier]"), function (d) {
       d.addEventListener("toggle", function () {
         var id = d.getAttribute("data-plier");
@@ -991,6 +1055,18 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      et aux volontaires sont renvoyées au pouvoir réglementaire, et ce texte
      n'a pas été capté dans ce dépôt : aucune autre colonne n'est demandée
      ici. Ce qui n'est pas lu n'est pas exigé. */
+  function teteAccueilli(a, num) {
+    var m = [];
+    if (vide(a.nom)) m.push("Nom");
+    if (vide(a.pre)) m.push("Prénoms");
+    if (vide(a.qualite)) m.push("Qualité");
+    if (vide(a.arr)) m.push("Date d'arrivée");
+    return "<b>" + (vide(a.arr) ? "Sans date d'arrivée" : "N° " + num) + " · " +
+      ech(vide(a.nom) && vide(a.pre) ? "(sans nom)" : (a.nom + " " + a.pre).trim()) + "</b>" +
+      (m.length ? '<span class="jauge non">' + ech(m.join(", ")) + "</span>"
+        : '<span class="jauge ok">complète</span>');
+  }
+
   function rendreAccueillis() {
     var L = E.accueillis.slice();
     L.sort(function (a, b) {
@@ -1005,19 +1081,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       : "";
     var h = "";
     L.forEach(function (a, i) {
-      var m = [];
-      if (vide(a.nom)) m.push("Nom");
-      if (vide(a.pre)) m.push("Prénoms");
-      if (vide(a.qualite)) m.push("Qualité");
-      if (vide(a.arr)) m.push("Date d'arrivée");
       var champA = function (c, lib, type) {
         return '<label class="ch"><span class="nom">' + lib + '</span><input type="' + (type || "text") +
           '" data-aid="' + ech(a.id) + '" data-c="' + c + '" value="' + ech(a[c] || "") + '"' +
           (vide(a[c]) ? "" : ' class="rempli"') + "></label>";
       };
-      h += '<div class="sal"><div class="tete"><b>' + (vide(a.arr) ? "Sans date d'arrivée" : "N° " + (i + 1)) + " · " +
-        ech(vide(a.nom) && vide(a.pre) ? "(sans nom)" : (a.nom + " " + a.pre).trim()) + "</b>" +
-        (m.length ? '<span class="jauge non">' + ech(m.join(", ")) + "</span>" : '<span class="jauge ok">complète</span>') + "</div>" +
+      h += '<div class="sal" data-acc="' + ech(a.id) + '" data-num="' + (i + 1) + '">' +
+        '<div class="tete">' + teteAccueilli(a, i + 1) + "</div>" +
         '<div class="champs">' + champA("nom", "Nom") + champA("pre", "Prénoms") +
         '<label class="ch"><span class="nom">Qualité</span><select data-aid="' + ech(a.id) + '" data-c="qualite">' +
           [["", "?"], ["stagiaire", "Stagiaire"], ["volontaire", "Volontaire en service civique"]].map(function (o) {
@@ -1034,7 +1104,22 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         garder();
       };
       el.addEventListener("input", ecrire);
-      el.addEventListener("change", function () { ecrire(); rendreAccueillis(); });
+      el.addEventListener("change", function () {
+        ecrire();
+        var id = el.getAttribute("data-aid");
+        var a = null;
+        E.accueillis.forEach(function (x) { if (x.id === id) a = x; });
+        var carte = $("accueillis").querySelector('[data-acc="' + id + '"]');
+        if (a && carte && carte.querySelector(".tete"))
+          carte.querySelector(".tete").innerHTML = teteAccueilli(a, carte.getAttribute("data-num"));
+      });
+      el.addEventListener("blur", function () {
+        setTimeout(function () {
+          var b = document.activeElement;
+          if (b && b.closest && b.closest("#accueillis")) return;
+          rendreAccueillis();
+        }, 0);
+      });
     });
     Array.prototype.forEach.call($("accueillis").querySelectorAll("[data-asup]"), function (b) {
       b.addEventListener("click", function () {
