@@ -362,9 +362,15 @@
       "Elle porte des obligations générales et permanentes en matière de santé, de sécurité " +
       "ou de discipline. L'article L. 1321-5 du code du travail en fait une adjonction au " +
       "règlement intérieur, soumise aux mêmes formalités que lui (L. 1321-4) :<ul>" +
-      "<li>avis du comité social et économique avant l'introduction de la note ;</li>" +
-      "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
-      "<li>communication à l'inspection du travail, avec l'avis du comité, en même temps ;</li>" +
+      /* Sans comité selon la fiche, le procès-verbal de carence tient lieu
+         d'avis, comme pour le règlement lui-même (26 septembre 2026). */
+      (String(profil.cseExiste || "").trim().toLowerCase() === "non"
+        ? "<li>pas de comité en place : le procès-verbal de carence tient lieu d'avis ;</li>" +
+          "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
+          "<li>communication à l'inspection du travail, avec le procès-verbal de carence, en même temps ;</li>"
+        : "<li>avis du comité social et économique avant l'introduction de la note ;</li>" +
+          "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
+          "<li>communication à l'inspection du travail, avec l'avis du comité, en même temps ;</li>") +
       "<li>entrée en vigueur à une date postérieure d'un mois à ces formalités ;</li>" +
       "<li>la note indique elle-même sa date d'entrée en vigueur.</li></ul>";
     if (m.urgence) {

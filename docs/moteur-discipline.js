@@ -2479,16 +2479,28 @@ function replier(s) {
 /* Le découpage en phrases. Un règlement intérieur est fait d'articles courts ;
    on coupe sur la ponctuation forte et sur les sauts de ligne, en gardant la
    position d'origine pour pouvoir rendre le passage tel qu'il est écrit. */
+/* Mesuré le 26 septembre 2026 : couper sur tout point cassait « 7.3 » et
+   « L. 1331-2 », et le passage rendu commençait par « 3, et à eux seuls ».
+   Une phrase finit sur un saut de ligne, ou sur un point, un point
+   d'exclamation ou d'interrogation suivi d'un blanc et d'une majuscule. */
 function phrases(texte) {
   const P = [];
   const brut = String(texte || "");
-  const re = /[^.!?\n]+[.!?]*/g;
-  let m;
-  while ((m = re.exec(brut)) !== null) {
-    const t = m[0].trim();
-    if (t.length < 3) continue;
-    P.push({ texte: t, debut: m.index, replie: replier(t) });
+  const fin = /\n+|[.!?]+(?=\s+(?:["«(\[A-ZÀ-ÝŒ]|\d+(?:\.\d+)*\s*-)|\s*$)/g;
+  let debut = 0, m;
+  const poser = (a, b) => {
+    const morceau = brut.slice(a, b);
+    const t = morceau.trim();
+    if (t.length < 3) return;
+    P.push({ texte: t, debut: a + morceau.indexOf(t), replie: replier(t) });
+  };
+  while ((m = fin.exec(brut)) !== null) {
+    const b = m[0][0] === "\n" ? m.index : m.index + m[0].length;
+    poser(debut, b);
+    debut = m.index + m[0].length;
+    if (m[0].length === 0) fin.lastIndex++;
   }
+  poser(debut, brut.length);
   return P;
 }
 
@@ -2642,6 +2654,11 @@ const GRILLE = [
     prohibe: true,
     marqueurs: ["amende", "sanction pecuniaire", "sanctions pecuniaires", "penalite",
       "retenue sur salaire", "retenue de salaire", "prelevement sur la remuneration"],
+    /* La phrase qui rappelle l'interdiction n'est pas une clause prohibée.
+       Mesuré le 26 septembre 2026 : « Article 17 - Interdiction des
+       sanctions pécuniaires » était rendu comme une amende à retirer. */
+    exclure: ["interdit", "interdite", "interdits", "interdites", "interdiction",
+      "reputee non ecrite", "reputees non ecrites"],
     critere: "Une retenue sur salaire n'est licite que si elle correspond à une absence de travail effectif ou à une créance de l'employeur régulièrement établie. Toute somme prélevée à raison d'un comportement fautif est une sanction pécuniaire, quelle que soit la formule employée.",
     remplacement: "Supprimer la clause. Le comportement visé peut être sanctionné par une sanction de l'échelle (avertissement, blâme, mise à pied), jamais par une somme d'argent.",
   },
@@ -2757,7 +2774,8 @@ function analyser(texte) {
       continue;
     }
 
-    const trouves = reperer(P, g.marqueurs);
+    const trouves = reperer(P, g.marqueurs).filter(p =>
+      !(g.exclure || []).some(x => contient(replier(p.texte), x)));
 
     if (g.prohibe) {
       points.push({ ...vue(g),
@@ -2830,7 +2848,7 @@ function corriger(analyse, choix) {
   let corps = analyse.texte;
   for (const m of marques) {
     corps = corps.slice(0, m.fin) +
-      `  [À CONTRÔLER - ${m.id} : ${m.objet}]` +
+      `  [À CONTRÔLER — ${m.id} : ${m.objet}]` +
       corps.slice(m.fin);
   }
 
@@ -2851,23 +2869,23 @@ function corriger(analyse, choix) {
     resume: `${ajouts.length} clause${ajouts.length > 1 ? "s ajoutées" : " ajoutée"}, ${notes.length} famille${notes.length > 1 ? "s signalées" : " signalée"} à contrôler.` };
 }
 
-/* Le texte plat de la version corrigée, celui que la page propose au
+/* Le texte plat de la version corrigée — celui que la page propose au
    téléchargement lorsque l'utilisateur ne veut pas le composer lui-même. */
 function texteCorrige(analyse, choix) {
   const r = corriger(analyse, choix);
   const L = [r.corps.trim(), ""];
   if (r.ajouts.length) {
-    L.push("", "- - -", "CLAUSES AJOUTÉES AU TITRE DU CONTRÔLE", "");
+    L.push("", "— — —", "CLAUSES AJOUTÉES AU TITRE DU CONTRÔLE", "");
     for (const a of r.ajouts) {
-      L.push(`[${a.id} - ${a.fondement.map(article).join(", ")}]`);
+      L.push(`[${a.id} — ${a.fondement.map(article).join(", ")}]`);
       for (const l of a.lignes) L.push(l);
       L.push("");
     }
   }
   if (r.notes.length) {
-    L.push("", "- - -", "PASSAGES À CONTRÔLER AVANT DIFFUSION", "");
+    L.push("", "— — —", "PASSAGES À CONTRÔLER AVANT DIFFUSION", "");
     for (const n of r.notes) {
-      L.push(`[${n.id} - ${n.objet} - ${n.fondement.map(article).join(", ")}]`);
+      L.push(`[${n.id} — ${n.objet} — ${n.fondement.map(article).join(", ")}]`);
       L.push("Critère : " + n.critere);
       L.push("Ce qu'il faut faire : " + n.remplacement);
       for (const p of n.passages) L.push("  « " + p + " »");
