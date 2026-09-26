@@ -90,7 +90,7 @@
       aide: "Elle figure en tête des courriers produits (convocations, notifications, dépôts)." },
     /* LE NOM ET LA QUALITÉ NE SONT PAS LA MÊME CHOSE.
 
-       Un seul champ « nom, qualité » donnait « Chadi EL AFAI » sans qualité,
+       Un seul champ « nom, qualité » donnait « Chadi EL SAFADI » sans qualité,
        et ce nom partait tel quel dans chaque document signé et dans les
        métadonnées. Relevé le 26 septembre 2026. Les deux se saisissent
        séparément ; le champ « responsable », que quatre-vingts endroits du
