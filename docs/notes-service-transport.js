@@ -54,7 +54,24 @@
     "Respect des temps de conduite et de repos",
     ["Les temps de conduite, de pause et de repos ne se négocient pas : ils protègent le conducteur, les autres usagers et l'entreprise.",
      "",
-     "Aucune tournée n'est construite sur un temps de conduite qui dépasse ce que la réglementation autorise. Si un planning paraît impossible à tenir, il se signale à l'exploitation avant le départ, non après.",
+     /* LES CHIFFRES, PUISQUE C'EST CE QU'ON VIENT CHERCHER.
+
+        La note n'en donnait aucun : elle disait « ce que la réglementation
+        autorise » sans dire quoi. Ils sont ceux du règlement (CE)
+        n° 561/2006, articles 4, g) et h), 6, 7 et 8, dans sa version
+        consolidée au 20 août 2020 (CELEX 02006R0561-20200820), lue à la
+        source sur EUR-Lex le 26 septembre 2026. Relevé le même jour. */
+     "Les durées sont celles du règlement (CE) n° 561/2006 :",
+     "",
+     "  - conduite journalière : neuf heures, portées à dix heures deux fois par semaine au plus (article 6, 1) ;",
+     "  - conduite hebdomadaire : cinquante-six heures (article 6, 2), et quatre-vingt-dix heures sur deux semaines consécutives (article 6, 3) ;",
+     "  - pause : après quatre heures trente de conduite, quarante-cinq minutes ininterrompues, ou quinze minutes puis trente minutes dans cet ordre (article 7) ;",
+     "  - repos journalier : onze heures, réductible à neuf heures trois fois au plus entre deux repos hebdomadaires (article 4, g, et article 8, 2 et 4) ;",
+     "  - repos hebdomadaire : quarante-cinq heures ; sur deux semaines consécutives, deux repos normaux, ou un repos normal et un repos réduit d'au moins vingt-quatre heures (article 4, h, et article 8, 6). Il commence au plus tard à la fin de six périodes de vingt-quatre heures depuis la fin du précédent (article 8, 6) ;",
+     "  - toute réduction du repos hebdomadaire est compensée par un repos équivalent pris en bloc avant la fin de la troisième semaine qui suit (article 8, 6 ter) ;",
+     "  - un repos hebdomadaire normal, et tout repos de plus de quarante-cinq heures pris en compensation, ne se prend pas dans le véhicule : l'hébergement est à la charge de l'employeur (article 8, 8).",
+     "",
+     "Aucune tournée n'est construite sur un temps de conduite qui dépasse ces durées. Si un planning paraît impossible à tenir, il se signale à l'exploitation avant le départ, non après.",
      "",
      "Un retard ne se rattrape jamais sur une pause ni sur un repos. L'exploitation prévient le client ; le conducteur ne roule pas davantage.",
      "",
