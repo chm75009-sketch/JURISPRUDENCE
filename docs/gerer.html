@@ -342,6 +342,31 @@
       dit: "la durée légale de travail effectif est de trente-cinq heures par semaine" },
     "L3121-36": { id: "LEGIARTI000033020341",
       dit: "à défaut d'accord, majoration de 25 % pour les huit premières heures supplémentaires, 50 % au-delà" },
+    /* LE TRAVAIL DE NUIT, POUR L'AVENANT QUI Y FAIT PASSER. Lus à la source
+       le 26 septembre 2026, deux lectures concordantes. */
+    /* LA PROMESSE D'EMBAUCHE, LE CDD D'USAGE ET LE CONTRAT DE
+       PROFESSIONNALISATION. Aucun des trois n'existait. Textes lus à la source
+       le 26 septembre 2026, deux lectures concordantes chacun. */
+    "CIV-1114": { id: "LEGIARTI000032040891", code: "Code civil",
+      dit: "l'offre comprend les éléments essentiels du contrat envisagé et exprime la volonté de son auteur d'être lié en cas d'acceptation ; à défaut, il y a seulement invitation à entrer en négociation" },
+    "CIV-1124": { id: "LEGIARTI000032040818", code: "Code civil",
+      dit: "la promesse unilatérale est le contrat par lequel le promettant accorde au bénéficiaire le droit d'opter pour la conclusion d'un contrat dont les éléments essentiels sont déterminés ; la révocation pendant le temps laissé pour opter n'empêche pas la formation du contrat" },
+    "D1242-1": { id: "LEGIARTI000051768762",
+      dit: "liste des secteurs où le contrat à durée déterminée d'usage est ouvert : exploitations forestières, réparation navale, déménagement, hôtellerie et restauration, sport professionnel, spectacles, enseignement, information et sondages, entreposage et stockage de la viande, bâtiment et travaux publics pour les chantiers à l'étranger, coopération et ingénierie à l'étranger, insertion par les associations intermédiaires, mise à disposition pour services à la personne, recherche scientifique sous convention internationale, activités foraines, soutien et fourniture à l'étranger au sens du code de la défense, exercice de la médecine dans certains centres de santé" },
+    "L6325-1": { id: "LEGIARTI000054201191",
+      dit: "le contrat de professionnalisation a pour objet l'acquisition d'une qualification et l'insertion ou la réinsertion professionnelle ; il est ouvert aux seize à vingt-cinq ans révolus, aux demandeurs d'emploi de vingt-six ans et plus, et aux bénéficiaires de certains minima sociaux" },
+    "L6325-7": { id: "LEGIARTI000024422128",
+      dit: "le contrat de professionnalisation à durée déterminée peut être renouvelé une fois, si le bénéficiaire prépare une qualification supérieure ou complémentaire, ou n'a pu obtenir la qualification visée pour échec, maternité, maladie, accident du travail, maladie professionnelle ou défaillance de l'organisme de formation" },
+    "L6325-11": { id: "LEGIARTI000037386541",
+      dit: "l'action de professionnalisation dure au minimum entre six et douze mois, et peut être allongée jusqu'à trente-six mois pour les personnes de l'article L. 6325-1-1" },
+    "L6325-13": { id: "LEGIARTI000033024376",
+      dit: "les actions de positionnement, d'évaluation, d'accompagnement et les enseignements durent au minimum entre 15 %, sans être inférieurs à cent cinquante heures, et 25 % de la durée totale du contrat" },
+    "D6325-1": { id: "LEGIARTI000049854565",
+      dit: "l'employeur adresse le contrat de professionnalisation et son document annexé à l'opérateur de compétences au plus tard dans les cinq jours qui suivent le début du contrat, sous forme dématérialisée" },
+    "D6325-15": { id: "LEGIARTI000018522997",
+      dit: "le salaire ne peut être inférieur à 55 % du salaire minimum de croissance avant vingt et un ans et à 70 % à partir de vingt et un ans ; 65 % et 80 % lorsque le bénéficiaire est titulaire d'une qualification au moins égale au baccalauréat professionnel" },
+    "L3122-5": { id: "LEGIARTI000033020171",
+      dit: "est travailleur de nuit celui qui accomplit, au moins deux fois par semaine, selon son horaire habituel, au moins trois heures de travail de nuit quotidiennes, ou un nombre minimal d'heures de nuit sur une période de référence" },
     "L3123-6": { id: "LEGIARTI000033020080",
       dit: "mentions du contrat à temps partiel : qualification, rémunération, durée et répartition, modifications, horaires, heures complémentaires" },
     "L3123-7": { id: "LEGIARTI000047453545",
@@ -529,6 +554,8 @@
          un article d'un autre code ne se cite pas comme s'il était du code du
          travail. Posé le 26 septembre 2026. */
       var css = n.indexOf("CSS-") === 0;
+      var civ = n.indexOf("CIV-") === 0;
+      if (civ) return "article " + n.slice(4) + " du code civil";
       var x = (css ? n.slice(4) : n).replace(/^([LRD])(\d)/, "$1. $2");
       return css ? x + " du code de la sécurité sociale" : x;
     }).join(", ");
@@ -1306,12 +1333,34 @@
   }
   function resultatContrat(d, loi) {
     var r = contrat(d);
-    if (r.refus) return { refus: r.refus, loi: loi };
+    /* LE CONTRAT D'USAGE N'EST PAS OUVERT À TOUS LES SECTEURS.
+       D. 1242-1 en donne la liste, et le transport routier de marchandises
+       n'y est pas : seul le déménagement l'est, avec l'entreposage et le
+       stockage de la viande. Un contrat d'usage conclu hors de ces secteurs
+       est requalifiable, et l'écran le dit dès le choix du motif, même quand
+       le contrat n'est pas encore complet. Relevé le 26 septembre 2026. */
+    var surUsage = [];
+    if (d.motif && d.motif.v === "usage") {
+      var sect = secteurUsage();
+      surUsage.push(sect.dans
+        ? "Le contrat d'usage suppose un secteur figurant à la liste de " + ref(["D1242-1"]) +
+          ". Votre fiche porte « " + sect.secteur + " », qui correspond à « " + sect.dans +
+          " ». Il faut en outre que l'emploi soit de ceux pour lesquels il est d'usage constant " +
+          "de ne pas recourir au contrat à durée indéterminée, et que le caractère temporaire de " +
+          "l'emploi soit établi : la seule appartenance au secteur ne suffit pas."
+        : "Le contrat d'usage n'est ouvert qu'aux secteurs de la liste de " + ref(["D1242-1"]) +
+          (sect.secteur ? ", et votre fiche porte « " + sect.secteur + " », qui n'y figure pas"
+                        : ", et votre fiche ne porte aucun secteur") +
+          ". Dans le transport routier de marchandises, seul le déménagement y est, avec " +
+          "l'entreposage et le stockage de la viande. Hors de ces cas, le contrat est " +
+          "requalifiable en contrat à durée indéterminée : choisissez un autre motif.");
+    }
+    if (r.refus) return { refus: r.refus, alertes: surUsage, loi: loi };
     var requis = (window.ListesValeurs && window.ListesValeurs.titreDeTravailRequis)
       ? window.ListesValeurs.titreDeTravailRequis(d.nationalite) : null;
     var titreEtranger = requis === true
       ? { fin: dateDe(d.titreFin) } : null;
-    var out = { blocs: r.blocs, dates: suitesEmbauche(d.entree, d.cdd, titreEtranger), alertes: [], loi: loi };
+    var out = { blocs: r.blocs, dates: suitesEmbauche(d.entree, d.cdd, titreEtranger), alertes: surUsage.slice(), loi: loi };
     if (requis === true && !String(d.titreNum || "").trim()) {
       out.alertes.push("La nationalité saisie suppose un titre autorisant l'exercice d'une " +
         "activité salariée : portez son type et son numéro, et son échéance. Ils figurent au " +
@@ -1320,6 +1369,52 @@
     if (r.termeManquant) out.alertes.push("Ce motif impose un terme fixé avec précision dès la conclusion (" + ref(["L1242-7"]) + ") : saisissez-le en tête.");
     if (r.partiel && d.heures < 24) out.alertes.push("Moins de vingt-quatre heures par semaine : la demande écrite et motivée du salarié doit être annexée au contrat, sauf cas exceptés par l'article " + ref(["L3123-7"]) + ".");
     return out;
+  }
+
+  /* Les secteurs de D. 1242-1, tels que l'article les énumère, rapprochés du
+     secteur porté sur la fiche. Le rapprochement se fait sur des mots, il ne
+     tranche pas : il dit ce qu'il a trouvé, et c'est l'employeur qui sait. */
+  var SECTEURS_USAGE = [
+    { lib: "les exploitations forestières", mots: ["forest", "sylvicult", "bois"] },
+    { lib: "la réparation navale", mots: ["naval", "chantier naval"] },
+    { lib: "le déménagement", mots: ["demenag", "déménag"] },
+    { lib: "l'hôtellerie et la restauration, les centres de loisirs et de vacances",
+      mots: ["hotel", "hôtel", "restaur", "loisir", "vacance", "cafe", "café"] },
+    { lib: "le sport professionnel", mots: ["sport"] },
+    { lib: "les spectacles, l'action culturelle, l'audiovisuel, la production cinématographique, l'édition phonographique",
+      mots: ["spectacle", "cultur", "audiovis", "cinema", "cinéma", "phonograph"] },
+    { lib: "l'enseignement", mots: ["enseign", "formation", "ecole", "école"] },
+    { lib: "l'information, les activités d'enquête et de sondage",
+      mots: ["information", "enquete", "enquête", "sondage", "presse", "media", "média"] },
+    { lib: "l'entreposage et le stockage de la viande", mots: ["viande", "abatt"] },
+    { lib: "le bâtiment et les travaux publics pour les chantiers à l'étranger",
+      mots: ["batiment", "bâtiment", "travaux publics"] },
+    { lib: "les activités foraines", mots: ["forain", "fete foraine", "fête foraine"] }
+  ];
+  function secteurUsage() {
+    var brut = String(profil.secteur || "").trim();
+    var t = brut.toLowerCase();
+    try { t = t.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } catch (e) {}
+    /* LE MOT SE CHERCHE EN DÉBUT DE MOT, PAS N'IMPORTE OÙ.
+       « transport et logistique » contenait « sport », et la fiche d'un
+       transporteur se voyait rangée dans le sport professionnel. Relevé à
+       l'essai, le 26 septembre 2026. */
+    var dans = null;
+    if (t) SECTEURS_USAGE.forEach(function (x) {
+      if (dans) return;
+      x.mots.forEach(function (m) {
+        var mm = m;
+        try { mm = m.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } catch (e) {}
+        if (dans) return;
+        try {
+          if (new RegExp("(^|[^a-z0-9])" + mm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).test(t))
+            dans = x.lib;
+        } catch (e) {
+          if (t.indexOf(mm) >= 0) dans = x.lib;
+        }
+      });
+    });
+    return { secteur: brut, dans: dans };
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -1914,9 +2009,123 @@
         f: "la décision est remise à chaque salarié avant cette date (" + ref(["CSS-L911-1"]) + ")", c: "tot" }] : [] };
   }
 
+  /* ═══════════════════ LES AVENANTS GUIDÉS ═══════════════════════════
+
+     L'avenant n'offrait qu'une zone de texte libre : au dirigeant de trouver
+     seul les clauses du passage en grand routier, du temps partiel ou du
+     travail de nuit. L'audit du 26 septembre 2026 demandait des avenants
+     guidés. Six objets, et le texte libre reste pour tout le reste.
+
+     Ce qui est écrit vient de ce qui a été lu : les durées de service des
+     quatre catégories sont celles du code des transports que porte
+     documents-transport.js, avec leurs identifiants de version ; le temps
+     partiel suit L. 3123-6, le travail de nuit L. 3122-5 du code du travail
+     et L. 3312-1 du code des transports, lus à la source le 26 septembre
+     2026, deux lectures concordantes. Ce que l'application n'a pas lu, la
+     grille conventionnelle et ses coefficients, reste entre crochets. */
+  function clausesAvenant(v) {
+    var L = [];
+    var T = window.Transport;
+    function cat(cle) { return T && T.categorie ? T.categorie(cle) : null; }
+    var sorte = v.sorte || "libre";
+
+    if (sorte === "coefficient") {
+      L.push("Le salarié est classé, à compter de la date d'effet, au coefficient " +
+        (String(v.coef || "").trim() || "[coefficient]") + " de la convention collective applicable, " +
+        "groupe " + (String(v.groupe || "").trim() || "[groupe]") + ".");
+      L.push("Sa rémunération mensuelle brute est portée à " +
+        (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros" : "[montant] euros") +
+        ", pour la durée de travail prévue au contrat.");
+      L.push("Ce montant ne peut être inférieur au minimum conventionnel du coefficient ni au " +
+        "salaire minimum de croissance ; il est vérifié à la grille en vigueur à la date d'effet. " +
+        "[Reprendre le taux horaire et la garantie annuelle de la grille applicable.]");
+      return L;
+    }
+    if (sorte === "grand" || sorte === "courte" || sorte === "messagerie" || sorte === "sedentaire") {
+      var c = cat(sorte);
+      L.push("Le salarié relève, à compter de la date d'effet, de la catégorie « " +
+        (c ? c.nom : "[catégorie]") + " ».");
+      if (c && c.service)
+        L.push("Sa durée de travail, comptée en temps de service, est de " + c.service +
+          " heures par semaine" + (c.trimestre ? ", soit " + c.trimestre + " heures par trimestre" : "") +
+          " (" + (T ? T.refs(["D3312-45"]) : "code des transports") + ").");
+      if (c && c.max)
+        L.push("Les durées maximales applicables à cette catégorie sont les suivantes : " + c.max +
+          " (" + (T ? T.refs(["R3312-50", "R3312-51"]) : "code des transports") + ").");
+      if (sorte === "grand")
+        L.push("Le salarié prend, du fait de cette affectation, au moins six repos quotidiens par " +
+          "mois hors de son domicile. Les indemnités de repas et de découcher de la convention " +
+          "collective lui sont dues. [Reprendre les montants du protocole en vigueur.]");
+      L.push("La rémunération est adaptée à cette durée : elle est portée à " +
+        (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros" : "[montant] euros") +
+        " bruts par mois, majorations de temps de service comprises. [Vérifier le calcul sur la " +
+        "grille et les taux de majoration applicables.]");
+      return L;
+    }
+    if (sorte === "spl") {
+      L.push("Le salarié est affecté, à compter de la date d'effet, à la conduite d'ensembles " +
+        "articulés, catégorie CE du permis de conduire.");
+      L.push("Cette affectation suppose que le salarié soit titulaire du permis CE en cours de " +
+        "validité, de la formation continue obligatoire à jour et de sa carte de conducteur. " +
+        "Le salarié remet à l'employeur la copie de ces titres et l'informe sans délai de toute " +
+        "suspension, rétention ou annulation de son permis.");
+      L.push("Sa classification est portée au coefficient " +
+        (String(v.coef || "").trim() || "[coefficient]") + " et sa rémunération mensuelle brute à " +
+        (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros" : "[montant] euros") +
+        ". [Vérifier la classification à la grille en vigueur.]");
+      return L;
+    }
+    if (sorte === "nuit") {
+      L.push("Le salarié accomplira, à compter de la date d'effet, une partie de son service " +
+        "pendant la période de nuit définie dans l'entreprise, soit de [heure] à [heure].");
+      L.push("Il est considéré comme travailleur de nuit dès lors qu'il accomplit, au moins deux " +
+        "fois par semaine selon son horaire habituel, au moins trois heures de travail de nuit " +
+        "quotidiennes (" + ref(["L3122-5"]) + ").");
+      L.push("Pour le personnel roulant d'une entreprise de transport routier, la durée " +
+        "quotidienne de travail du travailleur de nuit, ou de celui qui accomplit une partie de " +
+        "son travail entre 24 heures et 5 heures, ne peut excéder dix heures (L. 3312-1 du code " +
+        "des transports).");
+      L.push("Les contreparties dues au titre du travail de nuit, repos compensateur et, le cas " +
+        "échéant, compensation salariale, sont celles que prévoient la convention collective et " +
+        "les accords applicables. [Les reprendre ici en toutes lettres.]");
+      L.push("Le salarié bénéficie du suivi individuel renforcé attaché au travail de nuit : une " +
+        "visite avec le médecin du travail est demandée avant l'affectation.");
+      return L;
+    }
+    if (sorte === "partiel") {
+      var h = String(v.heures || "").trim();
+      L.push("La durée du travail du salarié est fixée, à compter de la date d'effet, à " +
+        (h ? nb(Number(h)) + " heures" : "[durée] heures") + " par semaine.");
+      L.push("Cette durée se répartit comme suit : [jour et horaires de chaque journée travaillée].");
+      L.push("Cette répartition pourra être modifiée en cas de surcroît temporaire d'activité, " +
+        "d'absence d'un ou plusieurs salariés, de réorganisation des horaires du site ou de " +
+        "survenance d'un évènement exceptionnel affectant le fonctionnement de l'établissement " +
+        "(" + ref(["L3123-6"]) + " 2°). Toute modification est notifiée au salarié au moins sept " +
+        "jours ouvrés à l'avance, sauf délai plus favorable prévu par la convention collective.");
+      L.push("Les horaires de chaque journée travaillée sont communiqués par écrit au salarié " +
+        "(" + ref(["L3123-6"]) + " 3°).");
+      L.push("Sa rémunération mensuelle brute est fixée à " +
+        (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros" : "[montant] euros") +
+        ", au prorata de cette durée.");
+      L.push("Le salarié bénéficie des mêmes droits que les salariés à temps complet, et d'une " +
+        "priorité pour l'attribution d'un emploi à temps complet ressortissant à sa catégorie " +
+        "professionnelle.");
+      return L;
+    }
+    if (sorte === "lieu") {
+      L.push("Le lieu de travail habituel du salarié est fixé, à compter de la date d'effet, à " +
+        (String(v.ou || "").trim() || "[adresse du nouveau lieu de travail]") + ".");
+      L.push("Ce changement ne modifie ni la qualification, ni la durée du travail, ni la " +
+        "rémunération du salarié.");
+      return L;
+    }
+    return null;
+  }
+
   function avenant(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var effet = dateDe(v.effet);
+    var guide = clausesAvenant(v);
     var b = [];
     b.push({ k: "t1", t: "Avenant au contrat de travail" });
     b.push({ k: "st", t: nomS });
@@ -1926,7 +2135,12 @@
     b.push({ k: "p", t: "Il a été convenu ce qui suit." });
     b.push({ k: "h1", t: "Article 1 - Objet" });
     b.push({ k: "p", t: "Le contrat de travail conclu entre les parties le [date du contrat] est modifié, à compter du " + dateFr(effet) + ", comme suit :" });
-    griefsBlocs(b, v.objet, "[ce qui change : emploi, durée du travail, rémunération, lieu de travail, horaires ; écrivez la clause nouvelle en entier]");
+    if (guide) guide.forEach(function (l) { b.push({ k: "p", t: l }); });
+    else griefsBlocs(b, v.objet, "[ce qui change : emploi, durée du travail, rémunération, lieu de travail, horaires ; écrivez la clause nouvelle en entier]");
+    if (guide && String(v.objet || "").trim()) {
+      b.push({ k: "p", t: "Il est en outre convenu ce qui suit :" });
+      griefsBlocs(b, v.objet, "");
+    }
     b.push({ k: "h1", t: "Article 2 - Autres clauses" });
     b.push({ k: "p", t: "Toutes les autres dispositions du contrat de travail demeurent inchangées et continuent de s'appliquer." });
     b.push({ k: "h1", t: "Article 3 - Accord des parties" });
@@ -1934,7 +2148,173 @@
     b.push({ k: "trait", t: "" });
     b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(AUJOURDHUI) + ", en deux exemplaires originaux, dont un remis au salarié." });
     b.push({ k: "sign", t: "\nLe salarié                                                    Pour la Société\n(signature précédée de la mention                             " + signataire() + "\n« lu et approuvé, bon pour accord »)" });
-    return { blocs: b, loi: ["L1221-1"], dates: [] };
+    var loi = ["L1221-1"];
+    if (v.sorte === "partiel") loi = loi.concat(["L3123-6"]);
+    if (v.sorte === "nuit") loi = loi.concat(["L3122-5"]);
+    var alertes = [];
+    if (v.sorte && v.sorte !== "libre")
+      alertes.push("Un avenant ne s'impose pas : il se signe. Tant que le salarié ne l'a pas " +
+        "signé, le contrat reste celui d'avant.");
+    return { blocs: b, loi: loi, dates: [], alertes: alertes };
+  }
+
+  /* ═══════════════ LA PROMESSE D'EMBAUCHE ═══════════════════════════════
+
+     Elle n'existait nulle part, et c'est l'écrit le plus demandé avant un
+     contrat. Depuis 2017, deux écrits distincts portent deux engagements
+     distincts, et l'application fait choisir plutôt que de mélanger :
+
+       article 1114 du code civil (LEGIARTI000032040891) : « L'offre, faite à
+       personne déterminée ou indéterminée, comprend les éléments essentiels du
+       contrat envisagé et exprime la volonté de son auteur d'être lié en cas
+       d'acceptation. A défaut, il y a seulement invitation à entrer en
+       négociation. »
+
+       article 1124 du code civil (LEGIARTI000032040818) : « La promesse
+       unilatérale est le contrat par lequel une partie, le promettant, accorde
+       à l'autre, le bénéficiaire, le droit d'opter pour la conclusion d'un
+       contrat dont les éléments essentiels sont déterminés [...]. La révocation
+       de la promesse pendant le temps laissé au bénéficiaire pour opter
+       n'empêche pas la formation du contrat. »
+
+     Les deux lus à la source le 26 septembre 2026, deux lectures concordantes.
+     La différence tient en une phrase, et le document l'écrit : l'offre se
+     rétracte tant qu'elle n'est pas acceptée, la promesse ne se rétracte pas
+     sans que le contrat se forme quand même.                                */
+  function promesse(v) {
+    var nomS = v.nom || "[nom et prénom du candidat]";
+    var civ = civiliteDe(nomS);
+    var unilat = v.forme === "promesse";
+    var debut = dateDe(v.debut);
+    var limite = dateDe(v.limite);
+    var b = [], dates = [], alertes = [];
+    b.push({ k: "t1", t: unilat ? "Promesse unilatérale de contrat de travail" : "Offre de contrat de travail" });
+    enTete(b, nomS, unilat ? "notre promesse d'embauche" : "notre offre de contrat de travail",
+      "Lettre remise en main propre contre décharge, ou adressée par courriel avec accusé de réception");
+    b.push({ k: "p", t: unilat
+      ? "Nous vous accordons, par la présente, le droit d'opter pour la conclusion du contrat de travail dont les éléments essentiels sont arrêtés ci-dessous."
+      : "Nous vous proposons de conclure le contrat de travail dont les éléments essentiels sont arrêtés ci-dessous, et nous nous déclarons liés par cette offre en cas d'acceptation de votre part." });
+    b.push({ k: "h1", t: "Les éléments essentiels du contrat" });
+    b.push({ k: "puce", t: "Emploi : " + (String(v.emploi || "").trim() || "[intitulé de l'emploi]") + "." });
+    b.push({ k: "puce", t: "Classification : " + (String(v.coef || "").trim() || "[niveau, coefficient]") +
+      " de la convention collective applicable." });
+    b.push({ k: "puce", t: "Rémunération : " +
+      (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros bruts par mois" : "[montant] euros bruts par mois") +
+      ", pour " + (String(v.heures || "").trim() ? nb(Number(v.heures)) + " heures" : "[durée]") + " par semaine." });
+    b.push({ k: "puce", t: "Date d'entrée en fonction : " + (debut ? dateFr(debut) : "[date]") + "." });
+    b.push({ k: "puce", t: "Lieu de travail : " + (String(v.lieu || "").trim() || "[lieu de travail]") + "." });
+    b.push({ k: "puce", t: "Nature du contrat : " + (String(v.nature || "").trim() || "[à durée indéterminée ou déterminée, avec son terme]") + "." });
+    b.push({ k: "h1", t: "Ce que cet écrit engage" });
+    if (unilat) {
+      b.push({ k: "p", t: "La présente promesse est une promesse unilatérale au sens de " +
+        ref(["CIV-1124"]) + " : nous sommes engagés, et il ne manque que votre consentement pour que le contrat soit formé." });
+      b.push({ k: "p", t: "Vous disposez, pour lever l'option, d'un délai expirant le " +
+        (limite ? dateFr(limite) : "[date]") + ". Notre révocation pendant ce délai n'empêcherait pas la formation du contrat." });
+    } else {
+      b.push({ k: "p", t: "La présente offre comprend les éléments essentiels du contrat envisagé et exprime notre volonté d'être liés en cas d'acceptation (" + ref(["CIV-1114"]) + ")." });
+      b.push({ k: "p", t: "Elle peut être rétractée tant que vous ne l'avez pas acceptée. Elle est valable jusqu'au " +
+        (limite ? dateFr(limite) : "[date]") + " ; passé ce terme, elle devient caduque." });
+    }
+    b.push({ k: "p", t: "L'embauche demeure subordonnée à l'accomplissement des formalités préalables, et notamment à la déclaration préalable à l'embauche (" + ref(["L1221-10"]) + ")." });
+    if (String(v.conditions || "").trim()) {
+      b.push({ k: "h1", t: "Conditions" });
+      griefsBlocs(b, v.conditions, "");
+    }
+    b.push({ k: "p", t: "Nous vous remercions de nous retourner un exemplaire de la présente, daté et signé, portant la mention « bon pour accord »." });
+    formule(b, civ);
+    if (limite) dates.push({ q: unilat ? "Fin du délai d'option" : "Fin de validité de l'offre",
+      d: dateFrJour(limite),
+      f: unilat ? "délai que vous fixez, pendant lequel la révocation n'empêche pas la formation du contrat (" + ref(["CIV-1124"]) + ")"
+                : "au-delà, l'offre est caduque (" + ref(["CIV-1114"]) + ")", c: "" });
+    if (debut) dates.push({ q: "Entrée en fonction prévue", d: dateFrJour(debut),
+      f: "la déclaration préalable à l'embauche se fait au plus tôt huit jours avant, et avant la prise de poste (" + ref(["L1221-10", "R1221-4"]) + ")", c: "" });
+    if (limite && debut && limite > debut)
+      alertes.push("Le délai laissé au candidat expire après la date d'entrée en fonction : l'une des deux dates est à revoir.");
+    alertes.push(unilat
+      ? "Une promesse unilatérale engage : la rétracter avant la levée de l'option n'empêche pas le contrat de se former, et la rupture s'analyse alors en licenciement."
+      : "Une offre se rétracte tant qu'elle n'est pas acceptée ; une fois acceptée, le contrat est formé et sa rupture s'analyse en licenciement.");
+    return { blocs: b, dates: dates, alertes: alertes,
+      loi: ["CIV-1114", "CIV-1124", "L1221-10", "R1221-4"] };
+  }
+
+  /* ═══════════════ LE CONTRAT DE PROFESSIONNALISATION ═══════════════════
+
+     Dans le transport, c'est la voie par laquelle un conducteur se forme et
+     obtient son titre professionnel : l'écran n'en avait rien. Les articles
+     qui le commandent ont été lus à la source le 26 septembre 2026, deux
+     lectures concordantes : L. 6325-1 (objet et public), L. 6325-7
+     (renouvellement), L. 6325-11 (six à douze mois, trente-six dans les cas
+     de L. 6325-1-1), L. 6325-13 (formation de 15 % à 25 %, cent cinquante
+     heures au moins), D. 6325-15 (rémunération minimale en pourcentage du
+     salaire minimum de croissance) et D. 6325-1 (dépôt à l'opérateur de
+     compétences dans les cinq jours du début du contrat).
+
+     Le contrat lui-même se conclut sur le formulaire de l'administration :
+     le document produit ici porte les clauses et sert d'annexe, et il le dit
+     au lieu de laisser croire qu'il remplace le formulaire.                */
+  function professionnalisation(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var debut = dateDe(v.debut), fin = dateDe(v.fin);
+    var mois = debut && fin ? Math.round(joursEntre(debut, fin) / 30.44) : null;
+    var heures = Number(v.heuresTotal) || 0;
+    var minFormation = heures ? Math.max(150, Math.round(heures * 0.15)) : null;
+    var maxFormation = heures ? Math.round(heures * 0.25) : null;
+    var b = [], dates = [], alertes = [];
+    b.push({ k: "t1", t: "Contrat de professionnalisation" });
+    b.push({ k: "st", t: nomS });
+    b.push({ k: "p", t: "Le présent document porte les clauses du contrat de professionnalisation. Le contrat se conclut sur le formulaire de l'administration, auquel ce document s'annexe." });
+    b.push({ k: "h1", t: "Entre les soussignés" });
+    b.push({ k: "p", t: "La société " + societe() + ", ci-après « la Société », d'une part," });
+    b.push({ k: "p", t: "Et " + nomS + ", demeurant [adresse], né le [date], ci-après « le salarié », d'autre part," });
+    b.push({ k: "h1", t: "Article 1 - Objet et qualification visée" });
+    b.push({ k: "p", t: "Le contrat a pour objet de permettre au salarié d'acquérir la qualification suivante : " +
+      (String(v.qualification || "").trim() || "[intitulé de la qualification, du titre ou du certificat visé]") +
+      ", et de favoriser son insertion ou sa réinsertion professionnelle (" + ref(["L6325-1"]) + ")." });
+    b.push({ k: "h1", t: "Article 2 - Nature et durée" });
+    b.push({ k: "p", t: "Le contrat est conclu " + (v.nature === "cdi"
+      ? "pour une durée indéterminée ; l'action de professionnalisation se situe à son début"
+      : "pour une durée déterminée") + ", du " + (debut ? dateFr(debut) : "[date]") +
+      " au " + (fin ? dateFr(fin) : "[date]") + (mois ? ", soit " + mois + " mois" : "") + "." });
+    b.push({ k: "p", t: "L'action de professionnalisation dure au minimum entre six et douze mois ; elle peut être allongée jusqu'à trente-six mois pour les personnes mentionnées à l'article L. 6325-1-1 (" + ref(["L6325-11"]) + ")." });
+    if (v.nature !== "cdi")
+      b.push({ k: "p", t: "Le contrat peut être renouvelé une fois si le salarié, ayant obtenu la qualification visée, prépare une qualification supérieure ou complémentaire, ou s'il n'a pu l'obtenir pour échec aux épreuves, maternité, maladie, accident du travail, maladie professionnelle ou défaillance de l'organisme de formation (" + ref(["L6325-7"]) + ")." });
+    b.push({ k: "h1", t: "Article 3 - Formation" });
+    b.push({ k: "p", t: "Les actions de positionnement, d'évaluation et d'accompagnement ainsi que les enseignements généraux, professionnels et technologiques sont mis en œuvre par " +
+      (String(v.organisme || "").trim() || "[nom et adresse de l'organisme de formation]") + "." });
+    b.push({ k: "p", t: "Leur durée est au minimum comprise entre 15 % de la durée totale du contrat, sans être inférieure à cent cinquante heures, et 25 % de cette durée (" + ref(["L6325-13"]) + ")." +
+      (minFormation ? " Pour une durée totale de " + nb(heures) + " heures, la formation représente au moins " +
+        nb(minFormation) + " heures, et 25 % en représenteraient " + nb(maxFormation) + "." : "") });
+    b.push({ k: "h1", t: "Article 4 - Tutorat" });
+    b.push({ k: "p", t: "Le salarié est suivi par " + (String(v.tuteur || "").trim() || "[nom et fonction du tuteur]") +
+      ", chargé de l'accueillir, de l'accompagner et de veiller au respect du calendrier de formation." });
+    b.push({ k: "h1", t: "Article 5 - Rémunération" });
+    b.push({ k: "p", t: "Le salarié perçoit une rémunération mensuelle brute de " +
+      (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros" : "[montant] euros") + "." });
+    b.push({ k: "p", t: "Pour les salariés de moins de vingt-six ans, elle ne peut être inférieure à 55 % du salaire minimum de croissance avant vingt et un ans et à 70 % à partir de vingt et un ans, portés respectivement à 65 % et 80 % lorsque le salarié est titulaire d'une qualification au moins égale à celle d'un baccalauréat professionnel (" + ref(["D6325-15"]) + "), ni au minimum conventionnel du coefficient s'il est plus favorable." });
+    b.push({ k: "h1", t: "Article 6 - Statut du salarié" });
+    b.push({ k: "p", t: "Le salarié bénéficie de l'ensemble des dispositions applicables aux autres salariés de l'entreprise, dans la mesure où elles ne sont pas incompatibles avec les exigences de sa formation." });
+    b.push({ k: "h1", t: "Article 7 - Dépôt" });
+    b.push({ k: "p", t: "Le contrat, accompagné du document qui lui est annexé, est adressé à l'opérateur de compétences " +
+      (String(profil.orgOpco || "").trim() ? "(" + String(profil.orgOpco).trim() + ")" : "[nom de l'OPCO]") +
+      " au plus tard dans les cinq jours qui suivent le début du contrat, sous forme dématérialisée (" + ref(["D6325-1"]) + ")." });
+    b.push({ k: "trait", t: "" });
+    b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(AUJOURDHUI) + ", en deux exemplaires originaux, dont un remis au salarié." });
+    b.push({ k: "sign", t: "\nLe salarié                                                    Pour la Société\n(signature précédée de la mention                             " + signataire() + "\n« lu et approuvé, bon pour accord »)" });
+    if (debut) dates.push({ q: "Dépôt à l'opérateur de compétences, au plus tard",
+      d: dateFrJour(jour(debut, 5)),
+      f: "cinq jours après le début du contrat (" + ref(["D6325-1"]) + ")", c: "tard" });
+    if (mois !== null && v.nature !== "cdi" && (mois < 6 || mois > 36))
+      alertes.push("La durée saisie, " + mois + " mois, sort de la fourchette de l'action de " +
+        "professionnalisation : au minimum entre six et douze mois, et jusqu'à trente-six mois " +
+        "pour les personnes de l'article L. 6325-1-1 (" + ref(["L6325-11"]) + ").");
+    if (!heures)
+      alertes.push("La durée totale du contrat en heures n'est pas saisie : le minimum de formation, " +
+        "quinze pour cent sans descendre sous cent cinquante heures, ne peut pas être calculé (" +
+        ref(["L6325-13"]) + ").");
+    alertes.push("Le contrat se conclut sur le formulaire de l'administration : ce document en porte " +
+      "les clauses et s'y annexe, il ne le remplace pas.");
+    return { blocs: b, dates: dates, alertes: alertes,
+      loi: ["L6325-1", "L6325-7", "L6325-11", "L6325-13", "D6325-15", "D6325-1"] };
   }
 
   function maladie(v) {
@@ -2619,6 +2999,41 @@
         { id: "heures", nom: "Heures par semaine", t: "number", defaut: "24" },
         { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }]),
       produire: function (v) { var d = baseContrat(v); d.cdd = false; d.entree = dateDe(v.entree); d.heures = Number(v.heures) || 24; return resultatContrat(d, LOI_CONTRAT.concat(LOI_PARTIEL)); } },
+    /* L'ÉCRIT QUI PRÉCÈDE LE CONTRAT. Offre ou promesse : deux engagements
+       distincts depuis 2017, et l'écran fait choisir. */
+    promesse: { titre: "Promesse d'embauche", champs: [
+        { id: "nom", nom: "Nom et prénom du candidat", t: "text", ph: "Monsieur Karim BENALI" },
+        { id: "forme", nom: "Ce que vous écrivez", t: "select", defaut: "offre", opts: [
+          ["offre", "Une offre de contrat, rétractable tant qu'elle n'est pas acceptée"],
+          ["promesse", "Une promesse unilatérale, qui vous engage dès maintenant"]] },
+        { id: "emploi", nom: "Emploi proposé", t: "text", ph: "conducteur routier poids lourd" },
+        { id: "coef", nom: "Classification", t: "text", ph: "groupe 6, coefficient 138 M" },
+        { id: "nature", nom: "Nature du contrat", t: "text", ph: "contrat à durée indéterminée" },
+        { id: "heures", nom: "Durée hebdomadaire, en heures", t: "number", ph: "39" },
+        { id: "salaire", nom: "Rémunération mensuelle brute (euros)", t: "number", ph: "2 200" },
+        { id: "debut", nom: "Entrée en fonction prévue", t: "date" },
+        { id: "limite", nom: "Réponse attendue avant le", t: "date" },
+        { id: "lieu", nom: "Lieu de travail", t: "text", pleine: true, ph: "1 rue du Port, 95100 Argenteuil" },
+        { id: "conditions", nom: "Conditions, s'il y en a", t: "textarea", pleine: true,
+          ph: "sous réserve de la production du permis CE en cours de validité et de la carte de conducteur" }],
+      produire: promesse },
+    /* LA VOIE PAR LAQUELLE UN CONDUCTEUR SE FORME. Le contrat se conclut sur
+       le formulaire de l'administration ; ce document en porte les clauses. */
+    pro: { titre: "Contrat de professionnalisation", champs: [
+        { id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Monsieur Karim BENALI" },
+        { id: "qualification", nom: "Qualification, titre ou certificat visé", t: "text", pleine: true,
+          ph: "titre professionnel de conducteur du transport routier de marchandises sur porteur" },
+        { id: "nature", nom: "Nature du contrat", t: "select", defaut: "cdd", opts: [
+          ["cdd", "À durée déterminée"], ["cdi", "À durée indéterminée"]] },
+        { id: "debut", nom: "Début du contrat", t: "date", defaut: iso(AUJOURDHUI) },
+        { id: "fin", nom: "Fin du contrat, ou de l'action de professionnalisation", t: "date",
+          defaut: iso(plusMois(AUJOURDHUI, 12)) },
+        { id: "heuresTotal", nom: "Durée totale du contrat, en heures", t: "number", ph: "1 820" },
+        { id: "organisme", nom: "Organisme de formation", t: "text", pleine: true,
+          ph: "nom et adresse du centre" },
+        { id: "tuteur", nom: "Tuteur", t: "text", pleine: true, ph: "nom et fonction" },
+        { id: "salaire", nom: "Rémunération mensuelle brute (euros)", t: "number", ph: "1 400" }],
+      produire: professionnalisation },
     dpae: { titre: "Déclaration d'embauche DPAE", ext: ["RH-CTL-EMB-03"], famille: "RH",
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: "Lucie MARTIN" }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
       loi: ["L1221-10", "R1221-1", "R1221-4"],
@@ -2636,8 +3051,25 @@
       produire: mutuelle },
     vip: { titre: "Visite d'information et de prévention", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" }, { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }], produire: visite },
 
-    avenant: { titre: "Avenant", champs: [NOM, { id: "effet", nom: "Date d'effet", t: "date", defaut: iso(AUJOURDHUI) },
-        { id: "objet", nom: "Ce qui change", t: "textarea", pleine: true, ph: "La durée du travail est portée à 35 heures par semaine et la rémunération mensuelle brute à 2 100 euros." }], produire: avenant },
+    avenant: { titre: "Avenant au contrat", champs: [NOM,
+        { id: "sorte", nom: "Ce que l'avenant change", t: "select", defaut: "libre", opts: [
+          ["libre", "Autre changement, que vous écrivez"],
+          ["coefficient", "Coefficient et rémunération"],
+          ["grand", "Passage en grand routier ou longue distance"],
+          ["courte", "Passage en courte distance"],
+          ["messagerie", "Passage en messagerie ou convoyage de fonds"],
+          ["sedentaire", "Passage à un poste sédentaire"],
+          ["spl", "Affectation à la conduite d'un ensemble articulé (CE)"],
+          ["nuit", "Travail de nuit"],
+          ["partiel", "Passage à temps partiel"],
+          ["lieu", "Changement de lieu de travail"]] },
+        { id: "effet", nom: "Date d'effet", t: "date", defaut: iso(AUJOURDHUI) },
+        { id: "coef", nom: "Coefficient", t: "text", ph: "150 M" },
+        { id: "groupe", nom: "Groupe", t: "text", ph: "7" },
+        { id: "heures", nom: "Durée hebdomadaire, en heures", t: "number", ph: "24" },
+        { id: "salaire", nom: "Rémunération mensuelle brute (euros)", t: "number", ph: "2 100" },
+        { id: "ou", nom: "Nouveau lieu de travail", t: "text", pleine: true, ph: "12 rue des Peupliers, 93200 Saint-Denis" },
+        { id: "objet", nom: "Ce qui change, ou ce que vous ajoutez", t: "textarea", pleine: true, ph: "La durée du travail est portée à 35 heures par semaine et la rémunération mensuelle brute à 2 100 euros." }], produire: avenant },
     conges: { titre: "Congés payés", ext: ["RH-CTL-CGP-01"], famille: "RH",
       champs: [{ id: "debut", nom: "Début de la période de prise", t: "date", cle: "debutPeriode", defaut: iso(new Date(AUJOURDHUI.getFullYear() + (AUJOURDHUI.getMonth() >= 4 ? 1 : 0), 4, 1)) },
                { id: "fin", nom: "Fin de la période", t: "date", cle: "finPeriode", defaut: iso(new Date(AUJOURDHUI.getFullYear() + (AUJOURDHUI.getMonth() >= 4 ? 1 : 0), 9, 31)) }],
@@ -2771,7 +3203,7 @@
        vrai registre, qui les porte et les exporte. Relevé le 26 septembre
        2026. La ligne du haut, « Registre unique du personnel », mène au vrai
        registre : c'est la seule. */
-    ["Embaucher", ["cdi", "cdd", "partiel", "dpae", "vip"]],
+    ["Embaucher", ["promesse", "cdi", "cdd", "partiel", "pro", "dpae", "vip"]],
     ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "conservatoire", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
