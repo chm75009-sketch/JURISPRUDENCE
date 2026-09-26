@@ -114,9 +114,30 @@
        fait selon le navigateur est dans installer.js. */
     h += '<button type="button" class="installer-app" id="barre-installer">' +
       "Installer l'application</button>";
-    if (seance()) h += '<button type="button" class="quitter" id="barre-quitter">Quitter</button>' +
-      '<p class="apres">Le mot de passe sera redemandé à la prochaine ouverture. ' +
-      "Rien de ce qui est sur cet appareil n'est effacé.</p>";
+    /* QUITTER, ET CHANGER SON CODE.
+
+       Deux défauts, relevés le 26 septembre 2026. Le bouton « Quitter »
+       renvoyait à « entrer.html », une page qui n'a jamais existé dans ce
+       dépôt : le menu conduisait à une erreur. Et un utilisateur connecté ne
+       pouvait pas changer son propre code : seul un administrateur le
+       pouvait pour lui, ce qui oblige à confier son code à quelqu'un pour en
+       changer.
+
+       Le bouton ne s'affiche donc que s'il y a une séance à fermer, c'est-à-
+       dire un utilisateur connecté, et il ferme cette séance-là. */
+    var u = utilisateurConnecte();
+    if (u) {
+      h += '<button type="button" class="installer-app" id="barre-moncode">' +
+        "Changer mon code d'accès</button>";
+      h += '<button type="button" class="quitter" id="barre-quitter">Se déconnecter</button>' +
+        '<p class="apres">Vous êtes connecté comme <b>' + ech(u.nom) + "</b>. " +
+        "Le code d'accès sera redemandé à la prochaine ouverture. " +
+        "Rien de ce qui est sur cet appareil n'est effacé.</p>";
+    } else if (seance()) {
+      h += '<button type="button" class="quitter" id="barre-quitter">Quitter</button>' +
+        '<p class="apres">La séance se referme. ' +
+        "Rien de ce qui est sur cet appareil n'est effacé.</p>";
+    }
     h += "</nav>";
     p.innerHTML = h;
     document.body.appendChild(p);
@@ -126,15 +147,59 @@
     });
     var q = $("#barre-quitter");
     if (q) q.addEventListener("click", quitter);
+    var mc = $("#barre-moncode");
+    if (mc) mc.addEventListener("click", changerMonCode);
     if (window.Installer) window.Installer.brancher();
   }
 
-  /* QUITTER. La séance se referme, donc verrou.js renvoie à la porte à la
-     page suivante. Ce qui est sur l'appareil n'est pas touché : quitter n'est
-     pas effacer. */
+  function ech(x) {
+    return String(x == null ? "" : x).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function utilisateurConnecte() {
+    try {
+      return (window.Droits && window.Droits.utilisateur && window.Droits.utilisateur()) || null;
+    } catch (e) { return null; }
+  }
+
+  /* QUITTER. La séance se referme. Ce qui est sur l'appareil n'est pas
+     touché : quitter n'est pas effacer. Quand une équipe est en place, c'est
+     la session de l'utilisateur qui se ferme, et l'écran de connexion revient
+     là où il est demandé. */
   function quitter() {
     try { window.sessionStorage.removeItem("seance-ouverte"); } catch (e) {}
-    location.replace("entrer.html");
+    var u = utilisateurConnecte();
+    if (u && window.Droits && window.Droits.deconnecter) {
+      window.Droits.deconnecter().then(function () { location.reload(); })
+        .catch(function () { location.reload(); });
+      return;
+    }
+    location.replace("index.html");
+  }
+
+  /* CHANGER SON PROPRE CODE. L'ancien code est redemandé : sans lui, il
+     suffirait de trouver une session ouverte pour prendre la place de
+     quelqu'un. Le changement passe par Droits, qui l'inscrit au journal. */
+  function changerMonCode() {
+    var u = utilisateurConnecte();
+    if (!u || !window.Droits || !window.Droits.changerMonCode) return;
+    var ancien = window.prompt("Votre code d'accès actuel :");
+    if (ancien === null) return;
+    var neuf = window.prompt("Votre nouveau code d'accès, quatre caractères au moins :");
+    if (neuf === null) return;
+    var encore = window.prompt("Saisissez-le une seconde fois :");
+    if (encore === null) return;
+    if (String(neuf) !== String(encore)) {
+      window.alert("Les deux saisies ne sont pas les mêmes : rien n'a été changé.");
+      return;
+    }
+    window.Droits.changerMonCode(ancien, neuf).then(function () {
+      window.alert("Votre code d'accès a été changé. Il sera demandé à la prochaine connexion.");
+      fermer();
+    }).catch(function (ex) {
+      window.alert(ex && ex.message ? ex.message : "Le code n'a pas pu être changé.");
+    });
   }
 
   /* ─────────────────────── la pose dans la page ─────────────────────── */

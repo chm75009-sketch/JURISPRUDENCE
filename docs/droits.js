@@ -637,6 +637,36 @@
       });
   }
 
+  /* CHANGER SON PROPRE CODE, SANS PASSER PAR UN ADMINISTRATEUR.
+
+     Seul un administrateur pouvait changer un code, y compris celui d'un
+     autre : pour en changer, il fallait confier le sien à quelqu'un. Relevé
+     le 26 septembre 2026. L'ancien code est redemandé, faute de quoi une
+     session laissée ouverte suffirait à prendre la place de son titulaire. */
+  function changerMonCode(ancienCode, nouveauCode) {
+    var vue = utilisateurCourant();
+    if (!vue) return Promise.reject(new Error("Personne n'est connecté."));
+    /* utilisateurCourant() rend une copie sans le sel ni le condensat : c'est
+       voulu, aucune page n'a à les voir. La vérification se fait donc sur
+       l'enregistrement lui-même. */
+    var u = parId(vue.id);
+    if (!u) return Promise.reject(new Error("Personne n'est connecté."));
+    if (condensat(u.sel, ancienCode) !== u.condensat)
+      return Promise.reject(new Error("Le code d'accès actuel est incorrect."));
+    if (String(nouveauCode).length < 4)
+      return Promise.reject(new Error("Le code d'accès doit compter au moins quatre caractères."));
+    if (String(nouveauCode) === String(ancienCode))
+      return Promise.reject(new Error("Le nouveau code est le même que l'ancien."));
+    var s = sel();
+    return fournisseur.modifierUtilisateur(u.id, { sel: s, condensat: condensat(s, nouveauCode) })
+      .then(function (r) {
+        return hydrater().then(function () {
+          return journaliser("administration", "equipe", "changerCode",
+            "Code d'accès changé par son titulaire : " + (r.nom || u.id)).then(function () { return r; });
+        });
+      });
+  }
+
   function supprimerUtilisateur(id) {
     if (!peutAdmin("supprimerUtilisateur"))
       return Promise.reject(new Error("Vous n'avez pas le droit de supprimer un utilisateur."));
@@ -1229,6 +1259,7 @@
     creer: creerUtilisateur,
     modifier: modifierUtilisateur,
     changerCode: changerCode,
+    changerMonCode: changerMonCode,
     supprimer: supprimerUtilisateur,
     connecter: connecter,
     deconnecter: deconnecter,
