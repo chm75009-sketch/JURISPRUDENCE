@@ -79,6 +79,10 @@
   .note-doc p.date{margin:0 0 16px;text-align:right;font-size:15px}
   .note-doc p.titre{font:700 18px/1.35 system-ui;margin:0 0 14px}
   .note-doc .a-remplir{color:var(--rouge);font-weight:600}
+  /* La mention d'entrée en vigueur : elle fait partie de la note, et se lit
+     d'un coup d'œil avant la signature. */
+  .note-doc p.vigueur{margin:16px 0 12px;padding:10px 12px;border-left:3px solid var(--accent);
+    background:var(--fond-2,#f4f6fa);border-radius:0 8px 8px 0;font-size:15px;line-height:1.55}
 
   .form{margin:12px 0 0;font-size:14.5px;line-height:1.6;color:var(--encre-2);
     background:var(--ambre-clair);border-left:3px solid var(--ambre);border-radius:0 8px 8px 0;padding:12px 14px}
@@ -195,6 +199,18 @@
     d = d || new Date();
     return (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
   }
+  /* Un mois plus tard, au même quantième ; quand il n'existe pas dans le
+     mois d'arrivée, le dernier jour de ce mois. */
+  function dansUnMois(d) {
+    var j = d.getDate();
+    var r = new Date(d.getFullYear(), d.getMonth() + 1, 1, 12, 0, 0);
+    var dernier = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate();
+    r.setDate(Math.min(j, dernier));
+    return r;
+  }
+  function sansComite() {
+    return String(profil.cseExiste || "").trim().toLowerCase().indexOf("non") === 0;
+  }
   function ville() {
     var a = String(profil.adresse || "");
     var m = /(\d{5})\s+([^,;]+)$/.exec(a.trim());
@@ -249,10 +265,17 @@
     var v = (NS.VARIANTES || {})[SECTEUR] || {};
     return v;
   }
+  /* LE MÉTIER D'ABORD. Le thème propre au secteur, « Conduite et
+     exploitation » pour un transporteur, arrivait en dernier, après dix
+     thèmes communs : c'est pourtant celui qu'on vient chercher. Relevé le
+     26 septembre 2026. */
   function themesDus() {
-    return NS.THEMES.filter(function (t) {
+    var L = NS.THEMES.filter(function (t) {
       return !t.secteurs || t.secteurs.indexOf(SECTEUR) >= 0;
     });
+    var propres = L.filter(function (t) { return !!t.secteurs; });
+    var communs = L.filter(function (t) { return !t.secteurs; });
+    return propres.concat(communs);
   }
   function notesDe(cle) {
     var remplace = remplacements();
@@ -347,6 +370,21 @@
     h += '<p class="date">' + ech(ville() + ", le " + leJour()) + "</p>";
     h += '<p class="titre">' + rouge(m.titre) + "</p>";
     h += m.corps.map(function (l) { return l === "" ? "" : "<p>" + rouge(l) + "</p>"; }).join("");
+    /* LA NOTE DIT ELLE-MÊME QUAND ELLE ENTRE EN VIGUEUR.
+
+       « Le règlement intérieur indique la date de son entrée en vigueur.
+       Cette date doit être postérieure d'un mois à l'accomplissement des
+       formalités de publicité » (L. 1321-4, LEGIARTI000054140230, lu à la
+       source le 26 septembre 2026, deux lectures concordantes), et
+       L. 1321-5 soumet l'adjonction aux mêmes formalités. La note sortait
+       sans cette date. Relevé le 26 septembre 2026. */
+    if (m.adjonction) {
+      var f = new Date();
+      h += '<p class="vigueur">' + ech("Formalités de publicité accomplies le " + leJour(f) +
+        " : affichage à la place prévue pour le règlement intérieur, et communication à " +
+        "l'inspection du travail" + (sansComite() ? "" : ", accompagnée de l'avis du comité social et économique") +
+        ". La présente note entre en vigueur le " + leJour(dansUnMois(f)) + " (L. 1321-4).") + "</p>";
+    }
     h += signature().map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("");
     return h;
   }
@@ -362,7 +400,11 @@
       "Elle porte des obligations générales et permanentes en matière de santé, de sécurité " +
       "ou de discipline. L'article L. 1321-5 du code du travail en fait une adjonction au " +
       "règlement intérieur, soumise aux mêmes formalités que lui (L. 1321-4) :<ul>" +
-      "<li>avis du comité social et économique avant l'introduction de la note ;</li>" +
+      (sansComite()
+        ? "<li>votre fiche indique qu'aucun comité social et économique n'est en place : " +
+          "il n'y a pas d'avis à recueillir, et la communication à l'inspection du travail " +
+          "se fait sans lui ;</li>"
+        : "<li>avis du comité social et économique avant l'introduction de la note ;</li>") +
       "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
       "<li>communication à l'inspection du travail, avec l'avis du comité, en même temps ;</li>" +
       "<li>entrée en vigueur à une date postérieure d'un mois à ces formalités ;</li>" +
@@ -387,6 +429,11 @@
     $("formalites").innerHTML = formalitesHtml(MOD);
     $("valider").disabled = false;
     $("valider").textContent = "Valider et numéroter";
+    /* LE WORD APRÈS LA VALIDATION. Le fichier se téléchargeait avant que la
+       note ait son numéro : deux versions du même texte circulaient, l'une
+       numérotée, l'autre non. Relevé le 26 septembre 2026. */
+    $("word").disabled = true;
+    $("word").title = "La note se télécharge une fois validée et numérotée.";
     $("etat").textContent = "";
     ecran("e-texte");
   }
@@ -403,8 +450,26 @@
      Demande du 15 septembre 2026. Numéroter à l'ouverture d'un modèle
      consommerait un numéro à chaque fois qu'on regarde une note sans
      l'émettre, et le registre porterait des trous. */
+  /* UN CROCHET EST UNE MENTION QUI MANQUE.
+
+     La note était numérotée et inscrite au registre avec « [NOM OU
+     FONCTION] » en toutes lettres : un numéro d'ordre donné à un texte
+     incomplet. Relevé le 26 septembre 2026. */
+  function crochets() {
+    var t = ($("objet").textContent || "") + " " + ($("doc").textContent || "");
+    return t.match(/\[[^\]\n]{1,120}\]/g) || [];
+  }
+
   $("valider").addEventListener("click", function () {
     if (!MOD || EMISE) return;
+    var manque = crochets();
+    if (manque.length) {
+      $("etat").textContent = "Il reste " + manque.length + " mention" +
+        (manque.length > 1 ? "s" : "") + " à compléter : " +
+        manque.slice(0, 4).join(" ") + (manque.length > 4 ? " …" : "") +
+        ". Une note ne se numérote pas tant qu'elle est incomplète.";
+      return;
+    }
     var d = new Date(), annee = d.getFullYear();
     var numero = prochainNumero(annee);
     EMISE = {
@@ -422,6 +487,8 @@
     if (ligne) ligne.textContent = "Note de service n° " + EMISE.numero + " · " + EMISE.reference;
     $("valider").disabled = true;
     $("valider").textContent = "Numérotée : " + EMISE.reference;
+    $("word").disabled = false;
+    $("word").title = "";
     $("etat").textContent = "Note inscrite au registre sous la référence " + EMISE.reference + ".";
     rendreRegistre();
   });
