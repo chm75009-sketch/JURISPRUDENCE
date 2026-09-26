@@ -127,11 +127,19 @@
         .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
   }
+  /* La liste des salariés du forfait ne porte que ceux qui sont en poste :
+     elle proposait les quatre-vingt-cinq inscrits, sortis compris, et on
+     pouvait écrire une convention pour quelqu'un qui est parti. Relevé le
+     26 septembre 2026. */
   function salaries() {
     var r = lireCle(CLE_REG, {});
     var L = (r && r.salaries) || [];
+    var aujourd = new Date(); aujourd.setHours(0, 0, 0, 0);
     return L.filter(function (s) {
-      return net(s.nom) || net(s.pre);
+      if (!(net(s.nom) || net(s.pre))) return false;
+      if (s.ex) return false;
+      var so = net(s.sor) ? new Date(net(s.sor) + "T12:00:00") : null;
+      return !(so && !isNaN(so) && so < aujourd);
     }).map(function (s) {
       var nom = (net(s.nom) + " " + net(s.pre)).trim();
       return {
@@ -497,12 +505,22 @@
     $("c-forme").value = f.conv.forme || "avenant";
     $("c-effet").value = f.conv.effet || "";
     $("c-fonctions").value = f.conv.fonctions || "";
+    if ($("c-elig")) $("c-elig").value = f.conv.elig || "";
+    /* L'emploi de conduite se dit tout de suite, avant même qu'on remplisse :
+       inutile de laisser écrire une convention qui ne tiendra pas. */
+    if ($("c-refus")) {
+      var r = refusDeConvention();
+      var conduit = qui && CONDUIT.test(qui.emp || "");
+      $("c-refus").hidden = !conduit;
+      if (conduit) $("c-refus").textContent = r || "";
+    }
   }
   function lireConvention() {
     var f = fiche();
     f.conv.forme = $("c-forme").value;
     f.conv.effet = $("c-effet").value;
     f.conv.fonctions = $("c-fonctions").value;
+    if ($("c-elig")) f.conv.elig = $("c-elig").value;
     garderFiche(f);
   }
 
@@ -644,6 +662,32 @@
 
   /* LE VERDICT. Il ne pondère rien : chaque manquement a sa conséquence, et
      elles ne se compensent pas. Nulle d'un côté, privée d'effet de l'autre. */
+  /* CE QUE LES CASES DISENT, ET CE QUE LES DONNÉES MONTRENT.
+
+     Le rapport concluait « convention valable et suivie, rien ne manque »
+     pendant que l'écran affichait, deux blocs plus bas, « aucun entretien
+     annuel n'est enregistré » et « 269 jours ne sont pas qualifiés ». Une
+     case cochée n'est pas une preuve : quand elle contredit ce qui est
+     enregistré ici, le verdict le dit et cesse d'être vert. Relevé le
+     26 septembre 2026. */
+  function contradictions() {
+    var f = fiche(), c = f.ctrl, b = bornesPeriode(), t = compterPeriode(), out = [];
+    var entretiens = (f.entretiens || []).filter(function (e) {
+      return String(e.le || "").slice(0, 4) === String(b.a);
+    });
+    if (c.entretien && !entretiens.length) {
+      out.push("l'entretien annuel est coché, mais aucun entretien n'est enregistré pour " + b.a);
+    }
+    if (c.doc && t.vides) {
+      out.push("le document de contrôle est coché, mais " + t.vides + " jour" +
+        (t.vides > 1 ? "s ne sont pas qualifiés" : " n'est pas qualifié") + " sur la période");
+    }
+    if (c.charge && !entretiens.some(function (e) { return net(e.mesures); })) {
+      out.push("le suivi de la charge est coché, mais aucune mesure n'est écrite dans les entretiens");
+    }
+    return out;
+  }
+
   function majVerdictControle() {
     var f = fiche(), c = f.ctrl;
     var v = $("ct-verdict");
@@ -682,6 +726,15 @@
         "appartient à l'employeur de prouver qu'il a respecté ce que l'accord promet " +
         "(Soc. 19 décembre 2018, n° 17-18.725). Cela se répare, et cela se répare maintenant : " +
         "le suivi est ouvert plus bas.";
+      return;
+    }
+    var contre = contradictions();
+    if (contre.length) {
+      v.className = "verdict tiede";
+      v.querySelector(".t").textContent = "Ce qui est coché n'est pas ce qui est enregistré.";
+      v.querySelector(".d").textContent = "Les cases donnent la convention pour suivie, mais " +
+        contre.join(" ; ") + ". Une case cochée ne prouve rien devant un juge : reprenez le suivi " +
+        "plus bas, ou décochez ce qui n'est pas fait.";
       return;
     }
     v.className = "verdict ok";
@@ -1069,8 +1122,52 @@
   /* LA CONVENTION DE FORFAIT. Les cinq mentions du I de L. 3121-64, 5°,
      l'autonomie caractérisée en fait et non recopiée du code, les repos qui
      restent dus, le suivi et l'entretien promis noir sur blanc. */
+  /* CE QUI EMPÊCHE D'ÉCRIRE UNE CONVENTION DE FORFAIT.
+
+     « Peuvent conclure une convention individuelle de forfait en jours sur
+     l'année : 1° Les cadres qui disposent d'une autonomie dans l'organisation
+     de leur emploi du temps et dont la nature des fonctions ne les conduit
+     pas à suivre l'horaire collectif [...] ; 2° Les salariés dont la durée du
+     temps de travail ne peut être prédéterminée et qui disposent d'une réelle
+     autonomie dans l'organisation de leur emploi du temps » (L. 3121-58,
+     LEGIARTI000033003228, lu à la source le 26 septembre 2026, deux lectures
+     concordantes). Un conducteur routier suit un horaire de service, des
+     tournées et un chronotachygraphe : la convention serait nulle, et le
+     rappel d'heures supplémentaires court sur trois ans. */
+  var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|magasinier|manutention/i;
+  function refusDeConvention() {
+    var f = fiche();
+    var elig = net(f.conv.elig);
+    if (CONDUIT.test(qui.emp || "")) {
+      return "L'emploi porté au registre, « " + (qui.emp || "") + " », est un emploi de conduite " +
+        "ou d'exécution soumis à un horaire : la durée du travail y est prédéterminée, et le " +
+        "forfait en jours de L. 3121-58 ne peut pas s'y appliquer. Ces heures se décomptent, elles " +
+        "ne se forfaitisent pas : l'écran du décompte des heures est fait pour cela.";
+    }
+    if (!elig) {
+      return "Dites d'abord qui peut conclure ce forfait : l'article L. 3121-58 ne l'ouvre qu'aux " +
+        "cadres autonomes et aux salariés dont la durée du travail ne peut pas être prédéterminée.";
+    }
+    if (elig === "ni") {
+      return "Ni cadre autonome, ni salarié dont la durée du travail ne peut pas être " +
+        "prédéterminée : le forfait en jours ne peut pas être conclu (L. 3121-58). La convention " +
+        "serait nulle, et le salarié pourrait réclamer ses heures supplémentaires sur trois ans.";
+    }
+    if (!net(f.conv.fonctions)) {
+      return "Écrivez en une phrase ce qui rend ce salarié autonome : c'est cette phrase que le " +
+        "juge lit, et elle ne se devine pas.";
+    }
+    return null;
+  }
+
   function docConvention() {
     var f = fiche(), p = entreprise(), a = accord();
+    var refus = refusDeConvention();
+    if (refus) {
+      if ($("c-refus")) { $("c-refus").textContent = refus; $("c-refus").hidden = false; }
+      return;
+    }
+    if ($("c-refus")) $("c-refus").hidden = true;
     var forfait = nb(f.conv.jours, 218);
     var periode = { civile: "du 1er janvier au 31 décembre",
       juin: "du 1er juin au 31 mai", autre: "de douze mois consécutifs, précisée ci-après" }[f.conv.periode || "civile"];
@@ -1227,9 +1324,60 @@
 
   /* LES MODALITÉS DU VOTE ET SON PROCÈS-VERBAL. Les quatre points de
      R. 2232-11, et le procès-verbal que R. 2232-10, 4° veut annexé. */
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA MAJORITÉ N'EST PAS LA MÊME SELON LA VOIE.
+
+     Le procès-verbal annonçait « majorité requise : deux tiers du personnel,
+     55 » pour une entreprise de quatre-vingt-deux salariés. Les deux tiers ne
+     valent que dans l'entreprise de moins de onze salariés, ou de onze à
+     vingt sans élu (L. 2232-21 et L. 2232-22, LEGIARTI000036761872 et
+     LEGIARTI000036761866). Au-delà, l'approbation se fait à la majorité des
+     suffrages exprimés (L. 2232-23-1, II, LEGIARTI000036761855 ; L. 2232-24,
+     LEGIARTI000036761844 ; L. 2232-26, LEGIARTI000036761849). Un accord
+     ratifié sur la mauvaise majorité est nul, et le forfait avec lui. Relevé
+     le 26 septembre 2026 ; textes lus à la source le même jour, deux lectures
+     concordantes.
+
+     Et avec un délégué syndical, il n'y a pas de consultation du personnel du
+     tout : l'accord se signe. Le document le dit au lieu d'en produire un. */
+  function regleDuVote() {
+    var v = voie(), eff = effectif();
+    if (v === "A") {
+      return { quoi: "deux tiers du personnel", base: "L. 2232-21 et L. 2232-22",
+        seuil: Math.ceil(eff * 2 / 3), surEffectif: true,
+        dit: "La majorité se calcule sur l'effectif du personnel, et non sur les votants : un " +
+          "salarié absent compte comme un refus (L. 2232-22)." };
+    }
+    if (v === "B" || v === "C") {
+      return { quoi: "majorité des suffrages exprimés", base: v === "B"
+        ? "L. 2232-23-1, II" : "L. 2232-24 et L. 2232-26",
+        seuil: null, surEffectif: false,
+        dit: "La majorité se calcule sur les suffrages exprimés, non sur l'effectif : les " +
+          "bulletins blancs et nuls ne comptent pas, et un absent non plus (" + (v === "B"
+            ? "L. 2232-23-1, II" : "L. 2232-24 et L. 2232-26") + ")." };
+    }
+    return null;
+  }
+
   function docVote() {
     var p = entreprise(), a = accord(), eff = effectif();
-    var seuil = Math.ceil(eff * 2 / 3);
+    var regle = regleDuVote();
+    if (!regle) {
+      var pourquoi = voie() === "D"
+        ? "Avec un délégué syndical, l'accord ne se ratifie pas par le personnel : il se signe " +
+          "avec lui, et sa validité tient aux suffrages recueillis par les organisations " +
+          "signataires aux dernières élections (L. 2232-12). Aucun procès-verbal de consultation " +
+          "n'est à produire."
+        : "La voie de conclusion n'est pas encore connue : répondez d'abord sur le délégué " +
+          "syndical et sur les élus, au-dessus. C'est elle qui décide de la majorité requise.";
+      if ($("ac-vote-refus")) {
+        $("ac-vote-refus").textContent = pourquoi;
+        $("ac-vote-refus").hidden = false;
+      }
+      return;
+    }
+    if ($("ac-vote-refus")) $("ac-vote-refus").hidden = true;
+    var seuil = regle.seuil;
     var items = [entete(),
       { k: "h1", t: "Consultation du personnel sur le projet d'accord relatif au forfait en jours" },
       { k: "h2", t: "Modalités d'organisation" },
@@ -1249,7 +1397,8 @@
         "jours court à compter de la communication du projet à chaque salarié." },
       { k: "h2", t: "Liste des salariés consultés" },
       { k: "p", t: "La liste nominative de l'ensemble des salariés est annexée aux présentes " +
-        "modalités et affichée en même temps qu'elles. Elle fixe le dénominateur des deux tiers." },
+        "modalités et affichée en même temps qu'elles." +
+        (regle.surEffectif ? " Elle fixe le dénominateur des deux tiers." : "") },
       { k: "note", t: "Aucun texte ne définit l'électorat de cette consultation ; l'article " +
         "R. 2232-13 suppose seulement qu'une liste des salariés devant être consultés existe et " +
         "peut être contestée devant le tribunal judiciaire." },
@@ -1262,15 +1411,16 @@
         ["Salariés inscrits sur la liste", String(eff || "")],
         ["Votants", ""],
         ["Bulletins blancs ou nuls", ""],
+        ["Suffrages exprimés", ""],
         ["OUI", ""],
         ["NON", ""],
-        ["Majorité requise : deux tiers du personnel", String(seuil || "")],
+        ["Majorité requise : " + regle.quoi + " (" + regle.base + ")",
+          seuil ? String(seuil) : "la moitié des suffrages exprimés, plus une voix"],
       ] },
       { k: "p", t: "Le projet d'accord est en conséquence : approuvé / rejeté (rayer la mention " +
         "inutile)." },
-      { k: "note", t: "La majorité se calcule sur l'effectif du personnel, et non sur les votants : " +
-        "un salarié absent compte comme un refus (L. 2232-22). Ce procès-verbal fait l'objet d'une " +
-        "publicité dans l'entreprise et est annexé à l'accord lors du dépôt." },
+      { k: "note", t: regle.dit + " Ce procès-verbal fait l'objet d'une publicité dans " +
+        "l'entreprise et est annexé à l'accord lors du dépôt." },
       { k: "p", t: " " },
       { k: "p", t: "Signatures des salariés chargés du dépouillement :" },
     ];
@@ -1405,11 +1555,48 @@
       "forfait-entretien-" + qui.id + ".docx");
   }
 
+  /* L'AVENANT REPREND CE QUI A ÉTÉ ENREGISTRÉ.
+
+     Après cinq jours saisis à 15 % et enregistrés, l'avenant sortait « renonce
+     à .... jour » et « porté de 218 à 218 jours » : le bouton d'enregistrement
+     vide les cases, et le document les relisait vides. Relevé le 26 septembre
+     2026. Il lit d'abord la saisie en cours, puis, à défaut, les
+     renonciations déjà enregistrées pour la période, qu'il additionne. Sans
+     rien de tout cela, il ne produit pas un avenant vide : il le dit. */
+  function renonceCourante() {
+    var f = fiche(), b = bornesPeriode();
+    var saisie = nb($("r-nb").value, 0);
+    var dejaces = (f.renonces || []).filter(function (r) { return String(r.an) === String(b.a); });
+    var deja = dejaces.reduce(function (t, r) { return t + nb(r.nb, 0); }, 0);
+    if (saisie > 0) {
+      return { nb: saisie, deja: deja, total: deja + saisie,
+        taux: nb($("r-taux").value, 10) || 10,
+        plafond: nb($("r-plafond").value, 0) || nb(dejaces[0] && dejaces[0].plafond, 0) || 235,
+        an: b.a, enregistree: false };
+    }
+    if (!dejaces.length) return null;
+    return { nb: deja, deja: 0, total: deja,
+      taux: nb(dejaces[0].taux, 10) || 10,
+      plafond: nb(dejaces[0].plafond, 0) || 235,
+      an: b.a, enregistree: true, le: dejaces[0].le };
+  }
+
   function docRenonce() {
     var f = fiche(), p = entreprise();
-    var n = nb($("r-nb").value, 0), taux = nb($("r-taux").value, 10);
+    var r = renonceCourante();
+    if (!r) {
+      if ($("r-refus")) {
+        $("r-refus").textContent = "Aucune renonciation n'est saisie ni enregistrée pour cette " +
+          "période : portez le nombre de jours et la majoration au-dessus. Un avenant sans nombre " +
+          "ne vaut rien, et L. 3121-59 exige que l'avenant fixe la renonciation.";
+        $("r-refus").hidden = false;
+      }
+      return;
+    }
+    if ($("r-refus")) $("r-refus").hidden = true;
+    var n = r.nb, taux = r.taux;
     var forfait = nb(f.conv.jours, 218);
-    var plafond = nb($("r-plafond").value, 0) || 235;
+    var plafond = r.plafond;
     var items = [entete(),
       { k: "h1", t: "Avenant de renonciation à des jours de repos" },
       { k: "p", t: "Entre " + (p.denomination || "........................") + ", représentée par " +
@@ -1417,12 +1604,17 @@
       { k: "p", t: "il est convenu ce qui suit." },
       { k: "h2", t: "Article 1" },
       { k: "p", t: "Le salarié, qui le souhaite et en accord avec son employeur, renonce à " +
-        (n || "....") + " jour" + (n > 1 ? "s" : "") + " de repos au titre de la période de " +
-        "référence " + (f.conv.an || "........") + "." },
+        n + " jour" + (n > 1 ? "s" : "") + " de repos au titre de la période de " +
+        "référence " + (f.conv.an || String(r.an)) + "." +
+        (r.deja ? " Il avait déjà renoncé à " + r.deja + " jour" + (r.deja > 1 ? "s" : "") +
+          " sur cette même période." : "") },
       { k: "h2", t: "Article 2" },
       { k: "p", t: "Le nombre de jours travaillés est porté de " + forfait + " à " +
-        (forfait + n) + " jours pour cette seule période. Ce nombre reste inférieur au plafond de " +
-        plafond + " jours." },
+        (forfait + r.total) + " jours pour cette seule période. Ce nombre " +
+        (forfait + r.total > plafond
+          ? "DÉPASSE le plafond de " + plafond + " jours : la renonciation ne peut pas aller " +
+            "jusque-là (L. 3121-66)."
+          : "reste inférieur au plafond de " + plafond + " jours.") },
       { k: "h2", t: "Article 3" },
       { k: "p", t: "Chaque journée de travail supplémentaire ainsi accomplie est rémunérée avec une " +
         "majoration de " + taux + " %, qui ne peut être inférieure à 10 %." },
@@ -1546,6 +1738,18 @@
         " journées travaillées, " + t.repos + " jours de repos du forfait pris sur " +
         nb(f.conv.repos, 0) + ", " + t.conge + " congés payés." },
     ];
+    /* Ce que le document de contrôle ne peut pas taire : les jours sans
+       qualification, et les contradictions avec ce qui est coché. */
+    if (t.vides) {
+      items.push({ k: "rouge", t: t.vides + " jour" + (t.vides > 1 ? "s ne sont pas qualifiés" :
+        " n'est pas qualifié") + " sur la période : ni travaillé, ni repos, ni congé. Le document " +
+        "de contrôle ne vaut que s'il porte toutes les journées (L. 3121-65, I, 1°)." });
+    }
+    var contre = contradictions();
+    if (contre.length) {
+      items.push({ k: "rouge", t: "Contradiction avec les cases du contrôle : " +
+        contre.join(" ; ") + "." });
+    }
     if (x.clos && x.clos.le) items.push({ k: "note", t: "Mois clos le " + enFrancais(x.clos.le) + "." });
     (x.ouvertures || []).forEach(function (o) {
       items.push({ k: "rouge", t: "Mois rouvert le " + enFrancais(o.le) + ", après une clôture du " +
@@ -1735,7 +1939,8 @@
     });
     $("j-prorata").addEventListener("change", calculJours);
 
-    ["c-forme", "c-effet", "c-fonctions"].forEach(function (i) {
+    ["c-forme", "c-effet", "c-fonctions", "c-elig"].forEach(function (i) {
+      if (!$(i)) return;
       $(i).addEventListener("input", lireConvention);
       $(i).addEventListener("change", lireConvention);
     });

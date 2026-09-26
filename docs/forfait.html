@@ -329,6 +329,9 @@
             <button type="button" id="d-accord">Le projet d'accord, en Word</button>
             <button type="button" class="second" id="d-vote">Les modalités du vote et le procès-verbal</button>
           </div>
+          <!-- Quand la voie ne comporte pas de consultation du personnel, on
+               ne produit pas un procès-verbal : on dit pourquoi. -->
+          <p class="alerte" id="ac-vote-refus" hidden></p>
         </div>
       </div>
 
@@ -401,8 +404,21 @@
             </select></label>
           <label class="champ"><span>Prise d'effet</span><input type="date" id="c-effet"></label>
         </div>
+        <!-- L'ÉLIGIBILITÉ AVANT TOUT LE RESTE.
+             Une convention était produite pour un chauffeur-livreur poids lourd,
+             sans aucune question : un conducteur n'est pas autonome au sens de
+             L. 3121-58, la convention serait nulle, et trois ans de rappel
+             d'heures avec elle. Relevé le 26 septembre 2026. -->
+        <label class="champ" style="margin-top:10px"><span>Qui peut conclure ce forfait (L. 3121-58)</span>
+          <select id="c-elig">
+            <option value="">- à choisir -</option>
+            <option value="cadre">Cadre autonome dans l'organisation de son emploi du temps, ne suivant pas l'horaire collectif</option>
+            <option value="autonome">Salarié dont la durée du travail ne peut pas être prédéterminée et qui dispose d'une réelle autonomie dans l'organisation de son emploi du temps</option>
+            <option value="ni">Ni l'un ni l'autre</option>
+          </select></label>
         <label class="champ" style="margin-top:10px"><span>Fonctions et autonomie, en une phrase</span>
           <textarea id="c-fonctions" placeholder="directeur commercial, il fixe lui-même ses rendez-vous, ses déplacements et l'organisation de ses journées"></textarea></label>
+        <p class="alerte" id="c-refus" hidden></p>
         <div class="barre">
           <button type="button" id="d-conv">La convention de forfait, en Word</button>
           <button type="button" class="second" id="c-signee">Elle est signée, passer au suivi</button>
@@ -520,6 +536,9 @@
           <button type="button" id="r-ok">Enregistrer la renonciation</button>
           <button type="button" class="second" id="d-renonce">L'avenant de renonciation, en Word</button>
         </div>
+        <!-- Un avenant sans nombre de jours ne vaut rien : on le dit au lieu
+             de produire « renonce à .... jour ». Relevé le 26 septembre 2026. -->
+        <p class="alerte" id="r-refus" hidden></p>
         <div class="liste" id="renonces"></div>
       </div>
 
