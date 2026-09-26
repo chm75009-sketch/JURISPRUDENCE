@@ -12,12 +12,19 @@
 
    DEUX RÈGLES TENUES PARTOUT DANS CE FICHIER
 
-   1. AUCUNE AFFIRMATION DE DROIT QUI N'AIT ÉTÉ LUE À LA SOURCE. Le relais
-      Légifrance de l'application ne sert que le code du travail : on ne cite
-      donc ici ni le code de commerce, ni le livre des procédures fiscales, ni
-      le code des assurances. Les lettres disent ce qu'elles demandent, elles
-      n'invoquent pas d'article que le dépôt n'aurait pas vérifié. Là où un
+   1. AUCUNE AFFIRMATION DE DROIT QUI N'AIT ÉTÉ LUE À LA SOURCE. Les lettres
+      de ce fichier disent ce qu'elles demandent, elles n'invoquent pas
+      d'article que le dépôt n'aurait pas vérifié : ni le livre des procédures
+      fiscales, ni le code des assurances, que le relais ne sert pas. Là où un
       fondement compte, il est laissé entre crochets, à vérifier avant envoi.
+
+      Une phrase de ce préambule disait que le relais « ne sert que le code du
+      travail ». Ce n'est plus exact, et la correction est datée du
+      26 septembre 2026 : interrogé avec le NOM du code, il sert aussi le code
+      de commerce, le code des transports, le code de la route et le code
+      civil, chaque article rendu avec son identifiant de version. Les lettres
+      du transport, dans courriers-modeles-3.js, citent donc leurs articles,
+      lus à la source ce jour-là.
 
    2. CE QUE L'APPLICATION NE PEUT PAS SAVOIR RESTE ENTRE CROCHETS. Un numéro
       de facture, un montant, une date d'échéance : la lettre les porte en
