@@ -194,6 +194,148 @@
   ];
 
   /* ═══════════════════════════════════════════════════════════════════════
+     CE QUI TIENT À LA PROFESSION, ET QUE LA FICHE NE DEMANDAIT NULLE PART.
+
+     Une entreprise de transport routier de marchandises ne vit pas de son
+     seul code du travail : elle vit d'une autorisation d'exercer, d'une
+     inscription à un registre, d'une licence, de copies conformes numérotées,
+     d'un gestionnaire de transport et de capitaux propres qui se vérifient
+     chaque année. L'audit du 26 septembre 2026 a relevé qu'aucun de ces
+     éléments n'était demandé, et que les échéances qui les accompagnent
+     n'étaient donc nulle part.
+
+     Les textes, code des transports, lus à la source le 26 septembre 2026,
+     deux lectures concordantes chacun :
+
+       R. 3211-9   LEGIARTI000033449967  l'inscription au registre électronique
+                   national des entreprises de transport par route, par le
+                   préfet de la région du siège ;
+       R. 3211-12  LEGIARTI000046177442  cette inscription donne lieu à la
+                   licence communautaire au-delà de 3,5 tonnes, à la licence
+                   de transport intérieur en deçà pour le seul territoire
+                   national, et à la licence communautaire portant la mention
+                   « inférieur ou égal à 3,5 tonnes » pour l'international
+                   au-dessus de 2,5 tonnes ; « délivrée pour une durée
+                   maximale de dix ans renouvelable », « accompagnée de copies
+                   certifiées conformes numérotées dont le nombre correspond à
+                   celui des véhicules » ;
+       R. 3211-32  LEGIARTI000046177267  la capacité financière : 9 000 € pour
+                   le premier véhicule de plus de 3,5 tonnes et 5 000 € pour
+                   chacun des suivants ; 1 800 € pour le premier véhicule qui
+                   n'excède pas 3,5 tonnes et 900 € pour chacun des suivants ;
+                   en parc mixte, 9 000 € pour le premier, 5 000 € par véhicule
+                   lourd suivant et 900 € par véhicule léger ;
+       R. 3211-43  LEGIARTI000033450051  le gestionnaire de transport, personne
+                   physique qui « dirige effectivement et en permanence »
+                   l'activité de transport ;
+       R. 3211-44  LEGIARTI000033450053  son lien effectif avec l'entreprise :
+                   employé, directeur, propriétaire, actionnaire, dirigeant ou
+                   entrepreneur individuel ;
+       R. 3211-45  LEGIARTI000033450055  à défaut de gestionnaire en son sein,
+                   la désignation par contrat d'habilitation.
+
+     Rien ici ne se devine : le montant exigé se calcule sur le parc de la
+     flotte, et il est mis en face des capitaux saisis. Quand le parc est vide,
+     le calcul le dit au lieu de conclure.
+     ══════════════════════════════════════════════════════════════════════ */
+  var TRANSPORT = [
+    { c: "transRegistreNum", nom: "Numéro d'inscription au registre des transporteurs", t: "text", pleine: true,
+      aide: "Le registre électronique national des entreprises de transport par route, tenu par le préfet de région du siège (R. 3211-9)." },
+    { c: "transLicenceType", nom: "Licence détenue", t: "select",
+      options: ["licence communautaire", "licence communautaire « inférieur ou égal à 3,5 tonnes »",
+        "licence de transport intérieur"],
+      aide: "Au-delà de 3,5 tonnes, la licence communautaire ; en deçà et sur le seul territoire national, la licence de transport intérieur (R. 3211-12)." },
+    { c: "transLicenceNum", nom: "Numéro de la licence", t: "text" },
+    { c: "transLicenceFin", nom: "Licence valable jusqu'au", t: "date",
+      aide: "Dix ans au plus, renouvelable (R. 3211-12). L'original reste dans l'établissement." },
+    { c: "transCopies", nom: "Copies conformes détenues", t: "number",
+      aide: "Leur nombre correspond à celui des véhicules (R. 3211-12) : la flotte donne le compte en face." },
+    { c: "transGestionnaire", nom: "Gestionnaire de transport", t: "text", pleine: true,
+      aide: "La personne physique qui dirige effectivement et en permanence l'activité de transport (R. 3211-43)." },
+    { c: "transGestionnaireLien", nom: "Son lien avec l'entreprise", t: "select",
+      options: ["employé", "directeur", "propriétaire ou actionnaire", "dirigeant",
+        "entrepreneur individuel", "habilité par contrat"],
+      aide: "R. 3211-44 pour le lien interne ; R. 3211-45 pour la personne habilitée par contrat, à défaut de gestionnaire en interne." },
+    { c: "transAttestation", nom: "Attestation de capacité professionnelle, numéro", t: "text", pleine: true },
+    { c: "transCapitaux", nom: "Capitaux et réserves du dernier exercice, en euros", t: "number",
+      aide: "C'est ce montant que la capacité financière met en face du parc, chaque année (R. 3211-32)." },
+    { c: "transExercice", nom: "Exercice clos le", t: "date" },
+  ];
+
+  /* LE MONTANT EXIGÉ SE CALCULE SUR LE PARC, IL NE SE DEMANDE PAS.
+     Les véhicules viennent de la flotte, et c'est leur genre qui dit de quel
+     côté des 3,5 tonnes ils tombent : poids lourd et tracteur routier
+     au-dessus, voiture et utilitaire léger en dessous. Une remorque n'est pas
+     un véhicule à moteur : elle ne compte ni pour la capacité financière ni
+     pour les copies conformes. Un genre qui ne dit pas le poids n'est pas
+     rangé d'office : il est nommé, et le calcul le signale. */
+  var LOURDS = { pl: 1, tracteur: 1 };
+  var LEGERS = { vl: 1, vul: 1 };
+  function parcTransport() {
+    var L = [];
+    try { L = JSON.parse(window.localStorage.getItem("flotte-vehicules") || "[]") || []; }
+    catch (e) { L = []; }
+    if (!L || !L.length || !L.forEach) return { lignes: 0, lourds: 0, legers: 0, remorques: 0, sansPoids: [] };
+    var lourds = 0, legers = 0, remorques = 0, sansPoids = [];
+    L.forEach(function (v) {
+      var g = String((v && v.genre) || "").trim();
+      var nom = String((v && (v.immat || v.marque)) || "véhicule sans immatriculation").trim();
+      if (g === "remorque") { remorques++; return; }
+      if (LOURDS[g]) { lourds++; return; }
+      if (LEGERS[g]) { legers++; return; }
+      sansPoids.push(nom);
+    });
+    return { lignes: L.length, lourds: lourds, legers: legers, remorques: remorques, sansPoids: sansPoids };
+  }
+
+  /* L'ÉCHÉANCE DE LA LICENCE ENTRE DANS LA LISTE DE LA SEMAINE.
+     Elle est délivrée pour dix ans au plus (R. 3211-12) et, passée sa date,
+     l'entreprise n'a plus de titre à faire monter dans ses véhicules. Elle
+     se range avec les échéances de la flotte et des salariés, au même
+     format : ni source à part, ni écran à part. */
+  function echeancesTransport(aujourdhui) {
+    var f = lire() || {};
+    var fin = String(f.transLicenceFin || "").trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(fin)) return [];
+    var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
+    var d = new Date(fin + "T12:00:00");
+    if (isNaN(d.getTime())) return [];
+    var n = Math.round((d.getTime() -
+      new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), 12, 0, 0).getTime()) / 864e5);
+    var etat = n < 0 ? "passe" : (n <= 30 ? "rouge" : (n <= 60 ? "ambre" : "vert"));
+    return [{ quoi: "Licence de transport à renouveler", qui: String(f.denomination || "l'entreprise"),
+      date: fin, jours: n, etat: etat, fond: "R. 3211-12",
+      faire: "demander le renouvellement au préfet de région", prov: "transport" }];
+  }
+
+  function capaciteTransport() {
+    var p = parcTransport(), exige = 0, dit = "";
+    /* « chacun des 1 suivants » ne s'écrit pas : au singulier, c'est le
+       second véhicule, et rien d'autre. */
+    var suivants = function (n, un, plusieurs) {
+      return n === 1 ? "pour le second " + un : "pour chacun des " + n + " " + plusieurs + " suivants";
+    };
+    if (p.lourds) {
+      exige = 9000 + (p.lourds - 1) * 5000 + p.legers * 900;
+      dit = "9 000 € pour le premier véhicule de plus de 3,5 tonnes" +
+        (p.lourds > 1 ? ", 5 000 € " + suivants(p.lourds - 1, "véhicule de plus de 3,5 tonnes",
+          "véhicules de plus de 3,5 tonnes") : "") +
+        (p.legers ? ", 900 € " + (p.legers === 1 ? "pour le véhicule qui n'excède pas 3,5 tonnes"
+          : "pour chacun des " + p.legers + " véhicules qui n'excèdent pas 3,5 tonnes") : "");
+    } else if (p.legers) {
+      exige = 1800 + (p.legers - 1) * 900;
+      dit = "1 800 € pour le premier véhicule" +
+        (p.legers > 1 ? ", 900 € " + suivants(p.legers - 1, "véhicule", "véhicules") : "");
+    }
+    var f = lire() || {};
+    var saisi = parseFloat(String(f.transCapitaux == null ? "" : f.transCapitaux).replace(/[^\d.,-]/g, "").replace(",", "."));
+    return { parc: p, exige: exige, dit: dit,
+      capitaux: isFinite(saisi) ? saisi : null,
+      copies: parseFloat(String(f.transCopies == null ? "" : f.transCopies).replace(",", ".")),
+      manque: exige && isFinite(saisi) ? Math.max(0, exige - saisi) : null };
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
      L'EFFECTIF SE CALCULE, IL NE SE DÉCLARE PAS.
 
      Il était saisi à la main et jamais rapproché du registre : l'agenda
@@ -429,7 +571,8 @@
      l'autre côté. Champs facultatifs, la version du format ne change pas,
      comme le prévoit PROFIL-PARTAGE.md. 26 septembre 2026. */
   function champsEchanges() {
-    return IDENTITE.concat(REPRESENTATION).concat(ORGANISMES).map(function (ch) { return ch.c; });
+    return IDENTITE.concat(REPRESENTATION).concat(ORGANISMES).concat(TRANSPORT)
+      .map(function (ch) { return ch.c; });
   }
 
   /* L'objet à écrire dans le fichier. Un champ vide n'y figure pas : on
@@ -717,7 +860,9 @@
 
   window.Profil = {
     CLE: CLE, IDENTITE: IDENTITE, REPRESENTATION: REPRESENTATION,
-    ORGANISMES: ORGANISMES, SECTEURS: SECTEURS,
+    ORGANISMES: ORGANISMES, TRANSPORT: TRANSPORT, SECTEURS: SECTEURS,
+    parcTransport: parcTransport, capaciteTransport: capaciteTransport,
+    echeancesTransport: echeancesTransport,
     organisme: organisme, effectifRegistre: effectifRegistre,
     VALEURS: VALEURS, conclut: conclut,
     lire: lire, ecrire: ecrire, effacer: effacer,

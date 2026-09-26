@@ -167,6 +167,18 @@
       <summary>Organismes et interlocuteurs <span>à remplir une fois, repris dans tous les documents</span></summary>
       <div id="fiche-organismes"></div>
     </details>
+
+    <!-- CE QUI TIENT À LA PROFESSION DE TRANSPORTEUR.
+         Registre des transporteurs, licence et copies conformes, gestionnaire
+         de transport, capacité financière : rien de tout cela n'était demandé,
+         et les échéances qui vont avec n'étaient donc nulle part. Relevé le
+         26 septembre 2026. Le bloc ne s'ouvre que pour une entreprise de
+         transport : ailleurs, il n'a rien à faire sur l'écran. -->
+    <details id="pli-transport" class="pli-org" hidden>
+      <summary>Transport routier <span>registre, licence, gestionnaire, capacité financière</span></summary>
+      <div id="fiche-transport"></div>
+      <div id="capacite-transport" class="eff-reg" hidden></div>
+    </details>
     <button type="button" class="btn-suite" id="continuer-fiche">Continuer</button>
   </section>
 
@@ -366,12 +378,13 @@
   }
   /* CE QUI VIENT DANS LES SEPT JOURS, ET CE QUI EST DÉJÀ DÉPASSÉ.
 
-     Les deux sources qui portent des dates : la flotte (contrôle technique,
-     limiteur, chronotachygraphe, permis, FCO, carte conducteur) et les
+     Les trois sources qui portent des dates : la flotte (contrôle technique,
+     limiteur, chronotachygraphe, permis, FCO, carte conducteur), les
      salariés (déclaration préalable, visite d'information et de prévention,
      entretien de parcours, fin d'essai, terme d'un contrat à durée
-     déterminée). Rien n'est calculé ici : les deux modules rendent leurs
-     échéances, l'accueil les range par date. */
+     déterminée) et la fiche d'entreprise, pour la licence de transport.
+     Rien n'est calculé ici : chaque module rend ses échéances, l'accueil les
+     range par date. */
   function enFrCourt(iso) {
     var d = new Date(iso + "T12:00:00");
     if (isNaN(d)) return iso;
@@ -385,6 +398,12 @@
     try {
       if (window.EcheancesSalaries && window.EcheancesSalaries.echeances)
         L = L.concat(window.EcheancesSalaries.echeances());
+    } catch (e) {}
+    /* La licence de transport : elle tient à l'entreprise, pas à un véhicule
+       ni à un salarié, et c'est pourquoi elle ne figurait nulle part. */
+    try {
+      if (window.Profil && window.Profil.echeancesTransport)
+        L = L.concat(window.Profil.echeancesTransport());
     } catch (e) {}
     var limite = new Date();
     limite.setDate(limite.getDate() + 7);
@@ -498,13 +517,89 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
+  function euros(n) {
+    return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+  }
+
+  /* LE BLOC DU TRANSPORT NE S'OUVRE QUE POUR UN TRANSPORTEUR.
+     Le secteur de la fiche décide, et la convention 16 avec lui : ailleurs,
+     ces champs n'ont rien à demander. */
+  function estTransporteur(p) {
+    var s = String((p && p.secteur) || "").toLowerCase();
+    var c = String((p && p.conventionCollective) || "").toLowerCase();
+    return s.indexOf("transport") >= 0 || /(^|\D)0*16(\D|$)/.test(c) ||
+      c.indexOf("transport") >= 0;
+  }
+  function direTransport() {
+    var z = $("pli-transport");
+    if (!z) return;
+    z.hidden = !estTransporteur(profil());
+  }
+
+  /* CE QUE LE PARC EXIGE, EN FACE DE CE QUI EST SAISI.
+     R. 3211-32 : 9 000 € pour le premier véhicule de plus de 3,5 tonnes,
+     5 000 € par lourd suivant, 900 € par véhicule léger ; 1 800 € et 900 €
+     quand le parc est entièrement léger. R. 3211-12 : autant de copies
+     conformes que de véhicules. Ce qui manque au parc est nommé, jamais
+     supposé. */
+  function direCapacite() {
+    var z = $("capacite-transport");
+    if (!z || !window.Profil || !window.Profil.capaciteTransport) return;
+    var c = window.Profil.capaciteTransport(), p = c.parc, L = [];
+    if (!p.lignes) {
+      z.innerHTML = '<p class="er-dit">La flotte ne porte aucun véhicule : ' +
+        "le montant de la capacité financière et le nombre de copies conformes " +
+        "ne peuvent pas être calculés. Ouvrez « Flotte et conducteurs » pour les " +
+        "saisir.</p>";
+      z.hidden = false;
+      return;
+    }
+    var moteurs = p.lourds + p.legers;
+    L.push('<p class="er-dit">Flotte : ' + moteurs + " véhicule" + (moteurs > 1 ? "s" : "") +
+      " à moteur (" + p.lourds + " de plus de 3,5 tonnes, " + p.legers + " en deçà)" +
+      (p.remorques ? ", " + p.remorques + " remorque" + (p.remorques > 1 ? "s qui ne comptent pas" :
+        " qui ne compte pas") : "") + ".</p>");
+    if (p.sansPoids.length)
+      L.push('<p class="er-ecart">' + p.sansPoids.length + " véhicule" +
+        (p.sansPoids.length > 1 ? "s dont le genre ne dit pas le poids ne sont pas comptés" :
+          " dont le genre ne dit pas le poids n'est pas compté") + " : " +
+        ech(p.sansPoids.slice(0, 6).join(", ")) +
+        (p.sansPoids.length > 6 ? "…" : "") + ".</p>");
+    if (c.exige) {
+      L.push('<p class="er-dit">Capacité financière exigée : ' + euros(c.exige) +
+        " (" + ech(c.dit) + ", R. 3211-32).</p>");
+      if (c.capitaux === null)
+        L.push('<p class="er-ecart">Les capitaux et réserves du dernier exercice ne sont pas saisis : ' +
+          "l'écart ne peut pas être mesuré.</p>");
+      else if (c.manque > 0)
+        L.push('<p class="er-ecart">Capitaux saisis : ' + euros(c.capitaux) + ". Il manque " +
+          euros(c.manque) + " pour atteindre le montant exigé.</p>");
+      else
+        L.push('<p class="er-dit">Capitaux saisis : ' + euros(c.capitaux) +
+          ", le montant exigé est atteint.</p>");
+    }
+    if (moteurs) {
+      if (!isFinite(c.copies))
+        L.push('<p class="er-ecart">Le nombre de copies conformes n\'est pas saisi : ' +
+          "il devrait correspondre aux " + moteurs + " véhicules du parc (R. 3211-12).</p>");
+      else if (c.copies < moteurs)
+        L.push('<p class="er-ecart">' + c.copies + " copie" + (c.copies > 1 ? "s" : "") +
+          " conforme" + (c.copies > 1 ? "s" : "") + " pour " + moteurs +
+          " véhicules : il en manque " + (moteurs - c.copies) + " (R. 3211-12).</p>");
+      else
+        L.push('<p class="er-dit">' + c.copies + " copies conformes pour " + moteurs +
+          " véhicules.</p>");
+    }
+    z.innerHTML = L.join("");
+    z.hidden = false;
+  }
 
   if (window.Profil && CHAMPS.length === Object.keys(NOMS).length) {
     window.Profil.rendre($("fiche-accueil"), {
       champs: CHAMPS,
       legende: "Votre entreprise",
       echange: false,
-      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); direEffectif(); }
+      onChange: function (p) { $("continuer-fiche").disabled = !complet(p); direEffectif(); direTransport(); }
     });
     direEffectif();
     /* La représentation du personnel : le comité, ses élections, la carence,
@@ -530,6 +625,21 @@
         "Laissés vides, le document garde son crochet rouge à cet endroit.",
       echange: false
     });
+    if ($("fiche-transport") && window.Profil.TRANSPORT) {
+      window.Profil.rendre($("fiche-transport"), {
+        champs: window.Profil.TRANSPORT,
+        prefixe: "ft",
+        legende: "Autorisation d'exercer et titres de transport",
+        aide: "Ce sont les pièces que l'entreprise doit tenir pour exercer : " +
+          "l'inscription au registre, la licence et ses copies conformes, le " +
+          "gestionnaire de transport, les capitaux propres de l'exercice. " +
+          "Le parc de la flotte dit en face ce qui est exigé.",
+        echange: false,
+        onChange: direCapacite
+      });
+      direTransport();
+      direCapacite();
+    }
     var autre = $("fiche-accueil").querySelector('option[value="__autre"]');
     if (autre) autre.textContent = "Autre";
     var cc = $("fc-conventionCollective");
