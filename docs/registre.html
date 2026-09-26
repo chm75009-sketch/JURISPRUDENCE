@@ -79,6 +79,7 @@
     border-radius:var(--r2);background:var(--surface);color:var(--encre,#16181d);
     cursor:pointer;font:15px system-ui}
   .reg-filtres button.actif{background:var(--accent,#1f3864);color:#fff;border-color:var(--accent,#1f3864)}
+  .sous-choix{margin:8px 0 0;font:14px/1.45 system-ui;color:var(--encre2,#4a4f5a)}
   .reg-tri input[type=search]{width:100%;margin-top:8px;min-height:44px;padding:8px 12px;
     border:1px solid var(--filet);border-radius:var(--r2);font:16px system-ui}
   .reg-compte{margin:8px 0 0;font-size:14px;color:var(--texte-2,#5f6874)}
@@ -1283,6 +1284,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   });
 
   var IMPORT = null;   /* l'analyse en cours : rien n'est écrit tant qu'on n'a pas cliqué */
+  var DOUBLONS = "maj"; /* ce qu'on fait d'une ligne déjà au registre : maj, ajout ou rien */
 
   $("i-analyser").addEventListener("click", function () {
     var brut = $("i-source").value;
@@ -1370,13 +1372,52 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      capitales, le prénom ce qui suit. Quand rien n'est en capitales, le
      premier mot fait le nom : c'est l'usage des registres, et l'écran laisse
      corriger. */
+  /* « BEN AYAD SAMIA » DANS UNE SEULE COLONNE.
+
+     Quand la casse distingue le nom des prénoms, c'est elle qui décide : les
+     mots en capitales font le nom, le reste les prénoms. Quand tout est en
+     capitales, elle ne dit plus rien, et le prénom tombait dans le nom. Les
+     registres écrivent le nom d'abord : le dernier mot est donc pris pour le
+     prénom, et la ligne est signalée comme à vérifier. Relevé le 26 septembre
+     2026 sur le registre déposé. */
   function couper(v) {
     var mots = String(v || "").trim().split(/\s+/).filter(Boolean);
-    if (!mots.length) return { nom: "", pre: "" };
+    if (!mots.length) return { nom: "", pre: "", doute: false };
+    var capitale = function (m) { return m === m.toUpperCase() && /[A-ZÀ-Ý]/.test(m); };
+    if (mots.every(capitale)) {
+      if (mots.length < 2) return { nom: mots[0], pre: "", doute: false };
+      return { nom: mots.slice(0, -1).join(" "), pre: mots[mots.length - 1], doute: true };
+    }
     var maj = [];
-    while (mots.length && mots[0] === mots[0].toUpperCase() && /[A-ZÀ-Ý]/.test(mots[0])) maj.push(mots.shift());
+    while (mots.length && capitale(mots[0])) maj.push(mots.shift());
     if (!maj.length) maj.push(mots.shift());
-    return { nom: maj.join(" "), pre: mots.join(" ") };
+    return { nom: maj.join(" "), pre: mots.join(" "), doute: false };
+  }
+
+  /* RAPPROCHER AVANT D'AJOUTER.
+
+     Le même registre déposé deux fois faisait passer la liste de 85 à 170
+     lignes, toutes en double, sans un mot. Une ligne reprise est maintenant
+     rapprochée de celles déjà là, sur le nom, puis sur la naissance ou
+     l'entrée pour trancher les homonymes. Relevé le 26 septembre 2026. */
+  function rapprochee(s) {
+    var n = sansAccent(s.nom), p = sansAccent(s.pre);
+    if (!n) return null;
+    var res = null;
+    E.salaries.forEach(function (x) {
+      if (res || x.ex) return;
+      if (sansAccent(x.nom) !== n) return;
+      /* Deux naissances connues et différentes, ou deux entrées connues et
+         différentes : deux personnes, quel que soit le nom. */
+      if (!vide(s.nais) && !vide(x.nais) && s.nais !== x.nais) return;
+      if (!vide(s.ent) && !vide(x.ent) && s.ent !== x.ent) return;
+      var memeDate = (!vide(s.nais) && s.nais === x.nais) || (!vide(s.ent) && s.ent === x.ent);
+      var memePre = p !== "" && sansAccent(x.pre) === p;
+      var prenomContraire = p !== "" && sansAccent(x.pre) !== "" && sansAccent(x.pre) !== p;
+      if (prenomContraire && !memeDate) return;
+      if (memeDate || memePre || (p === "" && sansAccent(x.pre) === "")) res = x;
+    });
+    return res;
   }
   /* UN TIRET N'EST PAS UNE VALEUR, « EN POSTE » N'EST PAS UNE DATE.
 
@@ -1389,13 +1430,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   var RIEN = /^(—|–|-{1,3}|n\s*\/\s*a|na|néant|neant|sans objet|non renseigné|non renseigne|\.)$/i;
   var PRESENT = /^(en poste|en cours|présent|present|toujours en poste|toujours présent|toujours present|n\s*\/\s*a|—|–|-{1,3})$/i;
   function ligneImportee(r) {
-    var s = neuf(), brutNature = "", brutTemps = "", dateKo = 0;
+    var s = neuf(), brutNature = "", brutTemps = "", dateKo = 0, doute = false;
     IMPORT.cibles.forEach(function (c, j) {
       var v = r[j] == null ? "" : String(r[j]).trim();
       if (!c || !v) return;
       if (RIEN.test(v)) return;
       if (c === "sor" && PRESENT.test(v)) return;
-      if (c === "_np") { var d = couper(v); s.nom = d.nom; s.pre = d.pre; return; }
+      if (c === "_np") { var d = couper(v); s.nom = d.nom; s.pre = d.pre; doute = d.doute; return; }
       if (c === "_nat") { brutNature = v; return; }
       if (c === "_tps") { brutTemps = v; return; }
       if (c === "nais" || c === "ent" || c === "sor") {
@@ -1413,7 +1454,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
        temps de travail. Le second ne se perd plus faute de colonne dédiée. */
     s.part = tempsDe(brutTemps) || tempsDe(brutNature);
     if (s.sexe) s.sexe = sexeDe(s.sexe) || s.sexe;
-    return { s: s, brutNature: brutNature, brutTemps: brutTemps, dateKo: dateKo };
+    return { s: s, brutNature: brutNature, brutTemps: brutTemps, dateKo: dateKo, doute: doute };
   }
 
   function rendreApercu() {
@@ -1427,7 +1468,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var apercu = IMPORT.corps.map(ligneImportee).filter(function (o) {
       return !(vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp));
     }).slice(0, 5);
-    var datesKo = 0, natureKo = 0, tempsKo = 0, retenuesLignes = 0;
+    var datesKo = 0, natureKo = 0, tempsKo = 0, retenuesLignes = 0, doutes = 0;
+    var dejaLa = [], nouvelles = 0;
     IMPORT.corps.forEach(function (r) {
       var o = ligneImportee(r);
       /* Une ligne qui ne porte ni nom, ni prénom, ni emploi n'entrera pas au
@@ -1435,8 +1477,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;
       retenuesLignes++;
       datesKo += o.dateKo;
+      if (o.doute) doutes++;
       if (o.brutNature && !o.s.nature && !tempsDe(o.brutNature)) natureKo++;
       if (o.brutTemps && !o.s.part) tempsKo++;
+      var v = rapprochee(o.s);
+      if (v) dejaLa.push(nomDe(o.s)); else nouvelles++;
     });
 
     var h = '<p class="groupe">L\'aperçu, cinq premières lignes</p>';
@@ -1489,36 +1534,96 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
     var alertes = [];
     if (datesKo) alertes.push(datesKo + " date(s) illisible(s), attendu jj/mm/aaaa ou aaaa-mm-jj. Elles resteront vides.");
+    if (doutes) alertes.push(doutes + " ligne(s) où le nom et le prénom sont tout en capitales : " +
+      "le dernier mot a été pris pour le prénom, le reste pour le nom. À vérifier au registre.");
     if (natureKo) alertes.push(natureKo + " libellé(s) de contrat non reconnu(s) : la nature restera « à établir ».");
     if (tempsKo) alertes.push(tempsKo + " libellé(s) de temps de travail non reconnu(s) : la mention « salarié à temps partiel » (D. 1221-23, 12°) ne sera pas proposée.");
     if (alertes.length)
-      h += '<div class="avis att"><b>Ce qui ne sera pas repris</b><ul class="manque"><li>' +
+      h += '<div class="avis att"><b>Ce qui reste à vérifier</b><ul class="manque"><li>' +
         alertes.map(ech).join("</li><li>") + "</li></ul></div>";
 
+    /* CE QU'ON FAIT DES LIGNES DÉJÀ LÀ.
+
+       Sans ce choix, le fichier déposé deux fois doublait le registre en
+       silence. Le rapprochement est dit, nommément, et la décision revient à
+       l'utilisateur. */
+    if (dejaLa.length) {
+      var CHOIX = [
+        { v: "maj", lib: "Mettre à jour", sous: "Les lignes déjà là reçoivent ce que le fichier porte. Rien n'est ajouté." },
+        { v: "ajout", lib: "Ajouter quand même", sous: "Une seconde ligne est créée pour chacune. Le registre comptera des doubles." },
+        { v: "rien", lib: "Ignorer", sous: "Elles sont laissées de côté ; seules les nouvelles entrent." },
+      ];
+      h += '<div class="avis att" id="i-doublons"><b>' + dejaLa.length +
+        " ligne(s) déjà au registre</b>" +
+        ech(dejaLa.slice(0, 8).join(" · ")) + (dejaLa.length > 8 ? " …" : "") +
+        ". Rapprochement fait sur le nom, puis sur la naissance ou la date d'entrée." +
+        '<div class="reg-filtres" style="margin-top:10px">' +
+        CHOIX.map(function (c) {
+          return '<button type="button" data-doublon="' + c.v + '"' +
+            (DOUBLONS === c.v ? ' class="actif"' : "") + ">" + c.lib + "</button>"; }).join("") +
+        "</div><p class=\"sous-choix\" id=\"i-doublons-sous\">" +
+        ech((CHOIX.filter(function (c) { return c.v === DOUBLONS; })[0] || CHOIX[0]).sous) + "</p></div>";
+    }
+
     h = h0 + h;
-    h += '<div class="barre pile"><button type="button" class="btn" id="i-ecrire">Reprendre les ' + retenuesLignes +
-      " ligne(s) dans le registre</button></div>";
+    var etiquette, rienAFaire = false;
+    if (!dejaLa.length) etiquette = "Reprendre les " + retenuesLignes + " ligne(s) dans le registre";
+    else if (DOUBLONS === "rien") {
+      rienAFaire = !nouvelles;
+      etiquette = nouvelles ? "Reprendre les " + nouvelles + " nouvelle(s) ligne(s)"
+        : "Rien à reprendre avec ce choix";
+    } else if (DOUBLONS === "maj")
+      etiquette = "Reprendre : " + nouvelles + " nouvelle(s), " + dejaLa.length + " mise(s) à jour";
+    else etiquette = "Tout ajouter : " + retenuesLignes + " ligne(s), doubles compris";
+    h += '<div class="barre pile"><button type="button" class="btn" id="i-ecrire"' +
+      (rienAFaire ? " disabled" : "") + ">" + ech(etiquette) + "</button></div>";
     $("i-apercu").innerHTML = h;
 
+    Array.prototype.forEach.call($("i-apercu").querySelectorAll("[data-doublon]"), function (b) {
+      b.addEventListener("click", function () {
+        DOUBLONS = b.getAttribute("data-doublon");
+        rendreApercu();
+      });
+    });
+
     $("i-ecrire").addEventListener("click", function () {
-      var n = 0;
+      var n = 0, maj = 0, laissees = 0;
+      var propre = function (k) {
+        return k !== "id" && k !== "src" && k !== "repris" && k !== "ex";
+      };
       /* Une carte vierge laissée vide ne compte pas : elle cède la place aux lignes reprises. */
       E.salaries = E.salaries.filter(function (s) { return !(vide(s.nom) && vide(s.pre) && vide(s.emp) && vide(s.ent)); });
       IMPORT.corps.forEach(function (r) {
-        var o = ligneImportee(r);
+        var o = ligneImportee(r), k;
         if (vide(o.s.nom) && vide(o.s.pre) && vide(o.s.emp)) return;
+        var vieille = rapprochee(o.s);
+        if (vieille && DOUBLONS === "rien") { laissees++; return; }
+        if (vieille && DOUBLONS === "maj") {
+          /* Ce que le fichier porte écrase la ligne existante, champ par
+             champ ; ce qu'il ne porte pas est laissé tel quel. */
+          vieille.src = vieille.src || {};
+          for (k in o.s) if (Object.prototype.hasOwnProperty.call(o.s, k) && propre(k) && !vide(o.s[k])) {
+            vieille[k] = o.s[k];
+            vieille.src[k] = o.s[k];
+          }
+          vieille.repris = true;
+          maj++;
+          return;
+        }
         /* Ce que le fichier portait est figé ici : tout ce qui s'en écartera
            ensuite est un ajout ou une correction, et se verra en rouge. */
         o.s.repris = true;
         o.s.src = {};
-        for (var k in o.s) if (Object.prototype.hasOwnProperty.call(o.s, k) &&
-          k !== "id" && k !== "src" && k !== "repris" && k !== "ex")
+        for (k in o.s) if (Object.prototype.hasOwnProperty.call(o.s, k) && propre(k))
           o.s.src[k] = o.s[k];
         E.salaries.push(o.s); n++;
       });
       garder();
       IMPORT = null;
-      $("i-resultat").innerHTML = '<div class="avis ok"><b>' + n + " ligne(s) ajoutée(s)</b>" +
+      var dit = [n + " ligne(s) ajoutée(s)"];
+      if (maj) dit.push(maj + " mise(s) à jour");
+      if (laissees) dit.push(laissees + " laissée(s) de côté");
+      $("i-resultat").innerHTML = '<div class="avis ok"><b>' + dit.join(", ") + "</b>" +
         "Le registre les classe dans l'ordre des embauches, et dit, ligne par ligne, ce qui manque encore.</div>";
       setTimeout(function () { ouvrir("registre"); }, 600);
     });
