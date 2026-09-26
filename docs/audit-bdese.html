@@ -99,6 +99,10 @@
   .suite .doc-ligne{display:block;padding:14px;border:1px solid var(--filet);border-radius:10px;
     background:var(--surface);color:var(--encre,#16181d);text-decoration:none;font:600 16px/1.35 system-ui}
   .doux{color:var(--texte-2);font-size:15px;line-height:1.5;margin:10px 0 0}
+  .acces{margin:18px 0 0;padding:14px;border:1px solid var(--filet);border-radius:12px;
+    background:var(--surface)}
+  .acces h3{margin:0 0 6px;font:600 17px/1.3 system-ui;color:var(--encre)}
+  .acces .champs{margin:12px 0 0}
   .grille-tab{overflow:auto;max-height:70vh;-webkit-overflow-scrolling:touch}
   table.g{border-collapse:separate;border-spacing:0;font-size:14px;background:var(--surface);min-width:100%}
   table.g th,table.g td{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);
@@ -172,8 +176,46 @@
         <select id="acc"><option value="non">non</option><option value="oui">oui</option></select></label>
     </form>
 
+    <!-- CE QUE L'APPLICATION SAIT DÉJÀ NE SE RESAISIT PAS.
+         Le registre du personnel porte les contrats, les sexes, les temps
+         partiels et les stagiaires ; la flotte porte les véhicules, qui sont
+         les sources mobiles de la rubrique environnementale. Ces cases se
+         remplissent d'un bouton, sur la seule colonne de l'année en cours,
+         et jamais par-dessus ce qui est déjà écrit. Relevé le 26 septembre
+         2026. -->
+    <div class="barre pile">
+      <button type="button" class="second" id="preremplir">Reprendre du registre et de la flotte</button>
+    </div>
+    <p class="doux" id="repris"></p>
+
     <p class="doux" id="remplissage"></p>
     <div id="rubriques"></div>
+
+    <!-- L'ACCÈS ET L'ACTUALISATION, QUE R. 2312-12 MET À LA CHARGE DE
+         L'EMPLOYEUR. Une base tenue et jamais annoncée ne vaut pas mise à
+         disposition : l'article demande d'informer de l'actualisation et de
+         fixer les modalités d'accès, de consultation et d'utilisation.
+         Relevé le 26 septembre 2026. -->
+    <section class="acces" id="acces">
+      <h3>L'accès à la base, et l'avis d'actualisation</h3>
+      <p class="doux" id="acces-dit"></p>
+      <form class="champs" autocomplete="off" onsubmit="return false">
+        <label>Support
+          <select id="a-support">
+            <option value="informatique">informatique</option>
+            <option value="papier">papier</option>
+          </select></label>
+        <label>Où la base est consultable
+          <input type="text" id="a-ou" placeholder="serveur, dossier partagé, bureau du gérant"></label>
+        <label>Qui y a accès
+          <input type="text" id="a-qui" placeholder="membres du comité et délégués syndicaux"></label>
+        <label>Date de l'actualisation
+          <input type="date" id="a-le"></label>
+      </form>
+      <div class="barre pile">
+        <button type="button" id="avis-actualisation">Avis d'actualisation, en Word</button>
+      </div>
+    </section>
 
     <!-- LES FORMALITÉS SOUS LA GRILLE. La base ne vaut que mise à disposition
          du comité, tenue à jour et accessible : le parcours les conduit une
@@ -190,6 +232,7 @@
 
 <script src="moteur-bdese.js"></script>
 <script src="profil.js"></script>
+<script src="audit-export.js"></script>
 <script>
 (function () {
   "use strict";
@@ -399,6 +442,7 @@
 
     cablerCases();
     direRemplissage();
+    direAcces();
 
     $("#champs").querySelector("label:nth-child(1)").classList.toggle("attend", !CTX.ent);
     $("#champs").querySelector("label:nth-child(2)").classList.toggle("attend", CTX.eff === null);
@@ -725,12 +769,235 @@
     "pendant douze mois consécutifs. » La base de données, à l'article L. 2312-18 <span class=\"vers\">(LEGIARTI000052437125)</span>, " +
     "est dans cette section.</p>";
 
+  /* ══════════════════ LE PRÉREMPLISSAGE DEPUIS LE REGISTRE ══════════════
+
+     Six cents cases à la main quand l'application tient déjà le registre du
+     personnel et la flotte : ce qui peut être compté l'est, sur la colonne de
+     l'année en cours, et rien d'autre. Une case déjà écrite n'est jamais
+     recouverte, et ce qui est repris est dit, ligne par ligne, au lieu
+     d'apparaître sans qu'on sache d'où cela vient.
+
+     Le registre donne l'état du jour, pas une série : les colonnes des années
+     passées et des perspectives restent vides, comme il se doit.            */
+  function lireLocal(cle) {
+    try { return JSON.parse(localStorage.getItem(cle) || "null"); } catch (e) { return null; }
+  }
+  function salariesEnPoste() {
+    var R = lireLocal("registre-personnel");
+    return ((R && R.salaries) || []).filter(function (s) {
+      return !s.ex && !String(s.sor || "").trim() &&
+        (String(s.nom || "").trim() || String(s.pre || "").trim());
+    });
+  }
+  function accueillisDuRegistre() {
+    var R = lireLocal("registre-personnel");
+    return ((R && R.accueillis) || []).filter(function (a) {
+      return String(a.nom || "").trim() || String(a.pre || "").trim();
+    });
+  }
+  function estFemme(s) { return /^f/i.test(String(s.sexe || "").trim()); }
+  function estHomme(s) { return /^(m|h)/i.test(String(s.sexe || "").trim()); }
+  function ageAu(nais, d) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(nais || "").trim());
+    if (!m) return null;
+    var a = d.getFullYear() - Number(m[1]);
+    var mois = (d.getMonth() + 1) - Number(m[2]);
+    if (mois < 0 || (mois === 0 && d.getDate() < Number(m[3]))) a--;
+    return a;
+  }
+  function compte(L, f) { var n = 0; L.forEach(function (x) { if (f(x)) n++; }); return n; }
+  /* « 1 stagiaires » ne s'écrit pas : le pluriel suit le nombre. */
+  function pl(n, un, plusieurs) { return n + " " + (n > 1 ? plusieurs : un); }
+
+  /* Ce que chaque ligne de la grille reçoit. La clé est l'information telle
+     qu'elle est écrite dans le décret : c'est elle qui identifie la case. */
+  function repris() {
+    var S = salariesEnPoste(), A = accueillisDuRegistre(), d = new Date();
+    var jour = d.toLocaleDateString("fr-FR");
+    var out = [];
+    function pose(info, valeur) { if (valeur) out.push({ info: info, valeur: valeur }); }
+
+    if (S.length) {
+      pose("nombre de salariés titulaires d'un contrat de travail à durée indéterminée",
+        String(compte(S, function (s) { return s.nature === "cdi"; })) + " au " + jour);
+      pose("nombre de salariés titulaires d'un contrat de travail à durée déterminée",
+        String(compte(S, function (s) { return s.nature === "cdd"; })) + " au " + jour);
+      pose("nombre de salariés temporaires",
+        String(compte(S, function (s) { return s.nature === "temporaire"; })) + " au " + jour);
+      var alt = compte(S, function (s) {
+        var a = ageAu(s.nais, d);
+        return (s.nature === "apprenti" || s.nature === "pro") && a !== null && a < 26;
+      });
+      pose("nombre de contrats d'insertion et de formation en alternance ouverts aux jeunes de moins de vingt-six ans",
+        String(alt) + " au " + jour);
+      var f = compte(S, estFemme), h = compte(S, estHomme);
+      var sansSexe = S.length - f - h;
+      pose("répartition des effectifs par sexe et par qualification",
+        pl(S.length, "salarié", "salariés") + " au " + jour + " : " +
+        pl(f, "femme", "femmes") + ", " + pl(h, "homme", "hommes") +
+        (sansSexe ? ", " + pl(sansSexe, "dont le sexe n'est pas porté au registre",
+          "dont le sexe n'est pas porté au registre") : "") +
+        ". Répartition par qualification à compléter.");
+      var tp = S.filter(function (s) { return s.part === "partiel"; });
+      if (tp.length)
+        pose("Données sur le travail à temps partiel : -nombre, sexe et qualification des salariés travaillant à temps partiel",
+          pl(tp.length, "salarié", "salariés") + " à temps partiel au " + jour + " : " +
+          pl(compte(tp, estFemme), "femme", "femmes") + ", " +
+          pl(compte(tp, estHomme), "homme", "hommes") + ". Qualifications à compléter.");
+    }
+    var stag = A.filter(function (a) { return /stag/i.test(String(a.qualite || "")); });
+    if (A.length)
+      pose("Evolution du nombre de stagiaires de plus de 16 ans",
+        pl(stag.length, "stagiaire inscrit", "stagiaires inscrits") +
+        " à la partie spécifique du registre (L. 1221-13).");
+
+    /* La flotte : les véhicules sont les sources mobiles du scope 1. Le
+       volume des émissions, lui, n'est pas calculé ici et la case le dit. */
+    if (window.Profil && window.Profil.parcTransport) {
+      var p = window.Profil.parcTransport();
+      if (p.lignes) {
+        var moteurs = p.lourds + p.legers;
+        pose("Identification des postes d'émissions directes de gaz à effet de serre produites par les sources fixes et mobiles nécessaires aux activités de l'entreprise (communément appelées \" émissions du scope 1 \") et, lorsque l'entreprise dispose de cette information, évaluation du volume de ces émissions de gaz à effet de serre",
+          "Sources mobiles : " + pl(moteurs, "véhicule à moteur", "véhicules à moteur") +
+          " au parc au " + jour +
+          " (" + p.lourds + " de plus de 3,5 tonnes, " + p.legers + " en deçà)" +
+          (p.remorques ? ", " + pl(p.remorques, "remorque", "remorques") : "") +
+          ". Volume des émissions non évalué à ce jour.");
+      }
+    }
+    return out;
+  }
+
+  function preremplir() {
+    var L = repris();
+    if (!L.length) {
+      $("#repris").textContent = "Le registre du personnel et la flotte sont vides : " +
+        "il n'y a rien à reprendre. Ouvrez le registre, puis revenez ici.";
+      return;
+    }
+    /* Les lignes de la grille, pour n'écrire que dans des cases qui existent. */
+    var existantes = {};
+    rubriques(CTX).forEach(function (r) {
+      r.lignes.forEach(function (l) { existantes[String(l.info).slice(0, 120)] = r.n; });
+    });
+    var an = String(CTX.an), mis = [], deja = [], hors = [];
+    L.forEach(function (x) {
+      var cle = String(x.info).slice(0, 120);
+      if (!existantes[cle]) { hors.push(x.info); return; }
+      var k = cleCase(existantes[cle], cle, an);
+      if (String(CONTENU[k] || "").trim()) { deja.push(x.info); return; }
+      CONTENU[k] = x.valeur;
+      mis.push(x.info);
+    });
+    garderContenu();
+    rendre();
+    var dit = [];
+    if (mis.length) dit.push(mis.length + " case" + (mis.length > 1 ? "s" : "") +
+      " remplie" + (mis.length > 1 ? "s" : "") + " sur la colonne " + an + ", depuis le registre et la flotte.");
+    if (deja.length) dit.push(deja.length + " case" + (deja.length > 1 ? "s" : "") +
+      " déjà écrite" + (deja.length > 1 ? "s" : "") + " n'" + (deja.length > 1 ? "ont" : "a") +
+      " pas été touchée" + (deja.length > 1 ? "s" : "") + ".");
+    if (hors.length) dit.push(hors.length + " ligne" + (hors.length > 1 ? "s" : "") +
+      " ne figure" + (hors.length > 1 ? "nt" : "") + " pas dans la grille due à cet effectif.");
+    if (!mis.length && !deja.length) dit.push("Rien n'a pu être repris dans la grille due à cet effectif.");
+    dit.push("Les années passées et les perspectives ne sont pas remplies : le registre donne l'état du jour, pas une série.");
+    $("#repris").textContent = dit.join(" ");
+  }
+  $("#preremplir").addEventListener("click", preremplir);
+
+  /* ══════════════ L'ACCÈS ET L'AVIS D'ACTUALISATION (R. 2312-12) ═════════
+
+     « La base de données est tenue à la disposition des personnes mentionnées
+     au dernier alinéa de l'article L. 2312-36 sur un support informatique
+     pour les entreprises d'au moins trois cents salariés, et sur un support
+     informatique ou papier pour les entreprises de moins de trois cents
+     salariés. L'employeur informe ces personnes de l'actualisation de la base
+     de données selon des modalités qu'il détermine et fixe les modalités
+     d'accès, de consultation et d'utilisation de la base. » R. 2312-12,
+     LEGIARTI000036411586, lu à la source le 26 septembre 2026, deux lectures
+     concordantes. Les personnes visées sont, au dernier alinéa de
+     L. 2312-36 (LEGIARTI000048533625), les membres de la délégation du
+     personnel du comité, ceux du comité central et les délégués syndicaux,
+     tenus à une obligation de discrétion sur ce qui est présenté comme
+     confidentiel.                                                            */
+  function direAcces() {
+    var z = $("#acces-dit");
+    if (!z) return;
+    var e = CTX ? CTX.eff : null;
+    var impose = e !== null && e >= 300;
+    if (impose) {
+      $("#a-support").value = "informatique";
+      $("#a-support").disabled = true;
+    } else {
+      $("#a-support").disabled = false;
+    }
+    z.textContent = "À défaut d'accord, la base est tenue à la disposition des membres de la " +
+      "délégation du personnel du comité et des délégués syndicaux, " +
+      (impose
+        ? "sur un support informatique : l'effectif atteint trois cents salariés (R. 2312-12)."
+        : "sur un support informatique ou papier en deçà de trois cents salariés (R. 2312-12).") +
+      " L'employeur les informe de chaque actualisation et fixe les modalités d'accès, " +
+      "de consultation et d'utilisation.";
+  }
+
+  $("#avis-actualisation").addEventListener("click", function () {
+    if (!window.AuditExport) return;
+    var ent = (CTX && CTX.ent) || profil.denomination || "[dénomination]";
+    var support = $("#a-support").value === "papier" ? "papier" : "informatique";
+    var ou = $("#a-ou").value.trim();
+    var qui = $("#a-qui").value.trim();
+    var le = $("#a-le").value.trim();
+    function jourFr(v) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+      if (!m) return "";
+      var M = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+        "août", "septembre", "octobre", "novembre", "décembre"];
+      var j = Number(m[3]);
+      return (j === 1 ? "1er" : j) + " " + M[Number(m[2]) - 1] + " " + m[1];
+    }
+    var aujourd = new Date();
+    var items = [];
+    items.push({ k: "sur", t: ent });
+    if (profil.adresse) items.push({ k: "sur", t: profil.adresse });
+    items.push({ k: "t1", t: "Avis d'actualisation de la base de données économiques, sociales et environnementales" });
+    items.push({ k: "p", t: "Destinataires : " + (qui ||
+      "les membres de la délégation du personnel du comité social et économique et les délégués syndicaux") + "." });
+    items.push({ k: "p", t: "Madame, Monsieur," });
+    items.push({ k: "p", t: "La base de données économiques, sociales et environnementales de " + ent +
+      " a été actualisée" + (le ? " le " + jourFr(le) : "") + "." });
+    items.push({ k: "p", t: "Elle porte sur les deux années précédentes, l'année en cours et les " +
+      "perspectives des trois années suivantes (L. 2312-36)." });
+    items.push({ k: "p", t: "Elle est tenue à votre disposition sur support " + support +
+      (ou ? ", " + ou : ", [préciser où et comment elle se consulte]") +
+      ". Vous pouvez la consulter et l'utiliser pour l'exercice de vos attributions, " +
+      "sans limitation de durée pendant votre mandat." });
+    items.push({ k: "p", t: "Ces modalités sont celles que l'employeur fixe en application de " +
+      "l'article R. 2312-12 du code du travail, à défaut d'accord conclu sur le fondement " +
+      "de l'article L. 2312-21." });
+    items.push({ k: "p", t: "Les informations présentées comme confidentielles sont couvertes par " +
+      "l'obligation de discrétion du dernier alinéa de l'article L. 2312-36." });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: (profil.responsable || "[nom et qualité du représentant légal]") });
+    items.push({ k: "p", t: ent });
+    var nom = "avis-actualisation-bdese-" + aujourd.getFullYear() + "-" +
+      String(aujourd.getMonth() + 1).padStart(2, "0") + "-" +
+      String(aujourd.getDate()).padStart(2, "0") + ".docx";
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Avis d'actualisation de la base de données"),
+      nom, "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
   /* ---------------------------------------------------------------- */
   /* La fiche entreprise pré-remplit ce qu'elle porte, et reçoit en retour ce
      qui est saisi ici : l'effectif et la dénomination sont les mêmes partout
      dans l'application. */
   (function prealable() {
     $("#an").value = new Date().getFullYear();
+    (function () {
+      var d = new Date();
+      $("#a-le").value = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") +
+        "-" + String(d.getDate()).padStart(2, "0");
+    })();
     if (profil.denomination) $("#ent").value = profil.denomination;
     if (effProfil !== null) $("#eff").value = effProfil;
 
