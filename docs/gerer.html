@@ -455,6 +455,18 @@
       dit: "le salarié demandant son départ à la retraite respecte un préavis dont la durée est celle de l'article L. 1234-1" },
     "D1237-1": { id: "LEGIARTI000018537484", lu: 8,
       dit: "au moins un demi-mois de salaire après dix ans d'ancienneté, un mois après quinze ans, un mois et demi après vingt ans, deux mois après trente ans" },
+    /* LA MISE À LA RETRAITE PAR L'EMPLOYEUR. Elle n'existait nulle part : le
+       menu n'offrait que le départ demandé par le salarié. Relevé le
+       26 septembre 2026. Textes lus à la source le même jour, deux lectures
+       concordantes. */
+    "L1237-5": { id: "LEGIARTI000052437183",
+      dit: "la mise à la retraite est la possibilité donnée à l'employeur de rompre le contrat d'un salarié ayant atteint l'âge mentionné au 1° de l'article L. 351-8 du code de la sécurité sociale ; avant cet âge, l'employeur interroge par écrit le salarié sur son intention de partir, et une réponse négative lui interdit la mise à la retraite pendant l'année qui suit, chaque année jusqu'au soixante-neuvième anniversaire" },
+    "L1237-6": { id: "LEGIARTI000006901180",
+      dit: "l'employeur qui décide une mise à la retraite respecte un préavis dont la durée est celle de l'article L. 1234-1" },
+    "L1237-7": { id: "LEGIARTI000047453558",
+      dit: "la mise à la retraite ouvre droit à une indemnité au moins égale à l'indemnité de licenciement de l'article L. 1234-9 ; un salarié ne peut bénéficier que d'une seule indemnité de départ ou de mise à la retraite" },
+    "D1237-2-1": { id: "LEGIARTI000020080277",
+      dit: "l'employeur interroge le salarié trois mois avant son anniversaire ; le salarié répond dans le mois qui suit la question" },
     "L1237-11": { id: "LEGIARTI000019071187", lu: 8,
       dit: "rupture convenue en commun, exclusive du licenciement ou de la démission, qui ne peut être imposée par l'une ou l'autre des parties ; elle résulte d'une convention signée" },
     "L1237-12": { id: "LEGIARTI000019071185", lu: 8,
@@ -2167,6 +2179,184 @@
     return { blocs: b, dates: dates, loi: ["L1237-9", "L1237-10", "D1237-1", "L1234-1", "L1234-19", "L1234-20", "R1234-9"] };
   }
 
+  /* ═══════════════ LA MISE À LA RETRAITE PAR L'EMPLOYEUR ═══════════════
+
+     Le menu n'offrait que le départ demandé par le salarié : la rupture à
+     l'initiative de l'employeur, qui obéit à d'autres règles, n'existait pas.
+     Relevé le 26 septembre 2026.
+
+     Ce que la page ne fait pas : elle n'écrit aucun âge. L'âge du 1° de
+     l'article L. 351-8 est dans le code de la sécurité sociale, que
+     l'application n'a pas lu ; c'est donc l'employeur qui porte la date à
+     laquelle son salarié l'atteint, et tout le reste se calcule depuis elle.
+     Trois mois avant, la question écrite ; un mois pour la réponse
+     (D. 1237-2-1). Une réponse négative ferme la voie pendant un an, et la
+     lettre le dit au lieu de laisser partir une notification irrégulière. */
+  function miseRetraite(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
+    var anniv = dateDe(v.anniversaire);
+    var interroge = dateDe(v.interrogation);
+    var entree = dateDe(v.entree);
+    var salaire = Number(v.salaireRef) || 0;
+    var mois = entree ? moisAnnees(entree, AUJOURDHUI) : null;
+    var quoi = v.quoi === "notification" ? "notification" : "question";
+    var b = [], dates = [], alerte = null;
+
+    /* Les deux dates de D. 1237-2-1, comptées depuis l'anniversaire porté. */
+    var auPlusTard = anniv ? jour(anniv, -90) : null;
+    var reponseAvant = interroge ? plusMois(interroge, 1) : null;
+
+    if (quoi === "question") {
+      b.push({ k: "t1", t: "Question préalable à une éventuelle mise à la retraite" });
+      enTete(b, nomS, "votre intention de quitter l'entreprise pour bénéficier d'une pension de vieillesse",
+        "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
+      b.push({ k: "p", t: "Vous atteindrez le " + (anniv ? dateFr(anniv) : "[date]") +
+        " l'âge mentionné au 1° de l'article L. 351-8 du code de la sécurité sociale." });
+      b.push({ k: "p", t: "Avant cette date, la loi nous impose de vous interroger par écrit sur votre " +
+        "intention de quitter volontairement l'entreprise pour bénéficier, ou continuer de bénéficier, " +
+        "d'une pension de vieillesse (" + ref(["L1237-5"]) + ")." });
+      b.push({ k: "p", t: "Nous vous remercions de nous répondre par écrit dans le mois qui suit la " +
+        "réception de la présente" + (reponseAvant ? ", soit avant le " + dateFr(reponseAvant) : "") +
+        " (" + ref(["D1237-2-1"]) + ")." });
+      b.push({ k: "p", t: "Votre réponse vous appartient entièrement. Si elle est négative, nous ne " +
+        "pourrons pas vous mettre à la retraite pendant l'année qui suit, et la question vous sera " +
+        "posée de nouveau l'année suivante (" + ref(["L1237-5"]) + "). Si vous ne répondez pas dans " +
+        "le délai, nous en tirerons les conséquences prévues par ce même article." });
+      formule(b, civ);
+      if (auPlusTard) dates.push({ q: "Question à poser au plus tard le", d: dateFrJour(auPlusTard),
+        f: "trois mois avant l'anniversaire du salarié (" + ref(["D1237-2-1"]) + ")",
+        c: AUJOURDHUI > auPlusTard ? "tard" : "" });
+      if (reponseAvant) dates.push({ q: "Réponse attendue avant le", d: dateFrJour(reponseAvant),
+        f: "un mois à compter de la question (" + ref(["D1237-2-1"]) + ")", c: "" });
+      return { blocs: b, dates: dates,
+        loi: ["L1237-5", "D1237-2-1", "L1237-6", "L1237-7", "L1234-1"] };
+    }
+
+    /* La notification. Elle ne s'écrit pas si la réponse a été négative. */
+    if (v.reponse === "non") {
+      return { refus: ["Le salarié a répondu qu'il ne souhaitait pas quitter l'entreprise : " +
+        "la mise à la retraite est fermée pendant l'année qui suit la date à laquelle il atteint " +
+        "l'âge du 1° de l'article L. 351-8 du code de la sécurité sociale, et la question devra lui " +
+        "être posée de nouveau l'année suivante (" + ref(["L1237-5"]) + "). Aucune notification ne " +
+        "peut être écrite ici."],
+        loi: ["L1237-5", "D1237-2-1"] };
+    }
+    if (v.reponse === "pas") {
+      alerte = "La question préalable n'a pas encore été posée. Tant qu'elle ne l'a pas été, " +
+        "la mise à la retraite ne peut pas être prononcée : posez-la d'abord, avec le premier " +
+        "document de cet écran (" + ref(["L1237-5"]) + ").";
+    }
+
+    var pv = preavisDu(v.statut || "employe", mois === null ? 24 : mois, false);
+    var fin = pv.jours ? jour(AUJOURDHUI, pv.jours) : null;
+    var ind = (mois !== null && salaire > 0) ? indemniteDe(mois, salaire, false) : null;
+
+    b.push({ k: "t1", t: "Notification de mise à la retraite" });
+    enTete(b, nomS, "votre mise à la retraite",
+      "Lettre recommandée avec avis de réception");
+    b.push({ k: "p", t: "Vous avez atteint le " + (anniv ? dateFr(anniv) : "[date]") +
+      " l'âge mentionné au 1° de l'article L. 351-8 du code de la sécurité sociale." });
+    if (v.reponse === "oui")
+      b.push({ k: "p", t: "Par votre lettre du " + (interroge ? dateFr(interroge) : "[date]") +
+        ", vous nous avez fait connaître votre intention de quitter l'entreprise pour bénéficier " +
+        "d'une pension de vieillesse." });
+    else if (v.reponse === "silence")
+      b.push({ k: "p", t: "Nous vous avons interrogé par écrit le " +
+        (interroge ? dateFr(interroge) : "[date]") + " sur votre intention de quitter l'entreprise " +
+        "pour bénéficier d'une pension de vieillesse, et vous n'avez pas répondu dans le délai d'un " +
+        "mois (" + ref(["L1237-5", "D1237-2-1"]) + ")." });
+    b.push({ k: "p", t: "Nous vous notifions par la présente notre décision de vous mettre à la " +
+      "retraite (" + ref(["L1237-5"]) + ")." });
+    if (pv.jours)
+      b.push({ k: "p", t: "Votre préavis, " + dePreavis(pv.jours) +
+        (mois === null ? "" : " compte tenu de votre ancienneté de " + anciennetePhrase(mois)) +
+        " (" + ref(["L1237-6", "L1234-1"]) + ", " + pv.source + "), commence à courir à la " +
+        "présentation de la présente lettre et prendra fin le " +
+        (fin ? dateFr(fin) : "[date]") + ", date à laquelle votre contrat prendra fin." });
+    else
+      b.push({ k: "p", t: "Votre préavis est celui que fixent la convention collective ou les usages " +
+        "(" + ref(["L1237-6", "L1234-1"]) + ") : [durée], de sorte que votre contrat prendra fin le [date]." });
+    if (ind && ind.montant)
+      b.push({ k: "p", t: "Vous percevrez une indemnité de mise à la retraite de " + eur(ind.montant) +
+        " euros, au moins égale à l'indemnité de licenciement (" + ref(["L1237-7", "L1234-9"]) + ") : " +
+        ind.detail + ", sur la base d'un salaire de référence de " + eur(salaire) + " euros." });
+    else
+      b.push({ k: "p", t: "Vous percevrez une indemnité de mise à la retraite de [montant] euros, au " +
+        "moins égale à l'indemnité de licenciement (" + ref(["L1237-7", "L1234-9"]) + ") : un quart de " +
+        "mois de salaire par année d'ancienneté jusqu'à dix ans, un tiers au-delà (" +
+        ref(["R1234-2"]) + "), ou l'indemnité conventionnelle si elle est plus favorable." });
+    b.push({ k: "p", t: "Un salarié ne peut bénéficier que d'une seule indemnité de départ ou de mise " +
+      "à la retraite, attribuée lors de la première liquidation complète de sa retraite (" +
+      ref(["L1237-7"]) + ")." });
+    finDeContrat(b);
+    formule(b, civ);
+    if (fin) dates.push({ q: "Fin du préavis et du contrat", d: dateFrJour(fin),
+      f: preavisMot(pv.jours) + " à compter de la présentation de la lettre (" +
+        ref(["L1237-6", "L1234-1"]) + ")", c: "" });
+    return { blocs: b, dates: dates, alertes: alerte ? [alerte] : [],
+      loi: ["L1237-5", "L1237-6", "L1237-7", "D1237-2-1", "L1234-1", "L1234-9", "R1234-2",
+        "L1234-19", "L1234-20", "R1234-9"] };
+  }
+
+  /* ═══════════════ LA MISE À PIED CONSERVATOIRE ═══════════════════════
+
+     Elle n'est pas une sanction : c'est la mesure qui écarte le salarié de
+     l'entreprise le temps de la procédure. L'écran ne l'avait pas, et la
+     mise à pied qu'il proposait était la mise à pied disciplinaire, qui est
+     tout autre chose. Relevé le 26 septembre 2026.
+
+     « Lorsque les faits reprochés au salarié ont rendu indispensable une
+     mesure conservatoire de mise à pied à effet immédiat, aucune sanction
+     définitive relative à ces faits ne peut être prise sans que la procédure
+     prévue à l'article L. 1332-2 ait été respectée » (L. 1332-3). La lettre
+     dit donc les deux à la fois : l'écartement immédiat, et la convocation
+     qui suit.                                                              */
+  function miseAPiedConservatoire(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
+    var dm = deuxMois(v);
+    var refuse = refusEntretien(v, "L1332-2");
+    if (refuse) return { refus: refuse, loi: ["L1332-2", "L1332-3"] };
+    var b = [], dates = [];
+    b.push({ k: "t1", t: "Mise à pied conservatoire et convocation à entretien préalable" });
+    enTete(b, nomS, "votre mise à pied à titre conservatoire et votre convocation à un entretien préalable",
+      "Lettre remise en main propre contre décharge, ou lettre recommandée avec avis de réception");
+    griefsBlocs(b, v.griefs, (v.faits ? "Le " + dateFr(dateDe(v.faits)) + ", " : "") +
+      "[rappelez ici les faits, datés et circonstanciés : ce sont eux, et eux seuls, qui justifient " +
+      "de vous écarter immédiatement]");
+    b.push({ k: "p", t: "Ces faits rendent indispensable votre écartement immédiat de l'entreprise. " +
+      "Vous êtes en conséquence mis à pied à titre conservatoire à compter de la remise de la " +
+      "présente lettre, et jusqu'à la décision qui sera prise à l'issue de la procédure engagée." });
+    b.push({ k: "p", t: "Cette mise à pied n'est pas une sanction : c'est une mesure d'attente. " +
+      "Elle ne nous dispense pas de la procédure disciplinaire, et aucune décision définitive ne " +
+      "sera prise sur ces faits sans que cette procédure ait été respectée (" +
+      ref(["L1332-3", "L1332-2"]) + ")." });
+    b.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable qui se tiendra le " +
+      (v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]") + " à " +
+      (String(v.eHeure || "").trim() || "[heure]") + ", " +
+      (String(v.eLieu || "").trim() || "[lieu de l'entretien]") +
+      ". Au cours de cet entretien, nous vous exposerons les motifs de la mesure envisagée et " +
+      "recueillerons vos explications (" + ref(["L1332-2"]) + ")." });
+    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix " +
+      "appartenant au personnel de l'entreprise (" + ref(["L1332-2"]) + ")." });
+    b.push({ k: "p", t: "Si la sanction finalement prononcée n'est pas un licenciement pour faute " +
+      "grave ou lourde, la période de mise à pied vous sera payée." });
+    formule(b, civ);
+    dates.push(carteDeuxMois(dm, "Dernier jour pour engager les poursuites"));
+    var alertes = [];
+    var m = manques(v, true);
+    if (m.length) alertes.push(alerteManques(m, "lettre"));
+    if (dm.prescrit) alertes.push(alertePrescrit(dm));
+    var hb = alerteHorsTravail(v);
+    if (hb) alertes.push(hb);
+    alertes.push("La mise à pied conservatoire ne vaut que si l'écartement immédiat était " +
+      "indispensable, et elle se paie si la sanction finale n'est pas un licenciement pour " +
+      "faute grave ou lourde.");
+    return { blocs: b, dates: dates, alertes: alertes,
+      loi: ["L1331-1", "L1332-1", "L1332-2", "L1332-3", "L1332-4", "R1332-1"] };
+  }
+
   function pvCse(v) {
     var reunion = dateDe(v.reunion) || AUJOURDHUI;
     var limite = jour(reunion, 15);
@@ -2491,7 +2681,11 @@
       produire: autorisationConduite },
 
     avert: { titre: "Avertissement", champs: CHAMPS_SANCTION, produire: function (v) { return sanction(v, "avertissement"); } },
-    miseapied: { titre: "Mise à pied", champs: CHAMPS_ENTRETIEN, produire: function (v) { return sanction(v, "miseapied"); } },
+    miseapied: { titre: "Mise à pied disciplinaire", champs: CHAMPS_ENTRETIEN, produire: function (v) { return sanction(v, "miseapied"); } },
+    /* La mesure d'attente, qui n'est pas une sanction : elle écarte le salarié
+       le temps de la procédure, et la lettre porte les deux. */
+    conservatoire: { titre: "Mise à pied conservatoire", champs: CHAMPS_ENTRETIEN,
+      produire: miseAPiedConservatoire },
     /* SANS L'ANCIENNETÉ NI LE SALAIRE, LE PRÉAVIS ET L'INDEMNITÉ RESTENT DES
        CROCHETS. La lettre sortait avec « [durée] » et « [montant] euros », et
        le dirigeant repartait sans le délai dont il a besoin. Relevé le
@@ -2518,8 +2712,29 @@
         { id: "eHeure", nom: "Heure de l'entretien", t: "text", ph: "10 h 00" },
         { id: "eLieu", nom: "Lieu de l'entretien", t: "text", pleine: true, ph: "au siège de la société" }], produire: licenciementEco },
     fincdd: { titre: "Fin de CDD", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "serveur" }, { id: "terme", nom: "Date du terme", t: "date", defaut: iso(plusMois(AUJOURDHUI, 1)) }], produire: finCdd },
-    retraite: { titre: "Départ en retraite", champs: [NOM, { id: "reception", nom: "Demande reçue le", t: "date", defaut: iso(AUJOURDHUI) },
+    retraite: { titre: "Départ en retraite, demandé par le salarié", champs: [NOM, { id: "reception", nom: "Demande reçue le", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" }, { id: "salaire", nom: "Salaire mensuel brut (euros)", t: "number", ph: "2 000" }], produire: retraite },
+    /* LA MISE À LA RETRAITE, À L'INITIATIVE DE L'EMPLOYEUR. L'âge n'est pas
+       écrit : il est au code de la sécurité sociale, que l'application n'a pas
+       lu. C'est l'employeur qui porte la date à laquelle son salarié l'atteint,
+       et les deux délais de D. 1237-2-1 se comptent depuis elle. */
+    miseretraite: { titre: "Mise à la retraite, décidée par l'employeur",
+      champs: [NOM,
+        { id: "quoi", nom: "Ce que vous écrivez", t: "select", defaut: "question", opts: [
+          ["question", "La question préalable, trois mois avant l'anniversaire"],
+          ["notification", "La notification de mise à la retraite"]] },
+        { id: "anniversaire", nom: "Date à laquelle le salarié atteint l'âge du 1° de L. 351-8 du code de la sécurité sociale", t: "date", pleine: true },
+        { id: "interrogation", nom: "Date de la question posée par écrit", t: "date" },
+        { id: "reponse", nom: "Réponse du salarié", t: "select", defaut: "pas", opts: [
+          ["pas", "La question n'a pas encore été posée"],
+          ["oui", "Il a répondu qu'il souhaitait partir"],
+          ["non", "Il a répondu qu'il ne souhaitait pas partir"],
+          ["silence", "Il n'a pas répondu dans le mois"]] },
+        { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" },
+        { id: "statut", nom: "Statut", t: "select", opts: STATUTS, defaut: "employe" },
+        { id: "salaireRef", nom: "Salaire mensuel brut de référence (euros)", t: "number",
+          ph: "la moyenne des douze derniers mois, ou le tiers des trois derniers si elle est plus favorable" }],
+      produire: miseRetraite },
     fin: { titre: "Certificat de travail, solde de tout compte, attestation", ext: ["RH-CTL-FIN-01", "RH-CTL-FIN-02"], famille: "RH",
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieSortie", ph: "Lucie MARTIN" }, { id: "sortie", nom: "Date de sortie", t: "date", cle: "dateSortie", defaut: iso(AUJOURDHUI) },
                { id: "entree", nom: "Date d'entrée", t: "date", cle: "dateEmbauche" }],
@@ -2558,8 +2773,8 @@
        registre : c'est la seule. */
     ["Embaucher", ["cdi", "cdd", "partiel", "dpae", "vip"]],
     ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "entretien"]],
-    ["Sanctionner", ["avert", "miseapied", "faute"]],
-    ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "fin"]],
+    ["Sanctionner", ["avert", "miseapied", "conservatoire", "faute"]],
+    ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
     ["Collectif", ["convoc", "odj", "pv", "nao", "desaccord"]]
   ];
 
