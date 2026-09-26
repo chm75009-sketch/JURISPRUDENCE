@@ -286,7 +286,8 @@
   var SECRETAIRE = { id: "secretaire", nom: "Secrétaire du comité", t: "text", ph: "Madame Nadia ROUX" };
   var REUNION = { id: "dateReunion", nom: "Date de la réunion", t: "date", defaut: iso(jour(AUJOURDHUI, 7)) };
   var LIGNES = [
-    { cle: "elections", nom: "Élections du comité", seuil: 11, titre: "Élections", doc: "CSE-DOC-ELECTIONS", oui: "controler-cse.html?d=protocole",
+    { cle: "elections", nom: "Élections du comité", seuil: 11, titre: "Élections",
+      doc: ["CSE-DOC-ELECTIONS", "CSE-CTL-MEP-02"], oui: "controler-cse.html?d=protocole",
       champs: [
         { id: "dateInformationPersonnel", nom: "Information du personnel", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "dateReunionNegociation", nom: "Première réunion de négociation", t: "date", defaut: iso(jour(AUJOURDHUI, 30)) },
@@ -443,9 +444,18 @@
     else h += '<input type="' + c.t + '" data-ch="' + c.id + '" value="' + ech(v) + '" placeholder="' + ech(c.ph || "") + '">';
     return h + "</label>";
   }
+  /* UNE LIGNE PEUT APPELER DEUX DOCUMENTS.
+
+     Les élections en appellent deux : la note d'information et l'invitation
+     des syndicats d'un côté, le procès-verbal de carence et sa transmission à
+     l'inspection du travail de l'autre. Ce second ne s'ouvrait nulle part
+     depuis l'audit, alors qu'une entreprise de quatre-vingt-deux salariés
+     sans comité en a besoin le jour où le scrutin ne donne aucun candidat
+     (L. 2314-9). Relevé le 26 septembre 2026. */
   function rendreDoc() {
     var l = ACTIF; if (!l) return;
-    var gen = window.DocumentsProduits ? window.DocumentsProduits.pour(l.doc) : null;
+    var ids = [].concat(l.doc);
+    var gen = window.DocumentsProduits ? window.DocumentsProduits.pour(ids[0]) : null;
     var d = "";
     l.dates(V).forEach(function (x) { d += x; });
     $("d-dates").innerHTML = d;
@@ -457,7 +467,12 @@
       var fiche = {};
       Object.keys(V).forEach(function (k) { fiche[k] = V[k]; });
       fiche.effectif = eff;
-      var texte = gen.produire({ profil: profil, fiche: fiche, donnees: fiche, aujourdhui: AUJOURDHUI });
+      var ctxDoc = { profil: profil, fiche: fiche, donnees: fiche, aujourdhui: AUJOURDHUI };
+      var texte = gen.produire(ctxDoc);
+      ids.slice(1).forEach(function (id) {
+        var g2 = window.DocumentsProduits ? window.DocumentsProduits.pour(id) : null;
+        if (g2) texte += "\n\n" + g2.produire(ctxDoc);
+      });
       $("d-feuille").innerHTML = feuilleHtml(blocsDeTexte(texte));
       $("btn-word").disabled = false; $("btn-imprimer").disabled = false;
     }
