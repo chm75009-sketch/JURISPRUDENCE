@@ -85,7 +85,12 @@
     <span id="ent"></span>
   </div>
 
-  <p class="aide">Non = le document rempli s'ouvre. Oui = vous déposez le vôtre, il est contrôlé.</p>
+  <!-- « Oui = il est contrôlé » était faux pour les lignes qui n'ont pas de
+       page de contrôle : là, « Oui » ne fait qu'inscrire la réponse sur ce
+       poste. Le bandeau le dit, et chaque ligne sans contrôle porte la
+       mention. Relevé le 26 septembre 2026. -->
+  <p class="aide">Non = le document rempli s'ouvre. Oui = vous déposez le vôtre et il est
+    contrôlé, ou, quand aucun contrôle n'existe encore, votre réponse est seulement notée ici.</p>
 
   <div id="liste"></div>
 
@@ -170,8 +175,8 @@
        de plus, c'était la première étape. La ligne le dit, plutôt que de
        laisser croire à un document qui viendrait tout seul. Relevé le
        26 septembre 2026. */
-    { cle: "pse",        nom: "Licenciement économique et PSE", seuil: 50, cond: "si projet de licenciement",
-      dit: "commence par la qualification du motif économique",
+    { cle: "pse",        nom: "Un licenciement économique est-il envisagé ?", seuil: 50,
+      dit: "la réponse commence par la qualification du motif économique",
       non: "audit.html", oui: "audit-pse.html" },
     /* La commission santé-sécurité n'obéit pas au seul effectif : L. 2315-36
        (LEGIARTI000035626455, deux lectures concordantes le 15 septembre 2026)
@@ -260,6 +265,7 @@
           o.type = "button";
           o.className = "oui";
           o.textContent = "Oui";
+          o.title = "Aucune page ne contrôle encore cette pièce : votre réponse est notée sur ce poste.";
           o.addEventListener("click", function () {
             var v = lireVus();
             v[l.cle] = new Date().toISOString().slice(0, 10);
