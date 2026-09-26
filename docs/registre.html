@@ -197,8 +197,11 @@
       <input type="search" id="reg-cherche" placeholder="Chercher un nom, un emploi" aria-label="Chercher dans le registre">
       <p class="reg-compte" id="reg-compte"></p>
     </div>
-    <div id="registre"></div>
+    <!-- CE QUI MANQUE SE LIT EN TÊTE, PAS APRÈS QUATRE-VINGT-CINQ FICHES.
+         La liste des lignes à compléter était sous le registre : personne ne
+         descendait jusque-là. Relevé le 26 septembre 2026. -->
     <div id="synthese-registre"></div>
+    <div id="registre"></div>
     <div class="suite">
       <button type="button" class="doc-ligne" data-va="accueillis">Stagiaires et volontaires en service civique</button>
       <button type="button" class="doc-ligne" data-va="import">Reprendre un export de paie</button>
@@ -900,17 +903,33 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var incompletes = L.filter(function (s) { return manques(s).length; });
     var indecises = L.filter(function (s) { return !manques(s).length && aEtablir(s).length; });
     var sansDate = L.filter(function (s) { return vide(s.ent); }).length;
+    /* Quatre-vingt-cinq noms d'affilée ne se lisent pas : on en montre douze,
+       et le bouton met la liste sur ces lignes-là. */
+    var douze = function (l) {
+      return ech(l.slice(0, 12).map(nomDe).join(" · ")) + (l.length > 12 ? " …" : "");
+    };
     var sh = "";
     if (sansDate)
       sh += '<div class="avis att"><b>' + sansDate + " ligne(s) sans date d'entrée</b>" +
         "Elles ne peuvent pas être placées dans l'ordre des embauches qu'impose L. 1221-13 : elles sont en fin de registre.</div>";
     if (incompletes.length)
       sh += '<div class="avis non"><b>' + incompletes.length + " ligne(s) incomplète(s)</b>" +
-        ech(incompletes.map(nomDe).join(" · ")) + "</div>";
+        douze(incompletes) +
+        (FILTRE === "manque" ? "" : '<div class="barre" style="margin-top:10px">' +
+          '<button type="button" class="second" id="r-voir-manques" ' +
+          'style="min-height:38px;padding:6px 12px;width:auto">N\'afficher que celles-là</button></div>') +
+        "</div>";
     if (indecises.length)
       sh += '<div class="avis att"><b>' + indecises.length + " ligne(s) dont la situation n'est pas tranchée</b>" +
-        ech(indecises.map(nomDe).join(" · ")) + ". Ouvrez leurs mentions particulières.</div>";
+        douze(indecises) + ". Ouvrez leurs mentions particulières.</div>";
     $("synthese-registre").innerHTML = sh;
+    if ($("r-voir-manques")) $("r-voir-manques").addEventListener("click", function () {
+      FILTRE = "manque";
+      Array.prototype.forEach.call(document.querySelectorAll("#reg-filtres button"), function (x) {
+        x.classList.toggle("actif", x.getAttribute("data-f") === "manque");
+      });
+      rendreRegistre();
+    });
   }
 
   /* Ce qu'on rafraîchit quand un champ vient d'être quitté : l'en-tête de sa
