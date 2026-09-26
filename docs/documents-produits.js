@@ -1613,7 +1613,9 @@
       }
       L.push("");
       L.push("Les formalités de publicité ont été accomplies le [DATE DE PUBLICITÉ] et le");
-      L.push("dépôt au greffe du conseil de prud'hommes de [VILLE] le [DATE DE DÉPÔT].");
+      /* Le ressort est dans la fiche, il ne se redemande pas entre crochets. */
+      L.push("dépôt au greffe du conseil de prud'hommes de " +
+        org(p, "orgPrudhommes", "VILLE DU RESSORT") + " le [DATE DE DÉPÔT].");
       L.push("L'entrée en vigueur est fixée au [DATE], postérieure d'un mois à la");
       L.push("dernière en date de ces formalités.");
       L.push("");

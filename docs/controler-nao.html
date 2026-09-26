@@ -1375,7 +1375,11 @@
     L.push("s'il y a lieu ; la liste mentionnée à l'article D. 2231-6, s'il y a lieu.");
     L.push("Un récépissé est délivré au déposant.");
     L.push("");
-    L.push("Un exemplaire est remis au greffe du conseil de prud'hommes de [VILLE],");
+    /* Le conseil de prud'hommes du ressort est demandé sur la fiche : on le
+       reprend, et on ne retombe sur la ville de l'adresse qu'à défaut. */
+    var pf = (window.Profil && window.Profil.lire()) || {};
+    var greffe = String(pf.orgPrudhommes || "").trim() || villeDe(f.adresse);
+    L.push("Un exemplaire est remis au greffe du conseil de prud'hommes de " + greffe + ",");
     L.push("lieu de conclusion (article D. 2231-2, III).");
     if (f.nego === "remuneration") {
       L.push("");

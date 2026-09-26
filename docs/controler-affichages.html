@@ -284,6 +284,13 @@
   depuisProfil("siret", P.siret);
   depuisProfil("responsable", P.responsable);
   depuisProfil("ccnIntitule", P.conventionCollective);
+  /* CE QUE LA FICHE SAIT NE SE REDEMANDE PAS, ET NE SORT PAS ENTRE CROCHETS.
+     Les affiches portaient « [ unité de contrôle à indiquer ] » et « [ nom du
+     service à indiquer ] » alors que la fiche d'entreprise a le bloc
+     « organismes et interlocuteurs », qui promet d'être repris dans les
+     documents. Relevé le 26 septembre 2026. */
+  depuisProfil("inspUnite", P.orgInspection);
+  depuisProfil("spstNom", P.orgSanteTravail);
   if (!E.v.dateReleve) E.v.dateReleve = new Date().toISOString().slice(0, 10);
 
   var effectif = (function () {

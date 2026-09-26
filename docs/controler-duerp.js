@@ -240,6 +240,27 @@
     "transmis à l'inspection du travail (L. 2314-9) ; le document est alors tenu à disposition " +
     "dans les conditions de l'article R. 4121-4. Supprimez celle des deux phrases qui ne vous " +
     "concerne pas. ]";
+  /* Le comité, tel que la fiche le dit : consulté, ou absent avec sa carence.
+     Tant que la fiche ne répond pas, les deux phrases restent, comme avant. */
+  function reponseComite() {
+    return String((P && P.cseExiste) || "").trim().toLowerCase();
+  }
+  function phraseComite() {
+    var r = reponseComite();
+    var consulte = "<p>Le comité social et économique est consulté sur le présent document et sur ses mises à jour (L. 4121-3). Avis rendu le " +
+      marque("dateAvisCse", "date de l'avis") + ".</p>";
+    if (r.indexOf("non") === 0) {
+      var d = dateFr(P.cseCarence);
+      return "<p>Aucun comité social et économique n'est en place. Les élections ont été " +
+        "organisées et un procès-verbal de carence a été établi le " +
+        (d ? "<mark>" + ech(d) + "</mark>" : "<mark>[ date du procès-verbal de carence ]</mark>") +
+        ", porté à la connaissance des salariés et transmis à l'inspection du travail " +
+        "(L. 2314-9) ; le document est tenu à disposition dans les conditions de " +
+        "l'article R. 4121-4.</p>";
+    }
+    if (r.indexOf("oui") === 0) return consulte;
+    return consulte + "<p><mark>" + ech(CARENCE) + "</mark></p>";
+  }
   function marque(c, quoi) {
     var x = v(c);
     return x ? "<mark>" + ech(x) + "</mark>" : "<mark>[ " + ech(quoi) + " ]</mark>";
@@ -441,9 +462,12 @@
          de l'avis, ou celle du procès-verbal de carence pour l'entreprise qui
          a organisé les élections sans candidat. Demande de l'utilisatrice, le
          cas de TEC, dont les élections sont en cours. */
-      "<p>Le comité social et économique est consulté sur le présent document et sur ses mises à jour (L. 4121-3). Avis rendu le " +
-      marque("dateAvisCse", "date de l'avis") + ".</p>" +
-      "<p><mark>" + ech(CARENCE) + "</mark></p>" +
+      /* LA FICHE DIT S'IL Y A UN COMITÉ : LE DOCUMENT N'ÉCRIT PLUS LES DEUX
+         PHRASES À LA FOIS. Il sortait « Avis rendu le [ date de l'avis ] »
+         suivi du bloc entre crochets sur la carence, à charge pour le lecteur
+         de biffer la mauvaise, y compris quand la fiche portait déjà un
+         procès-verbal de carence daté. Relevé le 26 septembre 2026. */
+      phraseComite() +
       /* CE QUI EST EN VIGUEUR, ET CE QUI N'EXISTE PAS ENCORE : DEUX CHOSES.
 
          La phrase disait « jusqu'à l'entrée en vigueur de cette obligation ».
