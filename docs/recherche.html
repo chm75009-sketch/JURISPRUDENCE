@@ -581,6 +581,7 @@ async function appelApiDirect(chemin, params){
    personnelle, exactement comme avant. La règle « relaxed → écarté » vaut
    dans les deux cas : elle s'applique sur la réponse, pas sur le chemin. */
 let relaisJudi = null;   // null : inconnu · true : actif · false : non activé
+let origineRefusee = false;  // le relais ne connaît pas encore l'adresse de ce site
 async function appelApi(chemin, params){
   if(relaisJudi !== false){
     const minuteur = new AbortController();
@@ -599,6 +600,16 @@ async function appelApi(chemin, params){
     }finally{ clearTimeout(arret); }
     if(rep){
       if(rep.status===404 || rep.status===405 || rep.status===401 || rep.status===403){
+        /* CE QUI EST REFUSÉ, C'EST L'ADRESSE DU SITE, PAS LA CLÉ DE
+           L'UTILISATRICE. Le relais répond « origine refusée » quand il ne
+           connaît pas encore l'adresse depuis laquelle on l'appelle : l'écran
+           réclamait alors une clé Judilibre, que personne n'a à fournir, et
+           envoyait chercher ce qui n'y était pour rien. Relevé le
+           26 septembre 2026. */
+        if(rep.status===403){
+          const d403 = await rep.json().catch(()=>null);
+          if(d403 && d403.erreur === "ORIGINE_REFUSEE") origineRefusee = true;
+        }
         relaisJudi = false;                   // non déployé, ou clé du site refusée : repli
       }else if(rep.status===503){
         const d = await rep.json().catch(()=>null);
@@ -624,7 +635,19 @@ async function appelApi(chemin, params){
 
 function messageErreur(e){
   switch(e.message){
-    case "PAS_DE_CLE":  return "Configurez d'abord votre clé Judilibre.";
+    /* LE RELAIS N'A PAS RÉPONDU : CE N'EST PAS LA FAUTE DE L'UTILISATRICE.
+       L'écran répondait « Configurez d'abord votre clé Judilibre » quand le
+       relais de l'application refusait l'adresse du site : on envoyait
+       chercher une clé personnelle pour un défaut qui n'est pas ici. Le
+       navigateur ne peut pas lire la raison du refus, faute d'en-têtes sur la
+       réponse : on dit donc ce qu'on sait, et ce qui reste possible. Relevé le
+       26 septembre 2026. */
+    case "PAS_DE_CLE":  return "La recherche passe par le relais de l'application, qui n'a pas " +
+      "répondu depuis cette adresse. Il n'y a rien à corriger de votre côté : soit le service " +
+      "est rétabli et la recherche repart seule, soit vous renseignez votre propre clé Judilibre " +
+      "ci-dessus, qui interroge l'API officielle directement.";
+    case "ORIGINE_REFUSEE": return "Le relais de l'application n'autorise pas encore cette " +
+      "adresse. Il n'y a rien à renseigner de votre côté.";
     case "CLE_REFUSEE": return "Accès refusé : clé invalide, ou application PISTE non souscrite à l'API JUDILIBRE en production.";
     case "QUOTA":       return "Quota de requêtes atteint. Patientez quelques instants.";
     case "TROP_LONG":   return "L'API n'a pas répondu en quinze secondes. Vérifiez la connexion, si vous êtes sur un réseau d'entreprise ou un VPN, il bloque peut-être api.piste.gouv.fr.";
@@ -2036,7 +2059,10 @@ async function assistantMots(){
   if(sujet.length >= 3){ await vocabulaire(); poserMatieres(sujet); }
   /* Sans clé personnelle, on n'arrête que si le relais de l'application s'est
      déjà révélé non activé : sinon, il peut porter la connexion. */
-  if(!cle() && relaisJudi === false) return message("Renseignez d'abord votre clé Judilibre.", "err");
+  if(!cle() && relaisJudi === false)
+    return message("Le relais de l'application n'a pas répondu depuis cette adresse. Il n'y a " +
+      "rien à corriger de votre côté : soit le service est rétabli et la recherche repart seule, " +
+      "soit vous renseignez votre propre clé Judilibre ci-dessus.", "err");
   if(sujet.length < 3)
     return message("Décrivez d'abord votre sujet dans le champ ci-dessus.", "info");
 
