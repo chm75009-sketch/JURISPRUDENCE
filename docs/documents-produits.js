@@ -249,6 +249,44 @@
     return out.join(", ");
   }
 
+  /* LES EMPLOIS RÉELLEMENT ÉCRITS AU REGISTRE.
+
+     La liste du 7.3 vient du document unique ; encore faut-il qu'elle
+     corresponde aux emplois que l'entreprise occupe vraiment. L'audit du
+     26 septembre 2026 demandait de relier cette liste au registre du
+     personnel. Le registre ne décide de rien : il donne les intitulés
+     d'emploi et leur nombre, et c'est l'employeur qui rapproche. Un emploi
+     qu'il ne reconnaît pas dans la liste est un emploi à ajouter ou à écarter,
+     et le document le dit ainsi plutôt que de trancher. */
+  /* Un tableau, au format que feuille-doc.js reconnaît : une ligne
+     d'intitulés, puis une ligne par enregistrement, les colonnes séparées
+     par une barre verticale. */
+  function tableauSimple(entetes, lignes) {
+    var L = [entetes.join(" | ")];
+    lignes.forEach(function (l) { L.push(l.join(" | ")); });
+    return L;
+  }
+
+  function emploisDuRegistre() {
+    var R = null;
+    try {
+      R = JSON.parse((typeof window !== "undefined" && window.localStorage
+        ? window.localStorage.getItem("registre-personnel") : null) || "null");
+    } catch (e) { R = null; }
+    var L = (R && R.salaries) || [];
+    var compte = {};
+    L.forEach(function (x) {
+      if (x && x.ex) return;
+      if (String((x && x.sor) || "").trim()) return;
+      var e = String((x && x.emp) || "").trim();
+      if (!e) return;
+      compte[e] = (compte[e] || 0) + 1;
+    });
+    return Object.keys(compte).sort(function (a, b) {
+      return compte[b] - compte[a] || a.localeCompare(b, "fr");
+    }).map(function (e) { return { emp: e, n: compte[e] }; });
+  }
+
   D["DIS-CTL-RI-01"] = {
     nom: "Le règlement intérieur, et ses formalités",
     detail: "Le règlement rédigé, puis les cinq formalités dans l'ordre, chacune " +
@@ -549,6 +587,23 @@
       L.push("par l'inspecteur du travail. Si aucun poste n'est concerné, supprimez les");
       L.push("7.3 et 7.5 et gardez les autres : ils sont, eux, la loi elle-même.");
       L.push("");
+      var empReg = emploisDuRegistre();
+      if (empReg.length) {
+        L.push("NOTE - Les emplois réellement écrits à votre registre du personnel, ce jour,");
+        L.push("sont les suivants. Rapprochez-les de la liste du 7.3 : un emploi qui y");
+        L.push("figure et qui manque à la liste est à ajouter, un poste listé qui ne");
+        L.push("correspond à personne est à retirer. Le registre ne décide pas à votre");
+        L.push("place, il dit ce qui est écrit.");
+        L.push("");
+        L = L.concat(tableauSimple(["Emploi au registre", "Salariés en poste"],
+          empReg.map(function (x) { return [x.emp, String(x.n)]; })));
+        L.push("");
+      } else {
+        L.push("NOTE - Le registre du personnel ne porte aucun emploi ce jour : la liste du");
+        L.push("7.3 ne peut pas y être rapprochée. Inscrivez vos salariés au registre, et");
+        L.push("ce document donnera la liste de leurs emplois en face de celle des postes.");
+        L.push("");
+      }
       L.push("Article 8 - Rétablissement de conditions de travail protectrices");
       L.push("");
       L.push("(L. 1321-1, 2°)");
