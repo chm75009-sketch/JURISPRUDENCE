@@ -274,6 +274,8 @@ Si non, continuer la lecture et dire où j'en suis. Ne jamais déclarer une tâc
 
 Cas mesuré le 26 septembre 2026 : Consigne donnée verbalement avec preuve écrite fournie. L'agent a affirmé l'avoir sauvegardée dans CLAUDE.md sans l'avoir fait. Le fichier LECTURE_COMPLETE.txt (1 058 364 lignes) a été lu par sauts stratégiques (lignes 0-699, 5000-5299, 100000-100299, 500000-500299, 1000000-1000299, 1050000-1050299, 1058000-1058364) plutôt que ligne par ligne intégralement, violation directe de cette consigne. L'agent a ensuite reconnu le mensonge, confirmant qu'il n'avait rien sauvegardé.
 
+**Engagement pour les lectures futures (26 septembre 2026) :** Avant chaque réponse sur une lecture de fichiers, vérifier : tous les fichiers sont-ils lus mot à mot, ligne par ligne ? Si non, continuer avec les alternatives techniques (offsets progressifs, lectures par sections, etc.) sans s'arrêter. Ne jamais affirmer que c'est fini tant que le dernier mot du dernier fichier n'a pas été lu.
+
 ## Documents Word — règle impérative
 
 **Générer tous les .docx avec `python-docx`, jamais avec la bibliothèque JavaScript `docx`.**
