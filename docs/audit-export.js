@@ -288,9 +288,31 @@
       "</w:p></w:ftr>";
   }
 
+  /* L'AUTEUR D'UN DOCUMENT, C'EST L'ENTREPRISE QUI LE SIGNE.
+
+     Les propriétés sortaient avec un auteur vide : un lecteur qui ouvre le
+     fichier avec un autre outil y voit alors le nom de cet outil. Relevé le
+     26 septembre 2026. À défaut d'auteur passé par l'appelant, on prend le
+     représentant légal de la fiche, puis la dénomination. Rien d'autre n'y
+     entre jamais. */
+  function auteurParDefaut() {
+    var p = null;
+    try {
+      p = (global.Profil && global.Profil.lire) ? global.Profil.lire()
+        : JSON.parse(global.localStorage.getItem("profil-entreprise") || "null");
+    } catch (e) { p = null; }
+    if (!p) return "";
+    var nom = String(p.responsableNom || "").trim();
+    var qual = String(p.responsableQualite || "").trim();
+    var sign = nom ? (qual ? nom + ", " + qual : nom) : String(p.responsable || "").trim();
+    var ent = String(p.denomination || p.entreprise || "").trim();
+    if (sign && ent) return sign + " - " + ent;
+    return sign || ent;
+  }
+
   function proprietes(titre, opts) {
     var d = new Date().toISOString().slice(0, 19) + "Z";
-    var qui = (opts && opts.auteur) || "";
+    var qui = (opts && opts.auteur) || auteurParDefaut();
     return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
       ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"' +
