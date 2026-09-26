@@ -1581,8 +1581,19 @@
           : ". ") +
         "Elle peut imposer des mentions que ce texte ne porte pas, encadrer la");
       L.push("procédure disciplinaire plus strictement que la loi, ou prévoir une");
-      L.push("commission de discipline. L'application ne lit pas les conventions");
-      L.push("collectives : cette lecture vous revient, et elle est indispensable.");
+      /* Pour la convention des transports routiers, le texte reprend déjà ses
+         délais d'absence et l'information sur le permis : dire que
+         l'application « ne lit pas les conventions » contredisait le
+         règlement lui-même (relevé le 26 septembre 2026). */
+      if (idccDe(p) === "16") {
+        L.push("commission de discipline. Les délais d'absence des articles 15 et 16 des");
+        L.push("clauses communes et l'information sur le permis de l'accord du 13 novembre");
+        L.push("1992 sont déjà repris dans ce texte : vérifiez qu'aucun avenant ne les a");
+        L.push("modifiés depuis, et cherchez ce que la convention ajoute d'autre.");
+      } else {
+        L.push("commission de discipline. L'application ne lit pas les conventions");
+        L.push("collectives : cette lecture vous revient, et elle est indispensable.");
+      }
       L.push("");
       L.push("Vos accords d'entreprise et vos usages ensuite. Un accord sur le temps de");
       L.push("travail, le télétravail ou le droit à la déconnexion peut contredire une");
