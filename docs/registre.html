@@ -693,10 +693,21 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       return !s.ex && (!vide(s.nom) || !vide(s.pre)) && vide(s.sor);
     }).length;
   }
+  /* DEUX NOMBRES, PAS UN.
+
+     L'en-tête reprenait l'effectif de la fiche, et affichait encore 82 après
+     deux sorties saisies. Les inscrits et ceux qui sont en poste ne sont pas
+     le même nombre, et celui qui compte se lit à une date : ils sont donc
+     écrits tous les deux, avec le jour. Relevé le 26 septembre 2026. */
   function rappelFiche() {
     var t = E.cadre.nom || "", n = Number(E.cadre.effectif);
+    var inscrits = E.salaries.filter(function (s) {
+      return !s.ex && (!vide(s.nom) || !vide(s.pre)); }).length;
     var p = enPoste();
-    t += (t ? " · " : "") + p + " salarié" + (p > 1 ? "s" : "") + " en poste au registre";
+    var j = new Date();
+    var jour = ("0" + j.getDate()).slice(-2) + "/" + ("0" + (j.getMonth() + 1)).slice(-2) + "/" + j.getFullYear();
+    t += (t ? " · " : "") + inscrits + " inscrit" + (inscrits > 1 ? "s" : "") +
+      " · " + p + " en poste au " + jour;
     if (isFinite(n) && String(E.cadre.effectif == null ? "" : E.cadre.effectif).trim() !== "" && n !== p)
       t += " · fiche d'entreprise : " + n;
     if (!vide(E.cadre.etab)) t += " · " + E.cadre.etab;
@@ -1180,7 +1191,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     { c: "sexe", lib: "Sexe", mots: ["sexe", "genre", "civilite"] },
     { c: "emp",  lib: "Emploi", mots: ["emploi", "poste", "fonction", "metier"] },
     { c: "qua",  lib: "Qualification", mots: ["qualification", "classification", "coefficient", "niveau", "categorie"] },
-    { c: "ent",  lib: "Date d'entrée", mots: ["date d entree", "date entree", "entree", "embauche", "anciennete", "debut"], hors: ["sortie"] },
+    /* « autorisation » et « demande » écartent la colonne du 7°, qui parle
+       elle aussi d'embauche sans être une date d'entrée. */
+    { c: "ent",  lib: "Date d'entrée", mots: ["date d entree", "date entree", "entree", "embauche", "anciennete", "debut"],
+      hors: ["sortie", "autorisation", "demande"] },
     { c: "sor",  lib: "Date de sortie", mots: ["date de sortie", "sortie", "depart", "fin de contrat"] },
     { c: "_nat", lib: "Nature du contrat (propose la mention de D. 1221-23)", mots: ["type de contrat", "nature du contrat", "contrat", "statut"] },
     { c: "_tps", lib: "Temps de travail (propose « salarié à temps partiel »)", mots: ["temps de travail", "quotite", "horaire", "heures", "duree du travail", "temps"] },
@@ -1917,21 +1931,43 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      et la feuille des salariés vient en premier, parce que c'est elle que le
      lecteur ouvre. Aucun titre ne la précède : une ligne de titre serait
      prise pour les en-têtes au retour. */
+  /* LES TREIZE INDICATIONS, TOUTES, ET DE VRAIES DATES.
+
+     Le classeur s'arrêtait au 8° et écrivait ses dates en texte : rien ne se
+     triait, aucune ancienneté ne se calculait, et les mentions des 10°, 11°
+     et 13° manquaient. Le numéro d'ordre manquait aussi, alors que L. 1221-13
+     fait l'ordre des embauches. Relevé le 26 septembre 2026. */
+  var jourExcel = function (v) {
+    var m = String(v || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : "";
+  };
   var COLONNES_XLSX = [
+    /* Le numéro d'ordre est un rang, pas une quantité : il s'écrit en toutes
+       lettres de chiffres, sans décimales. */
+    ["N°", function (s, i) { return String(i); }],
     ["Nom", function (s) { return s.nom; }],
     ["Prénoms", function (s) { return s.pre; }],
-    ["Nationalité", function (s) { return s.nat; }],
-    ["Date de naissance", function (s) { return s.nais; }],
-    ["Sexe", function (s) { return s.sexe; }],
-    ["Emploi", function (s) { return s.emp; }],
-    ["Qualification", function (s) { return s.qua; }],
-    ["Date d'entrée", function (s) { return s.ent; }],
-    ["Date de sortie", function (s) { return s.sor; }],
-    ["Nature du contrat", function (s) { return libelleNature(s.nature); }],
-    ["Temps de travail", function (s) {
+    ["Nationalité (1°)", function (s) { return s.nat; }],
+    ["Date de naissance (2°)", function (s) { return jourExcel(s.nais); }],
+    ["Sexe (3°)", function (s) { return s.sexe; }],
+    ["Emploi (4°)", function (s) { return s.emp; }],
+    ["Qualification (5°)", function (s) { return s.qua; }],
+    ["Date d'entrée (6°)", function (s) { return jourExcel(s.ent); }],
+    ["Date de sortie (6°)", function (s) { return jourExcel(s.sor); }],
+    ["Autorisation requise : date (7°)", function (s) { return jourExcel(s.autD); }],
+    ["À défaut, date de la demande (7°)", function (s) { return jourExcel(s.autDem); }],
+    ["Type du titre de travail (8°)", function (s) { return s.titT; }],
+    ["Numéro d'ordre du titre (8°)", function (s) { return s.titN; }],
+    ["Copie annexée (D. 1221-24)", function (s) {
+      return s.etr === "oui" ? (s.titCop === "oui" ? "Oui" : "Non") : ""; }],
+    ["Nature du contrat (9°, 13°)", function (s) { return libelleNature(s.nature); }],
+    ["Entreprise de travail temporaire : nom (10°)", function (s) { return s.ettN; }],
+    ["Entreprise de travail temporaire : adresse (10°)", function (s) { return s.ettA; }],
+    ["Groupement d'employeurs : dénomination (11°)", function (s) { return s.gpeN; }],
+    ["Groupement d'employeurs : adresse (11°)", function (s) { return s.gpeA; }],
+    ["Temps de travail (12°)", function (s) {
       return s.part === "partiel" ? "Temps partiel" : (s.part === "complet" ? "Temps complet" : ""); }],
-    ["Type du titre de travail", function (s) { return s.titT; }],
-    ["Numéro d'ordre du titre", function (s) { return s.titN; }],
+    ["Mention portée le (L. 1221-13)", function (s) { return jourExcel(s.insc); }],
   ];
   function libelleNature(v) {
     var l = "";
@@ -1940,13 +1976,16 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   }
   function classeurRegistre() {
     if (!window.TableurExport) return;
-    var salaries = E.salaries.filter(function (s) {
+    /* L'ordre des embauches, celui de L. 1221-13, est celui du classeur : le
+       numéro d'ordre n'aurait aucun sens sur une liste dans le désordre. */
+    var salaries = ordonnes().filter(function (s) {
       return !vide(s.nom) || !vide(s.pre) || !vide(s.emp);
     });
     var lignes = [COLONNES_XLSX.map(function (c) { return c[0]; })];
-    salaries.forEach(function (s) {
+    salaries.forEach(function (s, i) {
       lignes.push(COLONNES_XLSX.map(function (c) {
-        var v = c[1](s);
+        var v = c[1](s, i + 1);
+        if (v instanceof Date || typeof v === "number") return v;
         return v == null ? "" : String(v);
       }));
     });
@@ -1975,9 +2014,75 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   $("r-excel").addEventListener("click", classeurRegistre);
   $("i-excel").addEventListener("click", classeurRegistre);
 
+  /* LE REGISTRE EN WORD : UN TABLEAU, PAS NEUF CENT QUATRE-VINGT-DIX-SEPT LIGNES.
+
+     Le Word reprenait le texte de l'écran, ligne à ligne : neuf mentions
+     empilées par salarié, des dates au format informatique, l'établissement
+     entre crochets alors que la fiche le connaît, et, à la fin, ce que
+     l'application dit d'elle-même. Rien de tout cela n'est présentable à un
+     contrôle. Il sort maintenant comme un registre se tient : une ligne par
+     salarié, en paysage, dates en jour/mois/année. Ce que l'écran dit des
+     manques reste à l'écran. Relevé le 26 septembre 2026. */
+  function itemsRegistre() {
+    var lignes = ordonnes();
+    var rows = lignes.map(function (s, i) { return ligneModele(s, i + 1); });
+    var p = E.profil || {};
+    var qui = [E.cadre.nom || p.denomination || "", E.cadre.etab, E.cadre.adresse || p.adresse,
+      p.siret ? "SIRET " + p.siret : ""].filter(function (x) { return String(x || "").trim(); });
+    var A = E.accueillis.slice().sort(function (a, b) {
+      if (vide(a.arr) && vide(b.arr)) return 0;
+      if (vide(a.arr)) return 1;
+      if (vide(b.arr)) return -1;
+      return a.arr < b.arr ? -1 : (a.arr > b.arr ? 1 : 0);
+    });
+    var t = E.tenue;
+    var tenue = ["Support : " + (t["t-support"] === "papier" ? "papier"
+      : (t["t-support"] === "substitution" ? "support de substitution" : "à préciser")) + ".",
+      "Lieu de consultation : " + (vide(t["t-lieu"]) ? "à préciser" : t["t-lieu"]) + ".",
+      vide(t["t-depuis"]) ? "Date à laquelle le registre est tenu : à préciser."
+        : "Tenu depuis le " + enFr(t["t-depuis"]) + "."];
+    if (t["t-support"] === "substitution")
+      tenue.push("Avis du comité social et économique du " +
+        (vide(t["t-avis"]) ? "à dater" : enFr(t["t-avis"])) + ", adressé à l'inspection du travail le " +
+        (vide(t["t-envoi"]) ? "à dater" : enFr(t["t-envoi"])) + " (D. 1221-27).");
+    var out = [
+      /* Le titre est écrit par le générateur : le répéter ici le ferait
+         paraître deux fois. */
+      { k: "sur", t: qui.join(" · ") || "[dénomination]" },
+      { k: "p", t: "Un registre unique du personnel est tenu dans tout établissement où sont " +
+        "employés des salariés. Les noms et prénoms de tous les salariés y sont inscrits dans " +
+        "l'ordre des embauches, au moment de l'embauche et de façon indélébile (L. 1221-13). " +
+        "Les colonnes qui suivent sont les indications complémentaires de l'article D. 1221-23." },
+      { k: "table", head: COL_MODELE, rows: rows.length ? rows : [["1", "", "", "", "", "", "", "", "", "", ""]] },
+      { k: "h1", t: "Partie spécifique : stagiaires et volontaires en service civique" },
+      { k: "p", t: "Leurs nom et prénoms sont inscrits dans l'ordre d'arrivée (L. 1221-13). Pour " +
+        "chaque stagiaire, l'article D. 1221-23-1 ajoute les dates de début et de fin du stage, " +
+        "les nom et prénoms du tuteur et le lieu de présence." },
+      { k: "table",
+        head: ["N°", "Nom", "Prénoms", "Qualité", "Arrivée", "Début", "Fin", "Tuteur", "Lieu de présence"],
+        rows: A.length ? A.map(function (a, i) {
+          return [String(i + 1), a.nom || "", a.pre || "",
+            a.qualite === "stagiaire" ? "Stagiaire"
+              : (a.qualite === "volontaire" ? "Volontaire en service civique" : ""),
+            enFr(a.arr), enFr(a.deb), enFr(a.fin), a.tuteur || "", a.lieu || ""];
+        }) : [["1", "", "", "", "", "", "", "", ""]] },
+      { k: "h1", t: "La tenue" },
+      { k: "p", t: tenue.join(" ") },
+      { k: "p", t: "Le registre est tenu à la disposition du comité social et économique et des " +
+        "fonctionnaires et agents chargés de veiller à l'application du code du travail et du " +
+        "code de la sécurité sociale (L. 1221-15)." },
+    ];
+    var etr = E.salaries.filter(function (s) { return s.etr === "oui"; });
+    if (etr.length)
+      out.push({ k: "p", t: "Une copie des titres valant autorisation de travail des " +
+        etr.length + " salarié(s) étranger(s) inscrits est annexée au registre et rendue " +
+        "accessible dans les mêmes conditions (D. 1221-24)." });
+    return out;
+  }
+
   $("d-word").addEventListener("click", function () {
-    var items = blocs().filter(function (b) { return b.k !== "vide" && b.k !== "t1"; });
-    var octets = window.AuditExport.docx(items, "Registre unique du personnel");
+    var octets = window.AuditExport.docx(itemsRegistre(), "Registre unique du personnel",
+      { paysage: true });
     var nom = "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".docx";
     var type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     /* La version téléchargée est gardée par base-documents.js, qui enrobe

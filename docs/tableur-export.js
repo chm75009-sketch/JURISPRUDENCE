@@ -98,6 +98,9 @@
      quadrillage et non un tableau. */
   var STYLES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
     '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+    /* Le format des dates, écrit une fois : jour/mois/année, comme on les lit
+       ici. Sans lui, une vraie date apparaîtrait en nombre de jours. */
+    '<numFmts count="1"><numFmt numFmtId="164" formatCode="dd/mm/yyyy"/></numFmts>' +
     '<fonts count="3"><font><sz val="11"/><name val="Calibri"/></font>' +
     '<font><b/><sz val="13"/><color rgb="FF1F3864"/><name val="Calibri"/></font>' +
     '<font><b/><sz val="11"/><name val="Calibri"/></font></fonts>' +
@@ -110,7 +113,7 @@
     '<top style="medium"><color rgb="FF4A5568"/></top><bottom style="medium"><color rgb="FF4A5568"/></bottom>' +
     '<diagonal/></border></borders>' +
     '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
-    '<cellXfs count="8">' +
+    '<cellXfs count="10">' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
     '<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>' +
     '<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
@@ -124,6 +127,12 @@
        26 septembre 2026. */
     '<xf numFmtId="2" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
     '<xf numFmtId="2" fontId="0" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
+    /* LES DATES SONT DES DATES. Styles 8 et 9 : les mêmes cellules cadrées
+       que 3 et 5, au format jour/mois/année. Une date écrite en texte ne se
+       trie pas et ne se soustrait pas : un registre exporté ne permettait
+       aucun calcul d'ancienneté. Relevé le 26 septembre 2026. */
+    '<xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
+    '<xf numFmtId="164" fontId="0" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
     '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
 
   /* La ligne d'en-tête d'une feuille : la première qui porte au moins quatre
@@ -146,7 +155,13 @@
       largeurs = [];
       for (var j = 0; j < nbCol; j++) {
         var w = 10;
-        lignes.forEach(function (l, i) { if (i >= tete && l && l[j] != null && pleines(l) > 1) w = Math.max(w, Math.min(48, String(l[j]).length + 2)); });
+        lignes.forEach(function (l, i) {
+          if (!(i >= tete && l && l[j] != null && pleines(l) > 1)) return;
+          /* Une date compte pour ce qu'elle affiche, jj/mm/aaaa, et non pour
+             la longueur de son écriture interne. */
+          var lg = l[j] instanceof Date ? 10 : String(l[j]).length;
+          w = Math.max(w, Math.min(48, lg + 2));
+        });
         largeurs.push(w);
       }
     }
@@ -172,6 +187,15 @@
         if (typeof cel === "number" && isFinite(cel)) {
           var sn = style === 5 ? 7 : (style === 3 ? 6 : style);
           x += '<c r="' + ref + '" s="' + sn + '"><v>' + cel + "</v></c>";
+          continue;
+        }
+        /* Une date passée comme date s'écrit en date : elle se trie, et la
+           différence entre deux dates donne des jours. */
+        if (cel instanceof Date && isFinite(cel.getTime())) {
+          var sd = style === 5 ? 9 : (style === 3 ? 8 : style);
+          var serie = Math.round((Date.UTC(cel.getFullYear(), cel.getMonth(), cel.getDate()) -
+            Date.UTC(1899, 11, 30)) / 864e5);
+          x += '<c r="' + ref + '" s="' + sd + '"><v>' + serie + "</v></c>";
           continue;
         }
         x += '<c r="' + ref + '" s="' + style + '" t="inlineStr"><is><t xml:space="preserve">' + ech(cel) + "</t></is></c>";
