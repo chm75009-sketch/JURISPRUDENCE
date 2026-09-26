@@ -32,9 +32,9 @@
   var CLE_MODELE = "assistant-modele";
   var MODELE_DEFAUT = "claude-opus-5";
   var MODELES = [
-    { id: "claude-opus-5", nom: "Opus (défaut)" },
-    { id: "claude-sonnet-5", nom: "Sonnet" },
-    { id: "claude-haiku-4-5", nom: "Haiku" }
+    { id: "claude-opus-5", nom: "Précis (défaut)" },
+    { id: "claude-sonnet-5", nom: "Équilibré" },
+    { id: "claude-haiku-4-5", nom: "Rapide" }
   ];
   var MAX_TOKENS = 16000;
   var MAX_TOURS = 8;                              // garde-fou de la boucle d'outils
