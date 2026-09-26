@@ -91,6 +91,14 @@
     justify-content:space-between;gap:12px;align-items:baseline}
   .rb>.tt h3{margin:0;font:600 16px/1.3 system-ui;color:var(--encre)}
   .rb>.tt .n{font-size:13px;color:var(--texte-2);white-space:nowrap}
+  /* Une case renseignée se distingue d'une case vide au premier coup d'œil. */
+  .g td.vide[contenteditable]{min-width:90px;cursor:text}
+  .g td.vide[contenteditable]:focus{outline:2px solid var(--accent);outline-offset:-2px;background:#fff}
+  .g td.remplie{background:var(--vert-clair,#eef7ee);color:var(--encre,#16181d)}
+  .suite{margin:16px 0 0;display:flex;flex-direction:column;gap:8px}
+  .suite .doc-ligne{display:block;padding:14px;border:1px solid var(--filet);border-radius:10px;
+    background:var(--surface);color:var(--encre,#16181d);text-decoration:none;font:600 16px/1.35 system-ui}
+  .doux{color:var(--texte-2);font-size:15px;line-height:1.5;margin:10px 0 0}
   .grille-tab{overflow:auto;max-height:70vh;-webkit-overflow-scrolling:touch}
   table.g{border-collapse:separate;border-spacing:0;font-size:14px;background:var(--surface);min-width:100%}
   table.g th,table.g td{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);
@@ -164,7 +172,16 @@
         <select id="acc"><option value="non">non</option><option value="oui">oui</option></select></label>
     </form>
 
+    <p class="doux" id="remplissage"></p>
     <div id="rubriques"></div>
+
+    <!-- LES FORMALITÉS SOUS LA GRILLE. La base ne vaut que mise à disposition
+         du comité, tenue à jour et accessible : le parcours les conduit une
+         par une. Relevé le 26 septembre 2026. -->
+    <div class="suite">
+      <a class="doc-ligne" href="parcours.html?p=bdese&amp;faire=1">Les formalités de la base : mise à disposition du comité, accès, mise à jour</a>
+      <a class="doc-ligne" href="controler-bdese.html">Contrôler une base existante, déposée</a>
+    </div>
 
     <details class="loi"><summary>Voir le texte de loi</summary><div id="loi"></div></details>
   </section>
@@ -303,6 +320,37 @@
   }
 
   /* ---------------------------------------------------------------- */
+  /* LA GRILLE SE REMPLIT ICI, ET CE QUI EST SAISI PART DANS LE CLASSEUR.
+
+     Six cent deux cases s'affichaient vides et le restaient : l'écran ne
+     savait que lire. « Non » doit ouvrir la construction, pas un constat.
+     Chaque case est donc écrite ici et gardée sur ce poste, sous la clé
+     « bdese-contenu » ; le classeur téléchargé les reprend. Relevé le
+     26 septembre 2026. */
+  var CLE_CONTENU = "bdese-contenu";
+  var CONTENU = (function () {
+    try { return JSON.parse(localStorage.getItem(CLE_CONTENU) || "{}") || {}; }
+    catch (e) { return {}; }
+  })();
+  function garderContenu() {
+    try { localStorage.setItem(CLE_CONTENU, JSON.stringify(CONTENU)); } catch (e) {}
+  }
+  /* La clé d'une case : la rubrique, l'information, la colonne. Elle tient à
+     ce que l'information dit, non à son rang : ajouter une ligne au-dessus ne
+     déplace pas ce qui est déjà écrit. */
+  function cleCase(rubrique, info, colonne) {
+    return rubrique + "|" + String(info).slice(0, 120) + "|" + colonne;
+  }
+  function valeurCase(rubrique, info, colonne) {
+    var v = CONTENU[cleCase(rubrique, info, colonne)];
+    return v == null ? "" : String(v);
+  }
+  function compterRemplies() {
+    var n = 0;
+    Object.keys(CONTENU).forEach(function (k) { if (String(CONTENU[k]).trim()) n++; });
+    return n;
+  }
+
   /* Le classeur à l'écran : un tableau par rubrique, qui défile dans son
      cadre. La colonne de l'information reste fixée à gauche pendant que les
      six années défilent. Chaque réponse portée en tête le redessine. */
@@ -330,7 +378,18 @@
             corps += '<tr class="suj"><td class="info">' + ech(l.sujet) + '</td><td colspan="' + (nbCol - 1) + '"></td></tr>';
         }
         corps += '<tr><td class="info">' + ech(l.info) + "</td>" +
-          CTX.mil.map(function () { return '<td class="vide"></td>'; }).join("") + '<td class="vide"></td></tr>';
+          CTX.mil.map(function (m) {
+            var v = valeurCase(r.n, l.info, String(m.annee));
+            return '<td class="vide' + (v ? " remplie" : "") + '" contenteditable="true" ' +
+              'data-r="' + r.n + '" data-i="' + ech(String(l.info).slice(0, 120)) + '" ' +
+              'data-col="' + m.annee + '">' + ech(v) + "</td>";
+          }).join("") +
+          (function () {
+            var v = valeurCase(r.n, l.info, "raison");
+            return '<td class="vide' + (v ? " remplie" : "") + '" contenteditable="true" ' +
+              'data-r="' + r.n + '" data-i="' + ech(String(l.info).slice(0, 120)) + '" ' +
+              'data-col="raison">' + ech(v) + "</td>";
+          })() + "</tr>";
       });
       return '<div class="rb"><div class="tt"><h3>' + r.n + ". " + ech(r.titre) + "</h3>" +
         '<span class="n">' + r.lignes.length + " ligne" + (r.lignes.length > 1 ? "s" : "") + "</span></div>" +
@@ -338,8 +397,46 @@
         "</tbody></table></div></div>";
     }).join("");
 
+    cablerCases();
+    direRemplissage();
+
     $("#champs").querySelector("label:nth-child(1)").classList.toggle("attend", !CTX.ent);
     $("#champs").querySelector("label:nth-child(2)").classList.toggle("attend", CTX.eff === null);
+  }
+
+  function cablerCases() {
+    var cases = $("#rubriques").querySelectorAll("td[contenteditable]");
+    Array.prototype.forEach.call(cases, function (td) {
+      td.addEventListener("input", function () {
+        var t = td.textContent.replace(/\s+/g, " ").trim();
+        var k = cleCase(td.getAttribute("data-r"), td.getAttribute("data-i"), td.getAttribute("data-col"));
+        if (t) CONTENU[k] = t; else delete CONTENU[k];
+        td.classList.toggle("remplie", !!t);
+        garderContenu();
+        direRemplissage();
+      });
+      /* Un retour à la ligne dans une case de tableau ne sert à rien : il
+         passe à la case suivante. */
+      td.addEventListener("keydown", function (ev) {
+        if (ev.key !== "Enter") return;
+        ev.preventDefault();
+        var L = Array.prototype.slice.call($("#rubriques").querySelectorAll("td[contenteditable]"));
+        var i = L.indexOf(td);
+        if (i >= 0 && L[i + 1]) L[i + 1].focus();
+      });
+    });
+  }
+  function direRemplissage() {
+    var z = $("#remplissage");
+    if (!z) return;
+    var total = 0;
+    rubriques(CTX).forEach(function (r) { total += r.lignes.length * (CTX.mil.length + 1); });
+    var n = compterRemplies();
+    z.textContent = n
+      ? n + " case" + (n > 1 ? "s" : "") + " renseignée" + (n > 1 ? "s" : "") + " sur " + total +
+        ". Ce qui est écrit ici est gardé sur ce poste et repris dans le classeur."
+      : "Aucune case n'est encore renseignée : écrivez directement dans le tableau, " +
+        "les " + total + " cases sont éditables et gardées sur ce poste.";
   }
 
   /* ---------------------------------------------------------------- */
@@ -561,7 +658,9 @@
     return [couverture].concat(rubriques(CTX).map(function (r) {
       var lignes = [[r.titre].concat(new Array(head.length - 1).fill("")), head];
       r.lignes.forEach(function (l) {
-        lignes.push([l.section, l.sujet, l.info].concat(new Array(vides).fill("")));
+        lignes.push([l.section, l.sujet, l.info]
+          .concat(CTX.mil.map(function (m) { return valeurCase(r.n, l.info, String(m.annee)); }))
+          .concat([valeurCase(r.n, l.info, "raison")]));
       });
       return { titre: r.n + " " + r.titre, lignes: lignes, largeurs: largeurs };
     }));
