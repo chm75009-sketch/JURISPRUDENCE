@@ -112,8 +112,19 @@
       } else if (/https?:\/\//.test(texte) && para.length === 1) {
         b.push({ k: "lien", t: texte });
       } else if (para.every(function (l) { return /^\s{2,}/.test(l) || /^\s*[-•·]\s/.test(l); })) {
+        /* UNE CITATION COUPÉE À SOIXANTE-DOUZE SIGNES N'EST PAS UNE LISTE.
+
+           Les générateurs écrivent leur texte en lignes courtes, en retrait.
+           Chacune devenait une puce : une citation de quatre lignes sortait
+           en quatre puces, et une longue en trente. Une ligne sans marque,
+           qui commence en minuscule et suit une ligne inachevée, continue la
+           précédente : c'est une coupure de mise en page, pas un élément de
+           plus. Relevé le 26 septembre 2026. */
+        var items = [];
         para.forEach(function (l) {
-          if (/https?:\/\//.test(l)) b.push({ k: "lien", t: l.trim().replace(/^[-•·]\s*/, "") });
+          var brut = l.trim();
+          var lien = /https?:\/\//.test(brut);
+          var puce = /^[-•·]\s*/.test(brut);
           /* UNE LISTE DÉJÀ NUMÉROTÉE NE PREND PAS DE PUCE EN PLUS.
 
              L'échelle des sanctions du règlement intérieur est écrite « 1. »
@@ -121,8 +132,21 @@
              liste à puces, elle sortait « - 1. L'avertissement ». Relevé le
              25 septembre 2026 : le numéro est dans le texte, la puce s'en
              va. */
-          else if (/^\s*\d{1,2}[.)]\s/.test(l)) b.push({ k: "p", t: l.trim() });
-          else b.push({ k: "puce", t: l.trim().replace(/^[-•·]\s*/, "") });
+          var numero = /^\d{1,2}[.)]\s/.test(brut);
+          var avant = items.length ? items[items.length - 1] : null;
+          if (avant && !puce && !numero && !lien && !avant.lien &&
+              /^[a-zà-ÿ«(]/.test(brut) && !/[.:;»)\]]$/.test(avant.t)) {
+            avant.t += " " + brut;
+            return;
+          }
+          items.push({ t: brut.replace(/^[-•·]\s*/, ""), puce: puce, numero: numero, lien: lien });
+        });
+        items.forEach(function (x) {
+          if (x.lien) b.push({ k: "lien", t: x.t });
+          else if (x.numero) b.push({ k: "p", t: x.t });
+          else if (x.puce) b.push({ k: "puce", t: x.t });
+          /* Un seul bloc en retrait, sans marque : c'est un paragraphe. */
+          else b.push({ k: items.length === 1 ? "p" : "puce", t: x.t });
         });
       } else if (para.length >= 2 && para.every(function (l) { return /^[^:]{2,70} ?:/.test(l.trim()); })) {
         para.forEach(function (l) { b.push({ k: "p", t: l.trim() }); });
