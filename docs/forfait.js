@@ -1263,6 +1263,67 @@
       "forfait-convention-" + qui.id + ".docx");
   }
 
+  /* QUI CONCLUT L'ACCORD, ET QUI LE SIGNE.
+
+     Le projet sortait identique pour les quatre voies, se terminait par « Le
+     salarié, précédé de la mention lu et approuvé », qui est la signature
+     d'une convention individuelle et non celle d'un accord collectif, et son
+     préambule renvoyait les parties à « l'article 10 », qui porte sur la
+     durée. Chaque voie a ses parties et ses signataires : le délégué
+     syndical (L. 2232-12), les élus du comité (L. 2232-23-1, L. 2232-24), le
+     salarié mandaté dont l'accord est approuvé par les salariés
+     (L. 2232-26), ou le personnel consulté (L. 2232-21, L. 2232-22 ;
+     R. 2232-10, LEGIARTI000036284063, et R. 2232-13, LEGIARTI000051869378,
+     lus à la source le 26 septembre 2026, deux lectures concordantes).
+     Relevé le 26 septembre 2026. */
+  function preambuleAccord(v, p, eff) {
+    var maison = (p.denomination || "........................") + ", dont l'effectif est de " +
+      (eff || "....") + " salariés, représentée par " + (p.responsable || "........................");
+    if (v === "A")
+      return [
+        { k: "p", t: "Le présent accord est établi par " + maison + "." },
+        { k: "p", t: "Il est soumis à l'approbation du personnel, consulté dans les conditions " +
+          "des articles R. 2232-10 à R. 2232-13 du code du travail." },
+      ];
+    var autre = v === "D"
+      ? "et l'organisation syndicale représentative dans l'entreprise, représentée par son " +
+        "délégué syndical, ........................,"
+      : ((v === "B" || v === "C")
+        ? "et les membres titulaires de la délégation du personnel du comité social et " +
+          "économique, ........................, représentant la majorité des suffrages exprimés " +
+          "lors des dernières élections professionnelles,"
+        : "et la partie signataire, à désigner avant signature,");
+    return [
+      { k: "p", t: "Entre " + maison + "," },
+      { k: "p", t: autre },
+      { k: "p", t: "il a été convenu ce qui suit." },
+    ];
+  }
+  function signatureAccord(v) {
+    var p = entreprise();
+    var lignes = {
+      D: [{ k: "p", t: "Pour l'organisation syndicale représentative, le délégué syndical" }],
+      B: [{ k: "p", t: "Pour la délégation du personnel du comité social et économique, les " +
+        "membres titulaires signataires" }],
+      C: [{ k: "p", t: "Pour la délégation du personnel du comité social et économique, les " +
+        "membres titulaires signataires" },
+        { k: "note", t: "À défaut d'élus, l'accord peut être signé par un salarié mandaté par une " +
+          "organisation syndicale représentative ; il n'est alors valable qu'approuvé par les " +
+          "salariés à la majorité des suffrages exprimés (L. 2232-26). Les signataires sont " +
+          "alors le salarié mandaté, et le procès-verbal de la consultation est annexé." }],
+      A: [{ k: "note", t: "Cet accord n'est pas signé par une partie salariée : il est approuvé " +
+        "par le personnel. Le procès-verbal de la consultation lui est annexé lors du dépôt " +
+        "(R. 2232-10, 4°)." }],
+    }[v] || [{ k: "p", t: "Pour la partie salariée, ........................" }];
+    return [
+      { k: "p", t: " " },
+      { k: "p", t: "Fait à ........................, le ........................" },
+      { k: "p", t: "en autant d'exemplaires originaux que de parties, plus deux." },
+      { k: "p", t: " " },
+      { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
+    ].concat(lignes);
+  }
+
   /* LE PROJET D'ACCORD. Il porte les huit clauses, parce qu'un accord qui en
      oublie une ne fonde rien. */
   function docAccord() {
@@ -1278,11 +1339,7 @@
     }[v] || "La voie de conclusion sera précisée avant signature.";
     var items = [entete(),
       { k: "h1", t: "Accord d'entreprise relatif au forfait annuel en jours" },
-      { k: "p", t: "Entre " + (p.denomination || "........................") + ", dont l'effectif " +
-        "est de " + (eff || "....") + " salariés, représentée par " +
-        (p.responsable || "........................")+ "," },
-      { k: "p", t: "et les parties désignées à l'article 10," },
-      { k: "p", t: "il a été convenu ce qui suit." },
+    ].concat(preambuleAccord(v, p, eff)).concat([
       { k: "h2", t: "Article 1. Objet" },
       { k: "p", t: "Le présent accord autorise la conclusion de conventions individuelles de " +
         "forfait annuel en jours, en application des articles L. 3121-58 et L. 3121-63 du code du " +
@@ -1342,7 +1399,7 @@
         "plateforme de téléprocédure du ministère du travail avec sa version publiable, et un " +
         "exemplaire sera remis au greffe du conseil de prud'hommes du lieu de conclusion. Il entre " +
         "en vigueur le lendemain de son dépôt." },
-    ].concat(signature());
+    ]).concat(signatureAccord(v));
     sortir(items, "Projet d'accord - forfait en jours", "forfait-projet-accord.docx");
   }
 
