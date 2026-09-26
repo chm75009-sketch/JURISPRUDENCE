@@ -266,11 +266,27 @@
     var suivi = f.suivi === "sir" ? "sir" : "vip";
     var derniere = net(f.visiteTravail);
 
-    /* 1. La visite d'information et de prévention, à l'embauche. */
-    if (!derniere && net(s.ent))
-      L.push({ quoi: "Visite d'information et de prévention", date: plusMois(s.ent, 3),
-        fond: "R4624-10", pour: "une visite d'information et de prévention",
-        dit: "dans un délai qui n'excède pas trois mois à compter de la prise effective du poste" });
+    /* 1. La visite d'information et de prévention, à l'embauche.
+
+       UNE DATE QU'ON NE CONNAÎT PAS N'EST PAS UN RETARD. Pour un salarié entré
+       en 2004 et dont aucune visite n'est saisie, l'écran annonçait « en retard
+       de 8 152 jours » et la demande au service de santé au travail fixait une
+       échéance « au plus tard le 1er décembre 2009 » : envoyée telle quelle,
+       elle faisait reconnaître à l'employeur dix-sept ans de manquement, sur
+       une visite qui a peut-être eu lieu. Relevé le 26 septembre 2026. Tant que
+       la dernière visite n'est pas renseignée, l'échéance n'est pas calculée :
+       l'écran demande la date, et aucun courrier ne porte de date passée. */
+    if (!derniere && net(s.ent)) {
+      var duEmbauche = plusMois(s.ent, 3);
+      if (joursEntre(duEmbauche, AUJOURDHUI) >= 0)
+        L.push({ quoi: "Visite d'information et de prévention", date: duEmbauche,
+          fond: "R4624-10", pour: "une visite d'information et de prévention",
+          dit: "dans un délai qui n'excède pas trois mois à compter de la prise effective du poste" });
+      else
+        L.push({ quoi: "Visite d'information et de prévention", date: null, inconnu: true,
+          fond: "R4624-10", pour: "une visite d'information et de prévention",
+          dit: "dans un délai qui n'excède pas trois mois à compter de la prise effective du poste" });
+    }
 
     /* 2. Le renouvellement, cinq ans au plus, quatre en suivi renforcé, avec
           la visite intermédiaire à deux ans. */
@@ -301,17 +317,19 @@
             "l'employeur saisit le service dès qu'il connaît la date de fin de l'arrêt",
           reprise: true });
     }
-    return L.filter(function (x) { return !!x.date; });
+    return L.filter(function (x) { return !!x.date || x.inconnu; });
   }
 
-  function etatDe(jours) {
+  function etatDe(jours, inconnu) {
+    if (inconnu) return "att";
     if (jours === null) return "non";
     if (jours < 0) return "non";
     if (jours <= 30) return "non";
     if (jours <= 60) return "att";
     return "ok";
   }
-  function direDelai(jours) {
+  function direDelai(jours, inconnu) {
+    if (inconnu) return "dernière visite inconnue, à renseigner";
     if (jours === null) return "date inconnue";
     if (jours < 0) return "en retard de " + (-jours) + " jour" + (-jours > 1 ? "s" : "");
     if (jours === 0) return "aujourd'hui";
@@ -324,8 +342,8 @@
 
   function lignesDe(s) {
     return echeances(s).map(function (e) {
-      var j = joursEntre(e.date, AUJOURDHUI);
-      return { e: e, jours: j, etat: etatDe(j) };
+      var j = e.date ? joursEntre(e.date, AUJOURDHUI) : null;
+      return { e: e, jours: j, etat: etatDe(j, e.inconnu) };
     }).sort(function (a, b) { return (a.jours === null ? 1e9 : a.jours) - (b.jours === null ? 1e9 : b.jours); });
   }
 
@@ -395,7 +413,8 @@
       "Renseignez la date de la dernière visite pour que le renouvellement se calcule.</div>";
     return lg.map(function (x) {
       return '<div class="avis ' + x.etat + '"><b>' + ech(x.e.quoi + " : " +
-        (x.e.date ? dateFr(x.e.date) : "date inconnue") + ", " + direDelai(x.jours)) + "</b>" +
+        (x.e.date ? dateFr(x.e.date) + ", " + direDelai(x.jours, x.e.inconnu)
+          : direDelai(x.jours, x.e.inconnu))) + "</b>" +
         ech(x.e.dit) + " (" + ech(art(x.e.fond)) + ").</div>";
     }).join("");
   }
@@ -497,6 +516,15 @@
       b.push({ k: "p", t: "Nous vous saisissons dès connaissance de cette date afin que l'examen de " +
         "reprise soit organisé le jour de la reprise effective, et au plus tard dans les huit jours " +
         "qui suivent, soit le " + dateFr(plusJours(f.arretFin, 8)) + " (R. 4624-31)." });
+    } else if (premiere && premiere.e.inconnu) {
+      /* Aucune date passée dans un courrier : la dernière visite n'est pas
+         connue, on le dit et on demande la prochaine. */
+      b.push({ k: "p", t: "Nous sollicitons l'organisation d'une visite d'information et de " +
+        "prévention pour " + s.nom + ", " + (s.emp || "[emploi]") +
+        (net(s.ent) ? ", entré dans l'entreprise le " + dateFr(s.ent) : "") +
+        ". La date de sa dernière visite n'est pas connue de nos services : nous vous " +
+        "remercions de nous indiquer si elle figure dans votre dossier, et, à défaut, " +
+        "d'organiser cette visite dans les meilleurs délais." });
     } else if (premiere) {
       b.push({ k: "p", t: "Nous sollicitons l'organisation de la visite suivante pour " + s.nom + ", " +
         (s.emp || "[emploi]") + (net(s.ent) ? ", entré dans l'entreprise le " + dateFr(s.ent) : "") + " : " +

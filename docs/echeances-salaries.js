@@ -125,9 +125,23 @@
       var su = suite(id), f = conducteurs[id] || {};
       var ent = net(s.ent);
 
-      function pose(quoi, date, fond, quoiFaire) {
+      function pose(quoi, date, fond, quoiFaire, inconnu) {
         if (!date) return;
         var n = joursEntre(date, d0);
+        /* UNE ÉCHÉANCE CALCULÉE SUR UNE DATE QU'ON N'A PAS N'EST PAS UN RETARD.
+           Pour les salariés entrés en 2004, l'agenda affichait cent vingt-trois
+           cartes « en retard » : la visite et l'entretien étaient comptés depuis
+           l'embauche, faute de connaître la dernière date réelle. Relevé le
+           26 septembre 2026. Quand la référence manque et que le calcul tombe
+           dans le passé, la ligne demande la date au lieu d'annoncer un
+           manquement. */
+        if (inconnu && n < 0) {
+          out.push({ quoi: quoi, qui: nom, date: d0, jours: 0, etat: "rouge", inconnu: true,
+            fond: fond, faire: "la date de la dernière " + inconnu + ", à saisir sur la fiche du salarié : " +
+              "tant qu'elle manque, l'échéance ne peut pas être calculée",
+            prov: "salaries" });
+          return;
+        }
         out.push({ quoi: quoi, qui: nom, date: date, jours: n, etat: etatDe(n),
           fond: fond, faire: quoiFaire || "", prov: "salaries" });
       }
@@ -150,7 +164,8 @@
       if (ent && !net(f.visiteTravail) && !net(su.visite))
         pose("Visite d'information et de prévention", plusMois(ent, 3),
           "R. 4624-10 : dans un délai qui n'excède pas trois mois à compter de la prise effective du poste",
-          "la convocation du service de prévention et de santé au travail, et l'attestation de suivi");
+          "la convocation du service de prévention et de santé au travail, et l'attestation de suivi",
+          "visite médicale");
 
       /* L'entretien de parcours professionnel : la première année, puis tous
          les quatre ans. On ne propose que la prochaine échéance. */
@@ -159,7 +174,8 @@
         pose("Entretien de parcours professionnel",
           dernier ? plusMois(dernier, 48) : plusMois(ent, 12),
           "L. 6315-1, I : au cours de la première année suivant l'embauche, puis tous les quatre ans",
-          "le compte rendu daté et signé, dont copie est remise au salarié");
+          "le compte rendu daté et signé, dont copie est remise au salarié",
+          dernier ? null : "entretien de parcours professionnel");
       }
 
       /* La fin de la période d'essai et le terme du contrat à durée

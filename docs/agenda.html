@@ -693,7 +693,8 @@
           fondement: e.fond,
           docs: "le justificatif à jour, et la date reportée dans Flotte et conducteurs",
           retard: e.etat === "passe",
-          detail: e.etat === "passe" ? "Échéance dépassée." : "",
+          detail: e.inconnu ? "La dernière date n'est pas connue : l'échéance ne peut pas être calculée."
+            : (e.etat === "passe" ? "Échéance dépassée." : ""),
           prov: "flotte",
         });
       });
@@ -708,7 +709,17 @@
        26 septembre 2026. Les dates viennent du registre et du contrat écrit
        dans l'application, jamais d'une règle supposée. */
     if (window.EcheancesSalaries && window.EcheancesSalaries.echeances) {
+      /* QUATRE-VINGTS CARTES POUR DIRE QUATRE-VINGTS FOIS LA MÊME CHOSE.
+         Les dates qui manquent se comptent, elles ne se déroulent pas : une
+         ligne par nature d'échéance, avec le nombre de salariés concernés et
+         où la saisir. Relevé le 26 septembre 2026. */
+      var manquantes = {};
       window.EcheancesSalaries.echeances().forEach(function (e) {
+        if (e.inconnu) {
+          var g = manquantes[e.quoi] || (manquantes[e.quoi] = { date: e.date, fond: e.fond, faire: e.faire, qui: [] });
+          g.qui.push(e.qui);
+          return;
+        }
         lignes.push({
           tri: e.date, quand: enFr(e.date),
           titre: e.quoi + " : " + e.qui,
@@ -716,6 +727,20 @@
           docs: e.faire || "",
           retard: e.etat === "passe",
           detail: e.etat === "passe" ? "Échéance dépassée." : "",
+          prov: "salaries",
+        });
+      });
+      Object.keys(manquantes).forEach(function (quoi) {
+        var g = manquantes[quoi], n = g.qui.length;
+        lignes.push({
+          tri: g.date, quand: enFr(g.date),
+          titre: quoi + " : " + n + " salarié" + (n > 1 ? "s" : "") + " dont la dernière date n'est pas connue",
+          fondement: g.fond,
+          docs: g.faire,
+          retard: false,
+          detail: "Tant que ces dates manquent, l'échéance ne peut pas être calculée, et rien n'est " +
+            "en retard pour autant. " + g.qui.slice(0, 6).join(", ") +
+            (n > 6 ? " et " + (n - 6) + " autre" + (n - 6 > 1 ? "s" : "") + "." : "."),
           prov: "salaries",
         });
       });
