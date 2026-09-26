@@ -3652,6 +3652,19 @@
       L.push("");
       L.push("Extrayez les données de votre base de données économiques et sociales.");
       L.push("");
+      /* L'état des textes, lu au relais le 26 septembre 2026, deux
+         interrogations concordantes : toute la partie réglementaire de
+         l'index revient « abrogé à effet différé ». Le document le dit,
+         plutôt que de présenter ces articles comme un état stable. */
+      L.push("AVANT DE PUBLIER, VÉRIFIEZ LE TEXTE APPLICABLE À VOTRE DATE.");
+      L.push("");
+      L.push("Au 26 septembre 2026, les articles D. 1142-2 à D. 1142-8, qui fixent les");
+      L.push("indicateurs, leur barème, la date de publication et les mesures de correction,");
+      L.push("reviennent de Légifrance marqués « abrogé à effet différé ». L'obligation de");
+      L.push("publier, elle, reste portée par les articles L. 1142-8 à L. 1142-10, en");
+      L.push("vigueur. Le texte qui remplace la partie réglementaire n'a pas été lu pour");
+      L.push("établir ce document : ouvrez le chapitre à la date de votre publication.");
+      L.push("");
 
 
       modeDEmploi(L, "le constat de couverture et la note de publication des écarts de rémunération");
