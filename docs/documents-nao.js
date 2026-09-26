@@ -593,9 +593,13 @@
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     pousserPlie(L, "Fondement : " + articles + ".", 70, "", "");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur identifiant");
-    L.push("de version dans moteur/nao/textes-nao.json. Les arrêts cités ont été lus");
-    L.push("dans la base Judilibre de la Cour de cassation, réponse non relaxée.");
+    /* CE QUI EST INTERNE RESTE INTERNE. Le pied de page nommait le fichier
+       du dépôt où les textes sont conservés, et qualifiait la réponse de la
+       base de jurisprudence. Un document qui sort du cabinet dit d'où vient
+       le droit, pas comment il a été rangé. Relevé le 26 septembre 2026. */
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la date");
+    L.push("ci-dessus. Les arrêts cités ont été lus dans la base de jurisprudence de la");
+    L.push("Cour de cassation.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("CE QUE CE DOCUMENT N'EST PAS. Il prépare et rédige ; il ne négocie pas à");

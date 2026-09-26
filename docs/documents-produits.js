@@ -1756,12 +1756,28 @@
      par lequel tous les documents sortent, et il vaut mieux un tri qu'une
      relecture de cent trente-six fichiers. `parties` et les autres propriétés
      restent accessibles : on ne remplace que `produire`. */
+  /* LES CODES INTERNES NE SORTENT PAS DU CABINET.
+
+     Les documents se renvoient l'un à l'autre par le code du point qui les
+     produit : « le document du point CSE-CTL-SST-06 de ce module rédige cet
+     acte ». Ce code est l'identifiant d'un générateur ; il ne dit rien au
+     destinataire et il dit tout de l'outil. Il est remplacé par le nom du
+     document qu'il désigne, entre guillemets. Relevé le 26 septembre 2026. */
+  var CODE = /\b[A-Z]{3}-[A-Z]{3}-[A-Z0-9]{2,12}(?:-[A-Z0-9]{2,3})?\b/g;
+  function sansCodes(t) {
+    return String(t == null ? "" : t).replace(CODE, function (m) {
+      var d = Object.prototype.hasOwnProperty.call(D, m) ? D[m] : null;
+      if (!d || !d.nom) return m;
+      return "« " + String(d.nom).split(" : ")[0].trim() + " »";
+    });
+  }
+
   function pour(id) {
     if (!Object.prototype.hasOwnProperty.call(D, id)) return null;
     var g = D[id];
     if (!g || typeof g.produire !== "function" || g.__bandeau) return g;
     var brut = g.produire;
-    g.produire = function (ctx) { return ajusterBandeau(brut.call(g, ctx)); };
+    g.produire = function (ctx) { return sansCodes(ajusterBandeau(brut.call(g, ctx))); };
     g.__bandeau = true;
     return g;
   }
@@ -1880,6 +1896,6 @@
     pour: pour, tous: D, ajouter: ajouter,
     outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, identite: identite,
       liens: liens, EXEMPLE: EXEMPLE },
-    liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple,
+    liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple, sansCodes: sansCodes,
   };
 })(typeof window !== "undefined" ? window : this);

@@ -240,8 +240,11 @@
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur");
-    L.push("identifiant de version dans moteur/sst/textes-sst.json.");
+    /* Le pied nommait le fichier du dépôt où les textes sont conservés :
+       c'est une mention interne, elle n'a rien à faire dans un document
+       remis au client. Relevé le 26 septembre 2026. */
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
+    L.push("date ci-dessus.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
@@ -2940,7 +2943,7 @@
       return L.concat(pied("L. 1153-5, L. 1152-4, L. 1152-1, L. 1153-1, L. 1152-2, " +
         "L. 1153-2, L. 4121-1, L. 1155-2, R. 4121-2, D. 1151-1",
         ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
-         "cassation, réponse non relaxée : Soc., 18 juin 2025, n° 23-19.022, publié -",
+         "cassation : Soc., 18 juin 2025, n° 23-19.022, publié -",
          "la valeur probante d'une enquête interne relève de l'appréciation souveraine",
          "des juges du fond, au regard le cas échéant des autres éléments de preuve.",
          "",

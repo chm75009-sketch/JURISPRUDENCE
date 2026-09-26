@@ -187,8 +187,11 @@
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur");
-    L.push("identifiant de version dans moteur/sst/textes-sst.json.");
+    /* Le pied nommait le fichier du dépôt où les textes sont conservés :
+       c'est une mention interne, elle n'a rien à faire dans un document
+       remis au client. Relevé le 26 septembre 2026. */
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
+    L.push("date ci-dessus.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
@@ -3529,7 +3532,7 @@
         ["Décisions citées : Soc., 27 novembre 2019, n° 19-14.224, publié ; Soc.,",
          "13 mai 2026, n° 25-12.560 ; Soc., 18 mars 2026, n° 23-22.270, publié. Elles",
          "ont été lues à la source dans la base Judilibre de la Cour de cassation le",
-         "21 août 2026, réponse non relaxée, et ne sont citées que pour ce qu'elles",
+         "21 août 2026, et ne sont citées que pour ce qu'elles",
          "disent.",
          "",
          "LA COMMISSION ABSENTE LÀ OÙ ELLE EST DUE N'EST PAS UN MANQUEMENT SEULEMENT",
@@ -3769,7 +3772,7 @@
 
       return L.concat(pied("L. 2315-39, L. 2315-32, L. 2314-11, L. 2315-38",
         ["Décisions citées, lues à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026, réponse non relaxée : Soc., 27 novembre 2019,",
+         "cassation le 21 août 2026 : Soc., 27 novembre 2019,",
          "n° 19-14.224, publié ; Soc., 26 février 2025, n° 24-12.295, publié ; Soc.,",
          "11 février 2026, n° 24-16.408.",
          "",
@@ -3968,7 +3971,7 @@
       return L.concat(pied(
         "L. 2315-41, L. 2315-42, L. 2315-43, L. 2315-44, L. 2315-38, L. 2315-39, L. 2315-18",
         ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026, réponse non relaxée : Soc., 13 mai 2026,",
+         "cassation le 21 août 2026 : Soc., 13 mai 2026,",
          "n° 25-12.560.",
          "",
          "Aucune peine n'est annoncée : aucun texte répressif capté ne vise l'absence",
@@ -4186,7 +4189,7 @@
 
       return L.concat(pied("L. 2315-38, L. 2315-41, L. 2315-42, L. 2315-44",
         ["Décisions citées, lues à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026, réponse non relaxée : Soc., 13 mai 2026,",
+         "cassation le 21 août 2026 : Soc., 13 mai 2026,",
          "n° 25-12.560 ; Soc., 18 mars 2026, n° 23-22.270, publié.",
          "",
          "Aucune peine n'est annoncée : aucun texte répressif capté ne vise le",
@@ -4610,7 +4613,7 @@
 
       return L.concat(pied("L. 2315-39, L. 2314-33, L. 2315-32",
         ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026, réponse non relaxée : Soc., 28 mai 2026,",
+         "cassation le 21 août 2026 : Soc., 28 mai 2026,",
          "n° 24-22.914, publié.",
          "",
          "Aucune peine n'est annoncée. Le remplacement est le fait du COMITÉ, non de",

@@ -653,8 +653,8 @@
       L.push("     · temps consacré aux réunions des commissions : [préciser le régime");
       L.push("       retenu dans l'entreprise et sa source - accord, usage, règlement");
       L.push("       intérieur du comité. Ce point n'est pas tranché ici : il");
-      L.push("       relève des moyens du comité, traités par les documents CSE-CTL-MOY de");
-      L.push("       ce module.]");
+      L.push("       relève des moyens du comité, traités par les documents consacrés");
+      L.push("       au budget de fonctionnement et aux heures de délégation.]");
       L.push("");
       L.push("  c) L'ARTICULATION AVEC LES CONSULTATIONS RÉCURRENTES");
       L.push("     Les délibérations préparées par les commissions sont celles des 1° et 3°");
@@ -3707,9 +3707,9 @@
       } else {
         L.push("         plusieurs établissements distincts]");
       }
-      L.push("         Le périmètre lui-même est traité par les documents CSE-CTL-PER de ce");
-      L.push("         module : ne le refaites pas ici, relevez seulement l'accord et ses");
-      L.push("         dates.");
+      L.push("         Le périmètre lui-même est traité par les documents consacrés aux");
+      L.push("         établissements distincts : ne le refaites pas ici, relevez seulement");
+      L.push("         l'accord et ses dates.");
       L.push("");
       L.push("     [ ] l'accord de L. 2312-19 sur LE CONTENU, LA PÉRIODICITÉ, LES MODALITÉS");
       L.push("         ET LES NIVEAUX DES CONSULTATIONS RÉCURRENTES ;");
