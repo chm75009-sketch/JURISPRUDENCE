@@ -208,6 +208,26 @@
     garder(t);
   }
   function accord() { return base().accord; }
+  /* LES DEUX QUESTIONS SONT DÉJÀ RÉPONDUES SUR LA FICHE.
+
+     Relevé le 27 septembre 2026 : « Un délégué syndical ? » et « Des élus au
+     CSE ? » s'ouvraient vides, alors que la fiche d'entreprise porte les deux
+     réponses. La voie de conclusion restait donc indéterminée, et le pack
+     sortait le même pour tout le monde. Ce qui est sur la fiche est repris ;
+     ce qui est corrigé ici est gardé et ne se fait pas réécrire. */
+  function repriseDeLaFiche(a) {
+    var p = entreprise(), change = false;
+    if (!a.ds && (p.delegueSyndical === "oui" || p.delegueSyndical === "non")) {
+      a.ds = p.delegueSyndical; change = true;
+    }
+    if (!a.cse && p.cseExiste) {
+      var c = String(p.cseExiste);
+      a.cse = c.indexOf("oui") === 0 ? "oui" : (/carence/.test(c) ? "carence" : "non");
+      change = true;
+    }
+    if (change) garderAccord(a);
+    return a;
+  }
   function garderAccord(a) {
     var t = base();
     t.accord = a;
@@ -288,7 +308,7 @@
   ];
 
   function rendreAccord() {
-    var a = accord();
+    var a = repriseDeLaFiche(accord());
     $("ac-source").value = a.source || "";
     $("ac-ds").value = a.ds || "";
     $("ac-cse").value = a.cse || "";
@@ -323,7 +343,43 @@
       majVerdictAccord();
     }
     if (aucun) majVoie();
+    majPack();
     rendrePlan();
+  }
+
+  /* LE PACK SUIT LA VOIE, IL N'EST PAS LE MÊME PARTOUT.
+
+     Relevé le 27 septembre 2026 : sans comité et sans délégué syndical, le pack
+     proposait encore la consultation du comité et la notification aux
+     organisations syndicales ; avec un accord de branche, la lettre au greffe
+     déposait « l'accord d'entreprise » que l'entreprise n'a pas conclu. Chaque
+     bouton qui ne se justifie pas se ferme, et la raison s'écrit sous les
+     boutons. */
+  function majPack() {
+    if (!$("d-cse")) return;
+    var a = accord(), v = voie(), notes = [];
+    var sansComite = a.cse === "non" || a.cse === "carence";
+    var branche = a.source === "branche";
+
+    $("d-cse").hidden = sansComite;
+    if (sansComite)
+      notes.push("Il n'y a pas de comité : rien à convoquer, l'ordre du jour de consultation ne " +
+        "s'ouvre pas.");
+
+    var rienANotifier = branche || v === "A";
+    $("d-notif").hidden = rienANotifier;
+    if (branche)
+      notes.push("L'accord vient de votre branche : il a été notifié et déposé par ses " +
+        "signataires, ce n'est pas à vous de le faire.");
+    else if (v === "A")
+      notes.push("L'accord est ratifié par le personnel, sans partie syndicale signataire : il n'y " +
+        "a personne à qui notifier le texte au sens de L. 2231-5. Ce qui se joint au dépôt est le " +
+        "procès-verbal de la consultation.");
+
+    $("d-greffe").hidden = branche;
+    if (!notes.length) { $("pack-note").hidden = true; $("pack-note").textContent = ""; return; }
+    $("pack-note").hidden = false;
+    $("pack-note").textContent = notes.join(" ");
   }
 
   function clausesManquantes() {
@@ -367,6 +423,17 @@
     if (!a.ds) return "";
     if (eff < 11 || (eff <= 20 && a.cse !== "oui")) return "A";
     if (eff < 50) return "B";
+    /* LE PROCÈS-VERBAL DE CARENCE OUVRE LE MANDATEMENT, DE DROIT.
+
+       Relevé le 27 septembre 2026 : avec une carence, l'écran donnait la voie
+       des élus, et le rétroplanning faisait attendre un mois la réponse
+       d'élus qui n'existent pas. L. 2232-26 (LEGIARTI000036761849, deux
+       lectures concordantes au relais le 27 septembre 2026) : « Le présent
+       article s'applique de droit dans les entreprises dépourvues de délégué
+       syndical dans lesquelles un procès-verbal de carence a établi l'absence
+       de représentants élus du personnel. » Il n'y a donc personne à
+       interroger : on passe au salarié mandaté. */
+    if (a.cse === "carence") return "E";
     return "C";
   }
   function majVoie() {
@@ -400,6 +467,16 @@
         "exprimés en faveur des organisations représentatives au premier tour des dernières " +
         "élections des titulaires au CSE. Entre 30 et 50 %, un signataire peut demander la " +
         "consultation des salariés dans le mois (L. 2232-12)."],
+      E: ["Un salarié mandaté, et le vote des salariés",
+        "Votre procès-verbal de carence a établi qu'il n'y a pas d'élus, et vous n'avez pas de " +
+        "délégué syndical : l'article L. 2232-26 s'applique « de droit », et il n'y a personne à " +
+        "interroger avant. Vous informez les organisations syndicales représentatives dans la " +
+        "branche" + (entreprise().conventionCollective ? " dont vous relevez, " +
+          entreprise().conventionCollective : "") + ", ou à défaut au niveau national et " +
+        "interprofessionnel, de votre décision d'engager des négociations ; chacune peut mandater " +
+        "un salarié, un seul. " +
+        "L'accord signé par le mandaté n'existe qu'une fois approuvé par les salariés à la " +
+        "majorité des suffrages exprimés."],
     };
     z.querySelector(".t").textContent = T[v][0];
     z.querySelector(".d").textContent = T[v][1];
@@ -580,6 +657,28 @@
       E.push(["Fin du délai laissé aux élus pour se manifester", plus(depart, 30),
         "Un mois. Passé ce délai seulement, on sait avec qui on négocie."]);
       E.push(["Ouverture de la négociation", plus(depart, 31), ""]);
+    } else if (v === "E") {
+      /* Les étapes du mandatement, telles que les articles les posent. La
+         consultation des salariés est celle de D. 2232-8 (LEGIARTI000036001368,
+         deux lectures concordantes au relais le 27 septembre 2026), qui vise
+         expressément L. 2232-26 : deux mois au plus à compter de la conclusion,
+         modalités arrêtées après consultation du mandaté, salariés informés
+         quinze jours avant. */
+      E.push(["Information des organisations syndicales de la décision d'engager des négociations",
+        depart, "L. 2232-26 : les représentatives dans la branche, ou à défaut au niveau national " +
+        "et interprofessionnel. Gardez la preuve de l'envoi."]);
+      E.push(["Mandatement d'un salarié par une organisation", plus(depart, 21),
+        "Une même organisation ne peut mandater qu'un seul salarié (L. 2232-26)."]);
+      E.push(["Ouverture de la négociation avec le ou les salariés mandatés", plus(depart, 30), ""]);
+      E.push(["Modalités de la consultation arrêtées, après avoir consulté le mandaté",
+        plus(depart, 45), "D. 2232-8."]);
+      E.push(["Salariés informés des modalités", plus(depart, 45),
+        "Par tout moyen, quinze jours au moins avant la consultation (D. 2232-8). Un désaccord sur " +
+        "ces modalités se porte devant le président du tribunal judiciaire dans les huit jours " +
+        "(D. 2232-9)."]);
+      E.push(["Approbation par les salariés, à la majorité des suffrages exprimés", plus(depart, 60),
+        "L'accord n'existe pas sans elle (L. 2232-26). La consultation a lieu dans les deux mois " +
+        "de la conclusion (D. 2232-8), et le procès-verbal est annexé au dépôt."]);
     } else if (v === "B") {
       E.push(["Ouverture de la négociation avec les élus ou le mandaté", depart, "L. 2232-23-1, I."]);
       E.push(["Consultation des salariés, si l'accord est signé par un mandaté non élu",
@@ -1409,7 +1508,11 @@
         { k: "p", t: "Il est soumis à l'approbation du personnel, consulté dans les conditions " +
           "des articles R. 2232-10 à R. 2232-13 du code du travail." },
       ];
-    var autre = v === "D"
+    var autre = v === "E"
+      ? "et ........................, salarié de l'entreprise, expressément mandaté par " +
+        "........................, organisation syndicale représentative dans la branche, en " +
+        "application de l'article L. 2232-26 du code du travail,"
+      : v === "D"
       ? "et l'organisation syndicale représentative dans l'entreprise, représentée par son " +
         "délégué syndical, ........................,"
       : ((v === "B" || v === "C")
@@ -1435,6 +1538,12 @@
           "organisation syndicale représentative ; il n'est alors valable qu'approuvé par les " +
           "salariés à la majorité des suffrages exprimés (L. 2232-26). Les signataires sont " +
           "alors le salarié mandaté, et le procès-verbal de la consultation est annexé." }],
+      E: [{ k: "p", t: "Le salarié mandaté" },
+        { k: "note", t: "Cet accord n'existe qu'une fois approuvé par les salariés à la majorité " +
+          "des suffrages exprimés (L. 2232-26). La consultation est organisée dans les deux mois " +
+          "de la présente signature, après consultation du salarié mandaté sur ses modalités, les " +
+          "salariés en étant informés quinze jours au moins à l'avance (D. 2232-8). Le " +
+          "procès-verbal de cette consultation est annexé au dépôt." }],
       A: [{ k: "note", t: "Cet accord n'est pas signé par une partie salariée : il est approuvé " +
         "par le personnel. Le procès-verbal de la consultation lui est annexé lors du dépôt " +
         "(R. 2232-10, 4°)." }],
@@ -1460,6 +1569,10 @@
       C: "Le présent accord est conclu en application des articles L. 2232-24 à L. 2232-26 du code " +
          "du travail.",
       D: "Le présent accord est conclu en application de l'article L. 2232-12 du code du travail.",
+      E: "Le présent accord est conclu avec un salarié mandaté, en application de l'article " +
+         "L. 2232-26 du code du travail, un procès-verbal de carence ayant établi l'absence de " +
+         "représentants élus du personnel. Il ne prend effet qu'une fois approuvé par les salariés " +
+         "à la majorité des suffrages exprimés.",
     }[v] || "La voie de conclusion sera précisée avant signature.";
     var items = [entete(),
       { k: "h1", t: "Accord d'entreprise relatif au forfait annuel en jours" },
@@ -1553,13 +1666,16 @@
         dit: "La majorité se calcule sur l'effectif du personnel, et non sur les votants : un " +
           "salarié absent compte comme un refus (L. 2232-22)." };
     }
-    if (v === "B" || v === "C") {
-      return { quoi: "majorité des suffrages exprimés", base: v === "B"
-        ? "L. 2232-23-1, II" : "L. 2232-24 et L. 2232-26",
+    if (v === "B" || v === "C" || v === "E") {
+      var base = v === "B" ? "L. 2232-23-1, II"
+        : (v === "E" ? "L. 2232-26 et D. 2232-8" : "L. 2232-24 et L. 2232-26");
+      return { quoi: "majorité des suffrages exprimés", base: base,
         seuil: null, surEffectif: false,
         dit: "La majorité se calcule sur les suffrages exprimés, non sur l'effectif : les " +
-          "bulletins blancs et nuls ne comptent pas, et un absent non plus (" + (v === "B"
-            ? "L. 2232-23-1, II" : "L. 2232-24 et L. 2232-26") + ")." };
+          "bulletins blancs et nuls ne comptent pas, et un absent non plus (" + base + ")." +
+          (v === "E" ? " La consultation est organisée dans les deux mois de la conclusion, ses " +
+            "modalités arrêtées après consultation du salarié mandaté, et les salariés en sont " +
+            "informés quinze jours au moins à l'avance (D. 2232-8)." : "") };
     }
     return null;
   }
