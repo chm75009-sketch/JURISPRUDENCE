@@ -395,6 +395,28 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   E.tenue = E.tenue || {};
   function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (e) {} }
 
+  /* UNE LIGNE SANS IDENTIFIANT NE SE MODIFIE PAS, ET NE LE DIT PAS.
+     Les champs des cartes portent l'identifiant de la ligne ; la saisie cherche
+     la ligne par cet identifiant, et n'écrit rien si elle ne la trouve pas. Or
+     les lignes venues d'ailleurs n'en ont pas : celles que le contrat écrit par
+     « Inscrire au registre », et celles reprises d'un fichier. Sur ces
+     lignes-là, tout ce qu'on tapait au registre était perdu sans un mot.
+     Relevé le 27 septembre 2026. Chaque ligne reçoit donc un identifiant à
+     l'ouverture, une fois pour toutes. */
+  (function poserIdentifiants() {
+    var pose = 0;
+    ["salaries", "accueillis"].forEach(function (partie) {
+      (E[partie] || []).forEach(function (s) {
+        if (s && !String(s.id || "").trim()) {
+          s.id = (partie === "salaries" ? "s" : "a") + Date.now().toString(36) +
+            Math.random().toString(36).slice(2, 6);
+          pose++;
+        }
+      });
+    });
+    if (pose) garder();
+  })();
+
   /* La fiche entreprise sert de source : on ne redemande jamais ce qui est su. */
   (function reprendre() {
     var p = null;
@@ -596,8 +618,14 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     try { return String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); }
     catch (e) { return String(t || "").toLowerCase(); }
   }
+  /* UN SEUL COMPTE. L'en-tête disait « 24 à compléter » et la synthèse « 52
+     ligne(s) incomplète(s) » sur le même écran : le premier ne regardait que
+     les colonnes obligatoires, le second toutes les mentions dues, y compris
+     celles qui dépendent de la situation, titre de séjour, autorisation,
+     entreprise de travail temporaire. Relevé le 26 septembre 2026. Une seule
+     définition, celle de « manques », et le filtre suit. */
   function incomplete(s) {
-    return COLONNES.some(function (col) { return col.du && vide(s[col.c]); });
+    return manques(s).length > 0;
   }
   function filtrees(L) {
     var q = sansAccent2(CHERCHE).trim();
@@ -950,6 +978,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       var r = d.querySelector('[data-c="' + quoi + '"]');
       if (r) r.focus();
     }
+    /* L'EN-TÊTE COMPTE LES SALARIÉS EN POSTE : IL SUIT LA SAISIE. Après une
+       date de sortie, il affichait encore « 82 en poste » jusqu'au
+       rechargement de la page. Relevé le 26 septembre 2026. */
+    rappelFiche();
     rendreSynthese();
   }
 
