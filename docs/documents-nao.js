@@ -3604,14 +3604,26 @@
   /* ══════════════════════════════════════════════════════════════════════
      NAO-CTL-EGA-02 - LA COUVERTURE ET LA PUBLICATION DES ÉCARTS
 
-     Fondement : L. 2242-8. Ce texte est capté ; L. 1142-8 et L. 1142-9, qu'il
-     nomme, NE LE SONT PAS.
+     Fondement : L. 2242-8, et désormais les textes de l'index eux-mêmes, lus à
+     la source le 27 septembre 2026, chacun deux fois à quelques minutes
+     d'intervalle, mêmes identifiants de version :
 
-     Conséquence tenue dans tout le document : l'index est NOMMÉ, jamais
-     décrit. Ni ses indicateurs, ni sa date de publication, ni le seuil de
-     résultat qui déclenche les mesures de correction ne sont écrits - la fiche
-     de régularisation évoque « au plus tard le 1er mars » et un « seuil
-     réglementaire », mais aucun texte lu ne les porte.
+       L. 1142-8  LEGIARTI000044605453  publication annuelle des indicateurs
+       L. 1142-9  LEGIARTI000044605442  mesures de correction sous le seuil
+       L. 1142-10 LEGIARTI000051289090  trois ans, puis pénalité de 1 % au plus
+       D. 1142-2  LEGIARTI000038026011  les cinq indicateurs, plus de 250
+       D. 1142-2-1 LEGIARTI000038026015 les quatre indicateurs, de 50 à 250
+       D. 1142-3  LEGIARTI000038026019  le niveau de résultat, annexes I et II
+       D. 1142-4  LEGIARTI000045250060  publication au plus tard le 1er mars
+       D. 1142-5  LEGIARTI000045250047  mise à disposition du comité
+       D. 1142-6  LEGIARTI000045250040  correction sous soixante-quinze points
+
+     Le document disait, sur vingt lignes, ce qu'il n'écrirait pas : quels
+     indicateurs, comment ils se calculent, à quelle date, à partir de quel
+     résultat, dans quel délai. Les cinq réponses sont écrites. Seul le calcul
+     de chaque indicateur reste hors du document : il est aux annexes I et II du
+     chapitre, que le relais ne sert pas, et un barème recopié de mémoire serait
+     pire que son absence.
      ══════════════════════════════════════════════════════════════════════ */
 
   DP.ajouter("NAO-CTL-EGA-02", {
@@ -3702,21 +3714,78 @@
         L.push("");
       }
 
-      L.push("════ CE QUE CE DOCUMENT NE VOUS DIRA PAS, ET POURQUOI ════");
+      var effEga = effectifDe(ctx);
+      var grande = effEga !== null && effEga > 250;
+      L.push("════ CE QUE LA PUBLICATION DOIT PORTER ════");
       L.push("");
-      L.push("L'article L. 1142-8 est NOMMÉ par L. 2242-8, mais il n'a pas été lu à la");
-      L.push("source par ce module. Il en va de même de L. 1142-9, qui porte les mesures");
-      L.push("de correction. En conséquence, et délibérément, ce document N'ÉCRIT PAS :");
+      L.push("L'article L. 1142-8 impose à l'employeur, dans les entreprises d'au moins");
+      L.push("cinquante salariés, de publier chaque année « l'ensemble des indicateurs");
+      L.push("relatifs aux écarts de rémunération entre les femmes et les hommes et aux");
+      L.push("actions mises en oeuvre pour les supprimer ». Le décret dit lesquels.");
       L.push("");
-      L.push("  · quels indicateurs composent la publication ;");
-      L.push("  · comment ils se calculent ;");
-      L.push("  · à quelle date au plus tard la publication doit intervenir ;");
-      L.push("  · quel niveau de résultat déclenche les mesures de correction ;");
-      L.push("  · dans quel délai ces mesures doivent produire effet.");
+      if (grande) {
+        L.push("Votre effectif dépasse deux cent cinquante salariés : les indicateurs sont");
+        L.push("ceux de l'article D. 1142-2, au nombre de cinq.");
+        L.push("");
+        L.push("  1. L'écart de rémunération entre les femmes et les hommes, calculé à");
+        L.push("     partir de la moyenne de la rémunération des femmes comparée à celle");
+        L.push("     des hommes, par tranche d'âge et par catégorie de postes équivalents.");
+        L.push("  2. L'écart de taux d'augmentations individuelles de salaire ne");
+        L.push("     correspondant pas à des promotions.");
+        L.push("  3. L'écart de taux de promotions.");
+        L.push("  4. Le pourcentage de salariées ayant bénéficié d'une augmentation dans");
+        L.push("     l'année suivant leur retour de congé de maternité, si des");
+        L.push("     augmentations sont intervenues pendant ce congé.");
+        L.push("  5. Le nombre de salariés du sexe sous-représenté parmi les dix salariés");
+        L.push("     ayant perçu les plus hautes rémunérations.");
+      } else {
+        L.push("Votre effectif est compris entre cinquante et deux cent cinquante");
+        L.push("salariés : les indicateurs sont ceux de l'article D. 1142-2-1, au nombre");
+        L.push("de quatre.");
+        L.push("");
+        L.push("  1. L'écart de rémunération entre les femmes et les hommes, calculé à");
+        L.push("     partir de la moyenne de la rémunération des femmes comparée à celle");
+        L.push("     des hommes, par tranche d'âge et par catégorie de postes équivalents.");
+        L.push("  2. L'écart de taux d'augmentations individuelles de salaire entre les");
+        L.push("     femmes et les hommes.");
+        L.push("  3. Le pourcentage de salariées ayant bénéficié d'une augmentation dans");
+        L.push("     l'année suivant leur retour de congé de maternité, si des");
+        L.push("     augmentations sont intervenues au cours de la période pendant");
+        L.push("     laquelle le congé a été pris.");
+        L.push("  4. Le nombre de salariés du sexe sous-représenté parmi les dix salariés");
+        L.push("     ayant perçu les plus hautes rémunérations.");
+      }
       L.push("");
-      L.push("Un document qui vous donnerait ces cinq réponses de mémoire vous ferait");
-      L.push("publier sur des règles non vérifiées. Allez les lire à");
-      L.push("la source - ce sont cinq questions, et elles ont des réponses écrites.");
+      L.push("QUAND. Le niveau de résultat et le résultat de chaque indicateur se");
+      L.push("publient « annuellement, au plus tard le 1er mars de l'année en cours, au");
+      L.push("titre de l'année précédente, de manière visible et lisible, sur le site");
+      L.push("internet de l'entreprise lorsqu'il en existe un » ; à défaut de site, ils");
+      L.push("sont portés à la connaissance des salariés par tout moyen. Ils restent");
+      L.push("consultables au moins jusqu'à la publication de l'année suivante");
+      L.push("(D. 1142-4). Les mêmes informations sont mises à la disposition du comité");
+      L.push("social et économique, présentées par catégorie socio-professionnelle,");
+      L.push("niveau ou coefficient hiérarchique (D. 1142-5).");
+      L.push("");
+      L.push("À PARTIR DE QUEL RÉSULTAT IL FAUT CORRIGER. Les mesures de correction et,");
+      L.push("le cas échéant, la programmation de mesures financières de rattrapage");
+      L.push("salarial « doivent être mises en oeuvre dès lors que le niveau de résultat");
+      L.push("est inférieur à soixante-quinze points » (D. 1142-6). Ces mesures se");
+      L.push("négocient dans la négociation sur l'égalité professionnelle ; à défaut");
+      L.push("d'accord, elles sont arrêtées par décision de l'employeur après");
+      L.push("consultation du comité social et économique, et déposées auprès de");
+      L.push("l'autorité administrative (L. 1142-9).");
+      L.push("");
+      L.push("DANS QUEL DÉLAI. Sous le niveau défini par décret, l'entreprise « dispose");
+      L.push("d'un délai de trois ans pour se mettre en conformité ». À l'expiration de");
+      L.push("ce délai, si les résultats sont toujours en deçà, une pénalité financière");
+      L.push("peut être appliquée, d'un montant fixé au maximum à 1 % des rémunérations");
+      L.push("et gains (L. 1142-10).");
+      L.push("");
+      L.push("CE QUI N'EST PAS ÉCRIT ICI : le calcul de chaque indicateur et celui du");
+      L.push("niveau de résultat sur cent points. Ils sont fixés par les annexes I et II");
+      L.push("du chapitre (D. 1142-3), qui ne se citent pas par numéro d'article : un");
+      L.push("barème recopié de mémoire serait pire que son absence. Le simulateur du");
+      L.push("ministère du travail fait ce calcul, et c'est lui qui fait foi.");
       L.push("");
       L.push("Ce que ce document fait, en revanche : il monte la pièce qui prouve que");
       L.push("vous avez publié, et quand.");
