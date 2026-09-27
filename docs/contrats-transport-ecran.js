@@ -755,6 +755,11 @@
          Sans elle, le décompte appliquait les quarante-huit heures du code du
          travail à un conducteur. Relevé le 26 septembre 2026. */
       categorieTransport: PROFIL.roulant ? (PROFIL.grandRoutier ? "grand" : "courte") : "",
+      /* Le titre qui autorise à travailler part avec l'embauche : sans sa
+         date de fin, personne ne voit venir son échéance. L. 5221-8. */
+      titreTravail: V.titreTravail || "",
+      titreNumero: V.titreNumero || "",
+      titreFin: V.titreFin || "",
     });
     if (!r) { $("etat").textContent = "Rien n'a été inscrit."; return; }
     var dits = [];

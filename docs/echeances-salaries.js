@@ -153,6 +153,37 @@
   var MOIS_NOM = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
     "août", "septembre", "octobre", "novembre", "décembre"];
 
+  /* LA CLÔTURE DU MOIS DE DÉCOMPTE EST UNE ÉCHÉANCE.
+
+     Relevé le 27 septembre 2026 : l'écran des heures annonce « clôture prévue
+     le 5 » du mois suivant, et l'agenda n'en savait rien. Un mois tenu et non
+     clos est un décompte que personne n'a arrêté : c'est lui qu'on produira en
+     cas de litige. On ne remonte pas au-delà de trois mois : au-delà, le
+     rappel n'apporte plus rien, et le décompte reste la pièce. */
+  function cloturesDesHeures(id, nom, d0) {
+    var t = lire("heures-decompte", {}), out = [];
+    Object.keys(t).forEach(function (cle) {
+      var coupe = cle.split("|");
+      if (coupe[0] !== id || !/^\d{4}-\d{2}$/.test(coupe[1] || "")) return;
+      var m = t[cle];
+      if (!m || (m.clos && m.clos.le)) return;
+      var tenu = (m.jours && Object.keys(m.jours).length) || (m.rectifs || []).length ||
+        (m.recl || []).length || net(m.motif) || net(m.retenu);
+      if (!tenu) return;
+      var annee = parseInt(coupe[1].slice(0, 4), 10), mois = parseInt(coupe[1].slice(5, 7), 10);
+      /* Le 5 du mois qui suit celui du décompte. */
+      var d = jour(new Date(annee, mois, 5));
+      var depuis = joursEntre(d, d0);
+      if (depuis === null || depuis < -93 || depuis > 40) return;
+      out.push({ quoi: "Clôture du décompte des heures de " + MOIS_NOM[mois - 1] + " " + annee,
+        qui: nom, date: d, jours: depuis, etat: etatDe(depuis),
+        fond: "L. 3171-2 et D. 3171-8 : l'employeur établit les documents nécessaires au décompte de la durée de travail",
+        faire: "clore le mois dans le décompte des heures, le faire signer au salarié, et le conserver",
+        prov: "salaries" });
+    });
+    return out;
+  }
+
   function echeances(aujourdhui) {
     var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
     var conducteurs = lire(CLE_CONDUCTEURS, {});
@@ -214,6 +245,19 @@
          manquait. L'écran des heures garde le compte sur le mois ; l'agenda
          le reprend, daté du dernier jour du mois, avec son motif. */
       depassementsDesHeures(id, nom, d0).forEach(function (e) { out.push(e); });
+      cloturesDesHeures(id, nom, d0).forEach(function (e) { out.push(e); });
+
+      /* LE TITRE QUI AUTORISE À TRAVAILLER A UNE DATE DE FIN.
+
+         L. 5221-8 met à la charge de l'employeur de s'assurer de l'existence
+         du titre. Un titre expiré, c'est un salarié qui ne peut plus être
+         employé, et personne ne voyait venir la date. Elle vient du contrat
+         écrit ici. Relevé le 27 septembre 2026. */
+      if (net(su.titreFin))
+        pose("Titre de séjour ou de travail à renouveler", net(su.titreFin),
+          "L. 5221-8 : l'employeur s'assure auprès des administrations territorialement compétentes de l'existence du titre autorisant l'étranger à exercer une activité salariée en France",
+          "la copie du titre renouvelé, et la vérification auprès de la préfecture" +
+            (net(su.titreNumero) ? " ; titre en cours : " + net(su.titreNumero) : ""));
 
       /* La déclaration préalable ne se rappelle que si l'embauche est devant
          nous ou d'hier : passé ce délai, elle est faite ou elle ne se

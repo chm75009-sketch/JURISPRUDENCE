@@ -129,9 +129,14 @@
   <summary>Compléter les dates</summary>
   <form id="formulaire" autocomplete="off">
     <div class="grille">
+      <!-- UN SEUL EFFECTIF, CELUI DE LA FICHE.
+           Ce champ en donnait un second : l'agenda affichait « Effectif
+           retenu : 41 » et « 82 en poste » sur la même page. L'effectif ne se
+           ressaisit pas ici, il se lit sur la fiche d'entreprise et se corrige
+           là-bas. Relevé le 27 septembre 2026. -->
       <label><span class="nom">Effectif de l'entreprise</span>
-        <input type="number" id="f-effectif" min="0" step="1">
-        <span class="provenance" id="p-effectif" hidden></span></label>
+        <span class="nom" id="dit-effectif" style="font-weight:400"></span>
+        <span class="provenance">repris de la fiche d'entreprise, à corriger sur la fiche</span></label>
       <label><span class="nom">Une section syndicale d'organisation représentative est-elle constituée ?</span>
         <select id="f-sectionsSyndicales">
           <option value="">non renseigné</option>
@@ -322,6 +327,14 @@
     return e ? String(e.value || "").trim() : "";
   }
   function preremplir() {
+    /* L'effectif se lit, il ne se saisit plus : on l'écrit à la place du
+       champ, avec sa provenance. */
+    var de = $("dit-effectif");
+    if (de) {
+      var x = donnee(PROVENANCES.effectif);
+      de.textContent = x ? String(x.valeur) + " salarié" + (nombre(x.valeur) > 1 ? "s" : "")
+        : "non renseigné sur la fiche d'entreprise";
+    }
     Object.keys(PROVENANCES).forEach(function (cle) {
       var d = donnee(PROVENANCES[cle]), e = $("f-" + cle), p = $("p-" + cle);
       if (!e) return;
@@ -867,6 +880,25 @@
       });
     }
 
+    /* LES TITRES D'EXERCER SONT DES ÉCHÉANCES COMME LES AUTRES.
+       La licence de transport n'apparaissait qu'à l'accueil, cachée sous
+       « et 118 autres », et jamais dans l'agenda. Passée sa date, l'entreprise
+       n'a plus de titre à faire monter dans ses véhicules. Relevé le
+       27 septembre 2026. */
+    if (window.Profil && window.Profil.echeancesTransport) {
+      window.Profil.echeancesTransport().forEach(function (e) {
+        lignes.push({
+          tri: e.date, quand: enFr(e.date),
+          titre: e.quoi + " : " + e.qui,
+          fondement: e.fond,
+          docs: e.faire || "",
+          retard: e.etat === "passe",
+          detail: e.etat === "passe" ? "Échéance dépassée." : "",
+          prov: "fiche",
+        });
+      });
+    }
+
     return { lignes: lignes, attentes: attentes, cadences: cadences, notes: notes,
       rien: !Object.keys(d).length };
   }
@@ -904,7 +936,17 @@
     }
     r.notes.forEach(function (n) { h += '<div class="attente"><p class="w" style="margin:0">' + ech(n) + "</p></div>"; });
 
+    /* UN COMPTEUR AVANT LE MUR DE CARTES.
+       Cent vingt-trois cartes « en retard » se déroulaient sans qu'une ligne
+       dise combien il y en avait, ni combien étaient en retard. Relevé le
+       27 septembre 2026 : le compte se lit d'abord, les cartes ensuite. */
+    var enRetard = r.lignes.filter(function (l) { return l.retard; }).length;
     h += '<p class="groupe">Les douze prochains mois</p>';
+    if (r.lignes.length) {
+      h += '<p class="aide">' + r.lignes.length + " échéance" + (r.lignes.length > 1 ? "s" : "") +
+        (enRetard ? ", dont " + enRetard + " en retard" : ", aucune en retard") +
+        ". Les plus proches en premier.</p>";
+    }
     if (!r.lignes.length) {
       h += '<p class="aide">Aucune échéance datée ne peut être calculée avec les données disponibles.</p>';
     } else {
