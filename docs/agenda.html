@@ -461,13 +461,89 @@
           fondement: "L. 2314-8 (après une carence, la demande ne peut intervenir qu'à l'issue d'un délai de six mois ; elle oblige alors l'employeur à engager la procédure dans le mois suivant sa réception)",
           docs: "le procès-verbal de carence du " + enFr(dateCarence) + ", sa diffusion aux salariés et sa transmission à l'inspection du travail",
           retard: false, prov: "profil" });
+      /* UNE CARENCE NE DISPENSE PAS POUR TOUJOURS. Demande du 27 septembre
+         2026 : « demander la date pour faire une alerte 4 ans après et
+         relancer à nouveau l'organisation des élections ». L. 2314-4
+         (LEGIARTI000035651165, deux lectures concordantes au relais le
+         27 septembre 2026) : « l'employeur informe le personnel TOUS LES
+         QUATRE ANS de l'organisation des élections par tout moyen permettant
+         de conférer date certaine à cette information ». Le procès-verbal de
+         carence clôt un cycle, il n'en ouvre pas un sans fin : quatre ans
+         après, l'information du personnel se refait, et c'est à l'employeur de
+         la faire, sans attendre qu'on la lui demande. */
+      var relance = plusMois(dateCarence, 48);
+      lignes.push({ tri: relance, quand: enFr(relance),
+        titre: "Informer de nouveau le personnel de l'organisation des élections : quatre ans depuis le procès-verbal de carence",
+        fondement: "L. 2314-4 (l'employeur informe le personnel tous les quatre ans de l'organisation des élections, par tout moyen conférant date certaine ; le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion)",
+        docs: "la note d'information du personnel, l'invitation des organisations syndicales, le protocole d'accord préélectoral ; à défaut de candidat, un nouveau procès-verbal de carence",
+        detail: "Procès-verbal de carence du " + enFr(dateCarence) + ". Le premier tour devra se tenir au plus tard le " +
+          enFr(plusJours(relance, 90)) + " si l'information est diffusée à cette date.",
+        retard: passee(relance), prov: "profil" });
+      if (passee(relance))
+        attentes.push({ t: "Quatre ans depuis le procès-verbal de carence : l'information du personnel était à refaire le " + enFr(relance) + ".",
+          w: "L. 2314-4 : l'employeur informe le personnel tous les quatre ans de l'organisation des " +
+            "élections. Le procès-verbal du " + enFr(dateCarence) + " a clos un cycle, il n'en dispense pas " +
+            "pour la suite. Diffusez la note d'information, invitez les organisations syndicales, et si " +
+            "personne ne se présente, établissez un nouveau procès-verbal de carence." });
     } else if (parCarence) {
       attentes.push({ t: "Procès-verbal de carence : sa date manque.",
         w: "Votre fiche dit qu'un procès-verbal de carence a été établi, sans dire quand. C'est cette date " +
           "qui ouvre le délai de six mois pendant lequel aucune demande d'élections n'est recevable " +
           "(L. 2314-8). Renseignez-la dans la fiche d'entreprise." });
     }
-    if (pasDeComite && !parCarence) {
+    /* LES ÉLECTIONS EN COURS : DEUX DÉLAIS, ET ILS NE SE DEVINENT PAS.
+
+       Demande du 27 septembre 2026. L. 2314-5 (LEGIARTI000035651159, deux
+       lectures concordantes au relais ce jour) : « L'invitation à négocier
+       mentionnée au présent article doit parvenir au plus tard quinze jours
+       avant la date de la première réunion de négociation. » L. 2314-4 : le
+       premier tour se tient « au plus tard le quatre-vingt-dixième jour
+       suivant la diffusion » de l'information au personnel. Une réunion de
+       négociation au mardi 20 octobre veut donc dire des lettres reçues le
+       5 octobre au plus tard, et c'est ce calcul-là que l'écran doit faire. */
+    var enCours = pasDeComite && repCse.indexOf("cours") >= 0;
+    if (enCours) {
+      var dInfo = String(fichePf.cseInfoPersonnel || "").trim();
+      var dNego = String(fichePf.cseReunionNego || "").trim();
+      attentes.push({ t: "Élections en cours d'organisation : ni réunions ni consultations du comité à inscrire.",
+        w: "Tant que la délégation n'est pas élue, il n'y a pas de comité à réunir ni à consulter. Ce qui " +
+          "court, c'est le calendrier électoral : l'information du personnel par tout moyen conférant date " +
+          "certaine, l'invitation des organisations syndicales, la négociation du protocole, puis les deux " +
+          "tours. Les documents s'écrivent dans Audit, puis Comité social et économique." });
+      if (estDate(dNego)) {
+        var recuLe = plusJours(dNego, -15);
+        lignes.push({ tri: recuLe, quand: enFr(recuLe),
+          titre: "Invitation des organisations syndicales reçue, au plus tard, à négocier le protocole préélectoral",
+          fondement: "L. 2314-5 (l'invitation à négocier doit parvenir au plus tard quinze jours avant la date de la première réunion de négociation)",
+          docs: "les lettres aux organisations syndicales, et la preuve de leur réception ; le courrier se date de l'envoi, le délai se compte de la réception",
+          detail: "Première réunion de négociation le " + enFr(dNego) + ". Quinze jours avant : le " + enFr(recuLe) + ".",
+          retard: passee(recuLe), prov: "profil" });
+        lignes.push({ tri: dNego, quand: enFr(dNego),
+          titre: "Première réunion de négociation du protocole d'accord préélectoral",
+          fondement: "L. 2314-6 (la validité du protocole est subordonnée à sa signature par la majorité des organisations syndicales ayant participé à sa négociation, dont les représentatives ayant recueilli la majorité des suffrages exprimés aux dernières élections) et L. 2314-7 (le protocole peut modifier le nombre de sièges ou le volume des heures de délégation, à volume global au moins égal par collège)",
+          docs: "le projet de protocole, la liste des collèges et l'effectif par collège, la feuille de présence",
+          retard: passee(dNego), prov: "profil" });
+      } else {
+        attentes.push({ t: "Élections en cours : la date de la première réunion de négociation manque.",
+          w: "C'est elle qui fixe le jour où les invitations doivent être parvenues aux organisations " +
+            "syndicales, quinze jours plus tôt (L. 2314-5). Renseignez-la dans la fiche d'entreprise, " +
+            "rubrique Représentation du personnel." });
+      }
+      if (estDate(dInfo)) {
+        var premierTour = plusJours(dInfo, 90);
+        lignes.push({ tri: premierTour, quand: enFr(premierTour),
+          titre: "Premier tour des élections, au plus tard",
+          fondement: "L. 2314-4 (le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion de l'information au personnel)",
+          docs: "les listes de candidats, les bulletins et les enveloppes, la liste électorale par collège, le procès-verbal du scrutin ; à défaut de candidat, le procès-verbal de carence (L. 2314-9)",
+          detail: "Information du personnel diffusée le " + enFr(dInfo) + ".",
+          retard: passee(premierTour), prov: "profil" });
+      } else {
+        attentes.push({ t: "Élections en cours : la date de l'information du personnel manque.",
+          w: "Elle ouvre le délai de quatre-vingt-dix jours au terme duquel le premier tour doit s'être tenu " +
+            "(L. 2314-4). Renseignez-la dans la fiche d'entreprise, rubrique Représentation du personnel." });
+      }
+    }
+    if (pasDeComite && !parCarence && !enCours) {
       attentes.push({ t: "Aucun comité en place : ce sont les élections qui sont dues, pas les réunions.",
         w: "Votre fiche répond « non » à la question du comité social et économique, et votre effectif " +
           "l'impose (L. 2311-2). L'employeur informe le personnel de l'organisation des élections par tout " +
@@ -582,8 +658,10 @@
 
     /* Ce qui vient à la place : l'organisation des élections. Sauf après une
        carence, où le délai de six mois de L. 2314-8 court encore et où rien
-       n'est à organiser : la ligne datée ci-dessus le dit à sa place. */
-    if (pasDeComite && !parCarence) {
+       n'est à organiser : la ligne datée ci-dessus le dit à sa place. Et sauf
+       quand elles sont en cours : on ne demande pas d'organiser ce qui l'est,
+       ce sont les deux échéances datées qui valent. */
+    if (pasDeComite && !parCarence && !enCours) {
       cadences.push({
         titre: "Organiser les élections du comité social et économique",
         rythme: "premier tour au plus tard le quatre-vingt-dixième jour suivant l'information du personnel",

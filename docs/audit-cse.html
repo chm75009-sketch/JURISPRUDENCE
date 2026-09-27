@@ -228,8 +228,15 @@
   var COMITE_ABSENT = repCse.indexOf("non") === 0;
   var COMITE_ELU = repCse.indexOf("oui") === 0;
   var PAR_CARENCE = COMITE_ABSENT && repCse.indexOf("carence") >= 0;
+  /* La quatrième réponse, demandée le 27 septembre 2026 : les élections sont
+     en cours. Elles ne sont ni faites ni à lancer, et les deux dates de la
+     fiche disent où en est le calendrier. */
+  var EN_COURS = COMITE_ABSENT && repCse.indexOf("cours") >= 0;
   var DATE_CARENCE = String(profil.cseCarence || "").trim();
   var DATE_ELECTIONS = String(profil.cseElections || "").trim();
+  var DATE_INFO = String(profil.cseInfoPersonnel || "").trim();
+  var DATE_NEGO = String(profil.cseReunionNego || "").trim();
+  function estIso(v) { return /^\d{4}-\d{2}-\d{2}$/.test(String(v || "").trim()); }
 
   /* ──────────────────────────────────────────────────────────── les textes
 
@@ -366,20 +373,59 @@
     if (p.length !== 3) return "";
     return " du " + (+p[2]) + " " + MOIS[+p[1] - 1] + " " + p[0];
   }
+  /* Quatre ans après le procès-verbal de carence, l'information du personnel se
+     refait : L. 2314-4 la veut « tous les quatre ans ». Demande du 27 septembre
+     2026. */
+  function relanceQuatreAns() {
+    if (!estIso(DATE_CARENCE)) return " La date du procès-verbal n'est pas renseignée : sans elle, " +
+      "ni les six mois de L. 2314-8 ni les quatre ans de L. 2314-4 ne peuvent être calculés.";
+    var d = new Date(DATE_CARENCE + "T12:00:00");
+    d.setFullYear(d.getFullYear() + 4);
+    var passe = d.getTime() < Date.now();
+    return passe
+      ? " L'information du personnel était à refaire le " + dateFrJour(d) +
+        ", quatre ans après le procès-verbal (L. 2314-4) : elle est en retard."
+      : " L'information du personnel se refera le " + dateFrJour(d) +
+        " au plus tard, quatre ans après le procès-verbal (L. 2314-4).";
+  }
+
   function bandeauComite() {
     var el = $("etat-comite");
     if (!el) return;
-    if (COMITE_ABSENT) {
+    if (EN_COURS) {
+      el.className = "avis att";
+      var dits = ["Votre fiche indique que les élections sont en cours d'organisation : la convocation " +
+        "des réunions, l'ordre du jour, le procès-verbal et le règlement intérieur du comité " +
+        "supposent une instance élue et ne sont pas proposés."];
+      if (estIso(DATE_NEGO))
+        dits.push("Première réunion de négociation du protocole le " + dateFrJour(new Date(DATE_NEGO + "T12:00:00")) +
+          " : les invitations doivent être parvenues aux organisations syndicales le " +
+          dateFrJour(jour(new Date(DATE_NEGO + "T12:00:00"), -15)) + " au plus tard (L. 2314-5).");
+      else
+        dits.push("La date de la première réunion de négociation n'est pas renseignée : c'est elle qui " +
+          "fixe le jour où les invitations doivent être parvenues, quinze jours plus tôt (L. 2314-5).");
+      if (estIso(DATE_INFO))
+        dits.push("Information du personnel diffusée le " + dateFrJour(new Date(DATE_INFO + "T12:00:00")) +
+          " : premier tour au plus tard le " + dateFrJour(jour(new Date(DATE_INFO + "T12:00:00"), 90)) + " (L. 2314-4).");
+      else
+        dits.push("La date de l'information du personnel n'est pas renseignée : elle ouvre les " +
+          "quatre-vingt-dix jours au terme desquels le premier tour doit s'être tenu (L. 2314-4).");
+      el.textContent = dits.join(" ");
+    } else if (COMITE_ABSENT) {
       el.className = "avis non";
       el.textContent = PAR_CARENCE
         ? "Votre fiche indique qu'aucun comité n'est en place, un procès-verbal de carence" +
           motCarence() + " l'ayant constaté. La convocation des réunions, l'ordre du jour, le " +
           "procès-verbal et le règlement intérieur du comité supposent une instance élue : ils " +
-          "ne sont pas proposés. Reste la carence, à conserver et à produire."
-        : "Votre fiche indique qu'aucun comité n'est en place. Ce qui est dû, c'est l'organisation " +
-          "des élections, ou le procès-verbal de carence si aucun candidat ne se présente. La " +
-          "convocation des réunions, l'ordre du jour, le procès-verbal et le règlement intérieur " +
-          "du comité supposent une instance élue : ils ne sont pas proposés.";
+          "ne sont pas proposés. Reste la carence, à conserver et à produire." + relanceQuatreAns()
+        : "Votre fiche indique qu'aucun comité n'est en place, et qu'aucune élection n'a été " +
+          "organisée. Le comité est dû à partir de onze salariés (L. 2311-2) : ce qui s'impose est " +
+          "d'informer le personnel de l'organisation des élections, par tout moyen conférant date " +
+          "certaine, et d'inviter les organisations syndicales à négocier le protocole. " +
+          "L'entrave à la constitution du comité, « notamment par la méconnaissance des " +
+          "dispositions des articles L. 2314-1 à L. 2314-9 », est punie d'un an d'emprisonnement " +
+          "et de 7 500 euros d'amende (L. 2317-1). Commencez par la ligne « Élections du comité » " +
+          "ci-dessous : elle écrit la note, les invitations et le protocole.";
     } else if (COMITE_ELU) {
       el.className = "avis ok";
       var fin = "";

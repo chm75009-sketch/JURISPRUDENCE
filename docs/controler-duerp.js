@@ -249,7 +249,17 @@
     var r = reponseComite();
     var consulte = "<p>Le comité social et économique est consulté sur le présent document et sur ses mises à jour (L. 4121-3). Avis rendu le " +
       marque("dateAvisCse", "date de l'avis") + ".</p>";
-    if (r.indexOf("non") === 0) {
+    /* LA FICHE DISTINGUE MAINTENANT QUATRE SITUATIONS, ET LE DOCUMENT AUSSI.
+       Écrire « les élections ont été organisées et un procès-verbal de carence
+       a été établi » quand elles sont en cours, ou quand aucune n'a été
+       organisée, c'est écrire un fait qui n'a pas eu lieu, sous la signature du
+       gérant. Relevé le 27 septembre 2026. */
+    if (r.indexOf("cours") >= 0) {
+      return "<p>Aucun comité social et économique n'est en place à ce jour : les élections sont en " +
+        "cours d'organisation. Le présent document est tenu à disposition dans les conditions de " +
+        "l'article R. 4121-4, et il sera soumis au comité dès son élection (L. 4121-3).</p>";
+    }
+    if (r.indexOf("carence") >= 0) {
       var d = dateFr(P.cseCarence);
       return "<p>Aucun comité social et économique n'est en place. Les élections ont été " +
         "organisées et un procès-verbal de carence a été établi le " +
@@ -257,6 +267,12 @@
         ", porté à la connaissance des salariés et transmis à l'inspection du travail " +
         "(L. 2314-9) ; le document est tenu à disposition dans les conditions de " +
         "l'article R. 4121-4.</p>";
+    }
+    if (r.indexOf("non") === 0) {
+      return "<p>Aucun comité social et économique n'est en place, et aucune élection n'a été " +
+        "organisée à ce jour. Le présent document est tenu à disposition dans les conditions de " +
+        "l'article R. 4121-4 ; la consultation prévue à l'article L. 4121-3 sera recueillie dès " +
+        "que la délégation du personnel sera élue.</p>";
     }
     if (r.indexOf("oui") === 0) return consulte;
     return consulte + "<p><mark>" + ech(CARENCE) + "</mark></p>";

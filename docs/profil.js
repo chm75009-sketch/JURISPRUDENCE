@@ -115,9 +115,18 @@
        26 septembre 2026 : la question n'était posée que dans les parcours,
        si bien que l'accueil, l'agenda, Gérer et l'audit proposaient les
        réunions et les consultations d'un comité que l'entreprise n'a pas. */
+    /* QUATRE RÉPONSES, PARCE QU'IL Y A QUATRE SITUATIONS. Demande du
+       27 septembre 2026 : « si organisation des élections faute alors pv de
+       carence, et à ce moment demander la date pour faire une alerte 4 ans
+       après et relancer à nouveau l'organisation des élections ; si jamais
+       organisation des élections inciter à le faire ». Et, le même jour, la
+       quatrième : les élections en cours d'organisation, qui est la situation
+       de l'entreprise le jour où elle envoie ses lettres. Répondre « aucune
+       élection organisée » quand elles sont en cours était inexact. */
     { c: "cseExiste", nom: "Un comité social et économique est-il en place ?", t: "select",
-      options: ["oui, élu", "non, procès-verbal de carence", "non, aucune élection organisée"],
-      aide: "À partir de onze salariés pendant douze mois consécutifs, le comité est dû (L. 2311-2). Quand les élections n'ont donné aucun candidat, c'est un procès-verbal de carence qui le constate (L. 2314-9). Sans comité, le procès-verbal de carence remplace son avis, et ses réunions et consultations ne sont plus proposées." },
+      options: ["oui, élu", "non, élections en cours d'organisation",
+        "non, procès-verbal de carence", "non, aucune élection organisée"],
+      aide: "À partir de onze salariés pendant douze mois consécutifs, le comité est dû (L. 2311-2). Quand les élections n'ont donné aucun candidat, c'est un procès-verbal de carence qui le constate (L. 2314-9) ; l'information du personnel se refait tous les quatre ans (L. 2314-4). Sans comité, le procès-verbal de carence remplace son avis, et ses réunions et consultations ne sont plus proposées." },
     { c: "groupe", nom: "L'entreprise appartient-elle à un groupe ?", t: "oui-non",
       aide: "Le groupe déclenche le comité de groupe et pèse sur certains seuils des modules dédiés." },
     { c: "etablissementsDistincts", nom: "L'entreprise comporte-t-elle au moins deux établissements distincts ?", t: "oui-non",
@@ -165,7 +174,14 @@
     { c: "cseElections", nom: "Date des dernières élections", t: "date",
       aide: "Le mandat dure quatre ans (L. 2314-33) : c'est cette date qui dit quand recommencer." },
     { c: "cseCarence", nom: "Date du procès-verbal de carence", t: "date",
-      aide: "À renseigner si aucun candidat ne s'est présenté : le procès-verbal se transmet à l'inspection du travail." },
+      aide: "À renseigner si aucun candidat ne s'est présenté : le procès-verbal se transmet à l'inspection du travail. C'est elle qui ouvre les six mois pendant lesquels aucune demande d'élections n'est recevable (L. 2314-8), et les quatre ans au terme desquels l'information du personnel se refait (L. 2314-4)." },
+    /* LES DEUX DATES DES ÉLECTIONS EN COURS. Demande du 27 septembre 2026 :
+       la fiche ne disait pas que les élections étaient en cours, et rien ne
+       calculait les deux délais qui commandent l'envoi des lettres. */
+    { c: "cseInfoPersonnel", nom: "Information du personnel sur l'organisation des élections, le", t: "date",
+      aide: "À renseigner quand les élections sont en cours. Le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant cette diffusion (L. 2314-4)." },
+    { c: "cseReunionNego", nom: "Première réunion de négociation du protocole, le", t: "date",
+      aide: "L'invitation des organisations syndicales doit leur parvenir au plus tard quinze jours avant cette date (L. 2314-5)." },
     { c: "delegueSyndical", nom: "Un délégué syndical est-il désigné ?", t: "oui-non",
       aide: "La négociation annuelle obligatoire n'est due que si une ou plusieurs sections syndicales représentatives sont constituées (L. 2242-1)." },
   ];
