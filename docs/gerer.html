@@ -236,6 +236,12 @@
            ans (R. 4323-56) : la date se portait ici et ne remontait ni à la
            fiche conducteur ni à l'agenda. Relevé le 26 septembre 2026. -->
       <button type="button" class="second" id="btn-conducteur" hidden>Porter à la fiche conducteur</button>
+      <!-- LE REGISTRE DES SANCTIONS N'ÉTAIT RELIÉ À AUCUNE LETTRE. Les
+           avertissements, les mises à pied et les licenciements pour faute
+           partaient un à un, et au moment de sanctionner de nouveau personne ne
+           savait ce qui pouvait encore être invoqué. Relevé le 27 septembre
+           2026. -->
+      <button type="button" class="second" id="btn-sanction" hidden>Porter au registre des sanctions</button>
     </div>
     <p class="doux" id="d-inscrit" hidden></p>
     <details class="loi"><summary>Voir le texte de loi</summary><div id="d-loi"></div></details>
@@ -573,6 +579,27 @@
     "R2242-1": { id: "LEGIARTI000036222825", lu: 8,
       dit: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" },
 
+    /* L'inaptitude constatée par le médecin du travail, et le permis. Lus à la
+       source le 27 septembre 2026, deux lectures concordantes chacun. */
+    "L4624-4": { id: "LEGIARTI000033024926", lu: 27,
+      dit: "après étude de poste et échange avec le salarié et l'employeur, le médecin du travail qui constate qu'aucun aménagement n'est possible et que l'état de santé justifie un changement de poste déclare le travailleur inapte ; l'avis est éclairé par des conclusions écrites assorties d'indications sur le reclassement" },
+    "L1226-2": { id: "LEGIARTI000035653236", lu: 27,
+      dit: "après une maladie ou un accident non professionnel, l'employeur propose au salarié déclaré inapte un autre emploi approprié à ses capacités, dans l'entreprise ou le groupe sur le territoire national, après avis du comité, en prenant en compte les conclusions écrites et les indications du médecin du travail" },
+    "L1226-2-1": { id: "LEGIARTI000033013454", lu: 27,
+      dit: "l'impossibilité de reclasser se fait connaître par écrit et motivée ; le contrat ne peut être rompu que sur l'impossibilité de proposer un emploi, le refus du salarié, ou la mention expresse de l'avis que tout maintien serait gravement préjudiciable à sa santé ou que son état fait obstacle à tout reclassement ; la procédure est celle du licenciement pour motif personnel" },
+    "L1226-4": { id: "LEGIARTI000025560071", lu: 27,
+      dit: "un mois après l'examen de reprise, le salarié inapte ni reclassé ni licencié perçoit le salaire de l'emploi qu'il occupait avant la suspension ; en cas de licenciement le préavis n'est pas exécuté et le contrat est rompu à la notification, mais le préavis compte pour l'indemnité de licenciement et ne donne pas lieu à indemnité compensatrice" },
+    "L1226-10": { id: "LEGIARTI000035653215", lu: 27,
+      dit: "après un accident du travail ou une maladie professionnelle, l'employeur propose au salarié déclaré inapte un autre emploi approprié à ses capacités, aussi comparable que possible au précédent, après avis du comité et au vu des conclusions du médecin du travail" },
+    "L1226-12": { id: "LEGIARTI000033024893", lu: 27,
+      dit: "l'impossibilité de reclasser se fait connaître par écrit et motivée ; les trois seuls cas de rupture sont les mêmes qu'en inaptitude non professionnelle, et la procédure est celle du licenciement pour motif personnel" },
+    "L1226-14": { id: "LEGIARTI000006900981", lu: 27,
+      dit: "la rupture pour inaptitude d'origine professionnelle ouvre droit à une indemnité compensatrice égale à l'indemnité compensatrice de préavis et à une indemnité spéciale de licenciement égale au double de l'indemnité légale, sauf refus abusif du reclassement" },
+    "ROUTE-L221-2": { id: "LEGIARTI000039099784", lu: 27, code: "Code de la route",
+      dit: "conduire sans être titulaire du permis correspondant à la catégorie du véhicule est puni d'un an d'emprisonnement et de 15 000 euros d'amende" },
+    "ROUTE-L224-16": { id: "LEGIARTI000039099750", lu: 27, code: "Code de la route",
+      dit: "conduire malgré la notification d'une suspension, d'une rétention, d'une annulation ou d'une interdiction d'obtenir le permis est puni de deux ans d'emprisonnement et de 4 500 euros d'amende, avec confiscation obligatoire du véhicule du condamné" },
+
     /* Le délai de carence après un contrat à durée déterminée. Lus à la source
        le 27 septembre 2026, deux lectures concordantes chacun. */
     "L1244-3": { id: "LEGIARTI000035644007", lu: 27,
@@ -648,6 +675,10 @@
       if (civ) return "article " + n.slice(4) + " du code civil";
       if (n.indexOf("TR-") === 0)
         return n.slice(3).replace(/^([LRD])(\d)/, "$1. $2") + " du code des transports";
+      /* Le code de la route : la suspension du permis et la conduite sans
+         permis y sont, et elles se citent pour ce qu'elles sont. */
+      if (n.indexOf("ROUTE-") === 0)
+        return n.slice(6).replace(/^([LRD])(\d)/, "$1. $2") + " du code de la route";
       var x = (css ? n.slice(4) : n).replace(/^([LRD])(\d)/, "$1. $2");
       return css ? x + " du code de la sécurité sociale" : x;
     }).join(", ");
@@ -3787,6 +3818,200 @@
       loi: ["L1331-1", "L1332-1", "L1332-2", "L1332-3", "L1332-4", "R1332-1"] };
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA SUSPENSION OU LE RETRAIT DU PERMIS DE CONDUIRE.
+
+     Aucun parcours n'existait, dans une application ouverte par un
+     transporteur dont soixante-dix-neuf salariés sur quatre-vingt-cinq sont
+     conducteurs. Relevé le 27 septembre 2026.
+
+     Ce qui décide, et qui est lu à la source le même jour, deux lectures
+     concordantes : conduire malgré la notification d'une suspension est puni de
+     deux ans d'emprisonnement et de 4 500 euros d'amende (L. 224-16 du code de
+     la route, LEGIARTI000039099750) ; conduire sans permis de la catégorie du
+     véhicule, d'un an et de 15 000 euros (L. 221-2, LEGIARTI000039099784). La
+     mesure immédiate n'est donc pas une option.
+
+     Et ce qui est jugé, lu dans Judilibre le même jour, recherche exacte, non
+     relâchée : « aucune clause du contrat ne peut valablement décider qu'une
+     circonstance quelconque constituera en elle-même une cause de
+     licenciement » (Cass. soc. 12 février 2014, n° 12-11.554, publié, rendu sur
+     une clause qui prévoyait la rupture en cas de retrait du permis). Une
+     suspension n'est donc jamais, à elle seule, un motif : c'est l'impossibilité
+     d'exécuter le contrat qui en est un, et elle se démontre.
+     ══════════════════════════════════════════════════════════════════════ */
+  function permisSuspendu(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
+    var sP = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var emploi = String(v.poste || "").trim() || (sP && String(sP.emp || "").trim()) || "[emploi]";
+    var debut = dateDe(v.debut), fin = dateDe(v.fin);
+    var jours = debut && fin ? joursEntre(debut, fin) : null;
+    var medicale = v.cause === "medicale";
+    var service = v.cause === "service";
+    var definitif = v.duree === "definitif";
+    var b = [], dates = [], alertes = [];
+
+    b.push({ k: "t1", t: definitif ? "Retrait du permis de conduire : ce qui se fait, et dans quel ordre"
+      : "Suspension du permis de conduire : ce qui se fait, et dans quel ordre" });
+    b.push({ k: "st", t: nomS + (emploi ? " · " + emploi : "") });
+    b.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI) + " par " + societe() + "." });
+
+    b.push({ k: "h1", t: "1 - La mesure immédiate : plus de conduite" });
+    b.push({ k: "p", t: "À compter " + (debut ? "du " + dateFr(debut) : "de la notification de la décision") + ", le salarié ne conduit plus aucun véhicule dont la conduite suppose le permis retiré ou suspendu. Cette mesure n'attend rien : conduire malgré la notification d'une suspension, d'une rétention, d'une annulation ou d'une interdiction d'obtenir le permis est puni de deux ans d'emprisonnement et de 4 500 euros d'amende, avec confiscation obligatoire du véhicule du condamné (" + ref(["ROUTE-L224-16"]) + ") ; conduire sans être titulaire du permis de la catégorie du véhicule, d'un an et de 15 000 euros (" + ref(["ROUTE-L221-2"]) + ")." });
+    b.push({ k: "p", t: "Retirez le véhicule et la carte de conducteur, notez la date et l'heure de ce retrait, et faites-le savoir à l'exploitation : c'est elle qui affecte les tournées." });
+    b.push({ k: "note", t: "La mesure n'est pas une sanction : elle constate une interdiction légale de conduire. Elle ne se prononce donc pas à l'issue d'un entretien préalable, et elle n'épuise pas le pouvoir disciplinaire si les faits ont été commis au service." });
+
+    b.push({ k: "h1", t: "2 - Ce que cette suspension est, et ce qu'elle n'est pas" });
+    if (service) {
+      b.push({ k: "p", t: "Les faits ont été commis dans l'exercice des fonctions : ils peuvent être fautifs, et ouvrir une procédure disciplinaire distincte. Elle se mène alors pour ce qu'elle est, avec l'entretien préalable et le délai de deux mois de l'article " + ref(["L1332-4"]) + ", et elle se fonde sur les faits, non sur la suspension." });
+    } else if (medicale) {
+      b.push({ k: "p", t: "Le permis est retiré ou suspendu pour inaptitude physique constatée médicalement : il n'y a aucune faute, et c'est la voie de l'inaptitude qui s'ouvre. Saisissez le service de prévention et de santé au travail, et reportez-vous au document « Inaptitude constatée par le médecin du travail » de cet écran." });
+    } else {
+      b.push({ k: "p", t: "Les faits ont été commis en dehors du temps et du lieu de travail : ils relèvent de la vie personnelle du salarié et ne sont pas une faute. Aucune sanction disciplinaire ne peut donc être prononcée à ce titre." });
+    }
+    b.push({ k: "p", t: "Et aucune clause du contrat ne peut décider que le retrait du permis constitue par lui-même une cause de licenciement : « aucune clause du contrat ne peut valablement décider qu'une circonstance quelconque constituera en elle-même une cause de licenciement » (Cass. soc. 12 février 2014, n° 12-11.554). Ce qui peut fonder une rupture, c'est l'impossibilité d'exécuter le contrat, et elle se démontre : la durée de l'indisponibilité, l'absence de poste sans conduite, la désorganisation qui en résulte." });
+
+    b.push({ k: "h1", t: "3 - Ce qu'il faut chercher avant toute décision" });
+    b.push({ k: "puce", t: "un poste sans conduite, dans l'entreprise, pour la durée de l'indisponibilité : quai, magasin, exploitation, atelier ;" });
+    b.push({ k: "puce", t: "une conduite qui reste permise, si la suspension ne porte que sur une catégorie ;" });
+    b.push({ k: "puce", t: "l'aménagement du temps de travail, ou la prise de congés à la demande du salarié ;" });
+    b.push({ k: "puce", t: "la date exacte à laquelle le permis est restitué, et les démarches à accomplir avant." });
+    b.push({ k: "p", t: "Ce que vous avez cherché et ce que vous avez trouvé s'écrit : [postes examinés, dates, et pourquoi chacun n'a pas pu être proposé]." });
+
+    b.push({ k: "saut", t: "" });
+    b.push({ k: "t1", t: "Lettre au salarié" });
+    enTete(b, nomS, definitif ? "le retrait de votre permis de conduire" : "la suspension de votre permis de conduire",
+      "Lettre remise en main propre contre décharge ou recommandée avec avis de réception");
+    b.push({ k: "p", t: "Vous nous avez informés " + (debut ? "le " + dateFr(debut) : "[le ...]") + " de " + (definitif ? "l'annulation ou du retrait" : "la suspension") + " de votre permis de conduire" + (fin ? ", jusqu'au " + dateFr(fin) : "") + "." });
+    b.push({ k: "p", t: "Votre emploi " + de(emploi) + " suppose la conduite d'un véhicule pour laquelle ce permis est exigé. Nous ne pouvons donc plus vous confier de conduite : nous y serions tenus de vous en empêcher, la loi punissant de deux ans d'emprisonnement et de 4 500 euros d'amende le fait de conduire malgré la notification d'une suspension (" + ref(["ROUTE-L224-16"]) + ")." });
+    if (v.autre === "oui") {
+      b.push({ k: "p", t: "Nous vous proposons, pour la durée de cette indisponibilité, le poste suivant, sans conduite : [intitulé, lieu, horaires, rémunération]. Cette affectation est temporaire et prendra fin au retour de votre permis. Nous vous remercions de nous faire connaître votre réponse par écrit." });
+    } else if (v.autre === "non") {
+      b.push({ k: "p", t: "Nous avons recherché un poste sans conduite que nous pourrions vous confier pendant cette période. Nous n'en avons trouvé aucun : [dire ici quels postes ont été examinés, et pourquoi chacun n'a pas pu vous être proposé]." });
+      b.push({ k: "p", t: "Nous vous convoquerons donc à un entretien préalable, afin de recueillir vos explications avant toute décision. Cet entretien n'a pas un objet disciplinaire : il porte sur les conséquences de votre indisponibilité sur l'exécution de votre contrat de travail." });
+    } else {
+      b.push({ k: "p", t: "Nous recherchons un poste sans conduite que nous pourrions vous confier pendant cette période, et nous vous tiendrons informé du résultat de cette recherche. Si vous en connaissez un, faites-le nous savoir." });
+    }
+    b.push({ k: "p", t: "Pendant cette période, votre contrat de travail n'est pas suspendu : [préciser ce qui est retenu, affectation temporaire, congés à votre demande, ou absence non rémunérée faute de poste disponible]." });
+    formule(b, civ);
+
+    if (medicale && ccn && ccn.annexes) {
+      b.push({ k: "saut", t: "" });
+      b.push({ k: "t1", t: "Sous la convention des transports routiers" });
+      b.push({ k: "p", t: "L'article 11 ter de l'annexe I ouvre une indemnité conventionnelle particulière au conducteur dont le permis de la catégorie attachée à son emploi est retiré pour inaptitude physique constatée médicalement, en l'absence de reclassement et s'il justifie d'au moins trois ans d'exercice du métier de conducteur dans l'entreprise ; elle est d'un mois de salaire au moins au-delà de ces trois ans. Le paragraphe II l'étend à l'incapacité temporaire entraînant la suspension du permis." });
+      b.push({ k: "note", t: "La Cour de cassation applique ce texte à l'inaptitude définitive au poste de conducteur prononcée par le médecin du travail, dès lors que le salarié est resté dans l'incapacité physique de reprendre son ancienne profession (Cass. soc. 7 décembre 2011, n° 10-15.119)." });
+    }
+
+    if (fin) dates.push({ q: "Permis restitué le", d: dateFrJour(fin),
+      f: "fin de la suspension portée en tête" + (jours !== null ? ", soit " + jours + " jours d'indisponibilité" : ""), c: "" });
+    if (debut) dates.push({ q: "Décision à prendre au plus tard", d: dateFrJour(plusMois(debut, 1)),
+      f: "repère de gestion, non un délai légal : au-delà d'un mois sans poste et sans décision, l'absence non rémunérée se discute", c: "tard" });
+    if (!debut) alertes.push("La date de notification de la suspension n'est pas saisie : sans elle, ni la mesure immédiate ni les échéances ne se datent.");
+    if (!fin && !definitif) alertes.push("La date de restitution du permis n'est pas saisie. C'est la durée de l'indisponibilité qui décide : quelques semaines s'organisent, une année ne s'organise pas de la même façon.");
+    if (medicale) alertes.push("Retrait pour inaptitude physique : c'est la procédure d'inaptitude qui s'applique, avec le médecin du travail et l'obligation de reclassement. Aucun licenciement ne se prononce sur le seul retrait du permis.");
+    alertes.push("Vérifiez que le salarié n'est pas protégé : représentant du personnel, maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
+    return { blocs: b, dates: dates, alertes: alertes,
+      loi: ["ROUTE-L224-16", "ROUTE-L221-2", "L1332-4", "L1232-2", "L1232-6", "L1225-4", "L1226-9"] };
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     L'INAPTITUDE CONSTATÉE PAR LE MÉDECIN DU TRAVAIL.
+
+     Aucun parcours n'existait non plus. Relevé le 27 septembre 2026. Tous les
+     articles lus à la source le même jour, deux lectures concordantes.
+     ══════════════════════════════════════════════════════════════════════ */
+  function inaptitude(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
+    var sI = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var emploi = String(v.poste || "").trim() || (sI && String(sI.emp || "").trim()) || "[emploi]";
+    var avis = dateDe(v.avis);
+    var entree = dateDe(v.entree) || (sI ? dateDe(sI.ent) : null);
+    var salaire = Number(v.salaireRef) > 0 ? Number(v.salaireRef) : 0;
+    var pro = v.origine === "pro";
+    var dispense = v.dispense === "oui";
+    var moisFin = avis ? plusMois(avis, 1) : null;
+    var artRecl = pro ? "L1226-10" : "L1226-2";
+    var artMotifs = pro ? "L1226-12" : "L1226-2-1";
+    var cse = String((profil && profil.cseExiste) || "").trim().toLowerCase().indexOf("oui") === 0;
+    var b = [], dates = [], alertes = [];
+
+    b.push({ k: "t1", t: "Inaptitude constatée par le médecin du travail : ce qui se fait, et dans quel ordre" });
+    b.push({ k: "st", t: nomS + (emploi ? " · " + emploi : "") });
+    b.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI) + " par " + societe() + "." });
+
+    b.push({ k: "h1", t: "1 - L'avis, et ce qu'il doit porter" });
+    b.push({ k: "p", t: "L'avis d'inaptitude" + (avis ? " du " + dateFr(avis) : "") + " est rendu après étude de poste et après échange avec le salarié et avec l'employeur, et seulement si aucun aménagement, adaptation ou transformation du poste n'est possible. Il est éclairé par des conclusions écrites, assorties d'indications relatives au reclassement (" + ref(["L4624-4"]) + ")." });
+    b.push({ k: "p", t: "Relisez l'avis avant tout : sans conclusions écrites ni indications sur le reclassement, il ne permet pas de faire ce qui suit. L'origine retenue ici est " + (pro ? "professionnelle, accident du travail ou maladie professionnelle" : "non professionnelle") + ", et elle change les textes applicables et les indemnités." });
+
+    b.push({ k: "h1", t: "2 - Le mois qui court depuis l'avis" });
+    b.push({ k: "p", t: "Un mois après l'examen de reprise, le salarié qui n'est ni reclassé ni licencié perçoit de nouveau le salaire de l'emploi qu'il occupait avant la suspension de son contrat (" + ref(["L1226-4"]) + ")" + (moisFin ? ", soit à compter du " + dateFr(moisFin) : "") + ". Ce n'est pas une sanction : c'est le terme du délai pendant lequel la rémunération peut être suspendue." });
+
+    b.push({ k: "h1", t: "3 - La recherche de reclassement" });
+    b.push({ k: "p", t: "L'employeur propose au salarié un autre emploi approprié à ses capacités, dans l'entreprise ou dans les entreprises du groupe situées sur le territoire national dont l'organisation, les activités ou le lieu d'exploitation assurent la permutation de tout ou partie du personnel (" + ref([artRecl]) + ")." + (pro ? " L'emploi proposé est aussi comparable que possible à l'emploi précédemment occupé, au besoin par des mutations, des aménagements ou des adaptations du poste." : "") });
+    b.push({ k: "p", t: "La proposition prend en compte les conclusions écrites du médecin du travail et ses indications sur les capacités du salarié à exercer l'une des tâches existantes dans l'entreprise, " + (cse ? "après avis du comité social et économique, qui doit donc être consulté" : "après avis du comité social et économique lorsqu'il en existe un") + " (" + ref([artRecl]) + ")." });
+    b.push({ k: "p", t: "Écrivez la recherche au lieu de la raconter : [liste des postes examinés, avec pour chacun l'intitulé, le lieu, la raison pour laquelle il convient ou ne convient pas au regard de l'avis du médecin]." });
+    if (dispense) {
+      b.push({ k: "p", t: "L'avis porte la mention expresse que tout maintien du salarié dans un emploi serait gravement préjudiciable à sa santé, ou que son état de santé fait obstacle à tout reclassement : l'employeur est alors dispensé de la recherche, et peut rompre à ce seul titre (" + ref([artMotifs]) + "). Vérifiez que cette mention figure mot pour mot sur l'avis : c'est elle qui dispense, non une appréciation de l'employeur." });
+    }
+
+    b.push({ k: "h1", t: "4 - Les trois seules portes vers la rupture" });
+    b.push({ k: "puce", t: "l'impossibilité de proposer un emploi dans les conditions de l'article " + ref([artRecl]) + ", justifiée et écrite ;" });
+    b.push({ k: "puce", t: "le refus, par le salarié, de l'emploi proposé dans ces conditions ;" });
+    b.push({ k: "puce", t: "la mention expresse, dans l'avis, que tout maintien dans un emploi serait gravement préjudiciable à sa santé ou que son état fait obstacle à tout reclassement." });
+    b.push({ k: "p", t: "Hors de ces trois cas, le contrat ne peut pas être rompu (" + ref([artMotifs]) + "). Et l'impossibilité de reclasser se fait connaître au salarié par écrit, avec ses motifs, AVANT la convocation à l'entretien préalable." });
+    b.push({ k: "p", t: "Si le licenciement est prononcé, c'est la procédure du licenciement pour motif personnel qui s'applique : convocation, entretien préalable, notification (" + ref([artMotifs]) + ")." });
+
+    b.push({ k: "h1", t: "5 - Ce qui est dû à la rupture" });
+    b.push({ k: "p", t: "Le préavis n'est pas exécuté et le contrat est rompu à la date de notification du licenciement ; le préavis est néanmoins pris en compte pour le calcul de l'indemnité de licenciement, et son inexécution ne donne pas lieu à indemnité compensatrice (" + ref(["L1226-4"]) + ")." });
+    if (pro) {
+      var moisI = entree ? moisAnnees(entree, AUJOURDHUI) : null;
+      var indI = (moisI !== null && salaire > 0) ? indemniteDe(moisI, salaire, false) : null;
+      b.push({ k: "p", t: "L'inaptitude étant d'origine professionnelle, la rupture ouvre droit à une indemnité compensatrice d'un montant égal à l'indemnité compensatrice de préavis, et à une indemnité spéciale de licenciement égale au DOUBLE de l'indemnité légale, sauf dispositions conventionnelles plus favorables (" + ref(["L1226-14"]) + "). Ces indemnités ne sont pas dues si l'employeur établit que le refus du reclassement proposé était abusif." });
+      if (indI && indI.montant > 0) {
+        b.push({ k: "p", t: "Sur une ancienneté de " + anciennetePhrase(moisI) + " et un salaire de référence de " + eur(salaire) + " euros, l'indemnité légale serait de " + eur(indI.montant) + " euros : l'indemnité spéciale est donc de " + eur(Math.round(indI.montant * 2 * 100) / 100) + " euros, à laquelle s'ajoute l'indemnité compensatrice de préavis." });
+        b.push({ k: "note", t: "Le préavis compte dans l'ancienneté retenue pour l'indemnité (" + ref(["L1226-4"]) + ") : ce montant est un plancher, à recaler sur la date de notification." });
+      } else {
+        b.push({ k: "note", t: "Le montant n'est pas écrit : " + (entree ? "le salaire de référence n'est pas renseigné" : "la date d'entrée n'est pas renseignée") + ". Portez-la en tête pour que le double se calcule." });
+      }
+    } else {
+      b.push({ k: "p", t: "L'indemnité de licenciement est celle de l'article " + ref(["L1234-9"]) + ", préavis compris dans l'ancienneté. L'inaptitude d'origine non professionnelle n'ouvre pas l'indemnité spéciale de l'article " + ref(["L1226-14"]) + ", qui ne vise que l'accident du travail et la maladie professionnelle." });
+    }
+
+    b.push({ k: "saut", t: "" });
+    b.push({ k: "t1", t: "Lettre : les motifs qui s'opposent au reclassement" });
+    enTete(b, nomS, "les motifs qui s'opposent à votre reclassement",
+      "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
+    b.push({ k: "p", t: "Le médecin du travail vous a déclaré inapte" + (avis ? ", par avis du " + dateFr(avis) : "") + " à reprendre l'emploi " + de(emploi) + " que vous occupiez." });
+    if (dispense) {
+      b.push({ k: "p", t: "Cet avis porte la mention expresse que " + (pro ? "tout maintien dans l'emploi" : "tout maintien dans un emploi") + " serait gravement préjudiciable à votre santé, ou que votre état de santé fait obstacle à tout reclassement. Nous sommes donc dispensés de la recherche de reclassement (" + ref([artMotifs]) + ")." });
+    } else {
+      b.push({ k: "p", t: "Nous avons recherché un autre emploi approprié à vos capacités, dans l'entreprise [et dans les entreprises du groupe situées sur le territoire national], en tenant compte des conclusions écrites et des indications du médecin du travail" + (cse ? ", et après avis du comité social et économique recueilli le [date de la réunion]" : "") + " (" + ref([artRecl]) + ")." });
+      b.push({ k: "p", t: "Cette recherche n'a pas abouti, pour les motifs suivants :" });
+      griefsBlocs(b, v.motifs, "[les postes examinés, un par un, avec pour chacun la raison précise pour laquelle il ne peut vous être proposé au regard de l'avis du médecin du travail : incompatibilité avec les restrictions, absence de poste vacant, qualification hors de portée même après formation]");
+    }
+    b.push({ k: "p", t: "Nous vous informons en conséquence que nous envisageons la rupture de votre contrat de travail, et nous vous convoquerons à un entretien préalable dans les formes du licenciement pour motif personnel." });
+    formule(b, civ);
+
+    if (ccn && ccn.annexes) {
+      b.push({ k: "note", t: "Sous la convention des transports routiers, l'article 11 ter de l'annexe I ouvre au conducteur déclaré définitivement inapte à la conduite, en l'absence de reclassement et s'il justifie de trois ans d'exercice du métier dans l'entreprise, une indemnité conventionnelle particulière d'un mois de salaire au moins (Cass. soc. 7 décembre 2011, n° 10-15.119). Vérifiez-la avant d'arrêter le solde." });
+    }
+
+    if (avis) {
+      dates.push({ q: "Reprise du salaire si rien n'est fait", d: dateFrJour(moisFin),
+        f: "un mois à compter de l'examen de reprise du " + dateFr(avis) + " (" + ref(["L1226-4"]) + ")", c: "tard" });
+      dates.push({ q: "Écrit des motifs au plus tard", d: dateFrJour(jour(moisFin, -1)),
+        f: "avant l'expiration du mois, et avant la convocation à l'entretien préalable (" + ref([artMotifs]) + ")", c: "tard" });
+    }
+    if (!avis) alertes.push("La date de l'avis d'inaptitude n'est pas saisie : c'est elle qui ouvre le mois de l'article " + ref(["L1226-4"]) + ", au terme duquel le salaire reprend.");
+    if (!dispense) alertes.push("Aucune dispense n'est retenue : la recherche de reclassement est due, et son absence rend le licenciement sans cause réelle et sérieuse. Écrivez-la poste par poste.");
+    if (!cse) alertes.push("Votre fiche ne porte pas de comité social et économique en place. L'avis du comité est requis sur la proposition de reclassement lorsqu'il en existe un (" + ref([artRecl]) + ") : s'il en existe un, consultez-le et datez cet avis.");
+    if (pro) alertes.push("Origine professionnelle : l'indemnité spéciale est le double de l'indemnité légale, et l'indemnité compensatrice de préavis est due bien que le préavis ne soit pas exécuté (" + ref(["L1226-14", "L1226-4"]) + ").");
+    return { blocs: b, dates: dates, alertes: alertes,
+      loi: ["L4624-4", artRecl, artMotifs, "L1226-4", "L1226-14", "L1234-9", "R1234-2"] };
+  }
+
   function pvCse(v) {
     var reunion = dateDe(v.reunion) || AUJOURDHUI;
     var limite = jour(reunion, 15);
@@ -4298,6 +4523,41 @@
                { id: "fin", nom: "Fin de la période", t: "date", cle: "finPeriode", defaut: iso(new Date(AUJOURDHUI.getFullYear() + (AUJOURDHUI.getMonth() >= 4 ? 1 : 0), 9, 31)) }],
       loi: ["L3141-13", "D3141-5", "L3141-3"],
       dates: function (v) { var d = dateDe(v.debut); return d ? [{ q: "Affichage au plus tard", d: dateFrJour(plusMois(d, -2)), f: "deux mois avant l'ouverture de la période (" + ref(["D3141-5"]) + ")", c: "tard" }] : []; } },
+    /* LA SUSPENSION DU PERMIS ET L'INAPTITUDE : DEUX PARCOURS QUI MANQUAIENT.
+       Relevé le 27 septembre 2026, dans une application ouverte par un
+       transporteur dont la plupart des salariés sont conducteurs. */
+    permis: { titre: "Suspension ou retrait du permis de conduire",
+      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: exEmploi() },
+        { id: "cause", nom: "Origine de la mesure", t: "select", defaut: "personnelle", pleine: true,
+          opts: [["personnelle", "Infraction commise hors du temps et du lieu de travail"],
+                 ["service", "Infraction commise dans l'exercice des fonctions"],
+                 ["medicale", "Inaptitude physique constatée médicalement"]] },
+        { id: "duree", nom: "Nature de la mesure", t: "select", defaut: "suspension",
+          opts: [["suspension", "Suspension, pour une durée déterminée"],
+                 ["definitif", "Annulation ou retrait"]] },
+        { id: "debut", nom: "Mesure notifiée au salarié le", t: "date", defaut: iso(AUJOURDHUI) },
+        { id: "fin", nom: "Permis restitué le", t: "date", si: ["duree", "suspension"] },
+        { id: "autre", nom: "Un poste sans conduite est-il disponible ?", t: "select",
+          defaut: "cherche", pleine: true,
+          opts: [["cherche", "La recherche est en cours"], ["oui", "Oui, un poste est proposé"],
+                 ["non", "Non, aucun poste n'a été trouvé"]] }],
+      produire: permisSuspendu },
+    inaptitude: { titre: "Inaptitude constatée par le médecin du travail",
+      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: exEmploi() },
+        { id: "avis", nom: "Date de l'avis d'inaptitude", t: "date", defaut: iso(AUJOURDHUI),
+          sous: "c'est de l'examen de reprise que court le mois de L. 1226-4" },
+        { id: "origine", nom: "Origine de l'inaptitude", t: "select", defaut: "non", pleine: true,
+          opts: [["non", "Maladie ou accident non professionnel"],
+                 ["pro", "Accident du travail ou maladie professionnelle"]] },
+        { id: "dispense", nom: "L'avis porte-t-il la mention expresse qui dispense du reclassement ?",
+          t: "select", defaut: "non", pleine: true, opts: [["non", "Non"], ["oui", "Oui"]],
+          sous: "« tout maintien serait gravement préjudiciable à sa santé », ou « son état fait obstacle à tout reclassement »" },
+        { id: "motifs", nom: "Les postes examinés, et pourquoi chacun ne convient pas", t: "textarea",
+          pleine: true, si: ["dispense", "non"],
+          ph: "Agent de quai : port de charges incompatible avec les restrictions de l'avis. Exploitant : aucun poste vacant au 27 septembre." },
+        { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date", cle: "entree" },
+        { id: "salaireRef", nom: "Salaire mensuel brut de référence (euros)", t: "number" }],
+      produire: inaptitude },
     maladie: { titre: "Arrêt maladie", champs: [NOM, { id: "debut", nom: "Premier jour de l'arrêt", t: "date", defaut: iso(AUJOURDHUI) }, { id: "fin", nom: "Dernier jour de l'arrêt", t: "date", defaut: iso(jour(AUJOURDHUI, 7)) }], produire: maladie },
     at: { titre: "Accident du travail",
       champs: [NOM, { id: "date", nom: "Date de l'accident", t: "date", defaut: iso(AUJOURDHUI) },
@@ -4553,7 +4813,7 @@
        2026. La ligne du haut, « Registre unique du personnel », mène au vrai
        registre : c'est la seule. */
     ["Embaucher", ["promesse", "cdi", "cdd", "partiel", "pro", "titres", "dpae", "vip"]],
-    ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "entretien"]],
+    ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "permis", "inaptitude", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "conservatoire", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
     ["Collectif", ["elections", "convoc", "odj", "pv", "nao", "desaccord"]]
@@ -4975,6 +5235,11 @@
     var embauche = !!DOCS_EMBAUCHE[ACTIF] && !r.refus && !!window.EcheancesSalaries;
     $("btn-inscrire").hidden = !embauche;
     if (!embauche) $("d-inscrit").hidden = true;
+    /* Le bouton du registre des sanctions : pour les trois lettres qui en
+       prononcent une, dès que le nom et les griefs sont là. */
+    var sanc = SANCTION_REGISTRE[ACTIF] && !r.refus && !!String(V.nom || "").trim() &&
+      !!String(V.griefs || "").trim();
+    $("btn-sanction").hidden = !sanc;
     var conduite = (ACTIF === "autorisation" && !r.refus &&
       !!String(V.nom || "").trim() && !!String(V.attestation || "").trim()) ||
       (ACTIF === "titres" && !!String(V.nom || "").trim() && titresRemplis().length > 0);
@@ -5278,6 +5543,47 @@
      l'agenda, d'un seul geste, depuis le contrat qu'on vient d'écrire. Rien
      n'est écrasé : un salarié déjà inscrit est complété. */
   var DOCS_EMBAUCHE = { cdi: "cdi", cdd: "cdd", partiel: "cdi" };
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA SANCTION PRONONCÉE VA AU REGISTRE DES SANCTIONS.
+
+     Les trois lettres qui prononcent une sanction, l'avertissement, la mise à
+     pied disciplinaire et le licenciement pour faute, s'inscrivent d'un bouton
+     sous la nature que le registre connaît, avec la date de notification et les
+     griefs. C'est ce registre qui dit ensuite ce qui peut encore être invoqué,
+     trois ans durant (L. 1332-5).
+     ══════════════════════════════════════════════════════════════════════ */
+  var SANCTION_REGISTRE = { avert: "avertissement", miseapied: "miseapied", faute: "licenciement" };
+  function slugSanction(nom) {
+    try {
+      return String(nom == null ? "" : nom).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(nom == null ? "" : nom).toLowerCase(); }
+  }
+  $("btn-sanction").addEventListener("click", function () {
+    var nature = SANCTION_REGISTRE[ACTIF];
+    if (!nature) return;
+    var nom = String(V.nom || "").trim();
+    var motif = String(V.griefs || "").trim();
+    function dire(t) { $("d-inscrit").textContent = t; $("d-inscrit").hidden = false; }
+    if (!nom || !motif) { dire("Le nom du salarié ou les griefs manquent : rien n'a été porté."); return; }
+    /* La date de la sanction est celle de sa notification : le premier jour où
+       la lettre peut partir quand l'entretien est saisi, le jour même sinon. */
+    var eD = dateDe(V.eDate);
+    var quand = eD ? apresJoursOuvrables(eD, 2) : AUJOURDHUI;
+    var id = slugSanction(nom);
+    var T = {};
+    try { T = JSON.parse(localStorage.getItem("sanctions-salaries") || "null") || {}; } catch (e) { T = {}; }
+    if (!T[id]) T[id] = [];
+    var le = iso(quand);
+    var deja = T[id].some(function (x) { return x.le === le && x.nature === nature; });
+    if (deja) { dire(nom + " : cette sanction est déjà au registre, au " + dateFr(quand) + "."); return; }
+    T[id].push({ le: le, nature: nature, motif: motif });
+    try { localStorage.setItem("sanctions-salaries", JSON.stringify(T)); } catch (e) {}
+    dire(nom + " : sanction portée au registre des sanctions, au " + dateFr(quand) +
+      ". Elle pourra être invoquée à l'appui d'une nouvelle poursuite jusqu'au " +
+      dateFr(new Date(quand.getFullYear() + 3, quand.getMonth(), quand.getDate())) +
+      " (L. 1332-5). Le registre s'ouvre par l'entrée « Registre des sanctions ».");
+  });
   $("btn-inscrire").addEventListener("click", function () {
     if (!window.EcheancesSalaries) return;
     var nom = String(V.nom || "").trim();
