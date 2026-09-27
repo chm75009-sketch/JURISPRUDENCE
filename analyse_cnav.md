@@ -345,3 +345,205 @@ CNAV doit produire EN CONCILIATION :
 1. Ouvrir sur le montant certain (13,080€ + intérêts)
 2. Demander explication du multiplicateur 5.740x
 3. Si CNAV ne justifie pas → demander recalcul + différence plus importante
+
+---
+
+## RECONSTRUCTION : DEUX HYPOTHÈSES SUR LE MONTANT 1995
+
+### Données brutes des arriérés GERME
+
+**Arrêt Cour d'appel 26 juin 1997 (1990-1995) :**
+Ventilation en euros par année :
+- 1990 : 3,572.40€ arriérés
+- 1991 : 11,188.07€ arriérés
+- 1992 : 10,341.23€ arriérés
+- 1993 : 10,905.56€ arriérés
+- 1994 : 10,931.14€ arriérés
+- 1995 : 21,411.25€ arriérés
+
+**Arrêt Cour d'appel 13 novembre 1996 (1995-1996) :**
+Ventilation en euros :
+- 1995 : 6,292.46€ arriérés
+- 1996 : 12,106.71€ arriérés
+
+### Montants nominaux après plafonnement CNAV (par année, avant revalorisation)
+
+| Année | Arrêt 26 juin 1997 | Plafond 1995 appliqué | Montant retenu |
+|-------|--------|----------|--------|
+| 1990 | 8,621.51€ | 19,976.92€ | **8,621.51€** |
+| 1991 | 28,266.02€ | 21,001.38€ | **21,001.38€** |
+| 1992 | 26,169.86€ | 21,970.95€ | **21,970.95€** |
+| 1993 | 26,068.44€ | 22,839.91€ | **22,839.91€** |
+| 1994 | 32,243.51€ | 23,342.99€ | **23,342.99€** |
+| 1995 | 32,130.40€ | 23,772.90€ | **23,772.90€** |
+| **Cumul 1990-1995** | - | - | **121,549.64€** |
+
+### HYPOTHÈSE 1 : Utilisation seule de l'Arrêt 26 juin 1997
+
+**Scenario :** CNAV n'a retenu que l'arrêt couvrant 1990-1995, sans intégrer l'arrêt 13 novembre 1996.
+
+| Élément | Calcul | Résultat |
+|---------|--------|---------|
+| Total nominal après plafonnement (1990-1995) | Somme années | **121,549.64€** |
+| Montant affiché en 1995 (sept 2025) | Cible CNAV | **136,464.90€** |
+| Multiplicateur d'actualisation nécessaire | 136,464.90 / 121,549.64 | **1.123x** |
+| Taux d'actualisation annuel implicite | (1.123)^(1/30) - 1 | **3.92%/an** |
+
+**Répartition des montants plafonés par année (H1) :**
+- 1990 : 8,621.51€
+- 1991 : 21,001.38€
+- 1992 : 21,970.95€
+- 1993 : 22,839.91€
+- 1994 : 23,342.99€
+- 1995 : 23,772.90€
+
+### HYPOTHÈSE 2 : Utilisation combinée des deux Arrêts sans double-comptage de 1995
+
+**Scenario :** CNAV a retenu les deux arrêts (26 juin 1997 + 13 novembre 1996) en appliquant les montants plafonés pour 1990-1995 du premier arrêt, puis ajoutant 1996 du second arrêt.
+
+| Année | Arrêt 26 juin 1997 (plafonné) | Arrêt 13 novembre 1996 (plafonné) | Total par année |
+|-------|--------|----------|--------|
+| 1990 | 8,621.51€ | - | 8,621.51€ |
+| 1991 | 21,001.38€ | - | 21,001.38€ |
+| 1992 | 21,970.95€ | - | 21,970.95€ |
+| 1993 | 22,839.91€ | - | 22,839.91€ |
+| 1994 | 23,342.99€ | - | 23,342.99€ |
+| 1995 | 23,772.90€ | - | 23,772.90€ |
+| 1996 | - | 12,106.71€ | 12,106.71€ |
+| **Total 1990-1996** | **121,549.64€** | **12,106.71€** | **133,656.35€** |
+
+| Élément | Calcul | Résultat |
+|---------|--------|---------|
+| Total nominal après plafonnement (1990-1996) | Somme années | **133,656.35€** |
+| Montant affiché en 1995 (sept 2025) | Cible CNAV | **136,464.90€** |
+| Multiplicateur d'actualisation nécessaire | 136,464.90 / 133,656.35 | **1.021x** |
+| Taux d'actualisation annuel implicite | (1.021)^(1/30) - 1 | **0.70%/an** |
+
+**Répartition des montants plafonés par année (H2) :**
+- 1990 : 8,621.51€
+- 1991 : 21,001.38€
+- 1992 : 21,970.95€
+- 1993 : 22,839.91€
+- 1994 : 23,342.99€
+- 1995 : 23,772.90€
+- 1996 : 12,106.71€
+
+### Analyse comparative des deux hypothèses
+
+| Critère | H1 (Arrêt 1997 seul) | H2 (Deux arrêts combinés) |
+|---------|--------|----------|
+| **Total nominal** | 121,549.64€ | 133,656.35€ |
+| **Multiplicateur** | 1.123x | 1.021x |
+| **Taux annuel implicite** | 3.92%/an | 0.70%/an |
+| **Logique juridique** | Arrêt couvre 1990-1995 uniquement | Deux arrêts couvrent 1990-1996 complets |
+| **Vraisemblance** | Taux 3.92% = proche inflation/revalorisation moyenne | Taux 0.70% = très faible, questionnable |
+| **Montant affichable en 1995** | 136,464.90€ / 1.123 = 121,549.64€ | 136,464.90€ / 1.021 = 133,656.35€ |
+
+### Questionnement critique
+
+**H1 signifie :**
+- CNAV a appliqué un taux d'actualisation de 3.92%/an
+- Article légal permettant ce taux doit être justifié
+- Absence d'intégration de l'arrêt 13 novembre 1996 pour 1996 lui-même
+
+**H2 signifie :**
+- CNAV a intégré les deux arrêts
+- Taux 0.70%/an est anormalement bas (< inflation)
+- Possible erreur dans le calcul ou application partielle d'un arrêt
+
+**Le chiffre 5.740x (136,464.90 / 23,772.90) reste inexpliqué :**
+- Ne correspond à aucun taux cohérent sur 30 ans
+- Peut indiquer un calcul composite ou une revalorisation non linéaire
+- Nécessite une justification CNAV précise
+
+---
+
+## ÉLÉMENTS À DEMANDER EN CONCILIATION 8 OCTOBRE 2026
+
+### DEMANDE N°1 : CLARIFICATION 1995 (CAPITAL)
+
+**Qu'a versé CNAV pour arriver à 136,464.90€ en 1995 ?**
+
+CNAV doit produire :
+1. Document Excel ou calcul détaillé montrant :
+   - Montant nominal plafonné (attendu : ~121,549.64€ ou 133,656.35€)
+   - Taux d'actualisation appliqué (annuel ou par année)
+   - Formule de calcul (linéaire, composé, autre)
+   - Référence légale (article Code sécurité sociale)
+
+2. Confirmation du traitement des deux arrêts :
+   - Arrêt 26 juin 1997 (1990-1995) = oui/non utilisé
+   - Arrêt 13 novembre 1996 (1995-1996) = oui/non utilisé
+   - Méthode de réconciliation si les deux
+
+3. Justification du plafonnement année par année (si applicable)
+
+**Impact si CNAV ne justifie pas :**
+- Demander recalcul sur base H1 (3.92%/an) ou H2 (0.70%/an)
+- Recalcul du revenu de base (moyenne 25 ans)
+- Recalcul de la retraite mensuelle
+
+### DEMANDE N°2 : RÉGULARISATION FINANCIÈRE IMMÉDIATE
+
+**Perte financière de mai 2023 à septembre 2025 (27 mois) :**
+
+| Date | Montant mensuel | Nombre mois | Total |
+|------|--------|----------|--------|
+| Mai 2023 - sept 2025 | 410,39€ | 27 | **11,080.53€** |
+| Intérêts légaux 6% (30 mois) | - | - | **~2,000€** |
+| **TOTAL DÛ** | - | - | **~13,080€** |
+
+**Demande :** Versement immédiat de 13,080€ + intérêts légaux calculés du 1er mai 2023 au 15 septembre 2025.
+
+### DEMANDE N°3 : CLARIFICATIONS SECONDAIRES
+
+**Pour 1994 (ISCIO) :**
+- Relevé CNAV : 2,492.54€
+- Bulletin fourni : 3,907.02€
+- Écart : +1,414.48€
+- Vérifier : CNAV a-t-il intégré les 3,907.02€ ou conservé 2,492.54€ ?
+
+**Pour 1997 (TBW) :**
+- Relevé CNAV : manquait novembre-décembre 1997
+- Bulletins fournis : +2,091.60€
+- Évaluation sept 2025 affiche 10,418.30€ (vs 9,686.46€ en mai 2023)
+- Vérifier : TBW est-il inclus dans ce montant ?
+
+**Impact financier si manquants :** +1,414.48€ + 2,091.60€ = +3,506.08€ (faible mais à confirmer)
+
+### DEMANDE N°4 : DOCUMENTS D'AUDIT
+
+**CNAV doit transmettre :**
+1. Calcul détaillé du revenu de base 2025 (moyenne 25 meilleurs revenus)
+2. Liste des 25 années retenues avec montants revalorisés
+3. Taux de revalorisation appliqué pour chaque année
+4. Justification légale des taux appliqués
+
+---
+
+## SYNTHÈSE : POSITION POUR CONCILIATION
+
+### Ce qui est CERTAIN et INCONTESTABLE
+
+✓ **11,080.53€ minimum** pour la perte de mai 2023 à septembre 2025
+✓ **Intérêts légaux** (~2,000€)
+✓ **Total minimum : ~13,080€** à verser immédiatement
+
+### Ce qui est CONTESTABLE si CNAV n'explique pas
+
+⚠️ **Montant 1995 = 136,464.90€** : Justification requise
+- Si CNAV ne produit pas le calcul → demander recalcul conservateur
+- Recalcul pourrait impacter le revenu de base et la retraite finale
+
+### Éléments SECONDAIRES mais à confirmer
+
+- ISCIO 1994 : +1,414.48€ (si manquant)
+- TBW 1997 : +2,091.60€ (si manquant)
+- **Total secondaire : +3,506.08€**
+
+### Position du demandeur EN CONCILIATION
+
+**Ouverture : 13,080€ + intérêts (certain)**
+**Plafond : 13,080€ + intérêts + 3,506€ + différence 1995 si recalcul nécessaire**
+
+**Stratégie :** Laisser CNAV parler en premier. Si CNAV justifie 1995 → accepter et clore. Si CNAV ne justifie pas → demander immédiatement recalcul et produire les deux hypothèses H1/H2 en tant que scénarios de secours.
