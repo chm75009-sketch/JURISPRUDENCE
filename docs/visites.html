@@ -168,14 +168,32 @@
     "R4624-28": { id: "LEGIARTI000033769094",
       dit: "poste à risques particuliers : renouvellement par le médecin du travail selon une périodicité qui ne peut être supérieure à quatre ans, et visite intermédiaire au plus tard deux ans après" },
     "R4624-31": { id: "LEGIARTI000054250639",
-      dit: "examen de reprise après un congé de maternité, une maladie professionnelle, trente jours d'arrêt pour accident du travail ou soixante jours pour maladie ou accident non professionnel ; l'employeur saisit le service dès qu'il connaît la date de fin de l'arrêt, l'examen a lieu le jour de la reprise et au plus tard dans les huit jours" }
+      dit: "examen de reprise après un congé de maternité, une maladie professionnelle, trente jours d'arrêt pour accident du travail ou soixante jours pour maladie ou accident non professionnel ; l'employeur saisit le service dès qu'il connaît la date de fin de l'arrêt, l'examen a lieu le jour de la reprise et au plus tard dans les huit jours" },
+    /* L'APTITUDE MÉDICALE DU PERMIS, QUI N'EST PAS LA VISITE DU TRAVAIL.
+
+       Relevé le 27 septembre 2026 : cette page ne disait rien de la visite
+       médicale du permis, alors que c'est elle qui décide si un conducteur
+       peut prendre le volant. Les deux suivis sont distincts : le médecin du
+       travail se prononce sur le poste, le médecin agréé sur le droit de
+       conduire, et la seconde échéance tombe bien plus souvent que la
+       première. Ces deux articles viennent du code de la route, et non du
+       code du travail : le relais les sert, deux lectures espacées
+       concordantes le 27 septembre 2026, mêmes identifiants. */
+    "R221-10": { id: "LEGIARTI000051682550", code: "code de la route",
+      dit: "les catégories C1, C1E, C, CE, D1, D1E, D et DE ne peuvent être obtenues ou renouvelées qu'à la suite d'un avis médical favorable" },
+    "R221-11": { id: "LEGIARTI000046217357", code: "code de la route",
+      dit: "périodicité maximale de cinq ans pour les conducteurs de moins de soixante ans, deux ans à partir de soixante ans et un an à partir de soixante-seize ans ; pour les catégories D1, D, D1E ou DE, un an à partir de soixante ans" }
   };
   function ref(cles) {
     return cles.map(function (c) { return "art. " + c.replace(/^([A-Z])(\d)/, "$1. $2").replace("-", "-"); }).join(", ");
   }
   function art(c) {
     var m = /^([A-Z]+)(\d+)-(.+)$/.exec(c);
-    return m ? m[1] + ". " + m[2] + "-" + m[3] : c;
+    var n = m ? m[1] + ". " + m[2] + "-" + m[3] : c;
+    /* Un article d'un autre code se nomme avec son code : sans cela, « R. 221-10 »
+       se lit comme un article du code du travail, qui porte un tout autre texte. */
+    var t = TEXTES[c];
+    return t && t.code ? n + " du " + t.code : n;
   }
 
   /* ──────────────────────────────── les dates ────────────────────────── */
@@ -228,7 +246,10 @@
       return !s.ex && !net(s.sor) && (net(s.nom) || net(s.pre));
     }).map(function (s) {
       var nom = (net(s.nom) + " " + net(s.pre)).trim();
-      return { id: slug(nom), nom: nom, emp: net(s.emp), ent: net(s.ent) };
+      /* La date de naissance vient du registre : c'est l'âge qui commande la
+         périodicité de la visite médicale du permis (R. 221-11 du code de la
+         route). Sans elle, la périodicité n'est pas dite. */
+      return { id: slug(nom), nom: nom, emp: net(s.emp), ent: net(s.ent), nais: net(s.nais) };
     });
   }
   function fiches() {
@@ -317,7 +338,51 @@
             "l'employeur saisit le service dès qu'il connaît la date de fin de l'arrêt",
           reprise: true });
     }
+    /* 4. L'aptitude médicale du permis, pour les catégories lourdes.
+
+          Elle ne remplace pas la visite du travail et ne s'en déduit pas : le
+          médecin agréé se prononce sur le droit de conduire, le médecin du
+          travail sur le poste. Sans elle, le permis n'est plus valable et le
+          conducteur ne peut plus rouler. */
+    var cat = String(f.permisCat || "").toUpperCase();
+    var lourd = /\b(C1E|C1|CE|C|D1E|D1|DE|D)\b/.test(cat);
+    var transport = /transport|logistique/.test(String(profil.secteur || "").toLowerCase());
+    if (lourd || (transport && net(f.visitePermisFin))) {
+      var moisMax = periodicitePermis(s.nais, cat);
+      var ditPeriode = moisMax === null
+        ? "la date de naissance n'est pas au registre : la périodicité applicable, de cinq ans, de deux ans ou d'un an selon l'âge et la catégorie, ne peut pas être dite"
+        : "périodicité maximale " + (moisMax === 12 ? "d'un an" : (moisMax === 24 ? "de deux ans" : "de cinq ans")) +
+          " pour ce conducteur, au vu de son âge et de ses catégories";
+      if (net(f.visitePermisFin))
+        L.push({ quoi: "Visite médicale du permis", date: deIso(net(f.visitePermisFin)),
+          fond: "R221-11", pour: "le renouvellement de la visite médicale du permis de conduire",
+          dit: ditPeriode, permis: true });
+      else
+        L.push({ quoi: "Visite médicale du permis", date: null,
+          inconnu: "date de validité de l'avis médical inconnue",
+          fond: "R221-10", pour: "la visite médicale du permis de conduire",
+          dit: "la date jusqu'à laquelle l'avis médical vaut n'est pas renseignée sur la fiche du " +
+            "conducteur, et l'échéance ne peut donc pas être calculée ; " + ditPeriode,
+          permis: true });
+    }
     return L.filter(function (x) { return !!x.date || x.inconnu; });
+  }
+
+  /* La périodicité que le code de la route fixe, en mois : cinq ans sous
+     soixante ans, deux ans à partir de soixante, un an à partir de
+     soixante-seize ; et un an dès soixante ans pour les catégories D
+     (R. 221-11, I, 2°). Rend null quand la date de naissance manque : on ne
+     devine pas un âge. */
+  function periodicitePermis(naissance, cat) {
+    var n = deIso(net(naissance));
+    if (!n) return null;
+    var age = AUJOURDHUI.getFullYear() - n.getFullYear();
+    var m = AUJOURDHUI.getMonth() - n.getMonth();
+    if (m < 0 || (m === 0 && AUJOURDHUI.getDate() < n.getDate())) age--;
+    var d = /\b(D1E|D1|DE|D)\b/.test(String(cat || "").toUpperCase());
+    if (age >= 76) return 12;
+    if (age >= 60) return d ? 12 : 24;
+    return 60;
   }
 
   function etatDe(jours, inconnu) {
@@ -329,6 +394,11 @@
     return "ok";
   }
   function direDelai(jours, inconnu) {
+    /* « inconnu » peut valoir true, ou porter le mot qui convient à cette
+       échéance-là : la visite du travail se compte depuis la dernière visite,
+       la visite du permis depuis la date jusqu'à laquelle l'avis médical vaut,
+       et dire « dernière visite inconnue » pour la seconde était faux. */
+    if (typeof inconnu === "string" && inconnu) return inconnu + ", à renseigner";
     if (inconnu) return "dernière visite inconnue, à renseigner";
     if (jours === null) return "date inconnue";
     if (jours < 0) return "en retard de " + (-jours) + " jour" + (-jours > 1 ? "s" : "");
@@ -344,7 +414,29 @@
     return echeances(s).map(function (e) {
       var j = e.date ? joursEntre(e.date, AUJOURDHUI) : null;
       return { e: e, jours: j, etat: etatDe(j, e.inconnu) };
-    }).sort(function (a, b) { return (a.jours === null ? 1e9 : a.jours) - (b.jours === null ? 1e9 : b.jours); });
+    }).sort(function (a, b) { return rang(a) - rang(b); });
+  }
+  /* UNE DATE QUI MANQUE PASSE DEVANT CE QUI EST LOIN. Elle était rangée en
+     dernier, avec les échéances sans date : la carte du salarié affichait
+     alors une visite due en 2029 et taisait celle dont la date n'est pas
+     connue, si bien que le filtre « à faire » ne montrait personne. Elle vient
+     donc après ce qui est en retard, et avant tout ce qui est à venir. Relevé
+     le 27 septembre 2026. */
+  function rang(x) {
+    if (x.e.inconnu) return -0.5;
+    return x.jours === null ? 1e9 : x.jours;
+  }
+
+  /* LES DEUX COURRIERS S'ADRESSENT AU SERVICE DE PRÉVENTION ET DE SANTÉ AU
+     TRAVAIL, ET LA VISITE DU PERMIS NE LE CONCERNE PAS. Elle relève du
+     contrôle médical de l'aptitude à la conduite du code de la route : lui
+     demander de l'organiser serait lui demander ce qu'il ne fait pas. La
+     première échéance retenue pour les courriers écarte donc celle-là, qui
+     reste à sa place sur l'écran. */
+  function premiereDuTravail(lg) {
+    var out = null;
+    lg.forEach(function (x) { if (!out && !x.e.permis) out = x; });
+    return out;
   }
 
   function rendre() {
@@ -405,6 +497,18 @@
       (net(f.arretMotif) ? ch("arretDebut", "Arrêt depuis le", "date", net(f.arretDebut)) : "") +
       (net(f.arretMotif) ? ch("arretFin", "Fin de l'arrêt, le", "date", net(f.arretFin)) : "") +
       (net(f.arretMotif) ? ch("visiteReprise", "Examen de reprise tenu le", "date", net(f.visiteReprise)) : "") +
+      /* LA DATE DU PERMIS SE SAISIT ICI AUSSI. Elle vit dans la même fiche
+         conducteur que le reste, et c'est ici qu'on vient voir les échéances
+         médicales : obliger à passer par l'écran de la flotte pour la seule
+         date qui décide du droit de conduire n'avait pas de sens. La
+         catégorie s'y saisit également, puisque c'est elle, avec l'âge, qui
+         donne la périodicité. Relevé le 27 septembre 2026. */
+      ch("permisCat", "Catégories du permis", "text", net(f.permisCat),
+        "R. 221-10, II du code de la route : les catégories C1, C1E, C, CE, D1, D1E, D et DE " +
+        "ne s'obtiennent et ne se renouvellent qu'après un avis médical favorable.") +
+      ch("visitePermisFin", "Visite médicale du permis, valable jusqu'au", "date", net(f.visitePermisFin),
+        "R. 221-11 du code de la route : cinq ans au plus sous soixante ans, deux ans à partir de " +
+        "soixante, un an à partir de soixante-seize ; un an dès soixante ans pour les catégories D.") +
       "</div>";
   }
 
@@ -499,7 +603,7 @@
 
   function docService(s) {
     var f = fiche(s.id), lg = lignesDe(s);
-    var premiere = lg.length ? lg[0] : null;
+    var premiere = premiereDuTravail(lg);
     var org = net(profil.orgSanteTravail) || "[nom et adresse du service de prévention et de santé au travail]";
     var b = enTete().map(function (l) { return { k: "p", t: l }; });
     b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
@@ -550,7 +654,7 @@
 
   function docSalarie(s) {
     var f = fiche(s.id), lg = lignesDe(s);
-    var premiere = lg.length ? lg[0] : null;
+    var premiere = premiereDuTravail(lg);
     var b = enTete().map(function (l) { return { k: "p", t: l }; });
     b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
     b.push({ k: "p", t: s.nom });
