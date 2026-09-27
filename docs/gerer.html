@@ -440,6 +440,11 @@
       dit: "notification par lettre recommandée avec avis de réception énonçant les motifs, expédiée au plus tôt deux jours ouvrables après l'entretien" },
     "R1232-1": { id: "LEGIARTI000018537724",
       dit: "la convocation indique l'objet, la date, l'heure et le lieu, et rappelle la possibilité de se faire assister" },
+    /* Lu deux fois au relais le 27 septembre 2026, mêmes identifiant et texte :
+       la lettre renvoyait à la direction départementale, que l'article ne
+       désigne pas. */
+    "D1232-5": { id: "LEGIARTI000018537714",
+      dit: "la liste des conseillers du salarié est arrêtée dans chaque département par le préfet et tenue à la disposition des salariés dans chaque section d'inspection du travail et dans chaque mairie" },
     "R1232-13": { id: "LEGIARTI000036212577",
       dit: "le salarié dispose de quinze jours pour demander des précisions sur les motifs, l'employeur de quinze jours pour répondre" },
     "L1235-2": { id: "LEGIARTI000036261950",
@@ -700,6 +705,45 @@
     var tete = lignesIdentite().map(function (t) { return { k: "sur", t: t }; });
     return tete.concat([{ k: "trait" }]).concat(b);
   }
+  /* L'ASSISTANCE DU SALARIÉ : DEUX CAS, ET LA FICHE DIT LEQUEL.
+
+     L. 1232-4 (LEGIARTI000006901002) pour le licenciement personnel et
+     L. 1233-13 (LEGIARTI000006901025) pour le licenciement économique, tous
+     deux lus deux fois au relais le 27 septembre 2026 : le salarié peut se
+     faire assister par une personne du personnel, et « lorsqu'il n'y a pas
+     d'institutions représentatives du personnel dans l'entreprise », il peut
+     choisir à la place un conseiller du salarié. Avec un comité élu, ce second
+     choix n'existe pas ; les lettres l'offraient à tout le monde, avec la
+     phrase de repli « en l'absence d'institution représentative » qui laissait
+     le salarié trancher lui-même.
+
+     Et l'adresse : elles renvoyaient à « la direction départementale de
+     l'emploi, du travail et des solidarités de [département] », que le texte ne
+     désigne pas. D. 1232-5 (LEGIARTI000018537714, deux lectures concordantes le
+     27 septembre 2026) : la liste « est tenue à la disposition des salariés
+     dans chaque section d'inspection du travail et dans chaque mairie ».
+     L'inspection est dans la fiche, la mairie est celle du siège. */
+  function assistance(art) {
+    var rep = String((profil && profil.cseExiste) || "").trim().toLowerCase();
+    var ou = String((profil && profil.orgInspection) || "").trim();
+    var liste = "cette liste est tenue à votre disposition à " +
+      (ou ? "la section d'inspection du travail dont relève l'établissement, " + ou + "," :
+        "la section d'inspection du travail dont relève l'établissement") +
+      " et à la mairie " + de(ville()) + " (" + ref(["D1232-5"]) + ")";
+    if (rep.indexOf("oui") === 0)
+      return "Vous pouvez vous faire assister par une personne de votre choix appartenant au " +
+        "personnel de l'entreprise (" + ref([art]) + ").";
+    if (rep.indexOf("non") === 0)
+      return "Aucune institution représentative du personnel n'étant en place dans l'entreprise, " +
+        "vous pouvez vous faire assister soit par une personne de votre choix appartenant au " +
+        "personnel de l'entreprise, soit par un conseiller du salarié choisi sur une liste dressée " +
+        "par l'autorité administrative ; " + liste + " (" + ref([art]) + ").";
+    return "Vous pouvez vous faire assister par une personne de votre choix appartenant au " +
+      "personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
+      "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste " +
+      "dressée par l'autorité administrative ; " + liste + " (" + ref([art]) + ").";
+  }
+
   function ville() {
     var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
     return m ? m[1].trim() : "[ville]";
@@ -1816,7 +1860,7 @@
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + "." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision envisagée et recueillerons vos explications (" + ref(["L1232-3"]) + ")." });
-    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative. Cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie " + de(ville()) + " (" + ref(["L1232-4"]) + ")." });
+    b.push({ k: "p", t: assistance("L1232-4") });
     formule(b, civ);
     b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (" + ref(["L1232-2"]) + ")." });
     b.push({ k: "saut", t: "" });
@@ -2723,7 +2767,7 @@
     enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement pour motif économique, la suppression de votre poste de " + poste + " étant envisagée pour les raisons qui vous seront exposées." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + " (" + ref(["L1233-11"]) + ")." });
-    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative ; cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie " + de(ville()) + " (" + ref(["L1233-13"]) + ")." });
+    b.push({ k: "p", t: assistance("L1233-13") });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous proposerons le bénéfice du contrat de sécurisation professionnelle et vous remettrons le document d'information correspondant (" + ref(["L1233-66", "L1233-65"]) + ")." });
     formule(b, civ);
     b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (" + ref(["L1233-11"]) + "). Avant tout licenciement : efforts de formation et d'adaptation, et recherche de reclassement sur les emplois disponibles, avec des offres écrites et précises (" + ref(["L1233-4"]) + ")." });
