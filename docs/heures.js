@@ -313,8 +313,8 @@
      mois scellé sur ces heures-là devient une pièce opposable. Relevé le
      26 septembre 2026. Ces jours ne se saisissent plus, ne comptent pas, et
      le disent. */
-  function horsContrat(j) {
-    var d = new Date(an, mo, j), e = null, so = null;
+  function horsContrat(j, unAn, unMo) {
+    var d = new Date(unAn == null ? an : unAn, unMo == null ? mo : unMo, j), e = null, so = null;
     if (qui && net(qui.ent)) e = new Date(net(qui.ent) + "T00:00:00");
     if (qui && net(qui.sor)) so = new Date(net(qui.sor) + "T00:00:00");
     if (e && !isNaN(e) && d < e) return "avant l'entrée";
@@ -322,23 +322,33 @@
     return "";
   }
 
-  function construire() {
-    var m = moisDe(), r = refDe(qui.id);
-    var dernier = new Date(an, mo + 1, 0).getDate();
-    lignes = [];
+  /* Les jours d'un mois quelconque, construits comme ceux du mois affiché : il
+     faut pouvoir lire le mois voisin pour compléter une semaine à cheval. */
+  function lignesDuMois(unAn, unMo) {
+    var t = lireCle(CLE_DEC, {});
+    var m = t[qui.id + "|" + unAn + "-" + ("0" + (unMo + 1)).slice(-2)] || {};
+    var jours = m.jours || {};
+    var r = refDe(qui.id);
+    var dernier = new Date(unAn, unMo + 1, 0).getDate();
+    var out = [];
     for (var j = 1; j <= dernier; j++) {
-      var sem = new Date(an, mo, j).getDay();
+      var sem = new Date(unAn, unMo, j).getDay();
       var base = baseDuJour(r.sem[sem]);
-      var saisi = m.jours[String(j)];
-      var hc = horsContrat(j);
-      lignes.push({
-        j: j, sem: sem, base: base, hc: hc,
+      var saisi = jours[String(j)];
+      var hc = horsContrat(j, unAn, unMo);
+      out.push({
+        j: j, an: unAn, mo: unMo, sem: sem, base: base, hc: hc,
         n: hc ? "repos" : (saisi ? saisi.n : base.n),
         d: saisi && saisi.d != null ? saisi.d : base.d,
         f: saisi && saisi.f != null ? saisi.f : base.f,
         p: saisi && saisi.p != null ? String(saisi.p) : base.p,
+        saisi: !!saisi,
       });
     }
+    return out;
+  }
+  function construire() {
+    lignes = lignesDuMois(an, mo);
   }
   function modifiee(l) {
     return l.n !== l.base.n || l.d !== l.base.d || l.f !== l.base.f || String(l.p) !== String(l.base.p);
@@ -640,23 +650,78 @@
       sourceSeuil: "L. 3121-27 et L. 3121-28 du code du travail" };
   }
 
+  /* Les jours qui manquent à une semaine, pris dans le mois voisin. La semaine
+     va du lundi au dimanche : les jours manquants sont donc soit avant le
+     premier jour du mois, soit après le dernier. */
+  function completerSemaine(jours) {
+    if (!jours.length) return { jours: jours, dit: "" };
+    var premier = jours[0], dernier = jours[jours.length - 1];
+    var out = jours.slice(), dit = "";
+    /* Avant : on remonte jusqu'au lundi, dans le mois précédent. */
+    var avant = premier.sem === 0 ? 6 : premier.sem - 1;
+    if (premier.j === 1 && avant > 0) {
+      var pAn = mo === 0 ? an - 1 : an, pMo = mo === 0 ? 11 : mo - 1;
+      var L = lignesDuMois(pAn, pMo);
+      var pris = L.slice(Math.max(0, L.length - avant));
+      out = pris.concat(out);
+      dit = "complétée par " + pris.length + " jour" + (pris.length > 1 ? "s" : "") +
+        " du mois précédent";
+    }
+    /* Après : on descend jusqu'au dimanche, dans le mois suivant. */
+    var apres = dernier.sem === 0 ? 0 : 7 - dernier.sem;
+    var dernierDuMois = new Date(an, mo + 1, 0).getDate();
+    if (dernier.j === dernierDuMois && apres > 0) {
+      var sAn = mo === 11 ? an + 1 : an, sMo = mo === 11 ? 0 : mo + 1;
+      var L2 = lignesDuMois(sAn, sMo).slice(0, apres);
+      out = out.concat(L2);
+      dit = "complétée par " + L2.length + " jour" + (L2.length > 1 ? "s" : "") +
+        " du mois suivant";
+    }
+    return { jours: out, dit: dit };
+  }
+
   /* Une semaine du mois n'est complète que si ses sept jours y sont : celles
-     du premier et du dernier jour débordent sur le mois voisin, et un total
-     de quatre jours ne se compare à aucun plafond hebdomadaire. */
+     du premier et du dernier jour débordent sur le mois voisin, et se
+     complètent alors avec lui. */
   function analyse() {
     var pl = plafonds(), out = { pl: pl, jours: [], semaines: [], hs: 0, a25: 0, a50: 0, partielles: 0 };
     lignes.forEach(function (l) {
       var v = duree(l);
       if (v > pl.jour + 0.001) out.jours.push({ j: l.j, h: v });
     });
+    /* UNE SEMAINE À CHEVAL SUR DEUX MOIS EST UNE SEMAINE.
+
+       Relevé le 27 septembre 2026, et c'est la faute la plus lourde de cet
+       écran : une semaine dont les sept jours ne tenaient pas dans le mois
+       était écartée du calcul, dans les deux mois. Une semaine de cinquante-six
+       heures qui commençait un 30 septembre sortait donc sans une seule heure
+       supplémentaire, sans alerte de plafond, et sans ouvrir le repos
+       compensateur du trimestre. Le salarié perdait ses heures, et l'employeur
+       la preuve qu'il les avait comptées.
+
+       La semaine se complète maintenant avec le mois voisin, lu de la même
+       façon que celui qu'on affiche. Et pour qu'elle ne soit comptée qu'une
+       fois, elle appartient au mois où tombe son dernier jour : c'est celui-là
+       qui en porte les heures supplémentaires. L'écran le dit sur la ligne de
+       la semaine. */
     semaines.forEach(function (s) {
+      var jours = s.jours, entiere = s.jours.length === 7, voisin = "";
+      if (!entiere) {
+        var comp = completerSemaine(s.jours);
+        jours = comp.jours; voisin = comp.dit;
+        entiere = jours.length === 7;
+      }
       var t = 0;
-      s.jours.forEach(function (l) { t += duree(l); });
-      var complete = s.jours.length === 7;
-      if (!complete) { out.partielles++; }
-      out.semaines.push({ du: s.du, au: s.au, h: t, complete: complete,
-        depasse: complete && t > pl.sem + 0.001 });
-      if (complete && t > pl.seuil + 0.001) {
+      jours.forEach(function (l) { t += duree(l); });
+      /* Le dernier jour de la semaine complétée : s'il n'est pas dans le mois
+         affiché, la semaine se compte dans le mois suivant. */
+      var fin = jours[jours.length - 1];
+      var aNous = !fin || fin.an == null || (fin.an === an && fin.mo === mo);
+      if (!entiere) out.partielles++;
+      out.semaines.push({ du: s.du, au: s.au, h: t, complete: entiere,
+        voisin: voisin, aNous: aNous,
+        depasse: entiere && t > pl.sem + 0.001 });
+      if (entiere && aNous && t > pl.seuil + 0.001) {
         var sup = t - pl.seuil;
         out.hs += sup;
         out.a25 += Math.min(sup, 8);
@@ -741,18 +806,29 @@
           " (" + nbh(x.h) + ")"; }).join(", ") + ".</p>");
     }
     if (a.hs > 0.005) {
-      L.push('<p class="al">Heures supplémentaires des semaines entières du mois, au-delà de ' +
-        a.pl.seuil + " heures : " + nbh(a.hs) + ", dont " + nbh(a.a25) +
+      L.push('<p class="al">Heures supplémentaires au-delà de ' +
+        a.pl.seuil + " heures par semaine : " + nbh(a.hs) + ", dont " + nbh(a.a25) +
         " dans les huit premières heures de chaque semaine et " + nbh(a.a50) + " au-delà.</p>");
     } else if (!a.jours.length && !dep.length) {
       L.push('<p class="doux">Aucun dépassement des plafonds sur ce mois, et aucune semaine ' +
-        "entière au-delà de trente-cinq heures.</p>");
+        "au-delà de trente-cinq heures.</p>");
     }
-    if (a.partielles) {
-      L.push('<p class="doux">' + (a.partielles > 1
-        ? a.partielles + " semaines chevauchent le mois voisin : leurs totaux ne sont pas comparés"
-        : "Une semaine chevauche le mois voisin : son total n'est pas comparé") +
-        " aux plafonds hebdomadaires, il se vérifie avec l'autre mois.</p>");
+    /* Ce que devient une semaine à cheval : elle est complétée par le mois
+       voisin, et comptée dans le mois où tombe son dernier jour. */
+    var cheval = a.semaines.filter(function (x) { return x.voisin; });
+    if (cheval.length) {
+      L.push('<p class="doux">' + cheval.map(function (x) {
+        return "Semaine du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au + " : " + x.voisin +
+          ", total " + nbh(x.h) + (x.aNous ? ", comptée ici" : ", comptée dans le mois suivant");
+      }).join(". ") + ".</p>");
+    }
+    var restees = a.semaines.filter(function (x) { return !x.complete; });
+    if (restees.length) {
+      L.push('<p class="doux">' + (restees.length > 1
+        ? restees.length + " semaines restent incomplètes"
+        : "Une semaine reste incomplète") +
+        " : leurs jours manquants n'ont pas pu être lus dans le mois voisin, et leur total ne se " +
+        "compare à aucun plafond hebdomadaire.</p>");
     }
     /* LE REPOS QUI S'OUVRE, ET CE QUI MANQUE POUR LE DIRE.
 
@@ -1339,9 +1415,13 @@
     if (md) L.push("Motif du dépassement, porté par l'entreprise : " + md);
     if (!a.jours.length && !dep.length && a.hs <= 0.005)
       L.push("Aucun dépassement des plafonds, et aucune semaine entière au-delà de trente-cinq heures.");
+    a.semaines.filter(function (x) { return x.voisin; }).forEach(function (x) {
+      L.push("Semaine du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au + " : " + x.voisin +
+        ", total " + nbh(x.h) + (x.aNous ? ", comptée dans ce mois." : ", comptée dans le mois suivant."));
+    });
     if (a.partielles) L.push(a.partielles > 1
-      ? a.partielles + " semaines chevauchent le mois voisin : leurs totaux se vérifient avec l'autre mois."
-      : "Une semaine chevauche le mois voisin : son total se vérifie avec l'autre mois.");
+      ? a.partielles + " semaines restent incomplètes : leur total ne se compare à aucun plafond."
+      : "Une semaine reste incomplète : son total ne se compare à aucun plafond.");
     L.push("Plafonds appliqués : " + a.pl.jour + " heures par jour et " + a.pl.sem +
       " heures par semaine (" + a.pl.source + ")" + (a.pl.dit ? ", catégorie « " + a.pl.dit + " »" : "") +
       ". La moyenne de quarante-quatre heures sur douze semaines (L. 3121-22) ne se calcule pas sur un mois.");

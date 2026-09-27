@@ -465,8 +465,15 @@
      puisqu'il s'agit de quelqu'un d'autre. */
   function estFeminin(v) {
     var sexe = net(v && v.sexe).toUpperCase();
-    if (sexe === "F" || sexe === "FEMME" || sexe === "MME" || sexe === "MADAME") return true;
-    if (sexe === "M" || sexe === "H" || sexe === "HOMME" || sexe === "MONSIEUR") return false;
+    /* LE REGISTRE ÉCRIT « FÉMININ » ET « MASCULIN ». La liste ne connaissait que
+       « F », « FEMME », « MME » : le sexe porté au registre n'était donc jamais
+       reconnu, et le contrat d'une femme sortait « ZENNADI Naïma, née le …,
+       ci-après désigné le salarié … est engagé ». Relevé le 27 septembre 2026.
+       La première lettre suffit et couvre les deux orthographes : F pour le
+       féminin, M ou H pour le masculin. */
+    var c = sexe.charAt(0);
+    if (c === "F") return true;
+    if (c === "M" || c === "H") return false;
     return /^\s*(madame|mme)\b/i.test(net(v && v.nom));
   }
   /* Les limites de mot de l'expression régulière ne valent rien après une
