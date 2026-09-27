@@ -288,12 +288,14 @@ def construire(sortie="Boudjemaa-livre.docx"):
             gras=True, couleur=BLEU, avant=16, apres=8)
     p.paragraph_format.keep_with_next = True
     for t in [
-        "312 pages de journaux lues ligne par ligne.",
+        "312 pages de journaux lues ligne par ligne, et 339 articles au répertoire.",
         "382 numéros des Colmarer neueste Nachrichten, juillet 1938 - décembre 1939, interrogés un par un ; quinze le nomment, quatre articles lui sont consacrés, tous lus sur l'image et traduits.",
         "937 numéros du Mémorial, quotidien de Saint-Étienne, juin 1936 - janvier 1939, interrogés un par un ; quarante et un le nomment. La reproduction en image de ce titre est refusée par la Bibliothèque nationale de France.",
         "150 numéros du Forez sportif, 1936-1939, interrogés ; sept le nomment.",
         "114 numéros de L'Alsace et des Dernières Nouvelles d'Alsace autour de sa mort : aucune mention.",
         "20 numéros de La Tribune de l'Aube, Troyes, portent le nom ; quatorze sont bien lui, six sont des homonymes de la rubrique des tribunaux. La reproduction en image de ce titre est refusée : le texte a été reconstitué par fenêtres de recherche, et non lu sur la page.",
+        "38 numéros du Petit Matin de Tunis portent le nom entre 1932 et 1936 ; trois seulement relèvent du football, les trente-cinq autres sont des homonymes.",
+        "7 numéros de L'Écho de Tunis portent le nom en 1943 et 1944 ; six sont bien lui.",
         "La presse niçoise n'est pas numérisée : ni L'Éclaireur de Nice ni Le Petit Niçois ne sont accessibles pour 1935-1937. Les citations niçoises de ce livre viennent des coupures communiquées par l'OGC Nice et par l'auteur.",
     ]:
         par(doc, "- " + t, apres=5)

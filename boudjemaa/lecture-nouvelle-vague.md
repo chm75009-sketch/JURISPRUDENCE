@@ -419,14 +419,7 @@ l'avoir vendu.
 
 ## CE QUI RESTE À LIRE
 
-- Le Petit Matin de Tunis, 1932-1936 : 39 numéros portent le nom, dont 2
-  seulement relèvent du football. Les 37 autres sont des homonymes : vols,
-  faillites, liquidations judiciaires, un double suicide, des courses de
-  chevaux, une levée de suspension d'un joueur d'Oranie nommé Ben Salah
-  Boudjemaa.
-- Quatre numéros de L'Écho de Tunis de 1943 et 1944 où la recherche a trouvé
-  le nom sans que la reconnaissance de caractères le retrouve sur l'image :
-  à reprendre page par page.
+- Plus rien : les trois titres annoncés ici ont été lus.
 
 ---
 
@@ -501,3 +494,65 @@ PAG_4 : Boudjemaa, le brun et vif inter colma- rien, dont nous eûmes tout loisi
 ### 1939-09-29  - HOMONYME, ce n'est pas lui
 PAG_3 : Boudjema fut poussé dans la cour par Louail Dcrradji, beau-père de Souici(...)Ce dernier, armé d’un couteau, frappa Boudjema à la main gauche(...)Boudjéma qui a reconnu avoir frappé Souici avec son rasoir retrouvé dans la cour par la police, a été mis à la disposition de M. le Procureur de la République par les soins de M. le Commissaire de police
 
+
+---
+
+## L'Écho de Tunis et Le Petit Matin, fin de dépouillement, 27 septembre 2026
+
+### L'Écho de Tunis
+
+Sept numéros portent le nom. Six sont bien lui, un est un homonyme : le
+23 novembre 1943, page 2, « le Tribunal condamne Boudjema ben Amor ben Hadj
+Amara Zlassi à 5 ans d'emprisonnement ».
+
+Trois entrent au répertoire pour la première fois.
+
+- 7 novembre 1943, page 2 : la composition du jour, « avants : Boudjemaa ».
+- 30 décembre 1943, page 2 : la sélection annoncée pour le match du Nouvel
+  An, « Boudjemaa, Lanfranchi, Ben Batouche, Ouardi, Berbèche ».
+- Une correction au 2 janvier 1944 : la recherche rend « un tir de Younès
+  passe au-dessus », et non « un centre » comme le portait le répertoire.
+
+### Le Petit Matin de Tunis, 1932-1936
+
+Trente-huit numéros portent le nom sur cette période. Trois relèvent du
+football et sont bien lui, contre deux annoncés jusqu'ici. Les trente-cinq
+autres sont des homonymes : faillites et liquidations d'un négociant de Béja
+nommé Boudjemâa ben Mabrouk, un abus de confiance, un double suicide, des
+courses de chevaux, des condamnations correctionnelles, et la levée de
+suspension d'un joueur d'Oranie, Ben Salah Boudjemaa, licence 13267.
+
+Les trois articles de football :
+
+**17 mars 1932, page 7.** U.S. Souk-el-Arba bat U.S. Béja. Il manque un
+pénalty : « les visiteurs bénéficient d'un pénalty botté mollement par
+Boudjemàa dans les mains du portier ». Et la fin du compte rendu :
+« [spec]tateurs et joueurs souk-el-arbiens, qui, après la partie, malmenèrent
+très sérieusement le jeune joueur béjaois : Boujemaâ. » C'est la première
+fois qu'on le voit pris à partie, et la graphie « Boujemaâ » est celle du
+stade de Béja.
+
+**20 juin 1932, page 5.** « LE STADE GAULOIS ET L'U. S. BEJA FONT MATCH NUL
+1 à 1 APRÈS PROLONGATIONS ». Troisième match barrage pour l'ascension en
+Division d'Honneur, au Stade Municipal de Tunis. « Avec Imbach, Boudjema et
+Mary ressortirent. » Une quatrième rencontre est annoncée.
+
+**23 juillet 1932, page 4.** L'annonce du déplacement : « FOOTBALL. L'U. S.
+Béjaoise se déplacera [diman]che 24 courant, à Souk-Ahras », avec la
+composition, où il est inter-gauche, et les deux Martinelli.
+
+UNE QUESTION DE DATE, À TRANCHER. Le livre date le match de Souk-Ahras du
+30 juillet 1932, qui est la date du numéro du Souk-Ahras républicain. Ce
+journal est bi-hebdomadaire. Le Petit Matin annonce le déplacement pour le
+dimanche 24 juillet. Il est donc possible que le compte rendu du 30 juillet
+soit celui du match du 24. Je ne l'ai pas établi : il faudrait une autre
+source, ou la mention du jour dans le compte rendu lui-même.
+
+UNE ERREUR QUI RESTE DANS LE LIVRE. Le chapitre 1 dit encore que le match de
+Souk-Ahras est « la première trace de Boudjemaa sur un terrain ». C'est faux
+depuis la lecture du Petit Matin du 13 janvier 1931, où il joue et marque
+avec les juniors de l'U.S.B. à seize ans et cinq mois. Et c'est faux aussi
+de ces deux matchs de mars et juin 1932. La page 6 du livre dit de la même
+façon que la photographie des juniors est antérieure de deux ou trois ans à
+la première impression de son nom : elle est du même jour que l'article qui
+le nomme.
