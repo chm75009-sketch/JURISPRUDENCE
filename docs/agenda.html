@@ -398,21 +398,15 @@
        les trois consultations annuelles. Quand la fiche répond non, rien de
        ce qui suppose un comité ne s'inscrit, et l'agenda renvoie aux
        élections ou au procès-verbal de carence. */
-    var carence = false;
+    var fichePf = {};
     try {
-      var pf = (window.Profil && window.Profil.lire) ? window.Profil.lire()
+      fichePf = (window.Profil && window.Profil.lire) ? (window.Profil.lire() || {})
         : JSON.parse(localStorage.getItem("profil-entreprise") || "{}");
-      carence = String((pf || {}).cseExiste || "").trim().toLowerCase() === "non";
-    } catch (e) { carence = false; }
-    if (carence && !sansComite)
-      attentes.push({ t: "Pas de comité social et économique en place, selon la fiche.",
-        w: "Ni réunions ni consultations du comité à inscrire. À tenir : l'organisation des élections " +
-          "ou le procès-verbal de carence et sa transmission, dans le parcours « Mise en place du comité »." });
+    } catch (e) { fichePf = {}; }
     if (sansComite)
       attentes.push({ t: "Comité social et économique : pas dû avant onze salariés.",
         w: "L. 2311-2 : le comité est mis en place dans les entreprises d'au moins onze salariés. " +
           "Effectif retenu : " + effectif + ". Ni réunions, ni consultations, ni élections à inscrire." });
-    if (carence) sansComite = true;
 
     /* QUAND IL N'Y A PAS DE COMITÉ, ON N'EN PRÉPARE PAS LES RÉUNIONS.
 
@@ -423,12 +417,57 @@
        alors, c'est l'organisation des élections, ou le procès-verbal de
        carence si elles n'ont donné aucun candidat : L. 2314-4 pour
        l'information du personnel, L. 2314-9 pour la carence. */
-    var repCse = String(((window.Profil && window.Profil.lire()) || {}).cseExiste || "").trim().toLowerCase();
+    var repCse = String(fichePf.cseExiste || "").trim().toLowerCase();
     /* La fiche répond maintenant « oui, élu », « non, procès-verbal de
        carence » ou « non, aucune élection organisée » : l'égalité stricte à
        « non » ne reconnaissait plus aucune de ces réponses. */
     var pasDeComite = !sansComite && repCse.indexOf("non") === 0;
-    if (pasDeComite) {
+    /* UNE CARENCE N'EST PAS UNE ABSENCE D'ÉLECTIONS.
+
+       Relevé le 27 septembre 2026 : la fiche distinguait les deux réponses,
+       l'agenda les traitait pareil. Elles n'appellent pourtant pas la même
+       chose. L. 2314-8 (LEGIARTI000036262484, deux lectures concordantes au
+       relais le 27 septembre 2026) : « En l'absence de comité social et
+       économique, l'employeur engage la procédure définie à l'article
+       L. 2314-5 à la demande d'un salarié ou d'une organisation syndicale
+       dans le mois suivant la réception de cette demande. Lorsque l'employeur
+       a engagé le processus électoral et qu'un procès-verbal de carence a été
+       établi, la demande ne peut intervenir qu'à l'issue d'un délai de six
+       mois après l'établissement de ce procès-verbal. » Après une carence,
+       l'employeur n'a donc rien à relancer de lui-même : ce qui compte est la
+       date à partir de laquelle une demande devient recevable, et le mois
+       qu'il a alors pour engager la procédure. */
+    var parCarence = pasDeComite && repCse.indexOf("carence") >= 0;
+    var dateCarence = String(fichePf.cseCarence || "").trim();
+    if (parCarence && estDate(dateCarence)) {
+      var recevable = plusMois(dateCarence, 6);
+      var couru = passee(recevable);
+      attentes.push({ t: couru
+          ? "Procès-verbal de carence du " + enFr(dateCarence) + " : depuis le " + enFr(recevable) + ", une demande d'élections est de nouveau recevable."
+          : "Procès-verbal de carence du " + enFr(dateCarence) + " : aucune demande d'élections n'est recevable avant le " + enFr(recevable) + ".",
+        w: "L. 2314-8 : après un procès-verbal de carence, la demande d'un salarié ou d'une organisation " +
+          "syndicale « ne peut intervenir qu'à l'issue d'un délai de six mois après l'établissement de ce " +
+          "procès-verbal ». " + (couru
+            ? "Ce délai est écoulé. Vous n'avez toujours rien à organiser de vous-même, mais la première " +
+              "demande d'un salarié ou d'un syndicat vous oblige à engager la procédure dans le mois qui " +
+              "suit sa réception : datez sa réception le jour où elle arrive."
+            : "Jusqu'au " + enFr(recevable) + ", vous n'avez pas d'élections à organiser, et une demande " +
+              "reçue d'ici là n'y oblige pas.") +
+          " Gardez le procès-verbal, la preuve de son affichage et l'accusé de l'inspection du travail : " +
+          "ce sont eux qui justifient qu'aucun comité ne siège." });
+      if (!couru)
+        lignes.push({ tri: recevable, quand: enFr(recevable),
+          titre: "Fin du délai de six mois ouvert par le procès-verbal de carence : une demande d'élections redevient recevable",
+          fondement: "L. 2314-8 (après une carence, la demande ne peut intervenir qu'à l'issue d'un délai de six mois ; elle oblige alors l'employeur à engager la procédure dans le mois suivant sa réception)",
+          docs: "le procès-verbal de carence du " + enFr(dateCarence) + ", sa diffusion aux salariés et sa transmission à l'inspection du travail",
+          retard: false, prov: "profil" });
+    } else if (parCarence) {
+      attentes.push({ t: "Procès-verbal de carence : sa date manque.",
+        w: "Votre fiche dit qu'un procès-verbal de carence a été établi, sans dire quand. C'est cette date " +
+          "qui ouvre le délai de six mois pendant lequel aucune demande d'élections n'est recevable " +
+          "(L. 2314-8). Renseignez-la dans la fiche d'entreprise." });
+    }
+    if (pasDeComite && !parCarence) {
       attentes.push({ t: "Aucun comité en place : ce sont les élections qui sont dues, pas les réunions.",
         w: "Votre fiche répond « non » à la question du comité social et économique, et votre effectif " +
           "l'impose (L. 2311-2). L'employeur informe le personnel de l'organisation des élections par tout " +
@@ -541,8 +580,10 @@
       }
     }
 
-    /* Ce qui vient à la place : l'organisation des élections. */
-    if (pasDeComite) {
+    /* Ce qui vient à la place : l'organisation des élections. Sauf après une
+       carence, où le délai de six mois de L. 2314-8 court encore et où rien
+       n'est à organiser : la ligne datée ci-dessus le dit à sa place. */
+    if (pasDeComite && !parCarence) {
       cadences.push({
         titre: "Organiser les élections du comité social et économique",
         rythme: "premier tour au plus tard le quatre-vingt-dixième jour suivant l'information du personnel",
@@ -594,8 +635,10 @@
     }
 
     /* --- élections du CSE --- */
-    if (sansComite) {
-      /* rien : pas de comité, pas d'élections à renouveler */
+    if (sansComite || pasDeComite) {
+      /* rien : pas de comité, pas de mandats à renouveler. Une date
+         d'anciennes élections ne fait pas revenir un comité que la fiche dit
+         absent. */
     } else if (d.dateDernieresElections && estDate(d.dateDernieresElections.valeur)) {
       var elections = d.dateDernieresElections.valeur;
       var fin = plusMois(elections, 48);

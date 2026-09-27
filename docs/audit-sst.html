@@ -198,7 +198,11 @@
   /* Sans comité selon la fiche, la consultation du comité sur le document
      unique ne se demande pas : elle est remplacée par le procès-verbal de
      carence, que le parcours du comité écrit. */
-  var sansCse = String((fichePf || {}).cseExiste || "").trim().toLowerCase() === "non";
+  /* La fiche répond « oui, élu », « non, procès-verbal de carence » ou « non,
+     aucune élection organisée » : l'égalité stricte à « non » ne reconnaissait
+     aucune de ces réponses, et la consultation du comité restait demandée à
+     une entreprise qui n'en a pas. Relevé le 27 septembre 2026. */
+  var sansCse = String((fichePf || {}).cseExiste || "").trim().toLowerCase().indexOf("non") === 0;
   function griser() {
     QUESTIONS.forEach(function (q) {
       var carence = sansCse && q.id === "SST-CTL-DUE-07";

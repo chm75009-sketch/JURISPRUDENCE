@@ -186,6 +186,17 @@
       pose("Terme du contrat à durée déterminée", net(su.terme) || (s.nature === "cdd" ? net(s.sor) : ""),
         "L. 1243-5 : le contrat cesse de plein droit à l'échéance du terme (l'indemnité de fin de contrat relève de L. 1243-8)",
         "le solde de tout compte, le certificat de travail, l'attestation d'assurance chômage");
+
+      /* LE TITRE DE TRAVAIL QUI EXPIRE. L. 8251-1 (LEGIARTI000024197709, deux
+         lectures concordantes au relais le 27 septembre 2026) interdit de
+         « conserver à son service » un étranger non muni du titre l'autorisant
+         à exercer une activité salariée. La date de fin n'est pas une mention
+         du registre : elle s'y saisit pour que l'échéance se voie venir, à
+         soixante jours comme les autres. Relevé le 27 septembre 2026. */
+      if (s.etr === "oui")
+        pose("Fin de validité du titre de travail", net(s.titFin),
+          "L. 8251-1 : il est interdit de conserver à son service un étranger non muni du titre l'autorisant à exercer une activité salariée en France",
+          "le justificatif de renouvellement, ou le récépissé de demande de renouvellement, et la copie annexée au registre (D. 1221-24)");
     });
     out.sort(function (a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
     return out;

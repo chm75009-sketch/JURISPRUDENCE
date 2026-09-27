@@ -482,6 +482,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         nature: "cdi", part: "partiel", aut: "non", etr: "oui", titT: "Titre de séjour pluriannuel",
         titN: "9512AB34567", titCop: "oui", insc: "2024-01-15" },
     ];
+    /* L'exemple du travailleur étranger porte une fin de titre à quarante
+       jours : c'est la seule façon de voir, sur l'écran de démonstration, à
+       quoi ressemble l'alerte que L. 8251-1 commande de ne pas manquer. */
+    base[2].titFin = new Date(Date.now() + 40 * 86400000).toISOString().slice(0, 10);
     return base.map(function (b) {
       var s = neuf();
       for (var k in b) if (Object.prototype.hasOwnProperty.call(b, k)) s[k] = b[k];
@@ -594,7 +598,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         : "demande du " + s.autDem) : "autorisation du " + s.autD), fond: "D. 1221-23, 7°" });
     if (s.etr === "oui") L.push({ t: "Titre valant autorisation de travail : type " +
       (vide(s.titT) ? "[type du titre]" : s.titT) + ", n° d'ordre " +
-      (vide(s.titN) ? "[numéro d'ordre]" : s.titN), fond: "D. 1221-23, 8°" });
+      (vide(s.titN) ? "[numéro d'ordre]" : s.titN) +
+      (vide(s.titFin) ? "" : ", valable jusqu'au " + s.titFin), fond: "D. 1221-23, 8°" });
     if (s.nature === "autre" && !vide(s.natAutre))
       L.push({ t: s.natAutre, fond: "situation déclarée, hors énumération de D. 1221-23" });
     return L;
@@ -853,6 +858,17 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (s.etr === "oui") {
       h += e("titT", "Type du titre", "D. 1221-23, 8°");
       h += e("titN", "Numéro d'ordre du titre", "D. 1221-23, 8°");
+      /* LA FIN DE VALIDITÉ DU TITRE, QUE LE REGISTRE NE DEMANDE PAS ET QUE
+         L'EMPLOYEUR DOIT SUIVRE QUAND MÊME. Relevé le 27 septembre 2026 : le
+         registre portait le type et le numéro du titre, rien sur sa date de
+         fin, et aucune alerte. Or L. 8251-1 (LEGIARTI000024197709, deux
+         lectures concordantes au relais le 27 septembre 2026) : « Nul ne peut,
+         directement ou indirectement, embaucher, conserver à son service ou
+         employer pour quelque durée que ce soit un étranger non muni du titre
+         l'autorisant à exercer une activité salariée en France. » Le jour où
+         le titre expire, le salarié est conservé au service sans titre : c'est
+         cette date qu'il faut voir venir, pas la découvrir. */
+      h += e("titFin", "Fin de validité du titre", "L. 8251-1 : il est interdit de conserver à son service un étranger non muni du titre l'autorisant à travailler. Hors mentions du registre, suivie pour l'alerte.", "date");
       h += sel("titCop", "Copie annexée au registre et rendue accessible ?", ouiNon, "D. 1221-24");
     }
     h += e("insc", "Mention portée au registre le", "L. 1221-13 : au moment de l'embauche, de façon indélébile. D. 1221-25 pour les événements postérieurs.", "date");
@@ -1251,6 +1267,8 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     { c: "_tps", lib: "Temps de travail (propose « salarié à temps partiel »)", mots: ["temps de travail", "quotite", "horaire", "heures", "duree du travail", "temps"] },
     { c: "titT", lib: "Type du titre de travail", mots: ["titre de sejour", "type de titre", "autorisation de travail", "titre"] },
     { c: "titN", lib: "Numéro d'ordre du titre", mots: ["numero du titre", "numero de titre", "n titre"] },
+    { c: "titFin", lib: "Fin de validité du titre de travail",
+      mots: ["fin de validite du titre", "validite du titre", "expiration du titre", "titre expire le", "fin du titre"] },
     /* L'adresse n'est pas une mention du registre, mais elle arrive souvent
        dans le même tableau, et les courriers la réclament. */
     { c: "adr",  lib: "Adresse du salarié (pour les courriers)",
@@ -1804,6 +1822,29 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         "La copie des titres est annexée au registre et rendue accessible aux membres de la " +
         "délégation du personnel du comité et aux agents de contrôle, dans l'établissement ou sur " +
         "chaque chantier ou lieu de travail distinct où ces travailleurs sont employés (D. 1221-24).</div>");
+      /* LA VALIDITÉ DES TITRES, ET NON SEULEMENT LEUR NUMÉRO. Les lignes se
+         classent en trois : titre expiré, titre qui expire dans les soixante
+         jours, date de fin non renseignée. Le fondement est L. 8251-1, qui
+         interdit de conserver à son service un étranger non muni du titre. */
+      var ajd = new Date(), ajdIso = ajd.toISOString().slice(0, 10);
+      var dans60 = new Date(ajd.getTime() + 60 * 86400000).toISOString().slice(0, 10);
+      function nomDe(s) { return ((s.nom || "") + " " + (s.pre || "")).trim() || "ligne sans nom"; }
+      var expires = etrangers.filter(function (s) { return !vide(s.titFin) && s.titFin < ajdIso; });
+      var bientot = etrangers.filter(function (s) {
+        return !vide(s.titFin) && s.titFin >= ajdIso && s.titFin <= dans60; });
+      var sansFin = etrangers.filter(function (s) { return vide(s.titFin); });
+      if (expires.length || bientot.length || sansFin.length)
+        m.push('<div class="avis ' + (expires.length ? "non" : "att") + '"><b>Validité des titres</b>' +
+          (expires.length ? "<b>Titre expiré : " + ech(expires.map(nomDe).join(", ")) +
+            ".</b> Conserver à son service un étranger non muni du titre l'autorisant à travailler " +
+            "est interdit (L. 8251-1) : le renouvellement se justifie avant toute chose. " : "") +
+          (bientot.length ? "Titre qui expire dans les soixante jours : " +
+            ech(bientot.map(function (s) { return nomDe(s) + " (" + s.titFin + ")"; }).join(", ")) +
+            ". Demandez le justificatif de renouvellement. " : "") +
+          (sansFin.length ? "Date de fin non renseignée : " + ech(sansFin.map(nomDe).join(", ")) +
+            ". Sans elle, rien ne prévient de l'échéance. " : "") +
+          "Cette date n'est pas une mention du registre : elle est suivie ici parce que c'est " +
+          "l'employeur qui répond de l'emploi d'un salarié dont le titre a cessé.</div>");
     }
     if (vide(t["t-depuis"]))
       m.push('<div class="avis att"><b>La date de tenue n\'est pas renseignée</b>' +
@@ -2046,6 +2087,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     ["À défaut, date de la demande (7°)", function (s) { return jourExcel(s.autDem); }],
     ["Type du titre de travail (8°)", function (s) { return s.titT; }],
     ["Numéro d'ordre du titre (8°)", function (s) { return s.titN; }],
+    ["Fin de validité du titre (L. 8251-1)", function (s) { return jourExcel(s.titFin); }],
     ["Copie annexée (D. 1221-24)", function (s) {
       return s.etr === "oui" ? (s.titCop === "oui" ? "Oui" : "Non") : ""; }],
     ["Nature du contrat (9°, 13°)", function (s) { return libelleNature(s.nature); }],
