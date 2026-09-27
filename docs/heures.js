@@ -1262,9 +1262,13 @@
             "D. 3121-24, à défaut d'accord)."
           : ", sur un contingent de 220 heures à défaut d'accord (D. 3121-24).") + "</p>");
     }
-    if (c.manquants.length) {
-      L.push('<p class="doux">Mois du trimestre qui ne sont pas tenus ici : ' +
-        c.manquants.map(function (k) { return MOIS[k]; }).join(", ") +
+    /* Le trimestre est la période du roulant ; celle du sédentaire est
+       l'année. On ne lui liste pas des mois de trimestre. */
+    var manque = a.pl.roulant ? c.manquants : contingent().manquants;
+    if (manque.length) {
+      L.push('<p class="doux">Mois ' + (a.pl.roulant ? "du trimestre" : "de l'année") +
+        " qui ne sont pas tenus ici : " +
+        manque.map(function (k) { return MOIS[k]; }).join(", ") +
         ". Ils ne sont pas comptés, et rien n'est supposé à leur place.</p>");
     }
 
@@ -1771,11 +1775,19 @@
      heures et les pauses partent en nombres, pour que le tableur les
      additionne au lieu de les afficher comme du texte. Relevé le
      26 septembre 2026, « les heures sortent en texte dans Excel ». */
-  function tableauMois(chiffres) {
+  /* UN TOTAL EST UNE FORMULE, PAS UN CHIFFRE RECOPIÉ.
+
+     Relevé le 27 septembre 2026 : les totaux du classeur partaient en valeurs.
+     Le salarié ou l'inspecteur ne voyait pas d'où venait le total, et corriger
+     une journée dans le classeur ne le changeait pas. Quand le décalage des
+     lignes est donné, les totaux de semaine deviennent des sommes de leurs
+     journées, et la liste de leurs lignes est rendue avec le tableau pour que
+     le total du mois soit lui aussi une somme. */
+  function tableauMois(chiffres, decalage) {
     function h(v) { return chiffres ? Math.round(v * 100) / 100 : v.toFixed(2).replace(".", ","); }
     function mn(v) { var n = parseInt(v, 10) || 0; return chiffres ? n : String(n); }
     var t = [["Jour", "Nature", "Début", "Fin", "Pause (min)", "Heures"]];
-    var sem = null, cumul = 0;
+    var sem = null, cumul = 0, depart = null, totaux = [];
     lignes.forEach(function (l, i) {
       if (sem === null) sem = l.j;
       var v = duree(l);
@@ -1788,11 +1800,19 @@
         l.n === "travail" ? mn(l.p) : "",
         l.n === "travail" ? h(v) : "",
       ]);
+      if (depart === null) depart = t.length - 1;
       if (l.sem === 0 || i === lignes.length - 1) {
-        t.push(["Semaine du " + sem + " au " + l.j, "", "", "", "Total semaine", h(cumul)]);
-        sem = null; cumul = 0;
+        var total = h(cumul);
+        if (decalage != null) {
+          total = { f: "SUM(F" + (decalage + depart + 1) + ":F" + (decalage + t.length) + ")",
+                    v: Math.round(cumul * 100) / 100 };
+          totaux.push("F" + (decalage + t.length + 1));
+        }
+        t.push(["Semaine du " + sem + " au " + l.j, "", "", "", "Total semaine", total]);
+        sem = null; cumul = 0; depart = null;
       }
     });
+    t.totaux = totaux;
     return t;
   }
 
@@ -1806,11 +1826,31 @@
     if (dep.length) L.push("Semaines au-delà de " + a.pl.sem + " heures : " +
       dep.map(function (x) { return "du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au +
         " (" + nbh(x.h) + ")"; }).join(", ") + ".");
+    /* La feuille signée et le classeur disent ce que l'écran dit : même
+       ventilation, même ligne d'équivalence, mêmes montants. Relevé le
+       27 septembre 2026, où l'écran comptait au mois et le papier à la
+       semaine. */
+    var vent = ventilation(a);
+    if (a.nuit.length) L.push("Journées au-delà de dix heures avec du travail entre minuit et " +
+      "cinq heures : " + a.nuit.map(function (x) { return leJourDit(x.j) + " (" + nbh(x.h) + ")"; })
+        .join(", ") + " (L. 3312-1 du code des transports).");
+    if (a.pauses.length) L.push("Journées sans la pause due : " +
+      a.pauses.map(function (x) { return leJourDit(x.j) + " (" + x.p + " min au lieu de " + x.du +
+        ")"; }).join(", ") + " (L. 3312-2 du code des transports).");
+    if (vent.equivalence > 0.005) L.push("Heures d'équivalence : " + nbh(vent.equivalence) +
+      ". Le temps de service de " + a.pl.seuil + " heures par semaine est réputé équivalent à la " +
+      "durée légale de trente-cinq heures (D. 3312-45, qui renvoie à L. 3121-13) : ces heures sont " +
+      "travaillées et payées, elles ne sont pas des heures supplémentaires.");
     if (a.hs > 0.005) L.push("Heures supplémentaires des semaines entières, au-delà de " +
-      a.pl.seuil + " heures (" + a.pl.sourceSeuil + ") : " + nbh(a.hs) + ", dont " + nbh(a.a25) +
-      " dans les huit premières heures de chaque semaine et " + nbh(a.a50) + " au-delà. À défaut " +
-      "d'accord, 25 % et 50 % par L. 3121-36, sous réserve de votre convention collective, qui " +
-      "n'est pas lue ici. Aucun montant n'est calculé : les taux se reportent en paie.");
+      a.pl.seuil + " heures (" + a.pl.sourceSeuil + ") : " + nbh(a.hs) + ".");
+    L.push(vent.dit);
+    if (vent.h25 > 0.005 || vent.h50 > 0.005) {
+      var tx = tauxHoraire();
+      L.push("Majorations du mois : " + nbh(vent.h25) + " à 25 % et " + nbh(vent.h50) + " à 50 %" +
+        (tx ? ", soit " + euros(vent.h25 * tx * 0.25) + " et " + euros(vent.h50 * tx * 0.5) +
+              " de majoration, au taux horaire de " + euros(tx) + " porté par l'entreprise."
+            : ". Aucun montant n'est calculé : le taux horaire n'a pas été renseigné."));
+    }
     var tri = Math.floor(mo / 3), c = cumul(tri * 3, tri * 3 + 2);
     if (a.pl.roulant) {
       var jr = reposTrimestre(c.hs);
@@ -1828,8 +1868,23 @@
           "(L. 3121-30 et L. 3121-38, à défaut d'accord)."
           : ", contingent de 220 heures à défaut d'accord (D. 3121-24)."));
     }
-    if (c.manquants.length) L.push("Mois du trimestre non tenus ici : " +
-      c.manquants.map(function (k) { return MOIS[k]; }).join(", ") + ". Ils ne sont pas comptés.");
+    /* Le trimestre est la période du roulant ; celle du sédentaire est
+       l'année, et on ne lui liste pas des mois de trimestre. Relevé le
+       27 septembre 2026. */
+    if (a.pl.roulant) {
+      if (c.manquants.length) L.push("Mois du trimestre non tenus ici : " +
+        c.manquants.map(function (k) { return MOIS[k]; }).join(", ") + ". Ils ne sont pas comptés.");
+    } else {
+      var ca = contingent();
+      if (ca.manquants.length) L.push("Mois de l'année non tenus ici : " +
+        ca.manquants.map(function (k) { return MOIS[k]; }).join(", ") + ". Ils ne sont pas comptés " +
+        "dans le contingent, qui s'apprécie sur l'année civile.");
+    }
+    /* La prise effective du repos, que L. 3171-2 veut voir au document. */
+    var prisT = reposPris(cleTrimestre());
+    if (prisT.length) L.push("Repos compensateur pris : " + prisT.map(function (x) {
+      return (enFrancais(x.le) || x.le) + " (" + String(x.jours).replace(".", ",") + ")";
+    }).join(", ") + ".");
     var md = net(moisDe().motifDep);
     if (md) L.push("Motif du dépassement, porté par l'entreprise : " + md);
     if (!a.jours.length && !dep.length && a.hs <= 0.005)
@@ -2139,10 +2194,16 @@
       ["Horaire de référence", direSemaine(refDe(qui.id))],
       [],
     ];
+    /* Le tableau connaît sa place dans la feuille : ses totaux de semaine sont
+       alors des sommes, et le total du mois la somme de ces totaux. */
+    var corps = tableauMois(true, tete.length);
     var retenu = nombre(m.retenu);
     var pied = [
       [],
-      ["Total calculé par les jours (heures)", Math.round(totalMois() * 100) / 100],
+      ["Total calculé par les jours (heures)",
+        corps.totaux && corps.totaux.length
+          ? { f: "SUM(" + corps.totaux.join(",") + ")", v: Math.round(totalMois() * 100) / 100 }
+          : Math.round(totalMois() * 100) / 100],
       ["Total retenu par l'entreprise (heures)", retenu === null ? "à remplir" : retenu],
       ["Motif de l'écart", m.motif || ""],
       ["État du mois", m.clos && m.clos.le
@@ -2159,7 +2220,7 @@
     ]);
     var feuilles = [{
       titre: "Décompte",
-      lignes: tete.concat(tableauMois(true)).concat(pied),
+      lignes: tete.concat(corps).concat(pied),
       largeurs: [26, 22, 12, 12, 14, 12],
     }];
 

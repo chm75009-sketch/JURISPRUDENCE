@@ -182,6 +182,20 @@
       for (var j = 0; j < largeur; j++) {
         var cel = ligne[j], ref = colonne(j + 1) + (i + 1);
         if (cel === null || cel === undefined || cel === "") { x += '<c r="' + ref + '" s="' + style + '"/>'; continue; }
+        /* UN TOTAL EST UNE FORMULE, PAS UN CHIFFRE RECOPIÉ.
+
+           Relevé le 27 septembre 2026 : les totaux du décompte des heures
+           partaient en valeurs. Le classeur remis au salarié ou à
+           l'inspection ne montrait donc pas d'où venait le total, et
+           corriger une journée ne le changeait pas. Une cellule donnée sous
+           la forme { f: "SUM(F8:F38)", v: 154.5 } s'écrit en formule, avec
+           sa valeur en cache pour qu'elle se lise même sans recalcul. */
+        if (cel && typeof cel === "object" && typeof cel.f === "string") {
+          var sf = style === 5 ? 7 : (style === 3 ? 6 : style);
+          x += '<c r="' + ref + '" s="' + sf + '"><f>' + ech(cel.f) + "</f>" +
+            (typeof cel.v === "number" && isFinite(cel.v) ? "<v>" + cel.v + "</v>" : "") + "</c>";
+          continue;
+        }
         /* Un nombre passé comme nombre s'écrit en nombre : il s'additionne
            dans le tableur, et il s'affiche avec deux décimales. */
         if (typeof cel === "number" && isFinite(cel)) {
