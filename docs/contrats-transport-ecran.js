@@ -415,7 +415,91 @@
     }).join("");
   }
 
+
+  /* CE QU'UNE ALERTE CONDAMNE NE S'ÉCRIT PAS.
+
+     Relevé le 27 septembre 2026 : l'alerte du profil s'affichait, et le contrat
+     se produisait quand même, avec le temps de service d'un conducteur pour une
+     assistante de direction. Même chose pour un « temps partiel » à la durée
+     légale, pour un contrat à durée déterminée sans motif ni terme, et pour un
+     contrat à durée déterminée proposé à un salarié que le registre porte en
+     contrat à durée indéterminée.
+
+     Ce ne sont pas des avertissements de forme : chacun rend le contrat
+     attaquable, et deux d'entre eux le requalifient. Ils empêchent donc
+     l'écriture, et le disent en une phrase, avec le texte.
+
+     L. 1242-12 (LEGIARTI000006901206, deux lectures concordantes au relais le
+     27 septembre 2026) : le contrat à durée déterminée « est établi par écrit et
+     comporte la définition précise de son motif », et « à défaut, il est réputé
+     conclu pour une durée indéterminée ». Le même article impose la date du
+     terme, ou la durée minimale quand le terme n'est pas précis. */
+  function empechements() {
+    var E = [];
+    var s = salarieDuRegistre();
+    var emploi = String((s && s.emp) || V.emploi || "").trim();
+    if (emploi && PROFIL) {
+      var conduit = CONDUIT.test(emploi);
+      if (conduit !== !!PROFIL.conduite)
+        E.push(conduit
+          ? "L'emploi « " + emploi + "  » est un emploi de conduite, et le profil retenu est « " +
+            PROFIL.nom + " » : le contrat n'écrirait ni le temps de service du transport, ni les " +
+            "titres de conduite. Choisissez le profil qui correspond."
+          : "L'emploi « " + emploi + " » n'est pas un emploi de conduite, et le profil retenu est " +
+            "« " + PROFIL.nom + " » : le contrat exigerait le permis, la FIMO, la FCO et la carte " +
+            "de conducteur d'une personne qui ne conduit pas. Changez d'emploi ou de profil.");
+    }
+    var m = Number(String(V.mensuel || "").replace(",", ".")) || 0;
+    if (PARTIEL && m && PROFIL && PROFIL.mensuel && m >= PROFIL.mensuel)
+      E.push("La durée portée, " + CT.fr(m, 2) + " heures par mois, atteint celle de la catégorie, " +
+        CT.fr(PROFIL.mensuel, 2) + " heures : ce n'est pas un temps partiel. Baissez la durée, ou " +
+        "décochez la case.");
+    if (NATURE === "cdd") {
+      if (!String(V.motif || "").trim())
+        E.push("Le motif du recours manque. Le contrat à durée déterminée « comporte la définition " +
+          "précise de son motif » et, à défaut, « est réputé conclu pour une durée indéterminée » " +
+          "(L. 1242-12).");
+      if (!V.sansTerme && !String(V.terme || "").trim())
+        E.push("La date de fin manque. Le terme se date, sauf dans les cas de L. 1242-7 où le " +
+          "contrat est conclu sans terme précis : cochez alors la case et portez la durée minimale " +
+          "(L. 1242-12).");
+      if (V.sansTerme && !String(V.duree || "").trim())
+        E.push("Sans terme précis, la durée minimale est obligatoire (L. 1242-12).");
+      if (s && String(s.nature || "").trim() === "cdi")
+        E.push("Le registre du personnel porte ce salarié en contrat à durée indéterminée : un " +
+          "contrat à durée déterminée ne se conclut pas avec lui sans que le premier ait pris fin. " +
+          "Vérifiez le registre.");
+    }
+    return E;
+  }
+  /* Le salarié du registre correspondant au nom saisi, s'il y en a un. */
+  function salarieDuRegistre() {
+    var n = String(V.nom || "").trim().toLowerCase();
+    if (!n) return null;
+    var out = null;
+    (salariesDuRegistre() || []).forEach(function (x) {
+      if (out) return;
+      var plein = (String(x.nom || "") + " " + String(x.pre || "")).trim().toLowerCase();
+      if (plein === n || String(x.nom || "").trim().toLowerCase() === n) out = x;
+    });
+    return out;
+  }
+
   $("produire").addEventListener("click", function () {
+    /* Les empêchements d'abord : un contrat attaquable ne s'écrit pas. */
+    var stop = empechements();
+    var zone = $("alerte-stop");
+    if (stop.length) {
+      if (zone) {
+        zone.classList.remove("cache");
+        zone.innerHTML = "<b>Le contrat n'est pas écrit : " + stop.length +
+          (stop.length > 1 ? " points l'empêchent" : " point l'empêche") + ".</b>" +
+          "<ul><li>" + stop.map(ech).join("</li><li>") + "</li></ul>";
+        zone.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      return;
+    }
+    if (zone) zone.classList.add("cache");
     var v = valeurs();
     BLOCS = CT.ecrire(v);
     ANNEXE = CT.annexeDue(v) ? CT.annexeDemande(v) : [];
