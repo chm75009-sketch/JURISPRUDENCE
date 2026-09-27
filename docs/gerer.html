@@ -382,8 +382,12 @@
       dit: "les actions de positionnement, d'évaluation, d'accompagnement et les enseignements durent au minimum entre 15 %, sans être inférieurs à cent cinquante heures, et 25 % de la durée totale du contrat" },
     "D6325-1": { id: "LEGIARTI000049854565",
       dit: "l'employeur adresse le contrat de professionnalisation et son document annexé à l'opérateur de compétences au plus tard dans les cinq jours qui suivent le début du contrat, sous forme dématérialisée" },
-    "D6325-15": { id: "LEGIARTI000018522997",
+    "D6325-15": { id: "LEGIARTI000018522997", lu: 27,
       dit: "le salaire ne peut être inférieur à 55 % du salaire minimum de croissance avant vingt et un ans et à 70 % à partir de vingt et un ans ; 65 % et 80 % lorsque le bénéficiaire est titulaire d'une qualification au moins égale au baccalauréat professionnel" },
+    "D6325-16": { id: "LEGIARTI000018522995", lu: 27,
+      dit: "les montants de rémunération prévus à l'article D. 6325-15 sont calculés à partir du premier jour du mois suivant le jour où le titulaire du contrat a atteint l'âge indiqué" },
+    "D6325-18": { id: "LEGIARTI000018522991", lu: 27,
+      dit: "la rémunération du titulaire d'un contrat de professionnalisation âgé d'au moins vingt-six ans ne peut être inférieure à 85 % de la rémunération minimale prévue par la convention ou l'accord collectif de branche dont relève l'entreprise" },
     "L3122-5": { id: "LEGIARTI000033020171",
       dit: "est travailleur de nuit celui qui accomplit, au moins deux fois par semaine, selon son horaire habituel, au moins trois heures de travail de nuit quotidiennes, ou un nombre minimal d'heures de nuit sur une période de référence" },
     "L3123-6": { id: "LEGIARTI000033020080",
@@ -423,6 +427,8 @@
       dit: "l'employeur déclare tout accident dont il a eu connaissance à la caisse primaire d'assurance maladie dont relève la victime, dans un délai déterminé" },
     "R441-3": { id: "LEGIARTI000038423383", lu: 8, code: "Code de la sécurité sociale",
       dit: "déclaration par tout moyen conférant date certaine à sa réception, dans les quarante-huit heures non compris les dimanches et jours fériés" },
+    "L1331-2": { id: "LEGIARTI000006901446", lu: 27,
+      dit: "les amendes ou autres sanctions pécuniaires sont interdites ; toute disposition ou stipulation contraire est réputée non écrite" },
     "L1332-1": { id: "LEGIARTI000006901447",
       dit: "aucune sanction sans que le salarié soit informé, dans le même temps et par écrit, des griefs retenus contre lui" },
     "L1332-2": { id: "LEGIARTI000025560074",
@@ -559,6 +565,15 @@
       dit: "à défaut d'accord, procès-verbal de désaccord consignant, en leur dernier état, les propositions respectives des parties et les mesures que l'employeur entend appliquer unilatéralement ; il donne lieu à dépôt" },
     "R2242-1": { id: "LEGIARTI000036222825", lu: 8,
       dit: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" },
+
+    /* Le délai de carence après un contrat à durée déterminée. Lus à la source
+       le 27 septembre 2026, deux lectures concordantes chacun. */
+    "L1244-3": { id: "LEGIARTI000035644007", lu: 27,
+      dit: "à l'expiration d'un contrat à durée déterminée, le poste ne peut être pourvu par un nouveau contrat à durée déterminée ou temporaire avant un délai de carence calculé sur la durée du contrat, renouvellements compris ; les jours pris en compte sont les jours d'ouverture de l'entreprise, et un accord de branche étendu peut fixer les modalités de calcul" },
+    "L1244-3-1": { id: "LEGIARTI000035639421", lu: 27,
+      dit: "à défaut de stipulation conventionnelle, le délai de carence est du tiers de la durée du contrat venu à expiration s'il a duré quatorze jours ou plus, et de la moitié en dessous" },
+    "L1244-4-1": { id: "LEGIARTI000035639433", lu: 27,
+      dit: "à défaut de stipulation conventionnelle, le délai de carence ne s'applique pas notamment en cas de nouvelle absence du salarié remplacé, de travaux urgents nécessités par des mesures de sécurité, d'emploi saisonnier ou d'usage, de rupture à l'initiative du salarié ou de refus par lui du renouvellement" },
 
     /* Le licenciement économique : l'ordre, le comité, l'administration. Lus à
        la source le 27 septembre 2026, deux lectures concordantes chacun. */
@@ -1930,28 +1945,95 @@
     }
     b.push({ k: "p", t: "Nous vous notifions par la présente " + S.nom + " pour les faits suivants" + (dm.conn && v.faits ? ", dont nous avons eu connaissance le " + dateFr(dm.conn) : "") + "." });
     griefsBlocs(b, v.griefs, (v.faits ? "Le " + dateFr(dateDe(v.faits)) + ", " : "") + "[rappelez ici les faits, datés et circonstanciés : ce sont eux, et eux seuls, qui fondent la sanction]");
+    var mpJours = Number(v.mpJours) > 0 ? Math.round(Number(v.mpJours)) : 0;
+    var mpDebut = dateDe(v.mpDebut);
+    var mpMax = Number(v.mpMax) > 0 ? Math.round(Number(v.mpMax)) : 0;
+    var mpFin = null;
+    if (mpJours && mpDebut) {
+      /* Des jours ouvrés : on saute les dimanches, les samedis et les fériés. */
+      var d = new Date(mpDebut.getTime()), compte = 0;
+      while (compte < mpJours) {
+        if (d.getDay() !== 0 && d.getDay() !== 6 && !estFerie(d)) compte++;
+        if (compte < mpJours) d = jour(d, 1);
+      }
+      mpFin = d;
+    }
     if (type === "miseapied") {
-      b.push({ k: "p", t: "Cette mise à pied disciplinaire prendra effet pour une durée de [nombre] jours ouvrés, du [date] au [date] inclus. Votre contrat de travail sera suspendu pendant cette période, sans rémunération." });
+      b.push({ k: "p", t: "Cette mise à pied disciplinaire prendra effet pour une durée de " +
+        (mpJours ? mpJours + " jour" + (mpJours > 1 ? "s" : "") + " ouvré" + (mpJours > 1 ? "s" : "") : "[nombre] jours ouvrés") +
+        ", du " + (mpDebut ? dateFr(mpDebut) : "[date]") + " au " + (mpFin ? dateFr(mpFin) : "[date]") +
+        " inclus. Votre contrat de travail sera suspendu pendant cette période, sans rémunération." });
+      if (mpMax)
+        b.push({ k: "p", t: "Cette durée reste dans la limite de " + mpMax + " jour" +
+          (mpMax > 1 ? "s" : "") + " ouvré" + (mpMax > 1 ? "s" : "") + " que fixe le règlement " +
+          "intérieur de l'entreprise pour cette sanction." });
+      b.push({ k: "note", t: "La perte de salaire de cette période n'est pas une sanction " +
+        "pécuniaire, qui serait interdite (" + ref(["L1331-2"]) + ") : elle résulte de la " +
+        "suspension du contrat." });
     }
     b.push({ k: "p", t: "Nous vous demandons de veiller à ce que de tels faits ne se reproduisent pas. Nous restons à votre disposition pour évoquer votre situation." });
     formule(b, civ);
 
     var dates = [carteDeuxMois(dm, S.entretien ? "Dernier jour pour convoquer" : "Dernier jour pour notifier")];
     if (S.entretien) {
-      dates.push({ q: "Notification au plus tôt", d: dateFrJour(apresJoursOuvrables(entretien, 2)), f: "deux jours ouvrables après l'entretien du " + dateFr(entretien) + " (" + ref(["L1332-2"]) + ")", c: "tot" });
-      dates.push({ q: "Notification au plus tard", d: dateFrJour(plusMois(entretien, 1)), f: "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", c: "tard" });
+      /* UNE ÉCHÉANCE NE SE COMPTE PAS DEPUIS UN ENTRETIEN QU'ON A INVENTÉ.
+         « Notification au plus tôt jeudi 8 octobre 2026 » sortait d'une date
+         proposée à sept jours, que personne n'avait saisie : le chiffre avait
+         l'air d'un calcul. Relevé le 27 septembre 2026. */
+      if (v.eDate) {
+        dates.push({ q: "Notification au plus tôt", d: dateFrJour(apresJoursOuvrables(entretien, 2)), f: "deux jours ouvrables après l'entretien du " + dateFr(entretien) + " (" + ref(["L1332-2"]) + ")", c: "tot" });
+        dates.push({ q: "Notification au plus tard", d: dateFrJour(plusMois(entretien, 1)), f: "un mois après le jour fixé pour l'entretien (" + ref(["L1332-2"]) + ")", c: "tard" });
+      } else {
+        dates.push({ q: "Notification", d: "[date de l'entretien à saisir]", f: "au plus tôt deux jours ouvrables après l'entretien, au plus tard un mois après le jour fixé pour lui (" + ref(["L1332-2"]) + ") : les deux dates se comptent depuis l'entretien, elles ne se devinent pas", c: "" });
+      }
     }
+    if (type === "miseapied" && mpJours && mpFin)
+      dates.push({ q: "Reprise du travail", d: dateFrJour(prochainOuvrable(jour(mpFin, 1))),
+        f: "le lendemain du dernier jour de la mise à pied, " + mpJours + " jour" +
+           (mpJours > 1 ? "s" : "") + " ouvré" + (mpJours > 1 ? "s" : "") + " à compter du " +
+           dateFr(mpDebut), c: "" });
     var alertes = [];
     var m = manques(v, !!S.entretien);
     if (m.length) alertes.push(alerteManques(m, S.entretien ? "convocation" : "lettre"));
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     if (S.entretien) { var hb = alerteHorsTravail(v); if (hb) alertes.push(hb); }
+    if (type === "miseapied") {
+      /* Lu dans Judilibre le 27 septembre 2026, recherche exacte, relaxed
+         false : Cass. soc. 26 octobre 2010, n° 09-42.740, publié, « une mise à
+         pied disciplinaire prévue par ce règlement intérieur n'est licite que
+         si ce règlement précise sa durée maximale ». */
+      if (!mpMax)
+        alertes.push("La durée maximale de la mise à pied que fixe votre règlement intérieur n'est " +
+          "pas renseignée. Une sanction ne peut être prononcée que si elle est prévue par le " +
+          "règlement intérieur, et une mise à pied n'est licite que si ce règlement précise sa " +
+          "durée maximale (Cass. soc. 26 octobre 2010, n° 09-42.740). Vérifiez votre règlement " +
+          "avant d'envoyer, et portez la durée en tête.");
+      else if (mpJours && mpJours > mpMax)
+        alertes.push("La mise à pied de " + mpJours + " jours ouvrés dépasse la limite de " + mpMax +
+          " jours que fixe votre règlement intérieur : au-delà, la sanction n'est pas prévue par le " +
+          "règlement et n'est pas licite (Cass. soc. 26 octobre 2010, n° 09-42.740). Ramenez la " +
+          "durée dans la limite.");
+      if (!mpJours || !mpDebut)
+        alertes.push("La durée de la mise à pied et son premier jour ne sont pas saisis : la lettre " +
+          "garde ses crochets, et la sanction qu'elle notifie n'est donc pas déterminée.");
+    }
     /* UNE LETTRE QU'ON NE PEUT PAS ENVOYER NE SE TÉLÉCHARGE PAS. L'écran
        affichait « PRESCRIT » en rouge, ou « 2 informations manquent », et le
        bouton Word produisait quand même le fichier, avec ses crochets. Relevé
        le 26 septembre 2026. */
+    if (type === "miseapied" && (!mpJours || !mpDebut)) {
+      m = m.concat(["la durée de la mise à pied, en jours ouvrés", "son premier jour"]);
+    }
+    /* Une durée qui dépasse le plafond du règlement n'est pas une lettre à
+       envoyer : la sanction ne serait pas licite. */
+    if (type === "miseapied" && mpJours && mpMax && mpJours > mpMax)
+      return { blocs: b, dates: dates, alertes: alertes,
+        bloque: "la mise à pied dépasse la durée maximale de " + mpMax + " jours ouvrés que fixe " +
+          "le règlement intérieur : au-delà, la sanction n'est pas prévue par le règlement " +
+          "(Cass. soc. 26 octobre 2010, n° 09-42.740)",
+        loi: ["L1331-2", "L1332-1", "L1332-2", "L1332-4", "L1332-5", "R1332-1"] };
     return { blocs: b, dates: dates, alertes: alertes, bloque: blocageDe(dm, m),
-      loi: ["L1332-1", "L1332-2", "L1332-4", "L1332-5", "R1332-1"] };
+      loi: ["L1331-2", "L1332-1", "L1332-2", "L1332-4", "L1332-5", "R1332-1"] };
   }
 
   /* L'annexe de la convention 16 qui régit ce statut, ou rien. Les annexes III
@@ -2731,13 +2813,16 @@
     var nomS = String(v.nom || "").trim() || "[nom et prénom du conducteur]";
     var b = [], dates = [], alertes = [];
     var manquants = [];
-    b.push({ k: "t1", t: "Contrôle des titres du conducteur" });
-    b.push({ k: "st", t: nomS });
-    b.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI) + " par " + societe() + "." });
     /* UN DOCUMENT N'ATTESTE PAS CE QU'IL NE CONSTATE PAS. Il affirmait que les
        titres « ont été présentés et vérifiés » alors que chaque ligne portait
-       « non renseigné ». Relevé le 26 septembre 2026. */
+       « non renseigné ». Relevé le 26 septembre 2026. Le titre lui-même suit :
+       tant que rien n'est porté, ce n'est pas un contrôle, c'est une liste de
+       ce qui reste à produire. Relevé le 27 septembre 2026. */
     var remplis = titresRemplis().length;
+    b.push({ k: "t1", t: remplis ? "Contrôle des titres du conducteur"
+      : "Titres à produire par le conducteur" });
+    b.push({ k: "st", t: nomS });
+    b.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI) + " par " + societe() + "." });
     b.push({ k: "p", t: remplis
       ? "Les titres ci-dessous ont été présentés par le salarié et vérifiés avant sa prise de poste. Une copie de chacun est conservée au dossier."
       : "Aucun titre n'est encore renseigné : ce document est la liste de ce que le salarié doit produire avant sa prise de poste. Il ne vaut pas constat de vérification." });
@@ -2822,7 +2907,10 @@
     b.push({ k: "p", t: "Le présent document porte les clauses du contrat de professionnalisation. Le contrat se conclut sur le formulaire de l'administration, auquel ce document s'annexe." });
     b.push({ k: "h1", t: "Entre les soussignés" });
     b.push({ k: "p", t: "La société " + societe() + ", ci-après « la Société », d'une part," });
-    b.push({ k: "p", t: "Et " + nomS + ", demeurant [adresse], né le [date], ci-après « le salarié », d'autre part," });
+    b.push({ k: "p", t: "Et " + nomS + ", demeurant " + adresseDe(nomS) + ", né" +
+      (civiliteDe(nomS) === "Madame" ? "e" : "") + " le " +
+      (dateDe(v.naissance) ? dateFr(dateDe(v.naissance)) : "[date de naissance]") +
+      ", ci-après « le salarié », d'autre part," });
     b.push({ k: "h1", t: "Article 1 - Objet et qualification visée" });
     b.push({ k: "p", t: "Le contrat a pour objet de permettre au salarié d'acquérir la qualification suivante : " +
       (String(v.qualification || "").trim() || "[intitulé de la qualification, du titre ou du certificat visé]") +
@@ -2844,10 +2932,54 @@
     b.push({ k: "h1", t: "Article 4 - Tutorat" });
     b.push({ k: "p", t: "Le salarié est suivi par " + (String(v.tuteur || "").trim() || "[nom et fonction du tuteur]") +
       ", chargé de l'accueillir, de l'accompagner et de veiller au respect du calendrier de formation." });
+    /* LE MINIMUM, CALCULÉ SUR L'ÂGE ET SUR LE NIVEAU.
+
+       D. 6325-15 (LEGIARTI000018522997) : 55 % du salaire minimum de croissance
+       avant vingt et un ans, 70 % à partir de vingt et un ans, portés à 65 % et
+       80 % pour un titulaire d'une qualification au moins égale à un
+       baccalauréat professionnel. D. 6325-16 (LEGIARTI000018522995) : le
+       montant se calcule à partir du premier jour du mois suivant celui où
+       l'âge est atteint. D. 6325-18 (LEGIARTI000018522991) : à partir de
+       vingt-six ans, 85 % du minimum conventionnel de branche. Lus à la source
+       le 27 septembre 2026, deux lectures concordantes. */
+    var naisPro = dateDe(v.naissance);
+    var agePro = null;
+    if (naisPro && debut) {
+      agePro = debut.getFullYear() - naisPro.getFullYear();
+      var apres = debut.getMonth() < naisPro.getMonth() ||
+        (debut.getMonth() === naisPro.getMonth() && debut.getDate() < naisPro.getDate());
+      if (apres) agePro--;
+    }
+    var smicPro = Number(v.smic) > 0 ? Number(v.smic) : 0;
+    var convPro = Number(v.minConv) > 0 ? Number(v.minConv) : 0;
+    var salPro = Number(v.salaire) > 0 ? Number(v.salaire) : 0;
+    var bacPro = v.niveau === "bac";
+    var minPro = null, minDit = "";
+    if (agePro !== null && agePro >= 26) {
+      if (convPro > 0) {
+        minPro = Math.round(convPro * 0.85 * 100) / 100;
+        minDit = "85 % du minimum conventionnel de branche, soit 85 % de " + eur(convPro) +
+          " euros (" + ref(["D6325-18"]) + ")";
+      }
+    } else if (agePro !== null && smicPro > 0) {
+      var taux = agePro < 21 ? (bacPro ? 0.65 : 0.55) : (bacPro ? 0.80 : 0.70);
+      minPro = Math.round(smicPro * taux * 100) / 100;
+      minDit = Math.round(taux * 100) + " % du salaire minimum de croissance, soit " +
+        Math.round(taux * 100) + " % de " + eur(smicPro) + " euros (" + ref(["D6325-15"]) + ")";
+    }
     b.push({ k: "h1", t: "Article 5 - Rémunération" });
     b.push({ k: "p", t: "Le salarié perçoit une rémunération mensuelle brute de " +
-      (String(v.salaire || "").trim() ? nb(Number(v.salaire)) + " euros" : "[montant] euros") + "." });
-    b.push({ k: "p", t: "Pour les salariés de moins de vingt-six ans, elle ne peut être inférieure à 55 % du salaire minimum de croissance avant vingt et un ans et à 70 % à partir de vingt et un ans, portés respectivement à 65 % et 80 % lorsque le salarié est titulaire d'une qualification au moins égale à celle d'un baccalauréat professionnel (" + ref(["D6325-15"]) + "), ni au minimum conventionnel du coefficient s'il est plus favorable." });
+      (salPro > 0 ? eur(salPro) + " euros" : "[montant] euros") + "." + (agePro !== null
+        ? " Il " + (debut && debut > AUJOURDHUI ? "aura " : "a ") + agePro +
+          " ans au début du contrat." : "") });
+    if (minPro !== null) {
+      b.push({ k: "p", t: "Le minimum applicable est de " + eur(minPro) + " euros : " + minDit + "." +
+        (salPro > 0 ? (salPro >= minPro
+          ? " La rémunération fixée ci-dessus lui est supérieure ou égale."
+          : " La rémunération fixée ci-dessus lui est INFÉRIEURE de " + eur(minPro - salPro) +
+            " euros : elle doit être portée au minimum.") : "") });
+    }
+    b.push({ k: "p", t: "Pour les salariés de moins de vingt-six ans, la rémunération ne peut être inférieure à 55 % du salaire minimum de croissance avant vingt et un ans et à 70 % à partir de vingt et un ans, portés respectivement à 65 % et 80 % lorsque le salarié est titulaire d'une qualification au moins égale à celle d'un baccalauréat professionnel (" + ref(["D6325-15"]) + "), ces montants étant calculés à partir du premier jour du mois qui suit celui où l'âge est atteint (" + ref(["D6325-16"]) + "). À partir de vingt-six ans, elle ne peut être inférieure à 85 % de la rémunération minimale de la convention ou de l'accord de branche (" + ref(["D6325-18"]) + "). Le minimum conventionnel du coefficient s'applique s'il est plus favorable." });
     b.push({ k: "h1", t: "Article 6 - Statut du salarié" });
     b.push({ k: "p", t: "Le salarié bénéficie de l'ensemble des dispositions applicables aux autres salariés de l'entreprise, dans la mesure où elles ne sont pas incompatibles avec les exigences de sa formation." });
     b.push({ k: "h1", t: "Article 7 - Dépôt" });
@@ -2868,10 +3000,31 @@
       alertes.push("La durée totale du contrat en heures n'est pas saisie : le minimum de formation, " +
         "quinze pour cent sans descendre sous cent cinquante heures, ne peut pas être calculé (" +
         ref(["L6325-13"]) + ").");
+    if (agePro === null)
+      alertes.push("La date de naissance n'est pas saisie : le minimum de rémunération dépend de " +
+        "l'âge au début du contrat (" + ref(["D6325-15", "D6325-18"]) + ") et n'est donc pas " +
+        "calculé. Portez-la en tête, elle se reprend du registre du personnel.");
+    else if (minPro === null)
+      alertes.push(agePro >= 26
+        ? "Le salarié a " + agePro + " ans : le minimum est de 85 % de la rémunération minimale de " +
+          "la branche (" + ref(["D6325-18"]) + "). Portez ce minimum conventionnel en tête pour " +
+          "que le calcul se fasse."
+        : "Le salarié a " + agePro + " ans : le minimum est un pourcentage du salaire minimum de " +
+          "croissance (" + ref(["D6325-15"]) + "). Portez son montant mensuel en tête pour que le " +
+          "calcul se fasse.");
+    else if (salPro > 0 && salPro < minPro)
+      alertes.push("La rémunération de " + eur(salPro) + " euros est inférieure au minimum de " +
+        eur(minPro) + " euros (" + minDit + ") : le contrat ne peut pas être signé ainsi.");
+    else if (!salPro)
+      alertes.push("La rémunération n'est pas saisie. Le minimum applicable est de " + eur(minPro) +
+        " euros (" + minDit + ").");
     alertes.push("Le contrat se conclut sur le formulaire de l'administration : ce document en porte " +
       "les clauses et s'y annexe, il ne le remplace pas.");
     return { blocs: b, dates: dates, alertes: alertes,
-      loi: ["L6325-1", "L6325-7", "L6325-11", "L6325-13", "D6325-15", "D6325-1"] };
+      bloque: (salPro > 0 && minPro !== null && salPro < minPro)
+        ? "la rémunération de " + eur(salPro) + " euros est inférieure au minimum de " + eur(minPro) +
+          " euros (" + minDit + ")" : "",
+      loi: ["L6325-1", "L6325-7", "L6325-11", "L6325-13", "D6325-15", "D6325-16", "D6325-18", "D6325-1"] };
   }
 
   function maladie(v) {
@@ -3259,26 +3412,83 @@
       loi: ["L1233-3", "L1233-4", "L1233-5", "L1233-7", "L1233-8", "L1233-11", "L1233-13", "L1233-15", "L1233-16", "L1233-45", "L1233-65", "L1233-66", "L1233-67", "D1233-3", "L1234-1", "L1234-3", "L1234-9", "R1234-1", "R1234-2", "R1234-4", "R1232-13", "L1235-2", "L1234-19", "L1234-20", "R1234-9", "L1225-4", "L1226-9"] };
   }
 
+  /* NI CARENCE NI INDEMNITÉ N'ÉTAIENT CALCULÉES, ET LA PHRASE ÉTAIT CASSÉE.
+
+     « conclu le 2 avril 2019 Conducteur poids lourd » : il manquait « en
+     qualité de ». L'indemnité de fin de contrat restait un pourcentage, et le
+     délai de carence, qui interdit de reprendre un contrat à durée déterminée
+     sur le même poste, n'était pas nommé. Relevé le 27 septembre 2026.
+
+     Articles lus à la source le même jour, deux lectures concordantes :
+     L. 1243-8 (LEGIARTI000006901219), dix pour cent de la rémunération totale
+     brute ; L. 1244-3 (LEGIARTI000035644007), le délai de carence se compte
+     sur la durée du contrat, renouvellements compris, en jours d'ouverture de
+     l'entreprise, et un accord de branche étendu peut en fixer le calcul ;
+     L. 1244-3-1 (LEGIARTI000035639421), à défaut, le tiers de la durée si le
+     contrat a duré quatorze jours ou plus, la moitié en dessous ;
+     L. 1244-4-1 (LEGIARTI000035639433), les cas où la carence ne s'applique
+     pas, dont le remplacement en cas de nouvelle absence, les travaux urgents
+     de sécurité et l'emploi saisonnier ou d'usage. */
   function finCdd(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var civ = civiliteDe(nomS);
     var terme = dateDe(v.terme);
+    var sCdd = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var debut = dateDe(v.debut) || (sCdd ? dateDe(sCdd.ent) : null);
+    var emploi = String(v.poste || "").trim() || (sCdd && String(sCdd.emp || "").trim()) || "";
+    var jCdd = debut && terme ? joursEntre(debut, terme) + 1 : null;
+    var brut = Number(v.brut) > 0 ? Number(v.brut) : 0;
+    var precarite = brut > 0 ? Math.round(brut * 10) / 100 : null;
+    var sansPrecarite = v.precarite === "non";
+    var carenceJours = jCdd ? (jCdd >= 14 ? Math.ceil(jCdd / 3) : Math.ceil(jCdd / 2)) : null;
+    var sansCarence = v.carence === "non";
+    var finCarence = carenceJours && terme ? jour(terme, carenceJours) : null;
     var b = [];
     b.push({ k: "t1", t: "Fin de votre contrat à durée déterminée" });
     enTete(b, nomS, "terme de votre contrat à durée déterminée", "Lettre remise en main propre contre décharge ou recommandée avec avis de réception");
-    var sCdd = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
-    var concluLe = sCdd && sCdd.ent ? dateFr(dateDe(sCdd.ent)) : "";
     b.push({ k: "p", t: "Votre contrat de travail à durée déterminée, conclu le " +
-      (concluLe || "[date du contrat]") + " " + (v.poste || (sCdd && sCdd.emp) || "[emploi]") + ", arrive à son terme le " + dateFr(terme) + ". Il cesse de plein droit à cette date (" + ref(["L1243-5"]) + "), et nous vous confirmons qu'il ne sera pas poursuivi par un contrat à durée indéterminée." });
-    b.push({ k: "p", t: "Vous percevrez, avec votre dernier salaire et sur le bulletin correspondant, l'indemnité de fin de contrat égale à 10 % de la rémunération totale brute qui vous a été versée (" + ref(["L1243-8"]) + ") [sauf si le contrat relève d'un des cas de l'article " + ref(["L1243-10"]) + " : emploi saisonnier ou d'usage, refus d'un contrat à durée indéterminée pour le même emploi, rupture anticipée à votre initiative ou pour faute grave], ainsi que l'indemnité compensatrice de congés payés." });
+      (debut ? dateFr(debut) : "[date du contrat]") + " en qualité " + de(emploi || "[emploi]") +
+      ", arrive à son terme le " + dateFr(terme) + ". Il cesse de plein droit à cette date (" + ref(["L1243-5"]) + "), et nous vous confirmons qu'il ne sera pas poursuivi par un contrat à durée indéterminée." });
+    if (sansPrecarite) {
+      b.push({ k: "p", t: "L'indemnité de fin de contrat n'est pas due : votre contrat relève d'un des cas de l'article " + ref(["L1243-10"]) + ". Vous percevrez, avec votre dernier salaire, l'indemnité compensatrice de congés payés." });
+    } else if (precarite !== null) {
+      b.push({ k: "p", t: "Vous percevrez, avec votre dernier salaire et sur le bulletin correspondant, l'indemnité de fin de contrat, égale à 10 % de la rémunération totale brute qui vous a été versée, soit " + eur(precarite) + " euros pour une rémunération totale brute de " + eur(brut) + " euros (" + ref(["L1243-8"]) + "). Elle s'ajoute à cette rémunération. Vous percevrez également l'indemnité compensatrice de congés payés." });
+      b.push({ k: "note", t: "Le montant est calculé sur la rémunération totale brute que vous avez portée : vérifiez-la sur les bulletins avant l'envoi, primes et heures supplémentaires comprises." });
+    } else {
+      b.push({ k: "p", t: "Vous percevrez, avec votre dernier salaire et sur le bulletin correspondant, l'indemnité de fin de contrat égale à 10 % de la rémunération totale brute qui vous a été versée (" + ref(["L1243-8"]) + "), ainsi que l'indemnité compensatrice de congés payés." });
+      b.push({ k: "note", t: "Le montant n'est pas écrit : la rémunération totale brute du contrat n'est pas renseignée. Portez-la en tête pour qu'il se calcule." });
+    }
     b.push({ k: "p", t: "Votre certificat de travail, votre reçu pour solde de tout compte et l'attestation destinée à France Travail vous seront remis le " + dateFr(terme) + " (" + ref(["L1234-19", "L1234-20", "R1234-9"]) + ")." });
     b.push({ k: "p", t: "Nous vous remercions de votre collaboration." });
     formule(b, civ);
     b.push({ k: "note", t: "Si la relation de travail se poursuivait après le terme, le contrat deviendrait à durée indéterminée, l'ancienneté acquise étant conservée (" + ref(["L1243-11"]) + ")." });
-    var alCdd = alerteRegistre(nomS, "cdd");
-    return { blocs: b, alertes: alCdd || [],
-      loi: ["L1243-5", "L1243-8", "L1243-10", "L1243-11", "L1234-19", "L1234-20", "R1234-9"],
-      dates: [{ q: "Terme du contrat", d: terme ? dateFrJour(terme) : "[date du terme à saisir]", f: "le contrat cesse de plein droit à l'échéance du terme (" + ref(["L1243-5"]) + ")", c: "" }] };
+
+    b.push({ k: "saut", t: "" });
+    b.push({ k: "t1", t: "Le délai de carence sur ce poste" });
+    if (sansCarence) {
+      b.push({ k: "p", t: "Le délai de carence ne s'applique pas au cas retenu (" + ref(["L1244-4-1"]) + ") : le poste peut être pourvu de nouveau par un contrat à durée déterminée ou un contrat de travail temporaire sans attendre. Vérifiez que le cas est bien celui de l'article avant d'agir." });
+    } else if (carenceJours) {
+      b.push({ k: "p", t: "À l'expiration de ce contrat, le poste ne peut être pourvu ni par un contrat à durée déterminée ni par un contrat de travail temporaire avant l'expiration d'un délai de carence (" + ref(["L1244-3"]) + "). Le contrat aura duré " + jCdd + " jour" + (jCdd > 1 ? "s" : "") + " : le délai est " + (jCdd >= 14 ? "du tiers de cette durée, le contrat atteignant quatorze jours" : "de la moitié de cette durée, le contrat n'atteignant pas quatorze jours") + ", soit " + carenceJours + " jour" + (carenceJours > 1 ? "s" : "") + " (" + ref(["L1244-3-1"]) + ")." });
+      b.push({ k: "p", t: "Ce délai se compte en jours d'ouverture de l'entreprise, non en jours calendaires (" + ref(["L1244-3", "L1244-3-1"]) + ") : la date portée ici, le " + dateFr(finCarence) + ", est calculée en jours calendaires et ne vaut que si l'entreprise ouvre tous les jours. Reportez-la sur votre calendrier d'ouverture." });
+      b.push({ k: "note", t: "Une convention ou un accord de branche étendu peut fixer d'autres modalités de calcul (" + ref(["L1244-3"]) + "), et la carence ne s'applique pas dans les cas de l'article " + ref(["L1244-4-1"]) + " : nouvelle absence du salarié remplacé, travaux urgents nécessités par des mesures de sécurité, emploi saisonnier ou d'usage, contrat conclu au titre d'un dispositif en faveur de personnes sans emploi, rupture à l'initiative du salarié, ou refus par le salarié du renouvellement de son contrat." });
+    } else {
+      b.push({ k: "p", t: "Le délai de carence se calcule sur la durée du contrat, renouvellements compris (" + ref(["L1244-3", "L1244-3-1"]) + ") : portez la date du début du contrat en tête pour qu'il se calcule." });
+    }
+
+    var alCdd = alerteRegistre(nomS, "cdd") || [];
+    if (jCdd && jCdd > 548)
+      alCdd = alCdd.concat(["Le contrat aurait duré " + jCdd + " jours, soit plus de dix-huit mois : " +
+        "vérifiez la date de début et le motif, la durée maximale étant de dix-huit mois pour la " +
+        "plupart des cas de recours, à défaut d'accord de branche (" + ref(["L1242-8-1"]) + ")."]);
+    var dates = [{ q: "Terme du contrat", d: terme ? dateFrJour(terme) : "[date du terme à saisir]", f: "le contrat cesse de plein droit à l'échéance du terme (" + ref(["L1243-5"]) + ")", c: "" }];
+    if (finCarence && !sansCarence)
+      dates.push({ q: "Nouveau contrat sur ce poste, au plus tôt", d: dateFrJour(finCarence),
+        f: carenceJours + " jours d'ouverture de l'entreprise après le terme, " +
+           (jCdd >= 14 ? "le tiers" : "la moitié") + " de la durée du contrat (" +
+           ref(["L1244-3-1"]) + ") ; date comptée en jours calendaires, à reporter sur votre calendrier d'ouverture", c: "tot" });
+    return { blocs: b, alertes: alCdd.length ? alCdd : [],
+      loi: ["L1243-5", "L1243-8", "L1243-10", "L1243-11", "L1244-3", "L1244-3-1", "L1244-4-1", "L1242-8-1", "L1234-19", "L1234-20", "R1234-9"],
+      dates: dates };
   }
 
   function retraite(v) {
@@ -3336,7 +3546,6 @@
     var interroge = dateDe(v.interrogation);
     var entree = dateDe(v.entree);
     var salaire = Number(v.salaireRef) || 0;
-    var mois = entree ? moisAnnees(entree, AUJOURDHUI) : null;
     var quoi = v.quoi === "notification" ? "notification" : "question";
     var b = [], dates = [], alerte = null;
 
@@ -3361,12 +3570,41 @@
         "posée de nouveau l'année suivante (" + ref(["L1237-5"]) + "). Si vous ne répondez pas dans " +
         "le délai, nous en tirerons les conséquences prévues par ce même article." });
       formule(b, civ);
-      if (auPlusTard) dates.push({ q: "Question à poser au plus tard le", d: dateFrJour(auPlusTard),
-        f: "trois mois avant l'anniversaire du salarié (" + ref(["D1237-2-1"]) + ")",
-        c: AUJOURDHUI > auPlusTard ? "tard" : "" });
+      if (auPlusTard) dates.push({ q: "Fenêtre ouverte à partir du", d: dateFrJour(auPlusTard),
+        f: "la question se pose dans les trois mois qui précèdent l'anniversaire du salarié (" +
+           ref(["D1237-2-1"]) + ")", c: "tot" });
+      if (anniv) dates.push({ q: "Fenêtre fermée le", d: dateFrJour(anniv),
+        f: "la question se pose avant la date à laquelle le salarié atteint l'âge du 1° de " +
+           "l'article L. 351-8 du code de la sécurité sociale (" + ref(["L1237-5"]) + ")", c: "tard" });
       if (reponseAvant) dates.push({ q: "Réponse attendue avant le", d: dateFrJour(reponseAvant),
         f: "un mois à compter de la question (" + ref(["D1237-2-1"]) + ")", c: "" });
-      return { blocs: b, dates: dates,
+      /* LA FENÊTRE DE TROIS MOIS N'ÉTAIT PAS CONTRÔLÉE.
+
+         « Le délai mentionné au septième alinéa de l'article L. 1237-5 est fixé
+         à trois mois avant l'anniversaire du salarié » (D. 1237-2-1,
+         LEGIARTI000020080277, lu à la source le 27 septembre 2026, deux
+         lectures concordantes). Une question posée six mois avant, ou après
+         l'anniversaire, sortait sans un mot. Relevé le 27 septembre 2026. */
+      var alQ = [];
+      var quand = interroge || AUJOURDHUI;
+      if (!anniv) {
+        alQ.push("La date à laquelle le salarié atteint l'âge du 1° de l'article L. 351-8 du code de " +
+          "la sécurité sociale n'est pas saisie : la fenêtre de trois mois ne peut pas être " +
+          "contrôlée (" + ref(["D1237-2-1"]) + "). Portez-la en tête.");
+      } else if (quand < auPlusTard) {
+        alQ.push("La question serait posée le " + dateFr(quand) + ", soit plus de trois mois avant " +
+          "l'anniversaire du " + dateFr(anniv) + " : la fenêtre s'ouvre le " + dateFr(auPlusTard) +
+          " (" + ref(["D1237-2-1"]) + "). Attendez cette date.");
+      } else if (quand >= anniv) {
+        alQ.push("La question serait posée le " + dateFr(quand) + ", soit après la date du " +
+          dateFr(anniv) + " à laquelle le salarié atteint l'âge : elle doit être posée avant (" +
+          ref(["L1237-5"]) + "). À défaut d'avoir respecté cette obligation, la mise à la retraite " +
+          "est fermée pendant l'année qui suit cette date.");
+      }
+      return { blocs: b, dates: dates, alertes: alQ.length ? alQ : null,
+        bloque: (anniv && (quand < auPlusTard || quand >= anniv))
+          ? "la question sort de la fenêtre des trois mois qui précèdent le " + dateFr(anniv) +
+            " (" + ref(["D1237-2-1", "L1237-5"]) + ")" : "",
         loi: ["L1237-5", "D1237-2-1", "L1237-6", "L1237-7", "L1234-1"] };
     }
 
@@ -3385,8 +3623,36 @@
         "document de cet écran (" + ref(["L1237-5"]) + ").";
     }
 
-    var pv = preavisDu(v.statut || "employe", mois === null ? 24 : mois, false);
-    var fin = pv.jours ? jour(AUJOURDHUI, pv.jours) : null;
+    /* LA NOTIFICATION NE PRÉCÈDE PAS L'ÂGE, ET L'ANCIENNETÉ COURT JUSQU'AU
+       TERME DU PRÉAVIS.
+
+       La lettre écrivait « vous avez atteint le 15 mars 2027 » un 27 septembre
+       2026, et faisait finir le préavis le 26 novembre 2026, avant la date de
+       l'âge. L'ancienneté s'arrêtait au jour de l'édition. Relevé le
+       27 septembre 2026. */
+    if (anniv && AUJOURDHUI < anniv) {
+      return { refus: ["Le salarié n'atteint l'âge du 1° de l'article L. 351-8 du code de la " +
+        "sécurité sociale que le " + dateFr(anniv) + " : la mise à la retraite ne peut pas être " +
+        "notifiée avant cette date (" + ref(["L1237-5"]) + "). Ce qui s'écrit aujourd'hui, c'est la " +
+        "question préalable, dans les trois mois qui précèdent le " + dateFr(anniv) + " (" +
+        ref(["D1237-2-1"]) + ")."],
+        dates: [{ q: "Notification au plus tôt", d: dateFrJour(anniv),
+          f: "la date à laquelle le salarié atteint l'âge du 1° de l'article L. 351-8 du code de la " +
+             "sécurité sociale (" + ref(["L1237-5"]) + ")", c: "tot" }],
+        loi: ["L1237-5", "D1237-2-1"] };
+    }
+    /* Le préavis part de la présentation de la lettre : l'ancienneté se compte
+       jusqu'à son terme, et c'est elle qui donne la durée. On itère une fois,
+       la durée dépendant de l'ancienneté qui dépend de la durée. */
+    var moisNotif = entree ? moisAnnees(entree, AUJOURDHUI) : null;
+    var pv = preavisDu(v.statut || "employe", moisNotif === null ? 24 : moisNotif, false);
+    var fin = pv.jours ? finPreavis(AUJOURDHUI, pv.jours) : null;
+    var mois = entree ? moisAnnees(entree, fin || AUJOURDHUI) : null;
+    if (mois !== null && mois !== moisNotif) {
+      pv = preavisDu(v.statut || "employe", mois, false);
+      fin = pv.jours ? finPreavis(AUJOURDHUI, pv.jours) : null;
+      mois = entree ? moisAnnees(entree, fin || AUJOURDHUI) : null;
+    }
     var ind = (mois !== null && salaire > 0) ? indemniteDe(mois, salaire, false) : null;
 
     b.push({ k: "t1", t: "Notification de mise à la retraite" });
@@ -3408,7 +3674,7 @@
     if (pv.jours)
       b.push({ k: "p", t: "Votre préavis, " + dePreavis(pv.jours) +
         (mois === null ? "" : " compte tenu de votre ancienneté de " + anciennetePhrase(mois)) +
-        " (" + ref(["L1237-6", "L1234-1"]) + ", " + pv.source + "), commence à courir à la " +
+        " (" + ref(["L1237-6"]) + ", " + pv.source + "), commence à courir à la " +
         "présentation de la présente lettre et prendra fin le " +
         (fin ? dateFr(fin) : "[date]") + ", date à laquelle votre contrat prendra fin." });
     else
@@ -3838,6 +4104,23 @@
         { id: "organisme", nom: "Organisme de formation", t: "text", pleine: true,
           ph: "nom et adresse du centre" },
         { id: "tuteur", nom: "Tuteur", t: "text", pleine: true, ph: "nom et fonction" },
+        /* SANS L'ÂGE, LE MINIMUM NE SE CALCULE PAS, ET 1 400 EUROS PASSAIT.
+
+           Le contrat n'avait pas de date de naissance, et la rémunération
+           saisie n'était comparée à rien : le pourcentage du salaire minimum
+           de croissance dépend de l'âge et du niveau de formation (D. 6325-15),
+           et à partir de vingt-six ans c'est 85 % du minimum conventionnel
+           (D. 6325-18). Relevé le 27 septembre 2026. */
+        { id: "naissance", nom: "Date de naissance du salarié", t: "date", cle: "naissance" },
+        { id: "niveau", nom: "Niveau de formation déjà détenu", t: "select", defaut: "sous", opts: [
+          ["sous", "Inférieur au baccalauréat professionnel"],
+          ["bac", "Baccalauréat professionnel, ou titre de même niveau"]] },
+        { id: "smic", nom: "Salaire minimum de croissance mensuel brut, à la date du contrat (euros)",
+          t: "number", pleine: true,
+          sous: "à reporter du barème en vigueur : il change au moins une fois par an, et il n'est pas écrit ici" },
+        { id: "minConv", nom: "Minimum conventionnel mensuel brut du coefficient (euros)", t: "number",
+          pleine: true,
+          sous: "à partir de vingt-six ans, la rémunération ne peut être inférieure à 85 % de ce minimum (D. 6325-18)" },
         { id: "salaire", nom: "Rémunération mensuelle brute (euros)", t: "number", ph: "1 400" }],
       produire: professionnalisation },
     /* LES TITRES D'UN CONDUCTEUR, VÉRIFIÉS AVANT LA PRISE DE POSTE, ET
@@ -3996,7 +4279,20 @@
       produire: autorisationConduite },
 
     avert: { titre: "Avertissement", champs: CHAMPS_SANCTION, produire: function (v) { return sanction(v, "avertissement"); } },
-    miseapied: { titre: "Mise à pied disciplinaire", champs: CHAMPS_ENTRETIEN, produire: function (v) { return sanction(v, "miseapied"); } },
+    /* LA MISE À PIED A UNE DURÉE, ET UN PLAFOND QUI VIENT DU RÈGLEMENT.
+
+       La lettre écrivait « une durée de [nombre] jours ouvrés, du [date] au
+       [date] » : trois crochets dans la sanction elle-même. Et rien ne disait
+       que la mise à pied n'est licite que si le règlement intérieur précise sa
+       durée maximale. Relevé le 27 septembre 2026. */
+    miseapied: { titre: "Mise à pied disciplinaire",
+      champs: CHAMPS_ENTRETIEN.concat([
+        { id: "mpJours", nom: "Durée de la mise à pied, en jours ouvrés", t: "number" },
+        { id: "mpDebut", nom: "Premier jour de la mise à pied", t: "date" },
+        { id: "mpMax", nom: "Durée maximale prévue par le règlement intérieur, en jours ouvrés", t: "number",
+          pleine: true,
+          sous: "une mise à pied disciplinaire n'est licite que si le règlement intérieur précise sa durée maximale (Cass. soc. 26 octobre 2010, n° 09-42.740)" }]),
+      produire: function (v) { return sanction(v, "miseapied"); } },
     /* La mesure d'attente, qui n'est pas une sanction : elle écarte le salarié
        le temps de la procédure, et la lettre porte les deux. */
     conservatoire: { titre: "Mise à pied conservatoire", champs: CHAMPS_ENTRETIEN,
@@ -4043,7 +4339,20 @@
         { id: "salaireRef", nom: "Salaire mensuel brut de référence (euros)", t: "number",
           ph: "la moyenne des douze derniers mois, ou le tiers des trois derniers si elle est plus favorable" }],
       produire: licenciementEco },
-    fincdd: { titre: "Fin de CDD", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "serveur" }, { id: "terme", nom: "Date du terme", t: "date", defaut: iso(plusMois(AUJOURDHUI, 1)) }], produire: finCdd },
+    fincdd: { titre: "Fin de CDD",
+      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "conducteur poids lourd" },
+        { id: "debut", nom: "Date de début du contrat", t: "date", cle: "entree",
+          sous: "c'est elle qui donne la durée, et donc le délai de carence" },
+        { id: "terme", nom: "Date du terme", t: "date", defaut: iso(plusMois(AUJOURDHUI, 1)) },
+        { id: "brut", nom: "Rémunération totale brute versée sur le contrat (euros)", t: "number",
+          pleine: true, ph: "salaires, primes et heures supplémentaires du contrat entier" },
+        { id: "precarite", nom: "L'indemnité de fin de contrat est-elle due ?", t: "select",
+          defaut: "oui", opts: [["oui", "Oui"], ["non", "Non, cas de L. 1243-10"]],
+          sous: "elle n'est pas due pour un emploi saisonnier ou d'usage, en cas de refus d'un contrat à durée indéterminée pour le même emploi, ou de rupture à l'initiative du salarié ou pour faute grave" },
+        { id: "carence", nom: "Le délai de carence s'applique-t-il ?", t: "select",
+          defaut: "oui", opts: [["oui", "Oui"], ["non", "Non, cas de L. 1244-4-1"]],
+          sous: "il ne s'applique pas en cas de nouvelle absence du salarié remplacé, de travaux urgents de sécurité, d'emploi saisonnier ou d'usage, ni si le salarié a rompu ou refusé le renouvellement" }],
+      produire: finCdd },
     retraite: { titre: "Départ en retraite, demandé par le salarié", champs: [NOM, { id: "reception", nom: "Demande reçue le", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" }, { id: "salaire", nom: "Salaire mensuel brut (euros)", t: "number", ph: "2 000" }], produire: retraite },
     /* LA MISE À LA RETRAITE, À L'INITIATIVE DE L'EMPLOYEUR. L'âge n'est pas
