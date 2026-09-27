@@ -559,6 +559,21 @@
     "R2242-1": { id: "LEGIARTI000036222825", lu: 8,
       dit: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" },
 
+    /* La validité et le dépôt d'un accord d'entreprise. Lus à la source le
+       27 septembre 2026, deux lectures concordantes chacun. */
+    "L2232-12": { id: "LEGIARTI000035652760", lu: 27,
+      dit: "la validité d'un accord d'entreprise est subordonnée à sa signature par l'employeur et par des organisations représentatives ayant recueilli plus de 50 % des suffrages exprimés en faveur d'organisations représentatives au premier tour des dernières élections des titulaires au comité ; à défaut, plus de 30 % ouvre une consultation des salariés" },
+    "L2231-5-1": { id: "LEGIARTI000038837136", lu: 27,
+      dit: "les accords d'entreprise sont rendus publics et versés dans une base de données nationale, dans une version ne comportant pas les noms et prénoms des négociateurs et des signataires" },
+    "D2231-2": { id: "LEGIARTI000036920600", lu: 27,
+      dit: "les accords d'entreprise sont déposés par le représentant légal de l'entreprise ; le déposant remet également un exemplaire au greffe du conseil de prud'hommes du lieu de conclusion" },
+    "D2231-4": { id: "LEGIARTI000036920597", lu: 27,
+      dit: "les accords d'entreprise et les pièces accompagnant le dépôt sont déposés sur la plateforme de téléprocédure du ministère du travail" },
+    "D2231-6": { id: "LEGIARTI000036920594", lu: 27,
+      dit: "quand l'accord s'applique à des établissements ayant des implantations distinctes, le texte déposé est assorti de la liste de ces établissements et de leurs adresses" },
+    "D2231-7": { id: "LEGIARTI000036920591", lu: 27,
+      dit: "pièces du dépôt : version signée, preuve datée de la notification à l'ensemble des organisations représentatives, version publiable, acte écartant une partie de la publication s'il y a lieu, procès-verbal de consultation s'il y a lieu, liste des établissements s'il y a lieu ; un récépissé est délivré" },
+
     /* La mise en place du comité. Lus à la source le 27 septembre 2026, deux
        lectures concordantes chacun, filtre par le nom du code. */
     "L2311-2": { id: "LEGIARTI000035609353", lu: 27,
@@ -793,6 +808,13 @@
     return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
       "assister par une personne de son choix appartenant au personnel de l'entreprise, ou, en " +
       "l'absence d'institution représentative du personnel, " + conseiller + "] (" + ref([art]) + ")";
+  }
+
+  /* Le conseil de prud'hommes du ressort, tel que la fiche le porte, avec son
+     élision : « de Argenteuil » se lisait dans les lettres. */
+  function dePrudhommes() {
+    var x = String((profil && profil.orgPrudhommes) || "").trim();
+    return x ? de(x) : "[ville du conseil de prud'hommes]";
   }
 
   function ville() {
@@ -3328,11 +3350,44 @@
     b.push({ k: "h1", t: "Article 6 - Durée, révision, dénonciation" });
     b.push({ k: "p", t: "Le présent accord est conclu pour une durée [d'un an à compter du ... / déterminée de ... / indéterminée]. Il peut être révisé ou dénoncé dans les conditions prévues par le code du travail." });
     b.push({ k: "h1", t: "Article 7 - Dépôt et publicité" });
-    b.push({ k: "p", t: "Le présent accord fait l'objet du dépôt prévu à l'article " + ref(["L2231-6"]) + ", dans les conditions déterminées par voie réglementaire, à la diligence de l'employeur. Un exemplaire est remis à chaque organisation signataire et l'accord est porté à la connaissance des salariés par [affichage / intranet]." });
+    b.push({ k: "p", t: "Le présent accord est déposé par le représentant légal de l'entreprise sur la plateforme de téléprocédure du ministère du travail (" + ref(["L2231-6", "D2231-2", "D2231-4"]) + "). Un exemplaire est remis au greffe du conseil de prud'hommes du lieu de conclusion, celui " + dePrudhommes() + " (" + ref(["D2231-2"]) + ", III). Un exemplaire est remis à chaque organisation signataire et l'accord est porté à la connaissance des salariés par [affichage / intranet]." });
+    b.push({ k: "p", t: "Les parties conviennent que le présent accord est rendu public et versé dans la base de données nationale, dans une version ne comportant pas les noms et prénoms des négociateurs et des signataires (" + ref(["L2231-5-1"]) + "). [Le cas échéant : les parties actent que les stipulations suivantes ne font pas l'objet de cette publication : ...]" });
     b.push({ k: "trait", t: "" });
     b.push({ k: "sign", t: "Fait à " + ville() + ", le " + dateFr(signature) + ", en [nombre] exemplaires originaux." });
     b.push({ k: "sign", t: "\nPour la Société                                               Pour les organisations syndicales\n" + signataire() + "                                   " + (v.syndicats || "[nom, organisation, qualité]") });
-    return { blocs: b, dates: [], loi: ["L2242-1", "L2242-15", "L2231-6"] };
+
+    /* CE QUI REND L'ACCORD VALABLE, ET CE QUE LE DÉPÔT EXIGE.
+
+       Le document ne disait rien de la condition de majorité, ni de qui
+       dépose, ni où, ni avec quelles pièces : un accord signé par une
+       organisation minoritaire sortait comme un accord valable. Relevé le
+       27 septembre 2026. Les deux volets sont écrits en note, après la
+       signature, parce qu'ils ne sont pas une clause de l'accord mais ce qui
+       en conditionne l'effet. Articles lus à la source le même jour, deux
+       lectures concordantes. */
+    b.push({ k: "saut", t: "" });
+    b.push({ k: "t1", t: "Ce qui rend cet accord valable" });
+    b.push({ k: "p", t: "La validité de l'accord est subordonnée à sa signature par l'employeur, d'une part, et par une ou plusieurs organisations syndicales représentatives ayant recueilli plus de 50 % des suffrages exprimés en faveur d'organisations représentatives au premier tour des dernières élections des titulaires au comité social et économique, quel que soit le nombre de votants (" + ref(["L2232-12"]) + ")." });
+    b.push({ k: "p", t: "À défaut, l'accord signé par des organisations représentatives ayant recueilli plus de 30 % de ces suffrages peut encore être validé : une ou plusieurs de ces organisations disposent d'un mois à compter de la signature pour demander une consultation des salariés. Au terme de ce délai, l'employeur peut demander lui-même cette consultation, en l'absence d'opposition de l'ensemble de ces organisations ; huit jours après cette demande, si le taux de 50 % n'est toujours pas atteint, la consultation est organisée, et l'accord est validé s'il est approuvé à la majorité des suffrages exprimés (" + ref(["L2232-12"]) + ")." });
+    b.push({ k: "p", t: "Relevez donc, avant de signer, le score de chaque organisation au premier tour des dernières élections : c'est lui qui décide, et non le nombre de signataires." });
+    var dJ = [];
+    dJ.push({ k: "t1", t: "Le dépôt : qui, où, avec quelles pièces" });
+    dJ.push({ k: "p", t: "Qui : le représentant légal de l'entreprise, et non la partie la plus diligente comme pour un accord de branche (" + ref(["D2231-2"]) + ", II)." });
+    dJ.push({ k: "p", t: "Où : sur la plateforme de téléprocédure du ministère du travail (" + ref(["D2231-4"]) + "), et un exemplaire au greffe du conseil de prud'hommes du lieu de conclusion, celui " + dePrudhommes() + " (" + ref(["D2231-2"]) + ", III)." });
+    dJ.push({ k: "p", t: "Les pièces qui accompagnent le dépôt (" + ref(["D2231-7"]) + ") :" });
+    dJ.push({ k: "puce", t: "la version signée des parties ;" });
+    dJ.push({ k: "puce", t: "la copie du courrier, du courriel, du récépissé ou de l'avis de réception daté par lequel le texte a été notifié à l'ensemble des organisations représentatives à l'issue de la procédure de signature ;" });
+    dJ.push({ k: "puce", t: "la version publiable prévue à l'article " + ref(["L2231-5-1"]) + ", sans les noms et prénoms des négociateurs et des signataires ;" });
+    dJ.push({ k: "puce", t: "s'il y a lieu, l'acte par lequel les parties écartent une partie de l'accord de cette publication ;" });
+    dJ.push({ k: "puce", t: "s'il y a lieu, le procès-verbal de la consultation des salariés ;" });
+    dJ.push({ k: "puce", t: "si l'accord s'applique à des établissements ayant des implantations distinctes, la liste de ces établissements et leurs adresses (" + ref(["D2231-6"]) + ")." });
+    dJ.push({ k: "p", t: "Un récépissé est délivré au déposant : conservez-le, c'est la preuve du dépôt." });
+    dJ.push({ k: "note", t: "La notification du texte à l'ensemble des organisations représentatives se fait à l'issue de la procédure de signature, et sa preuve est une pièce du dépôt : faites-la par un moyen qui laisse une date." });
+    b = b.concat(dJ);
+    return { blocs: b, dates: [{ q: "Délai de la demande de consultation des salariés",
+      d: dateFrJour(plusMois(signature, 1)),
+      f: "un mois à compter de la signature du " + dateFr(signature) + ", si l'accord n'atteint pas 50 % des suffrages mais dépasse 30 % (" + ref(["L2232-12"]) + ")", c: "" }],
+      loi: ["L2242-1", "L2242-15", "L2232-12", "L2231-5-1", "L2231-6", "D2231-2", "D2231-4", "D2231-6", "D2231-7"] };
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -4042,15 +4097,30 @@
          représentatives » (L. 2242-1). Relevé le 26 septembre 2026. La
          réponse vient de la fiche ; tant qu'elle n'y est pas, les deux
          documents restent accessibles, avec la question posée. */
+      /* « EN COURS » EST UNE RÉPONSE, PAS UN SILENCE.
+
+         La fiche accepte « en cours », et la note répondait « votre fiche ne
+         dit pas si un délégué syndical est désigné » : elle le dit. Relevé le
+         27 septembre 2026. Une désignation en cours ne fait pas encore naître
+         l'obligation de négocier, qui suppose une section syndicale constituée
+         (L. 2242-1), mais elle l'annonce : c'est cela qu'il faut lire. */
       if (g[0] === "Collectif" && ds !== "oui") {
-        h += '<p class="doc-note">' + (ds === "non"
+        h += '<p class="doc-note">' + ech(ds === "non"
           ? "Votre fiche indique qu'aucun délégué syndical n'est désigné : la négociation annuelle " +
-            "obligatoire n'est pas due (L. 2242-1). L'accord et le procès-verbal de désaccord " +
-            "ci-dessous ne servent que si une section syndicale représentative se constitue."
-          : "Votre fiche ne dit pas si un délégué syndical est désigné. La négociation annuelle " +
-            "obligatoire n'est due que dans les entreprises où sont constituées une ou plusieurs " +
-            "sections syndicales d'organisations représentatives (L. 2242-1) : répondez sur la " +
-            "fiche d'entreprise avant d'écrire l'accord ou le procès-verbal.") + "</p>";
+            "obligatoire n'est pas due (" + ref(["L2242-1"]) + "). L'accord et le procès-verbal de " +
+            "désaccord ci-dessous ne servent que si une section syndicale représentative se constitue."
+          : (ds === "en cours"
+            ? "Votre fiche indique une désignation de délégué syndical en cours. L'obligation de " +
+              "négocier ne pèse que sur les entreprises où sont constituées une ou plusieurs " +
+              "sections syndicales d'organisations représentatives (" + ref(["L2242-1"]) + ") : " +
+              "elle naîtra de la désignation, pas avant. Préparez l'accord et le procès-verbal de " +
+              "désaccord ci-dessous, et reportez la réponse sur la fiche dès que la désignation " +
+              "vous est notifiée."
+            : "Votre fiche ne dit pas si un délégué syndical est désigné. La négociation annuelle " +
+              "obligatoire n'est due que dans les entreprises où sont constituées une ou plusieurs " +
+              "sections syndicales d'organisations représentatives (" + ref(["L2242-1"]) + ") : " +
+              "répondez sur la fiche d'entreprise avant d'écrire l'accord ou le procès-verbal.")) +
+          "</p>";
       }
       g[1].forEach(function (cle) {
         if (transport16 && (cle === "cdi" || cle === "cdd" || cle === "partiel")) {
