@@ -1101,17 +1101,29 @@
   }
   /* Les puces partent en paragraphes : l'export commun les ferait précéder
      d'un tiret long, proscrit partout. */
-  var VERS_EXPORT = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "p",
-    note: "note", sign: "p", trait: "trait", saut: "saut", lien: "p" };
+  /* DEUX TABLES DE CORRESPONDANCE POUR LE MÊME WORD, ET ELLES DIVERGEAIENT.
+
+     Celle de cet écran rendait les puces en paragraphes ordinaires, et les
+     blocs de signature sur une seule ligne, quand celle de FeuilleDoc les
+     traite correctement. Relevé le 27 septembre 2026 : il n'y en a plus qu'une,
+     celle de FeuilleDoc, et les corrections faites à la main dans l'écran
+     passent par elle. */
   function exporterDocx(titre, fichier) {
-    var blocs = relire().filter(function (b) { return b.k !== "note"; });
-    var t = blocs.length && blocs[0].k === "t1" ? blocs.shift().t : titre;
-    var items = blocs.map(function (b) {
-      if (b.k === "table") return { k: "table", head: b.head, rows: b.rows };
-      if (b.k === "exemple") return { k: "enc", titre: "Exemple", t: b.t };
-      return { k: VERS_EXPORT[b.k] || "p", t: b.t };
-    });
-    window.AuditExport.telecharger(window.AuditExport.docx(items, t), fichier,
+    var blocs = relire();
+    /* LE TITRE DU WORD ÉTAIT ÉCRIT DEUX FOIS.
+
+       Le fichier s'ouvrait sur « Certificat de travail, solde de tout compte,
+       attestation », le nom de l'entrée du menu, puis immédiatement sur
+       « CERTIFICAT DE TRAVAIL », le titre du document. Le premier bloc n'est
+       pas le titre mais l'en-tête de l'entreprise : le titre est le premier
+       t1 rencontré, où qu'il soit dans les premières lignes. Relevé le
+       27 septembre 2026. */
+    var iT = -1;
+    for (var k = 0; k < blocs.length && k < 14 && iT < 0; k++)
+      if (blocs[k].k === "t1") iT = k;
+    var t = iT >= 0 ? blocs.splice(iT, 1)[0].t : titre;
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(window.FeuilleDoc.items(blocs), t), fichier,
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
   function slug(s) {
@@ -4770,6 +4782,16 @@
     if (!TABLEAU) {
       var feuilles = window.FeuilleDoc.tableaux(relire());
       if (!feuilles.length) return;
+      /* L'EN-TÊTE DE L'ENTREPRISE MANQUAIT SUR LE CLASSEUR.
+
+         Un onglet s'ouvrait sur la ligne de titres, sans dire de quelle
+         entreprise il est ni à quelle date il a été établi. Relevé le
+         27 septembre 2026. */
+      var tete = lignesIdentite().map(function (t) { return [t]; })
+        .concat([[doc.titre], ["Établi le " + dateFr(AUJOURDHUI)], []]);
+      feuilles = feuilles.map(function (f) {
+        return { titre: f.titre, lignes: tete.concat(f.lignes), largeurs: f.largeurs };
+      });
       var nomF = (doc.titre + "-" + (profil.denomination || "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
       TableurExport.telecharger(TableurExport.xlsx(feuilles), nomF + ".xlsx");
       return;
@@ -4781,11 +4803,13 @@
     });
     var texte = String(REGLES || "").split(/\n+/).map(function (t) { return t.replace(/^#+\s*/, "").trim(); }).filter(Boolean);
     var feuilleRegles = [[doc.titre + " : les règles"], []].concat(regles).concat([[]]).concat(texte.map(function (t) { return [t]; }));
+    var teteT = lignesIdentite().map(function (t) { return [t]; })
+      .concat([[doc.titre], ["Établi le " + dateFr(AUJOURDHUI)], []]);
     var nom = (doc.titre + "-" + (profil.denomination || "")).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
     TableurExport.telecharger(TableurExport.xlsx([
-      { titre: "À compléter", lignes: modeleVide(tableau) },
-      { titre: "Exemple rempli", lignes: tableau },
-      { titre: "Règles", lignes: feuilleRegles, largeurs: [110] }
+      { titre: "À compléter", lignes: teteT.concat(modeleVide(tableau)) },
+      { titre: "Exemple rempli", lignes: teteT.concat(tableau) },
+      { titre: "Règles", lignes: teteT.concat(feuilleRegles), largeurs: [110] }
     ]), nom + ".xlsx");
   });
 

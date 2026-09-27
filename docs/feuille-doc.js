@@ -78,6 +78,19 @@
   }
 
   /* Le texte en blocs. */
+  /* TOUT CE QUI EST EN CAPITALES N'EST PAS UN TITRE.
+
+     « TOTAL BRUT : [MONTANT] € » et « L. 1234-19, D. 1234-6 » sortaient en
+     titres de niveau 1 dans le Word, faute d'une minuscule. Relevé le
+     27 septembre 2026. Deux marques les séparent d'un vrai titre : un titre ne
+     porte pas de valeur après un deux-points, et il contient au moins un mot de
+     trois lettres capitales. Une liste de numéros d'articles n'en a aucun. */
+  function estTitre(t) {
+    var s = String(t == null ? "" : t).trim();
+    if (/:\s*\S/.test(s)) return false;
+    return /[A-ZÀ-Þ]{3}/.test(s);
+  }
+
   function blocs(t) {
     t = propre(t);
     var lignes = t.split("\n"), b = [], para = [], premier = true, table = null;
@@ -154,6 +167,7 @@
          sous-titre entre parenthèses reste avant celle-ci. */
       if (!premier && para.length >= 2 && !/[a-zà-ÿ]/.test(para[0]) &&
           para[0].trim().length <= 90 && !/[.;,:]$/.test(para[0].trim()) &&
+          estTitre(para[0]) &&
           /[a-zà-ÿ]/.test(para[1]) && !/^\s*\(/.test(para[1])) {
         b.push({ k: "h1", t: para[0].trim() });
         para = para.slice(1);
@@ -175,7 +189,7 @@
       } else if (capitales && para.length >= 2 && /^\s*\(/.test(para[1])) {
         b.push({ k: "t1", t: para[0].trim() });
         b.push({ k: "st", t: para.slice(1).map(function (s) { return s.trim(); }).join(" ") });
-      } else if (capitales && texte.length < 120) {
+      } else if (capitales && texte.length < 120 && estTitre(texte)) {
         b.push({ k: "h1", t: texte });
       } else if (/^NOTE\b/.test(texte)) {
         b.push({ k: "note", t: texte });
@@ -392,13 +406,13 @@
       }
       jointes.push(c);
     });
-    return { k: "table", head: jointes[0], rows: jointes.slice(1) };
+    return { k: "table", nu: true, head: jointes[0], rows: jointes.slice(1) };
   }
   function items(bs) {
     var out = [];
     bs.forEach(function (b) {
       if (b.k === "note") return;
-      if (b.k === "table") { out.push({ k: "table", head: b.head, rows: b.rows }); return; }
+      if (b.k === "table") { out.push({ k: "table", head: b.head, rows: b.rows, nu: b.nu }); return; }
       if (b.k === "exemple") { out.push({ k: "enc", titre: "Exemple", t: b.t }); return; }
       if (b.k === "sign") {
         var s = signature(b.t);
@@ -420,20 +434,54 @@
 
   /* Les tableaux de la page, une feuille chacun, pour TableurExport. Le
      titre de la feuille est le dernier titre lu avant le tableau. */
+  /* UNE DATE ÉCRITE DANS UN TABLEAU EST UNE DATE, PAS DU TEXTE.
+
+     Les colonnes de dates du classeur ne se triaient ni ne se filtraient : le
+     générateur écrit « 02/04/2019 », et la cellule partait en texte. Relevé le
+     27 septembre 2026. Une cellule qui ne contient QUE une date en chiffres
+     devient une vraie date ; tout le reste est laissé tel quel, y compris
+     « du 02/04/2019 au 27/09/2026 », qui est une phrase. */
+  function dateCellule(c) {
+    if (c instanceof Date || c === null || c === undefined) return c;
+    var m = String(c).trim().match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+    if (!m) return c;
+    var j = Number(m[1]), mo = Number(m[2]), a = Number(m[3]);
+    if (mo < 1 || mo > 12 || j < 1 || j > 31) return c;
+    var d = new Date(a, mo - 1, j);
+    return (d.getDate() === j && d.getMonth() === mo - 1) ? d : c;
+  }
+
   function tableaux(bs) {
-    var f = [], titre = "", n = 0, vus = {};
+    var f = [], titre = "", n = 0, vus = {}, doc = "";
     bs.forEach(function (b) {
+      /* Le dernier grand titre : il nomme l'onglet quand deux tableaux portent
+         le même intitulé, « VOTRE CALENDRIER » et « VOTRE CALENDRIER 2 » ne
+         disant pas de quel document chacun relève. Relevé le 27 septembre
+         2026. */
+      if (b.k === "t1") doc = b.t;
       /* Le titre de l'onglet : le dernier titre, ou la courte ligne qui
          précède le tableau (« UNITÉ DE TRAVAIL : Quai de chargement »). */
       if (b.k === "h1" || b.k === "t1" || b.k === "h2" || ((b.k === "p" || b.k === "puce") && b.t && (b.t.length < 60 || /^unité de travail/i.test(b.t)))) titre = b.t;
       if (b.k !== "table") return;
       n++;
-      /* Un nom d'onglet : 31 signes au plus, sans : \ / ? * [ ], unique. */
-      var nom = String(titre || "Tableau " + n).replace(/^UNITÉ DE TRAVAIL\s*:\s*/i, "").replace(/\s*\(.*$/, "").replace(/[:\\\/?*\[\]]/g, " ").replace(/\s+/g, " ").trim().slice(0, 28) || "Tableau";
+      /* Un nom d'onglet : 31 signes au plus, sans : \ / ? * [ ], unique. Le
+         nom était coupé à vingt-huit signes même quand rien ne l'obligeait,
+         « INVENTAIRE DES SOMMES VERSÉE ». Relevé le 27 septembre 2026. */
+      var propre = function (t) {
+        return String(t || "").replace(/^UNITÉ DE TRAVAIL\s*:\s*/i, "").replace(/\s*\(.*$/, "")
+          .replace(/[:\\\/?*\[\]]/g, " ").replace(/\s+/g, " ").trim();
+      };
+      var nom = propre(titre).slice(0, 31) || "Tableau " + n;
+      if (vus[nom.toLowerCase()] && propre(doc)) {
+        var autre = (propre(doc) + " - " + propre(titre)).slice(0, 31);
+        if (!vus[autre.toLowerCase()]) nom = autre;
+      }
       var base = nom, k = 2;
-      while (vus[nom.toLowerCase()]) { nom = base.slice(0, 25) + " " + k; k++; }
+      while (vus[nom.toLowerCase()]) { nom = base.slice(0, 28) + " " + k; k++; }
       vus[nom.toLowerCase()] = true;
-      f.push({ titre: nom, lignes: [b.head].concat(b.rows) });
+      f.push({ titre: nom, lignes: [b.head].concat(b.rows.map(function (l) {
+        return (l || []).map(dateCellule);
+      })) });
     });
     return f;
   }

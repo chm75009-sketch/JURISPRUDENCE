@@ -143,16 +143,20 @@
      "FFE7B3" }. C'est ainsi que la priorité se colore dans le programme de
      prévention, vert, ambre ou rouge, comme sur les modèles du métier.
      Demande du 25 septembre 2026. */
-  function cellule(texte, entete, largeur, pair, fondEntete) {
+  /* Un bloc de signature est un tableau, mais pas une grille de données : ni
+     trait, ni bandeau bleu, ni ligne grisée. Seule la mise en colonnes est
+     empruntée. Relevé le 27 septembre 2026. */
+  function cellule(texte, entete, largeur, pair, fondEntete, nu) {
     var propre = (texte && typeof texte === "object") ? texte : null;
     if (propre) texte = propre.t;
-    var fond = entete ? (fondEntete || "1F3864")
-      : (propre && propre.fond) || (pair ? "F2F5F9" : null);
+    var fond = nu ? null : (entete ? (fondEntete || "1F3864")
+      : (propre && propre.fond) || (pair ? "F2F5F9" : null));
     return "<w:tc><w:tcPr>" +
       (largeur ? '<w:tcW w:w="' + largeur + '" w:type="dxa"/>' : '<w:tcW w:w="0" w:type="auto"/>') +
       (fond ? '<w:shd w:val="clear" w:color="auto" w:fill="' + fond + '"/>' : "") +
-      '<w:vAlign w:val="center"/></w:tcPr>' +
-      par(texte, { gras: !!entete, taille: 18, couleur: entete ? "FFFFFF" : null, serre: true }) +
+      '<w:vAlign w:val="top"/></w:tcPr>' +
+      par(texte, { gras: !!entete && !nu, taille: nu ? 20 : 18,
+        couleur: (entete && !nu) ? "FFFFFF" : null, serre: true }) +
       "</w:tc>";
   }
 
@@ -180,9 +184,16 @@
     };
     var x = '<w:tbl><w:tblPr><w:tblW w:w="' + utile + '" w:type="dxa"/>' +
       '<w:tblLayout w:type="fixed"/><w:tblBorders>' +
-      trait("top", 12, "1F3864") + trait("left", 8, "9AA4B2") +
-      trait("bottom", 12, "1F3864") + trait("right", 8, "9AA4B2") +
-      trait("insideH", 4, "C7CEDA") + trait("insideV", 4, "C7CEDA") +
+      (opts.nu
+        ? '<w:top w:val="none" w:sz="0" w:space="0" w:color="auto"/>' +
+          '<w:left w:val="none" w:sz="0" w:space="0" w:color="auto"/>' +
+          '<w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>' +
+          '<w:right w:val="none" w:sz="0" w:space="0" w:color="auto"/>' +
+          '<w:insideH w:val="none" w:sz="0" w:space="0" w:color="auto"/>' +
+          '<w:insideV w:val="none" w:sz="0" w:space="0" w:color="auto"/>'
+        : trait("top", 12, "1F3864") + trait("left", 8, "9AA4B2") +
+          trait("bottom", 12, "1F3864") + trait("right", 8, "9AA4B2") +
+          trait("insideH", 4, "C7CEDA") + trait("insideV", 4, "C7CEDA")) +
       "</w:tblBorders>" +
       '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="100" w:type="dxa"/>' +
       '<w:bottom w:w="60" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar>' +
@@ -195,11 +206,11 @@
     /* L'en-tête se répète en tête de chaque page : un tableau de trente-trois
        lignes tient sur deux pages, et la seconde sans titres ne se lit pas. */
     var fonds = opts.entetes || [];
-    x += '<w:tr><w:trPr><w:tblHeader/><w:cantSplit/></w:trPr>' +
-      entetes.map(function (h, i) { return cellule(h, true, L[i], false, fonds[i]); }).join("") + "</w:tr>";
+    x += '<w:tr><w:trPr>' + (opts.nu ? "" : "<w:tblHeader/>") + '<w:cantSplit/></w:trPr>' +
+      entetes.map(function (h, i) { return cellule(h, true, L[i], false, fonds[i], opts.nu); }).join("") + "</w:tr>";
     lignes.forEach(function (l, il) {
       x += "<w:tr><w:trPr><w:cantSplit/></w:trPr>" +
-        l.map(function (c, i) { return cellule(c, false, L[i], il % 2 === 1); }).join("") + "</w:tr>";
+        l.map(function (c, i) { return cellule(c, false, L[i], il % 2 === 1, null, opts.nu); }).join("") + "</w:tr>";
     });
     return x + "</w:tbl>" + par("");
   }
@@ -310,6 +321,36 @@
     return sign || ent;
   }
 
+  /* La dénomination de l'entreprise, pour la propriété « Société » du Word. */
+  function societeParDefaut() {
+    var p = null;
+    try {
+      p = (global.Profil && global.Profil.lire) ? global.Profil.lire()
+        : JSON.parse(global.localStorage.getItem("profil-entreprise") || "null");
+    } catch (e) { p = null; }
+    return p ? String(p.denomination || p.entreprise || "").trim() : "";
+  }
+
+  /* DEUX FICHIERS DE PROPRIÉTÉS, PAS UN.
+
+     Le .docx ne portait que docProps/core.xml : la propriété « Société » du
+     document restait vide, et Word affichait une fiche incomplète. Relevé le
+     27 septembre 2026. docProps/app.xml porte cette propriété, et rien
+     d'autre : pas de nom d'application, parce qu'aucun des noms possibles ne
+     serait vrai ; pas de compteur de pages, parce qu'il serait faux dès la
+     première modification. */
+  function proprietesEtendues(opts) {
+    var ent = (opts && opts.societe) || societeParDefaut();
+    return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"' +
+      ' xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">' +
+      "<Company>" + ech(ent) + "</Company>" +
+      "<SharedDoc>false</SharedDoc>" +
+      "<HyperlinksChanged>false</HyperlinksChanged>" +
+      "<LinksUpToDate>false</LinksUpToDate>" +
+      "</Properties>";
+  }
+
   function proprietes(titre, opts) {
     var d = new Date().toISOString().slice(0, 19) + "Z";
     var qui = (opts && opts.auteur) || auteurParDefaut();
@@ -353,7 +394,7 @@
           tableau(i.head, i.rows, { paysage: true, proportions: i.proportions, entetes: i.entetes }) +
           sautSection(true, opts);
       }
-      if (i.k === "table") return tableau(i.head, i.rows, { paysage: large, proportions: i.proportions, entetes: i.entetes });
+      if (i.k === "table") return tableau(i.head, i.rows, { paysage: large, proportions: i.proportions, entetes: i.entetes, nu: i.nu });
       return VERS_WORD[i.k] ? VERS_WORD[i.k](i) : "";
     }).join("");
     var section = '<w:footerReference w:type="default" r:id="rIdPied"/>' +
@@ -385,11 +426,13 @@
         '<Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/>' +
         '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' +
         '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' +
+        '<Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>' +
         "</Types>" },
       { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
         '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
         '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>' +
+        '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>' +
         "</Relationships>" },
       { nom: "word/_rels/document.xml.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
@@ -401,6 +444,7 @@
       { nom: "word/settings.xml", contenu: REGLAGES },
       { nom: "word/footer1.xml", contenu: pied(titre, opts) },
       { nom: "docProps/core.xml", contenu: proprietes(titre, opts) },
+      { nom: "docProps/app.xml", contenu: proprietesEtendues(opts) },
       { nom: "word/document.xml", contenu: doc },
     ]);
     /* Les octets écrits gardent avec eux le rendu qui leur correspond : c'est

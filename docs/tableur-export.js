@@ -149,6 +149,31 @@
   function ligneEntete(lignes) {
     var tete = -1;
     (lignes || []).forEach(function (l, i) { if (tete < 0 && pleines(l) >= 4) tete = i; });
+    if (tete >= 0) return tete;
+    /* UN TABLEAU DE DEUX OU TROIS COLONNES N'AVAIT PAS D'EN-TÊTE DU TOUT.
+
+       « Étape | Date | Preuve conservée » ne porte que trois cellules : la
+       règle des quatre ne trouvait rien, aucune ligne n'était un en-tête, et
+       les dates de la colonne du milieu perdaient leur format pour sortir en
+       nombres bruts, 46292. Relevé le 27 septembre 2026. À défaut de quatre,
+       deux suffisent, à la condition que la ligne ne porte que du texte et que
+       la suivante porte autant de cellules : c'est ce qui la sépare d'une
+       ligne de titre isolée. */
+    var L = lignes || [];
+    for (var i = 0; i < L.length && tete < 0; i++) {
+      var l = L[i] || [];
+      var n = pleines(l);
+      if (n < 2) continue;
+      var queDuTexte = l.every(function (c) {
+        return c === null || c === undefined || c === "" || typeof c === "string";
+      });
+      if (!queDuTexte) continue;
+      for (var j = i + 1; j < L.length; j++) {
+        if (!pleines(L[j] || [])) continue;
+        if (pleines(L[j]) >= n) tete = i;
+        break;
+      }
+    }
     return tete;
   }
   function feuilleXml(lignes, largeurs) {
