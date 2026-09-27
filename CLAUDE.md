@@ -343,6 +343,12 @@ sans l'avoir vérifié autrement.
 - Autres employeurs: 117 281 FRF
 - **TOTAL ANNÉE 1995: 677 216 FRF**
 
+**ACTUALISATION 1995 → JANVIER 2025 — CIRCULAIRE CNAV**
+- Source: Circulaire CNAV 2024-39 "Revalorisation à compter du 1er janvier 2025" (23 décembre 2024)
+- Coefficient revalorisation 1995: **1.563**
+- Montant 1995 en euros: 103 240,98 €
+- **Montant au 1er janvier 2025: 161 365,65 €** (103 240,98 × 1.563)
+
 ### Le relais n'est pas fiable sous charge — mesuré le 15 août 2026
 
 Interrogé 368 fois d'affilée, il rend des 502, et — plus insidieux — il rend
