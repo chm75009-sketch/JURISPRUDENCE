@@ -86,7 +86,18 @@
 
   $("salarie").addEventListener("change", function () {
     var i = $("salarie").value;
-    if (i === "") return;
+    /* LES DONNÉES DU SALARIÉ PRÉCÉDENT NE RESTENT PAS SUR LE SUIVANT. En
+       repassant à la saisie à la main, le formulaire gardait la date d'entrée,
+       la naissance et la nationalité de celui d'avant : un nouvel embauché
+       sortait « en poste depuis le 5 février 2026 », sans essai ni déclaration
+       préalable. Relevé le 26 septembre 2026. */
+    if (i === "") {
+      ["nom", "naissance", "lieuNaissance", "nationalite", "nir", "adresse", "entree",
+       "groupe", "sexe", "emploi"].forEach(function (c) { V[c] = ""; });
+      V.entree = iso(new Date());
+      rendreChamps();
+      return;
+    }
     var s = salariesDuRegistre()[Number(i)];
     if (!s) return;
     V.nom = (String(s.nom || "").trim() + " " + String(s.pre || "").trim()).trim();
