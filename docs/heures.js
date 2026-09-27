@@ -366,6 +366,12 @@
         d: saisi && saisi.d != null ? saisi.d : base.d,
         f: saisi && saisi.f != null ? saisi.f : base.f,
         p: saisi && saisi.p != null ? String(saisi.p) : base.p,
+        /* LE VÉHICULE CONDUIT DANS LA JOURNÉE.
+           Relevé le 27 septembre 2026 : le décompte ne disait pas avec quel
+           véhicule la journée avait été faite. C'est pourtant ce qui relie le
+           relevé au chronotachygraphe du véhicule, et ce qu'un contrôle
+           demande. Il se choisit dans la flotte, et se garde avec le jour. */
+        veh: saisi && saisi.veh != null ? String(saisi.veh) : "",
         saisi: !!saisi,
       });
     }
@@ -375,13 +381,15 @@
     lignes = lignesDuMois(an, mo);
   }
   function modifiee(l) {
-    return l.n !== l.base.n || l.d !== l.base.d || l.f !== l.base.f || String(l.p) !== String(l.base.p);
+    return l.n !== l.base.n || l.d !== l.base.d || l.f !== l.base.f ||
+      String(l.p) !== String(l.base.p) || !!net(l.veh);
   }
   /* On n'écrit que ce qui s'écarte du contrat : un mois conforme ne pèse rien,
      et changer l'horaire de référence ne réécrit pas les jours déjà corrigés. */
   function enregistrerJour(l) {
     var m = moisDe();
-    if (modifiee(l)) m.jours[String(l.j)] = { n: l.n, d: l.d, f: l.f, p: l.p };
+    if (modifiee(l)) m.jours[String(l.j)] = { n: l.n, d: l.d, f: l.f, p: l.p,
+        veh: net(l.veh) || undefined };
     else delete m.jours[String(l.j)];
     garderMois(m);
   }
@@ -394,8 +402,23 @@
     return e;
   }
 
+  /* LE VÉHICULE CONDUIT DANS LA JOURNÉE.
+
+     Relevé le 27 septembre 2026 : le décompte ne disait pas avec quel véhicule
+     la journée avait été faite. C'est pourtant ce qui relie le relevé au
+     chronotachygraphe du véhicule, et ce qu'un contrôle demande. Les
+     immatriculations viennent de la flotte ; un véhicule de location se tape. */
+  function immatriculations() {
+    var L = null;
+    try { L = JSON.parse(window.localStorage.getItem("flotte-vehicules") || "null"); } catch (e) { L = null; }
+    return (L || []).map(function (v) { return String(v.immat || "").trim(); })
+      .filter(function (x) { return x; });
+  }
+  var IMMATS = [];
+
   function dessinerJours() {
     var m = moisDe(), verrou = !!(m.clos && m.clos.le);
+    IMMATS = immatriculations();
     VERROU = verrou;
     var hote = $("jours");
     hote.textContent = "";
@@ -467,6 +490,29 @@
           enregistrerJour(l); majLigne(d, l); calculer();
         });
         z.appendChild(pau);
+        /* Le nom de la case du véhicule est posé juste avant elle, et non
+           avec les quatre autres : sur un téléphone, il se retrouvait deux
+           rangées au-dessus de son champ. */
+        var capVeh = cap("Véhicule");
+        capVeh.classList.add("veh");
+        z.appendChild(capVeh);
+        /* Le véhicule de la journée : la liste des immatriculations de la
+           flotte, et la saisie libre pour un véhicule de location. */
+        var veh = document.createElement("input");
+        veh.type = "text";
+        veh.id = "v-" + l.j;
+        veh.value = l.veh || "";
+        veh.placeholder = "véhicule";
+        veh.className = "veh";
+        veh.setAttribute("aria-label", "Véhicule du " + l.j);
+        veh.disabled = verrou || !!l.hc;
+        veh.addEventListener("input", function () {
+          l.veh = veh.value;
+          enregistrerJour(l); majLigne(d, l);
+        });
+        if (window.ListeChoix && IMMATS.length)
+          window.ListeChoix.attacher(veh, { valeurs: IMMATS, libelle: "un véhicule de votre flotte" });
+        z.appendChild(veh);
       } else {
         z.classList.add("seule");
       }
@@ -518,7 +564,8 @@
     lignes.forEach(function (l) {
       if (l.base.n !== "travail" || l.n !== "travail") return;
       l.d = modele.d; l.f = modele.f; l.p = modele.p;
-      if (modifiee(l)) m.jours[String(l.j)] = { n: l.n, d: l.d, f: l.f, p: l.p };
+      if (modifiee(l)) m.jours[String(l.j)] = { n: l.n, d: l.d, f: l.f, p: l.p,
+        veh: net(l.veh) || undefined };
       else delete m.jours[String(l.j)];
     });
     garderMois(m);
@@ -2677,6 +2724,23 @@
       if (!window.LireClasseur) { $("imp-etat").textContent = "Le lecteur de tableaux n'a pas pu être chargé."; return; }
       if (colle) { reprendre(window.LireClasseur.texte(colle)); return; }
       if (!f) { $("imp-etat").textContent = "Choisissez un fichier, ou collez le tableau."; return; }
+      /* UN .ddd OU UN .esm N'EST PAS LU ICI, ET L'ÉCRAN LE DIT.
+
+         Relevé le 27 septembre 2026 : l'application n'a pas de lecteur pour
+         les fichiers bruts de la carte de conducteur et de l'unité embarquée.
+         Ce sont des fichiers binaires scellés, dont le format vient des
+         annexes du règlement européen ; en tirer un décompte sans pouvoir le
+         vérifier serait pire que de ne rien produire. Plutôt que d'échouer en
+         silence sur « ce fichier n'a pas pu être lu », l'écran dit ce que
+         c'est et par où passer. */
+      if (/\.(ddd|esm|tgd|v1b|c1b)$/i.test(f.name)) {
+        $("imp-etat").textContent = "Ce fichier est le relevé brut du chronotachygraphe, " +
+          "et l'application ne le décode pas : son format vient des annexes du règlement " +
+          "européen, et un décompte qu'on ne peut pas vérifier ne vaut rien. Votre logiciel de " +
+          "télédéchargement sait l'exporter en tableau : reprenez ce tableau ici, en .xlsx ou " +
+          "en .csv, une ligne par jour avec le début, la fin et la pause.";
+        return;
+      }
       if (/\.(csv|txt|tsv)$/i.test(f.name)) {
         f.text().then(function (t) { reprendre(window.LireClasseur.texte(t)); });
         return;
