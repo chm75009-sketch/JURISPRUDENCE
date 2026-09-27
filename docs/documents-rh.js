@@ -83,6 +83,38 @@
     return d ? leJour(d) : cro(v, quoi);
   }
 
+  /* Le salarié du registre, retrouvé sur son nom : c'est lui qui porte le
+     sexe, la naissance, la nationalité et la nature du contrat (D. 1221-23). */
+  function salarieDuRegistre(ctx, nom) {
+    var n = String(nom == null ? "" : nom).trim().toLowerCase();
+    if (!n) return null;
+    var reg = null;
+    try {
+      reg = JSON.parse((typeof window !== "undefined" && window.localStorage
+        ? window.localStorage.getItem("registre-personnel") : null) || "null");
+    } catch (e) { reg = null; }
+    var L = (reg && reg.salaries) || [];
+    var out = null;
+    L.forEach(function (x) {
+      if (out) return;
+      var plein = (String(x.nom || "").trim() + " " + String(x.pre || "").trim()).trim().toLowerCase();
+      if (plein === n || String(x.nom || "").trim().toLowerCase() === n) out = x;
+    });
+    return out;
+  }
+  /* « Masculin » et « Féminin » au registre, « M » et « F » sur la
+     déclaration. Rien quand le registre ne le dit pas. */
+  function sexeLettre(v) {
+    var c = String(v == null ? "" : v).trim().charAt(0).toUpperCase();
+    if (c === "M" || c === "H") return "M";
+    if (c === "F") return "F";
+    return "";
+  }
+  function jjOuVide(v) {
+    var d = dateDe(v);
+    return d ? jj(d) : "";
+  }
+
   function sansComiteCtx(ctx) {
     var p = (ctx && ctx.profil) || {};
     var v = String(p.cseExiste || ((ctx && ctx.fiche) || {}).cseExiste ||
@@ -141,10 +173,15 @@
   function pied(articles, notes) {
     var L = [];
     L.push("");
-    L.push("CITATIONS LÉGALES");
-    L.push("");
-    L.push(articles);
-    L.push("");
+    /* UN TITRE SANS RIEN DESSOUS NE S'ÉCRIT PAS.
+       Relevé le 27 septembre 2026 : « CITATIONS LÉGALES » sortait suivi d'une
+       ligne vide quand le générateur n'avait pas d'articles à donner. */
+    if (String(articles || "").trim()) {
+      L.push("CITATIONS LÉGALES");
+      L.push("");
+      L.push(String(articles).trim());
+      L.push("");
+    }
     if (notes && notes.length > 0) {
       L.push("NOTE - " + notes.join(" "));
     }
@@ -740,17 +777,20 @@
       L.push("RÉUNION DES MENTIONS À DÉCLARER À L'URSSAF");
       L.push("");
       L.push("1. L'EMPLOYEUR");
+      L.push("");
       L.push("Dénomination : AAAAA SARL");
       L.push("Code APE : 4941B");
       L.push("SIRET : 12345678901234");
       L.push("Adresse : 45 rue du Port, 76600 Le Havre");
       L.push("");
       L.push("2. LE SALARIÉ");
+      L.push("");
       L.push("Nom et prénoms : ZZZZZ Sofia");
       L.push("Date et lieu de naissance : 03/11/1995 à Lisbonne");
       L.push("Nationalité : portugaise");
       L.push("");
       L.push("3. L'EMBAUCHE");
+      L.push("");
       L.push("Date d'embauche : 01/10/2026");
       L.push("Nature du contrat : CDD");
       L.push("Durée du contrat : 2 mois");
@@ -758,26 +798,54 @@
 
       L.push("VOS PIÈCES, À COMPLÉTER");
       L.push("");
-      L.push("« L'embauche d'un salarié ne peut intervenir qu'APRÈS déclaration nominative accomplies " +
-             "par l'employeur auprès des organismes de protection sociale » (L. 1221-10).");
+      /* LA CITATION, MOT POUR MOT.
+         Relevé le 27 septembre 2026 : le document écrivait « déclaration
+         nominative accomplies », au pluriel, et coupait la phrase. Le texte,
+         lu à la source au relais le 27 septembre 2026, deux lectures
+         concordantes (L. 1221-10, LEGIARTI000006900849) : « L'embauche d'un
+         salarié ne peut intervenir qu'après déclaration nominative accomplie
+         par l'employeur auprès des organismes de protection sociale désignés
+         à cet effet. » Une citation fausse dans un document remis vaut moins
+         que pas de citation. */
+      L.push("« L'embauche d'un salarié ne peut intervenir qu'après déclaration nominative " +
+             "accomplie par l'employeur auprès des organismes de protection sociale désignés à " +
+             "cet effet » (L. 1221-10).");
       L.push("");
       L.push("1. L'EMPLOYEUR");
+      L.push("");
       L.push("Dénomination : " + cro(p.denomination || p.entreprise, "DÉNOMINATION"));
       L.push("Code APE : " + cro(p.ape, "CODE APE"));
       L.push("SIRET : " + (p.siret || "[SIRET]"));
       L.push("Adresse : " + cro(p.adresse, "adresse de l'employeur"));
       L.push("");
+      /* CE QUE LE REGISTRE PORTE NE SE REDEMANDE PAS.
+         Relevé le 27 septembre 2026 : le sexe, la date et le lieu de
+         naissance, la nationalité et la nature du contrat sortaient entre
+         crochets alors que le registre unique du personnel les porte tous
+         (D. 1221-23). Ce qui manque au registre reste entre crochets. */
+      var sal = salarieDuRegistre(ctx, d.salarieEmbauche);
+      var natCtr = { cdi: "contrat à durée indéterminée", cdd: "contrat à durée déterminée",
+        apprentissage: "contrat d'apprentissage", pro: "contrat de professionnalisation" };
       L.push("2. LE SALARIÉ");
+      L.push("");
       L.push("Nom et prénoms : " + cro(d.salarieEmbauche, "NOM ET PRÉNOMS"));
-      L.push("Sexe : [M / F]");
-      L.push("Date et lieu de naissance : [DATE] à [LIEU]");
-      L.push("Nationalité : [NATIONALITÉ]");
+      L.push("Sexe : " + cro(sexeLettre(sal && sal.sexe), "M / F"));
+      L.push("Date de naissance : " + cro(jjOuVide(sal && sal.nais), "DATE"));
+      L.push("Lieu de naissance : " + cro(sal && sal.naisLieu, "LIEU"));
+      L.push("Nationalité : " + cro(sal && sal.nat, "NATIONALITÉ"));
+      L.push("Numéro national d'identification, s'il est déjà immatriculé : " +
+        cro(sal && sal.secu, "NUMÉRO"));
       L.push("");
       L.push("3. L'EMBAUCHE");
-      L.push("Date d'embauche : " + cro(d.dateEmbauche, "DATE"));
+      L.push("");
+      L.push("Date d'embauche : " + cro(d.dateEmbauche || (sal && jjOuVide(sal.ent)), "DATE"));
       L.push("Heure d'embauche : [HEURE]");
-      L.push("Nature du contrat : [CDI / CDD]");
-      L.push("Durée du contrat : [DURÉE, POUR UN CDD]");
+      L.push("Nature du contrat : " +
+        cro(sal && natCtr[String(sal.nature || "").toLowerCase()], "CDI / CDD"));
+      L.push("Durée du contrat : " +
+        ((sal && String(sal.nature || "").toLowerCase() === "cdd")
+          ? cro(sal.terme ? "jusqu'au " + jjOuVide(sal.terme) : "", "DURÉE, POUR UN CDD")
+          : "sans objet pour un contrat à durée indéterminée"));
       L.push("Durée de la période d'essai : [DURÉE]");
       L.push("");
 
@@ -808,9 +876,10 @@
       L.push("LES RÈGLES");
       L.push("");
       L.push("TIMING IMPÉRATIF :");
-      L.push("« L'embauche d'un salarié ne peut intervenir qu'APRÈS déclaration nominative " +
-             "accomplies par l'employeur auprès des organismes de protection sociale désignés à cet effet » " +
-             "(L. 1221-10).");
+      L.push("« L'embauche d'un salarié ne peut intervenir qu'après déclaration nominative " +
+             "accomplie par l'employeur auprès des organismes de protection sociale désignés à " +
+             "cet effet. L'employeur accomplit cette déclaration dans tous les lieux de travail " +
+             "où sont employés des salariés » (L. 1221-10).");
       L.push("");
       L.push("Les informations à déclarer (R. 1221-1) :");
       L.push("  1. Identité de l'employeur, code APE, SIRET, adresse");
@@ -877,8 +946,12 @@
              "(L. 6315-1, I). C'est un entretien sur les parcours, pas sur la performance.");
       L.push("");
       L.push("Entreprise : " + cro(p.denomination || p.entreprise, "DÉNOMINATION"));
-      L.push("Salarié : " + cro(d.salarie, "NOM ET PRÉNOMS") + " - emploi occupé : [EMPLOI]");
-      L.push("Date d'entrée : [DATE]");
+      /* L'emploi et la date d'entrée sont au registre : ils ne se retapent
+         pas. Relevé le 27 septembre 2026. */
+      var salE = salarieDuRegistre(ctx, d.salarie);
+      L.push("Salarié : " + cro(d.salarie, "NOM ET PRÉNOMS") + " - emploi occupé : " +
+        cro(salE && salE.emp, "EMPLOI"));
+      L.push("Date d'entrée : " + cro(jjOuVide(d.entree || d.dateEmbauche || (salE && salE.ent)), "DATE"));
       L.push("Entretien tenu le : " + cro(d.dateEntretien, "DATE") + ", à [HEURE], pendant le temps de travail");
       L.push("Conduit par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("");
@@ -898,7 +971,8 @@
       L.push("Le salarié a été informé de son CPF et de ses possibilités d'abondement.");
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
-      L.push("L'employeur : [NOM]                      Le salarié : " + cro(d.salarie, "Nom et prénoms"));
+      L.push("L'employeur : " + cro(respo(ctx), "NOM ET QUALITÉ"));
+      L.push("Le salarié : " + cro(d.salarie, "Nom et prénoms"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");
@@ -909,15 +983,47 @@
          entretien » un an après la date d'édition. La date d'entrée vient du
          registre ; sans elle, la ligne dit d'où elle se compte au lieu
          d'inventer un jour. Relevé le 26 septembre 2026. */
-      var ent = dateDe(d.entree || d.dateEmbauche);
-      var quatre = ent ? new Date(ent.getFullYear() + 4, ent.getMonth(), ent.getDate(), 12) : null;
+      /* LE PROCHAIN REPÈRE EST DEVANT, PAS DERRIÈRE.
+
+         Relevé le 27 septembre 2026 : pour un salarié entré en 2019, le
+         document annonçait « prochain repère : 02/04/2023 », une date passée
+         de trois ans. Le repère se compte depuis l'entretien tenu quand il est
+         saisi, sinon depuis l'entrée, et on avance de quatre ans en quatre ans
+         jusqu'à tomber devant nous. « Tout salarié restant employé dans la
+         même entreprise bénéficie d'un entretien de parcours professionnel
+         tous les quatre ans » (L. 6315-1, I, LEGIARTI000053279288, deux
+         lectures concordantes au relais le 27 septembre 2026).
+
+         Et l'état des lieux des huit ans manquait : « Tous les huit ans,
+         l'entretien de parcours professionnel mentionné au I fait un état des
+         lieux récapitulatif du parcours professionnel du salarié » (L. 6315-1,
+         II, même lecture). */
+      var ent = dateDe(d.entree || d.dateEmbauche) ||
+        (salE && salE.ent ? dateDe(salE.ent) : null);
+      var tenu = dateDe(d.dateEntretien);
+      var depart = tenu || ent;
+      var quatre = null;
+      if (depart) {
+        quatre = new Date(depart.getFullYear() + 4, depart.getMonth(), depart.getDate(), 12);
+        while (quatre < d0) quatre = new Date(quatre.getFullYear() + 4, quatre.getMonth(), quatre.getDate(), 12);
+      }
+      var huit = null;
+      if (ent) {
+        huit = new Date(ent.getFullYear() + 8, ent.getMonth(), ent.getDate(), 12);
+        while (huit < d0) huit = new Date(huit.getFullYear() + 8, huit.getMonth(), huit.getDate(), 12);
+      }
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
         ["Premier entretien, au cours de la première année suivant l'embauche",
           ent ? "avant le " + jj(moisDans(ent, 12)) : "un an après l'entrée, date d'entrée à porter",
           "document signé et remis"],
         ["Puis tous les quatre ans",
-          quatre ? "prochain repère : " + jj(quatre) : "quatre ans après le précédent",
+          quatre ? "prochain repère : " + jj(quatre) +
+            (tenu ? ", quatre ans après l'entretien tenu" : ", compté depuis l'entrée")
+            : "quatre ans après le précédent",
           "document signé et remis"],
+        ["État des lieux récapitulatif du parcours, tous les huit ans (L. 6315-1, II)",
+          huit ? "prochain repère : " + jj(huit) : "huit ans après l'entrée, date d'entrée à porter",
+          "document récapitulatif, copie remise au salarié"],
         ["Remise d'une copie au salarié le jour même", jj(d0), "signature du salarié sur l'original"],
       ]));
 
@@ -1016,7 +1122,8 @@
       L.push("Progressions : [DÉCRIRE SALARIALES OU PROFESSIONNELLES]");
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
-      L.push("L'employeur : [NOM]                      Le salarié : " + cro(d.salarie, "Nom et prénoms"));
+      L.push("L'employeur : " + cro(respo(ctx), "NOM ET QUALITÉ"));
+      L.push("Le salarié : " + cro(d.salarie, "Nom et prénoms"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");

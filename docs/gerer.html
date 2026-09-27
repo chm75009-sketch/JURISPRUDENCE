@@ -298,6 +298,14 @@
       dit: "suivi individuel de l'état de santé ; visite d'information et de prévention effectuée après l'embauche, qui donne lieu à une attestation ; travailleur de nuit et travailleur handicapé, suivi adapté" },
     "R4624-10": { id: "LEGIARTI000033769085",
       dit: "visite d'information et de prévention dans un délai qui n'excède pas trois mois à compter de la prise effective du poste" },
+    /* Lus à la source au relais le 27 septembre 2026, deux lectures
+       concordantes chacun. */
+    "R4624-18": { id: "LEGIARTI000033769047",
+      dit: "tout travailleur de nuit et tout travailleur de moins de dix-huit ans bénéficie d'une visite d'information et de prévention préalablement à son affectation sur le poste" },
+    "R4624-22": { id: "LEGIARTI000033769092",
+      dit: "tout travailleur affecté à un poste présentant des risques particuliers bénéficie d'un suivi individuel renforcé de son état de santé" },
+    "R4624-24": { id: "LEGIARTI000033769104",
+      dit: "le suivi individuel renforcé comprend un examen médical d'aptitude, qui se substitue à la visite d'information et de prévention, effectué par le médecin du travail préalablement à l'affectation sur le poste" },
     "R4624-31": { id: "LEGIARTI000054250639", lu: 8,
       dit: "examen de reprise après un congé de maternité, une maladie professionnelle, trente jours d'absence pour accident du travail, soixante jours pour maladie ou accident non professionnel ; organisé le jour de la reprise et au plus tard dans les huit jours" },
     "L1221-19": { id: "LEGIARTI000019071113",
@@ -743,6 +751,33 @@
       "personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
       "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste " +
       "dressée par l'autorité administrative ; " + liste + " (" + ref([art]) + ").";
+  }
+
+  /* LA MÊME RÈGLE, DITE DU SALARIÉ ET NON À LUI.
+
+     La convention de rupture conventionnelle gardait les deux branches entre
+     crochets, avec « en l'absence d'institution représentative du personnel »
+     alors que la fiche dit si le comité existe. Relevé le 27 septembre 2026. */
+  function assistanceTiers(art) {
+    var rep = String((profil && profil.cseExiste) || "").trim().toLowerCase();
+    var ou = String((profil && profil.orgInspection) || "").trim();
+    var conseiller = "par un conseiller du salarié choisi sur une liste dressée par l'autorité " +
+      "administrative, tenue à sa disposition à " +
+      (ou ? "la section d'inspection du travail dont relève l'établissement, " + ou + "," :
+        "la section d'inspection du travail dont relève l'établissement") +
+      " et à la mairie " + de(ville()) + " (" + ref(["D1232-5"]) + ")";
+    if (rep.indexOf("oui") === 0)
+      return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
+        "assister par une personne de son choix appartenant au personnel de l'entreprise] (" +
+        ref([art]) + ")";
+    if (rep.indexOf("non") === 0)
+      return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
+        "assister par une personne de son choix appartenant au personnel de l'entreprise, ou, " +
+        "aucune institution représentative du personnel n'étant en place, " + conseiller + "] (" +
+        ref([art]) + ")";
+    return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
+      "assister par une personne de son choix appartenant au personnel de l'entreprise, ou, en " +
+      "l'absence d'institution représentative du personnel, " + conseiller + "] (" + ref([art]) + ")";
   }
 
   function ville() {
@@ -1879,6 +1914,17 @@
     enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + "." });
+    var mpc = v.mpc === "oui";
+    var mpcJour = dateDe(v.mpcDate);
+    if (mpc) {
+      b.push({ k: "p", t: "À compter " + (mpcJour ? "du " + dateFr(mpcJour) : "de la remise de la " +
+        "présente lettre") + ", et jusqu'à la décision qui sera prise à l'issue de cette procédure, " +
+        "vous êtes mis à pied à titre conservatoire. Cette mesure n'est pas une sanction : elle vous " +
+        "écarte de votre poste le temps de la procédure, qui reste entière (" +
+        ref(["L1332-3", "L1332-2"]) + ")." });
+      b.push({ k: "p", t: "Si la décision finalement prise n'est pas un licenciement pour faute " +
+        "grave ou lourde, la période de mise à pied vous sera payée." });
+    }
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision envisagée et recueillerons vos explications (" + ref(["L1232-3"]) + ")." });
     b.push({ k: "p", t: assistance("L1232-4") });
     formule(b, civ);
@@ -1927,6 +1973,11 @@
         "la rupture prend effet à la date de présentation de cette lettre, sans préavis ni indemnité " +
         "de licenciement (" + ref(["L1234-1", "L1234-9"]) + "). Vous percevrez l'indemnité " +
         "compensatrice de congés payés." });
+      if (mpc)
+        b.push({ k: "p", t: "La mise à pied conservatoire prononcée " +
+          (mpcJour ? "le " + dateFr(mpcJour) : "par notre lettre de convocation") + " prend fin à " +
+          "cette même date. La faute grave étant retenue, la période qu'elle a couverte n'est pas " +
+          "rémunérée." });
     } else if (moisAnc !== null) {
       var pv = preavisDu(v.statut || "employe", moisAnc, false);
       var finPv = pv.jours && envoiTot ? finPreavis(envoiTot, pv.jours) : null;
@@ -1967,6 +2018,11 @@
       b.push({ k: "note", t: "La date d'entrée n'est pas renseignée : sans elle, ni le préavis ni " +
         "l'indemnité ne se calculent. Portez-la en tête, elle se reprend du registre du personnel." });
     }
+    if (mpc && !grave)
+      b.push({ k: "p", t: "La mise à pied conservatoire prononcée " +
+        (mpcJour ? "le " + dateFr(mpcJour) : "par notre lettre de convocation") + " prend fin. La " +
+        "faute grave n'étant pas retenue, le salaire de cette période vous est réglé avec votre " +
+        "solde." });
     b.push({ k: "p", t: "Vous pouvez, dans les quinze jours suivant la notification, nous demander des précisions sur les motifs énoncés dans cette lettre, par lettre recommandée avec avis de réception ou remise contre récépissé. Nous disposerons de quinze jours pour y répondre (" + ref(["R1232-13", "L1235-2"]) + ")." });
     finDeContrat(b);
     formule(b, civ);
@@ -1988,9 +2044,28 @@
       "recommandé, non depuis son envoi : la date portée ici est estimée au premier jour ouvrable " +
       "suivant. Reportez la date réelle de l'avis de réception avant de tenir l'entretien.");
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
+    if (mpc) {
+      /* Lu dans Judilibre le 27 septembre 2026, recherche exacte, relaxed
+         false : Cass. soc. 18 février 1998, n° 96-40.219, « dès lors qu'une
+         mise à pied n'est pas suivie immédiatement de l'ouverture d'une
+         procédure de licenciement (...) cette mesure présente un caractère
+         disciplinaire et le salarié ne peut être sanctionné deux fois pour les
+         mêmes faits ». */
+      if (mpcJour && joursEntre(mpcJour, convocation) > 1)
+        alertes.push("La mise à pied est prononcée le " + dateFr(mpcJour) + " et la convocation " +
+          "part le " + dateFr(convocation) + ", soit " + joursEntre(mpcJour, convocation) + " jours " +
+          "plus tard. Une mise à pied qui n'est pas suivie immédiatement de l'ouverture de la " +
+          "procédure prend un caractère disciplinaire, et le salarié ne peut alors être sanctionné " +
+          "deux fois pour les mêmes faits (Cass. soc. 18 février 1998, n° 96-40.219). Datez-la du " +
+          "jour de la convocation, ou justifiez le délai.");
+      if (!grave)
+        alertes.push("La gravité retenue n'est pas la faute grave : la période de mise à pied " +
+          "conservatoire se paie, et la lettre le dit. Portez-la au solde de tout compte (Cass. " +
+          "soc. 20 mars 1996, n° 93-40.553, sur le rappel de salaire de cette période).");
+    }
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
     return { blocs: b, dates: dates, alertes: alertes, bloque: blocageDe(dm, m),
-      loi: ["L1332-4", "L1232-1", "L1232-2", "L1232-3", "L1232-4", "L1232-6", "L1332-2", "R1232-1", "R1232-13", "L1235-2", "L1234-1", "L1234-3", "L1234-5", "L1234-9", "R1234-1", "R1234-2", "R1234-4", "L1234-19", "L1234-20", "R1234-9", "L1225-4", "L1226-9"] };
+      loi: ["L1332-4", "L1232-1", "L1232-2", "L1232-3", "L1232-4", "L1232-6", "L1332-2", "L1332-3", "R1232-1", "R1232-13", "L1235-2", "L1234-1", "L1234-3", "L1234-5", "L1234-9", "R1234-1", "R1234-2", "R1234-4", "L1234-19", "L1234-20", "R1234-9", "L1225-4", "L1226-9"] };
   }
 
   /* ═══════════════════════════════════════════════════════════════════════
@@ -1999,21 +2074,55 @@
   function visite(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var e = dateDe(v.entree);
-    var limite = e ? plusMois(e, 3) : null;
+    var nuit = v.nuit === "oui";
+    var risques = v.risques === "oui";
+    /* Avec la nuit ou un poste à risques, la visite est préalable : la limite
+       est la veille de la prise de poste, non trois mois après. */
+    var prealable = nuit || risques;
+    var limite = prealable ? e : (e ? plusMois(e, 3) : null);
     var b = [];
     b.push({ k: "t1", t: "Demande de visite d'information et de prévention" });
     b.push({ k: "p", t: profil.denomination });
     if (profil.adresse) b.push({ k: "p", t: profil.adresse });
     b.push({ k: "vide", t: "" });
-    b.push({ k: "p", t: "Service de prévention et de santé au travail [nom et adresse du service]" });
+    b.push({ k: "p", t: "Service de prévention et de santé au travail " +
+      (String(profil.orgSanteTravail || "").trim() || "[nom et adresse du service]") });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
     b.push({ k: "p", t: "Objet : visite d'information et de prévention de " + nomS });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: "Madame, Monsieur," });
     b.push({ k: "p", t: "Nous avons engagé " + nomS + " en qualité " + de(v.poste || "[emploi]") + ", à compter du " + dateFr(e) + "." });
-    b.push({ k: "p", t: "Nous vous demandons d'organiser la visite d'information et de prévention prévue à l'article " + ref(["L4624-1"]) + " du code du travail, dans un délai qui n'excède pas trois mois à compter de la prise effective du poste, soit au plus tard le " + dateFr(limite) + " (" + ref(["R4624-10"]) + ")." });
-    b.push({ k: "p", t: "Poste occupé et risques auxquels le salarié est exposé : [travail de nuit, produits, manutention, écran, autre]. [Le salarié déclare être reconnu travailleur handicapé ou titulaire d'une pension d'invalidité : dans ce cas, orientation vers le médecin du travail et suivi adapté, " + ref(["L4624-1"]) + ".]" });
+    if (risques) {
+      b.push({ k: "p", t: "Ce poste présente des risques particuliers. Nous vous demandons " +
+        "d'organiser l'examen médical d'aptitude du suivi individuel renforcé, qui se substitue " +
+        "à la visite d'information et de prévention et se fait par le médecin du travail " +
+        "préalablement à l'affectation sur le poste (" + ref(["R4624-22", "R4624-24"]) + "), soit " +
+        "avant le " + dateFr(limite) + "." });
+    } else if (nuit) {
+      b.push({ k: "p", t: "Le salarié est travailleur de nuit au sens de l'article " +
+        ref(["L3122-5"]) + " ou âgé de moins de dix-huit ans. Nous vous demandons d'organiser la " +
+        "visite d'information et de prévention préalablement à son affectation sur le poste (" +
+        ref(["R4624-18"]) + "), soit avant le " + dateFr(limite) + "." });
+    } else {
+      b.push({ k: "p", t: "Nous vous demandons d'organiser la visite d'information et de prévention prévue à l'article " + ref(["L4624-1"]) + " du code du travail, dans un délai qui n'excède pas trois mois à compter de la prise effective du poste, soit au plus tard le " + dateFr(limite) + " (" + ref(["R4624-10"]) + ")." });
+    }
+    /* UNE ÉCHÉANCE DÉJÀ PASSÉE SE DIT, ELLE NE S'AFFICHE PAS SEULE.
+
+       La date d'entrée venant du registre, la demande sortait « au plus tard
+       le 2 juillet 2019 » pour un salarié entré en 2019, sans un mot sur le
+       retard. Relevé le 27 septembre 2026. */
+    var enRetard = limite && limite < AUJOURDHUI;
+    if (enRetard) {
+      b.push({ k: "p", t: "Ce délai est dépassé : la visite n'a pas eu lieu, ou nous n'en avons " +
+        "pas l'attestation. Nous vous demandons de l'organiser sans attendre." });
+    }
+    b.push({ k: "p", t: "Poste occupé et risques auxquels le salarié est exposé : " +
+      (String(v.poste || "").trim() || "[emploi]") +
+      (risques ? ", poste à risques particuliers" : "") + (nuit ? ", travail de nuit" : "") +
+      ". [Précisez les expositions : produits, manutention, écran, autre.] [Le salarié déclare " +
+      "être reconnu travailleur handicapé ou titulaire d'une pension d'invalidité : dans ce cas, " +
+      "orientation vers le médecin du travail et suivi adapté, " + ref(["L4624-1"]) + ".]" });
     b.push({ k: "p", t: "Nous vous remercions de nous adresser la convocation, que nous remettrons au salarié, et l'attestation délivrée à l'issue de la visite." });
     b.push({ k: "p", t: "Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos salutations distinguées." });
     b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
@@ -2022,12 +2131,32 @@
     b.push({ k: "p", t: nomS });
     b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
     b.push({ k: "p", t: civiliteDe(nomS) + "," });
-    b.push({ k: "p", t: "Vous bénéficiez, au titre du suivi individuel de votre état de santé, d'une visite d'information et de prévention après votre embauche (" + ref(["L4624-1"]) + "). Elle a lieu dans les trois mois de votre prise de poste, soit au plus tard le " + dateFr(limite) + " (" + ref(["R4624-10"]) + ")." });
+    b.push({ k: "p", t: risques
+      ? "Votre poste présente des risques particuliers. Vous bénéficiez à ce titre d'un suivi " +
+        "individuel renforcé : un examen médical d'aptitude, réalisé par le médecin du travail " +
+        "avant votre affectation sur le poste, soit avant le " + dateFr(limite) + " (" +
+        ref(["R4624-22", "R4624-24"]) + ")."
+      : (nuit
+        ? "Vous bénéficiez d'une visite d'information et de prévention préalable à votre " +
+          "affectation sur le poste, soit avant le " + dateFr(limite) + " (" + ref(["R4624-18"]) + ")."
+        : "Vous bénéficiez, au titre du suivi individuel de votre état de santé, d'une visite " +
+          "d'information et de prévention après votre embauche (" + ref(["L4624-1"]) + "). Elle a " +
+          "lieu dans les trois mois de votre prise de poste, soit au plus tard le " +
+          dateFr(limite) + " (" + ref(["R4624-10"]) + ").") });
     b.push({ k: "p", t: "Vous êtes convoqué au service de prévention et de santé au travail le [date et heure fixées par le service], à [adresse]. Cette visite a lieu pendant le temps de travail et donne lieu à une attestation, dont un exemplaire vous est remis." });
     b.push({ k: "p", t: "Nous vous prions d'agréer, " + civiliteDe(nomS) + ", l'expression de nos salutations distinguées." });
     b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
-    return { blocs: b, loi: ["L4624-1", "R4624-10"],
-      dates: [{ q: "Visite au plus tard le", d: limite ? dateFrJour(limite) : "[date d'entrée à saisir]", f: "trois mois à compter de la prise effective du poste (" + ref(["R4624-10"]) + ")", c: "tard" }] };
+    return { blocs: b,
+      loi: risques ? ["L4624-1", "R4624-22", "R4624-24"]
+        : (nuit ? ["L4624-1", "R4624-18", "L3122-5"] : ["L4624-1", "R4624-10"]),
+      alertes: enRetard ? ["L'échéance de la visite, le " + dateFr(limite) + ", est passée. " +
+        "La demande le dit, et la date reste celle du texte : elle mesure le retard."] : null,
+      dates: [{ q: prealable ? "Visite préalable, avant le" : "Visite au plus tard le",
+        d: limite ? dateFrJour(limite) : "[date d'entrée à saisir]",
+        f: risques ? "examen d'aptitude préalable à l'affectation (" + ref(["R4624-24"]) + ")"
+          : (nuit ? "visite préalable à l'affectation (" + ref(["R4624-18"]) + ")"
+            : "trois mois à compter de la prise effective du poste (" + ref(["R4624-10"]) + ")"),
+        c: "tard" }] };
   }
 
   /* LA COMPLÉMENTAIRE SANTÉ : LA DÉCISION, PAS UNE LISTE DE LIENS.
@@ -2685,36 +2814,71 @@
     return { blocs: b, dates: dates, loi: ["L1226-1", "R4624-31"] };
   }
 
+  /* LE DÉLAI DE QUARANTE-HUIT HEURES PART DE LA CONNAISSANCE, PAS DE LA CHUTE.
+
+     « L'employeur (...) doit déclarer tout accident dont il a eu connaissance »
+     (L. 441-2, LEGIARTI000006743085), et la déclaration se fait « dans les
+     quarante-huit heures non compris les dimanches et jours fériés »
+     (R. 441-3, LEGIARTI000038423383) ; pour les accidents survenus hors des
+     locaux, « le délai imparti à l'employeur ne commence à courir que du jour
+     où il a été informé de l'accident ». Le relevé comptait depuis la date de
+     l'accident et ne demandait pas le jour où l'entreprise l'avait appris :
+     un accident du vendredi soir rapporté le lundi donnait une échéance déjà
+     passée. Le champ est ajouté, et l'échéance part de lui. Deux lectures
+     concordantes le 27 septembre 2026. */
   function accident(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var civ = civiliteDe(nomS);
     var date = dateDe(v.date);
-    var limite = date ? finJoursOuvrables(date, 2) : null;
+    var connu = dateDe(v.connu) || date;
+    var limite = connu ? finJoursOuvrables(connu, 2) : null;
+    var sAt = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
     var b = [];
     b.push({ k: "t1", t: "Accident du travail : relevé des circonstances" });
     b.push({ k: "st", t: profil.denomination + (profil.siret ? " · SIRET " + profil.siret : "") });
-    b.push({ k: "p", t: "Ce relevé réunit ce que la déclaration à la caisse primaire d'assurance maladie demande. La déclaration elle-même se fait par tout moyen conférant date certaine à sa réception, dans les quarante-huit heures non compris les dimanches et jours fériés (" + ref(["L441-2", "R441-3"]) + " du code de la sécurité sociale), soit au plus tard le " + dateFr(limite) + "." });
-    b.push({ k: "puce", t: "Victime : " + nomS + ", [date de naissance], [numéro de sécurité sociale], [emploi], [date d'embauche]" });
-    b.push({ k: "puce", t: "Date de l'accident : " + dateFr(date) + " à [heure]" });
-    b.push({ k: "puce", t: "Lieu : [lieu précis de l'accident]" });
+    b.push({ k: "p", t: "Ce relevé réunit ce que la déclaration à la caisse primaire d'assurance maladie demande. La déclaration elle-même se fait par tout moyen conférant date certaine à sa réception, dans les quarante-huit heures non compris les dimanches et jours fériés (" + ref(["L441-2", "R441-3"]) + " du code de la sécurité sociale), et ce délai court du jour où l'employeur a connaissance de l'accident : soit au plus tard le " + dateFr(limite) + "." });
+    /* Ce que le registre du personnel porte déjà n'est pas redemandé ici. Le
+       numéro de sécurité sociale n'y figure pas : il garde son crochet. */
+    var vic = [nomS];
+    var naisAt = sAt ? dateDe(sAt.nais) : null;
+    vic.push(naisAt ? "né" + (civ === "Madame" ? "e" : "") + " le " + dateFr(naisAt) : "[date de naissance]");
+    vic.push((sAt && String(sAt.nat || "").trim()) || "[nationalité]");
+    vic.push("numéro de sécurité sociale [à compléter]");
+    vic.push((sAt && String(sAt.emp || "").trim()) || "[emploi]");
+    var entAt = sAt ? dateDe(sAt.ent) : null;
+    vic.push(entAt ? "embauché" + (civ === "Madame" ? "e" : "") + " le " + dateFr(entAt) : "[date d'embauche]");
+    b.push({ k: "puce", t: "Victime : " + vic.join(", ") });
+    b.push({ k: "puce", t: "Adresse de la victime : " + adresseDe(nomS) });
+    b.push({ k: "puce", t: "Date de l'accident : " + dateFr(date) + " à " + (String(v.heure || "").trim() || "[heure]") });
+    b.push({ k: "puce", t: "Lieu : " + (String(v.lieu || "").trim() || "[lieu précis de l'accident]") });
+    b.push({ k: "puce", t: "Accident connu de l'employeur le : " + dateFr(connu) +
+      (String(v.connuHeure || "").trim() ? " à " + String(v.connuHeure).trim() : " à [heure]") +
+      ", par [la victime elle-même / un témoin / ...]" });
     b.push({ k: "puce", t: "Horaires de travail de la victime ce jour-là : [de ... à ...]" });
     b.push({ k: "puce", t: "Circonstances :" });
     griefsBlocs(b, v.circonstances, "[ce qui s'est passé, dans l'ordre, avec les mots de la victime et ceux des témoins]");
     b.push({ k: "puce", t: "Siège et nature des lésions : [à compléter]" });
     b.push({ k: "puce", t: "Témoins : [noms et adresses] ; premier tiers informé : [nom, qualité, date et heure]" });
-    b.push({ k: "puce", t: "Accident connu de l'employeur le : [date et heure]" });
     b.push({ k: "puce", t: "Arrêt de travail : [oui, du ... au ... / non]" });
-    b.push({ k: "puce", t: "Réserves de l'employeur sur le caractère professionnel : [aucune / motivées : ...]" });
+    b.push({ k: "puce", t: "Réserves de l'employeur sur le caractère professionnel : [aucune / motivées : ...]. Elles se forment dans les dix jours francs qui suivent la déclaration (" + ref(["R441-6"]) + " du code de la sécurité sociale)." });
     b.push({ k: "saut", t: "" });
     b.push({ k: "t1", t: "Information du salarié" });
     enTete(b, nomS, "votre accident du travail du " + dateFr(date), "Lettre remise en main propre ou adressée par courriel");
-    b.push({ k: "p", t: "Vous avez été victime d'un accident le " + dateFr(date) + ". Nous l'avons déclaré à la caisse primaire d'assurance maladie le [date de la déclaration], dans le délai de quarante-huit heures, dimanches et jours fériés non compris (" + ref(["L441-2", "R441-3"]) + " du code de la sécurité sociale). Une feuille d'accident vous est remise pour vos soins." });
+    b.push({ k: "p", t: "Vous avez été victime d'un accident le " + dateFr(date) + ", que nous avons connu le " + dateFr(connu) + ". Nous l'avons déclaré à la caisse primaire d'assurance maladie le [date de la déclaration], dans le délai de quarante-huit heures, dimanches et jours fériés non compris, qui court du jour de cette connaissance (" + ref(["L441-2", "R441-3"]) + " du code de la sécurité sociale). Une feuille d'accident vous est remise pour vos soins (" + ref(["L441-5"]) + " du même code)." });
     b.push({ k: "p", t: "Pendant l'arrêt de travail provoqué par l'accident, votre contrat de travail est suspendu, et la durée de cette suspension compte pour votre ancienneté (" + ref(["L1226-7"]) + "). Pendant cette période, le contrat ne peut être rompu que pour faute grave ou impossibilité de le maintenir pour un motif étranger à l'accident (" + ref(["L1226-9"]) + ")." });
     b.push({ k: "p", t: "Si votre absence atteint trente jours, un examen de reprise par le médecin du travail sera organisé le jour de votre reprise et au plus tard dans les huit jours (" + ref(["R4624-31"]) + ", 3°) ; nous saisirons le service de prévention et de santé au travail dès que la date de fin de votre arrêt sera connue." });
     b.push({ k: "p", t: "Nous vous souhaitons un prompt rétablissement." });
     formule(b, civ);
-    return { blocs: b, loi: ["L441-2", "R441-3", "L1226-7", "L1226-9", "R4624-31"],
-      dates: [{ q: "Déclaration à la caisse au plus tard", d: limite ? dateFrJour(limite) : "[date de l'accident à saisir]", f: "quarante-huit heures non compris les dimanches et jours fériés (R. 441-3 du code de la sécurité sociale)", c: "tard" }] };
+    var datesAt = [{ q: "Déclaration à la caisse au plus tard",
+      d: limite ? dateFrJour(limite) : "[date de l'accident à saisir]",
+      f: "quarante-huit heures non compris les dimanches et jours fériés, à compter du jour où l'employeur a connu l'accident, le " + dateFr(connu) + " (" + ref(["L441-2", "R441-3"]) + " du code de la sécurité sociale)",
+      c: "tard" }];
+    if (limite) datesAt.push({ q: "Réserves motivées au plus tard",
+      d: dateFrJour(jour(limite, 10)),
+      f: "dix jours francs à compter de la déclaration (" + ref(["R441-6"]) + " du code de la sécurité sociale) : compté ici depuis le dernier jour utile pour déclarer, à recompter sur la date réelle de la déclaration",
+      c: "tard" });
+    return { blocs: b, loi: ["L441-2", "R441-3", "L441-5", "R441-6", "L1226-7", "L1226-9", "R4624-31"],
+      dates: datesAt };
   }
 
   function ruptureConventionnelle(v) {
@@ -2731,10 +2895,16 @@
     b.push({ k: "st", t: "Articles L. 1237-11 à L. 1237-14 du code du travail" });
     b.push({ k: "h1", t: "Entre les soussignés" });
     b.push({ k: "p", t: "La société " + societe() + ", ci-après « la Société », d'une part," });
-    b.push({ k: "p", t: "Et " + nomS + ", demeurant [adresse], engagé le " + dateFr(entree) + " en qualité de [emploi], ci-après « le salarié », d'autre part," });
+    var sRc = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    b.push({ k: "p", t: "Et " + nomS + ", demeurant " + adresseDe(nomS) + ", engagé" +
+      (civiliteDe(nomS) === "Madame" ? "e" : "") + " le " + dateFr(entree) + " en qualité " +
+      de((sRc && String(sRc.emp || "").trim()) || "[emploi]") +
+      ", ci-après « le salarié », d'autre part," });
     b.push({ k: "h1", t: "Article 1 - Objet" });
     b.push({ k: "p", t: "Les parties conviennent en commun de la rupture du contrat de travail qui les lie. Cette rupture conventionnelle, exclusive du licenciement ou de la démission, n'a été imposée par aucune des parties (" + ref(["L1237-11"]) + ")." });
-    b.push({ k: "p", t: "Elles en ont convenu au cours d'un entretien tenu le [date de l'entretien], au cours duquel le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire assister par une personne de son choix appartenant au personnel de l'entreprise ou, en l'absence d'institution représentative du personnel, par un conseiller du salarié] (" + ref(["L1237-12"]) + ")." });
+    b.push({ k: "p", t: "Elles en ont convenu au cours d'un entretien tenu le " +
+      (dateDe(v.entretien) ? dateFr(dateDe(v.entretien)) : "[date de l'entretien]") +
+      ", au cours duquel " + assistanceTiers("L1237-12") + "." });
     b.push({ k: "h1", t: "Article 2 - Indemnité spécifique de rupture conventionnelle" });
     if (ind) {
       b.push({ k: "p", t: "La Société versera au salarié une indemnité spécifique de rupture conventionnelle de " + eur(ind.montant) + " euros. Elle n'est pas inférieure à l'indemnité de licenciement de l'article " + ref(["L1234-9"]) + " (" + ref(["L1237-13"]) + "), calculée sur un salaire de référence de " + eur(salaire) + " euros et une ancienneté de " + anciennetePhrase(mois) + " à la date de la rupture : " + ind.detail + "." });
@@ -3427,7 +3597,30 @@
     mutuelle: { titre: "Complémentaire santé : la décision unilatérale",
       champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(premierDuMoisSuivant()) }],
       produire: mutuelle },
-    vip: { titre: "Visite d'information et de prévention", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" }, { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }], produire: visite },
+    /* DEUX QUESTIONS FERMÉES, PARCE QU'ELLES CHANGENT LA VISITE.
+
+       Relevé le 27 septembre 2026 : la demande ne posait ni la question de la
+       nuit, ni celle du poste à risques, et écrivait dans tous les cas « dans
+       les trois mois de la prise de poste ». R. 4624-18 (LEGIARTI000033769047,
+       deux lectures concordantes au relais le 27 septembre 2026) : le
+       travailleur de nuit et le travailleur de moins de dix-huit ans
+       bénéficient de la visite « préalablement à leur affectation sur le
+       poste ». R. 4624-22 et R. 4624-24 (LEGIARTI000033769092 et
+       LEGIARTI000033769104, mêmes lectures) : sur un poste à risques
+       particuliers, le suivi individuel renforcé comprend un examen médical
+       d'aptitude « qui se substitue à la visite d'information et de
+       prévention » et se fait « préalablement à l'affectation sur le poste ».
+       Une demande qui ignore ces deux cas fait perdre le délai. */
+    vip: { titre: "Visite d'information et de prévention",
+      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" },
+        { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) },
+        { id: "nuit", nom: "Travailleur de nuit, ou de moins de dix-huit ans ?", t: "select",
+          opts: [["non", "Non"], ["oui", "Oui"]], defaut: "non",
+          sous: "la visite est alors préalable à l'affectation (R. 4624-18)" },
+        { id: "risques", nom: "Poste à risques particuliers ?", t: "select",
+          opts: [["non", "Non"], ["oui", "Oui"]], defaut: "non",
+          sous: "amiante, plomb, agents cancérogènes, rayonnements, milieu hyperbare, chute de hauteur en montage, habilitation électrique, conduite d'équipement soumise à autorisation (R. 4624-23)" }],
+      produire: visite },
 
     avenant: { titre: "Avenant au contrat", champs: [NOM,
         { id: "sorte", nom: "Ce que l'avenant change", t: "select", defaut: "libre", opts: [
@@ -3462,7 +3655,13 @@
       loi: ["L3141-13", "D3141-5", "L3141-3"],
       dates: function (v) { var d = dateDe(v.debut); return d ? [{ q: "Affichage au plus tard", d: dateFrJour(plusMois(d, -2)), f: "deux mois avant l'ouverture de la période (" + ref(["D3141-5"]) + ")", c: "tard" }] : []; } },
     maladie: { titre: "Arrêt maladie", champs: [NOM, { id: "debut", nom: "Premier jour de l'arrêt", t: "date", defaut: iso(AUJOURDHUI) }, { id: "fin", nom: "Dernier jour de l'arrêt", t: "date", defaut: iso(jour(AUJOURDHUI, 7)) }], produire: maladie },
-    at: { titre: "Accident du travail", champs: [NOM, { id: "date", nom: "Date de l'accident", t: "date", defaut: iso(AUJOURDHUI) },
+    at: { titre: "Accident du travail",
+      champs: [NOM, { id: "date", nom: "Date de l'accident", t: "date", defaut: iso(AUJOURDHUI) },
+        { id: "heure", nom: "Heure de l'accident", t: "text", ph: "14 h 30" },
+        { id: "connu", nom: "Accident connu de l'employeur le", t: "date", defaut: iso(AUJOURDHUI),
+          sous: "c'est de ce jour que court le délai de quarante-huit heures (L. 441-2 du code de la sécurité sociale)" },
+        { id: "connuHeure", nom: "À quelle heure", t: "text", ph: "15 h" },
+        { id: "lieu", nom: "Lieu précis de l'accident", t: "text", pleine: true, ph: "Cuisine du restaurant, 12 rue des Peupliers, 93200 Saint-Denis" },
         { id: "circonstances", nom: "Circonstances", t: "textarea", pleine: true, ph: "En portant un carton de la réserve à la cuisine, a glissé sur le sol mouillé et est tombé sur le poignet droit." }], produire: accident },
     entretien: { titre: "Entretien professionnel", ext: ["RH-CTL-ENT-01"], famille: "RH",
       champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarie", ph: "Lucie MARTIN" },
@@ -3544,10 +3743,19 @@
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" },
         { id: "statut", nom: "Statut", t: "select", opts: STATUTS, defaut: "employe" },
         { id: "salaireRef", nom: "Salaire mensuel brut de référence (euros)", t: "number",
-          ph: "la moyenne des douze derniers mois, ou le tiers des trois derniers si elle est plus favorable" }]),
+          ph: "la moyenne des douze derniers mois, ou le tiers des trois derniers si elle est plus favorable" },
+        /* LA MISE À PIED CONSERVATOIRE SE DIT DANS LES DEUX LETTRES, OU NULLE
+           PART. La notification pour faute grave ne l'évoquait pas : le
+           dirigeant écartait le salarié sans écrit, et sans savoir ce que
+           devient le salaire de la période. Relevé le 27 septembre 2026. */
+        { id: "mpc", nom: "Une mise à pied conservatoire est-elle prononcée ?", t: "select",
+          defaut: "non", opts: [["non", "Non"], ["oui", "Oui"]],
+          sous: "elle écarte le salarié le temps de la procédure, et n'est pas une sanction (L. 1332-3)" },
+        { id: "mpcDate", nom: "Mise à pied conservatoire à compter du", t: "date", si: ["mpc", "oui"] }]),
       produire: licenciementFaute },
 
     rc: { titre: "Rupture conventionnelle", champs: [NOM, { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" },
+        { id: "entretien", nom: "Date de l'entretien", t: "date" },
         { id: "salaire", nom: "Salaire mensuel brut (euros)", t: "number", ph: "2 000" }, { id: "signature", nom: "Date de signature", t: "date", defaut: iso(AUJOURDHUI) }], produire: ruptureConventionnelle },
     demission: { titre: "Démission", champs: [NOM, { id: "reception", nom: "Démission reçue le", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" }, { id: "statut", nom: "Statut", t: "select", opts: STATUTS, defaut: "employe" }], produire: demission },
@@ -3778,6 +3986,21 @@
     /* Une précision sous le champ, quand le champ en demande une. */
     if (c.sous) h += '<span class="sous">' + ech(c.sous) + "</span>";
     return h + "</label>";
+  }
+
+  /* UN CHAMP QUI NE SERT QUE SI UN AUTRE LE COMMANDE NE S'AFFICHE PAS AVANT.
+
+     « Mise à pied conservatoire à compter du » sans mise à pied, c'est une
+     case de plus à lire pour rien, sur un écran de téléphone où chaque ligne
+     compte. La règle s'écrit sur le champ : si: ["mpc", "oui"]. */
+  function majChampsVisibles(doc) {
+    (doc.champs || []).forEach(function (c) {
+      if (!c.si) return;
+      var el = $("d-champs").querySelector('[data-ch="' + c.id + '"]');
+      var lab = el && el.closest ? el.closest("label") : null;
+      if (!lab) return;
+      lab.hidden = String(V[c.si[0]] == null ? "" : V[c.si[0]]) !== c.si[1];
+    });
   }
 
   function loiHtml(nums) {
@@ -4124,6 +4347,7 @@
       $("d-titre").textContent = doc.titre;
       $("d-champs").innerHTML = doc.champs.map(champHtml).join("");
       $("d-champs").hidden = !doc.champs.length;
+      majChampsVisibles(doc);
       $("d-registre").hidden = true;
       /* Le nom se choisit dans le registre : on ne retape pas
          « ZENNADI Naïma » pour la quatrième fois. */
@@ -4180,6 +4404,7 @@
     var id = el.getAttribute("data-ch"); if (!id) return;
     V[id] = el.value;
     if (id === "nom" && DOCS[ACTIF]) reprendreDuRegistre(DOCS[ACTIF]);
+    if (DOCS[ACTIF]) majChampsVisibles(DOCS[ACTIF]);
     rendreDoc();
   }
   $("d-champs").addEventListener("input", surChamp);
