@@ -100,6 +100,16 @@
     }
     var s = salariesDuRegistre()[Number(i)];
     if (!s) return;
+    /* D'un salarié du registre à un autre, ce que le premier avait et que le
+       second n'a pas restait à l'écran : l'adresse, le lieu de naissance, le
+       numéro de sécurité sociale. On vide d'abord, on remplit ensuite avec ce
+       que le registre porte. Relevé le 27 septembre 2026. */
+    ["nom", "naissance", "lieuNaissance", "nationalite", "nir", "adresse", "entree",
+     "groupe", "sexe", "emploi", "titreTravail", "titreNumero", "titreFin"]
+      .forEach(function (c) { V[c] = ""; });
+    if (s.adr) V.adresse = s.adr;
+    if (s.nir) V.nir = s.nir;
+    if (s.naisLieu) V.lieuNaissance = s.naisLieu;
     V.nom = (String(s.nom || "").trim() + " " + String(s.pre || "").trim()).trim();
     if (s.nat) V.nationalite = s.nat;
     if (s.nais) V.naissance = s.nais;
@@ -206,6 +216,20 @@
 
   function champsDuProfil() {
     var L = CHAMPS_COMMUNS.slice();
+    /* Le titre de travail ne se demande qu'à qui en a besoin : la liste de
+       R. 5221-2 dispense les ressortissants de l'Union, de l'Espace économique
+       européen et de la Suisse. Relevé le 27 septembre 2026, où rien ne le
+       demandait à personne. */
+    if (window.ListesValeurs && window.ListesValeurs.titreDeTravailRequis &&
+        window.ListesValeurs.titreDeTravailRequis(V.nationalite) === true) {
+      L = L.concat([
+        { id: "titreTravail", nom: "Titre autorisant à travailler", t: "text", large: true,
+          sous: "sa nature : carte de séjour pluriannuelle, titre de séjour salarié, autorisation de travail" },
+        { id: "titreNumero", nom: "Numéro du titre", t: "text" },
+        { id: "titreFin", nom: "Valable jusqu'au", t: "date",
+          sous: "L. 5221-8 : l'entreprise s'assure de son existence auprès de la préfecture" },
+      ]);
+    }
     if (NATURE === "cdd") L = CHAMPS_CDD.concat(L);
     if (PARTIEL) L = L.concat(CHAMPS_PARTIEL);
     if (PARTIEL) L.push({ id: "motifPartiel", nom: "Motif de la demande du salarié", t: "text",

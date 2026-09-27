@@ -543,6 +543,47 @@
     return r ? r[1].trim() : "";
   }
 
+  /* Vrai quand la nationalité saisie appelle un titre de travail, faux quand
+     elle en dispense, et faux aussi quand elle n'est pas reconnue : on
+     n'écrit pas une formalité sur une supposition. La liste est celle de
+     listes-valeurs.js, tirée de R. 5221-2. */
+  function etrangerHorsUe(v) {
+    if (!v || !window.ListesValeurs || !window.ListesValeurs.titreDeTravailRequis) return false;
+    return window.ListesValeurs.titreDeTravailRequis(v.nationalite) === true;
+  }
+
+  /* Le calcul de L. 1242-10, en jours. La durée du contrat se prend sur le
+     terme quand il est daté, sur la durée minimale sinon. */
+  function essaiCdd(v) {
+    var jours = null, base = "";
+    if (v && !v.sansTerme && net(v.entree) && net(v.terme)) {
+      var a = new Date(net(v.entree) + "T12:00:00"), b = new Date(net(v.terme) + "T12:00:00");
+      if (!isNaN(a) && !isNaN(b) && b > a) {
+        jours = Math.round((b - a) / 86400000) + 1;
+        base = "la durée initiale du contrat, du " + dateFr(v.entree) + " au " + dateFr(v.terme);
+      }
+    } else if (v && v.sansTerme && net(v.duree)) {
+      var m = String(net(v.duree)).match(/(\d+(?:[.,]\d+)?)\s*(mois|semaines?|jours?)/i);
+      if (m) {
+        var n = parseFloat(m[1].replace(",", "."));
+        var u = m[2].toLowerCase();
+        jours = u.indexOf("mois") === 0 ? Math.round(n * 30.4375)
+          : (u.indexOf("semaine") === 0 ? Math.round(n * 7) : Math.round(n));
+        base = "la durée minimale de " + net(v.duree);
+      }
+    }
+    if (jours === null) return { dit: "[DURÉE]", base: "" };
+    var semaines = Math.floor(jours / 7);
+    var plafond = jours <= 183 ? 14 : 30;        /* deux semaines, ou un mois */
+    var essai = Math.min(semaines, plafond);
+    if (essai < 1) return { dit: "un jour", base: base };
+    var dit = essai >= 30 ? "un mois"
+      : (essai === 14 ? "deux semaines"
+      : (essai % 7 === 0 ? (essai / 7) + " semaine" + (essai > 7 ? "s" : "")
+      : essai + " jours"));
+    return { dit: dit, base: base };
+  }
+
   function dejaEnPoste(v) {
     var e = v && v.entree ? new Date(String(v.entree) + "T12:00:00") : null;
     if (!e || isNaN(e)) return false;
@@ -690,6 +731,25 @@
       "instructions qui lui sont données" +
       (p.roulant ? ", dans le respect de la réglementation sociale européenne applicable au " +
         "transport routier" : "") + "." });
+
+    /* LE TITRE QUI AUTORISE À TRAVAILLER.
+       Rien, dans le contrat, ne parlait du titre d'un salarié étranger.
+       L. 5221-8 met la vérification à la charge de l'employeur ; la clause dit
+       le titre présenté, son numéro et son échéance, et ce que le salarié doit
+       signaler. Relevé le 27 septembre 2026. */
+    if (etrangerHorsUe(v)) {
+      art("Titre autorisant à exercer une activité salariée");
+      B.push({ k: "p", t: "Le salarié a présenté, avant son entrée en fonction, le titre " +
+        "l'autorisant à exercer une activité salariée en France : " +
+        (net(v.titreTravail) || "[nature du titre]") + ", numéro " +
+        (net(v.titreNumero) || "[numéro]") + ", valable jusqu'au " +
+        (net(v.titreFin) ? dateFr(v.titreFin) : "[date de fin de validité]") + "." });
+      B.push({ k: "p", t: "L'entreprise s'est assurée de l'existence de ce titre auprès de " +
+        "l'administration territorialement compétente, conformément à l'article L. 5221-8 du code " +
+        "du travail. Copie du titre et de cette vérification est conservée au dossier." });
+      B.push({ k: "p", t: "Le salarié s'engage à présenter le titre renouvelé avant son échéance, " +
+        "et à informer l'entreprise sans délai de toute décision qui en affecterait la validité." });
+    }
 
     /* ── 3 · titres de conduite ─────────────────────────────────────── */
     if (p.conduite) {
@@ -899,10 +959,29 @@
         "une relation de travail en cours depuis le " + dateFr(v.entree) + ", et l'essai ne peut " +
         "porter que sur un engagement nouveau." });
     } else if (cdd) {
-      B.push({ k: "p", t: "Le contrat comporte une période d'essai de " +
-        (net(v.essai) || "[DURÉE]") + ", calculée à raison d'un jour par semaine de contrat, dans la " +
-        "limite de deux semaines lorsque la durée initiale est au plus égale à six mois, et d'un " +
-        "mois au-delà." });
+      /* L'ESSAI D'UN CONTRAT À DURÉE DÉTERMINÉE SE CALCULE, IL NE SE DEMANDE PAS.
+
+         Relevé le 27 septembre 2026 : le contrat sortait « une période d'essai
+         de [DURÉE] ». L. 1242-10 (LEGIARTI000006901204, deux lectures
+         concordantes au relais le 27 septembre 2026) donne la règle entière :
+         « cette période d'essai ne peut excéder une durée calculée à raison
+         d'un jour par semaine, dans la limite de deux semaines lorsque la
+         durée initialement prévue au contrat est au plus égale à six mois et
+         d'un mois dans les autres cas. Lorsque le contrat ne comporte pas de
+         terme précis, la période d'essai est calculée par rapport à la durée
+         minimale du contrat. » Le même article réserve les usages et les
+         stipulations conventionnelles plus courtes : le contrat le dit. */
+      var ess = essaiCdd(v);
+      var duree = net(v.essai) || ess.dit;
+      /* « de un mois » ne s'écrit pas : l'article s'élide. */
+      B.push({ k: "p", t: "Le contrat comporte une période d'essai " +
+        (/^[aeiouyâàéèêîïôöûü]/i.test(duree) ? "d'" : "de ") + duree +
+        ", calculée à raison d'un jour par semaine de contrat, dans la limite de deux semaines " +
+        "lorsque la durée initiale est au plus égale à six mois, et d'un mois au-delà " +
+        "(L. 1242-10)." +
+        (ess.base ? " Elle est ici calculée sur " + ess.base + "." : "") });
+      B.push({ k: "p", t: "Des usages ou des stipulations conventionnelles prévoyant une durée " +
+        "moindre s'appliquent de plein droit et l'emportent sur la durée ci-dessus." });
     } else {
       B.push({ k: "p", t: "Le contrat comporte une période d'essai de " +
         (net(v.essai) || (p.annexe === "II" ? CCN.annexeII.essai
@@ -1231,6 +1310,31 @@
       L.push({ quoi: "Demande écrite et motivée du salarié, si la durée est inférieure à 24 heures",
         quand: "avant la signature", ou: "annexée au contrat",
         loi: "L. 3123-7 du code du travail" });
+    }
+    /* LE TITRE DE TRAVAIL D'UN SALARIÉ ÉTRANGER, QUE RIEN NE RAPPELAIT.
+
+       Relevé le 27 septembre 2026 : rien, dans le contrat ni dans les
+       formalités, ne parlait du titre autorisant un étranger à travailler.
+       L. 5221-8 (LEGIARTI000018766932, deux lectures concordantes au relais le
+       27 septembre 2026) : « L'employeur s'assure auprès des administrations
+       territorialement compétentes de l'existence du titre autorisant
+       l'étranger à exercer une activité salariée en France, sauf si cet
+       étranger est inscrit sur la liste des demandeurs d'emploi tenue par
+       l'institution mentionnée à l'article L. 5312-1. »
+
+       La vérification se demande avant l'embauche, et l'échéance du titre se
+       suit comme celle d'un permis : c'est la date qui manque le plus souvent
+       au dossier. */
+    if (etrangerHorsUe(v)) {
+      L.push({ quoi: "Vérification du titre autorisant à travailler, auprès de la préfecture",
+        quand: regularise ? "au dossier, et à chaque renouvellement du titre"
+          : "avant l'embauche, et conservée au dossier",
+        ou: "préfecture du lieu d'embauche",
+        loi: "L. 5221-8 du code du travail" });
+      L.push({ quoi: "Relever le numéro du titre et sa date de fin de validité",
+        quand: "à l'embauche, puis à chaque renouvellement",
+        ou: "au registre unique du personnel",
+        loi: "D. 1221-23 du code du travail" });
     }
     return L;
   }
