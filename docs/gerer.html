@@ -217,6 +217,7 @@
     <div id="d-feuille"></div>
     <div class="barre">
       <button type="button" id="btn-word">Télécharger en Word</button>
+      <p class="doux" id="d-bloque" hidden></p>
       <button type="button" class="second" id="btn-imprimer">Imprimer</button>
       <!-- LE CONTRAT ÉCRIT INSCRIT LE SALARIÉ. Un CDI produit ici ne
            remontait nulle part : quatre-vingt-cinq lignes au registre avant,
@@ -836,6 +837,21 @@
     if (jours === 90) return "trois mois";
     return jours + " jours";
   }
+  /* UN PRÉAVIS DE DEUX MOIS SE COMPTE EN MOIS, DE QUANTIÈME À QUANTIÈME.
+     Ajouter soixante jours faisait finir le 8 décembre un préavis parti le
+     9 octobre, qui s'achève le 9 décembre. Relevé le 26 septembre 2026. */
+  function finPreavis(depart, jours) {
+    if (!depart || !jours) return null;
+    if (jours % 30 === 0) return moisPlus(depart, jours / 30);
+    return jour(depart, jours);
+  }
+  function moisPlus(d, n) {
+    var x = new Date(d.getTime()), j = x.getDate();
+    x.setDate(1); x.setMonth(x.getMonth() + n);
+    var dernier = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate();
+    x.setDate(Math.min(j, dernier));
+    return x;
+  }
   function dePreavis(jours) {
     var m = preavisMot(jours);
     return (/^[aeiouyâêîôûéèh]/i.test(m) ? "d'" : "de ") + m;
@@ -1434,9 +1450,17 @@
     avertissement: { nom: "un avertissement", entretien: false, objet: "notification d'un avertissement" },
     miseapied: { nom: "une mise à pied disciplinaire", entretien: true, objet: "notification d'une mise à pied disciplinaire" }
   };
+  /* LA CIVILITÉ EST AU REGISTRE : LES LETTRES N'ONT PLUS À ÉCRIRE
+     « MADAME, MONSIEUR » À QUELQU'UN QU'ON CONNAÎT. Le registre porte le sexe
+     du salarié ; les courriers l'ignoraient et s'adressaient à tout le monde à
+     la fois. Relevé le 26 septembre 2026. */
   function civiliteDe(nom) {
     if (/^\s*madame/i.test(nom)) return "Madame";
     if (/^\s*monsieur/i.test(nom)) return "Monsieur";
+    var s = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nom) : null;
+    var x = s ? String(s.sexe || s.civ || "").trim().toLowerCase() : "";
+    if (/^f/.test(x)) return "Madame";
+    if (/^(m|h)/.test(x)) return "Monsieur";
     return "Madame, Monsieur";
   }
   /* L'adresse vient de la fiche du salarié, au registre du personnel, où elle
@@ -1446,14 +1470,14 @@
     var a = (window.ListesAuto && window.ListesAuto.adresse) ? window.ListesAuto.adresse(nomS) : "";
     return a || "[adresse du salarié]";
   }
-  function enTete(b, nomS, objet, envoi) {
+  function enTete(b, nomS, objet, envoi, le) {
     b.push({ k: "p", t: profil.denomination });
     if (profil.adresse) b.push({ k: "p", t: profil.adresse });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: nomS });
     b.push({ k: "p", t: adresseDe(nomS) });
     b.push({ k: "vide", t: "" });
-    b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
+    b.push({ k: "p", t: ville() + ", le " + dateFr(le || AUJOURDHUI) });
     b.push({ k: "p", t: envoi });
     b.push({ k: "p", t: "Objet : " + objet });
     b.push({ k: "vide", t: "" });
@@ -1645,6 +1669,14 @@
       f: "deux mois à compter du jour où vous avez eu connaissance des faits" + (dm.conn ? ", le " + dateFr(dm.conn) : "") + " (" + ref(["L1332-4"]) + ")",
       c: dm.prescrit ? "tard" : "" };
   }
+  /* Ce qui interdit de produire la lettre, dit en une phrase, ou rien. */
+  function blocageDe(dm, m) {
+    if (dm && dm.prescrit) return "les faits sont prescrits : aucune sanction ne peut plus être " +
+      "prononcée sur ces seuls faits (L. 1332-4)";
+    if (m && m.length) return m.length === 1 ? "une information manque encore"
+      : m.length + " informations manquent encore";
+    return "";
+  }
   function alertePrescrit(dm) {
     return "Le délai de deux mois est écoulé depuis le " + dateFr(dm.limite) + " : les poursuites disciplinaires ne peuvent plus être engagées sur ces seuls faits (" + ref(["L1332-4"]) + "), sauf poursuites pénales exercées dans le même délai.";
   }
@@ -1695,7 +1727,11 @@
     if (m.length) alertes.push(alerteManques(m, S.entretien ? "convocation" : "lettre"));
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     if (S.entretien) { var hb = alerteHorsTravail(v); if (hb) alertes.push(hb); }
-    return { blocs: b, dates: dates, alertes: alertes,
+    /* UNE LETTRE QU'ON NE PEUT PAS ENVOYER NE SE TÉLÉCHARGE PAS. L'écran
+       affichait « PRESCRIT » en rouge, ou « 2 informations manquent », et le
+       bouton Word produisait quand même le fichier, avec ses crochets. Relevé
+       le 26 septembre 2026. */
+    return { blocs: b, dates: dates, alertes: alertes, bloque: blocageDe(dm, m),
       loi: ["L1332-1", "L1332-2", "L1332-4", "L1332-5", "R1332-1"] };
   }
 
@@ -1752,15 +1788,42 @@
     b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (" + ref(["L1232-2"]) + ")." });
     b.push({ k: "saut", t: "" });
 
+    /* UNE LETTRE NE SE DATE PAS DU JOUR OÙ ON L'ÉCRIT, MAIS DU JOUR OÙ ELLE
+       PEUT PARTIR. Elle était datée du jour même, celui de la convocation,
+       alors qu'elle relate un entretien à venir, et son préavis se comptait
+       depuis ce même jour. « Elle ne peut être expédiée moins de deux jours
+       ouvrables après la date prévue de l'entretien préalable » (L. 1232-6,
+       LEGIARTI000036762096, lu à la source le 26 septembre 2026, deux lectures
+       concordantes), et « la date de présentation de la lettre recommandée
+       notifiant le licenciement au salarié fixe le point de départ du préavis »
+       (L. 1234-3, LEGIARTI000006901114, même lecture). Relevé le 26 septembre
+       2026. */
+    var eDateLic = dateDe(v.eDate);
+    var envoiTot = eDateLic ? apresJoursOuvrables(eDateLic, 2) : null;
     b.push({ k: "t1", t: "Notification de licenciement" });
-    enTete(b, nomS, "notification de votre licenciement", "Lettre recommandée avec avis de réception");
+    enTete(b, nomS, "notification de votre licenciement", "Lettre recommandée avec avis de réception", envoiTot);
+    if (envoiTot)
+      b.push({ k: "note", t: "Cette lettre ne peut être expédiée avant le " + dateFr(envoiTot) +
+        ", soit deux jours ouvrables après la date prévue de l'entretien (" + ref(["L1232-6"]) +
+        "). Elle est datée de ce jour : si vous l'envoyez plus tard, reportez la date." });
     b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + ". Les explications que vous nous avez données ne nous ont pas permis de modifier notre appréciation de la situation." });
-    b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement pour faute, pour les motifs suivants" + (dm.conn ? ", dont nous avons eu connaissance le " + dateFr(dm.conn) : "") + "." });
+    b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement pour " +
+      (v.gravite === "grave" ? "faute grave" : (v.gravite === "lourde" ? "faute lourde" : "faute")) +
+      ", pour les motifs suivants" + (dm.conn ? ", dont nous avons eu connaissance le " + dateFr(dm.conn) : "") + "." });
     griefsBlocs(b, v.griefs, (v.faits ? "Le " + dateFr(dateDe(v.faits)) + ", " : "") + "[énoncez ici les motifs, datés et circonstanciés ; ce sont eux qui fixent les limites du litige : ce qui n'y figure pas ne pourra pas être invoqué ensuite]");
     /* Le préavis et l'indemnité se calculent dès que l'entrée et le salaire
        sont là ; sinon la phrase reste ouverte, et dit ce qu'il manque. */
     var grave = v.gravite === "grave" || v.gravite === "lourde";
-    var moisAnc = dateDe(v.entree) ? moisAnnees(dateDe(v.entree), AUJOURDHUI) : null;
+    /* L'ancienneté s'arrête à la fin du préavis, pas au jour où l'on écrit :
+       c'est elle qui commande la durée du préavis et l'indemnité. Faute de
+       connaître la date de présentation, on retient la plus proche possible,
+       celle du premier jour où la lettre peut partir. */
+    var finTot = null;
+    if (!grave && dateDe(v.entree) && envoiTot) {
+      var pvTot = preavisDu(v.statut || "employe", moisAnnees(dateDe(v.entree), envoiTot), false);
+      if (pvTot.jours) finTot = finPreavis(envoiTot, pvTot.jours);
+    }
+    var moisAnc = dateDe(v.entree) ? moisAnnees(dateDe(v.entree), finTot || envoiTot || AUJOURDHUI) : null;
     var salRef = Number(v.salaireRef) > 0 ? Number(v.salaireRef) : 0;
     if (grave) {
       b.push({ k: "p", t: "La gravité des faits rend impossible votre maintien dans l'entreprise : " +
@@ -1769,12 +1832,16 @@
         "compensatrice de congés payés." });
     } else if (moisAnc !== null) {
       var pv = preavisDu(v.statut || "employe", moisAnc, false);
-      var finPreavis = pv.jours ? jour(AUJOURDHUI, pv.jours) : null;
+      var finPv = pv.jours && envoiTot ? finPreavis(envoiTot, pv.jours) : null;
       b.push({ k: "p", t: "Votre préavis, d'une durée " + dePreavis(pv.jours) + ", débutera à la " +
-        "date de première présentation de cette lettre et s'achèvera le " +
-        (finPreavis ? dateFr(finPreavis) : "[date]") + ", " + pv.source + ". Si nous vous " +
+        "date de première présentation de cette lettre (" + ref(["L1234-3"]) + ") et s'achèvera " +
+        "à l'issue de cette durée, " + pv.source + ". Si nous vous " +
         "dispensons de l'exécuter, cette dispense ne réduira ni votre rémunération ni la date à " +
         "laquelle votre contrat prend fin (" + ref(["L1234-5"]) + ")." });
+      if (finPv)
+        b.push({ k: "note", t: "Cette lettre ne pouvant partir avant le " + dateFr(envoiTot) +
+          ", le préavis ne peut s'achever avant le " + dateFr(finPv) + ". La date exacte " +
+          "dépend du jour de première présentation, que l'avis de réception établira." });
       var ind = indemniteDe(moisAnc, salRef, false);
       if (salRef > 0 && ind.montant > 0) {
         b.push({ k: "p", t: "Vous percevrez l'indemnité de licenciement de l'article " +
@@ -1825,7 +1892,7 @@
       "suivant. Reportez la date réelle de l'avis de réception avant de tenir l'entretien.");
     if (dm.prescrit) alertes.push(alertePrescrit(dm));
     alertes.push("Vérifiez avant l'envoi qu'aucune protection ne s'applique : représentant du personnel (autorisation de l'inspection du travail), maternité (" + ref(["L1225-4"]) + "), accident du travail (" + ref(["L1226-9"]) + ").");
-    return { blocs: b, dates: dates, alertes: alertes,
+    return { blocs: b, dates: dates, alertes: alertes, bloque: blocageDe(dm, m),
       loi: ["L1332-4", "L1232-1", "L1232-2", "L1232-3", "L1232-4", "L1232-6", "L1332-2", "R1232-1", "R1232-13", "L1235-2", "L1234-1", "L1234-3", "L1234-5", "L1234-9", "R1234-1", "R1234-2", "R1234-4", "L1234-19", "L1234-20", "R1234-9", "L1225-4", "L1226-9"] };
   }
 
@@ -2866,7 +2933,7 @@
     alertes.push("La mise à pied conservatoire ne vaut que si l'écartement immédiat était " +
       "indispensable, et elle se paie si la sanction finale n'est pas un licenciement pour " +
       "faute grave ou lourde.");
-    return { blocs: b, dates: dates, alertes: alertes,
+    return { blocs: b, dates: dates, alertes: alertes, bloque: blocageDe(dm, m),
       loi: ["L1331-1", "L1332-1", "L1332-2", "L1332-3", "L1332-4", "R1332-1"] };
   }
 
@@ -3646,8 +3713,13 @@
       $("d-feuille").innerHTML = r.refus ? "" : feuilleHtml(avecEnTete(r.blocs));
       $("d-barre-tableau").hidden = r.refus || !window.FeuilleDoc.tableaux(r.blocs || []).length;
     }
-    $("btn-word").disabled = !!r.refus;
-    $("btn-imprimer").disabled = !!r.refus;
+    $("btn-word").disabled = !!r.refus || !!r.bloque;
+    $("btn-imprimer").disabled = !!r.refus || !!r.bloque;
+    var db = $("d-bloque");
+    if (db) {
+      db.hidden = !r.bloque;
+      db.textContent = r.bloque ? "Le téléchargement est fermé tant que " + r.bloque + "." : "";
+    }
     var embauche = !!DOCS_EMBAUCHE[ACTIF] && !r.refus && !!window.EcheancesSalaries;
     $("btn-inscrire").hidden = !embauche;
     if (!embauche) $("d-inscrit").hidden = true;
