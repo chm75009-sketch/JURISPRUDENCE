@@ -241,25 +241,51 @@ Le montant de 136,464.90€ reflète l'intégration des deux arrêts Cour d'appe
 
 ### ⚠ Points à clarifier (critique pour CNAV)
 
-1. **Montant 1995 anormal** : 136,464.90€ vs plafond 23,772.90€
-   - Dépassement massif : +112,692€ au-delà du plafond
-   - Question : CNAV a-t-elle le droit d'intégrer les arriérés AU-DELÀ du plafond?
-   - Chaîne de valeur :
-     * 10,719€ (salaire GERME 1995 original)
-     * 27,548€ (juin 2023, valeur revalorisée)
-     * 129,127€ (mai 2023, avec arriérés partiels)
-     * 136,464€ (septembre 2025, avec arriérés supplémentaires)
-   - **ACTION REQUISE** : CNAV doit expliquer ligne par ligne comment elle passe de 10,719€ à 136,464€
+**DÉCOUVERTE CRUCIALE : Ventilation détaillée des arriérés GERME**
 
-2. **Taux d'actualisation** : Non documentés
-   - Comment le passage de 27,548€ (juin 2023) à 136,464€ (sept 2025) a-t-il été calculé?
-   - Taux annuel appliqué?
-   - Ventilation par année des arriérés (1990-1996) ou globalisation à 1995?
+Arrêt Cour d'appel 26 juin 1997 - Ventilation en euros par année:
+- 1990 : 3,572.40€ arriérés → Total brut 8,621.51€ → Plafonné : 8,621.51€
+- 1991 : 11,188.07€ arriérés → Total brut 28,266.02€ → Plafonné : 21,001.38€
+- 1992 : 10,341.23€ arriérés → Total brut 26,169.86€ → Plafonné : 21,970.95€
+- 1993 : 10,905.56€ arriérés → Total brut 26,068.44€ → Plafonné : 22,839.91€
+- 1994 : 10,931.14€ arriérés → Total brut 32,243.51€ → Plafonné : 23,342.99€
+- 1995 : 21,411.25€ arriérés → Total brut 32,130.40€ → Plafonné : 23,772.90€
+- **TOTAL NOMINAL APRÈS PLAFONNEMENT : 121,549.64€**
 
-3. **ISCIO 1994 et TBW 1997** : Intégration incertaine
-   - Montants faibles mais à clarifier
-   - 1994 affiché à 47,285.65€ (demande initiale = 3,907€ delta)
-   - 1997 affiché à 10,418.30€ (demande initiale = 2,091€ manquant)
+**LE PROBLÈME : Multiplicateur mystérieux x5.740**
+
+| Montant | Valeur | Source |
+|---------|--------|--------|
+| Nominal plafonné 1995 | 23,772.90€ | Après plafond CNAV |
+| Affiché en sept 2025 | 136,464.90€ | Évaluation CNAV |
+| **Multiplicateur** | **5.740x** | 136,464.90 / 23,772.90 |
+
+**LES 3 QUESTIONS À POSER À CNAV EN CONCILIATION :**
+
+1️⃣ **Taux d'actualisation** : Quel est le taux exact (1995 → 2025)?
+   - Passer de 23,772.90€ à 136,464.90€ = revalorisation de 5.740x sur 30 ans
+   - CNAV doit fournir : taux par année ou taux moyen utilisé
+   - Justification légale : Article Code sécurité sociale?
+   - Trace du calcul : Excel / justification ?
+
+2️⃣ **Plafonnement** : Chaque année a-t-elle été plafonnée séparément?
+   - ✓ CORRECT : 1990 à plafond 1990, 1991 à plafond 1991, etc.
+   - ✗ INCORRECT : Tous les arriérés additionnés à 1995, puis plafonné
+   - Confirmation requise avec détail année par année
+
+3️⃣ **Justification légale** : Quel article permet ce calcul?
+   - Code de sécurité sociale pour arriérés jugés?
+   - Exception pour salaires pré-2005?
+   - Traitement des arriérés au-delà du plafond nominal?
+
+**IMPACT SI CNAV NE JUSTIFIE PAS :**
+
+Recalcul conservateur possible:
+- Total nominal plafonné (1990-1995) : 121,549.64€
+- Après revalorisation identique : À recalculer mais MOINS de 136,464.90€
+- Revenu de base (moyenne 25 ans) : Diminuerait
+- Retraite mensuelle : Diminuerait proportionnellement
+- → Demander nouvelle évaluation
 
 ### Position impartiale du juge
 
@@ -283,13 +309,39 @@ Le montant de 136,464.90€ reflète l'intégration des deux arrêts Cour d'appe
 - + Intérêts légaux 6% ≈ 2,000€
 - **Total minimum : ~13,080€**
 
-### PROCHAINES ÉTAPES
+### PROCHAINES ÉTAPES POUR LA CONCILIATION
 
-1. **Conciliation (8 octobre 2026)** : Exiger la clarification de 1995 et taux d'actualisation
-2. **CNAV doit produire** :
-   - Calcul détaillé du montant 1995 (27,548€ → 136,464€)
-   - Taux d'actualisation appliqués par année
-   - Ventilation précise des arriérés GERME par année (1990-1996)
-   - Justification légale de dépasser le plafond CNAV
-3. **Confirmer le versement** des 13,080€ minimum + intérêts rétroactifs
-4. **Clarifier ISCIO 1994 et TBW 1997** si les montants supplémentaires peuvent être validés
+**Priorité 1 : Exiger la justification du montant 1995 = 136,464.90€**
+
+CNAV doit produire EN CONCILIATION :
+1. Calcul détaillé de l'actualisation (23,772.90€ → 136,464.90€)
+   - Taux appliqué par année (1995-2025)?
+   - Formule mathématique ou Excel?
+   - Références légales (article Code sécurité sociale)?
+
+2. Ventilation complète des arriérés par année (1990-1996)
+   - Confirmation que 1990-1995 ont été plafonnés séparément
+   - Ou explication du traitement retenu si exception
+
+3. Justification de dépasser le plafond CNAV nominal avec revalorisation
+   - Code de sécurité sociale : quel article?
+   - Jurisprudence ou circulaire CNAV applicable?
+
+**Si CNAV ne peut pas justifier :**
+- Demander recalcul sur base conservatrice (121,549.64€ nominal × taux revalorisation identique)
+- Impact sur revenu base et retraite finale
+
+**Priorité 2 : Montant certain à réclamer**
+- 11,080.53€ (différence mai 2023 - sept 2025)
+- + Intérêts légaux 6% ≈ 2,000€
+- **Total minimum incontestable : ~13,080€**
+- À verser immédiatement
+
+**Priorité 3 : Clarifications secondaires**
+- ISCIO 1994 et TBW 1997 (montants faibles mais à confirmer)
+- Vérifier si totalement intégrés dans 1994/1997 de l'évaluation
+
+**Stratégie de négociation :**
+1. Ouvrir sur le montant certain (13,080€ + intérêts)
+2. Demander explication du multiplicateur 5.740x
+3. Si CNAV ne justifie pas → demander recalcul + différence plus importante
