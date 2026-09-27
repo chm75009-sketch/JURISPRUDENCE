@@ -393,6 +393,14 @@
     var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
     return m ? m[1].trim() : "[ville]";
   }
+  /* L'ÉLISION : « la mairie d'Argenteuil », et non « de Argenteuil ». Le nom de
+     la commune vient de la fiche, et la préposition doit s'y accorder. Relevé
+     le 27 septembre 2026. */
+  function de(mot) {
+    var s = String(mot == null ? "" : mot).trim();
+    if (!s) return "";
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
 
   /* ═══════════════════════════════════════════════════════ dates et calculs */
   function paques(an) {
@@ -798,7 +806,7 @@
       ? "celui que fixe le présent accord, soit [périmètre], qui ne peut être inférieur à la zone " +
         "d'emplois dans laquelle est situé l'établissement concerné."
       : "la zone d'emplois dans laquelle est situé l'établissement concerné par les suppressions " +
-        "d'emplois, soit la zone d'emplois de " + ville() + ".") });
+        "d'emplois, soit la zone d'emplois " + de(ville()) + ".") });
     b.push({ k: "note", t: "Aucun critère ne peut être écarté, et la situation sociale rendant la " +
       "réinsertion difficile ne se limite pas au handicap reconnu : " + ARRETS.criteres.ref + ". " +
       "Les catégories professionnelles et la pondération retenue sont contrôlées par " +

@@ -176,9 +176,19 @@
        de plus, c'était la première étape. La ligne le dit, plutôt que de
        laisser croire à un document qui viendrait tout seul. Relevé le
        26 septembre 2026. */
+    /* UNE QUESTION QUI N'EST PAS « AVEZ-VOUS CE DOCUMENT ? ».
+
+       Toutes les autres lignes demandent si une pièce existe, et « non »
+       ouvre sa rédaction. Celle-ci demande si un licenciement est envisagé :
+       « non » veut dire qu'il n'y a rien à faire, et cela ouvrait pourtant la
+       qualification du motif. Relevé le 27 septembre 2026. « Oui » ouvre
+       maintenant la première étape, qui est de qualifier le motif et de
+       compter les licenciements envisagés sur trente jours ; « non » ne mène
+       nulle part et se note, comme les lignes sans page de contrôle. */
     { cle: "pse",        nom: "Un licenciement économique est-il envisagé ?", seuil: 50,
-      dit: "la réponse commence par la qualification du motif économique",
-      non: "audit.html", oui: "audit-pse.html" },
+      projet: true,
+      dit: "« oui » ouvre la qualification du motif et le décompte sur trente jours, qui décide du régime",
+      oui: "audit.html" },
     /* La commission santé-sécurité n'obéit pas au seul effectif : L. 2315-36
        (LEGIARTI000035626455, deux lectures concordantes le 15 septembre 2026)
        la crée dans les entreprises d'au moins trois cents salariés, dans les
@@ -219,7 +229,9 @@
          annuelle ; sans comité, pas de commission. */
       var empeche = typeof l.sans === "function" ? l.sans(profil) : "";
       var du = (eff >= l.seuil || !!l.sousSeuil) && !empeche;
-      var vu = du && !l.oui && !!vus[l.cle];
+      /* Une ligne « notée » : soit une pièce qu'aucune page ne contrôle
+         encore, soit un projet auquel on a répondu non. */
+      var vu = du && (!l.oui || l.projet) && !!vus[l.cle];
       var ligne = document.createElement("div");
       ligne.className = "ligne" + (du ? "" : " pasdu") + (vu ? " fait" : "");
       ligne.setAttribute("data-cle", l.cle);
@@ -245,7 +257,7 @@
         var b = document.createElement("button");
         b.type = "button";
         b.className = "vu";
-        b.textContent = "vu";
+        b.textContent = l.projet ? "aucun projet" : "vu";
         b.title = "Annuler";
         b.addEventListener("click", function () {
           var v = lireVus();
@@ -275,11 +287,28 @@
           });
           ligne.appendChild(o);
         }
-        var n = document.createElement("a");
-        n.className = "non";
-        n.href = l.non;
-        n.textContent = "Non";
-        ligne.appendChild(n);
+        if (l.projet) {
+          /* « Non » sur un projet : rien n'est dû, et la réponse se note pour
+             que la ligne ne revienne pas à chaque passage. */
+          var rien = document.createElement("button");
+          rien.type = "button";
+          rien.className = "non";
+          rien.textContent = "Non";
+          rien.title = "Aucun licenciement envisagé : rien à faire, la réponse est notée.";
+          rien.addEventListener("click", function () {
+            var v = lireVus();
+            v[l.cle] = new Date().toISOString().slice(0, 10);
+            ecrireVus(v);
+            rendre();
+          });
+          ligne.appendChild(rien);
+        } else {
+          var n = document.createElement("a");
+          n.className = "non";
+          n.href = l.non;
+          n.textContent = "Non";
+          ligne.appendChild(n);
+        }
       }
       liste.appendChild(ligne);
     });

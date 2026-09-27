@@ -72,6 +72,16 @@
   .question .deux button{min-width:150px;font-size:17px;padding:16px 26px}
   .question .fiche{margin:var(--e6) 0 0;font-size:var(--t3);color:var(--texte-2)}
   .question .fiche a{color:var(--accent)}
+  /* Le décompte, en tête : c'est la première chose qu'on saisit, avant de
+     savoir quelle procédure s'applique. */
+  .question .ch-nombre{display:block;max-width:420px;margin:0 auto var(--e4);text-align:left;
+    font:600 var(--t3)/1.35 system-ui;color:var(--encre)}
+  .question .ch-nombre input{display:block;width:100%;margin:6px 0 0;font-size:19px;padding:12px 14px;
+    min-height:48px;border:1px solid var(--filet);border-radius:var(--r1);background:var(--fond);color:var(--encre)}
+  .question .ch-nombre .sous{display:block;margin:6px 0 0;font:400 var(--t1)/1.5 system-ui;color:var(--texte-2)}
+  .question #q-regime{max-width:560px;margin:0 auto var(--e5);text-align:left}
+  .question #q-regime a{color:var(--accent);display:inline-block;margin-top:6px;font-weight:600}
+  .question h2{font:600 clamp(19px,2.6vw,23px)/1.3 system-ui;margin:0 0 var(--e3)}
 
   /* Le document seul à l'écran : les onglets, deux ou trois champs en tête,
      la feuille, la barre, le texte de loi replié. */
@@ -159,7 +169,13 @@
 
   <!-- ═══════════════════ LA QUESTION, ET RIEN D'AUTRE ═══════════════════ -->
   <section class="question" id="ecran-question">
-    <h1 id="q-titre">Avez-vous engagé la procédure de licenciement pour motif économique ?</h1>
+    <h1 id="q-titre">Combien de licenciements envisagez-vous sur une même période de trente jours ?</h1>
+    <label class="ch-nombre" for="q-nombre">Nombre de salariés concernés
+      <input type="number" id="q-nombre" min="1" step="1" value="1" inputmode="numeric">
+      <span class="sous">C'est ce nombre qui décide du régime : moins de dix, la procédure ci-dessous ; dix ou plus dans une entreprise d'au moins cinquante salariés, un plan de sauvegarde de l'emploi (L. 1233-61).</span>
+    </label>
+    <div id="q-regime"></div>
+    <h2 id="q-titre2">Avez-vous engagé la procédure ?</h2>
     <div class="deux" id="q-deux">
       <button type="button" class="second" id="rep-oui">Oui</button>
       <button type="button" id="rep-non">Non</button>
@@ -307,6 +323,14 @@
   function ville() {
     var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
     return m ? m[1].trim() : "[ville]";
+  }
+  /* L'ÉLISION : « la mairie d'Argenteuil », et non « de Argenteuil ». Le nom de
+     la commune vient de la fiche, et la préposition doit s'y accorder. Relevé
+     le 27 septembre 2026. */
+  function de(mot) {
+    var s = String(mot == null ? "" : mot).trim();
+    if (!s) return "";
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
   function conventionPhrase() {
     var s = String(profil.conventionCollective || profil.convention || profil.idcc || "").trim();
@@ -640,17 +664,42 @@
       "le " + dateFrJour(d.entretien) + " à " + heureFr(d.heure) + ", " + d.lieu + "." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision " +
       "envisagée et recueillerons vos explications." });
-    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant " +
-      "au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
-      "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée " +
-      /* D. 1232-5 (LEGIARTI000018537714, lu à la source le 26 septembre 2026,
-         deux lectures concordantes) : la liste « est tenue à la disposition
-         des salariés dans chaque section d'inspection du travail et dans
-         chaque mairie ». La lettre renvoyait à la direction départementale,
-         que le texte ne désigne pas. */
-      "par l'autorité administrative ; cette liste est tenue à votre disposition à la section " +
-      "d'inspection du travail dont relève l'établissement et à la mairie de " +
-      ville() + " (D. 1232-5)." });
+    /* LE CONSEILLER DU SALARIÉ N'EST PAS DE TOUS LES ENTRETIENS.
+
+       L. 1233-13 (LEGIARTI000006901025, deux lectures concordantes au relais le
+       27 septembre 2026) : le salarié peut se faire assister par une personne du
+       personnel ; « lorsqu'il n'y a pas d'institutions représentatives du
+       personnel dans l'entreprise », il peut choisir à la place un conseiller du
+       salarié sur la liste de l'autorité administrative. Avec un comité élu, ce
+       second choix n'existe pas, et la lettre l'offrait quand même, avec la
+       phrase de repli « en l'absence d'institution représentative » qui laissait
+       le salarié trancher lui-même. La fiche dit lequel des deux cas est le
+       bon. Relevé le 27 septembre 2026.
+
+       D. 1232-5 (LEGIARTI000018537714, lu à la source le 26 septembre 2026,
+       deux lectures concordantes) : la liste « est tenue à la disposition des
+       salariés dans chaque section d'inspection du travail et dans chaque
+       mairie ». La lettre renvoyait à la direction départementale, que le texte
+       ne désigne pas. */
+    var rep = String(profil.cseExiste || "").trim().toLowerCase();
+    if (rep.indexOf("oui") === 0) {
+      b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix " +
+        "appartenant au personnel de l'entreprise (L. 1233-13)." });
+    } else if (rep.indexOf("non") === 0) {
+      b.push({ k: "p", t: "Aucune institution représentative du personnel n'étant en place dans " +
+        "l'entreprise, vous pouvez vous faire assister soit par une personne de votre choix " +
+        "appartenant au personnel de l'entreprise, soit par un conseiller du salarié choisi sur une " +
+        "liste dressée par l'autorité administrative ; cette liste est tenue à votre disposition à " +
+        "la section d'inspection du travail dont relève l'établissement et à la mairie " +
+        de(ville()) + " (L. 1233-13 ; D. 1232-5)." });
+    } else {
+      b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant " +
+        "au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
+        "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée " +
+        "par l'autorité administrative ; cette liste est tenue à votre disposition à la section " +
+        "d'inspection du travail dont relève l'établissement et à la mairie " +
+        de(ville()) + " (L. 1233-13 ; D. 1232-5)." });
+    }
     b.push({ k: "p", t: mille
       ? "Nous vous informerons, lors de cet entretien, des conditions de mise en oeuvre du congé de " +
         "reclassement que nous sommes tenus de vous proposer."
@@ -755,9 +804,38 @@
     var b = [], tab = tableauOrdre(d.ordre), poste = d.poste || "[catégorie professionnelle]";
     b.push({ k: "t1", t: "Critères d'ordre des licenciements" });
     b.push({ k: "st", t: profil.denomination + ", catégorie professionnelle : " + poste });
+    /* LA CONSULTATION NE S'ÉCRIT QUE SI ELLE PEUT AVOIR LIEU.
+
+       Le document affirmait « après consultation du comité social et économique »
+       dès onze salariés, et le répétait en fin de page, sans regarder si un
+       comité existe. Avec un procès-verbal de carence, cette phrase est fausse,
+       et signée elle devient un aveu. Relevé le 27 septembre 2026.
+
+       L. 1233-5 (LEGIARTI000036261856, deux lectures concordantes au relais le
+       27 septembre 2026) : « Lorsque l'employeur procède à un licenciement
+       collectif pour motif économique et en l'absence de convention ou accord
+       collectif de travail applicable, il définit les critères retenus pour
+       fixer l'ordre des licenciements, après consultation du comité social et
+       économique. » Le texte vise le licenciement collectif : pour un
+       licenciement individuel, c'est L. 1233-7 qui impose seulement de tenir
+       compte des critères dans le choix du salarié. */
+    var collectif = Number(d.nombre) >= 2;
+    var repCse = String(profil.cseExiste || "").trim().toLowerCase();
+    var sansComite = repCse.indexOf("non") === 0;
+    var comiteDu = effectif >= 11;
     b.push({ k: "p", t: "À défaut de convention ou d'accord collectif applicable fixant les critères " +
       "d'ordre, les critères retenus pour fixer l'ordre des licenciements sont définis comme suit" +
-      (effectif >= 11 ? ", après consultation du comité social et économique." : ".") });
+      (collectif && comiteDu && !sansComite ? ", après consultation du comité social et économique (L. 1233-5)." : ".") });
+    if (collectif && comiteDu && sansComite)
+      b.push({ k: "p", t: "Aucun comité social et économique n'est en place dans l'entreprise" +
+        (repCse.indexOf("carence") >= 0 ? ", un procès-verbal de carence l'ayant constaté" : "") +
+        ". La consultation prévue par l'article L. 1233-5 n'a donc pas pu être recueillie ; " +
+        "les critères sont définis par l'employeur et le présent document est tenu à disposition " +
+        "des salariés concernés et de l'inspection du travail." });
+    if (!collectif)
+      b.push({ k: "p", t: "Un seul licenciement est envisagé : l'employeur prend en compte ces " +
+        "critères dans le choix du salarié (L. 1233-7), sans que la consultation propre au " +
+        "licenciement collectif soit en cause." });
     b.push({ k: "h1", t: "Les quatre critères et leur pondération" });
     b.push({ k: "puce", t: "- Charges de famille, en particulier celles des parents isolés : un point " +
       "par enfant à charge, un point supplémentaire pour un parent isolé." });
@@ -773,7 +851,7 @@
     b.push({ k: "h1", t: "Le périmètre d'application" });
     b.push({ k: "p", t: "En l'absence d'accord collectif fixant un autre périmètre, les critères sont " +
       "appliqués sur la zone d'emplois dans laquelle est situé l'établissement concerné par les " +
-      "suppressions d'emplois, soit la zone d'emplois de " + ville() + "." });
+      "suppressions d'emplois, soit la zone d'emplois " + de(ville()) + "." });
     b.push({ k: "h1", t: "L'application aux salariés de la catégorie" });
     b.push({ k: "p", t: "L'entreprise compte " + (effectif || "[   ]") + " salariés. La catégorie " +
       "professionnelle concernée en compte " + (tab.length || "[   ]") + ", " +
@@ -784,7 +862,7 @@
       b.push({ k: "ligne", t: r.nom + " ; " + r.pCharges + " ; " + r.pAnc + " ; " + r.pSocial +
         " ; " + r.qual + " ; " + r.total + " ; " + (i + 1) });
     });
-    if (effectif >= 11) {
+    if (collectif && comiteDu && !sansComite) {
       b.push({ k: "p", t: "La présente application des critères a été soumise au comité social et " +
         "économique le [date] et figure au procès-verbal de cette réunion." });
     }
@@ -1289,6 +1367,59 @@
       t += ' · dix licenciements ou plus : <a href="audit-pse.html">plan de sauvegarde</a>';
     }
     $("#fiche-rappel").innerHTML = t;
+  })();
+
+  /* LE NOMBRE SE DEMANDE D'ENTRÉE, PARCE QUE C'EST LUI QUI DÉCIDE.
+
+     L'écran annonçait « dix licenciements ou plus : plan de sauvegarde » et
+     n'avait jamais demandé combien : le nombre ne se saisissait qu'au
+     quatrième onglet, celui des critères d'ordre, après que trois documents
+     avaient été écrits sous le régime des moins de dix. Relevé le
+     27 septembre 2026.
+
+     L. 1233-61 (LEGIARTI000036261733, deux lectures concordantes au relais le
+     27 septembre 2026) : « Dans les entreprises d'au moins cinquante salariés,
+     lorsque le projet de licenciement concerne au moins dix salariés dans une
+     même période de trente jours, l'employeur établit et met en oeuvre un plan
+     de sauvegarde de l'emploi. » L. 1233-8 (LEGIARTI000036261850) : sous dix
+     licenciements, le comité est réuni et consulté dans les entreprises d'au
+     moins onze salariés. Le nombre saisi ici est celui des critères d'ordre :
+     une seule saisie, un seul chiffre. */
+  (function regime() {
+    var champ = $("#q-nombre"), zone = $("#q-regime");
+    if (!champ || !zone) return;
+    if (etat.nombre) champ.value = etat.nombre;
+    function dire() {
+      var n = parseInt(champ.value, 10);
+      etat.nombre = isNaN(n) ? "" : String(n);
+      if (isNaN(n) || n < 1) { zone.innerHTML = ""; return; }
+      if (n >= 10 && effectif >= 50) {
+        zone.innerHTML = '<div class="avis non"><b>' + n + " licenciements sur trente jours : " +
+          "un plan de sauvegarde de l'emploi est dû</b>Dans une entreprise d'au moins cinquante " +
+          "salariés, un projet portant sur au moins dix salariés dans une même période de trente " +
+          "jours impose ce plan (L. 1233-61). La procédure de cet écran est celle des licenciements " +
+          "de moins de dix : elle ne suffit pas. " +
+          '<a href="audit-pse.html">Ouvrir le plan de sauvegarde de l\'emploi</a></div>';
+      } else if (n >= 10) {
+        zone.innerHTML = '<div class="avis att"><b>' + n + " licenciements sur trente jours, " +
+          "sous cinquante salariés</b>Le plan de sauvegarde n'est dû qu'à partir de cinquante " +
+          "salariés (L. 1233-61) ; votre effectif est de " + effectif + ". La procédure reste celle " +
+          "de cet écran, avec la consultation du comité (L. 1233-8) et l'information de " +
+          "l'administration.</div>";
+      } else if (n >= 2 && effectif >= 11) {
+        zone.innerHTML = '<div class="avis info"><b>Licenciement collectif de moins de dix salariés</b>' +
+          "Le comité social et économique est réuni et consulté (L. 1233-8), et son avis se joint aux " +
+          "pièces de la procédure.</div>";
+      } else {
+        zone.innerHTML = '<div class="avis info"><b>Licenciement individuel pour motif économique</b>' +
+          "Ni plan de sauvegarde ni consultation au titre du licenciement collectif : la procédure " +
+          "est celle des onglets ci-dessous, et les critères d'ordre s'appliquent tout de même " +
+          "(L. 1233-7).</div>";
+      }
+    }
+    champ.addEventListener("input", dire);
+    champ.addEventListener("change", dire);
+    dire();
   })();
 
   try {
