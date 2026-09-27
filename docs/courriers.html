@@ -97,7 +97,8 @@
   .lettre p.dest{margin:0;font-size:15px;line-height:1.5;text-align:right}
   .lettre p.dest.premiere{margin-top:18px}
   .lettre p.dest.derniere{margin-bottom:4px}
-  .lettre p.date{margin:14px 0 16px;text-align:right;font-size:15px}
+  .lettre p.date{margin:14px 0 4px;text-align:right;font-size:15px}
+  .lettre p.reference{margin:0 0 16px;font-size:15px;font-weight:600}
   .lettre .a-remplir{color:var(--rouge);font-weight:600}
   .garder{margin:12px 0 0;border:1px solid var(--filet);border-radius:10px;
     background:var(--carte);padding:12px 14px}
@@ -452,16 +453,35 @@
   /* Ce que la fiche d'entreprise sait, elle l'écrit : il n'y a aucune raison
      de laisser en rouge la dénomination ou le nom du gérant, qui sont saisis
      une fois pour toutes sur la page d'accueil. */
+  /* CE QUE LA FICHE SAIT NE SE REDEMANDE PAS.
+
+     Relevé le 27 septembre 2026 : « agissant en qualité de [QUALITÉ] » sortait
+     en toutes lettres alors que la fiche porte la qualité du dirigeant dans
+     son propre champ. La qualité se prenait sur ce qui suit la virgule de
+     « Chadi EL SAFADI, gérant », et une fiche qui remplit les deux champs
+     séparément n'a pas de virgule. Le téléphone, le courriel, la ville et la
+     date du jour manquaient aussi. */
   function champsFiche() {
     var r = String(profil.responsable || "").trim();
     var virgule = r.indexOf(",");
+    var nomResp = String(profil.responsableNom || "").trim() ||
+      (virgule > 0 ? r.slice(0, virgule).trim() : r);
+    var qualite = String(profil.responsableQualite || "").trim() ||
+      (virgule > 0 ? r.slice(virgule + 1).trim() : "");
     return {
       "DÉNOMINATION": profil.denomination || "",
       "NOM DE L'ENTREPRISE": profil.denomination || "",
-      "REPRÉSENTANT LÉGAL": virgule > 0 ? r.slice(0, virgule).trim() : r,
-      "QUALITÉ": virgule > 0 ? r.slice(virgule + 1).trim() : "",
+      "REPRÉSENTANT LÉGAL": nomResp,
+      "SIGNATAIRE": r || nomResp,
+      "QUALITÉ": qualite,
+      "QUALITÉ DU SIGNATAIRE": qualite,
       "SIRET": profil.siret || "",
       "ADRESSE DU SIÈGE": profil.adresse || "",
+      "TÉLÉPHONE DE L'ENTREPRISE": profil.telephone || "",
+      "COURRIEL DE L'ENTREPRISE": profil.courriel || "",
+      "CONVENTION COLLECTIVE": profil.conventionCollective || "",
+      "DATE DU JOUR": leJour(),
+      "VILLE": ville() === "[VILLE]" ? "" : ville(),
       "LIEU": ville() === "[VILLE]" ? "" : ville(),
     };
   }
@@ -492,6 +512,13 @@
       }).join("");
     }
     h += '<p class="date">' + ech(ville() + ", le " + leJour()) + "</p>";
+    /* LA RÉFÉRENCE SE SAISIT, ET NE S'IMPRIMAIT PAS.
+       Le carnet demande « n° de compte, de contrat, de dossier », et la lettre
+       ne la portait nulle part, sauf dans les modèles qui écrivent
+       [RÉFÉRENCE]. Elle se pose sous la date, à sa place. Relevé le
+       27 septembre 2026. */
+    var ref = DEST && DEST.champs && DEST.champs["RÉFÉRENCE"];
+    if (ref) h += '<p class="reference">' + ech("Nos réf. : " + ref) + "</p>";
     h += m.corps.map(function (l) {
       return l === "" ? "" : "<p>" + rouge(remplir(l)) + "</p>";
     }).join("");
@@ -636,7 +663,65 @@
     location.href = "index.html";
   });
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE BROUILLON SURVIT AU RECHARGEMENT.
+
+     Relevé le 27 septembre 2026 : une lettre en cours d'écriture disparaissait
+     au moindre rechargement de la page, et sur un téléphone la page se
+     recharge toute seule. Ce qui est tapé est gardé sur cet appareil, avec le
+     modèle et le destinataire, et se retrouve à l'ouverture suivante. Le
+     brouillon ne quitte jamais l'appareil.
+     ═══════════════════════════════════════════════════════════════════════ */
+  var CLE_BROUILLON = "courriers-brouillon";
+  var brouillonPret = false;
+  function garderBrouillon() {
+    if (!brouillonPret || !MOD) return;
+    try {
+      window.localStorage.setItem(CLE_BROUILLON, JSON.stringify({
+        modele: MOD.id, famille: FAM ? FAM.cle : "",
+        dest: DEST ? DEST.id : "", destNom: DEST ? DEST.nom : "",
+        objet: $("objet").innerHTML, lettre: $("lettre").innerHTML,
+        le: new Date().toISOString(),
+      }));
+    } catch (e) {}
+  }
+  function lireBrouillon() {
+    try { return JSON.parse(window.localStorage.getItem(CLE_BROUILLON) || "null"); }
+    catch (e) { return null; }
+  }
+  function oublierBrouillon() {
+    try { window.localStorage.removeItem(CLE_BROUILLON); } catch (e) {}
+  }
+  ["objet", "lettre"].forEach(function (id) {
+    var e = $(id);
+    if (e) e.addEventListener("input", garderBrouillon);
+  });
+  /* Le bandeau qui propose de reprendre : il ne rouvre rien tout seul. */
+  function proposerBrouillon() {
+    var b = lireBrouillon();
+    if (!b || !b.modele || !b.lettre) return;
+    var z = document.createElement("div");
+    z.className = "note";
+    z.innerHTML = "<b>Une lettre est restée en cours.</b> " +
+      ech(b.destNom ? "Pour " + b.destNom + "." : "") +
+      ' <button type="button" class="s" id="repr-oui">La reprendre</button>' +
+      ' <button type="button" class="s" id="repr-non">L\'effacer</button>';
+    var h = $("familles");
+    if (h && h.parentNode) h.parentNode.insertBefore(z, h);
+    $("repr-oui").addEventListener("click", function () {
+      CM.FAMILLES.forEach(function (f) { if (f.cle === b.famille) FAM = f; });
+      if (b.dest && window.Carnet && window.Carnet.pour && b.famille) {
+        window.Carnet.pour(b.famille).forEach(function (x) { if (x.id === b.dest) DEST = x; });
+      }
+      z.remove();
+      ouvrirModele(b.modele, { objet: b.objet, lettre: b.lettre });
+    });
+    $("repr-non").addEventListener("click", function () { oublierBrouillon(); z.remove(); });
+  }
+
   rendreFamilles();
+  proposerBrouillon();
+  brouillonPret = true;
 })();
 </script>
 </body>

@@ -132,7 +132,7 @@
     "Vos documents de fin de contrat",
     ["Bonjour [PRÉNOM],",
      "",
-     "Votre contrat a pris fin le [DATE]. Vous trouverez ci-joint : votre certificat de travail, votre reçu pour solde de tout compte, l'attestation destinée à France Travail et le récapitulatif de vos droits en matière d'épargne salariale s'il y a lieu.",
+     "Votre contrat a pris fin le [DATE DE SORTIE]. Vous trouverez ci-joint : votre certificat de travail, votre reçu pour solde de tout compte, l'attestation destinée à France Travail et le récapitulatif de vos droits en matière d'épargne salariale s'il y a lieu.",
      "",
      "Le solde de tout compte, d'un montant de [MONTANT] euros, [vous a été versé le [DATE] / sera versé le [DATE]] par virement.",
      "",

@@ -120,7 +120,14 @@
         lignes: lignes,
         champs: {
           "NOM": net(s.nom),
-          "PRÉNOM": net(s.pre),
+          /* « Bonjour IMAD » : le registre écrit les prénoms en capitales, et
+             une lettre qui commence par un cri n'est pas une lettre. Le
+             prénom d'un en-tête garde ses capitales ; celui d'une salutation
+             se met en bas de casse, première lettre en majuscule, en
+             respectant les traits d'union et les apostrophes. Relevé le
+             27 septembre 2026. */
+          "PRÉNOM": joliPrenom(net(s.pre)),
+          "PRÉNOM EN CAPITALES": net(s.pre),
           "NOM ET PRÉNOM": nom,
           "CIVILITÉ NOM PRÉNOM": nom,
           "NOM DU SALARIÉ": nom,
@@ -141,6 +148,17 @@
         },
         duRegistre: true,
       };
+    });
+  }
+
+  /* Un prénom écrit en capitales, rendu lisible : IMAD devient Imad,
+     JEAN-PIERRE devient Jean-Pierre, N'GUYEN devient N'Guyen. Un prénom déjà
+     écrit normalement n'est pas touché. */
+  function joliPrenom(p) {
+    var t = String(p == null ? "" : p).trim();
+    if (!t || /[a-zà-ÿ]/.test(t)) return t;
+    return t.toLowerCase().replace(/(^|[\s\-'’])([a-zà-ÿ])/g, function (tout, avant, lettre) {
+      return avant + lettre.toUpperCase();
     });
   }
 
