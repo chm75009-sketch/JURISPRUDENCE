@@ -154,6 +154,7 @@
       <span id="ent"></span>
     </div>
     <p class="aide">Non = le document rempli s'ouvre. Oui = vous déposez le vôtre, il est contrôlé.</p>
+    <p class="avis" id="etat-comite"></p>
     <div id="liste"></div>
   </section>
 
@@ -210,6 +211,25 @@
   var ENT = profil.denomination + " · " + eff + " salarié" + (eff > 1 ? "s" : "");
   $("ent").textContent = ENT;
   $("ent2").textContent = ENT;
+
+  /* LA FICHE DIT S'IL Y A UN COMITÉ, ET LA PAGE S'Y TIENT.
+
+     Relevé le 27 septembre 2026 : sans comité, cette page proposait encore la
+     convocation des réunions, l'ordre du jour, le procès-verbal et le
+     règlement intérieur du comité. Ces quatre pièces supposent une instance
+     élue : sans elle, il n'y a rien à convoquer. Ce qui reste dû est
+     l'organisation des élections, ou le procès-verbal de carence. À l'inverse,
+     avec un comité élu, la ligne des élections ne redemande pas de les
+     organiser : elle donne la fin des mandats, quatre ans après le scrutin
+     (L. 2314-33, LEGIARTI000052437191, deux lectures concordantes au relais le
+     27 septembre 2026 : « Les membres de la délégation du personnel du comité
+     social et économique sont élus pour quatre ans »). */
+  var repCse = String(profil.cseExiste || "").trim().toLowerCase();
+  var COMITE_ABSENT = repCse.indexOf("non") === 0;
+  var COMITE_ELU = repCse.indexOf("oui") === 0;
+  var PAR_CARENCE = COMITE_ABSENT && repCse.indexOf("carence") >= 0;
+  var DATE_CARENCE = String(profil.cseCarence || "").trim();
+  var DATE_ELECTIONS = String(profil.cseElections || "").trim();
 
   /* ──────────────────────────────────────────────────────────── les textes
 
@@ -285,6 +305,14 @@
      de contrôle, le dépôt en premier. */
   var SECRETAIRE = { id: "secretaire", nom: "Secrétaire du comité", t: "text", ph: "Madame Nadia ROUX" };
   var REUNION = { id: "dateReunion", nom: "Date de la réunion", t: "date", defaut: iso(jour(AUJOURDHUI, 7)) };
+  /* L'HEURE ET LE LIEU, DEMANDÉS PARTOUT OÙ ILS SERVENT. La convocation les
+     demandait, l'ordre du jour non : le même document sortait « à [heure], à
+     [lieu] ». Ils sont posés une fois et repris par les deux. Le lieu s'ouvre
+     sur le siège, que la fiche donne, et se corrige d'un mot. Relevé le
+     27 septembre 2026. */
+  var HEURE = { id: "heure", nom: "Heure", t: "text", ph: "10 h", defaut: "10 h" };
+  var LIEU = { id: "lieuReunion", nom: "Lieu", t: "text", ph: "salle de réunion du siège",
+    defaut: profil.adresse || "" };
   var LIGNES = [
     { cle: "elections", nom: "Élections du comité", seuil: 11, titre: "Élections",
       doc: ["CSE-DOC-ELECTIONS", "CSE-CTL-MEP-02"], oui: "controler-cse.html?d=protocole",
@@ -300,8 +328,8 @@
         return out;
       },
       loi: ["L2311-2", "L2314-4", "L2314-5"] },
-    { cle: "convocation", nom: "Convocation des réunions", seuil: 11, titre: "Convocation", doc: "CSE-DOC-CONVOCATION", oui: "controler-cse.html?d=convocation",
-      champs: [REUNION, { id: "heure", nom: "Heure", t: "text", ph: "10 h", defaut: "10 h" }, { id: "lieuReunion", nom: "Lieu", t: "text", ph: "salle de réunion du siège" }],
+    { cle: "convocation", comite: true, nom: "Convocation des réunions", seuil: 11, titre: "Convocation", doc: "CSE-DOC-CONVOCATION", oui: "controler-cse.html?d=convocation",
+      champs: [REUNION, HEURE, LIEU],
       dates: function (v) {
         var d = dateDe(v.dateReunion); if (!d) return [];
         if (eff < 50) return [
@@ -310,14 +338,14 @@
         return [carte("Ordre du jour communiqué au plus tard le", jour(d, -3), "trois jours au moins avant la réunion (L. 2315-30)")];
       },
       loi: function () { return eff < 50 ? ["L2315-21", "L2315-22", "L2314-1"] : ["L2312-19", "L2315-27", "L2315-28", "L2315-29", "L2315-30", "L2315-31", "L2314-1"]; } },
-    { cle: "odj", nom: "Ordre du jour", seuil: 50, titre: "Ordre du jour", doc: "CSE-DOC-ORDRE-DU-JOUR", oui: "controler-cse.html?d=odj",
-      champs: [REUNION, SECRETAIRE, { id: "points", nom: "Points à l'ordre du jour, un par ligne", t: "textarea", pleine: true, ph: "Information sur les résultats du trimestre\nConsultation sur le projet de réorganisation du service" }],
+    { cle: "odj", comite: true, nom: "Ordre du jour", seuil: 50, titre: "Ordre du jour", doc: "CSE-DOC-ORDRE-DU-JOUR", oui: "controler-cse.html?d=odj",
+      champs: [REUNION, HEURE, LIEU, SECRETAIRE, { id: "points", nom: "Points à l'ordre du jour, un par ligne", t: "textarea", pleine: true, ph: "Information sur les résultats du trimestre\nConsultation sur le projet de réorganisation du service" }],
       dates: function (v) {
         var d = dateDe(v.dateReunion); if (!d) return [];
         return [carte("À communiquer au plus tard le", jour(d, -3), "trois jours au moins avant la réunion, aux membres, à l'inspection du travail et à l'agent de prévention (L. 2315-30)")];
       },
       loi: ["L2315-29", "L2315-30"] },
-    { cle: "pv", nom: "Procès-verbal des réunions", seuil: 50, titre: "Procès-verbal", doc: "CSE-DOC-PROCES-VERBAL", oui: "controler-cse.html?d=pvreunion",
+    { cle: "pv", comite: true, nom: "Procès-verbal des réunions", seuil: 50, titre: "Procès-verbal", doc: "CSE-DOC-PROCES-VERBAL", oui: "controler-cse.html?d=pvreunion",
       champs: [{ id: "dateReunion", nom: "Date de la réunion", t: "date", defaut: iso(AUJOURDHUI) }, SECRETAIRE,
         { id: "deliberations", nom: "Points délibérés, un par ligne", t: "textarea", pleine: true, ph: "Information sur les résultats du trimestre\nConsultation sur le projet de réorganisation du service" }],
       dates: function (v) {
@@ -325,17 +353,60 @@
         return [carte("À transmettre à l'employeur au plus tard le", jour(d, 15), "quinze jours suivant la réunion, à défaut d'accord, ou avant la réunion suivante si elle tombe dans ce délai (R. 2315-25, D. 2315-26)")];
       },
       loi: ["L2315-32", "L2315-34", "L2315-35", "R2315-25", "D2315-26"] },
-    { cle: "reglement", nom: "Règlement intérieur du comité", seuil: 50, titre: "Règlement intérieur", doc: "CSE-DOC-REGLEMENT", oui: "controler-cse.html?d=reglement",
+    { cle: "reglement", comite: true, nom: "Règlement intérieur du comité", seuil: 50, titre: "Règlement intérieur", doc: "CSE-DOC-REGLEMENT", oui: "controler-cse.html?d=reglement",
       champs: [{ id: "dateAdoption", nom: "Date d'adoption", t: "date", defaut: iso(AUJOURDHUI) }, SECRETAIRE],
       dates: function () { return []; },
       loi: ["L2315-24", "L2315-23", "L2314-1", "L2312-19", "L2315-28", "L2315-27", "L2315-31", "L2315-29", "L2315-30", "L2315-32", "L2315-34", "R2315-25", "D2315-26", "L2315-35"] }
   ];
 
+  /* Ce que la fiche dit du comité, en une phrase, au-dessus de la liste. */
+  function motCarence() {
+    if (!DATE_CARENCE) return "";
+    var p = DATE_CARENCE.split("-");
+    if (p.length !== 3) return "";
+    return " du " + (+p[2]) + " " + MOIS[+p[1] - 1] + " " + p[0];
+  }
+  function bandeauComite() {
+    var el = $("etat-comite");
+    if (!el) return;
+    if (COMITE_ABSENT) {
+      el.className = "avis non";
+      el.textContent = PAR_CARENCE
+        ? "Votre fiche indique qu'aucun comité n'est en place, un procès-verbal de carence" +
+          motCarence() + " l'ayant constaté. La convocation des réunions, l'ordre du jour, le " +
+          "procès-verbal et le règlement intérieur du comité supposent une instance élue : ils " +
+          "ne sont pas proposés. Reste la carence, à conserver et à produire."
+        : "Votre fiche indique qu'aucun comité n'est en place. Ce qui est dû, c'est l'organisation " +
+          "des élections, ou le procès-verbal de carence si aucun candidat ne se présente. La " +
+          "convocation des réunions, l'ordre du jour, le procès-verbal et le règlement intérieur " +
+          "du comité supposent une instance élue : ils ne sont pas proposés.";
+    } else if (COMITE_ELU) {
+      el.className = "avis ok";
+      var fin = "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(DATE_ELECTIONS)) {
+        var d = new Date(DATE_ELECTIONS + "T12:00:00");
+        d.setFullYear(d.getFullYear() + 4);
+        fin = " Les mandats, de quatre ans (L. 2314-33), s'achèvent le " + dateFrJour(d) +
+          " : le processus électoral se rouvre au plus tard quatre-vingt-dix jours avant, " +
+          "soit le " + dateFrJour(jour(d, -90)) + " (L. 2314-4).";
+      } else {
+        fin = " La date des dernières élections n'est pas renseignée dans la fiche : sans elle, " +
+          "la fin des mandats, quatre ans après le scrutin (L. 2314-33), ne peut pas être calculée.";
+      }
+      el.textContent = "Votre fiche indique un comité élu." + fin;
+    } else {
+      el.className = "avis att";
+      el.textContent = "Votre fiche ne dit pas si un comité est en place. Renseignez-le : c'est " +
+        "cette réponse qui décide de ce qui est dû ici, les élections ou le fonctionnement du comité.";
+    }
+  }
+
   function rendreListe() {
     var liste = $("liste");
     liste.textContent = "";
+    bandeauComite();
     LIGNES.forEach(function (l) {
-      var du = eff >= l.seuil;
+      var du = eff >= l.seuil && !(l.comite && COMITE_ABSENT);
       var ligne = document.createElement("div");
       ligne.className = "ligne" + (du ? "" : " pasdu");
       ligne.setAttribute("data-cle", l.cle);
@@ -343,7 +414,12 @@
       nom.className = "nom";
       nom.textContent = l.nom;
       ligne.appendChild(nom);
-      if (!du) {
+      if (l.comite && COMITE_ABSENT && eff >= l.seuil) {
+        var sans = document.createElement("span");
+        sans.className = "du";
+        sans.textContent = "aucun comité en place";
+        ligne.appendChild(sans);
+      } else if (!du) {
         var pas = document.createElement("span");
         pas.className = "du";
         pas.textContent = "pas dû avant " + l.seuil;
@@ -354,6 +430,21 @@
         a.href = l.oui;
         a.textContent = "Oui";
         ligne.appendChild(a);
+        /* Avec un comité élu, on ne redemande pas si les élections ont eu
+           lieu : la fiche l'a dit. La ligne mène au contrôle du protocole et
+           du procès-verbal du scrutin, et porte l'échéance des mandats. */
+        if (l.cle === "elections" && COMITE_ELU) {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(DATE_ELECTIONS)) {
+            var f = new Date(DATE_ELECTIONS + "T12:00:00");
+            f.setFullYear(f.getFullYear() + 4);
+            var e = document.createElement("span");
+            e.className = "du";
+            e.textContent = "mandats jusqu'au " + dateFrJour(f);
+            ligne.insertBefore(e, a);
+          }
+          liste.appendChild(ligne);
+          return;
+        }
         var n = document.createElement("button");
         n.type = "button";
         n.className = "non";
@@ -473,6 +564,18 @@
         var g2 = window.DocumentsProduits ? window.DocumentsProduits.pour(id) : null;
         if (g2) texte += "\n\n" + g2.produire(ctxDoc);
       });
+      /* NI EXEMPLE NI AVERTISSEMENT DANS UN DOCUMENT QUI SE SIGNE.
+
+         Le « non » de cette page ouvre la convocation, l'ordre du jour, le
+         procès-verbal ou le règlement du comité : des pièces qui partent
+         telles quelles, sous l'en-tête de l'entreprise. Elles s'ouvraient sur
+         « À ADAPTER : ce document est un modèle rédigé à partir des textes »,
+         phrase qui suivait jusque dans le .docx et jusque dans le classeur du
+         comité. Gérer la retirait déjà ; cette page ne le faisait pas. Relevé
+         le 27 septembre 2026. Ce qui est à compléter reste entre crochets,
+         c'est le seul repère dont le lecteur a besoin. */
+      if (window.DocumentsProduits && window.DocumentsProduits.sansExemple)
+        texte = window.DocumentsProduits.sansExemple(texte);
       $("d-feuille").innerHTML = feuilleHtml(blocsDeTexte(texte));
       $("btn-word").disabled = false; $("btn-imprimer").disabled = false;
     }

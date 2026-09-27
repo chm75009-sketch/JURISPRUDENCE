@@ -176,6 +176,11 @@
         if (!gen) { $("suite-dit").textContent = "Ce document n'est pas écrit."; return; }
         var ctx = { profil: profil, fiche: {}, donnees: {}, aujourdhui: new Date() };
         var texte = gen.produire(ctx);
+        /* Même règle que dans Gérer : l'annexe s'imprime et se joint au
+           document unique, elle ne porte pas l'avertissement du modèle ni
+           l'exemple d'une entreprise fictive. Relevé le 27 septembre 2026. */
+        if (window.DocumentsProduits.sansExemple)
+          texte = window.DocumentsProduits.sansExemple(texte);
         COURANT = { nom: gen.nom, texte: texte };
         $("annexe-titre").textContent = gen.nom;
         $("annexe-feuille").innerHTML = window.FeuilleDoc
