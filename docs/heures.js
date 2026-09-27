@@ -1352,13 +1352,38 @@
 
   /* Le même relevé que le classeur et le Word, posé en page pour le papier :
      la journée, la semaine, le total, puis la signature. */
+  /* L'HORAIRE DE RÉFÉRENCE, ÉCRIT EN TOUTES LETTRES. La feuille que le salarié
+     signe portait « undefined - undefined, pause undefined minutes » : elle
+     lisait trois champs que la référence ne porte plus, l'horaire étant
+     désormais tenu jour par jour. Relevé le 26 septembre 2026. */
+  function phraseReference(r) {
+    var JOURS = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
+    var pris = [], signatures = {};
+    for (var j = 0; j < 7; j++) {
+      var c = r.sem[j];
+      if (!c) continue;
+      pris.push(JOURS[j]);
+      var s = [c.d1, c.f1, c.d2, c.f2, c.p].join("|");
+      signatures[s] = (signatures[s] || 0) + 1;
+    }
+    if (!pris.length) return "horaire de référence non renseigné";
+    var cles = Object.keys(signatures);
+    var jours = pris.length === 5 && pris[0] === "lundi" && pris[4] === "vendredi"
+      ? "du lundi au vendredi" : pris.join(", ");
+    if (cles.length > 1) return jours + ", horaire variable selon les jours";
+    var c0 = cles[0].split("|");
+    var plage = c0[0] && c0[1] ? c0[0] + " - " + c0[1] : "";
+    if (c0[2] && c0[3]) plage += (plage ? " et " : "") + c0[2] + " - " + c0[3];
+    var pause = c0[4] && c0[4] !== "0" ? ", pause " + c0[4] + " minutes" : "";
+    return jours + (plage ? ", " + plage : "") + pause;
+  }
   function feuilleImpression() {
     var p = entreprise(), m = moisDe(), r = refDe(qui.id), T = tableauMois();
     var h = '<h1>Décompte des heures de travail</h1>';
     h += '<p class="sous">' + ech(p.denomination || "") + (p.adresse ? " - " + ech(p.adresse) : "") +
       "<br>Salarié : " + ech(qui.nom) + (qui.emp ? ", " + ech(qui.emp) : "") +
       "<br>Mois : " + ech(MOIS[mo] + " " + an) +
-      "<br>Horaire de référence : " + ech(r.d + " - " + r.f + ", pause " + r.p + " minutes") + "</p>";
+      "<br>Horaire de référence : " + ech(phraseReference(r)) + "</p>";
     /* La récapitulation de semaine tient sur une seule cellule : autrement,
        ses quatre cases vides élargissent la colonne du jour et le tableau
        déborde de la page. */
