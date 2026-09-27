@@ -55,12 +55,3 @@ Cette révision de GERME en 1995 a ensuite contribué à l'augmentation de l'est
 ### Conversion en euros
 - **635 938 FRF ÷ 6,55957 = 96 976€**
 
-### Composition du total
-- Salaires réels nominaux: 635 938 FRF
-- Après plafonnement PASS 1995 (146 400 FRF par employeur): 263 681 FRF
-- Convertis en euros: 40 192€
-- Après revalorisation (coeff. 1,563): **62 860€**
-
-Plus arriérés 1990-1994 revalorialisés: ~75 000€
-
-**= Montant total 1995 estimation CNAV: 138 902,64€**
