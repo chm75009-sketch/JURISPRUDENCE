@@ -1005,7 +1005,18 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
      Aucune correction ne s'applique d'elle-même : la coupure d'un nom n'est pas
      une règle, c'est un fait que seul l'employeur connaît. L'écran dit ce qui
-     est douteux, pourquoi, et propose la forme corrigée sur un bouton. */
+     est douteux, pourquoi, et propose la forme corrigée sur un bouton.
+
+     UNE CORRECTION NE PEUT PAS VIDER LE PRÉNOM. Relevé le 28 septembre 2026 par
+     la vérification : « ZAKI | KHALID » se voyait proposer « ZAKI KHALID » avec
+     un prénom vide, et quarante-huit lignes étaient dans ce cas. Or le registre
+     porte « le nom et les prénoms » (L. 1221-13) : une ligne sans prénom n'est
+     plus un registre régulier, et la correction créait le manquement qu'elle
+     prétendait réparer. La règle du prénom en capitales d'un seul mot est donc
+     retirée : « KHALID » en capitales n'est pas le signe d'une mauvaise coupure,
+     c'est une casse, et la plupart des registres repris d'un PDF sont tout en
+     capitales. Et la correction refuse désormais d'écrire un nom ou un prénom
+     vide, quelle que soit la règle qui l'a proposée. */
   var MOT_HAPPE = /^(n[eé]e?|le|du|de|d|en|poste|entr[eé]e?)$/i;
   function douteNom(s) {
     var nom = String(s.nom || "").trim(), pre = String(s.pre || "").trim();
@@ -1031,13 +1042,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
           seul mot, il y passe en entier ; deux mots, la coupure est tombée un
           mot trop tôt et c'est le premier qui rejoint le nom, « DALLA | BETTA
           RYAN » devenant « DALLA BETTA | RYAN ». */
-    if (pre && pre === pre.toUpperCase() && /[A-ZÀ-Þ]{2}/.test(pre) && motsPre.length <= 2) {
-      if (motsPre.length === 1)
-        return { quoi: "le prénom est écrit en capitales, comme un nom",
-          nom: (nom + " " + pre).trim(), pre: "" };
+    /* Un seul mot en capitales n'est pas une mauvaise coupure : c'est une casse.
+       Le fusionner au nom viderait le prénom, que L. 1221-13 exige. */
+    if (pre && pre === pre.toUpperCase() && /[A-ZÀ-Þ]{2}/.test(pre) && motsPre.length === 2)
       return { quoi: "le prénom est en capitales et compte deux mots : la coupure est tombée trop tôt",
         nom: (nom + " " + motsPre[0]).trim(), pre: motsPre[1] };
-    }
     /* 4. Un prénom de trois mots ou plus : la coupure est probablement tombée
           au milieu d'un nom composé. */
     if (motsPre.length >= 3)
@@ -1105,6 +1114,15 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
           if (!x) return;
           var d = douteNom(x);
           if (!d) return;
+          /* Le garde-fou : L. 1221-13 veut le nom ET les prénoms. Une
+             correction qui vide l'un des deux ne s'écrit pas. */
+          if (!String(d.nom || "").trim() || !String(d.pre || "").trim()) {
+            b.disabled = true;
+            b.textContent = "Correction refusée : elle viderait " +
+              (String(d.nom || "").trim() ? "le prénom" : "le nom") +
+              ", que L. 1221-13 exige";
+            return;
+          }
           x.nom = d.nom; x.pre = d.pre;
           garder();
           rendreRegistre();
