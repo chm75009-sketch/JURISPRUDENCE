@@ -1,0 +1,133 @@
+[
+  {
+    "k": "t1",
+    "t": "Synthèse des sommes reconnues en 1995"
+  },
+  {
+    "k": "h2",
+    "t": "Composition du relevé de carrière 27/09/2026"
+  },
+  {
+    "k": "h3",
+    "t": "GERME: 518 657 FRF"
+  },
+  {
+    "k": "p",
+    "t": "Salaire initial (relevé 01/01/2023, avant révision CRA): 70 313 FRF"
+  },
+  {
+    "k": "note",
+    "t": "Montant déclaré initialement à la CNAV pour la période 01/01/1995 à 31/12/1995"
+  },
+  {
+    "k": "p",
+    "t": "Plus: Rappel arrêt Cour d'Appel de Paris du 26 juin 1997: 448 344 FRF"
+  },
+  {
+    "k": "p",
+    "t": "Total GERME 1995: 518 657 FRF"
+  },
+  {
+    "k": "note",
+    "t": "L'arrêt du 26 juin 1997 a réformé la décision du Conseil de Prud'hommes et accordé au salarié le montant de 448 344 FRF, correspondant au bulletin de paie GERME du 10/09/1995 au 09/11/1995."
+  },
+  {
+    "k": "h3",
+    "t": "Autres employeurs"
+  },
+  {
+    "k": "table",
+    "head": ["Employeur", "Période", "Montant (FRF)"],
+    "rows": [
+      ["INSTITUT SUP COMMERCE INFORMATIQUE ORSAY", "01/01/1995 à 31/12/1995", "99 341"],
+      ["INSTITUT SUPERIEUR INTERNATIONA COMMERCE", "01/02/1995 à 30/04/1995", "6 325"],
+      ["INSTITUT SUPERIEUR INTERNATIONA COMMERCE", "01/01/1995 à 30/06/1995", "11 615"],
+      ["Sous-total autres employeurs", "", "117 281 FRF"]
+    ]
+  },
+  {
+    "k": "h3",
+    "t": "Récapitulatif 1995 par employeur"
+  },
+  {
+    "k": "table",
+    "head": ["Employeur", "Montant (FRF)"],
+    "rows": [
+      ["GERME", "518 657"],
+      ["Autres employeurs", "117 281"],
+      ["TOTAL 1995", "635 938 FRF"]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Décomposition GERME 518 657 FRF (relevé de carrière 27/09/2026)"
+  },
+  {
+    "k": "h3",
+    "t": "Bulletin de salaire suite arrêt du 26 juin 1997"
+  },
+  {
+    "k": "p",
+    "t": "Période: 10/09/1995 à 09/11/1995"
+  },
+  {
+    "k": "p",
+    "t": "Montant brut: 448 344,41 FRF"
+  },
+  {
+    "k": "p",
+    "t": "Statut: Intégré au relevé 27/09/2026"
+  },
+  {
+    "k": "h3",
+    "t": "Bulletin de salaire suite arrêt du 13 juin 1996"
+  },
+  {
+    "k": "p",
+    "t": "Période: 10/1995 à 02/1996"
+  },
+  {
+    "k": "p",
+    "t": "Montant brut: 64 864,82 FRF"
+  },
+  {
+    "k": "p",
+    "t": "Statut: Intégré au relevé 27/09/2026"
+  },
+  {
+    "k": "p",
+    "t": "Calcul: 448 344,41 + 64 864,82 = 513 209,23 FRF ≈ 513 208 FRF"
+  },
+  {
+    "k": "h3",
+    "t": "Bulletin écarté (sans date)"
+  },
+  {
+    "k": "p",
+    "t": "Montant: 55 292,80 FRF"
+  },
+  {
+    "k": "p",
+    "t": "Statut: Non intégré (absence de période d'emploi clairement datée)"
+  },
+  {
+    "k": "h2",
+    "t": "Estimation CNAV 12/12/2025 - Année 1995"
+  },
+  {
+    "k": "p",
+    "t": "Total année 1995: 138 902,64€"
+  },
+  {
+    "k": "p",
+    "t": "Salaires réels 1995 (cappés PASS) + revalorisation coefficient 1.563 = 62 860€"
+  },
+  {
+    "k": "p",
+    "t": "Arriérés 1990-1994 (avec révalorisation par année) = ~75 000€"
+  },
+  {
+    "k": "p",
+    "t": "Total: 138 902,64€"
+  }
+]
