@@ -880,6 +880,41 @@
       });
     }
 
+    /* UNE NOTE DE SERVICE N'ENTRE EN VIGUEUR QU'UN MOIS APRÈS.
+
+       Relevé le 27 septembre 2026 : l'écran des notes calcule cette date et la
+       porte sur la note, et l'agenda n'en savait rien. Une adjonction au
+       règlement intérieur qu'on croit applicable et qui ne l'est pas encore
+       est une sanction prise sans fondement. L. 1321-4 : « Cette date doit
+       être postérieure d'un mois à l'accomplissement des formalités de
+       publicité. » Les notes émises restent visibles deux mois après leur
+       entrée en vigueur, puis elles s'effacent de l'agenda. */
+    (function notesDeService() {
+      var R = [];
+      try { R = JSON.parse(localStorage.getItem("notes-service-registre") || "[]") || []; }
+      catch (e) { R = []; }
+      R.forEach(function (n) {
+        if (!n || !n.adjonction || !/^\d{4}-\d{2}-\d{2}$/.test(String(n.vigueur || ""))) return;
+        var j = Math.round((new Date(n.vigueur + "T12:00:00") -
+          new Date(AUJ + "T12:00:00")) / 86400000);
+        if (!isFinite(j) || j < -62 || j > 400) return;
+        lignes.push({
+          tri: n.vigueur, quand: enFr(n.vigueur),
+          titre: "Entrée en vigueur de la note de service " + (n.reference || "") +
+            (n.titre ? " : " + n.titre : ""),
+          fondement: "L. 1321-4 et L. 1321-5 du code du travail : une note portant des obligations générales et permanentes vaut adjonction au règlement intérieur, et entre en vigueur un mois après les formalités de publicité",
+          docs: "l'affichage daté, le courrier de communication à l'inspection du travail, et " +
+            "l'avis du comité ou le procès-verbal de carence",
+          retard: false,
+          detail: j > 0
+            ? "Affichage et communication à l'inspection le " + enFr(n.affichage || "") +
+              ". La note ne s'applique pas avant cette date."
+            : "La note est applicable depuis cette date.",
+          prov: "agenda",
+        });
+      });
+    })();
+
     /* LES TITRES D'EXERCER SONT DES ÉCHÉANCES COMME LES AUTRES.
        La licence de transport n'apparaissait qu'à l'accueil, cachée sous
        « et 118 autres », et jamais dans l'agenda. Passée sa date, l'entreprise

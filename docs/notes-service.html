@@ -158,6 +158,16 @@
       <span class="et">Objet de la note</span>
       <div class="v" id="objet" contenteditable="true" spellcheck="true"></div>
     </div>
+    <!-- LA DATE D'AFFICHAGE NE SE PRÉSUME PAS.
+         La note écrivait « formalités accomplies le » au jour où on l'ouvrait,
+         et en tirait une entrée en vigueur un mois plus tard. Or on affiche
+         rarement le jour même, et c'est cette date qui commande l'entrée en
+         vigueur (L. 1321-4). Relevé le 27 septembre 2026. -->
+    <div class="emarge" id="quand-affichage">
+      <label for="d-affichage">Affichage et communication à l'inspection, prévus le</label>
+      <input type="date" id="d-affichage">
+      <p class="emarge-dit" id="dit-vigueur"></p>
+    </div>
     <div class="note-doc" id="doc" contenteditable="true" spellcheck="true"></div>
     <div class="form cache" id="formalites"></div>
     <div class="barre">
@@ -165,6 +175,7 @@
       <button type="button" class="s" id="word">Télécharger en Word</button>
       <button type="button" class="s" id="imprimer">Imprimer</button>
       <button type="button" class="s" id="modele">Revenir au modèle</button>
+      <button type="button" class="s" id="lettre-inspection">Courrier à l'inspection</button>
     </div>
 
     <!-- LA PREUVE DE LA REMISE, TIRÉE DU REGISTRE.
@@ -233,6 +244,28 @@
     r.setDate(Math.min(j, dernier));
     return r;
   }
+  /* LA DATE D'AFFICHAGE NE SE PRÉSUME PAS.
+
+     Relevé le 27 septembre 2026 : la note écrivait « formalités accomplies
+     le » au jour où l'écran s'ouvrait, et en tirait une entrée en vigueur un
+     mois plus tard. On affiche rarement le jour même, et c'est cette date qui
+     commande l'entrée en vigueur : « Cette date doit être postérieure d'un
+     mois à l'accomplissement des formalités de publicité » (L. 1321-4,
+     LEGIARTI000054140230, deux lectures concordantes au relais le
+     27 septembre 2026). */
+  function dateAffichage() {
+    var e = document.getElementById("d-affichage");
+    var v = e ? String(e.value || "").trim() : "";
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+    if (!m) return new Date();
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12, 0, 0);
+    return isNaN(d.getTime()) ? new Date() : d;
+  }
+  function isoDe(d) {
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) +
+      "-" + ("0" + d.getDate()).slice(-2);
+  }
+
   function sansComite() {
     return String(profil.cseExiste || "").trim().toLowerCase().indexOf("non") === 0;
   }
@@ -404,7 +437,7 @@
        L. 1321-5 soumet l'adjonction aux mêmes formalités. La note sortait
        sans cette date. Relevé le 26 septembre 2026. */
     if (m.adjonction) {
-      var f = new Date();
+      var f = dateAffichage();
       h += '<p class="vigueur">' + ech("Formalités de publicité accomplies le " + leJour(f) +
         " : affichage à la place prévue pour le règlement intérieur, et communication à " +
         "l'inspection du travail" + (sansComite() ? "" : ", accompagnée de l'avis du comité social et économique") +
@@ -465,9 +498,44 @@
     $("emargement").disabled = true;
     $("emargement").title = "La feuille se télécharge une fois la note validée et numérotée.";
     $("etat").textContent = "";
+    var da = $("d-affichage");
+    if (da) {
+      if (!da.value) da.value = isoDe(new Date());
+      $("quand-affichage").hidden = !MOD.adjonction;
+      direVigueur();
+    }
+    if ($("lettre-inspection")) {
+      $("lettre-inspection").hidden = !MOD.adjonction;
+      $("lettre-inspection").disabled = true;
+      $("lettre-inspection").title = "Le courrier se télécharge une fois la note validée.";
+    }
     direEmargement();
     ecran("e-texte");
   }
+
+  /* Ce que la date choisie change, dit sous le champ. */
+  function direVigueur() {
+    var z = $("dit-vigueur");
+    if (!z) return;
+    if (!MOD || !MOD.adjonction) { z.textContent = ""; return; }
+    var f = dateAffichage();
+    z.textContent = "Affichage et communication à l'inspection le " + leJour(f) +
+      " : la note entre en vigueur le " + leJour(dansUnMois(f)) +
+      ", un mois après les formalités de publicité (L. 1321-4).";
+  }
+  if ($("d-affichage")) $("d-affichage").addEventListener("input", function () {
+    direVigueur();
+    /* La ligne de vigueur du document suit la date, sans réécrire le reste. */
+    var p = $("doc").querySelector("p.vigueur");
+    if (p && MOD && MOD.adjonction) {
+      var f = dateAffichage();
+      p.textContent = "Formalités de publicité accomplies le " + leJour(f) +
+        " : affichage à la place prévue pour le règlement intérieur, et communication à " +
+        "l'inspection du travail" +
+        (sansComite() ? "" : ", accompagnée de l'avis du comité social et économique") +
+        ". La présente note entre en vigueur le " + leJour(dansUnMois(f)) + " (L. 1321-4).";
+    }
+  });
 
   $("modele").addEventListener("click", function () {
     if (!MOD) return;
@@ -508,6 +576,11 @@
       theme: MOD.theme, modele: MOD.id,
       titre: $("objet").textContent.trim() || MOD.titre,
       jour: leJour(d), date: d.toISOString(),
+      /* Ce que l'agenda ira chercher : une adjonction n'entre en vigueur
+         qu'un mois après les formalités, et cette date-là se surveille. */
+      adjonction: !!MOD.adjonction,
+      affichage: isoDe(dateAffichage()),
+      vigueur: MOD.adjonction ? isoDe(dansUnMois(dateAffichage())) : "",
     };
     var L = lireRegistre();
     L.push(EMISE);
@@ -522,6 +595,7 @@
     $("word").title = "";
     $("emargement").disabled = false;
     $("emargement").title = "";
+    if ($("lettre-inspection")) { $("lettre-inspection").disabled = false; $("lettre-inspection").title = ""; }
     $("etat").textContent = "Note inscrite au registre sous la référence " + EMISE.reference + ".";
     rendreRegistre();
   });
@@ -599,6 +673,71 @@
       (seuls ? "les conducteurs du registre" : "les salariés en poste au registre") + ".";
   }
   $("qui-emarge").addEventListener("change", direEmargement);
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     LE COURRIER À L'INSPECTION DU TRAVAIL.
+
+     Relevé le 27 septembre 2026 : la note disait qu'elle devait être
+     communiquée à l'inspection du travail, et l'application ne produisait pas
+     ce courrier. L. 1321-4 : « En même temps qu'il fait l'objet des mesures de
+     publicité, le règlement intérieur, accompagné de l'avis du comité social
+     et économique, est communiqué à l'inspecteur du travail », et L. 1321-5
+     soumet la note aux mêmes formalités. R. 1321-4 (LEGIARTI000018536911, deux
+     lectures concordantes au relais le 27 septembre 2026) : « Le texte du
+     règlement intérieur est transmis à l'inspecteur du travail en deux
+     exemplaires. »
+     ═══════════════════════════════════════════════════════════════════════ */
+  if ($("lettre-inspection")) $("lettre-inspection").addEventListener("click", function () {
+    if (!window.AuditExport) { $("etat").textContent = "Le module d'export ne s'est pas chargé."; return; }
+    if (!EMISE) { $("etat").textContent = "Validez et numérotez la note : le courrier porte sa référence."; return; }
+    var f = dateAffichage();
+    var items = [];
+    entete().forEach(function (l) { items.push({ k: "p", t: l }); });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: "Monsieur ou Madame l'inspecteur du travail" });
+    items.push({ k: "p", t: String(profil.orgInspection || "[unité de contrôle compétente, adresse]") });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: ville() + ", le " + leJour(f) });
+    items.push({ k: "p", t: "Lettre recommandée avec accusé de réception" });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: "Objet : communication d'une note de service valant adjonction au " +
+      "règlement intérieur, " + EMISE.reference });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: "Madame, Monsieur l'inspecteur du travail," });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: "Conformément aux articles L. 1321-4 et L. 1321-5 du code du travail, " +
+      "je vous communique, en deux exemplaires et en même temps que l'accomplissement des mesures " +
+      "de publicité, la note de service " + EMISE.reference + " intitulée « " + EMISE.titre +
+      " », qui porte des obligations générales et permanentes et vaut adjonction au règlement " +
+      "intérieur de l'entreprise." });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: sansComite()
+      ? "Aucun comité social et économique n'est en place dans l'entreprise. Le procès-verbal de " +
+        "carence établissant l'absence de représentants élus est joint à la présente."
+      : "L'avis du comité social et économique, recueilli avant l'introduction de la note, est " +
+        "joint à la présente." });
+    items.push({ k: "p", t: "Les mesures de publicité ont été accomplies le " + leJour(f) +
+      " : la note est affichée à la place prévue pour le règlement intérieur et portée, par tout " +
+      "moyen, à la connaissance des personnes ayant accès aux lieux de travail (R. 1321-1)." });
+    items.push({ k: "p", t: "Elle entre en vigueur le " + leJour(dansUnMois(f)) +
+      ", soit un mois après ces formalités, comme l'article L. 1321-4 l'impose." });
+    items.push({ k: "p", t: " " });
+    items.push({ k: "p", t: "Je vous prie d'agréer, Madame, Monsieur l'inspecteur du travail, " +
+      "l'expression de ma considération distinguée." });
+    items.push({ k: "p", t: " " });
+    signature().forEach(function (l) { items.push({ k: "p", t: l }); });
+    items.push({ k: "note", t: "Pièces jointes : la note de service en deux exemplaires (R. 1321-4) ; " +
+      (sansComite() ? "le procès-verbal de carence" : "l'avis du comité social et économique") + "." });
+    var titre = "Communication à l'inspection du travail - " + EMISE.reference;
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, titre, {
+        auteur: String(profil.responsable || profil.denomination || "").trim(),
+        pied: String(profil.denomination || "").trim() + "  ·  " + titre,
+      }),
+      "inspection-" + EMISE.reference.replace(/[^A-Za-z0-9]+/g, "-") + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+    $("etat").textContent = "Courrier à l'inspection téléchargé, en deux exemplaires à joindre.";
+  });
 
   $("emargement").addEventListener("click", function () {
     if (!window.AuditExport) { $("etat").textContent = "Le module d'export ne s'est pas chargé."; return; }
