@@ -279,6 +279,7 @@
         (c.sous ? '<span class="sous">' + ech(c.sous) + "</span>" : "") + "</label>";
     }).join("");
     verifierSmic();
+    verifierPartiel();
   }
 
   $("champs").addEventListener("input", function (ev) {
@@ -294,6 +295,7 @@
       }
     }
     if (c === "taux" || c === "smic" || c === "coef") verifierSmic();
+    if (c === "mensuel" || c === "hebdo") verifierPartiel();
     garder();
   });
   $("champs").addEventListener("change", function (ev) {
@@ -318,6 +320,21 @@
      Les taux « marchandises » n'ont pas bougé depuis le 1er décembre 2023 et
      sont passés sous le SMIC. Le module porte le SMIC connu, daté, et écrit
      au contrat le plus élevé des deux. */
+  /* UN TEMPS PARTIEL NE PEUT PAS ATTEINDRE LA DURÉE DE LA CATÉGORIE. La case
+     « temps partiel » cochée, le contrat sortait avec « 151,67 heures par
+     mois », c'est-à-dire la durée légale, et personne ne le disait : un tel
+     contrat n'est pas un temps partiel. Relevé le 26 septembre 2026. */
+  function verifierPartiel() {
+    var b = $("alerte-partiel");
+    if (!b) return;
+    var m = Number(String(V.mensuel || "").replace(",", ".")) || 0;
+    if (!PARTIEL || !m || !PROFIL.mensuel || m < PROFIL.mensuel) { b.classList.add("cache"); return; }
+    b.classList.remove("cache");
+    b.innerHTML = "<b>Ce n'est plus un temps partiel.</b> Vous avez porté " + ech(CT.fr(m, 2)) +
+      " heures par mois, alors que la durée de la catégorie est de " + ech(CT.fr(PROFIL.mensuel, 2)) +
+      " heures. Un contrat à temps partiel est celui dont la durée est inférieure à la durée " +
+      "légale ou conventionnelle : baissez la durée, ou décochez la case.";
+  }
   function verifierSmic() {
     var t = Number(V.taux) || 0, s = Number(V.smic) || 0;
     var b = $("alerte-smic");
@@ -357,6 +374,7 @@
     if (PARTIEL && V.mensuel && Number(V.mensuel) >= PROFIL.mensuel) V.mensuel = "";
     if (!PARTIEL) V.mensuel = String(PROFIL.mensuel);
     rendreChamps();
+    verifierPartiel();
   });
 
   /* ─────────────────────────── 3 · le contrat ───────────────────────── */
