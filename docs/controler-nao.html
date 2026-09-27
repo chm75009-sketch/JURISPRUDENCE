@@ -1379,7 +1379,8 @@
        reprend, et on ne retombe sur la ville de l'adresse qu'à défaut. */
     var pf = (window.Profil && window.Profil.lire()) || {};
     var greffe = String(pf.orgPrudhommes || "").trim() || villeDe(f.adresse);
-    L.push("Un exemplaire est remis au greffe du conseil de prud'hommes de " + greffe + ",");
+    L.push("Un exemplaire est remis au greffe du conseil de prud'hommes " +
+      (/^[aeiouyàâäéèêëîïôöùûüh]/i.test(greffe) ? "d'" + greffe : "de " + greffe) + ",");
     L.push("lieu de conclusion (article D. 2231-2, III).");
     if (f.nego === "remuneration") {
       L.push("");

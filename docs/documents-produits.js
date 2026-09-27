@@ -54,6 +54,12 @@
      ici. Vides, le crochet reste : rien n'est deviné. Demande du 26 septembre
      2026, « généraliser ce principe à chaque fois où on doit compléter des
      informations constantes ». */
+  /* L'élision devant une voyelle : « prud'hommes d'Argenteuil ». */
+  function elide(mot) {
+    var s = String(mot == null ? "" : mot).trim();
+    if (!s) return "";
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
   function org(p, cle, quoi) {
     var s = String((p && p[cle]) || "").trim();
     return s === "" ? "[" + quoi + "]" : s;
@@ -1473,7 +1479,7 @@
       L.push((sansCse
         ? "n'ayant pu être mis en place, et il est déposé au greffe du conseil de"
         : "et il est déposé au greffe du conseil de"));
-      L.push("prud'hommes de " + org(p, "orgPrudhommes", "VILLE DU RESSORT") +
+      L.push("prud'hommes " + elide(org(p, "orgPrudhommes", "VILLE DU RESSORT")) +
         " et communiqué à l'inspection du travail.");
       L.push("");
       L.push("Il fixe les règles de santé et de sécurité, les conditions de");
@@ -1519,7 +1525,7 @@
       L.push(cro(p.adresse, "adresse"));
       L.push("");
       L.push("Monsieur le Greffier en chef");
-      L.push("Conseil de prud'hommes de " + org(p, "orgPrudhommes", "VILLE DU RESSORT"));
+      L.push("Conseil de prud'hommes " + elide(org(p, "orgPrudhommes", "VILLE DU RESSORT")));
       L.push("");
       L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
       L.push("");

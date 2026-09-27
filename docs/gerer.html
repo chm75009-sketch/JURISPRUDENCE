@@ -1457,6 +1457,13 @@
      « MADAME, MONSIEUR » À QUELQU'UN QU'ON CONNAÎT. Le registre porte le sexe
      du salarié ; les courriers l'ignoraient et s'adressaient à tout le monde à
      la fois. Relevé le 26 septembre 2026. */
+  /* « de Argenteuil », « de Assitante » : l'élision manquait partout où un nom
+     propre ou un emploi suit « de ». Relevé le 26 septembre 2026. */
+  function de(mot) {
+    var s = String(mot == null ? "" : mot).trim();
+    if (!s) return "";
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
   function civiliteDe(nom) {
     if (/^\s*madame/i.test(nom)) return "Madame";
     if (/^\s*monsieur/i.test(nom)) return "Monsieur";
@@ -1809,7 +1816,7 @@
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + "." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous exposerons les motifs de la décision envisagée et recueillerons vos explications (" + ref(["L1232-3"]) + ")." });
-    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative. Cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie de " + ville() + " (" + ref(["L1232-4"]) + ")." });
+    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative. Cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie " + de(ville()) + " (" + ref(["L1232-4"]) + ")." });
     formule(b, civ);
     b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (" + ref(["L1232-2"]) + ")." });
     b.push({ k: "saut", t: "" });
@@ -1940,7 +1947,7 @@
     b.push({ k: "p", t: "Objet : visite d'information et de prévention de " + nomS });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: "Madame, Monsieur," });
-    b.push({ k: "p", t: "Nous avons engagé " + nomS + " en qualité de " + (v.poste || "[emploi]") + ", à compter du " + dateFr(e) + "." });
+    b.push({ k: "p", t: "Nous avons engagé " + nomS + " en qualité " + de(v.poste || "[emploi]") + ", à compter du " + dateFr(e) + "." });
     b.push({ k: "p", t: "Nous vous demandons d'organiser la visite d'information et de prévention prévue à l'article " + ref(["L4624-1"]) + " du code du travail, dans un délai qui n'excède pas trois mois à compter de la prise effective du poste, soit au plus tard le " + dateFr(limite) + " (" + ref(["R4624-10"]) + ")." });
     b.push({ k: "p", t: "Poste occupé et risques auxquels le salarié est exposé : [travail de nuit, produits, manutention, écran, autre]. [Le salarié déclare être reconnu travailleur handicapé ou titulaire d'une pension d'invalidité : dans ce cas, orientation vers le médecin du travail et suivi adapté, " + ref(["L4624-1"]) + ".]" });
     b.push({ k: "p", t: "Nous vous remercions de nous adresser la convocation, que nous remettrons au salarié, et l'attestation délivrée à l'issue de la visite." });
@@ -2716,7 +2723,7 @@
     enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
     b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement pour motif économique, la suppression de votre poste de " + poste + " étant envisagée pour les raisons qui vous seront exposées." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + " (" + ref(["L1233-11"]) + ")." });
-    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative ; cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie de " + ville() + " (" + ref(["L1233-13"]) + ")." });
+    b.push({ k: "p", t: "Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous pouvez également vous faire assister par un conseiller du salarié choisi sur une liste dressée par l'autorité administrative ; cette liste est tenue à votre disposition à la direction départementale de l'emploi, du travail et des solidarités de [département] et à la mairie " + de(ville()) + " (" + ref(["L1233-13"]) + ")." });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous proposerons le bénéfice du contrat de sécurisation professionnelle et vous remettrons le document d'information correspondant (" + ref(["L1233-66", "L1233-65"]) + ")." });
     formule(b, civ);
     b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (" + ref(["L1233-11"]) + "). Avant tout licenciement : efforts de formation et d'adaptation, et recherche de reclassement sur les emplois disponibles, avec des offres écrites et précises (" + ref(["L1233-4"]) + ")." });
