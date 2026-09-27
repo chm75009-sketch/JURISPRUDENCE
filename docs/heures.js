@@ -96,6 +96,12 @@
     var m = /^(\d{1,2})[:hH.]?(\d{2})?$/.exec(String(t == null ? "" : t).trim());
     return m ? parseInt(m[1], 10) * 60 + (m[2] ? parseInt(m[2], 10) : 0) : null;
   }
+  /* L'inverse : des minutes depuis minuit vers « HH:MM », en repassant par
+     zéro au-delà de vingt-quatre heures. */
+  function enHeureMinute(min) {
+    var m = ((Math.round(min) % 1440) + 1440) % 1440;
+    return ("0" + Math.floor(m / 60)).slice(-2) + ":" + ("0" + (m % 60)).slice(-2);
+  }
   function duree(l) {
     if (!l || l.n !== "travail") return 0;
     var a = enMinutes(l.d), b = enMinutes(l.f);
@@ -177,6 +183,24 @@
       var cond = !r.d && qui && qui.id === id && estConducteur(qui);
       var dd = r.d || (cond ? "06:00" : "09:00"), ff = r.f || (cond ? "14:33" : "17:00");
       var pp = r.p == null ? (cond ? "45" : "60") : String(r.p);
+      /* L'HORAIRE PRÉREMPLI DOIT FAIRE LA DURÉE DU CONTRAT.
+
+         Relevé le 27 septembre 2026 : l'écran annonçait trente-neuf heures,
+         prises du contrat, et remplissait les jours de neuf heures à dix-sept,
+         ce qui en fait trente-cinq. Le relevé partait donc avec quatre heures
+         de moins que ce qui est dû, chaque semaine. Quand le contrat porte une
+         durée hebdomadaire et qu'aucune semaine n'a encore été enregistrée, la
+         fin de journée se calcule pour que les jours travaillés la fassent :
+         l'heure de départ et la pause restent celles du modèle, et tout reste
+         modifiable. */
+      var nbJ = 0;
+      for (var q = 0; q < 7; q++) if (jours[q]) nbJ++;
+      var duCtr = (!r.f && qui && qui.id === id) ? duContrat() : null;
+      if (duCtr && duCtr.sem > 0 && nbJ > 0) {
+        var debut = enMinutes(dd);
+        var minutes = Math.round(duCtr.sem * 60 / nbJ) + (parseInt(pp, 10) || 0);
+        if (debut !== null && minutes > 0) ff = enHeureMinute(debut + minutes);
+      }
       for (var k = 0; k < 7; k++) {
         sem[k] = jours[k] ? { d1: dd, f1: ff, d2: "", f2: "", p: pp } : null;
       }
@@ -883,9 +907,67 @@
      franchi est dit en premier, avec le jour et le chiffre. */
   function leJourDit(j) { return j === 1 ? "le 1er" : "le " + j; }
 
+  /* LA CATÉGORIE D'UN CONDUCTEUR SE DEMANDE, ELLE NE SE DEVINE PAS.
+
+     Relevé le 27 septembre 2026 : sans contrat écrit dans l'application, un
+     conducteur était compté comme un sédentaire. Son seuil d'heures
+     supplémentaires tombait à trente-cinq heures au lieu de quarante-trois,
+     son plafond quotidien à dix heures au lieu de douze, et la moyenne
+     trimestrielle du transport ne s'appliquait pas. La question se pose une
+     fois, la réponse se garde avec le salarié, et elle se change. */
+  var CATEGORIES = [
+    ["grand", "Grand routier ou longue distance", "43 h de temps de service, 56 h par semaine isolée"],
+    ["courte", "Autre roulant marchandises", "39 h de temps de service, 52 h par semaine isolée"],
+    ["messagerie", "Messagerie ou convoyeur de fonds", "35 h de temps de service, 48 h par semaine isolée"],
+    ["sedentaire", "Il ne conduit pas", "durée légale de 35 h et plafonds du code du travail"],
+  ];
+  function rendreCategorie() {
+    var z = $("q-categorie");
+    if (!z) return;
+    var su = (qui && window.EcheancesSalaries) ? (window.EcheancesSalaries.suite(qui.id) || {}) : {};
+    var dite = net(su.categorieTransport);
+    if (!qui || !estConducteur(qui) || (dite && dite !== "")) {
+      /* Une fois répondu, la ligne reste, brève, pour pouvoir se corriger. */
+      if (qui && estConducteur(qui) && dite) {
+        var nom = CATEGORIES.filter(function (c) { return c[0] === dite; })[0];
+        z.hidden = false;
+        z.innerHTML = '<p class="doux">Catégorie retenue pour ' + ech(qui.nom) + " : " +
+          ech(nom ? nom[1] : dite) + '.</p><div class="barre">' +
+          '<button type="button" class="second" id="cat-changer">Changer la catégorie</button></div>';
+        var b = $("cat-changer");
+        if (b) b.addEventListener("click", function () {
+          window.EcheancesSalaries.poser(qui.id, { categorieTransport: "" });
+          var t = lireCle("suites-embauche", {});
+          if (t[qui.id]) { delete t[qui.id].categorieTransport; garderCle("suites-embauche", t); }
+          rendreCategorie(); rendreControles();
+        });
+        return;
+      }
+      z.hidden = true; z.innerHTML = "";
+      return;
+    }
+    z.hidden = false;
+    z.innerHTML = '<p class="al">L\'emploi de ' + ech(qui.nom) + ", « " + ech(qui.emp) +
+      " », est un emploi de conduite, et sa catégorie n'est pas connue : tant qu'elle manque, ce " +
+      "relevé applique la durée légale et les plafonds du code du travail, qui ne sont pas les " +
+      "siens. Laquelle ?</p><div class=\"barre\">" +
+      CATEGORIES.map(function (c) {
+        return '<button type="button" class="second" data-cat="' + c[0] + '" title="' + ech(c[2]) +
+          '">' + ech(c[1]) + "</button>";
+      }).join("") + "</div>";
+    Array.prototype.forEach.call(z.querySelectorAll("[data-cat]"), function (b) {
+      b.addEventListener("click", function () {
+        window.EcheancesSalaries.poser(qui.id, { categorieTransport: b.getAttribute("data-cat") });
+        rendreCategorie();
+        rendreControles();
+      });
+    });
+  }
+
   function rendreControles() {
     var z = $("controles");
     if (!z) return;
+    rendreCategorie();
     var a = analyse(), L = [];
     /* Les journées franchies sont marquées dans la grille : la phrase n'en
        nomme que quatre au plus, sinon elle fait un mur de texte sur un
