@@ -88,6 +88,7 @@
     width:100%;min-width:0;max-width:100%;box-sizing:border-box}
   .champs label{min-width:0}
   .champs textarea{min-height:88px}
+  .champs label .sous{font-size:12.5px;line-height:1.45;color:var(--texte-3)}
 
   .tableau-doc{margin:0 0 14px}
   .tableau-doc .titre-tab{font:600 17px/1.3 system-ui;color:var(--encre);margin:0 0 4px}
@@ -2320,10 +2321,14 @@
     b.push({ k: "st", t: nomS });
     b.push({ k: "h1", t: "Entre les soussignés" });
     b.push({ k: "p", t: "La société " + societe() + ", ci-après « la Société », d'une part," });
-    b.push({ k: "p", t: "Et " + nomS + ", demeurant [adresse], ci-après « le salarié », d'autre part," });
+    b.push({ k: "p", t: "Et " + nomS + ", demeurant " +
+      (String(v.adresse || "").trim() || "[adresse]") + ", ci-après « le salarié », d'autre part," });
     b.push({ k: "p", t: "Il a été convenu ce qui suit." });
     b.push({ k: "h1", t: "Article 1 - Objet" });
-    b.push({ k: "p", t: "Le contrat de travail conclu entre les parties le [date du contrat] est modifié, à compter du " + dateFr(effet) + ", comme suit :" });
+    var conclu = dateDe(v.entree);
+    b.push({ k: "p", t: "Le contrat de travail conclu entre les parties le " +
+      (conclu ? dateFr(conclu) : "[date du contrat]") +
+      " est modifié, à compter du " + dateFr(effet) + ", comme suit :" });
     if (guide) guide.forEach(function (l) { b.push({ k: "p", t: l }); });
     else griefsBlocs(b, v.objet, "[ce qui change : emploi, durée du travail, rémunération, lieu de travail, horaires ; écrivez la clause nouvelle en entier]");
     if (guide && String(v.objet || "").trim()) {
@@ -3221,14 +3226,21 @@
      de cinq ans. Demande du 15 septembre 2026.                             */
 
   function protocole(v) {
-    var accueil = profil.denomination || "[entreprise d'accueil]";
-    var transporteur = v.transporteur || "[entreprise de transport]";
+    /* Le rôle décide laquelle des deux parties est la nôtre. */
+    var nous = (profil.denomination || "[votre entreprise]") +
+      (profil.adresse ? ", " + profil.adresse : "");
+    var autre = String(v.transporteur || "").trim();
+    var jeSuisTransporteur = v.role === "transporteur";
+    var accueil = jeSuisTransporteur ? (autre || "[entreprise d'accueil]") : nous;
+    var transporteur = jeSuisTransporteur ? nous : (autre || "[entreprise de transport]");
     var b = [];
     b.push({ k: "t1", t: "Protocole de sécurité" });
     b.push({ k: "p", t: "Opérations de chargement ou de déchargement (" + ref(["R4515-4"]) + ")" });
     b.push({ k: "vide", t: "" });
-    b.push({ k: "p", t: "Entreprise d'accueil : " + accueil + (profil.adresse ? ", " + profil.adresse : "") });
-    b.push({ k: "p", t: "Entreprise de transport : " + transporteur });
+    b.push({ k: "p", t: "Entreprise d'accueil : " + accueil +
+      (jeSuisTransporteur ? "" : "  (c'est nous)") });
+    b.push({ k: "p", t: "Entreprise de transport : " + transporteur +
+      (jeSuisTransporteur ? "  (c'est nous)" : "") });
     b.push({ k: "p", t: "Lieu de l'opération : " + (v.lieu || "[site, quai, adresse]") });
     b.push({ k: "p", t: "Nature de l'opération : " + (v.operation === "chargement" ? "chargement"
       : (v.operation === "dechargement" ? "déchargement" : "chargement et déchargement")) });
@@ -3254,7 +3266,7 @@
 
     b.push({ k: "t1", t: "2. Ce que décrit le transporteur (" + ref(["R4515-7"]) + ")" });
     b.push({ k: "p", t: "1° Caractéristiques du véhicule, son aménagement et ses équipements : "
-      + "[type, hayon, bâchage, immatriculation]." });
+      + (String(v.vehicule || "").trim() || "[type, hayon, bâchage, immatriculation]") + "." });
     b.push({ k: "p", t: "2° Nature et conditionnement de la marchandise : "
       + (v.marchandise || "[nature, palettes, colis, vrac]") + "." });
     b.push({ k: "p", t: "3° Précautions ou sujétions particulières résultant de la nature des "
@@ -3264,8 +3276,17 @@
     b.push({ k: "t1", t: "3. Signatures" });
     b.push({ k: "p", t: "Le protocole est établi pour la durée des opérations. Il est réexaminé "
       + "dès qu'une des données change : véhicule, marchandise, lieu, matériel ou consignes." });
-    b.push({ k: "p", t: "Pour l'entreprise d'accueil, " + signataire() + "        Pour le transporteur, [nom et qualité]" });
-    b.push({ k: "p", t: "Date et signature :                                       Date et signature :" });
+    /* LES SIGNATURES DANS UN TABLEAU, NON SUR UNE LIGNE.
+       Relevé le 27 septembre 2026 : les deux signataires étaient écrits sur la
+       même ligne, séparés par des espaces, et le Word les collait l'un à
+       l'autre. Deux colonnes, quatre lignes, et chacun signe dans sa case. */
+    b.push({ k: "table", head: ["Pour l'entreprise d'accueil", "Pour le transporteur"], rows: [
+      ["Nom et qualité", "Nom et qualité"],
+      [jeSuisTransporteur ? "[nom et qualité]" : signataire(),
+       jeSuisTransporteur ? signataire() : "[nom et qualité]"],
+      ["Date", "Date"],
+      ["Signature", "Signature"],
+    ] });
     return { blocs: b, loi: ["R4515-4", "R4515-5", "R4515-6", "R4515-7"] };
   }
 
@@ -3421,6 +3442,14 @@
           ["partiel", "Passage à temps partiel"],
           ["lieu", "Changement de lieu de travail"]] },
         { id: "effet", nom: "Date d'effet", t: "date", defaut: iso(AUJOURDHUI) },
+        /* LA DATE DU CONTRAT NE SE TAPE PAS DEUX FOIS.
+           Relevé le 27 septembre 2026 : l'avenant écrivait « le contrat conclu
+           entre les parties le [date du contrat] », alors que le registre
+           porte la date d'entrée du salarié. Elle se reprend, et reste
+           modifiable quand le contrat est postérieur à l'entrée. */
+        { id: "entree", nom: "Date du contrat modifié", t: "date" },
+        { id: "adresse", nom: "Adresse du salarié", t: "text", pleine: true,
+          ph: "12 rue des Lilas, 95100 Argenteuil" },
         { id: "coef", nom: "Coefficient", t: "text", ph: "150 M" },
         { id: "groupe", nom: "Groupe", t: "text", ph: "7" },
         { id: "heures", nom: "Durée hebdomadaire, en heures", t: "number", ph: "24" },
@@ -3446,7 +3475,23 @@
 
     protocole: { titre: "Protocole de sécurité, chargement ou déchargement",
       champs: [
-        { id: "transporteur", nom: "Entreprise de transport", t: "text", ph: "Transports MARTIN" },
+        /* LE RÔLE SE CHOISIT : L'ENTREPRISE N'EST PAS TOUJOURS CELLE QUI REÇOIT.
+
+           Relevé le 27 septembre 2026 : le protocole figeait l'entreprise de
+           la fiche en « entreprise d'accueil » et laissait la partie
+           transporteur entre crochets. Un transporteur qui vient charger chez
+           un client est la seconde partie, pas la première, et c'est lui qui
+           décrit son véhicule. R. 4515-6 énumère ce que fournit l'entreprise
+           d'accueil, R. 4515-7 ce que décrit le transporteur : les deux rôles
+           sont dans le texte, l'écran les donne. */
+        { id: "role", nom: "Dans cette opération, nous sommes", t: "select",
+          opts: [["accueil", "L'entreprise d'accueil : le véhicule vient chez nous"],
+                 ["transporteur", "Le transporteur : nous allons charger ou décharger chez un tiers"]],
+          defaut: "accueil" },
+        { id: "transporteur", nom: "L'autre entreprise", t: "text", ph: "Transports MARTIN",
+          sous: "le transporteur si vous recevez, l'entreprise d'accueil si vous vous déplacez" },
+        { id: "vehicule", nom: "Véhicule", t: "text", ph: "AA-142-NH, porteur 19 t, hayon",
+          sous: "repris de votre flotte quand l'immatriculation y figure" },
         { id: "lieu", nom: "Lieu de l'opération", t: "text", ph: "quai n° 2, 3 rue des Lilas" },
         { id: "operation", nom: "Nature de l'opération", t: "select",
           opts: [["les deux", "Chargement et déchargement"], ["chargement", "Chargement"], ["dechargement", "Déchargement"]],
@@ -3457,13 +3502,24 @@
       produire: protocole },
     autorisation: { titre: "Autorisation de conduite",
       champs: [NOM,
+        /* LA LISTE DES ÉQUIPEMENTS VIENT D'UN ARRÊTÉ, PAS D'ICI.
+
+           R. 4323-57 (LEGIARTI000018531403, deux lectures concordantes au
+           relais le 27 septembre 2026) : des arrêtés déterminent « les
+           catégories d'équipements de travail dont la conduite nécessite
+           d'être titulaire d'une autorisation de conduite ». L'application ne
+           lit pas cet arrêté. Le hayon élévateur y figurait, sans que rien ne
+           le fonde : il en sort, et l'écran dit d'où vient la liste. Relevé le
+           27 septembre 2026. */
         { id: "equipement", nom: "Équipement", t: "select", opts: [
           ["un chariot élévateur", "Chariot élévateur"],
-          ["un hayon élévateur", "Hayon élévateur"],
           ["une grue auxiliaire de chargement", "Grue auxiliaire de chargement"],
           ["une plateforme élévatrice mobile de personnes", "Plateforme élévatrice mobile"],
-          ["un transpalette à conducteur porté", "Transpalette à conducteur porté"],
-          ["[équipement]", "Autre, à préciser"]], defaut: "un chariot élévateur" },
+          ["un engin de chantier télécommandé ou à conducteur porté", "Engin de chantier"],
+          ["une grue à tour", "Grue à tour"],
+          ["une grue mobile", "Grue mobile"],
+          ["[équipement]", "Autre, à préciser"]], defaut: "un chariot élévateur",
+          sous: "Les catégories soumises à autorisation sont fixées par arrêté (R. 4323-57), que l'application ne lit pas : vérifiez que votre équipement en relève." },
         { id: "formation", nom: "Date de la formation à la conduite", t: "date" },
         { id: "attestation", nom: "Attestation du médecin du travail, délivrée le", t: "date" },
         { id: "effet", nom: "Prend effet le", t: "date", defaut: iso(AUJOURDHUI) }],
@@ -3719,6 +3775,8 @@
       h += '<input type="' + c.t + '" data-ch="' + c.id + '" value="' + ech(v) + '" placeholder="' + ech(c.ph || "") + '"' +
         (c.t === "number" ? ' min="0" step="0.5"' : "") + ">";
     }
+    /* Une précision sous le champ, quand le champ en demande une. */
+    if (c.sous) h += '<span class="sous">' + ech(c.sous) + "</span>";
     return h + "</label>";
   }
 
@@ -3946,6 +4004,21 @@
      conduite, et c'est d'elle que l'agenda tire l'échéance de cinq ans de
      R. 4323-56. */
   var CLE_CONDUCTEURS = "flotte-conducteurs";
+  /* LE VÉHICULE VIENT DE LA FLOTTE.
+     Le protocole demandait de décrire le véhicule à la main alors que la
+     flotte porte l'immatriculation, le genre et la marque. La liste se
+     propose ; ce qui est tapé à la main reste. Relevé le 27 septembre 2026. */
+  function vehiculesDeLaFlotte() {
+    var L = null;
+    try { L = JSON.parse(localStorage.getItem("flotte-vehicules") || "null"); } catch (e) { L = null; }
+    var GENRE = { pl: "poids lourd", vl: "véhicule léger", spl: "ensemble articulé",
+      remorque: "remorque", semi: "semi-remorque" };
+    return (L || []).filter(function (v) { return String(v.immat || "").trim(); })
+      .map(function (v) {
+        return [String(v.immat).trim(), GENRE[v.genre] || String(v.genre || ""),
+          String(v.marque || "").trim()].filter(Boolean).join(", ");
+      });
+  }
   function ficheConducteur(nom) {
     var id = sansAccentSimple(nom);
     if (!id) return null;
@@ -4055,6 +4128,12 @@
       /* Le nom se choisit dans le registre : on ne retape pas
          « ZENNADI Naïma » pour la quatrième fois. */
       var gens = salariesRegistre();
+      /* Le véhicule se choisit dans la flotte, comme le nom dans le registre. */
+      var ev = $("d-champs").querySelector('[data-ch="vehicule"]');
+      if (ev && window.ListeChoix) {
+        var F = vehiculesDeLaFlotte();
+        if (F.length) window.ListeChoix.attacher(ev, { valeurs: F, libelle: "un véhicule de votre flotte" });
+      }
       ["nom", "remplace"].forEach(function (id) {
         var e = $("d-champs").querySelector('[data-ch="' + id + '"]');
         if (!e || !gens.length || !window.ListeChoix) return;
