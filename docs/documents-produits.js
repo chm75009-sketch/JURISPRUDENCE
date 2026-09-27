@@ -1857,6 +1857,43 @@
     return avant.concat([""], L.slice(fin + 1)).join("\n");
   }
 
+  /* CE QUI SERT À APPRENDRE NE PART PAS AVEC LE DOCUMENT SIGNÉ.
+
+     Un certificat de travail remis à un salarié portait « Même structure que
+     l'exemple. Les données de votre fiche sont déjà portées. » et une rubrique
+     « POUR ALLER PLUS LOIN » avec les liens de l'INRS et d'une fédération
+     professionnelle. Relevé le 27 septembre 2026. Ces deux-là ont leur place
+     dans les parcours, où l'on apprend ; pas dans la pièce qu'on signe et qu'on
+     remet. L'écran qui produit un document du quotidien les retire, comme il
+     retire déjà l'exemple.
+
+     Le renvoi à l'exemple s'en va en même temps : sans exemple, la phrase ne
+     désigne plus rien. */
+  function sansAnnexes(texte) {
+    var L = String(texte == null ? "" : texte).split("\n");
+    var out = [], i = 0;
+    while (i < L.length) {
+      var t = String(L[i]);
+      if (/^POUR ALLER PLUS LOIN\s*$/.test(t.trim())) {
+        /* La rubrique va jusqu'au prochain titre en capitales, ou jusqu'au
+           bout. Ses lignes sont en retrait, ou vides. */
+        i++;
+        while (i < L.length) {
+          var u = String(L[i]);
+          if (u.trim() && !/^\s/.test(u) && !/^Pour aller plus loin/.test(u.trim())) break;
+          i++;
+        }
+        while (out.length && !String(out[out.length - 1]).trim()) out.pop();
+        out.push("");
+        continue;
+      }
+      if (/^\s*Même structure que l'exemple/.test(t)) { i++; continue; }
+      out.push(t);
+      i++;
+    }
+    return out.join("\n");
+  }
+
   /* Le générateur rendu passe par le tri des bandeaux : c'est le seul endroit
      par lequel tous les documents sortent, et il vaut mieux un tri qu'une
      relecture de cent trente-six fichiers. `parties` et les autres propriétés
@@ -2001,6 +2038,7 @@
     pour: pour, tous: D, ajouter: ajouter,
     outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, identite: identite,
       liens: liens, EXEMPLE: EXEMPLE },
-    liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple, sansCodes: sansCodes,
+    liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple,
+    sansAnnexes: sansAnnexes, sansCodes: sansCodes,
   };
 })(typeof window !== "undefined" ? window : this);

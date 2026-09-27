@@ -3903,6 +3903,11 @@
          sert à apprendre. */
       if (window.DocumentsProduits && window.DocumentsProduits.sansExemple)
         t = window.DocumentsProduits.sansExemple(t);
+      /* Et les deux annexes d'apprentissage : le renvoi à l'exemple et les
+         liens « pour aller plus loin ». Relevé le 27 septembre 2026 sur le
+         certificat de travail. */
+      if (window.DocumentsProduits && window.DocumentsProduits.sansAnnexes)
+        t = window.DocumentsProduits.sansAnnexes(t);
       crochets.forEach(function (c) { t = t.split(c[0]).join(c[1]); });
       if (i) blocs.push({ k: "saut", t: "" });
       blocs = blocs.concat(blocsDeTexte(t));

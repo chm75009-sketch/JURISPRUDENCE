@@ -361,12 +361,53 @@
      elles s'adressent à celui qui remplit, pas à celui qui lit. */
   var VERS_WORD = { t1: "t1", st: "sur", h1: "h1", h2: "h2", p: "p", puce: "puce",
     lien: "p", sign: "p", trait: "trait", saut: "saut" };
+  /* UN BLOC DE SIGNATURE ALIGNÉ À L'ESPACE SORT SUR UNE SEULE LIGNE DANS WORD.
+
+     « Le salarié                    Pour la Société » et les deux noms en
+     dessous sont écrits avec des espaces, et la police du Word n'est pas à
+     chasse fixe : les deux colonnes se mêlaient, et les retours à la ligne
+     disparaissaient. Relevé le 27 septembre 2026. Deux colonnes séparées par
+     trois espaces ou plus se rendent en tableau de deux colonnes, la première
+     ligne servant d'en-tête. Un bloc d'une seule colonne reste un paragraphe,
+     ligne par ligne. */
+  function signature(t) {
+    var lignes = String(t == null ? "" : t).split("\n")
+      .map(function (l) { return l.replace(/\s+$/, ""); })
+      .filter(function (l) { return l.trim() !== ""; });
+    if (!lignes.length) return null;
+    var coupe = lignes.map(function (l) {
+      var m = l.match(/^(.*?\S)\s{3,}(\S.*)$/);
+      return m ? [m[1].trim(), m[2].trim()] : [l.trim(), ""];
+    });
+    if (!coupe.some(function (c) { return c[1]; })) return null;
+    /* Une mention qui se poursuit sous la première colonne, « (signature
+       précédée de la mention » puis « « lu et approuvé » ) », rejoint la case
+       du dessus : elle n'est pas une ligne de plus. */
+    var jointes = [];
+    coupe.forEach(function (c, i) {
+      if (i && !c[1] && jointes.length) {
+        var av = jointes[jointes.length - 1];
+        av[0] = av[0] ? av[0] + " " + c[0] : c[0];
+        return;
+      }
+      jointes.push(c);
+    });
+    return { k: "table", head: jointes[0], rows: jointes.slice(1) };
+  }
   function items(bs) {
     var out = [];
     bs.forEach(function (b) {
       if (b.k === "note") return;
       if (b.k === "table") { out.push({ k: "table", head: b.head, rows: b.rows }); return; }
       if (b.k === "exemple") { out.push({ k: "enc", titre: "Exemple", t: b.t }); return; }
+      if (b.k === "sign") {
+        var s = signature(b.t);
+        if (s) { out.push(s); return; }
+        String(b.t).split("\n").forEach(function (l) {
+          if (l.trim()) out.push({ k: "p", t: l.trim() });
+        });
+        return;
+      }
       out.push({ k: VERS_WORD[b.k] || "p", t: b.t });
     });
     return out;

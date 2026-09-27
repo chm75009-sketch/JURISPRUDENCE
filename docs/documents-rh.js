@@ -371,20 +371,32 @@
       L.push("- en est sorti le " + cro(d.dateSortie, "DATE DE SORTIE") + " ;");
       L.push("- y a occupé le ou les emplois suivants, aux périodes indiquées :");
       L.push("");
-      L.push("[EMPLOI OCCUPÉ], du [DATE] au [DATE]");
+      /* L'EMPLOI ET SES DATES SONT AU REGISTRE, ET LE CERTIFICAT SE DATE DE LA
+         SORTIE, NON DU JOUR OÙ ON L'ÉDITE.
+
+         « [EMPLOI OCCUPÉ], du [DATE] au [DATE] » restait vide pour un salarié
+         que le registre porte, et le certificat d'un salarié sorti le 31 août
+         était daté du 27 septembre. Il est délivré à l'expiration du contrat.
+         Relevé le 27 septembre 2026. */
+      var salC = salarieDuRegistre(ctx, d.salarieSortie);
+      var sortieC = dateDe(d.dateSortie) || (salC ? dateDe(salC.sor) : null);
+      var entreeC = dateDe(d.dateEmbauche) || (salC ? dateDe(salC.ent) : null);
+      var empC = (salC && String(salC.emp || "").trim()) || "";
+      L.push((empC || "[EMPLOI OCCUPÉ]") + ", du " + (entreeC ? jj(entreeC) : "[DATE]") +
+             " au " + (sortieC ? jj(sortieC) : "[DATE]"));
       L.push("(répéter pour chaque emploi successivement tenu)");
       L.push("");
       L.push("En foi de quoi ce certificat est délivré au salarié pour servir et valoir ce que de droit.");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0));
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(sortieC || d0));
       L.push(cro(p.responsable, "Nom, qualité et signature"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");
       L.push("");
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
-        ["Établissement du certificat : à l'expiration du contrat", jj(d0), "certificat signé et daté"],
-        ["Remise au salarié ou mise à disposition : le certificat est quérable", jj(d0), "trace de la remise ou mise à disposition"],
+        ["Établissement du certificat : à l'expiration du contrat", jj(sortieC || d0), "certificat signé et daté"],
+        ["Remise au salarié ou mise à disposition : le certificat est quérable", jj(sortieC || d0), "trace de la remise ou mise à disposition"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
@@ -477,8 +489,19 @@
       L.push("Cotisations salariales : [MONTANT] €");
       L.push("TOTAL NET VERSÉ : [MONTANT] €");
       L.push("");
+      /* LE REÇU SE SIGNE À LA RUPTURE, ET LES SIX MOIS COURENT DU LENDEMAIN.
+
+         Le reçu était daté du jour de l'édition, non de la fin du contrat, et
+         le dernier jour pour le dénoncer était compté du jour même de la
+         signature : « dans les six mois qui SUIVENT sa signature » (L. 1234-20,
+         LEGIARTI000019071122, lu à la source le 27 septembre 2026, deux
+         lectures concordantes). Le délai part donc du lendemain. Relevé le
+         27 septembre 2026. */
+      var salS = salarieDuRegistre(ctx, d.salarieSortie);
+      var sortieS = dateDe(d.dateSortie) || (salS ? dateDe(salS.sor) : null);
+      var signS = sortieS || d0;
       L.push("Le présent reçu est établi en DEUX EXEMPLAIRES.");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(signS) + ", en deux exemplaires.");
       L.push("");
       L.push("Pour la société                          Le salarié");
       L.push(cro(p.responsable, "Nom et qualité") + "                      " +
@@ -488,10 +511,13 @@
       L.push("VOTRE CALENDRIER");
       L.push("");
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
-        ["Établissement du reçu en double exemplaire", jj(d0), "deux exemplaires signés"],
-        ["Remise d'un exemplaire au salarié", jj(d0), "signature du salarié ou trace de remise"],
+        ["Établissement du reçu en double exemplaire", jj(signS), "deux exemplaires signés"],
+        ["Remise d'un exemplaire au salarié", jj(signS), "signature du salarié ou trace de remise"],
         ["Conservation du second exemplaire", "en permanence", "au dossier du personnel"],
-        ["Dénonciation possible par le salarié", jj(moisDans(d0, 6)), "délai de 6 mois à partir de la signature"],
+        ["Dernier jour pour dénoncer le reçu", jj(dans(moisDans(signS, 6), 1)),
+         "six mois qui suivent la signature du " + jj(signS) + ", comptés du lendemain (L. 1234-20)"],
+        ["Le reçu devient libératoire", jj(dans(moisDans(signS, 6), 2)),
+         "pour les seules sommes qui y sont mentionnées (L. 1234-20)"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
