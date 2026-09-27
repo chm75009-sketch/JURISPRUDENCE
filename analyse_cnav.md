@@ -221,9 +221,75 @@ Le montant de 136,464.90€ reflète l'intégration des deux arrêts Cour d'appe
 - Montant régularisé (décembre 2027) : 913,37€/mois
 - **Augmentation mensuelle : 618,04€ (+209%)**
 
+---
+
+## VÉRIFICATION IMPARTIALE DES CALCULS
+
+### ✓ Points de force (vérifiés)
+
+1. **Formules mathématiques CNAV** : 100% exactes sur les 3 propositions
+   - Retraite = Revenu base × Taux × (Trimestres/167)
+   - Calculs vérifiés à ±0.01€
+
+2. **Demandes RTH NETGOCE** : Chiffres corrects
+   - 54 trimestres = 13 ans × 4T + 1 an × 2T ✓
+   - Salaire total = 327,636.00€ ✓
+   - Acceptation CNAV confirmée
+
+3. **Revenu de base** : Calculation vérifiée
+   - 25 années × 32,112.29€ = 802,807.26€ ✓
+
+### ⚠ Points à clarifier (critique pour CNAV)
+
+1. **Montant 1995 anormal** : 136,464.90€ vs plafond 23,772.90€
+   - Dépassement massif : +112,692€ au-delà du plafond
+   - Question : CNAV a-t-elle le droit d'intégrer les arriérés AU-DELÀ du plafond?
+   - Chaîne de valeur :
+     * 10,719€ (salaire GERME 1995 original)
+     * 27,548€ (juin 2023, valeur revalorisée)
+     * 129,127€ (mai 2023, avec arriérés partiels)
+     * 136,464€ (septembre 2025, avec arriérés supplémentaires)
+   - **ACTION REQUISE** : CNAV doit expliquer ligne par ligne comment elle passe de 10,719€ à 136,464€
+
+2. **Taux d'actualisation** : Non documentés
+   - Comment le passage de 27,548€ (juin 2023) à 136,464€ (sept 2025) a-t-il été calculé?
+   - Taux annuel appliqué?
+   - Ventilation par année des arriérés (1990-1996) ou globalisation à 1995?
+
+3. **ISCIO 1994 et TBW 1997** : Intégration incertaine
+   - Montants faibles mais à clarifier
+   - 1994 affiché à 47,285.65€ (demande initiale = 3,907€ delta)
+   - 1997 affiché à 10,418.30€ (demande initiale = 2,091€ manquant)
+
+### Position impartiale du juge
+
+**Pour CNAV :**
+- ✓ Reconnaissance de l'erreur (refus d'août 2023)
+- ✓ Régularisation complète (acceptation RTH + GERME)
+- ✓ Calculs mathématiques exacts
+
+**Contre CNAV :**
+- ✗ Absence de justification détaillée du montant 1995
+- ✗ Taux d'actualisation non communiqués
+- ✗ Dépasse le plafond CNAV sans explication
+
+**Pour le demandeur :**
+- ✓ RTH NETGOCE : chiffres vérifiés et acceptés
+- ✓ Perte financière quantifiable : 11,080€ (27 mois × 410€) + intérêts
+- ✓ Documents complets et justificatifs
+
+**Dû au demandeur (certain) :**
+- 11,080,53€ pour mai 2023 - septembre 2025 (27 mois × 410,39€)
+- + Intérêts légaux 6% ≈ 2,000€
+- **Total minimum : ~13,080€**
+
 ### PROCHAINES ÉTAPES
 
-1. **Conciliation (8 octobre 2026)** : Négociation du versement rétroactif et des intérêts
-2. **Clarifier ISCIO 1994 et TBW 1997** auprès de CNAV
-3. **Vérifier l'intégration effective** de ces deux éléments dans le calcul du revenu de base
-4. **Demander le versement des arriérés** depuis mai 2023 avec intérêts légaux (6% pour sécurité sociale)
+1. **Conciliation (8 octobre 2026)** : Exiger la clarification de 1995 et taux d'actualisation
+2. **CNAV doit produire** :
+   - Calcul détaillé du montant 1995 (27,548€ → 136,464€)
+   - Taux d'actualisation appliqués par année
+   - Ventilation précise des arriérés GERME par année (1990-1996)
+   - Justification légale de dépasser le plafond CNAV
+3. **Confirmer le versement** des 13,080€ minimum + intérêts rétroactifs
+4. **Clarifier ISCIO 1994 et TBW 1997** si les montants supplémentaires peuvent être validés
