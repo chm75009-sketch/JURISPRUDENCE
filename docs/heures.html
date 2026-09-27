@@ -273,10 +273,8 @@
 
     <div class="bloc">
       <h2>Horaire de référence</h2>
-      <p class="doux">La semaine du contrat, jour par jour. Elle remplit d'avance tous les jours
-        travaillés du mois et ne sert qu'à cela : chaque jour du mois reste modifiable. Un service
-        en coupure se saisit sur deux lignes, midi et soir. Un horaire type remplit les jours
-        travaillés en un geste, et vous corrigez ensuite ce qui diffère.</p>
+      <p class="doux">La semaine du contrat, jour par jour : elle remplit d'avance le mois, et chaque
+        jour reste modifiable. Un service en coupure se saisit sur deux lignes.</p>
       <label class="champ" style="margin:0 0 12px"><span>Horaire type</span>
         <select id="r-type" aria-label="Horaire type"></select></label>
       <div id="r-sem"></div>
@@ -307,9 +305,8 @@
 
     <div class="bloc">
       <h2>Jours du mois</h2>
-      <p class="doux">Les jours travaillés arrivent déjà remplis par l'horaire de référence : il n'y a
-        rien à saisir tant que rien ne change. On ne touche qu'aux jours qui s'en écartent, ils se
-        marquent d'un trait orange et proposent alors de recopier leurs horaires sur tout le mois.</p>
+      <p class="doux">Rien à saisir tant que rien ne change : on ne touche qu'aux jours qui
+        s'écartent de l'horaire de référence, marqués d'un trait orange.</p>
       <div class="jours" id="jours"></div>
     </div>
 
@@ -450,12 +447,9 @@
 
     <div class="bloc">
       <h2>Remettre le récapitulatif au salarié</h2>
-      <p class="doux">Le même document dans les deux cas : le relevé du mois, jour par jour, avec la
-        semaine récapitulée et la place de la signature. Sur place, on l'imprime et on le fait signer.
-        À distance, le bouton d'envoi ouvre la feuille de partage du téléphone avec le récapitulatif
-        déjà dedans : Mail, WhatsApp, Messenger, ce que vous voulez. Sur un ordinateur qui ne sait pas
-        partager, le fichier se télécharge et le message e-mail s'ouvre prêt, à compléter d'une pièce
-        jointe.</p>
+      <p class="doux">Le relevé du mois, jour par jour, avec la place de la signature. Sur place,
+        on l'imprime ; à distance, le bouton d'envoi ouvre la feuille de partage du téléphone, le
+        récapitulatif déjà dedans.</p>
       <label class="champ"><span>Adresse e-mail du salarié</span>
         <input type="email" id="s-courriel" inputmode="email" autocomplete="off"
           placeholder="prenom.nom@exemple.fr"></label>
@@ -471,12 +465,9 @@
          de points : c'est le conducteur qui déclare ce point-là. -->
     <div class="bloc">
       <h2>Déclaration du conducteur, à joindre au décompte</h2>
-      <p class="doux">L'imprimé que le salarié signe en même temps que son relevé du mois : il y
-        déclare que son permis est valable, qu'il ne fait l'objet d'aucune rétention, suspension,
-        annulation ni invalidation, qu'il n'a pas perdu la totalité de ses points, et il s'engage à
-        prévenir l'entreprise sans délai si cela change. Le numéro et la catégorie du permis sont
-        repris de sa fiche dans <a href="flotte.html">Flotte et conducteurs</a> ; ce qui manque
-        laisse des pointillés à remplir à la main.</p>
+      <p class="doux">L'imprimé que le conducteur signe avec son relevé : son permis est valable,
+        sans rétention ni suspension, et il préviendra sans délai si cela change. Le numéro et la
+        catégorie viennent de sa fiche dans <a href="flotte.html">Flotte et conducteurs</a>.</p>
       <div class="barre">
         <button type="button" id="b-decl-imp">Imprimer la déclaration</button>
         <button type="button" class="second" id="b-decl">La déclaration en Word</button>

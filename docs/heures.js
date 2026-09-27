@@ -484,7 +484,7 @@
       if (l.sem === 0 || i === lignes.length - 1) {
         var s = document.createElement("div");
         s.className = "semaine";
-        s.innerHTML = "<span>Semaine du " + courante.du + " au " + courante.au + " " +
+        s.innerHTML = "<span>Semaine du " + quantieme(courante.du) + " au " + courante.au + " " +
           MOIS[mo] + "</span><b>0,00 h</b>";
         hote.appendChild(s);
         courante.noeud = s.querySelector("b");
@@ -906,6 +906,10 @@
   /* Ce que l'écran en dit : des phrases, pas un tableau de bord. Ce qui est
      franchi est dit en premier, avec le jour et le chiffre. */
   function leJourDit(j) { return j === 1 ? "le 1er" : "le " + j; }
+  /* Le premier du mois s'écrit « 1er », partout : « du 1 au 6 » se lisait dans
+     la grille, dans le tableau du classeur et sur la feuille signée. Relevé le
+     27 septembre 2026. */
+  function quantieme(j) { return j === 1 ? "1er" : String(j); }
 
   /* LA CATÉGORIE D'UN CONDUCTEUR SE DEMANDE, ELLE NE SE DEVINE PAS.
 
@@ -1453,12 +1457,20 @@
         (verrou ? " disabled" : "") + "></label>";
     }).join("");
 
-    $("frais-dit").textContent = "Les montants sont ceux de " + C.frais.source +
-      ", en vigueur au " + C.frais.depuis.split("-").reverse().join("/") +
-      ", et la période de nuit celle de " + C.nuit.source +
-      ". Vérifiez-les au texte : la convention n'est pas lue par l'application, ces valeurs y ont été " +
-      "recopiées avec leur date. Le nombre de repas et de découchers ne se déduit d'aucun horaire : " +
-      "c'est vous qui le comptez.";
+    /* Une aide de huit lignes n'est pas lue. Celle-ci en fait trois, et dit
+       l'essentiel : d'où viennent les montants, et ce qui reste à compter à la
+       main. Relevé le 27 septembre 2026. L'élision aussi : on lisait « ceux de
+       Avenant n° 81 ». */
+    /* Deux lignes, et le texte exact derrière un repli : l'aide faisait six
+       lignes, dont quatre pour le titre de l'avenant. Relevé le 27 septembre
+       2026. */
+    $("frais-dit").innerHTML = "Montants recopiés de la convention, à vérifier au texte. Le " +
+      "nombre de repas et de découchers se compte à la main." +
+      '<details class="loi" style="margin-top:6px"><summary>D\'où viennent ces montants</summary>' +
+      "<div><p>" + ech(C.frais.source) + ", en vigueur au " +
+      ech(C.frais.depuis.split("-").reverse().join("/")) + ". Période de nuit : " +
+      ech(C.nuit.source) + ". La convention n'est pas lue par l'application : ces valeurs y ont " +
+      "été recopiées avec leur date.</p></div></details>";
 
     Array.prototype.forEach.call($("frais").querySelectorAll("[data-frais]"), function (el) {
       el.addEventListener("input", function () {
@@ -1808,7 +1820,7 @@
                     v: Math.round(cumul * 100) / 100 };
           totaux.push("F" + (decalage + t.length + 1));
         }
-        t.push(["Semaine du " + sem + " au " + l.j, "", "", "", "Total semaine", total]);
+        t.push(["Semaine du " + quantieme(sem) + " au " + l.j, "", "", "", "Total semaine", total]);
         sem = null; cumul = 0; depart = null;
       }
     });
@@ -2067,7 +2079,16 @@
     var t = lireCle(CLE_DEC, {});
     var cleM = an + "-" + ("0" + (mo + 1)).slice(-2);
     var trimestre = Math.floor(mo / 3);
-    return salaries().map(function (s) {
+    /* UN SALARIÉ PARTI AVANT LE MOIS N'EST PAS DANS L'ÉTAT DU MOIS.
+
+       Relevé le 27 septembre 2026 : l'état listait les trois salariés sortis,
+       avec un mois « non tenu », comme s'il y avait quelque chose à tenir.
+       Celui qui part en cours de mois y reste : ses heures de ce mois-là
+       existent. Celui qui était parti avant le premier du mois en sort. */
+    var premierDuMois = an + "-" + ("0" + (mo + 1)).slice(-2) + "-01";
+    return salaries().filter(function (s) {
+      return !(net(s.sor) && net(s.sor) < premierDuMois);
+    }).map(function (s) {
       var m = t[s.id + "|" + cleM];
       /* « Tenu » veut dire saisi, pas visité : un enregistrement qui ne porte
          qu'un total calculé n'est pas un mois tenu. */
@@ -2421,15 +2442,27 @@
     $("e-tout").hidden = false;
 
     $("qui").innerHTML = GENS.map(function (s, i) {
-      return '<option value="' + i + '">' + ech(s.nom + (s.emp ? ", " + s.emp : "")) + "</option>";
+      return '<option value="' + i + '">' + ech(s.nom + (s.emp ? ", " + s.emp : "") +
+        (s.sor ? " (sorti le " + (enFrancais(s.sor) || s.sor) + ")" : "")) + "</option>";
     }).join("");
-    qui = GENS[0];
+    /* ON REVIENT OÙ L'ON ÉTAIT.
+
+       Relevé le 27 septembre 2026 : quel que soit le salarié ouvert, la page
+       rechargée retombait sur le premier du registre. Le nom choisi est gardé
+       sur ce poste, et repris au démarrage s'il est toujours au registre. */
+    var garde = "";
+    try { garde = window.localStorage.getItem("heures-salarie") || ""; } catch (e) { garde = ""; }
+    var depart = 0;
+    GENS.forEach(function (s, i) { if (s.id === garde) depart = i; });
+    $("qui").value = String(depart);
+    qui = GENS[depart];
 
     var n = new Date();
     an = n.getFullYear(); mo = n.getMonth();
 
     $("qui").addEventListener("change", function () {
       qui = GENS[parseInt($("qui").value, 10) || 0];
+      try { window.localStorage.setItem("heures-salarie", qui.id); } catch (e) {}
       tout();
     });
     $("mois-avant").addEventListener("click", function () {
