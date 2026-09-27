@@ -216,7 +216,7 @@
       c.d1 = c.d1 || ""; c.f1 = c.f1 || ""; c.d2 = c.d2 || ""; c.f2 = c.f2 || "";
       if (c.p == null) c.p = "0";
     }
-    return { sem: sem, courriel: r.courriel || "", taux: r.taux || "" };
+    return { sem: sem, courriel: r.courriel || "", taux: r.taux || "", repos: r.repos || {} };
   }
 
   /* Les plages réellement travaillées d'un jour : une, ou deux en coupure. Les
@@ -1023,6 +1023,97 @@
     return n.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
   }
 
+  /* ── LE REPOS ACQUIS, ET SA PRISE EFFECTIVE ──────────────────────────────
+
+     L. 3171-2 (LEGIARTI000035653247, deux lectures concordantes au relais le
+     27 septembre 2026) : « l'employeur établit les documents nécessaires au
+     décompte de la durée de travail, des repos compensateurs acquis et de leur
+     prise effective, pour chacun des salariés concernés ». L'écran comptait ce
+     qui s'ouvrait et ne suivait rien de ce qui était pris : le document
+     manquait la moitié de ce que le texte demande.
+
+     Le délai est celui de R. 3312-48 (LEGIARTI000033450333) pour un roulant :
+     « Cette compensation obligatoire en repos doit être prise dans un délai
+     maximum de trois mois suivant l'ouverture du droit. Une convention ou un
+     accord collectif étendu ou un accord d'entreprise ou d'établissement peut
+     fixer un délai supérieur, dans la limite de six mois. » */
+  function cleTrimestre() { return an + "-T" + (Math.floor(mo / 3) + 1); }
+  function reposPris(cle) {
+    var r = refDe(qui.id), t = r.repos || {};
+    return (t[cle] || []).slice();
+  }
+  function garderRepos(cle, liste) {
+    var r = refDe(qui.id);
+    r.repos = r.repos || {};
+    r.repos[cle] = liste;
+    garderRef(qui.id, r);
+  }
+  function rendreRepos() {
+    var z = $("repos-etat");
+    if (!z || !qui) return;
+    var a = analyse(), tri = Math.floor(mo / 3), pl = a.pl;
+    var cle = cleTrimestre();
+    var c = cumul(tri * 3, tri * 3 + 2);
+    var unite, du, fond;
+    if (pl.roulant) {
+      du = reposTrimestre(c.hs);
+      unite = du > 1 ? "journées" : "journée";
+      fond = "R. 3312-48 du code des transports";
+    } else {
+      var ct = contingent();
+      du = Math.round(ct.audela * ct.taux) / 100;
+      unite = "heures";
+      fond = "L. 3121-30 et L. 3121-38 du code du travail";
+    }
+    var pris = reposPris(cle);
+    var somme = pris.reduce(function (s, x) { return s + (parseFloat(x.jours) || 0); }, 0);
+    var reste = Math.round((du - somme) * 100) / 100;
+    /* La limite : trois mois après la fin du trimestre qui a ouvert le droit. */
+    var finTri = new Date(an, tri * 3 + 3, 0);
+    var limite = new Date(finTri.getFullYear(), finTri.getMonth() + 4, 0);
+    var L = [];
+    if (du <= 0) {
+      L.push('<p class="doux">Rien n\'est encore acquis sur ce trimestre : ' + nbh(c.hs) +
+        " d'heures supplémentaires" + (pl.roulant
+          ? ", et le repos s'ouvre à la quarante et unième (" + ech(fond) + ")."
+          : ", et la contrepartie s'ouvre au-delà du contingent de 220 heures (" + ech(fond) + ")."));
+    } else {
+      L.push('<p class="al">Acquis sur le trimestre : ' + String(du).replace(".", ",") + " " +
+        unite + " (" + ech(fond) + "). Pris : " + String(somme).replace(".", ",") +
+        ". Reste à prendre : " + String(reste).replace(".", ",") + ".</p>");
+      if (reste > 0.005)
+        L.push('<p class="' + (new Date() > limite ? "al rouge" : "doux") + '">À prendre au plus tard le ' +
+          ech(enFrancais(iso(limite)) || "") + ", trois mois après l'ouverture du droit. Un accord " +
+          "de branche étendu ou d'entreprise peut porter ce délai à six mois : s'il en existe un, " +
+          "c'est lui qui s'applique.</p>");
+      else
+        L.push('<p class="doux">Le repos acquis sur ce trimestre a été pris en entier.</p>');
+    }
+    z.innerHTML = L.join("");
+    var liste = $("repos-liste");
+    /* Une ligne par repos pris : la date, la quantité, et de quoi la retirer.
+       Le tout tient sur une ligne de téléphone. */
+    if (liste) liste.innerHTML = pris.length
+      ? pris.map(function (x, i) {
+          return '<div style="display:flex;align-items:center;justify-content:space-between;' +
+            'gap:10px;padding:9px 0;border-top:1px solid var(--filet)">' +
+            '<span style="font-size:15px">' + ech(enFrancais(x.le) || x.le) + " : " +
+            String(x.jours).replace(".", ",") + " " + ech(unite) + "</span>" +
+            '<button type="button" class="second" data-rp="' + i +
+            '" style="flex:0 0 auto;min-height:36px;padding:6px 12px;font-size:13px">Retirer</button>' +
+            "</div>";
+        }).join("")
+      : "";
+    if (liste) Array.prototype.forEach.call(liste.querySelectorAll("[data-rp]"), function (b) {
+      b.addEventListener("click", function () {
+        var l = reposPris(cle);
+        l.splice(parseInt(b.getAttribute("data-rp"), 10), 1);
+        garderRepos(cle, l);
+        rendreRepos();
+      });
+    });
+  }
+
   function rendreControles() {
     var z = $("controles");
     if (!z) return;
@@ -1462,6 +1553,7 @@
       $("l-motif").hidden = false;
     }
     rendreControles();
+    rendreRepos();
     rendreSujetions();
     return total;
   }
@@ -1581,7 +1673,7 @@
       }
       sem[j] = c;
     });
-    garderRef(qui.id, { sem: sem, courriel: r.courriel, taux: r.taux });
+    garderRef(qui.id, { sem: sem, courriel: r.courriel, taux: r.taux, repos: r.repos });
     direCeQuiManque(sem);
     construire();
     if (redessiner) rendreRef();
@@ -2297,7 +2389,7 @@
         var travaille = aucun ? (j >= 1 && j <= 5) : !!r.sem[j];
         sem[j] = travaille ? { d1: t.d, f1: t.f, d2: "", f2: "", p: String(t.p) } : null;
       }
-      garderRef(qui.id, { sem: sem, courriel: r.courriel, taux: r.taux });
+      garderRef(qui.id, { sem: sem, courriel: r.courriel, taux: r.taux, repos: r.repos });
       $("r-type").value = "";
       construire(); rendreRef(); rendreIdentite(); dessinerJours(); calculer();
     });
@@ -2521,6 +2613,24 @@
       r.taux = $("s-taux").value;
       garderRef(qui.id, r);
       rendreControles();
+    });
+    /* Le repos pris s'inscrit avec sa date : c'est la « prise effective » que
+       L. 3171-2 demande de porter au document. */
+    if ($("rp-poser")) $("rp-poser").addEventListener("click", function () {
+      var d = net($("rp-date").value);
+      var n = parseFloat(String($("rp-combien").value).replace(",", "."));
+      if (!d || !isFinite(n) || n <= 0) {
+        $("rp-dit").textContent = "Il faut une date et un nombre : c'est ce qui fait la preuve " +
+          "de la prise effective.";
+        return;
+      }
+      var cle = cleTrimestre(), l = reposPris(cle);
+      l.push({ le: d, jours: Math.round(n * 100) / 100 });
+      l.sort(function (x, y) { return x.le < y.le ? -1 : 1; });
+      garderRepos(cle, l);
+      $("rp-date").value = ""; $("rp-combien").value = "";
+      $("rp-dit").textContent = "Inscrit.";
+      rendreRepos();
     });
     $("b-excel").addEventListener("click", classeur);
     $("b-word").addEventListener("click", word);

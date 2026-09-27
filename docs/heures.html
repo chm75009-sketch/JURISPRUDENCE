@@ -383,6 +383,26 @@
           placeholder="ce qui explique le dépassement, et ce qui a été fait"></label>
     </div>
 
+    <!-- LE REPOS ACQUIS, ET SA PRISE EFFECTIVE.
+         L. 3171-2 impose à l'employeur d'établir les documents nécessaires au
+         décompte « des repos compensateurs acquis et de leur prise effective ».
+         L'écran comptait ce qui s'ouvrait et ne suivait rien de ce qui était
+         pris : le document manquait la moitié de ce que le texte demande.
+         Relevé le 27 septembre 2026. -->
+    <div class="bloc">
+      <h2>Repos compensateur : acquis, et pris</h2>
+      <div id="repos-etat"></div>
+      <div class="deux" style="margin-top:10px">
+        <label class="champ"><span>Repos pris le</span>
+          <input type="date" id="rp-date"></label>
+        <label class="champ"><span>Combien</span>
+          <input type="text" id="rp-combien" inputmode="decimal" placeholder="1"></label>
+      </div>
+      <div class="barre"><button type="button" class="second" id="rp-poser">Inscrire ce repos</button></div>
+      <p class="doux" id="rp-dit"></p>
+      <div id="repos-liste"></div>
+    </div>
+
     <div class="bloc">
       <h2>Clôture du mois</h2>
       <p class="doux">Une fois clos, le mois passe en lecture seule et son empreinte est calculée :
