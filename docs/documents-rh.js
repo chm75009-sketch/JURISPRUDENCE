@@ -99,6 +99,18 @@
     r.setDate(r.getDate() + jours);
     return r;
   }
+  /* LES MOIS ET LES ANNÉES NE SE COMPTENT PAS EN JOURS. « Deux mois avant le
+     1er mai » donnait le 2 mars, parce que soixante jours en arrière tombent
+     en mars et non en mars : l'écran disait le 1er mars, le document le 2. De
+     même, six mois après une signature du 25 septembre, ce n'est pas
+     cent quatre-vingts jours. Relevé le 26 septembre 2026. */
+  function moisDans(d, n) {
+    var r = new Date(d), j = r.getDate();
+    r.setDate(1); r.setMonth(r.getMonth() + n);
+    var dernier = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate();
+    r.setDate(Math.min(j, dernier));
+    return r;
+  }
   function tableau(en_tete, lignes) {
     var L = [];
     if (en_tete && en_tete.length > 0) {
@@ -427,7 +439,7 @@
         ["Établissement du reçu en double exemplaire", jj(d0), "deux exemplaires signés"],
         ["Remise d'un exemplaire au salarié", jj(d0), "signature du salarié ou trace de remise"],
         ["Conservation du second exemplaire", "en permanence", "au dossier du personnel"],
-        ["Dénonciation possible par le salarié", jj(dans(d0, 180)), "délai de 6 mois à partir de la signature"],
+        ["Dénonciation possible par le salarié", jj(moisDans(d0, 6)), "délai de 6 mois à partir de la signature"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
@@ -886,7 +898,7 @@
       var quatre = ent ? new Date(ent.getFullYear() + 4, ent.getMonth(), ent.getDate(), 12) : null;
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
         ["Premier entretien, au cours de la première année suivant l'embauche",
-          ent ? "avant le " + jj(dans(ent, 365)) : "un an après l'entrée, date d'entrée à porter",
+          ent ? "avant le " + jj(moisDans(ent, 12)) : "un an après l'entrée, date d'entrée à porter",
           "document signé et remis"],
         ["Puis tous les quatre ans",
           quatre ? "prochain repère : " + jj(quatre) : "quatre ans après le précédent",
@@ -995,9 +1007,9 @@
       L.push("VOTRE CALENDRIER");
       L.push("");
       L = L.concat(tableau(["Étape", "Date", "Trace conservée"], [
-        ["Premier entretien : première année", jj(dans(d0, 365)), "document signé"],
-        ["Deuxième entretien : quatre ans après le premier", jj(dans(d0, 1460)), "document signé"],
-        ["État des lieux : huit ans après la première embauche", jj(dans(d0, 2920)), "document signé et remis"],
+        ["Premier entretien : première année", jj(moisDans(d0, 12)), "document signé"],
+        ["Deuxième entretien : quatre ans après le premier", jj(moisDans(d0, 48)), "document signé"],
+        ["État des lieux : huit ans après la première embauche", jj(moisDans(d0, 96)), "document signé et remis"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));
@@ -1054,7 +1066,7 @@
       L.push("Les demandes de congés sont adressées à la direction avant le 31 mars 2026.");
       L.push("L'ordre des départs sera communiqué à chaque salarié un mois au moins avant son départ.");
       L.push("");
-      L.push("Affiché le " + leJour(dans(d0, 60)) + " aux emplacements habituels.");
+      L.push("Affiché le " + leJour(moisDans(d0, 2)) + " aux emplacements habituels.");
       L.push("Jean XXXXX, gérant");
       L.push("");
 
@@ -1103,7 +1115,7 @@
       var deb = dateDe(d.debutPeriode), finP = dateDe(d.finPeriode);
       L = L.concat(tableau(["Étape", "Date", "Trace conservée"], [
         ["Affichage de l'avis : au moins deux mois avant l'ouverture (D. 3141-5)",
-          deb ? jj(dans(deb, -60)) : "[à compléter : deux mois avant l'ouverture]",
+          deb ? jj(moisDans(deb, -2)) : "[à compléter : deux mois avant l'ouverture]",
           "affichage daté, photographie"],
         ["Ouverture de la période de prise", deb ? jj(deb) : "[date de début à saisir]",
           "avis affiché"],
