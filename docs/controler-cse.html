@@ -506,13 +506,45 @@
       marques: ["repartition du personnel", "proportion de femmes", "repartition des sieges"], seuil: 2,
       texte: function (c) {
         var noms = nomsColleges(c);
-        var rows = noms.map(function (n) { return [n, "[  ]", "[  ]", "[  ]", "[  ] %", "[  ] %", "[  ]", "[  ]"]; });
-        rows.push(["Total", "[  ]", "[  ]", "[  ]", "[  ] %", "[  ] %",
-          c.tit === null ? "[  ]" : String(c.tit), c.tit === null ? "[  ]" : String(c.tit)]);
+        /* Le tableau se remplit du registre quand il est tenu, et la part de
+           femmes et d'hommes se calcule : c'est cette proportion que L. 2314-30
+           impose de respecter sur les listes, et L. 2314-31 de porter à la
+           connaissance des salariés. */
+        function pc(n, t) { return t > 0 ? String(Math.round(n * 1000 / t) / 10).replace(".", ",") + " %" : "[  ] %"; }
+        var rows;
+        if (REG && REG.total) {
+          /* Un collège unique reçoit tout le monde ; sinon, chaque collège
+             reçoit ce que la qualification a proposé, la maîtrise et les cadres
+             étant réunis quand il n'y a que deux collèges. */
+          var paquets;
+          if (noms.length === 1) paquets = [[REG.total, REG.femmes, REG.hommes]];
+          else if (noms.length === 2) paquets = [REG.col[0],
+            [REG.col[1][0] + REG.col[2][0], REG.col[1][1] + REG.col[2][1], REG.col[1][2] + REG.col[2][2]]];
+          else paquets = [REG.col[0], REG.col[1], REG.col[2]];
+          rows = noms.map(function (n, i) {
+            var q = paquets[i] || [0, 0, 0];
+            return [n, String(q[0]), String(q[1]), String(q[2]), pc(q[1], q[0]), pc(q[2], q[0]), "[  ]", "[  ]"];
+          });
+          rows.push(["Total", String(REG.total), String(REG.femmes), String(REG.hommes),
+            pc(REG.femmes, REG.total), pc(REG.hommes, REG.total),
+            c.tit === null ? "[  ]" : String(c.tit), c.tit === null ? "[  ]" : String(c.tit)]);
+        } else {
+          rows = noms.map(function (n) { return [n, "[  ]", "[  ]", "[  ]", "[  ] %", "[  ] %", "[  ]", "[  ]"]; });
+          rows.push(["Total", "[  ]", "[  ]", "[  ]", "[  ] %", "[  ] %",
+            c.tit === null ? "[  ]" : String(c.tit), c.tit === null ? "[  ]" : String(c.tit)]);
+        }
         return [
           "Article 4. Répartition du personnel dans les collèges et des sièges entre les catégories.",
           "La répartition du personnel dans les collèges électoraux et la répartition des sièges entre les différentes catégories de personnel sont arrêtées comme suit :",
           tab(["Collège", "Inscrits", "Femmes", "Hommes", "Part de femmes", "Part d'hommes", "Sièges titulaires", "Sièges suppléants"], rows),
+          (REG && REG.total
+            ? "[Les effectifs ci-dessus sont ceux du registre unique du personnel, au jour de la rédaction : " +
+              REG.total + " salariés en poste, dont " + REG.femmes + " femmes et " + REG.hommes +
+              " hommes. La répartition entre collèges est proposée d'après la qualification portée au " +
+              "registre ; vérifiez-la ligne par ligne, c'est la classification qui décide, et complétez " +
+              "la répartition des sièges.]"
+            : "[Portez ici les inscrits, les femmes et les hommes de chaque collège : le registre unique " +
+              "du personnel les donne, et l'écran les reprendra dès qu'il sera tenu.]"),
           "Le présent article mentionne la proportion de femmes et d'hommes composant chaque collège électoral.",
           "Dès l'intervention du présent accord sur la répartition du personnel, l'employeur porte cette proportion à la connaissance des salariés, par tout moyen permettant de donner une date certaine à cette information.",
           "À défaut d'accord sur cette répartition, alors qu'au moins une organisation syndicale a répondu à l'invitation à négocier, l'autorité administrative décide de la répartition entre les collèges électoraux ; le directeur régional statue dans un délai de deux mois à compter de la réception de la contestation, et sa décision peut faire l'objet d'un recours devant le tribunal judiciaire dans les quinze jours suivant sa notification. La saisine de l'autorité administrative suspend le processus électoral jusqu'à la décision et entraîne la prorogation des mandats en cours jusqu'à la proclamation des résultats.",
@@ -1150,7 +1182,11 @@
     }).join("");
   }
 
+  /* Tant que rien n'est déposé, il n'y a pas de nature, donc pas de clauses :
+     la page lançait une erreur au lieu de rendre une liste vide. Relevé le
+     27 septembre 2026. */
   function pourLaNature() {
+    if (!CTX) return [];
     return CLAUSES.filter(function (cl) { return cl.pour === CTX.nature && (!cl.si || cl.si(CTX)); });
   }
   /* Le repérage lexical des clauses de la nature choisie, sur le texte déposé. */
@@ -1164,6 +1200,7 @@
   }
 
   function rendreClauses() {
+    if (!CTX) return;
     var liste = pourLaNature();
     var aPoser = liste.filter(function (cl) { return !PRESENTES[cl.id]; });
     var deja = liste.filter(function (cl) { return PRESENTES[cl.id]; });
@@ -1210,6 +1247,10 @@
   }
 
   $("#tout").addEventListener("click", function () {
+    /* Rien n'est déposé : il n'y a pas de clauses à insérer, et le bouton
+       lançait une erreur au lieu de ne rien faire. Relevé le 27 septembre
+       2026. */
+    if (!CTX) return;
     pourLaNature().forEach(function (cl) { CHOIX[cl.id] = true; });
     rendreClauses();
   });
@@ -1340,6 +1381,9 @@
   }
 
   function assembler() {
+    /* Sans dépôt, il n'y a pas de document à assembler : le bouton lançait une
+       erreur. Relevé le 27 septembre 2026. */
+    if (!CTX) return;
     $("#calendrier").innerHTML = calendrierHtml(CTX);
     $("#sortie").textContent = texteFinal();
     onglet("sortie");
@@ -1398,13 +1442,62 @@
   /* ---------------------------------------------------------------- */
   /* La fiche entreprise pré-remplit ce qui la concerne : l'effectif commande
      les sièges et les collèges, et il n'a pas à être ressaisi ici. */
+  /* LE REGISTRE REMPLIT LE TABLEAU DES COLLÈGES.
+
+     Relevé le 27 septembre 2026 : l'article 4 du protocole sortait avec des
+     crochets partout, « [  ] inscrits, [  ] femmes, [  ] hommes », alors que le
+     registre du personnel porte les quatre-vingt-deux salariés, leur sexe et
+     leur qualification. Le tableau se propose donc rempli, et il se corrige.
+
+     La répartition entre collèges se lit sur la qualification : « cadre »,
+     « ingénieur » ou « chef de service » pour le collège des cadres,
+     « technicien », « agent de maîtrise » ou « assimilé » pour le deuxième,
+     tout le reste au premier (L. 2314-11). C'est une PROPOSITION lue sur du
+     texte libre, pas une classification : l'écran le dit, et c'est l'employeur
+     qui tranche, avec les organisations syndicales. */
+  var CADRES = /\bcadre|ing[eé]nieur|chef de service/i;
+  var MAITRISE = /technicien|agent de ma[iî]trise|ma[iî]trise|assimil/i;
+  function duRegistre() {
+    var E = null;
+    try { E = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) { E = null; }
+    var L = ((E && E.salaries) || []).filter(function (x) {
+      return x && !x.ex && !String(x.sor || "").trim() &&
+        (String(x.nom || "").trim() || String(x.pre || "").trim());
+    });
+    if (!L.length) return null;
+    var out = { total: 0, femmes: 0, hommes: 0, col: [[0, 0, 0], [0, 0, 0], [0, 0, 0]] };
+    L.forEach(function (x) {
+      var q = String(x.qua || "") + " " + String(x.emp || "");
+      var i = CADRES.test(q) ? 2 : (MAITRISE.test(q) ? 1 : 0);
+      var f = /^f/i.test(String(x.sexe || "").trim());
+      var h = /^(m|h)/i.test(String(x.sexe || "").trim());
+      out.total++; out.col[i][0]++;
+      if (f) { out.femmes++; out.col[i][1]++; }
+      if (h) { out.hommes++; out.col[i][2]++; }
+    });
+    return out;
+  }
+  var REG = duRegistre();
+
   (function prealable() {
     if (P) {
       var p = P.lire() || {};
       if (p.denomination) $("#ent").value = p.denomination;
       if (p.effectif !== undefined && p.effectif !== null && String(p.effectif).trim() !== "")
         $("#eff").value = p.effectif;
+      /* La fin des mandats se calcule : quatre ans après le scrutin
+         (L. 2314-33). Le champ restait vide, et le protocole comme le
+         procès-verbal sortaient sans elle. */
+      if (!$("#dfin").value && /^\d{4}-\d{2}-\d{2}$/.test(String(p.cseElections || "").trim())) {
+        var f4 = new Date(String(p.cseElections).trim() + "T12:00:00");
+        f4.setFullYear(f4.getFullYear() + 4);
+        $("#dfin").value = f4.getFullYear() + "-" +
+          String(f4.getMonth() + 1).padStart(2, "0") + "-" + String(f4.getDate()).padStart(2, "0");
+      }
     }
+    /* Le nombre d'ingénieurs et cadres, compté au registre : il décide du
+       troisième collège (L. 2314-11). */
+    if (REG && !$("#cad").value) $("#cad").value = REG.col[2][0];
     /* Chaque réponse remplit le texte déjà affiché, sans qu'on quitte l'écran :
        les clauses se réécrivent, le compteur suit, les choix d'insertion sont
        conservés. */
