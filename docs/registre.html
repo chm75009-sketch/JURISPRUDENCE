@@ -71,6 +71,15 @@
   /* Une carte par salarié : le numéro et le nom en tête, le contrôle à côté,
      les colonnes du décret dessous, les mentions particulières sous un repli. */
   /* Le tri du registre : trois filtres, une recherche, un compte. */
+  /* La rangée des sorties : elle défile horizontalement plutôt que de se
+     comprimer, quatre intitulés ne tenant pas de front sur un téléphone. */
+  .reg-sorties{display:flex;gap:8px;margin:0 0 12px;padding:2px 0 6px;
+    overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .reg-sorties::-webkit-scrollbar{display:none}
+  .reg-sorties button{flex:none;min-height:44px;padding:0 14px;cursor:pointer;
+    font:600 15px/1.2 system-ui;white-space:nowrap;border-radius:999px;
+    border:1px solid var(--filet);background:var(--surface);color:var(--encre)}
+  .reg-sorties button:hover{border-color:var(--accent);color:var(--accent)}
   .reg-tri{margin:14px 0 0}
   .reg-filtres{display:flex;gap:6px;flex-wrap:wrap}
   /* La couleur du texte est écrite : sans elle, le bouton héritait du blanc
@@ -200,15 +209,23 @@
     <!-- CE QUI MANQUE SE LIT EN TÊTE, PAS APRÈS QUATRE-VINGT-CINQ FICHES.
          La liste des lignes à compléter était sous le registre : personne ne
          descendait jusque-là. Relevé le 26 septembre 2026. -->
+    <!-- LES SORTIES SE PRENNENT EN HAUT. Elles étaient sous les quatre-vingts
+         cartes du registre : personne ne descendait jusque-là, et sur un
+         téléphone cela fait plusieurs écrans de défilement. Relevé le
+         27 septembre 2026. Elles sont ici, en une rangée qui défile du doigt,
+         et la navigation reste en bas. -->
+    <div class="reg-sorties">
+      <button type="button" data-va="doc">Word</button>
+      <button type="button" id="r-excel">Excel</button>
+      <button type="button" id="r-modele">Modèle vierge</button>
+      <button type="button" data-va="import">Reprendre un export</button>
+    </div>
     <div id="synthese-registre"></div>
     <div id="registre"></div>
     <div class="suite">
       <button type="button" class="doc-ligne" data-va="accueillis">Stagiaires et volontaires en service civique</button>
-      <button type="button" class="doc-ligne" data-va="import">Reprendre un export de paie</button>
       <button type="button" class="doc-ligne" data-va="tenue">L'établissement et la tenue du registre</button>
       <button type="button" class="doc-ligne" data-va="doc">Le registre en Word ou à imprimer</button>
-      <button type="button" class="doc-ligne" id="r-modele">Le modèle vierge en Word, avec trois exemples</button>
-      <button type="button" class="doc-ligne" id="r-excel">Le registre en Excel, à compléter et à redéposer</button>
       <!-- Le registre donne les noms ; le décompte des heures les reprend, mois
            par mois. C'est le même salarié, saisi une seule fois. -->
       <a class="doc-ligne" href="heures.html">Le décompte des heures de ces salariés, mois par mois</a>
@@ -1549,22 +1566,42 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      lignes, toutes en double, sans un mot. Une ligne reprise est maintenant
      rapprochée de celles déjà là, sur le nom, puis sur la naissance ou
      l'entrée pour trancher les homonymes. Relevé le 26 septembre 2026. */
+  /* LE MÊME NOM COUPÉ AILLEURS RESTE LE MÊME NOM.
+
+     Relevé le 27 septembre 2026, sur la reprise d'un registre en PDF : douze
+     « nouveaux » salariés étaient des doublons, parce que le nom composé avait
+     été coupé à un autre endroit, « DALLA | BETTA RYAN » d'un côté et
+     « DALLA BETTA | RYAN » de l'autre. Le rapprochement ne regardait que le
+     nom de famille, qui différait, et le registre passait de 85 à 97 inscrits.
+
+     La clé est donc l'ensemble des mots du nom et du prénom, sans accents, mis
+     dans l'ordre alphabétique : où que la coupure tombe, les mêmes mots donnent
+     la même clé. Les deux gardes qui distinguent deux personnes, deux
+     naissances connues et différentes ou deux entrées connues et différentes,
+     restent. */
+  function clePersonne(x) {
+    return sansAccent(String(x.nom || "") + " " + String(x.pre || ""))
+      .split(" ").filter(Boolean).sort().join(" ");
+  }
   function rapprochee(s) {
     var n = sansAccent(s.nom), p = sansAccent(s.pre);
     if (!n) return null;
+    var cle = clePersonne(s);
     var res = null;
     E.salaries.forEach(function (x) {
       if (res || x.ex) return;
-      if (sansAccent(x.nom) !== n) return;
+      /* Le nom de famille, ou l'ensemble des mots du nom complet. */
+      if (sansAccent(x.nom) !== n && clePersonne(x) !== cle) return;
       /* Deux naissances connues et différentes, ou deux entrées connues et
          différentes : deux personnes, quel que soit le nom. */
       if (!vide(s.nais) && !vide(x.nais) && s.nais !== x.nais) return;
       if (!vide(s.ent) && !vide(x.ent) && s.ent !== x.ent) return;
       var memeDate = (!vide(s.nais) && s.nais === x.nais) || (!vide(s.ent) && s.ent === x.ent);
       var memePre = p !== "" && sansAccent(x.pre) === p;
-      var prenomContraire = p !== "" && sansAccent(x.pre) !== "" && sansAccent(x.pre) !== p;
+      var memeTout = clePersonne(x) === cle;
+      var prenomContraire = !memeTout && p !== "" && sansAccent(x.pre) !== "" && sansAccent(x.pre) !== p;
       if (prenomContraire && !memeDate) return;
-      if (memeDate || memePre || (p === "" && sansAccent(x.pre) === "")) res = x;
+      if (memeTout || memeDate || memePre || (p === "" && sansAccent(x.pre) === "")) res = x;
     });
     return res;
   }
