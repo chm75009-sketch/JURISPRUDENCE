@@ -369,6 +369,7 @@
     var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
     var ilYaUnAn = new Date(d0.getFullYear() - 1, d0.getMonth(), d0.getDate());
     var out = { total: 0, plein: 0, cdd: 0, partiel: 0, sansHoraire: [], remplacement: 0,
+      apprentis: 0, pro: 0, temporaires: 0,
       lignes: L.length, date: d0 };
 
     function jourDe(v) {
@@ -406,8 +407,22 @@
       var ent = jourDe(s.ent), sor = jourDe(s.sor);
       if (sor && sor < d0) return;                    /* parti : hors effectif */
       if (String(s.remplacement || "").trim() === "oui") { out.remplacement++; return; }
+      /* CE QUE LA LOI EXCLUT DU DÉCOMPTE. « Ne sont pas pris en compte dans le
+         calcul des effectifs de l'entreprise : 1° Les apprentis ; (…) 6° Les
+         titulaires d'un contrat de professionnalisation jusqu'au terme prévu
+         par le contrat » (L. 1111-3, LEGIARTI000031565369, lu à la source le
+         27 septembre 2026, deux lectures concordantes). L'un et l'autre
+         comptaient pour un. Relevé le 26 septembre 2026. */
+      var nature = String(s.nature || "").trim();
+      if (nature === "apprenti") { out.apprentis++; return; }
+      if (nature === "pro") { out.pro++; return; }
       var partiel = String(s.part || "").trim() === "partiel";
-      var cdd = String(s.nature || "").trim() === "cdd";
+      /* Les salariés temporaires et ceux qu'un groupement met à disposition se
+         comptent au prorata de leur présence sur les douze mois précédents,
+         comme les contrats à durée déterminée (L. 1111-2, 2°), et non pour un
+         chacun. */
+      var cdd = nature === "cdd" || nature === "temporaire" || nature === "groupement";
+      if (nature === "temporaire" || nature === "groupement") out.temporaires++;
       if (partiel) {
         var h = heuresSemaine(s);
         if (h === null) { out.sansHoraire.push((String(s.nom || "") + " " + String(s.pre || "")).trim()); return; }

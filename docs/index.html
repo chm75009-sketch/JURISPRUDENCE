@@ -483,11 +483,29 @@
       (e.cdd ? ", " + nombreFr(e.cdd) + " au titre des contrats à durée déterminée, au prorata de leur présence" : "") +
       (e.partiel ? ", " + nombreFr(e.partiel) + " au titre des temps partiels, au prorata de leur horaire" : "") +
       ").";
+    /* UN CHIFFRE QUI ÉCARTE DES SALARIÉS N'EST PAS UN CHIFFRE : C'EST UNE
+       FOURCHETTE. Deux temps partiels sans horaire étaient retirés du calcul
+       et le bouton proposait de reprendre le total amputé. L'effectif est
+       entre le calcul et ce même calcul augmenté de ces salariés comptés
+       pour un. Relevé le 26 septembre 2026. */
     if (e.sansHoraire.length) {
       dit += " " + (e.sansHoraire.length > 1
         ? e.sansHoraire.length + " salariés à temps partiel sans horaire au registre ne sont pas comptés"
         : "Un salarié à temps partiel sans horaire au registre n'est pas compté") +
-        " : " + e.sansHoraire.join(", ") + ".";
+        " : " + e.sansHoraire.join(", ") + ". L'effectif est donc entre " +
+        nombreFr(calcule) + " et " + nombreFr(Math.round((calcule + e.sansHoraire.length) * 100) / 100) +
+        " : saisissez leur horaire de contrat pour le fixer.";
+    }
+    if (e.apprentis || e.pro) {
+      dit += " " + (e.apprentis ? e.apprentis + " apprenti" + (e.apprentis > 1 ? "s" : "") : "") +
+        (e.apprentis && e.pro ? " et " : "") +
+        (e.pro ? e.pro + " contrat" + (e.pro > 1 ? "s" : "") + " de professionnalisation" : "") +
+        " hors décompte (L. 1111-3, 1° et 6°).";
+    }
+    if (e.temporaires) {
+      dit += " " + e.temporaires + " salarié" + (e.temporaires > 1 ? "s" : "") +
+        " temporaire" + (e.temporaires > 1 ? "s" : "") + " ou mis à disposition, comptés au " +
+        "prorata de leur présence sur douze mois (L. 1111-2, 2°).";
     }
     if (e.remplacement) {
       dit += " " + e.remplacement + " remplacement" + (e.remplacement > 1 ? "s" : "") +
@@ -498,6 +516,9 @@
       (ecart ? '<p class="er-ecart">Vous avez saisi ' + ech(nombreFr(saisi)) +
         " : l'écart avec le registre est de " + ech(nombreFr(Math.abs(saisi - calcule))) +
         ". Reprenez le registre, ou dites pourquoi vous retenez un autre chiffre.</p>" : "") +
+      (e.sansHoraire.length
+        ? '<p class="er-ecart">Le bouton reprend le chiffre bas de la fourchette : ' +
+          "il vaut mieux saisir les horaires manquants avant de l'arrêter.</p>" : "") +
       '<div class="er-boutons"><button type="button" id="er-reprendre">Reprendre ' +
       ech(nombreFr(calcule)) + "</button></div>" +
       (ecart ? '<label class="er-motif"><span>Pourquoi ce chiffre plutôt que celui du registre</span>' +
