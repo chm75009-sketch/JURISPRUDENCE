@@ -533,6 +533,16 @@
      d'entrée est passée, l'acte devient un contrat de régularisation : il
      constate la relation en cours, il ne l'ouvre pas. Ni essai, ni
      déclaration préalable, ni visite d'embauche, et il le dit en tête. */
+  /* La ville du siège, lue sur l'adresse de la fiche : « 23 avenue du
+     Château, 95100 Argenteuil » donne Argenteuil. */
+  function villeDe(ent) {
+    var m = String((ent && ent.ville) || "").trim();
+    if (m) return m;
+    var a = String((ent && ent.adresse) || "");
+    var r = a.match(/\d{5}\s+([A-Za-zÀ-ÿ' -]+)/);
+    return r ? r[1].trim() : "";
+  }
+
   function dejaEnPoste(v) {
     var e = v && v.entree ? new Date(String(v.entree) + "T12:00:00") : null;
     if (!e || isNaN(e)) return false;
@@ -557,8 +567,14 @@
     var n = 0;
     function art(titre) { n++; B.push({ k: "h2", t: "Article " + n + " - " + titre }); }
 
+    /* LE TITRE DIT CE QUE L'ACTE EST.
+       Relevé le 27 septembre 2026 : un contrat qui constate une relation
+       commencée en 2014 s'intitulait « Contrat de travail à durée
+       indéterminée », comme s'il l'ouvrait. */
     B.push({ k: "sur", t: (cdd ? "Contrat de travail à durée déterminée" : "Contrat de travail à durée indéterminée") +
-      (partiel ? " à temps partiel" : "") + (cdd ? " - motif : " + motif : "") });
+      (partiel ? " à temps partiel" : "") +
+      (regularise ? " - régularisation d'une relation de travail en cours" : "") +
+      (cdd ? " - motif : " + motif : "") });
     B.push({ k: "t1", t: p.nom });
     B.push({ k: "trait" });
 
@@ -568,8 +584,10 @@
           "la relation de travail existante ; il ne l'ouvre pas. Ni période d'essai, ni " +
           "déclaration préalable à l'embauche, ni visite d'information et de prévention " +
           "d'embauche ne s'y rattachent : ces formalités se rapportent à la date réelle de " +
-          "l'entrée, et leur absence se règle pour elle-même. Ne l'antidatez pas : il se signe " +
-          "à sa date, et c'est l'ancienneté qui remonte." });
+          "l'entrée, et leur absence se règle pour elle-même." });
+    /* « Ne l'antidatez pas » est une consigne à l'employeur, pas une clause du
+       contrat : elle était écrite dans l'acte que le salarié signe. Elle est
+       passée à l'écran. Relevé le 27 septembre 2026. */
     }
     B.push({ k: "p", t: "Entre les soussignés :" });
     B.push({ k: "p", t: (ent.denomination || "[DÉNOMINATION]") + ", " +
@@ -613,6 +631,18 @@
           (net(v.renouvellement) || "deux fois au plus, dans la limite de la durée maximale légale") +
           ", par avenant signé avant le terme." });
       }
+    } else if (regularise) {
+      /* L'ARTICLE 1 D'UNE RÉGULARISATION CONSTATE, IL N'ENGAGE PAS.
+         Relevé le 27 septembre 2026 : l'encadré disait « le présent écrit
+         constate la relation existante » et l'article 1 disait, trois lignes
+         plus bas, « l'entreprise engage le salarié à compter du 21 juillet
+         2014 ». Les deux ne peuvent pas être vrais. */
+      B.push({ k: "p", t: "Le salarié est au service de l'entreprise depuis le " +
+        dateFr(v.entree) + ", à durée indéterminée. Le présent contrat constate cette relation " +
+        "de travail et en arrête les conditions par écrit ; il ne l'ouvre pas, et il prend effet " +
+        "à sa signature." });
+      B.push({ k: "p", t: "L'ancienneté du salarié court depuis le " + dateFr(v.entree) +
+        ", date de son entrée dans l'entreprise, et non depuis la signature du présent écrit." });
     } else {
       B.push({ k: "p", t: "L'entreprise engage le salarié à durée indéterminée à compter du " +
         dateFr(v.entree) + "." });
@@ -627,16 +657,27 @@
        d'avance : il se décide à l'issue de la visite (R. 4624-17). Reformulé
        le 24 septembre 2026, la version d'avant présentait le suivi adapté
        comme donné. */
-    B.push({ k: "p", t: "Le salarié bénéficiera de la visite d'information et de prévention dans " +
-      "les trois mois qui suivent sa prise de poste. S'il est travailleur de nuit au sens de " +
-      "l'article L. 3122-5 du code du travail, cette visite a lieu avant son affectation au poste " +
-      "(R. 4624-18). Des modalités de suivi adaptées peuvent être décidées à l'issue de la visite, " +
-      "selon son état de santé, son âge, ses conditions de travail ou les risques auxquels il est " +
-      "exposé (R. 4624-17)." });
+    /* La visite d'embauche ne se promet pas à qui est en poste depuis douze
+       ans : elle se rattache à la date réelle de l'entrée, et l'encadré de
+       régularisation l'a déjà dit. Relevé le 27 septembre 2026. */
+    if (!regularise)
+      B.push({ k: "p", t: "Le salarié bénéficiera de la visite d'information et de prévention dans " +
+        "les trois mois qui suivent sa prise de poste. S'il est travailleur de nuit au sens de " +
+        "l'article L. 3122-5 du code du travail, cette visite a lieu avant son affectation au poste " +
+        "(R. 4624-18). Des modalités de suivi adaptées peuvent être décidées à l'issue de la visite, " +
+        "selon son état de santé, son âge, ses conditions de travail ou les risques auxquels il est " +
+        "exposé (R. 4624-17)." });
 
     /* ── 2 · emploi et classification ───────────────────────────────── */
     art("Emploi, qualification et classification");
-    var groupe = net(v.groupe) || CCN.groupes.parCoefficient[net(v.coef)] || "";
+    /* LE GROUPE SE DÉDUIT DU COEFFICIENT, IL NE SE SAISIT PAS.
+       Relevé le 27 septembre 2026 : le contrat portait « groupe Ouvrier,
+       coefficient 138 M ». « Ouvrier » est une catégorie, pas un groupe : la
+       table des coefficients de l'avenant n° 72 du 5 décembre 1990 à l'annexe I
+       met le 138 M au groupe 6. Le coefficient décide donc, et ce qui est
+       saisi à la main ne sert que lorsque le coefficient est inconnu. */
+    var groupe = CCN.groupes.parCoefficient[net(v.coef)] || net(v.groupe) || "";
+    if (/^(ouvrier|employ|technicien|agent|ma[îi]trise|cadre)/i.test(groupe)) groupe = "";
     B.push({ k: "p", t: "Le salarié est engagé en qualité " +
       de(net(v.emploi) || p.emploi || p.nom) +
       (groupe ? ", groupe " + groupe : "") +
@@ -948,7 +989,10 @@
       "l'information sur la convention collective applicable, le règlement intérieur lorsqu'il " +
       "existe, et la notice des régimes de protection sociale." });
 
-    B.push({ k: "p", t: "Fait à " + (net(v.lieuSignature) || "[LIEU]") + ", le " +
+    /* « Fait à [LIEU] » restait en crochets alors que la fiche d'entreprise
+       porte l'adresse du siège : la ville s'en tire. Relevé le 27 septembre
+       2026. */
+    B.push({ k: "p", t: "Fait à " + (net(v.lieuSignature) || villeDe(ent) || "[LIEU]") + ", le " +
       dateFr(v.dateSignature) + ", en deux exemplaires." });
     B.push({ k: "p", t: "" });
     B.push({ k: "p", t: "Pour l'entreprise\t\t\tLe salarié" });

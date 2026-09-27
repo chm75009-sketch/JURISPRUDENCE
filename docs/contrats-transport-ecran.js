@@ -512,7 +512,13 @@
     rendreFormalites(v);
     rendreDroit();
     rendreMaj();
-    $("etat").textContent = "";
+    /* LA CONSIGNE EST À L'ÉCRAN, PAS DANS L'ACTE SIGNÉ.
+       « Ne l'antidatez pas » s'adressait à l'employeur et se lisait dans le
+       contrat que le salarié signe. Relevé le 27 septembre 2026. */
+    $("etat").textContent = dejaEnPoste()
+      ? "Contrat de régularisation : il constate la relation en cours et se signe à sa date. " +
+        "Ne l'antidatez pas ; c'est l'ancienneté qui remonte, et elle est écrite à l'article 1."
+      : "";
     $("titre-haut").textContent = (NATURE === "cdd" ? "CDD " : "CDI ") + PROFIL.nom.toLowerCase();
     garder();
     ecran("e-contrat");
@@ -656,8 +662,11 @@
       "Réserve d'usage et observation - " + (PROFIL ? PROFIL.nom : ""),
       { auteur: String(entN.responsable || entN.denomination || "").trim(),
         pied: String(entN.denomination || entN.entreprise || "").trim() + "  ·  note hors contrat" });
+    /* Le fichier portait le même nom pour tout le monde : deux notes dans le
+       même dossier se recouvraient. Relevé le 27 septembre 2026. */
+    var quiN = (V.nom || "salarie").replace(/[^A-Za-zÀ-ÿ0-9]+/g, "-").replace(/^-|-$/g, "");
     window.AuditExport.telecharger(octets, "Note-hors-contrat-" +
-      (NATURE === "cdd" ? "CDD" : "CDI") + ".docx");
+      (NATURE === "cdd" ? "CDD" : "CDI") + "-" + quiN + ".docx");
     $("etat").textContent = "Note téléchargée, séparément du contrat.";
   });
 
