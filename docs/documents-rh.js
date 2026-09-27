@@ -329,7 +329,7 @@
       L.push("");
       L.push("« Le certificat de travail contient EXCLUSIVEMENT : 1° la date d'entrée du salarié et " +
              "celle de sa sortie ; 2° la nature de l'emploi ou des emplois successivement occupés " +
-             "avec les périodes pendant lesquelles ces emplois ont été tenus » (D. 1234-6).");
+             "et les périodes pendant lesquelles ces emplois ont été tenus » (D. 1234-6).");
       L.push("");
       L.push("LES INTERDICTIONS ABSOLUES :");
       L.push("- Pas de motif de rupture (même pas « licenciement pour cause personnelle »).");

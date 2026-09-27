@@ -429,6 +429,9 @@
       dit: "tout licenciement pour motif personnel est motivé et justifié par une cause réelle et sérieuse" },
     "L1232-2": { id: "LEGIARTI000006901000",
       dit: "convocation par lettre recommandée ou remise en main propre ; l'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation" },
+    /* Lu à la source le 27 septembre 2026, deux lectures concordantes. */
+    "L3132-3": { id: "LEGIARTI000020967733",
+      dit: "dans l'intérêt des salariés, le repos hebdomadaire est donné le dimanche" },
     "L1232-3": { id: "LEGIARTI000006901001",
       dit: "au cours de l'entretien, l'employeur indique les motifs et recueille les explications du salarié" },
     "L1232-4": { id: "LEGIARTI000006901002",
@@ -1553,8 +1556,10 @@
   function alerteJourDeRepos(v) {
     var saisie = dateDe(v.eDate);
     if (!saisie) return null;
-    if (saisie.getDay() === 0) return "L'entretien est fixé un dimanche : vérifiez que le salarié " +
-      "et son assistant peuvent s'y rendre, et que ce jour est bien travaillé dans l'entreprise.";
+    if (saisie.getDay() === 0) return "L'entretien est fixé un dimanche. Le dimanche n'est pas un " +
+      "jour ouvrable : il ne compte pas dans les cinq jours ouvrables qui doivent séparer la " +
+      "présentation de la convocation de l'entretien (" + ref(["L1232-2"]) + "), et le repos " +
+      "hebdomadaire est donné ce jour-là (" + ref(["L3132-3"]) + "). Choisissez un autre jour.";
     if (estFerie(saisie)) return "L'entretien est fixé un jour férié : vérifiez qu'il est bien " +
       "travaillé dans l'entreprise.";
     return null;
@@ -2383,7 +2388,13 @@
     b.push({ k: "t1", t: "Contrôle des titres du conducteur" });
     b.push({ k: "st", t: nomS });
     b.push({ k: "p", t: "Établi le " + dateFr(AUJOURDHUI) + " par " + societe() + "." });
-    b.push({ k: "p", t: "Les titres ci-dessous ont été présentés par le salarié et vérifiés avant sa prise de poste. Une copie de chacun est conservée au dossier." });
+    /* UN DOCUMENT N'ATTESTE PAS CE QU'IL NE CONSTATE PAS. Il affirmait que les
+       titres « ont été présentés et vérifiés » alors que chaque ligne portait
+       « non renseigné ». Relevé le 26 septembre 2026. */
+    var remplis = titresRemplis().length;
+    b.push({ k: "p", t: remplis
+      ? "Les titres ci-dessous ont été présentés par le salarié et vérifiés avant sa prise de poste. Une copie de chacun est conservée au dossier."
+      : "Aucun titre n'est encore renseigné : ce document est la liste de ce que le salarié doit produire avant sa prise de poste. Il ne vaut pas constat de vérification." });
     TITRES_CONDUCTEUR.forEach(function (x) {
       if (!x.quoi) return;
       var lignes = [x];
@@ -2527,7 +2538,28 @@
     enTete(b, nomS, "votre arrêt de travail du " + dateFr(debut) + " au " + dateFr(fin), "Lettre remise en main propre ou adressée par courriel");
     b.push({ k: "p", t: "Nous accusons réception de votre arrêt de travail pour maladie, prescrit du " + dateFr(debut) + " au " + dateFr(fin) + " inclus" + (duree ? ", soit " + duree + " jour" + (duree > 1 ? "s" : "") : "") + ", que nous avons reçu le " + dateFr(AUJOURDHUI) + "." });
     b.push({ k: "p", t: "Votre contrat de travail est suspendu pendant cette période. Toute prolongation nous sera adressée dans les quarante-huit heures : c'est la condition de l'indemnité complémentaire (" + ref(["L1226-1"]) + ", 1°)." });
-    b.push({ k: "p", t: "Si vous comptez une année d'ancienneté dans l'entreprise, vous bénéficiez de l'indemnité complémentaire à l'allocation journalière de la sécurité sociale prévue à l'article " + ref(["L1226-1"]) + ", à condition d'avoir justifié de votre incapacité dans les quarante-huit heures, d'être pris en charge par la sécurité sociale et d'être soigné en France ou dans l'Espace économique européen. Son taux, ses délais et son calcul sont ceux du décret [et de la convention collective, si elle est plus favorable]." });
+    /* L'ANCIENNETÉ EST AU REGISTRE : LA LETTRE N'A PLUS À POSER LA CONDITION
+       COMME UNE ÉNIGME. « Si vous comptez une année d'ancienneté » était écrit
+       à un salarié entré en 2009. Relevé le 26 septembre 2026. */
+    var sMal = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var entMal = sMal ? dateDe(sMal.ent) : null;
+    var moisMal = entMal ? moisAnnees(entMal, AUJOURDHUI) : null;
+    if (moisMal !== null && moisMal >= 12) {
+      b.push({ k: "p", t: "Vous comptez " + anciennetePhrase(moisMal) + " d'ancienneté dans " +
+        "l'entreprise : vous bénéficiez de l'indemnité complémentaire à l'allocation journalière " +
+        "de la sécurité sociale prévue à l'article " + ref(["L1226-1"]) + ", à condition d'avoir " +
+        "justifié de votre incapacité dans les quarante-huit heures, d'être pris en charge par la " +
+        "sécurité sociale et d'être soigné en France ou dans l'Espace économique européen. Son " +
+        "taux, ses délais et son calcul sont ceux du décret, et de la convention collective si " +
+        "elle est plus favorable." });
+    } else if (moisMal !== null) {
+      b.push({ k: "p", t: "Vous comptez " + anciennetePhrase(moisMal) + " d'ancienneté : " +
+        "l'indemnité complémentaire de l'article " + ref(["L1226-1"]) + " suppose une année " +
+        "d'ancienneté, et n'est donc pas due à ce titre. Vérifiez la convention collective, qui " +
+        "peut l'ouvrir plus tôt." });
+    } else {
+      b.push({ k: "p", t: "Si vous comptez une année d'ancienneté dans l'entreprise, vous bénéficiez de l'indemnité complémentaire à l'allocation journalière de la sécurité sociale prévue à l'article " + ref(["L1226-1"]) + ", à condition d'avoir justifié de votre incapacité dans les quarante-huit heures, d'être pris en charge par la sécurité sociale et d'être soigné en France ou dans l'Espace économique européen. Son taux, ses délais et son calcul sont ceux du décret, et de la convention collective si elle est plus favorable." });
+    }
     if (duree >= 60) {
       b.push({ k: "p", t: "Votre absence atteignant soixante jours, un examen de reprise par le médecin du travail sera organisé le jour de votre reprise, et au plus tard dans les huit jours qui la suivent (" + ref(["R4624-31"]) + ", 4°). Nous saisirons le service de prévention et de santé au travail dès que la date de fin de votre arrêt sera connue." });
     } else {
