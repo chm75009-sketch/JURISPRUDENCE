@@ -41,6 +41,19 @@
 (function (global) {
   "use strict";
 
+  /* LE NOM DU RESPONSABLE EST DANS LA FICHE : IL NE SE LAISSE PLUS EN BLANC.
+     Demande du 27 septembre 2026. Le crochet ne reste que si la fiche est
+     vide. */
+  function respo(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var s = String(p.responsable || "").trim();
+    if (!s) {
+      s = [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+        .filter(Boolean).join(", ");
+    }
+    return s;
+  }
+
   var DP = global.DocumentsProduits;
   if (!DP || typeof DP.ajouter !== "function") return;
 
@@ -2595,7 +2608,7 @@
       L.push("(L. 2312-18). Le délai de consultation court de la communication ou de");
       L.push("l'information de leur mise à disposition (R. 2312-5).");
       L.push("");
-      L.push("Reçu par : [nom et qualité] · le [date] · signature : ______________");
+      L.push("Reçu par : " + cro(respo(ctx), "nom et qualité") + " · le [date] · signature : ______________");
       L.push("");
 
       titre(L, "3 - Réponse motivée aux observations du comité");
@@ -2780,7 +2793,7 @@
       L.push("Délai applicable : [un mois / deux mois / trois mois / délai fixé par l'accord");
       L.push("du … ] · terme : [DATE].");
       L.push("");
-      L.push("Reçu pour le comité par : [nom et qualité]");
+      L.push("Reçu pour le comité par : " + cro(respo(ctx), "nom et qualité"));
       L.push("Le [date]                                  Signature : ______________");
       L.push("");
       L.push("Pour l'employeur : " + signataire(ctx));
@@ -2872,7 +2885,7 @@
       L.push("");
       L.push(signataire(ctx));
       L.push("");
-      L.push("Reçu pour le comité par [nom et qualité], le [date] - signature : __________");
+      L.push("Reçu pour le comité par " + cro(respo(ctx), "nom et qualité") + ", le [date] - signature : __________");
       L.push("");
 
       titre(L, "2 - Réponse motivée aux observations (avant l'avis)");

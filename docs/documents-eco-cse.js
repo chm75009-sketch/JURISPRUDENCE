@@ -63,6 +63,19 @@
 (function (global) {
   "use strict";
 
+  /* LE NOM DU RESPONSABLE EST DANS LA FICHE : IL NE SE LAISSE PLUS EN BLANC.
+     Demande du 27 septembre 2026. Le crochet ne reste que si la fiche est
+     vide. */
+  function respo(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var s = String(p.responsable || "").trim();
+    if (!s) {
+      s = [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+        .filter(Boolean).join(", ");
+    }
+    return s;
+  }
+
   var A = global.DocumentsProduits;
   if (!A || typeof A.ajouter !== "function")
     throw new Error("documents-eco-cse.js : documents-produits.js doit être chargé avant.");
@@ -3400,7 +3413,7 @@
       L.push("");
       L.push("Conformément à l'article L. 1233-11 du code du travail, nous vous convoquons");
       L.push("à un entretien préalable qui se tiendra le [DATE], à [HEURE], à [LIEU");
-      L.push("PRÉCIS], avec [nom et qualité de la personne qui conduira l'entretien].");
+      L.push("PRÉCIS], avec " + cro(respo(ctx), "nom et qualité de la personne qui conduira l'entretien") + ".");
       L.push("");
       L.push("Cet entretien a pour objet de vous exposer les motifs de la décision");
       L.push("envisagée et de recueillir vos explications (L. 1233-12). Aucune décision");
@@ -3477,7 +3490,7 @@
       L.push("  Salarié : [nom, prénom, emploi, ancienneté]");
       L.push("  Date, heure et lieu de l'entretien : ..................................");
       L.push("  Employeur représenté par : ...........................................");
-      L.push("  Salarié assisté par : [nom et qualité] / non assisté");
+      L.push("  Salarié assisté par : " + cro(respo(ctx), "nom et qualité") + " / non assisté");
       L.push("");
       L.push("  Motifs exposés au salarié (L. 1233-12) : [reprendre les raisons");
       L.push("  économiques, la suppression ou la transformation de l'emploi, et le");

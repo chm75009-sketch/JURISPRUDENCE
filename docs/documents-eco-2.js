@@ -58,6 +58,19 @@
 (function (global) {
   "use strict";
 
+  /* LE NOM DU RESPONSABLE EST DANS LA FICHE : IL NE SE LAISSE PLUS EN BLANC.
+     Demande du 27 septembre 2026. Le crochet ne reste que si la fiche est
+     vide. */
+  function respo(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var s = String(p.responsable || "").trim();
+    if (!s) {
+      s = [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+        .filter(Boolean).join(", ");
+    }
+    return s;
+  }
+
   var A = global.DocumentsProduits;
   if (!A || typeof A.ajouter !== "function")
     throw new Error("documents-eco-2.js : documents-produits.js doit être chargé avant.");
@@ -1214,7 +1227,7 @@
       L.push("    adressées, avec copie aux représentants du personnel.");
       L.push("  ☐ Aucune lettre n'a déjà été expédiée.");
       L.push("");
-      L.push("  Vérification faite le [DATE] par [nom et qualité]. Signature : ..........");
+      L.push("  Vérification faite le [DATE] par " + cro(respo(ctx), "nom et qualité") + ". Signature : ..........");
       L.push("");
 
       titre(L, "VI. Si des lettres sont déjà parties avant la décision");
@@ -1253,7 +1266,7 @@
       L.push("");
       L.push("  Nombre de lettres expédiées avant la décision : [  ]");
       L.push("  Nombre de contrats effectivement rompus : [  ]");
-      L.push("  Constat établi le [DATE] par [nom et qualité].");
+      L.push("  Constat établi le [DATE] par " + cro(respo(ctx), "nom et qualité") + ".");
       L.push("");
       L.push("  Remis à [nom du conseil] le [DATE].");
       L.push("");
@@ -2056,7 +2069,7 @@
       L.push("  Quorum atteint au premier tour ? ☐ oui ☐ non - sans effet sur le calcul,");
       L.push("  le texte disant « quel que soit le nombre de votants ».");
       L.push("");
-      L.push("  Calcul établi le [DATE] par [nom et qualité], à partir du procès-verbal");
+      L.push("  Calcul établi le [DATE] par " + cro(respo(ctx), "nom et qualité") + ", à partir du procès-verbal");
       L.push("  des élections du [DATE].");
       L.push("");
 
@@ -2532,7 +2545,7 @@
       L.push("  Une demande en cours d'instruction n'est pas une autorisation. Une case");
       L.push("  « en attente » interdit l'envoi tout autant qu'une case vide.");
       L.push("");
-      L.push("  Registre tenu par [nom et qualité], arrêté le [DATE].");
+      L.push("  Registre tenu par " + cro(respo(ctx), "nom et qualité") + ", arrêté le [DATE].");
       L.push("");
 
       titre(L, "V. En cas de refus");
@@ -2553,7 +2566,7 @@
       L.push("  CONSTAT - salarié [nom], mandat [  ], décision de refus du [DATE],");
       L.push("  notifiée à l'entreprise le [DATE]. Retiré du projet le [DATE].");
       L.push("  Aucune lettre de licenciement n'a été expédiée : ☐ vérifié le [DATE]");
-      L.push("  par [nom et qualité].");
+      L.push("  par " + cro(respo(ctx), "nom et qualité") + ".");
       L.push("");
 
       titre(L, "VOTRE CALENDRIER");
@@ -2819,7 +2832,7 @@
       L.push("  Pour chaque notification DIFFÉRÉE, écrire :");
       L.push("  « La notification concernant [nom] est différée au [DATE], pour le motif");
       L.push("  suivant : [reprendre le motif donné par le conseil]. Décision prise le");
-      L.push("  [DATE] par [nom et qualité]. »");
+      L.push("  [DATE] par " + cro(respo(ctx), "nom et qualité") + ". »");
       L.push("");
       L.push("  [Différer une notification peut faire sortir un salarié de la fenêtre de");
       L.push("  trente jours, ou l'y faire entrer. Relancez l'audit après toute décision de");
@@ -3155,7 +3168,7 @@
         [["[nom]", "[  ]", "[avis de réception n°]", "[moins de dix]"],
          ["[nom]", "[  ]", "[avis de réception n°]", "[moins de dix]"]]);
       L.push("");
-      L.push("  Relevé établi le [DATE] par [nom et qualité], remis à [conseil] le [DATE].");
+      L.push("  Relevé établi le [DATE] par " + cro(respo(ctx), "nom et qualité") + ", remis à [conseil] le [DATE].");
       L.push("");
 
       titre(L, "VOTRE CALENDRIER");
@@ -4011,7 +4024,7 @@
       L.push("  4. Conservez cette fiche de correction : elle établit que les données ont");
       L.push("     été vérifiées à la source, et quand.");
       L.push("");
-      L.push("  Fiche arrêtée le [DATE] par [nom et qualité]. Audit relancé le [DATE].");
+      L.push("  Fiche arrêtée le [DATE] par " + cro(respo(ctx), "nom et qualité") + ". Audit relancé le [DATE].");
       L.push("");
 
       titre(L, "VOTRE CALENDRIER");
@@ -4961,7 +4974,7 @@
       L.push("");
       L.push("  Ressources disponibles de la procédure : [montant, à la date du  ]");
       L.push("  Position du liquidateur : [  ]");
-      L.push("  Décision prise le [DATE], par [nom et qualité].");
+      L.push("  Décision prise le [DATE], par " + cro(respo(ctx), "nom et qualité") + ".");
       L.push("");
       L.push("  [Informez les salariés concernés de la situation. Une créance non garantie");
       L.push("  découverte au moment du paiement fait plus de dégâts qu'une créance non");
@@ -5218,7 +5231,7 @@
       L.push("  L. 1233-57-19 : c'est sur ce terrain que le comité est appelé à donner son");
       L.push("  avis, et c'est donc sur ce terrain que l'offre doit être documentée.]");
       L.push("");
-      L.push("  Journal tenu par [nom et qualité], arrêté au [DATE].");
+      L.push("  Journal tenu par " + cro(respo(ctx), "nom et qualité") + ", arrêté au [DATE].");
       L.push("");
 
       titre(L, "V. La consultation du comité sur l'offre retenue");

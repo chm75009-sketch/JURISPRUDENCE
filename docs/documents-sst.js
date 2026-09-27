@@ -957,7 +957,10 @@
         C.push(nom.toUpperCase());
         C.push(E ? E.adresse : cro((ctx.profil || {}).adresse, "adresse du siège"));
         C.push("Version " + X(E, "1", "n° de version") + ", établie le " + X(E, leJour(d0), "DATE D'ÉTABLISSEMENT"));
-        C.push("Rédacteur : " + X(E, E && E.redacteur, "nom et qualité") + ". Validation : " + sig + ".");
+        /* Hors de l'exemple, le rédacteur est celui que la fiche désigne : le
+           document sortait « Rédacteur : [nom et qualité] ». Demande du
+           27 septembre 2026. */
+        C.push("Rédacteur : " + (E ? E.redacteur : signataire(ctx)) + ". Validation : " + sig + ".");
         C.push("");
 
         C.push("1. OBJET ET PÉRIMÈTRE");

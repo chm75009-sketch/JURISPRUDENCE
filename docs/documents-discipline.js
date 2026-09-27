@@ -42,6 +42,21 @@
     throw new Error("documents-discipline.js : documents-produits.js doit être chargé avant.");
 
   var O = DP.outils;
+
+  /* LE NOM DU RESPONSABLE EST DANS LA FICHE : IL NE SE LAISSE PLUS EN BLANC.
+     Les documents sortaient « Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ") + " » alors que la
+     fiche d'entreprise porte le représentant légal. Demande du 27 septembre
+     2026. Le crochet ne reste que si la fiche est vide. */
+  function respo(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var s = String(p.responsable || "").trim();
+    if (!s) {
+      s = [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+        .filter(Boolean).join(", ");
+    }
+    return s;
+  }
+
   var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   function jj(d) {
@@ -674,7 +689,7 @@
       L.push("[QUELLE CLAUSE] : [MOTIVATION DU RETRAIT OU DE LA MODIFICATION]");
       L.push("");
       L.push("Date d'effet : [DATE]");
-      L.push("Signée par : [NOM ET QUALITÉ]");
+      L.push("Signée par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");

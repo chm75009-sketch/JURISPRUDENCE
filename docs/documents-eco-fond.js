@@ -85,6 +85,21 @@
     throw new Error("documents-eco-fond.js : documents-produits.js doit être chargé avant.");
 
   var O = DP.outils;
+
+  /* LE NOM DU RESPONSABLE EST DANS LA FICHE : IL NE SE LAISSE PLUS EN BLANC.
+     Les documents sortaient « Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ") + " » alors que la
+     fiche d'entreprise porte le représentant légal. Demande du 27 septembre
+     2026. Le crochet ne reste que si la fiche est vide. */
+  function respo(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var s = String(p.responsable || "").trim();
+    if (!s) {
+      s = [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+        .filter(Boolean).join(", ");
+    }
+    return s;
+  }
+
   var cro = O.cro, leJour = O.leJour, entete = O.entete;
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -674,7 +689,7 @@
 
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ DE CELUI QUI A FAIT LE CALCUL]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ DE CELUI QUI A FAIT LE CALCUL"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -817,7 +832,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -967,7 +982,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -1291,7 +1306,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Relevé établi par : [NOM ET QUALITÉ - celui qui a lu le texte]");
+      L.push("Relevé établi par : " + cro(respo(ctx), "NOM ET QUALITÉ - celui qui a lu le texte"));
       L.push("Date de la lecture : [AAAA-MM-JJ]");
       L.push("Visa : " + signataire(ctx));
       L.push("");
@@ -1428,7 +1443,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Relevé établi par : [NOM ET QUALITÉ]");
+      L.push("Relevé établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -1611,7 +1626,7 @@
       L.push("4. L'ENREGISTREMENT DE LA LECTURE");
       L.push("");
       tableau(L, ["Accord", "Lu le", "Par", "Écarts relevés avec le dossier"], [
-        ["[nature de l'accord]", "[AAAA-MM-JJ]", "[nom et qualité]", "[écarts, ou « aucun »]"],
+        ["[nature de l'accord]", "[AAAA-MM-JJ]", cro(respo(ctx), "nom et qualité"), "[écarts, ou « aucun »]"],
         ["[…]", "[…]", "[…]", "[…]"],
       ]);
       L.push("Marquez ensuite chaque accord comme lu dans le dossier d'audit, puis");
@@ -1771,7 +1786,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Recensement établi par : [NOM ET QUALITÉ]");
+      L.push("Recensement établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Personnes interrogées : [liste et dates]");
       L.push("Visa : " + signataire(ctx));
       L.push("");
@@ -2081,7 +2096,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Bordereau établi par : [NOM ET QUALITÉ]");
+      L.push("Bordereau établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -2233,7 +2248,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Relevé établi par : [NOM ET QUALITÉ]");
+      L.push("Relevé établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -2427,7 +2442,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Note établie par : [NOM ET QUALITÉ]");
+      L.push("Note établie par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -2511,7 +2526,7 @@
           L.push("  │ Réponse du questionnaire correspondante : [champ et valeur déclarée]");
           L.push("  │ Écart : [aucun / décrire l'écart, chiffres et dates à l'appui]");
           L.push("  │ Suite donnée : [corriger la réponse / corriger la pièce / expliquer]");
-          L.push("  │ Lue le [AAAA-MM-JJ] par [NOM ET QUALITÉ]");
+          L.push("  │ Lue le [AAAA-MM-JJ] par " + cro(respo(ctx), "NOM ET QUALITÉ"));
           L.push("  └──");
           L.push("");
         });
@@ -2563,7 +2578,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Lectures faites par : [NOM ET QUALITÉ]");
+      L.push("Lectures faites par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -2714,7 +2729,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -2896,7 +2911,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -3075,7 +3090,7 @@
       L.push("");
       L.push("   Nouvelle liste des catégories : [à écrire, avec l'effectif de chacune]");
       L.push("   Date du nouveau classement : [AAAA-MM-JJ]");
-      L.push("   Auteur : [nom et qualité]");
+      L.push("   Auteur : " + cro(respo(ctx), "nom et qualité"));
       L.push("");
 
       if (dn) {
@@ -3096,7 +3111,7 @@
 
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -3297,7 +3312,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Tableau établi par : [NOM ET QUALITÉ]");
+      L.push("Tableau établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Date d'établissement : [AAAA-MM-JJ] - antérieure à toute notification");
       L.push("Visa : " + signataire(ctx));
       L.push("");
@@ -3477,7 +3492,7 @@
 
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 
@@ -3698,7 +3713,7 @@
       L.push("");
       L.push("Fait à " + lieuDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
-      L.push("Établi par : [NOM ET QUALITÉ]");
+      L.push("Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Visa : " + signataire(ctx));
       L.push("");
 

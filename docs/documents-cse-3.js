@@ -97,6 +97,21 @@
   if (!DP || typeof DP.ajouter !== "function") return;
 
   var O = DP.outils;
+
+  /* LE NOM DU RESPONSABLE EST DANS LA FICHE : IL NE SE LAISSE PLUS EN BLANC.
+     Les documents sortaient « Établi par : " + cro(respo(ctx), "NOM ET QUALITÉ") + " » alors que la
+     fiche d'entreprise porte le représentant légal. Demande du 27 septembre
+     2026. Le crochet ne reste que si la fiche est vide. */
+  function respo(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var s = String(p.responsable || "").trim();
+    if (!s) {
+      s = [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+        .filter(Boolean).join(", ");
+    }
+    return s;
+  }
+
   var cro = O.cro;
   var leJour = O.leJour;
   var dans = O.dans;
@@ -3892,7 +3907,7 @@
       L.push("ÉCONOMIQUE");
       L.push("");
       L.push(nom(ctx));
-      L.push("Établie le " + leJour(d0) + " par [nom et qualité de l'auteur de l'analyse].");
+      L.push("Établie le " + leJour(d0) + " par " + cro(respo(ctx), "nom et qualité de l'auteur de l'analyse") + ".");
       L.push("");
       L.push("1. Accords examinés : [liste, avec pour chacun sa date de signature, de");
       L.push("   notification et de publication].");
