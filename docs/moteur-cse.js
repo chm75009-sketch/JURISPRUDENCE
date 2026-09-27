@@ -1,13 +1,13 @@
-/* Moteur d'audit « cse » — version navigateur (MoteurCSE).
+/* Moteur d'audit « cse » - version navigateur (MoteurCSE).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
    de moteur/cse, et versé au dépôt : le site ne construit rien.
-   Ne pas le modifier à la main — rejouer l'empaquetage.
+   Ne pas le modifier à la main - rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : 6baa1d6ec4e3
    {"articlesLus":374,"articlesSansReponse":64,"arrets":163,"regles":40,"reglesJamaisDeclenchees":0,"controles":47,"detection":3,"coherence":2,"casMoteur":59,"casContradictoires":92,"verdicts":4324,"exceptions":0,"conformitesSurFicheVide":0,"sansBrancheNonConforme":10,"branchesNonConformeJamaisAtteintes":0,"detectionConcluantConforme":0}
 
-   Jeux de données allégés — champs non lus par la grille, retirés :
+   Jeux de données allégés - champs non lus par la grille, retirés :
    · cse_corpus.json : 3128 Ko réduits à 177 Ko
 */
 (function (global) {
@@ -44,13 +44,13 @@ const { R: REG } = require("./regularisation-cse.js");
 const { MODELES } = require("./modeles-cse.js");
 const DT = require("../commun/parcours-deux-temps.js");
 const T = require("./textes_cse.json");
-/* Le manifeste porte les compteurs mesurés à la publication — dont le nombre de
+/* Le manifeste porte les compteurs mesurés à la publication - dont le nombre de
    règles qu'aucun dossier d'épreuve n'a jamais déclenchées, publié au rapport. */
 const MAN = require("./manifeste-cse.json");
 
 const MOIS = ["", "janvier", "février", "mars", "avril", "mai", "juin", "juillet",
   "août", "septembre", "octobre", "novembre", "décembre"];
-const dateFr = s => { if (!s) return "—"; const [a, m, j] = s.split("-");
+const dateFr = s => { if (!s) return "-"; const [a, m, j] = s.split("-");
   return `${+j}${+j === 1 ? "er" : ""} ${MOIS[+m]} ${a}`; };
 const net = s => String(s || "").replace(/\s+/g, " ").trim();
 const artFr = n => n.replace(/^([LRD])(\d+)-/, "$1. $2-");
@@ -59,7 +59,7 @@ function audit(f) {
   const A = O(); const { sur, t1, trait, h1, h2, h3, p, note, puce, enc, tab } = A;
   const retenues = GRILLE.filter(r => { try { return r.si(f); } catch (e) { return false; } });
 
-  sur("Audit — comité social et économique · deuxième partie, livre III du code du travail");
+  sur("Audit - comité social et économique · deuxième partie, livre III du code du travail");
   t1(f.entreprise || "Audit de situation");
   sur(`${retenues.length} règles applicables sur ${GRILLE.length} de la base · ${CONTROLES.length} contrôles exécutés`);
   trait();
@@ -93,7 +93,7 @@ function audit(f) {
   const decision = bl.length
     ? "Ne poursuivez aucune étape avant correction des points bloquants."
     : (nc.length ? "Vous pouvez poursuivre, mais le fonctionnement du comité est exposé : traitez les non-conformités d'abord."
-    : ((mq.length || rq.length) ? "Ne franchissez pas les étapes irréversibles — dépôt des listes, scrutin, recueil de l'avis — avant d'avoir produit les pièces demandées."
+    : ((mq.length || rq.length) ? "Ne franchissez pas les étapes irréversibles - dépôt des listes, scrutin, recueil de l'avis - avant d'avoir produit les pièces demandées."
     : "Aucune correction n'est requise au vu des pièces versées."));
   p(sn.motif);
   tab(["Question", "Réponse"], [
@@ -163,7 +163,7 @@ function audit(f) {
    ["REVUE PROFESSIONNELLE OBLIGATOIRE", "La situation comporte un élément que l'application ne sait pas trancher seule.", "Faire relire le dossier par un professionnel."]]);
 
   /* ---------------- détail ---------------- */
-  h1("Verdict — état du dossier");
+  h1("Verdict - état du dossier");
   p("Détail du résultat de la première page. Chaque ligne est un contrôle : non pas ce que la loi exige, mais si ce que vous avez décrit y satisfait.");
   const cpt = {}; V.forEach(x => cpt[x.v.etat] = (cpt[x.v.etat] || 0) + 1);
   tab(["État", "Nombre", "Ce que cela signifie"], [
@@ -179,14 +179,14 @@ function audit(f) {
     l.sort((a, b) => ACT.RANG[ACT.gr(a.id)] - ACT.RANG[ACT.gr(b.id)]);
     tab(["Contrôle", "Priorité", "Objet", "Constat", "Fondement"],
       l.map(x => [x.id + (DETECTION.has(x.id) ? " (détection)" : ""), ACT.gr(x.id), x.objet, x.v.motif,
-        (x.fondement || []).join(" · ") || "—"]));
+        (x.fondement || []).join(" · ") || "-"]));
   }
   h3("Ce que signifie la colonne « priorité »");
   tab(["Priorité", "Signification"], ACT.DEF);
 
   h1("1 · Ce que la loi exige, appliqué à votre situation");
   for (const r of retenues) {
-    h3(`${r.id} — ${r.question}`);
+    h3(`${r.id} - ${r.question}`);
     p(r.alors(f));
     note("Fondement : " + r.fondement.map(artFr).join(", ") + " du code du travail.");
     if (r.juris.length) note("Jurisprudence : " + r.juris.map(j =>
@@ -207,7 +207,7 @@ function audit(f) {
   const vus = new Set();
   for (const r of retenues) for (const j of r.juris) {
     if (vus.has(j.num + j.date)) continue; vus.add(j.num + j.date);
-    h3(`Cass. ${j.ch.replace("Chambre ", "ch. ")} ${dateFr(j.date)}, n° ${j.num} — ${j.sol}`);
+    h3(`Cass. ${j.ch.replace("Chambre ", "ch. ")} ${dateFr(j.date)}, n° ${j.num} - ${j.sol}`);
     p(j.sommaire || "(sans sommaire publié)");
     if (j.rapport) note("Publié au Rapport annuel de la Cour.");
   }
@@ -224,10 +224,10 @@ function audit(f) {
   h1("Annexe · Traçabilité du résultat");
   tab(["Traçabilité", "Valeur"], [
    ["Date de génération", new Date().toISOString().slice(0, 10)],
-   ["Date de contrôle des sources", "15 août 2026 — articles relus sur Légifrance à cette date"],
+   ["Date de contrôle des sources", "15 août 2026 - articles relus sur Légifrance à cette date"],
    ["Articles lus à la source", String(Object.values(T).filter(v => v && v.texte).length)],
-   ["Articles demandés sans réponse de la source", `${Object.values(T).filter(v => !v || !v.texte).length} — aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent`],
-   ["Vérification des versions", "node verifier-textes.js — rejoue la lecture de chaque article et signale tout écart d'identifiant ou de contenu"],
+   ["Articles demandés sans réponse de la source", `${Object.values(T).filter(v => !v || !v.texte).length} - aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent`],
+   ["Vérification des versions", "node verifier-textes.js - rejoue la lecture de chaque article et signale tout écart d'identifiant ou de contenu"],
    ["Règles de la base", `${GRILLE.length} dont ${retenues.length} applicables`],
    ["Contrôles exécutés", `${CONTROLES.length} dont ${DETECTION.size} de détection`],
    ["Corpus de jurisprudence", "163 arrêts publiés, du 24 janvier 2018 au 8 juillet 2026"],
@@ -238,14 +238,14 @@ function audit(f) {
      rapport qui ne publie que ce qu'il a vérifié laisse croire qu'il a tout
      vérifié. Les chiffres sont ceux du manifeste, produits par l'exécution. */
   h3("Ce que cet audit n'a pas exercé");
-  p("Les lignes qui précèdent disent sur quoi le résultat repose. Celles-ci disent ce qu'il ne couvre pas — non par omission, mais parce que c'est mesuré et publié. Un audit qui ne dit pas où s'arrête sa propre couverture n'est pas opposable.");
+  p("Les lignes qui précèdent disent sur quoi le résultat repose. Celles-ci disent ce qu'il ne couvre pas - non par omission, mais parce que c'est mesuré et publié. Un audit qui ne dit pas où s'arrête sa propre couverture n'est pas opposable.");
   const _c = (MAN && MAN.compteurs) || {};
   tab(["Mesure", "Valeur", "Ce que cela veut dire"], [
    ["Règles de la base non applicables à votre situation",
     `${GRILLE.length - retenues.length} sur ${GRILLE.length}`,
     "Leur condition d'application n'est pas remplie par votre dossier. Elles n'ont donc rien dit, ni dans un sens ni dans l'autre."],
    ["Règles qu'aucun dossier d'épreuve n'a jamais déclenchées",
-    _c.reglesJamaisDeclenchees !== undefined ? String(_c.reglesJamaisDeclenchees) : "—",
+    _c.reglesJamaisDeclenchees !== undefined ? String(_c.reglesJamaisDeclenchees) : "-",
     "Elles sont écrites sur des articles lus à la source, mais aucune fiche d'épreuve du dépôt ne les a encore exercées : elles n'ont jamais été mises à l'épreuve. C'est la mesure exacte de la couverture réelle, et elle est publiée plutôt que tue."],
    ["Contrôles restés sans objet sur votre dossier", `${so.length} sur ${V.length}`,
     "Le contrôle ne s'applique pas à votre configuration. « Sans objet » n'est pas « conforme »."],
@@ -254,22 +254,22 @@ function audit(f) {
    ["Contrôles de détection", String(DETECTION.size),
     "Ils signalent une situation et s'arrêtent là : ils ne concluent jamais à la conformité, parce que le sujet excède ce qu'une base peut trancher."],
    ["Contrôles de cohérence", String(COHERENCE.size),
-    "Ils ne vérifient pas une donnée mais la relation entre deux — ici, l'effectif déclaré confronté aux relevés mensuels du même dossier. C'est là que se cachent les conformités fausses."],
+    "Ils ne vérifient pas une donnée mais la relation entre deux - ici, l'effectif déclaré confronté aux relevés mensuels du même dossier. C'est là que se cachent les conformités fausses."],
    ["Articles demandés à la source restés sans réponse",
-    _c.articlesSansReponse !== undefined ? String(_c.articlesSansReponse) : "—",
+    _c.articlesSansReponse !== undefined ? String(_c.articlesSansReponse) : "-",
     "Aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent."],
    ["Dossiers construits pour mettre les contrôles en défaut",
-    _c.casContradictoires !== undefined ? String(_c.casContradictoires) : "—",
+    _c.casContradictoires !== undefined ? String(_c.casContradictoires) : "-",
     "Chaque contrôle susceptible de constater une non-conformité doit la constater au moins une fois sur ces dossiers, sans quoi la publication échoue."]]);
   enc("Ce que la loi elle-même ne tranche pas",
-   "La règle de composition des listes de l'article L. 2314-30 est arithmétiquement contradictoire dans un peu moins d'un cas sur cent : l'arrondi prescrit ne retombe pas sur le nombre de candidats à désigner. Le texte ne règle pas ce cas et aucun arrêt publié du corpus ne le tranche. L'application s'arrête et l'écrit, au lieu de choisir — le refus figure alors dans le corps du rapport, à l'endroit de la question.");
+   "La règle de composition des listes de l'article L. 2314-30 est arithmétiquement contradictoire dans un peu moins d'un cas sur cent : l'arrondi prescrit ne retombe pas sur le nombre de candidats à désigner. Le texte ne règle pas ce cas et aucun arrêt publié du corpus ne le tranche. L'application s'arrête et l'écrit, au lieu de choisir - le refus figure alors dans le corps du rapport, à l'endroit de la question.");
   return A.D;
 }
 module.exports = audit;
 
 /* Les verdicts bruts, tels que la page en a besoin pour le parcours : le
    rapport ci-dessus les met en forme, il ne les rend pas. Un contrôle qui jette
-   ne fait pas tomber le parcours — il rend « donnée manquante », comme dans le
+   ne fait pas tomber le parcours - il rend « donnée manquante », comme dans le
    corps du rapport, et le motif dit pourquoi. */
 function verdicts(f) {
   const v = {};
@@ -280,7 +280,7 @@ function verdicts(f) {
   return v;
 }
 
-/* Le parcours en deux temps — corriger ce qui manque, puis vérifier ce qui est
+/* Le parcours en deux temps - corriger ce qui manque, puis vérifier ce qui est
    déclaré. `etat` porte ce que la page a recueilli : les corrections déclarées
    faites et les réponses à la grille de vérification. Rien n'est calculé ici
    qui ne vienne des contrôles et de la régularisation. */
@@ -288,7 +288,7 @@ function parcours(f, etat) {
   return DT.parcours(CONTROLES, REG, verdicts(f), etat);
 }
 
-/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+/* Le modèle concret d'un point de régularisation - étape 5 du parcours.
    Chiffré sur le dossier remis, jamais sur un exemple figé : voir
    modeles-cse.js. Rend null si aucun modèle n'est écrit pour cet id. */
 function modele(f, id) {
@@ -314,11 +314,11 @@ if (require.main === module) {
 
 __def("./moteur-cse.js", function(module, exports, require){
 /* Le moteur du comité social et économique : tout ce qui se calcule.
-   Aucune phrase de droit ici — seulement des nombres, des seuils et des dates,
+   Aucune phrase de droit ici - seulement des nombres, des seuils et des dates,
    tirés d'articles lus à la source le 15 août 2026. Le tableau de l'article
    R. 2314-1 n'a pas été recopié : il est extrait du texte même de l'article. */
 
-/* [effectifMin, effectifMax|null, titulaires, heures] — 54 tranches, extraites
+/* [effectifMin, effectifMax|null, titulaires, heures] - 54 tranches, extraites
    de R. 2314-1 et vérifiées : titulaires × heures = total annoncé par le texte. */
 const R2314_1 = require("./_r2314_1.json");
 
@@ -344,8 +344,8 @@ function seuilAtteint(mois, seuil) {
 
 /* L'effectif déclaré, confronté aux relevés mensuels.
 
-   Tout le régime du comité — nombre de réunions, commission santé et sécurité,
-   subvention, attributions — se calcule sur un seul nombre, « effectif », que
+   Tout le régime du comité - nombre de réunions, commission santé et sécurité,
+   subvention, attributions - se calcule sur un seul nombre, « effectif », que
    l'employeur déclare. Les relevés mensuels ne servaient qu'au seuil de onze.
    Un dossier déclarant 299 salariés et produisant quatorze relevés compris
    entre 312 et 317 obtenait donc six réunions par an au lieu de douze et une
@@ -354,8 +354,8 @@ function seuilAtteint(mois, seuil) {
 
    Les seuils ne se franchissent pas de la même manière selon le chapitre : les
    articles L. 2311-2, L. 2312-2 et L. 2312-34 posent chacun leur règle des
-   douze mois consécutifs, mais les chapitres du fonctionnement — réunion
-   mensuelle de L. 2315-28, commission de L. 2315-36 — n'en posent aucune. Le
+   douze mois consécutifs, mais les chapitres du fonctionnement - réunion
+   mensuelle de L. 2315-28, commission de L. 2315-36 - n'en posent aucune. Le
    moteur dit ce que chaque texte prévoit et ne complète pas le silence des
    autres. */
 const SEUILS_EFFECTIF = [
@@ -474,7 +474,7 @@ function colleges(o = {}) {
       ? "Un troisième collège est constitué : le nombre d'ingénieurs, chefs de service et cadres est d'au moins vingt-cinq."
       : (typeof c === "number"
          ? "Deux collèges : le nombre de cadres est inférieur à vingt-cinq."
-         : "Deux collèges par défaut — le nombre de cadres n'est pas renseigné, la vérification du troisième collège n'a pas pu être faite."),
+         : "Deux collèges par défaut - le nombre de cadres n'est pas renseigné, la vérification du troisième collège n'a pas pu être faite."),
     inconnu: typeof c !== "number",
     cadre501: e >= 501 ? "Dans les entreprises d'au moins cinq cent un salariés, les ingénieurs et cadres ont au moins un délégué titulaire au sein du second collège." : null };
 }
@@ -501,7 +501,7 @@ function listeParitaire(o = {}) {
   /* Le quatrième alinéa n'est pas indexé sur le nombre de candidats mais sur le
      nombre de **sièges à pourvoir** : « En cas de nombre impair de sièges à
      pourvoir et de stricte égalité entre les femmes et les hommes inscrits… ».
-     La distinction n'est pas théorique — une liste incomplète comporte moins de
+     La distinction n'est pas théorique - une liste incomplète comporte moins de
      candidats que le collège n'a de sièges. Le moteur lisait le nombre de
      candidats, ce qui ouvrait l'alinéa 4 dans des cas qu'il ne couvre pas et le
      fermait dans des cas qu'il couvre. */
@@ -518,7 +518,7 @@ function listeParitaire(o = {}) {
        nombre impair, et stricte égalité entre les inscrits des deux sexes. */
     if (egaliteStricte && sieges !== null && sieges % 2 === 1)
       return { ...base, indifferent: true, candidatsFemmes: null, candidatsHommes: null,
-        motif: `${sieges} sièges à pourvoir — nombre impair — et stricte égalité entre les femmes et les hommes inscrits : la liste comprend ${Math.floor(n / 2)} candidat${Math.floor(n / 2) > 1 ? "s" : ""} de chaque sexe et, indifféremment, un homme ou une femme supplémentaire.`,
+        motif: `${sieges} sièges à pourvoir - nombre impair - et stricte égalité entre les femmes et les hommes inscrits : la liste comprend ${Math.floor(n / 2)} candidat${Math.floor(n / 2) > 1 ? "s" : ""} de chaque sexe et, indifféremment, un homme ou une femme supplémentaire.`,
         texte_al: "L. 2314-30, al. 4" };
     /* Stricte égalité, mais le nombre de sièges à pourvoir n'est pas connu :
        l'alinéa 4 ne peut ni être appliqué, ni être écarté. La donnée manque, et
@@ -526,14 +526,14 @@ function listeParitaire(o = {}) {
     if (egaliteStricte && sieges === null)
       return { ...base, siegesInconnus: true, aVerifier: true,
         candidatsFemmes: null, candidatsHommes: null,
-        motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}. Les inscrits des deux sexes étant en stricte égalité, l'issue dépend du nombre de sièges à pourvoir dans le collège, seul critère retenu par le quatrième alinéa — et il n'est pas renseigné. L'indiquer tranchera le cas.`,
+        motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}. Les inscrits des deux sexes étant en stricte égalité, l'issue dépend du nombre de sièges à pourvoir dans le collège, seul critère retenu par le quatrième alinéa - et il n'est pas renseigné. L'indiquer tranchera le cas.`,
         texte_al: "L. 2314-30, al. 4" };
     /* Cas où l'arrondi arithmétique des deux sexes ne retombe pas sur le nombre
        de candidats, hors l'hypothèse du quatrième alinéa. Le texte ne le règle
        pas et aucun arrêt du corpus ne le tranche : la base le signale au lieu
        de choisir. */
     return { ...base, conflit: true, candidatsFemmes: null, candidatsHommes: null,
-      motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}${sieges !== null ? ` et ${sieges} siège(s) à pourvoir` : ""}. Le quatrième alinéa ne couvre pas ce cas${!egaliteStricte ? " — les inscrits des deux sexes ne sont pas en stricte égalité" : " — le nombre de sièges à pourvoir est pair"}, et aucun arrêt publié du corpus ne le tranche : la composition doit être arrêtée avec un conseil avant le dépôt de la liste.`,
+      motif: `L'arrondi arithmétique donne ${nF} femme(s) et ${nH} homme(s), soit ${nF + nH} candidats pour une liste qui en comporte ${n}${sieges !== null ? ` et ${sieges} siège(s) à pourvoir` : ""}. Le quatrième alinéa ne couvre pas ce cas${!egaliteStricte ? " - les inscrits des deux sexes ne sont pas en stricte égalité" : " - le nombre de sièges à pourvoir est pair"}, et aucun arrêt publié du corpus ne le tranche : la composition doit être arrêtée avec un conseil avant le dépôt de la liste.`,
       aVerifier: true };
   }
 
@@ -670,7 +670,7 @@ function commissionsSuppletives(o = {}) {
     return { du: null, motif: "L'effectif n'est pas renseigné : le seuil de trois cents salariés des commissions supplétives ne peut pas être apprécié." };
   if (e < 300)
     return { du: false, texte: "L. 2315-49",
-      motif: `Effectif de ${e} salariés : les commissions de la formation (L. 2315-49), d'information et d'aide au logement (L. 2315-50) et de l'égalité professionnelle (L. 2315-56) ne sont dues qu'à partir de trois cents salariés — et seulement en l'absence d'accord prévu à l'article L. 2315-45. Les entreprises de moins de trois cents salariés peuvent toutefois se grouper entre elles pour former la commission d'information et d'aide au logement (L. 2315-50).` };
+      motif: `Effectif de ${e} salariés : les commissions de la formation (L. 2315-49), d'information et d'aide au logement (L. 2315-50) et de l'égalité professionnelle (L. 2315-56) ne sont dues qu'à partir de trois cents salariés - et seulement en l'absence d'accord prévu à l'article L. 2315-45. Les entreprises de moins de trois cents salariés peuvent toutefois se grouper entre elles pour former la commission d'information et d'aide au logement (L. 2315-50).` };
   return { du: true, texte: "L. 2315-49",
     motif: `Effectif de ${e} salariés : le seuil de trois cents est atteint.` };
 }
@@ -724,7 +724,7 @@ __def("./grille-cse.js", function(module, exports, require){
    Chaque règle porte son article et, quand il en existe un dans le corpus, l'arrêt
    publié qui l'applique. Les arrêts ne sont pas recopiés : ils sont lus dans
    cse_corpus.json à partir de leur numéro de pourvoi. Un numéro absent du corpus
-   fait échouer le chargement — aucune référence ne peut donc être inventée. */
+   fait échouer le chargement - aucune référence ne peut donc être inventée. */
 
 const M = require("./moteur-cse.js");
 const CORPUS = Object.values(require("./cse_corpus.json"));
@@ -775,7 +775,7 @@ r({ id: "CSE-A-03", rubrique: "Périmètre",
  juris: [A("20-60.258"), A("19-11.918"), A("19-21.086"), A("19-17.298")],
  pieces: ["accord de découpage ou décision unilatérale datée", "organigrammes", "délégations de pouvoir des responsables d'établissement"],
  erreurs: ["Refuser l'autonomie de gestion au motif que les fonctions support sont centralisées : la centralisation ne l'exclut pas.",
-   "Ajouter au texte des critères qu'il ne prévoit pas — la Cour censure."] });
+   "Ajouter au texte des critères qu'il ne prévoit pas - la Cour censure."] });
 
 r({ id: "CSE-A-04", rubrique: "Périmètre",
  question: "Dans quel délai la décision sur les établissements distincts peut-elle être contestée ?",
@@ -891,7 +891,7 @@ r({ id: "CSE-B-08", rubrique: "Élections",
 r({ id: "CSE-B-09", rubrique: "Élections",
  question: "Dans quel délai les élections peuvent-elles être contestées ?",
  si: f => f.contentieuxElectoral === true || f.electionsEnCours === true,
- alors: () => "Trois jours suivant la publication de la liste électorale pour l'électorat ; quinze jours suivant l'élection ou la désignation pour la régularité des opérations et la désignation des représentants syndicaux. La contestation des résultats qui procède d'une contestation du périmètre — lequel n'est pas un élément spécifique au premier tour — reste recevable dans les quinze jours du second tour.",
+ alors: () => "Trois jours suivant la publication de la liste électorale pour l'électorat ; quinze jours suivant l'élection ou la désignation pour la régularité des opérations et la désignation des représentants syndicaux. La contestation des résultats qui procède d'une contestation du périmètre - lequel n'est pas un élément spécifique au premier tour - reste recevable dans les quinze jours du second tour.",
  fondement: ["R2314-24", "L2314-32"],
  juris: [A("20-17.286"), A("19-23.428"), A("23-19.384")],
  pieces: ["procès-verbaux datés", "preuve de la publication des listes électorales"],
@@ -941,7 +941,7 @@ r({ id: "CSE-C-04", rubrique: "Consultations",
  question: "Quelles sont les consultations récurrentes, et qu'un accord peut-il en faire ?",
  si: f => typeof f.effectif === "number" && f.effectif >= 50,
  alors: f => f.accordConsultations
-   ? "Un accord d'entreprise peut définir le contenu, la périodicité et les modalités des trois consultations récurrentes, la liste des informations nécessaires, le nombre de réunions annuelles — qui ne peut être inférieur à six — et les niveaux auxquels les consultations sont conduites. L'accord versé doit être confronté à ces limites."
+   ? "Un accord d'entreprise peut définir le contenu, la périodicité et les modalités des trois consultations récurrentes, la liste des informations nécessaires, le nombre de réunions annuelles - qui ne peut être inférieur à six - et les niveaux auxquels les consultations sont conduites. L'accord versé doit être confronté à ces limites."
    : "À défaut d'accord, le comité est consulté chaque année sur les orientations stratégiques, sur la situation économique et financière et sur la politique sociale, les conditions de travail et l'emploi. Les deux premières sont conduites au niveau de l'entreprise, sauf décision contraire de l'employeur.",
  fondement: ["L2312-17", "L2312-19", "L2312-22", "L2312-26"],
  juris: [A("21-25.233"), A("21-25.748"), A("23-10.857")],
@@ -1209,7 +1209,7 @@ function effectifDouteux(f) {
 /* Un verdict qui repose sur un effectif contredit devient une réserve.
    « Conforme » toujours : il tiendrait pour acquis un constat que le dossier
    dément. « Sans objet » lorsque le doute porte sur un seuil : c'est le cas le
-   plus trompeur du module — « commission non obligatoire en deçà de trois
+   plus trompeur du module - « commission non obligatoire en deçà de trois
    cents salariés » écrit sur un dossier dont les quatorze relevés dépassent
    trois cents. Les autres états ne prononcent rien et restent inchangés. */
 const surEffectif = (f, v) => {
@@ -1231,7 +1231,7 @@ const ARRETS = {
   designation: "Soc., 27 novembre 2019, n° 19-14.224, publié : « la désignation des membres d'une CSSCT, que sa mise en place soit obligatoire ou conventionnelle, résulte d'un vote des membres du CSE à la majorité des voix des membres présents lors du vote, sans qu'il soit besoin d'une résolution préalable fixant les modalités de l'élection ». La Cour tire cette solution de la combinaison de L. 2315-39 et de L. 2315-32, alinéa 1, aux termes duquel les résolutions du comité sont prises à la majorité des membres présents.",
   designationOrdrePublic: "Soc., 11 février 2026, n° 24-16.408 : la Cour rappelle que les dispositions de L. 2315-39 sont d'ordre public, et retient qu'une stipulation d'accord attribuant « un siège à chaque organisation syndicale représentée au CSE, par ordre de représentativité » ne peut pas être interprétée comme imposant une désignation proportionnelle au résultat électoral de chaque syndicat, une telle interprétation étant contraire aux articles L. 2315-32 et L. 2315-39.",
   troisiemeCollege: "Soc., 26 février 2025, n° 24-12.295, publié : « Il résulte de l'article L. 2315-39 du code du travail dont les dispositions sont d'ordre public que, dans les entreprises ou établissements où est institué, en application de l'article L. 2314-11 du code du travail, un troisième collège électoral, un siège au moins à la commission santé, sécurité et conditions de travail doit être attribué à un élu au comité social et économique représentant le troisième collège. » L'arrêt casse le jugement qui voyait dans L. 2315-39 une simple alternative entre le second et le troisième collège.",
-  remplacement: "Soc., 28 mai 2026, n° 24-22.914, publié : « Sauf dans les cas de fin anticipée de mandat énumérés à l'article L. 2314-33 du code du travail, le comité social et économique ne peut procéder au remplacement des membres d'une commission santé, sécurité et conditions de travail initialement désignés avant le terme du mandat des membres élus du comité. » La Cour précise que ni un accord d'entreprise ne peut y déroger, L. 2315-39 étant d'ordre public. Elle statuait sur L. 2314-33 dans sa version antérieure à la loi n° 2025-989 du 24 octobre 2025 ; les causes de fin anticipée qu'elle énumère — décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible — sont celles de la version lue au dépôt (LEGIARTI000052437191).",
+  remplacement: "Soc., 28 mai 2026, n° 24-22.914, publié : « Sauf dans les cas de fin anticipée de mandat énumérés à l'article L. 2314-33 du code du travail, le comité social et économique ne peut procéder au remplacement des membres d'une commission santé, sécurité et conditions de travail initialement désignés avant le terme du mandat des membres élus du comité. » La Cour précise que ni un accord d'entreprise ne peut y déroger, L. 2315-39 étant d'ordre public. Elle statuait sur L. 2314-33 dans sa version antérieure à la loi n° 2025-989 du 24 octobre 2025 ; les causes de fin anticipée qu'elle énumère - décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible - sont celles de la version lue au dépôt (LEGIARTI000052437191).",
   delegation: "Soc., 13 mai 2026, n° 25-12.560 : « Aux termes de l'article L. 2315-38 du même code, dont les dispositions sont d'ordre public, la commission santé, sécurité et conditions de travail se voit confier, par délégation du comité social et économique, tout ou partie des attributions du comité relatives à la santé, à la sécurité et aux conditions de travail, à l'exception du recours à un expert prévu à la sous-section 10 et des attributions consultatives du comité. » L'accord en cause réservait expressément au comité le recueil de l'avis et la décision de recourir à l'expert.",
   expertiseCommissions: "Soc., 18 mars 2026, n° 23-22.270, publié : le comité social et économique peut, « le cas échéant sur proposition des commissions constituées en son sein », décider de recourir à une expertise lors de la première réunion prévue à l'article L. 1233-30 (L. 1233-34). La Cour en déduit que lorsque l'introduction de nouvelles technologies ou un projet important entraîne des licenciements économiques et donne lieu à un plan de sauvegarde de l'emploi, la faculté de recourir à une expertise portant sur l'incidence du projet sur les conditions de santé, de sécurité et de travail ne peut s'exercer que dans les conditions de L. 1233-34 : une délibération distincte fondée sur L. 2315-94, 2°, est nulle.",
 };
@@ -1242,7 +1242,7 @@ const c = (id, rubrique, objet, fondement, fn) => C.push({ id, rubrique, objet, 
 /* ---------------- Recevabilité et cohérence des données ---------------- */
 c("CSE-CTL-REC-01", "Recevabilité", "Les données saisies sont-elles lisibles ?", [],
  f => { const A = valider(f);
-   if (A.length) return { etat: NC, motif: `${A.length} donnée(s) impossible(s) ou mal formée(s) : ${A.map(x => `${x.champ} = « ${x.valeur} » — ${x.motif}`).join(" ; ")}. Tant qu'elles ne sont pas corrigées, les contrôles qui les lisent concluent sur des valeurs qui n'existent pas.` };
+   if (A.length) return { etat: NC, motif: `${A.length} donnée(s) impossible(s) ou mal formée(s) : ${A.map(x => `${x.champ} = « ${x.valeur} » - ${x.motif}`).join(" ; ")}. Tant qu'elles ne sont pas corrigées, les contrôles qui les lisent concluent sur des valeurs qui n'existent pas.` };
    const n = examines(f);
    return n
      ? { etat: CONF, motif: `${n} donnée(s) examinée(s), aucune impossible : dates existantes, dénombrements entiers, montants positifs, chronologies dans l'ordre.` }
@@ -1253,7 +1253,7 @@ c("CSE-CTL-COH-01", "Recevabilité", "L'effectif déclaré est-il cohérent avec
    if (!co) return { etat: MANQ, motif: "L'effectif ou les relevés mensuels ne sont pas renseignés : la cohérence ne peut pas être vérifiée." };
    if (!co.lisible) return { etat: MANQ, motif: co.motif };
    if (co.dans) return { etat: CONF, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, compris dans l'intervalle des ${co.releves} relevés mensuels (${co.min} à ${co.max}, moyenne ${co.moyenne}).` };
-   return { etat: NC, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, alors que les ${co.releves} relevés mensuels s'échelonnent de ${co.min} à ${co.max} — un écart de ${co.ecart} salarié(s) avec le relevé le plus proche. Aucun mois du dossier ne corrobore le nombre déclaré, sur lequel repose pourtant tout le régime applicable au comité.` }; });
+   return { etat: NC, motif: `Effectif déclaré de ${co.effectifDeclare} salariés, alors que les ${co.releves} relevés mensuels s'échelonnent de ${co.min} à ${co.max} - un écart de ${co.ecart} salarié(s) avec le relevé le plus proche. Aucun mois du dossier ne corrobore le nombre déclaré, sur lequel repose pourtant tout le régime applicable au comité.` }; });
 
 c("CSE-CTL-COH-02", "Recevabilité", "Les relevés mensuels franchissent-ils un seuil que l'effectif déclaré ne franchit pas ?", ["L. 2311-2", "L. 2312-2", "L. 2312-34"],
  f => { const co = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
@@ -1262,7 +1262,7 @@ c("CSE-CTL-COH-02", "Recevabilité", "Les relevés mensuels franchissent-ils un 
      return { etat: CONF, motif: `Aucun seuil n'est atteint par les relevés mensuels sans l'être par l'effectif déclaré de ${co.effectifDeclare} salariés.` };
    return { etat: NC, motif: co.seuilsFranchis.map(s =>
      `Seuil de ${s.seuil} salariés : ${s.regle} L'effectif déclaré étant de ${co.effectifDeclare}, le régime appliqué au dossier ignore ${s.effet}.`).join(" ") +
-     " Le régime du comité — réunions, commission, budgets, attributions — se calcule sur l'effectif déclaré : tant qu'il contredit les relevés, les conformités qui en découlent ne valent rien." }; });
+     " Le régime du comité - réunions, commission, budgets, attributions - se calcule sur l'effectif déclaré : tant qu'il contredit les relevés, les conformités qui en découlent ne valent rien." }; });
 
 /* ---------------- Mise en place ---------------- */
 c("CSE-CTL-MEP-01", "Mise en place", "Le seuil de onze salariés est-il mesuré sur douze mois consécutifs ?", ["L. 2311-2"],
@@ -1306,7 +1306,7 @@ c("CSE-CTL-PER-01", "Périmètre", "Le découpage en établissements distincts r
  f => f.etablissementsMultiples !== true
    ? { etat: SO, motif: "L'entreprise ne comporte pas plusieurs établissements distincts." }
    : vide(f.sourceDecoupage)
-     ? { etat: MANQ, motif: "La source du découpage — accord, décision unilatérale ou décision administrative — n'est pas renseignée." }
+     ? { etat: MANQ, motif: "La source du découpage - accord, décision unilatérale ou décision administrative - n'est pas renseignée." }
      : (f.sourceDecoupage === "accord"
        ? (piece(f, "accord-decoupage") ? { etat: CONF, motif: "Le découpage résulte d'un accord d'entreprise, versé au dossier." }
           : { etat: RISQ, motif: "Un accord de découpage est déclaré, mais il n'est pas versé : sa validité et son périmètre restent invérifiables." })
@@ -1420,7 +1420,7 @@ c("CSE-CTL-CON-01", "Consultations", "Les trois consultations récurrentes ont-e
  f => (typeof f.effectif !== "number" || f.effectif < 50)
    ? { etat: SO, motif: "Les consultations récurrentes ne sont dues qu'à partir de cinquante salariés." }
    : neant(f, "consultationsRecurrentes")
-     ? { etat: NC, motif: "Aucune consultation récurrente n'a été conduite. À défaut d'accord en aménageant la périodicité, les trois consultations — orientations stratégiques, situation économique et financière, politique sociale — sont annuelles, et leur défaut constitue un trouble manifestement illicite." }
+     ? { etat: NC, motif: "Aucune consultation récurrente n'a été conduite. À défaut d'accord en aménageant la périodicité, les trois consultations - orientations stratégiques, situation économique et financière, politique sociale - sont annuelles, et leur défaut constitue un trouble manifestement illicite." }
    : vide(f.consultationsRecurrentes)
      ? { etat: MANQ, motif: "Les consultations récurrentes conduites ne sont pas renseignées." }
      : (() => { const dues = ["orientations stratégiques", "situation économique et financière", "politique sociale"];
@@ -1579,8 +1579,8 @@ c("CSE-CTL-SST-04", "Santé et sécurité", "Des membres de la commission ont-il
    if (vide(r.cause))
      return { etat: MANQ, motif: "Un remplacement est déclaré, mais sa cause n'est pas renseignée : seules les fins anticipées de mandat énumérées à L. 2314-33 l'autorisent. " + ARRETS.remplacement };
    if (M.finAnticipeeMandat(r.cause))
-     return { etat: CONF, motif: `Le remplacement est intervenu pour une cause de fin anticipée du mandat au sens de L. 2314-33 — ${r.cause}. ` + ARRETS.remplacement };
-   return { etat: NC, motif: `Un membre de la commission a été remplacé pour une cause — ${r.cause} — qui ne figure pas parmi les fins anticipées de mandat de L. 2314-33 (décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible). ` + ARRETS.remplacement };
+     return { etat: CONF, motif: `Le remplacement est intervenu pour une cause de fin anticipée du mandat au sens de L. 2314-33 - ${r.cause}. ` + ARRETS.remplacement };
+   return { etat: NC, motif: `Un membre de la commission a été remplacé pour une cause - ${r.cause} - qui ne figure pas parmi les fins anticipées de mandat de L. 2314-33 (décès, démission, rupture du contrat de travail, perte des conditions requises pour être éligible). ` + ARRETS.remplacement };
  });
 
 c("CSE-CTL-SST-05", "Santé et sécurité", "La délégation consentie à la commission laisse-t-elle au comité l'avis et le recours à l'expert ?",
@@ -1590,14 +1590,14 @@ c("CSE-CTL-SST-05", "Santé et sécurité", "La délégation consentie à la com
    if (vide(d.avisDelegue) && vide(d.expertDelegue))
      return { etat: MANQ, motif: "Le contenu de la délégation consentie à la commission n'est pas renseigné. " + ARRETS.delegation };
    const griefs = [], manques = [];
-   if (vide(d.avisDelegue)) manques.push("les attributions consultatives — le comité rend-il lui-même ses avis ?");
+   if (vide(d.avisDelegue)) manques.push("les attributions consultatives - le comité rend-il lui-même ses avis ?");
    else if (d.avisDelegue === true) griefs.push("les attributions consultatives du comité lui ont été déléguées : un avis rendu par la seule commission serait irrégulier");
-   if (vide(d.expertDelegue)) manques.push("le recours à l'expert — la décision appartient-elle encore au comité ?");
+   if (vide(d.expertDelegue)) manques.push("le recours à l'expert - la décision appartient-elle encore au comité ?");
    else if (d.expertDelegue === true) griefs.push("la décision de recourir à un expert lui a été déléguée, quand la sous-section 10 la réserve au comité");
    if (griefs.length)
      return { etat: NC, motif: `La délégation consentie à la commission excède ce que L. 2315-38 permet : ${griefs.join(" ; ")}. Ce texte est d'ordre public : les stipulations de l'accord qui l'organise ne peuvent pas y déroger. ` + ARRETS.delegation };
    if (manques.length)
-     return { etat: MANQ, motif: `La délégation est incomplètement décrite — il manque : ${manques.join(" ; ")} (L. 2315-38). ` + ARRETS.delegation };
+     return { etat: MANQ, motif: `La délégation est incomplètement décrite - il manque : ${manques.join(" ; ")} (L. 2315-38). ` + ARRETS.delegation };
    return { etat: CONF, motif: "La délégation consentie à la commission laisse au comité ses attributions consultatives et la décision de recourir à un expert, comme L. 2315-38 l'impose. " + ARRETS.delegation };
  });
 
@@ -1609,17 +1609,17 @@ c("CSE-CTL-SST-06", "Santé et sécurité", "Les modalités de la commission son
    if (s === "aucune")
      return { etat: NC, motif: "Rien ne fixe les modalités de la commission. À défaut d'accord prévu aux articles L. 2315-41 et L. 2315-42, c'est le règlement intérieur du comité qui doit définir les modalités mentionnées aux 1° à 6° de L. 2315-41 (L. 2315-44). Une commission sans règles écrites n'a ni missions ni moyens établis, et l'étendue de la délégation qu'elle exerce ne peut pas être vérifiée." };
    const source = M.SOURCES_MODALITES_CSSCT[s];
-   if (!source) return { etat: MANQ, motif: `La source déclarée (« ${s} ») n'est pas reconnue : répondez « accord d'entreprise », « accord avec le comité », « règlement intérieur du comité » — ou « aucune ».` };
+   if (!source) return { etat: MANQ, motif: `La source déclarée (« ${s} ») n'est pas reconnue : répondez « accord d'entreprise », « accord avec le comité », « règlement intérieur du comité » - ou « aucune ».` };
    return { etat: CONF, motif: `Les modalités de la commission sont fixées par ${source.libelle} (${source.texte}). Elles portent sur les six points de L. 2315-41 : nombre de membres, missions déléguées et leurs modalités d'exercice, fonctionnement et heures de délégation, formation, moyens le cas échéant, et le cas échéant la formation spécifique aux risques particuliers de l'activité.` };
  });
 
 c("CSE-CTL-SST-07", "Santé et sécurité", "Les membres de la commission ont-ils reçu la formation santé, sécurité et conditions de travail pour la durée minimale applicable ?",
  ["L. 2315-18", "L. 2315-41, 4°"],
- f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : la durée renforcée de L. 2315-18, 2°, n'a pas d'objet — la formation de tous les membres de la délégation est contrôlée par CSE-CTL-MOY-04." };
+ f => { if (f.cssct !== true) return { etat: SO, motif: "Aucune commission en place : la durée renforcée de L. 2315-18, 2°, n'a pas d'objet - la formation de tous les membres de la délégation est contrôlée par CSE-CTL-MOY-04." };
    if (typeof f.effectif !== "number")
      return { etat: MANQ, motif: "L'effectif n'est pas renseigné : la durée minimale de la formation en dépend au renouvellement du mandat (cinq jours pour les membres de la commission dans les entreprises d'au moins trois cents salariés, L. 2315-18, 2°)." };
    if (vide(f.mandatRenouvele))
-     return { etat: MANQ, motif: "Il n'est pas indiqué s'il s'agit du premier mandat ou d'un renouvellement : la durée minimale est de cinq jours lors du premier mandat, et de trois jours au renouvellement — cinq pour les membres de la commission dans les entreprises d'au moins trois cents salariés (L. 2315-18)." };
+     return { etat: MANQ, motif: "Il n'est pas indiqué s'il s'agit du premier mandat ou d'un renouvellement : la durée minimale est de cinq jours lors du premier mandat, et de trois jours au renouvellement - cinq pour les membres de la commission dans les entreprises d'au moins trois cents salariés (L. 2315-18)." };
    const d = M.dureeFormationSSCT(f);
    if (typeof f.joursFormationSSCT !== "number")
      return { etat: MANQ, motif: `La durée de formation effectivement dispensée aux membres de la commission n'est pas renseignée. ${d.motif} Son financement est pris en charge par l'employeur (L. 2315-18, dernier alinéa).` };
@@ -1680,7 +1680,7 @@ c("CSE-CTL-COM-03", "Commissions", "Une commission des marchés est-elle créée
    if (vide(f.seuilsComptesComite))
      return { etat: MANQ, motif: "Le critère de la commission des marchés n'est pas l'effectif de l'entreprise mais les comptes du comité lui-même : nombre de salariés du comité à la clôture d'un exercice, ressources annuelles, total du bilan (D. 2315-29). Il n'est pas indiqué si le comité dépasse au moins deux de ces trois seuils. Ce point se recontrôle à chaque clôture des comptes du comité." };
    if (f.seuilsComptesComite === false)
-     return { etat: SO, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 : la commission des marchés n'est pas due (L. 2315-44-1). Le critère tient aux comptes du comité, non à l'effectif de l'entreprise — recontrôlez à chaque clôture." };
+     return { etat: SO, motif: "Le comité ne dépasse pas au moins deux des trois seuils de D. 2315-29 : la commission des marchés n'est pas due (L. 2315-44-1). Le critère tient aux comptes du comité, non à l'effectif de l'entreprise - recontrôlez à chaque clôture." };
    if (vide(f.commissionMarches))
      return { etat: MANQ, motif: "Le comité dépasse au moins deux des trois seuils de D. 2315-29, mais l'existence de la commission des marchés n'est pas renseignée (L. 2315-44-1)." };
    if (f.commissionMarches === false)
@@ -1755,13 +1755,13 @@ c("CSE-CTL-EXP-04", "Expertises", "La décision de recourir à l'expertise a-t-e
      return { etat: SO, motif: "Aucune expertise en cours : il n'y a pas de décision à contrôler." };
    const qui = f.expertise.decideePar;
    if (vide(qui))
-     return { etat: MANQ, motif: "L'auteur de la décision de recourir à l'expertise n'est pas renseigné. La décision appartient au comité social et économique — le cas échéant sur proposition des commissions constituées en son sein (L. 1233-34) —, et le recours à l'expert ne peut jamais être délégué à la commission santé, sécurité et conditions de travail (L. 2315-38). " + ARRETS.expertiseCommissions };
+     return { etat: MANQ, motif: "L'auteur de la décision de recourir à l'expertise n'est pas renseigné. La décision appartient au comité social et économique - le cas échéant sur proposition des commissions constituées en son sein (L. 1233-34) -, et le recours à l'expert ne peut jamais être délégué à la commission santé, sécurité et conditions de travail (L. 2315-38). " + ARRETS.expertiseCommissions };
    if (qui === "la commission santé, sécurité et conditions de travail")
      return { etat: NC, motif: "La décision de recourir à l'expertise a été prise par la commission santé, sécurité et conditions de travail. L. 2315-38 exclut expressément le recours à l'expert des attributions qui peuvent lui être déléguées, et ce texte est d'ordre public : aucune stipulation d'accord ne peut en disposer autrement. La commission peut proposer l'expertise ; c'est le comité qui la décide. " + ARRETS.delegation + " " + ARRETS.expertiseCommissions };
    if (qui === "l'employeur")
      return { etat: NC, motif: "La décision de recourir à l'expertise est attribuée à l'employeur. Le recours à l'expert est une prérogative du comité social et économique, qui en délibère (L. 1233-34, L. 2315-38) ; l'employeur, lui, peut la contester devant le juge dans les dix jours (contrôle CSE-CTL-EXP-02)." };
    if (qui === "le comité social et économique")
-     return { etat: CONF, motif: "La décision de recourir à l'expertise a été prise par le comité social et économique lui-même. Il peut la prendre, le cas échéant, sur proposition des commissions constituées en son sein — c'est là ce que les commissions apportent à l'expertise, et la seule chose qu'elles y apportent. " + ARRETS.expertiseCommissions };
+     return { etat: CONF, motif: "La décision de recourir à l'expertise a été prise par le comité social et économique lui-même. Il peut la prendre, le cas échéant, sur proposition des commissions constituées en son sein - c'est là ce que les commissions apportent à l'expertise, et la seule chose qu'elles y apportent. " + ARRETS.expertiseCommissions };
    return { etat: MANQ, motif: `L'auteur déclaré de la décision (« ${qui} ») n'est pas reconnu : répondez « le comité social et économique », « la commission santé, sécurité et conditions de travail » ou « l'employeur ».` };
  });
 
@@ -1808,10 +1808,10 @@ for (const ctl of C) {
 
 /* Les contrôles de cohérence ne vérifient pas une donnée mais la relation entre
    deux. C'est la famille qui manquait, et c'est là que se cachaient les
-   conformités fausses — celles qu'un dossier obtient en se contredisant. */
+   conformités fausses - celles qu'un dossier obtient en se contredisant. */
 const COHERENCE = new Set(["CSE-CTL-COH-01", "CSE-CTL-COH-02"]);
 
-/* Ce qu'une donnée illisible interdit de conclure — voir
+/* Ce qu'une donnée illisible interdit de conclure - voir
    moteur/commun/recevabilite.js. CSE-CTL-REC-01 est exempté : c'est lui qui
    porte l'anomalie, il doit continuer à la constater. */
 REC.surSilence(C, ["CSE-CTL-REC-01"]);
@@ -1845,14 +1845,14 @@ __def("./recevabilite.js", function(module, exports, require){
 
    La règle appliquée ici est plus simple que les exceptions qu'il faudrait
    écrire sans elle : un contrôle qui a lu un champ illisible n'a rien constaté.
-   Son verdict devient « donnée manquante » — la donnée n'est pas absente, elle
-   est inexploitable, ce qui revient au même pour la conclusion — et le motif
+   Son verdict devient « donnée manquante » - la donnée n'est pas absente, elle
+   est inexploitable, ce qui revient au même pour la conclusion - et le motif
    dit lequel des champs lus est en cause. Le contrôle de recevabilité, lui,
    garde son « non conforme » : c'est lui qui porte l'anomalie, et il bloque.
 
    Comment savoir ce qu'un contrôle a lu, sans le deviner ? En l'observant. La
    fiche est enveloppée dans un Proxy le temps de l'exécution, et l'on relève
-   les champs réellement touchés — f.nom, f["nom"] et la déstructuration
+   les champs réellement touchés - f.nom, f["nom"] et la déstructuration
    comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
 
 const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier", SO = "sans objet";
@@ -1862,7 +1862,7 @@ const CONCLUSIFS = new Set([CONF, "non conforme"]);
 
    Le registre et le questionnaire déduisent les champs lus en inspectant le
    texte de la fonction. Une enveloppe qui masque ce texte casserait la
-   garantie de non-divergence — la première tentative l'a fait, et trois
+   garantie de non-divergence - la première tentative l'a fait, et trois
    contre-épreuves l'ont dit aussitôt. L'enveloppe rend donc, quand on
    l'imprime, le texte de la fonction qu'elle enveloppe. */
 function remplacer(ctl, fn) {
@@ -1904,10 +1904,10 @@ function envelopper(controles, valider, exemptes) {
       if (touchees.length)
         return { etat: MANQ, illisible: true,
           motif: `Ce contrôle a lu ${touchees.length > 1 ? "des données inexploitables" : "une donnée inexploitable"} : `
-            + touchees.map(a => `${a.champ} = « ${a.valeur} » — ${a.motif}`).join(" ; ")
+            + touchees.map(a => `${a.champ} = « ${a.valeur} » - ${a.motif}`).join(" ; ")
             + ". Aucune conclusion n'en est tirée, dans aucun sens. Corrigez la saisie et relancez l'audit ; le constat qu'aurait rendu ce contrôle est sans valeur tant que la donnée n'existe pas." };
       /* Le contrôle n'a lu aucune des données fautives : son constat tient par
-         lui-même. Il ne peut pas pour autant valoir conformité — le document
+         lui-même. Il ne peut pas pour autant valoir conformité - le document
          se lit d'un bloc, et une page qui affirme qu'une donnée est impossible
          ne peut pas en présenter une autre comme acquise. Le manquement
          constaté, lui, reste constaté : une non-conformité n'est pas effacée
@@ -1923,23 +1923,23 @@ function envelopper(controles, valider, exemptes) {
 /* ------------------------------------------------------------ le silence
 
    Un contrôle qui se déclare « sans objet » ferme la question : il affirme que
-   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien — « l'entreprise
+   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien - « l'entreprise
    n'appartient à aucun groupe », « aucune élection en cours », « l'entreprise ne
-   comporte pas plusieurs établissements distincts » — alors que la fiche ne
+   comporte pas plusieurs établissements distincts » - alors que la fiche ne
    disait rien du groupe, des élections ni des établissements. Sur un dossier
    entièrement vide, quarante-quatre contrôles des deux modules affirmaient ainsi
    des faits que personne n'avait déclarés.
 
    C'est la règle du dépôt appliquée à un état de plus : une donnée non
    renseignée ne produit jamais « conforme », et elle ne doit pas davantage
-   produire « sans objet ». Le silence n'est pas une réponse — ni dans un sens,
+   produire « sans objet ». Le silence n'est pas une réponse - ni dans un sens,
    ni dans l'autre.
 
    La mesure est la même que pour la recevabilité : on observe l'exécution. Si le
    contrôle a conclu « sans objet » sans qu'aucun des champs qu'il a lus ne soit
    déclaré sur la fiche, sa conclusion ne repose sur rien et devient « donnée
-   manquante ». S'il a lu ne serait-ce qu'un champ renseigné — un effectif de
-   vingt, qui écarte une obligation due à cinquante — le « sans objet » tient. */
+   manquante ». S'il a lu ne serait-ce qu'un champ renseigné - un effectif de
+   vingt, qui écarte une obligation due à cinquante - le « sans objet » tient. */
 function surSilence(controles, exemptes) {
   const hors = new Set(exemptes || []);
   for (const ctl of controles) {
@@ -1961,7 +1961,7 @@ function surSilence(controles, exemptes) {
       if (declares.length) return v;
       const attendus = [...lus].filter(k => !/^(then|constructor|toJSON|inspect|Symbol)/.test(k));
       return { etat: MANQ, surSilence: true,
-        motif: `Ce contrôle s'écarterait de lui-même — « ${v.motif} » — mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
+        motif: `Ce contrôle s'écarterait de lui-même - « ${v.motif} » - mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
     });
   }
   return controles;
@@ -1998,7 +1998,7 @@ const estDateISO = s => {
 const JOUR = 86400000;
 const jour = s => Date.UTC(...s.split("-").map((x, i) => i === 1 ? +x - 1 : +x));
 
-/* ecart(depuis, jusqu) — le nombre de jours écoulés du premier au second.
+/* ecart(depuis, jusqu) - le nombre de jours écoulés du premier au second.
    Rend { valide: true, jours } si, et seulement si, les deux dates existent et
    sont dans cet ordre. Sinon { valide: false, cause, motif } : « format » quand
    une date n'existe pas, « ordre » quand la chronologie est inversée. */
@@ -2028,13 +2028,13 @@ __def("./valider-cse.js", function(module, exports, require){
 /* La validation des entrées du module comité.
 
    Le module économique avait déjà la sienne ; celui-ci n'en avait aucune. Une
-   date d'élections au 30 février était acceptée sans broncher — new Date la
-   décale au 1er ou au 2 mars — et le contrôle du renouvellement prononçait une
+   date d'élections au 30 février était acceptée sans broncher - new Date la
+   décale au 1er ou au 2 mars - et le contrôle du renouvellement prononçait une
    conformité sur un jour qui n'existe pas. Un effectif de 299,5, une masse
    salariale négative, un nombre de titulaires décimal passaient de même.
 
    Ce fichier ne juge rien du droit : il dit seulement si la donnée est lisible.
-   Ce qui n'est pas lisible n'est ni conforme ni non conforme — c'est à corriger
+   Ce qui n'est pas lisible n'est ni conforme ni non conforme - c'est à corriger
    avant tout examen, et le contrôle de recevabilité le dit en tête du rapport. */
 const { estDateISO } = require("./dates.js");
 
@@ -2066,11 +2066,11 @@ Object.assign(ATTENDU, {
 
 /* Deux natures d'anomalie, et la distinction commande ce qui en découle.
 
-   « lisibilité » : la valeur ne peut pas exister — le 30 février, un effectif
+   « lisibilité » : la valeur ne peut pas exister - le 30 février, un effectif
    décimal, un montant négatif. Aucun contrôle ne peut rien conclure de ce qu'il
    a lu là, et moteur/commun/recevabilite.js le lui interdit.
 
-   « cohérence » : deux valeurs parfaitement lisibles se contredisent — plus de
+   « cohérence » : deux valeurs parfaitement lisibles se contredisent - plus de
    titulaires restants qu'élus à l'origine, un avis antérieur à la remise des
    informations. Ce n'est pas un obstacle à l'examen, c'est son objet : les
    contrôles doivent au contraire pouvoir le constater. */
@@ -2083,7 +2083,7 @@ function valider(f) {
 
   for (const c of DATES)
     if (a(f, c) && !estDateISO(f[c]))
-      dit(c, f[c], "date inexistante ou format non reconnu — le format attendu est AAAA-MM-JJ");
+      dit(c, f[c], "date inexistante ou format non reconnu - le format attendu est AAAA-MM-JJ");
 
   for (const c of ENTIERS)
     if (a(f, c) && !estEntierPositif(f[c]))
@@ -2139,7 +2139,7 @@ function valider(f) {
   /* Cohérences internes : elles ne dépendent d'aucune règle de fond. */
   const ordre = (a1, c1, a2, c2, quoi1, quoi2) => {
     if (estDateISO(a1) && estDateISO(a2) && a2 < a1)
-      incoherent(c2, a2, `antérieure à ${quoi1} du ${a1} — ${quoi2} ne peut pas la précéder`);
+      incoherent(c2, a2, `antérieure à ${quoi1} du ${a1} - ${quoi2} ne peut pas la précéder`);
   };
   ordre(f.dateInformationPersonnel, "dateInformationPersonnel", f.datePremierTour, "datePremierTour",
     "l'information du personnel", "le premier tour");
@@ -2177,7 +2177,7 @@ if (require.main === module) {
   
   const f = JSON.parse(fs.readFileSync(process.argv[2] || __dirname + "/fiche-cse.json", "utf8"));
   const A = valider(f);
-  console.log(A.length ? A.map(x => `${x.champ} = ${x.valeur} — ${x.motif}`).join("\n") : "aucune anomalie de saisie");
+  console.log(A.length ? A.map(x => `${x.champ} = ${x.valeur} - ${x.motif}`).join("\n") : "aucune anomalie de saisie");
 }
 
 });
@@ -2196,7 +2196,7 @@ const ORDRE = [NOW, AV_ELE, AV_LIS, AV_CON, AV_AVI, AV_DEC];
 const A = {
 "CSE-CTL-REC-01": { faire: "Corriger les données impossibles listées au constat : une date qui n'existe pas ou un dénombrement décimal ne peuvent pas être audités.", quand: NOW },
 "CSE-CTL-COH-01": { faire: "Rétablir l'effectif de l'entreprise au sens de l'article L. 1111-2, en le calculant sur les relevés mensuels versés, et relancer l'audit.", quand: NOW },
-"CSE-CTL-COH-02": { faire: "Appliquer le régime du seuil que les relevés mensuels franchissent — réunions, commission santé et sécurité, budgets, attributions — ou établir pourquoi l'effectif au sens de L. 1111-2 reste en deçà.", quand: NOW },
+"CSE-CTL-COH-02": { faire: "Appliquer le régime du seuil que les relevés mensuels franchissent - réunions, commission santé et sécurité, budgets, attributions - ou établir pourquoi l'effectif au sens de L. 1111-2 reste en deçà.", quand: NOW },
 "CSE-CTL-MEP-01": { faire: "Produire les états mensuels d'effectif des douze derniers mois, calculés selon l'article L. 1111-2.", quand: AV_ELE },
 "CSE-CTL-MEP-02": { faire: "Mettre en place le comité, ou verser le procès-verbal de carence établi à l'issue des élections.", quand: AV_ELE },
 "CSE-CTL-MEP-03": { faire: "Engager le renouvellement du comité : informer le personnel et fixer la date du premier tour.", quand: NOW },
@@ -2226,7 +2226,7 @@ const A = {
 "CSE-CTL-SST-03": { faire: "Faire désigner les membres de la commission par une résolution du comité adoptée à la majorité des membres présents, et en conserver le procès-verbal. Aucune résolution préalable fixant les modalités de l'élection n'est requise (Soc., 27 novembre 2019, n° 19-14.224).", quand: AV_CON },
 "CSE-CTL-SST-04": { faire: "Rétablir les membres de la commission initialement désignés : hors les fins anticipées de mandat de L. 2314-33, aucun remplacement n'est possible avant le terme du mandat des élus, et aucun accord n'y déroge (Soc., 28 mai 2026, n° 24-22.914).", quand: NOW },
 "CSE-CTL-SST-05": { faire: "Ramener la délégation dans les limites de L. 2315-38 : les attributions consultatives et le recours à l'expert restent au comité, quelles que soient les stipulations de l'accord.", quand: AV_CON },
-"CSE-CTL-SST-06": { faire: "Fixer les modalités de la commission — les six points de L. 2315-41 — par accord, ou à défaut par le règlement intérieur du comité.", quand: AV_CON },
+"CSE-CTL-SST-06": { faire: "Fixer les modalités de la commission - les six points de L. 2315-41 - par accord, ou à défaut par le règlement intérieur du comité.", quand: AV_CON },
 "CSE-CTL-SST-07": { faire: "Compléter la formation santé, sécurité et conditions de travail des membres de la commission jusqu'à la durée minimale applicable, aux frais de l'employeur.", quand: AV_DEC },
 "CSE-CTL-COM-01": { faire: "Constituer, à défaut d'accord L. 2315-45, les commissions de la formation, d'information et d'aide au logement et de l'égalité professionnelle, par délibération du comité.", quand: AV_DEC },
 "CSE-CTL-COM-02": { faire: "Créer la commission économique au sein du comité ou du comité central, avec cinq membres au plus dont un représentant des cadres, à défaut d'accord L. 2315-45.", quand: AV_DEC },
@@ -2351,12 +2351,12 @@ __def("./regularisation-cse.js", function(module, exports, require){
    pas.
 
    Le module d'audit dit ce qui manque ; ce fichier dit comment y remédier. Un
-   contrôle sans entrée ici fait échouer la publication — l'oubli se voit, il ne
+   contrôle sans entrée ici fait échouer la publication - l'oubli se voit, il ne
    se devine pas. Une entrée peut valoir « null » : c'est le cas des contrôles
    qui ne constatent rien à corriger, et ce null doit être écrit.
 
    Chaque entrée porte :
-     gravite    1 le plus grave, 4 le moins — c'est l'ordre du guide
+     gravite    1 le plus grave, 4 le moins - c'est l'ordre du guide
      quoiFaire  une phrase, à l'infinitif : l'acte à accomplir
      risque     ce que coûte l'inaction, chiffré et fondé
      delai      le temps qu'il faut y consacrer, en clair
@@ -2370,7 +2370,7 @@ __def("./regularisation-cse.js", function(module, exports, require){
    La première est celle des trois étages, que ce module applique déjà dans ses
    contrôles : une obligation d'ordre public, une obligation renvoyée à un
    accord, une obligation supplétive due seulement à défaut d'accord. L'ordre
-   n'est pas indifférent — L. 2313-4 ne s'applique qu'« en l'absence d'accord »,
+   n'est pas indifférent - L. 2313-4 ne s'applique qu'« en l'absence d'accord »,
    L. 2312-22 qu'« en l'absence d'accord prévu à l'article L. 2312-19 »,
    L. 2315-46 et L. 2315-49 qu'« en l'absence d'accord prévu à l'article
    L. 2315-45 », L. 2315-44 qu'« en l'absence d'accord prévu aux articles
@@ -2379,7 +2379,7 @@ __def("./regularisation-cse.js", function(module, exports, require){
 
    La seconde tient à ce module en particulier : il vit de délais et de
    procès-verbaux. Une étape commandée par un délai dit le délai ET son point de
-   départ — quatre-vingt-dix jours à compter de la diffusion de l'information au
+   départ - quatre-vingt-dix jours à compter de la diffusion de l'information au
    personnel, dix jours à compter de l'acte contesté, quinze jours à compter de
    l'établissement du procès-verbal de carence. Les vérifications, elles, ne
    demandent jamais « est-ce conforme ? » mais des dates et des pièces.
@@ -2395,7 +2395,7 @@ const { C } = require("./controles-cse.js");
 const GRAVITES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -2406,12 +2406,12 @@ const R = {
   "CSE-CTL-REC-01": {
     gravite: 4,
     quoiFaire: "Corriger les données du dossier que l'application a jugées impossibles ou mal formées, puis relancer l'audit.",
-    risque: "Un contrôle qui lit une date inexistante, un dénombrement fractionnaire ou une chronologie inversée conclut sur une valeur qui n'existe pas. Ce qu'il rend alors — conforme comme non conforme — ne vaut rien, et tout l'audit repose dessus.",
+    risque: "Un contrôle qui lit une date inexistante, un dénombrement fractionnaire ou une chronologie inversée conclut sur une valeur qui n'existe pas. Ce qu'il rend alors - conforme comme non conforme - ne vaut rien, et tout l'audit repose dessus.",
     delai: "Quelques minutes : ce sont des saisies, non des actes juridiques.",
     document: null,
     etapes: [
       "Reprendre la liste des anomalies rendue par le contrôle : chacune nomme le champ, la valeur saisie et ce qui la rend impossible.",
-      "Corriger à la source, sur la pièce d'origine — état d'effectif, information du personnel, convocation, procès-verbal, récépissé — et non de mémoire : une valeur rectifiée au jugé remplace une erreur par une autre.",
+      "Corriger à la source, sur la pièce d'origine - état d'effectif, information du personnel, convocation, procès-verbal, récépissé - et non de mémoire : une valeur rectifiée au jugé remplace une erreur par une autre.",
       "Vérifier l'ordre des dates entre elles : information du personnel avant premier tour, remise des informations avant avis, acte contesté avant saisine du juge. Une chronologie inversée n'est pas un délai tenu, et l'application refuse de la lire comme tel.",
       "Relancer l'audit : tant qu'une donnée reste illisible, les contrôles qui la lisent ne prononcent rien, ni dans un sens ni dans l'autre.",
     ],
@@ -2424,7 +2424,7 @@ const R = {
   "CSE-CTL-COH-01": {
     gravite: 4,
     quoiFaire: "Rétablir l'effectif de l'entreprise sur les états mensuels, en appliquant les modalités de calcul de l'article L. 1111-2.",
-    risque: "Tout le régime du comité — nombre de sièges, crédit d'heures, périodicité des réunions, commissions, budgets — se calcule sur l'effectif, dont L. 2311-2 renvoie le calcul à L. 1111-2. Un effectif qu'aucun mois du dossier ne corrobore fait tomber, avec lui, toutes les conformités qui en découlent.",
+    risque: "Tout le régime du comité - nombre de sièges, crédit d'heures, périodicité des réunions, commissions, budgets - se calcule sur l'effectif, dont L. 2311-2 renvoie le calcul à L. 1111-2. Un effectif qu'aucun mois du dossier ne corrobore fait tomber, avec lui, toutes les conformités qui en découlent.",
     delai: "Une journée si les états d'effectif existent ; une à deux semaines s'il faut les reconstituer.",
     document: "État récapitulatif des effectifs mensuels des douze derniers mois",
     etapes: [
@@ -2465,7 +2465,7 @@ const R = {
   "CSE-CTL-MEP-01": {
     gravite: 4,
     quoiFaire: "Verser les états d'effectif qui établissent que le seuil de onze salariés a été atteint pendant douze mois consécutifs.",
-    risque: "La mise en place du comité n'est obligatoire que si l'effectif d'au moins onze salariés est atteint pendant douze mois consécutifs (L. 2311-2). Sans les états, ni l'obligation ni son point de départ ne sont démontrables — et c'est du franchissement du seuil que part l'information du personnel prévue à L. 2314-4.",
+    risque: "La mise en place du comité n'est obligatoire que si l'effectif d'au moins onze salariés est atteint pendant douze mois consécutifs (L. 2311-2). Sans les états, ni l'obligation ni son point de départ ne sont démontrables - et c'est du franchissement du seuil que part l'information du personnel prévue à L. 2314-4.",
     delai: "Quelques jours : les états existent en paie, il s'agit de les extraire et de les dater.",
     document: "États d'effectif mensuels établissant le franchissement du seuil de onze salariés",
     etapes: [
@@ -2497,7 +2497,7 @@ const R = {
     verifs: [
       { cle: "mep02Existence", question: "Un comité est-il en place, et à quelle date les résultats ont-ils été proclamés ?", attendu: "La date de proclamation et le procès-verbal des élections." },
       { cle: "mep02Carence", question: "À défaut, le procès-verbal de carence est-il établi, et à quelle date ?", attendu: "Le procès-verbal daté." },
-      { cle: "mep02Transmission", question: "À quelle date le procès-verbal de carence a-t-il été transmis à l'inspection du travail ?", attendu: "La date — au plus quinze jours après son établissement — et la preuve d'envoi conférant date certaine." },
+      { cle: "mep02Transmission", question: "À quelle date le procès-verbal de carence a-t-il été transmis à l'inspection du travail ?", attendu: "La date - au plus quinze jours après son établissement - et la preuve d'envoi conférant date certaine." },
     ],
   },
 
@@ -2506,7 +2506,7 @@ const R = {
     quoiFaire: "Engager le renouvellement du comité dont le mandat est arrivé à son terme.",
     risque: "Les membres de la délégation du personnel sont élus pour quatre ans (L. 2314-33), et l'employeur informe le personnel tous les quatre ans de l'organisation des élections (L. 2314-4). Le fait d'apporter une entrave à la constitution du comité, notamment par la méconnaissance des articles L. 2314-1 à L. 2314-9, est puni d'un an d'emprisonnement et de 7 500 € d'amende (L. 2317-1).",
     delai: "Quatre-vingt-dix jours au moins entre la diffusion de l'information au personnel et le premier tour : l'information doit donc partir plus de trois mois avant le terme des mandats.",
-    document: "Information du personnel sur l'organisation des élections — renouvellement",
+    document: "Information du personnel sur l'organisation des élections - renouvellement",
     etapes: [
       "Dater le terme des mandats en cours : quatre ans à compter de l'élection (L. 2314-33), ou la durée fixée par accord de branche, de groupe ou d'entreprise, comprise entre deux et quatre ans (L. 2314-34).",
       "Remonter de quatre-vingt-dix jours depuis la date envisagée pour le premier tour : c'est le délai maximal entre la diffusion de l'information au personnel et ce premier tour (L. 2314-4).",
@@ -2515,9 +2515,9 @@ const R = {
       "Tenir le premier tour dans la quinzaine précédant l'expiration du mandat (L. 2314-5), pour qu'aucune période ne reste sans institution.",
     ],
     verifs: [
-      { cle: "mep03Terme", question: "À quelle date le mandat en cours vient-il à terme, et sur quel fondement — durée légale ou accord ?", attendu: "La date et, s'il existe un accord, sa référence et la durée qu'il fixe." },
+      { cle: "mep03Terme", question: "À quelle date le mandat en cours vient-il à terme, et sur quel fondement - durée légale ou accord ?", attendu: "La date et, s'il existe un accord, sa référence et la durée qu'il fixe." },
       { cle: "mep03Information", question: "À quelle date le personnel a-t-il été informé de l'organisation des élections, et par quel moyen conférant date certaine ?", attendu: "La date et la preuve de diffusion." },
-      { cle: "mep03Invitation", question: "À quelle date les organisations syndicales ont-elles été invitées à négocier le protocole ?", attendu: "La date — deux mois avant l'expiration des mandats — et les preuves d'envoi." },
+      { cle: "mep03Invitation", question: "À quelle date les organisations syndicales ont-elles été invitées à négocier le protocole ?", attendu: "La date - deux mois avant l'expiration des mandats - et les preuves d'envoi." },
     ],
   },
 
@@ -2534,7 +2534,7 @@ const R = {
       "Recalculer, sur la durée retenue, la date de terme des mandats en cours et celle à laquelle l'information du personnel devra être diffusée (L. 2314-4).",
     ],
     verifs: [
-      { cle: "mep04Source", question: "Quel instrument fixe la durée du mandat — accord de branche, de groupe ou d'entreprise ?", attendu: "L'accord, daté et déposé." },
+      { cle: "mep04Source", question: "Quel instrument fixe la durée du mandat - accord de branche, de groupe ou d'entreprise ?", attendu: "L'accord, daté et déposé." },
       { cle: "mep04Duree", question: "Quelle durée fixe-t-il, en années ?", attendu: "La durée ; hors de la fourchette de deux à quatre ans, elle ne tient pas." },
       { cle: "mep04Terme", question: "Quelle date de terme des mandats en cours cette durée donne-t-elle ?", attendu: "La date, calculée depuis la proclamation des résultats." },
     ],
@@ -2551,11 +2551,11 @@ const R = {
     etapes: [
       "Rechercher l'accord d'abord : l'ordre des sources n'est pas indifférent, puisque L. 2313-4 ne joue qu'« en l'absence d'accord conclu dans les conditions mentionnées aux articles L. 2313-2 et L. 2313-3 ».",
       "S'il existe, le verser au dossier avec la preuve de son dépôt, et vérifier que le périmètre qu'il fixe est celui sur lequel les élections ont été organisées.",
-      "S'il n'existe pas, ouvrir la négociation ; à défaut d'accord seulement, la décision de l'employeur fixe le nombre et le périmètre des établissements distincts compte tenu de l'autonomie de gestion du responsable de l'établissement, notamment en matière de gestion du personnel (L. 2313-4) — autonomie qui doit être documentée, ce que le contrôle CSE-CTL-PER-02 reprend pour lui-même.",
+      "S'il n'existe pas, ouvrir la négociation ; à défaut d'accord seulement, la décision de l'employeur fixe le nombre et le périmètre des établissements distincts compte tenu de l'autonomie de gestion du responsable de l'établissement, notamment en matière de gestion du personnel (L. 2313-4) - autonomie qui doit être documentée, ce que le contrôle CSE-CTL-PER-02 reprend pour lui-même.",
       "Notifier la source retenue aux organisations syndicales et au comité, et la porter au dossier avec sa date.",
     ],
     verifs: [
-      { cle: "per01Source", question: "Sur quoi repose le découpage — accord d'entreprise, décision unilatérale de l'employeur ou décision administrative ?", attendu: "L'acte lui-même, daté." },
+      { cle: "per01Source", question: "Sur quoi repose le découpage - accord d'entreprise, décision unilatérale de l'employeur ou décision administrative ?", attendu: "L'acte lui-même, daté." },
       { cle: "per01Accord", question: "Si c'est un accord, est-il versé et déposé ?", attendu: "L'accord et son récépissé de dépôt." },
       { cle: "per01Perimetre", question: "Le périmètre retenu est-il celui sur lequel les dernières élections ont été organisées ?", attendu: "Le rapprochement du découpage et des procès-verbaux d'élection." },
     ],
@@ -2564,13 +2564,13 @@ const R = {
   "CSE-CTL-PER-02": {
     gravite: 3,
     quoiFaire: "Documenter l'autonomie de gestion des responsables d'établissement, notamment en matière de gestion du personnel.",
-    risque: "Lorsque le découpage est fixé par l'employeur, l'autonomie de gestion du responsable d'établissement est le seul critère que le texte retient (L. 2313-4). Sans pièce, elle n'est pas établie, et le périmètre — donc les élections tenues sur ce périmètre — reste contestable.",
+    risque: "Lorsque le découpage est fixé par l'employeur, l'autonomie de gestion du responsable d'établissement est le seul critère que le texte retient (L. 2313-4). Sans pièce, elle n'est pas établie, et le périmètre - donc les élections tenues sur ce périmètre - reste contestable.",
     delai: "Deux à trois semaines : les pièces existent, il faut les réunir.",
     document: "Recueil des délégations de pouvoir des responsables d'établissement",
     etapes: [
       "Réunir, pour chaque établissement, la délégation de pouvoir écrite de son responsable : c'est la pièce qui dit l'étendue réelle de son autonomie.",
       "Vérifier qu'elle porte sur la gestion du personnel, que L. 2313-4 cite expressément : embauche, discipline, organisation et durée du travail.",
-      "Compléter par les éléments de fait qui la corroborent — organigramme, budget propre, signature des contrats de travail, sanctions effectivement prononcées : le juge se prononce au regard de l'ensemble des circonstances de fait, non sur une affirmation.",
+      "Compléter par les éléments de fait qui la corroborent - organigramme, budget propre, signature des contrats de travail, sanctions effectivement prononcées : le juge se prononce au regard de l'ensemble des circonstances de fait, non sur une affirmation.",
       "Verser l'ensemble au dossier, établissement par établissement, et le dater.",
     ],
     verifs: [
@@ -2588,7 +2588,7 @@ const R = {
     document: "Accord d'entreprise instituant les représentants de proximité",
     etapes: [
       "Rechercher l'accord d'entreprise défini à L. 2313-2 : c'est le seul instrument que L. 2313-7 admet.",
-      "Vérifier qu'il définit les quatre points que le texte énumère : le nombre de représentants de proximité, leurs attributions — notamment en matière de santé, de sécurité et de conditions de travail —, les modalités de leur désignation et leurs modalités de fonctionnement, notamment le nombre d'heures de délégation dont ils bénéficient (L. 2313-7, 1° à 4°).",
+      "Vérifier qu'il définit les quatre points que le texte énumère : le nombre de représentants de proximité, leurs attributions - notamment en matière de santé, de sécurité et de conditions de travail -, les modalités de leur désignation et leurs modalités de fonctionnement, notamment le nombre d'heures de délégation dont ils bénéficient (L. 2313-7, 1° à 4°).",
       "Vérifier qu'ils sont membres du comité ou désignés par lui, et que leur mandat prend fin avec celui des membres élus du comité (L. 2313-7, dernier alinéa).",
       "Vérifier l'articulation des heures : lorsque les membres du comité sont également représentants de proximité, le temps nécessaire à l'exercice de leurs fonctions défini par l'accord de L. 2313-7 peut rester inchangé par rapport à celui dont ils disposent en vertu de l'accord prévu à L. 2314-7 ou, à défaut, du tableau de R. 2314-1.",
       "À défaut d'accord, ouvrir la négociation, ou constater par écrit qu'aucun représentant de proximité ne peut être maintenu.",
@@ -2616,7 +2616,7 @@ const R = {
       "Conserver les preuves d'envoi et de réception : c'est sur elles que se prouvera le respect du délai de quinze jours.",
     ],
     verifs: [
-      { cle: "ele01Liste", question: "Quelles organisations ont été invitées, et par quel canal — courrier ou tout moyen ?", attendu: "La liste nominative et le canal retenu pour chacune." },
+      { cle: "ele01Liste", question: "Quelles organisations ont été invitées, et par quel canal - courrier ou tout moyen ?", attendu: "La liste nominative et le canal retenu pour chacune." },
       { cle: "ele01Delai", question: "À quelle date l'invitation est-elle parvenue, et quelle était la date de la première réunion de négociation ?", attendu: "Les deux dates ; l'écart doit être d'au moins quinze jours." },
       { cle: "ele01Preuves", question: "Les preuves d'envoi et de réception sont-elles versées ?", attendu: "Les accusés de réception ou les preuves conférant date certaine." },
     ],
@@ -2626,7 +2626,7 @@ const R = {
     gravite: 1,
     quoiFaire: "Tenir le premier tour au plus tard le quatre-vingt-dixième jour suivant la diffusion de l'information du personnel, ou reprendre le processus par une nouvelle information.",
     risque: "Le document diffusé précise la date envisagée pour le premier tour, et celui-ci doit se tenir au plus tard le quatre-vingt-dixième jour suivant la diffusion (L. 2314-4). Le fait d'apporter une entrave à la constitution du comité, notamment par la méconnaissance des articles L. 2314-1 à L. 2314-9, est puni d'un an d'emprisonnement et de 7 500 € d'amende (L. 2317-1).",
-    delai: "Quatre-vingt-dix jours à compter de la diffusion de l'information au personnel — pas un de plus.",
+    delai: "Quatre-vingt-dix jours à compter de la diffusion de l'information au personnel - pas un de plus.",
     document: "Information du personnel sur l'organisation des élections, portant la date envisagée du premier tour",
     etapes: [
       "Dater la diffusion de l'information au personnel : elle doit avoir été faite par tout moyen permettant de conférer date certaine (L. 2314-4), et c'est de cette date que court le délai.",
@@ -2645,14 +2645,14 @@ const R = {
   "CSE-CTL-ELE-03": {
     gravite: 3,
     quoiFaire: "Réunir sur le protocole préélectoral la double majorité de l'article L. 2314-6, ou tirer les conséquences de son invalidité.",
-    risque: "La validité du protocole est subordonnée à sa signature par la majorité des organisations syndicales ayant participé à sa négociation, dont les organisations syndicales représentatives ayant recueilli la majorité des suffrages exprimés lors des dernières élections professionnelles ou, lorsque ces résultats ne sont pas disponibles, la majorité des organisations représentatives dans l'entreprise (L. 2314-6). Un protocole invalide ne purge rien : les stipulations qu'il porte — collèges, sièges, calendrier, modalités du scrutin — sont sans effet.",
+    risque: "La validité du protocole est subordonnée à sa signature par la majorité des organisations syndicales ayant participé à sa négociation, dont les organisations syndicales représentatives ayant recueilli la majorité des suffrages exprimés lors des dernières élections professionnelles ou, lorsque ces résultats ne sont pas disponibles, la majorité des organisations représentatives dans l'entreprise (L. 2314-6). Un protocole invalide ne purge rien : les stipulations qu'il porte - collèges, sièges, calendrier, modalités du scrutin - sont sans effet.",
     delai: "Une réunion supplémentaire de négociation ; le calendrier électoral s'en trouve décalé d'autant.",
     document: "Protocole d'accord préélectoral et feuille de signatures",
     etapes: [
       "Recenser les organisations qui ont participé à la négociation : c'est sur elles, et non sur l'ensemble des organisations invitées, que se compte la première majorité.",
       "Vérifier la première condition : la majorité en nombre des organisations ayant participé à la négociation a-t-elle signé ?",
-      "Vérifier la seconde : parmi les signataires, les organisations représentatives ont-elles recueilli la majorité des suffrages exprimés aux dernières élections professionnelles — ou, à défaut de résultats disponibles, s'agit-il de la majorité des organisations représentatives dans l'entreprise (L. 2314-6) ?",
-      "Si l'une des deux conditions manque, rouvrir la négociation ; à défaut d'accord valable, appliquer les règles légales — notamment la composition des collèges de L. 2314-11 et le tableau de R. 2314-1 — plutôt qu'un protocole dépourvu de validité.",
+      "Vérifier la seconde : parmi les signataires, les organisations représentatives ont-elles recueilli la majorité des suffrages exprimés aux dernières élections professionnelles - ou, à défaut de résultats disponibles, s'agit-il de la majorité des organisations représentatives dans l'entreprise (L. 2314-6) ?",
+      "Si l'une des deux conditions manque, rouvrir la négociation ; à défaut d'accord valable, appliquer les règles légales - notamment la composition des collèges de L. 2314-11 et le tableau de R. 2314-1 - plutôt qu'un protocole dépourvu de validité.",
       "Annexer au protocole la feuille de signatures et le relevé des suffrages des dernières élections : ce sont les pièces qui établissent la double majorité.",
     ],
     verifs: [
@@ -2665,7 +2665,7 @@ const R = {
   "CSE-CTL-ELE-04": {
     gravite: 3,
     quoiFaire: "Faire figurer au protocole la proportion de femmes et d'hommes composant chaque collège électoral, et la porter à la connaissance des salariés.",
-    risque: "L'accord de répartition des sièges et du personnel dans les collèges mentionne la proportion de femmes et d'hommes composant chaque collège électoral (L. 2314-13), et l'employeur porte cette proportion à la connaissance des salariés dès qu'un accord ou une décision est intervenu (L. 2314-31). Sans elle, les listes ne peuvent pas être composées selon L. 2314-30 — et leur irrégularité entraîne l'annulation de l'élection des élus du sexe surreprésenté (L. 2314-32).",
+    risque: "L'accord de répartition des sièges et du personnel dans les collèges mentionne la proportion de femmes et d'hommes composant chaque collège électoral (L. 2314-13), et l'employeur porte cette proportion à la connaissance des salariés dès qu'un accord ou une décision est intervenu (L. 2314-31). Sans elle, les listes ne peuvent pas être composées selon L. 2314-30 - et leur irrégularité entraîne l'annulation de l'élection des élus du sexe surreprésenté (L. 2314-32).",
     delai: "Quelques jours, mais avant l'ouverture du dépôt des listes : après, les candidatures se composent à l'aveugle.",
     document: "Avenant au protocole portant la proportion de femmes et d'hommes par collège, et note d'information aux salariés",
     etapes: [
@@ -2732,12 +2732,12 @@ const R = {
     etapes: [
       "Vérifier que l'un des deux cas de L. 2314-10 est réuni : un collège électoral n'est plus représenté, ou le nombre des membres titulaires de la délégation du personnel est réduit de moitié ou plus.",
       "Vérifier l'exception, et la dater : les élections partielles ne sont pas dues si l'événement intervient moins de six mois avant le terme du mandat des membres de la délégation du personnel (L. 2314-10). Comparer la date de l'événement à celle du terme des mandats.",
-      "Organiser le scrutin dans les conditions fixées à l'article L. 2314-29 — scrutin de liste à deux tours avec représentation proportionnelle à la plus forte moyenne —, sur la base des dispositions en vigueur lors de l'élection précédente (L. 2314-10).",
+      "Organiser le scrutin dans les conditions fixées à l'article L. 2314-29 - scrutin de liste à deux tours avec représentation proportionnelle à la plus forte moyenne -, sur la base des dispositions en vigueur lors de l'élection précédente (L. 2314-10).",
       "Pourvoir tous les sièges vacants dans les collèges intéressés, et non le seul siège dont la vacance a déclenché l'obligation.",
       "Retenir que les candidats sont élus pour la durée du mandat restant à courir (L. 2314-10) : le terme commun reste celui du mandat en cours.",
     ],
     verifs: [
-      { cle: "ele07Cas", question: "Quel événement a ouvert l'obligation — collège non représenté, ou titulaires réduits de moitié ou plus — et à quelle date ?", attendu: "L'événement, sa date, et le décompte des titulaires avant et après." },
+      { cle: "ele07Cas", question: "Quel événement a ouvert l'obligation - collège non représenté, ou titulaires réduits de moitié ou plus - et à quelle date ?", attendu: "L'événement, sa date, et le décompte des titulaires avant et après." },
       { cle: "ele07Exception", question: "Cet événement est-il intervenu moins de six mois avant le terme des mandats ?", attendu: "La date de l'événement et celle du terme des mandats." },
       { cle: "ele07Scrutin", question: "À quelle date les élections partielles se sont-elles tenues, et quels sièges ont été pourvus ?", attendu: "La date, le procès-verbal, et la liste des sièges pourvus par collège." },
     ],
@@ -2781,7 +2781,7 @@ const R = {
     ],
     verifs: [
       { cle: "con02Remise", question: "À quelle date les informations ont-elles été remises au comité, ou leur mise à disposition dans la base de données lui a-t-elle été signalée ?", attendu: "La date et le bordereau ou l'accusé correspondant." },
-      { cle: "con02Delai", question: "Quel délai s'appliquait, et sur quel fondement — accord de L. 2312-19, 4°, ou régime de R. 2312-6 ?", attendu: "Le délai en jours et sa source." },
+      { cle: "con02Delai", question: "Quel délai s'appliquait, et sur quel fondement - accord de L. 2312-19, 4°, ou régime de R. 2312-6 ?", attendu: "Le délai en jours et sa source." },
       { cle: "con02Avis", question: "À quelle date l'avis a-t-il été rendu ?", attendu: "La date et le procès-verbal qui la porte." },
       { cle: "con02Expert", question: "Un expert est-il intervenu, et à quelle date a-t-il été désigné ?", attendu: "La désignation datée ; elle porte le délai à deux mois." },
     ],
@@ -2795,7 +2795,7 @@ const R = {
     document: "Note d'information au comité et réponse motivée à ses observations",
     etapes: [
       "Établir une note écrite sur le sujet soumis à consultation : le texte exige des informations précises et écrites (L. 2312-15).",
-      "Les transmettre, ou les mettre à disposition dans la base de données économiques, sociales et environnementales — cette mise à disposition actualisée vaut communication des rapports et informations au comité (L. 2312-18).",
+      "Les transmettre, ou les mettre à disposition dans la base de données économiques, sociales et environnementales - cette mise à disposition actualisée vaut communication des rapports et informations au comité (L. 2312-18).",
       "Dater la remise : c'est elle qui fait courir le délai de consultation (R. 2312-5), et elle seule.",
       "Répondre par écrit et de manière motivée aux observations du comité avant qu'il ne rende son avis : la réponse motivée fait partie de ce dont il doit disposer (L. 2312-15).",
       "Rendre compte, en la motivant, de la suite donnée aux avis et vœux du comité (L. 2312-15, dernier alinéa).",
@@ -2823,7 +2823,7 @@ const R = {
     verifs: [
       { cle: "con04Mesures", question: "Le projet comporte-t-il des mesures d'adaptation spécifiques à un ou plusieurs établissements ?", attendu: "La description des mesures, établissement par établissement." },
       { cle: "con04Instances", question: "Quelles instances ont été consultées, et à quelles dates ?", attendu: "La liste des instances et les dates de leurs avis." },
-      { cle: "con04Transmission", question: "Les avis des comités d'établissement ont-ils été transmis au comité central, et à quelle date ?", attendu: "Les avis et leur date de transmission — au plus tard sept jours avant l'échéance du comité central." },
+      { cle: "con04Transmission", question: "Les avis des comités d'établissement ont-ils été transmis au comité central, et à quelle date ?", attendu: "Les avis et leur date de transmission - au plus tard sept jours avant l'échéance du comité central." },
     ],
   },
 
@@ -2880,7 +2880,7 @@ const R = {
       "Rechercher ensuite l'accord : R. 2314-1 ne fixe le temps mensuel qu'« à défaut de stipulations » dans l'accord prévu à L. 2314-7, lequel peut modifier le nombre de sièges ou le volume des heures individuelles.",
       "Vérifier la contrepartie que L. 2314-7 exige : le volume global des heures, au sein de chaque collège, doit rester au moins égal à celui qui résulte des dispositions légales. Un protocole qui réduit ce volume global ne vaut pas.",
       "Rétablir le crédit à hauteur du volume dû, et régulariser sur la paie les heures non accordées (L. 2315-10).",
-      "Retenir que ce nombre d'heures peut être augmenté en cas de circonstances exceptionnelles (R. 2314-1), et que le plancher de L. 2315-7 — dix heures par mois dans les entreprises de moins de cinquante salariés, seize dans les autres — ne peut jamais être franchi à la baisse.",
+      "Retenir que ce nombre d'heures peut être augmenté en cas de circonstances exceptionnelles (R. 2314-1), et que le plancher de L. 2315-7 - dix heures par mois dans les entreprises de moins de cinquante salariés, seize dans les autres - ne peut jamais être franchi à la baisse.",
     ],
     verifs: [
       { cle: "moy01Tableau", question: "Quelle tranche d'effectif du tableau de R. 2314-1 s'applique, et quel total d'heures donne-t-elle ?", attendu: "La tranche, le nombre de titulaires, les heures par titulaire et le total." },
@@ -2892,7 +2892,7 @@ const R = {
   "CSE-CTL-MOY-02": {
     gravite: 4,
     quoiFaire: "Établir la cause de l'écart entre le nombre de titulaires élus et le nombre prévu par le tableau réglementaire.",
-    risque: "L'écart peut être régulier — un protocole modifiant le nombre de sièges dans les conditions de L. 2314-7 — ou révéler des sièges non pourvus. S'il manque la moitié des titulaires, ou si un collège n'est plus représenté, des élections partielles sont dues à l'initiative de l'employeur (L. 2314-10).",
+    risque: "L'écart peut être régulier - un protocole modifiant le nombre de sièges dans les conditions de L. 2314-7 - ou révéler des sièges non pourvus. S'il manque la moitié des titulaires, ou si un collège n'est plus représenté, des élections partielles sont dues à l'initiative de l'employeur (L. 2314-10).",
     delai: "Quelques jours : il s'agit de rapprocher des pièces qui existent déjà.",
     document: "Note explicative de la composition de la délégation du personnel",
     etapes: [
@@ -2904,7 +2904,7 @@ const R = {
     ],
     verifs: [
       { cle: "moy02Prevu", question: "Combien de titulaires le tableau de R. 2314-1 prévoit-il pour l'effectif de l'entreprise ?", attendu: "Le nombre et la tranche d'effectif." },
-      { cle: "moy02Cause", question: "D'où vient l'écart — protocole modifiant les sièges, sièges non pourvus, ou vacances en cours de mandat ?", attendu: "La cause et la pièce qui l'établit : protocole ou procès-verbal d'élection." },
+      { cle: "moy02Cause", question: "D'où vient l'écart - protocole modifiant les sièges, sièges non pourvus, ou vacances en cours de mandat ?", attendu: "La cause et la pièce qui l'établit : protocole ou procès-verbal d'élection." },
       { cle: "moy02Partielles", question: "Si l'écart provient de vacances, un collège n'est-il plus représenté, ou les titulaires sont-ils réduits de moitié ou plus ?", attendu: "Le décompte par collège, à la date de la vacance." },
     ],
   },
@@ -3007,7 +3007,7 @@ const R = {
       "Consigner au procès-verbal le décompte des voix et le nom des membres désignés.",
     ],
     verifs: [
-      { cle: "sst03Ordre", question: "La désignation figurait-elle à l'ordre du jour, et à quelle date celui-ci a-t-il été communiqué ?", attendu: "L'ordre du jour et sa date de communication — trois jours au moins avant la réunion." },
+      { cle: "sst03Ordre", question: "La désignation figurait-elle à l'ordre du jour, et à quelle date celui-ci a-t-il été communiqué ?", attendu: "L'ordre du jour et sa date de communication - trois jours au moins avant la réunion." },
       { cle: "sst03Majorite", question: "Quelle règle de majorité a été appliquée au vote, et quel a été le décompte des voix ?", attendu: "Le décompte, rapporté au nombre de membres présents." },
       { cle: "sst03President", question: "Le président a-t-il pris part au vote ?", attendu: "La mention au procès-verbal ; il n'y participe pas." },
     ],
@@ -3021,7 +3021,7 @@ const R = {
     document: "Résolution du comité rétablissant la composition initiale de la commission",
     etapes: [
       "Reprendre chaque remplacement intervenu depuis la désignation initiale et en établir la cause, par écrit.",
-      "Confronter cette cause aux fins anticipées de mandat de L. 2314-33 : le décès, la démission, la rupture du contrat de travail, la perte des conditions requises pour être éligible. Le changement de catégorie professionnelle n'en fait pas partie — l'élu conserve son mandat (L. 2314-33).",
+      "Confronter cette cause aux fins anticipées de mandat de L. 2314-33 : le décès, la démission, la rupture du contrat de travail, la perte des conditions requises pour être éligible. Le changement de catégorie professionnelle n'en fait pas partie - l'élu conserve son mandat (L. 2314-33).",
       "Pour les remplacements dont la cause ne figure pas dans cette liste, rétablir la composition initiale par une résolution du comité adoptée à la majorité des membres présents (L. 2315-32).",
       "Écarter la stipulation d'accord qui autoriserait un remplacement en dehors de ces cas : L. 2315-39 est d'ordre public (Soc., 28 mai 2026, n° 24-22.914).",
       "Retenir que les mandats des membres de la commission prennent fin avec celui des membres élus du comité (L. 2315-39) : c'est ce terme commun qui commande, et lui seul.",
@@ -3040,7 +3040,7 @@ const R = {
     delai: "Le temps d'un avenant à l'accord ou d'une modification du règlement intérieur du comité : deux à trois mois.",
     document: "Avenant à l'accord ou au règlement intérieur délimitant la délégation consentie à la commission",
     etapes: [
-      "Relire l'acte qui organise la commission — accord de L. 2315-41, accord avec le comité de L. 2315-42, ou règlement intérieur du comité de L. 2315-44 — et isoler les missions déléguées, que le 2° de L. 2315-41 impose de définir.",
+      "Relire l'acte qui organise la commission - accord de L. 2315-41, accord avec le comité de L. 2315-42, ou règlement intérieur du comité de L. 2315-44 - et isoler les missions déléguées, que le 2° de L. 2315-41 impose de définir.",
       "Retirer de la délégation les attributions consultatives du comité : c'est le comité qui rend ses avis, et lui seul (L. 2315-38).",
       "Retirer de la délégation le recours à l'expert prévu à la sous-section 10 : la commission peut proposer une expertise, le comité seul la décide (L. 2315-38).",
       "Faire adopter l'avenant ou la modification du règlement intérieur, et notifier la nouvelle délimitation aux membres de la commission.",
@@ -3067,7 +3067,7 @@ const R = {
       "Vérifier que les six points de L. 2315-41 sont couverts : le nombre de membres ; les missions déléguées et leurs modalités d'exercice ; les modalités de fonctionnement, notamment le nombre d'heures de délégation ; les modalités de formation conformément aux articles L. 2315-16 à L. 2315-18 ; le cas échéant les moyens alloués ; et le cas échéant la formation spécifique correspondant aux risques ou facteurs de risques particuliers en rapport avec l'activité de l'entreprise.",
     ],
     verifs: [
-      { cle: "sst06Source", question: "Quel acte fixe les modalités de la commission — accord d'entreprise, accord avec le comité, ou règlement intérieur du comité ?", attendu: "L'acte lui-même, daté." },
+      { cle: "sst06Source", question: "Quel acte fixe les modalités de la commission - accord d'entreprise, accord avec le comité, ou règlement intérieur du comité ?", attendu: "L'acte lui-même, daté." },
       { cle: "sst06Recherche", question: "Si c'est le règlement intérieur, quelle recherche d'accord l'a précédé ?", attendu: "La trace de la négociation, ou le constat de l'absence de délégué syndical." },
       { cle: "sst06Points", question: "Les six points de L. 2315-41 sont-ils tous couverts ?", attendu: "Le renvoi, point par point, aux clauses de l'acte." },
     ],
@@ -3082,7 +3082,7 @@ const R = {
     etapes: [
       "Établir, membre par membre, s'il s'agit d'un premier mandat ou d'un renouvellement : c'est cette qualité qui commande la durée.",
       "Retenir la durée : cinq jours lors du premier mandat ; au renouvellement, trois jours, portés à cinq pour les membres de la commission dans les entreprises d'au moins trois cents salariés (L. 2315-18, 1° et 2°).",
-      "Vérifier ce que l'accord prévoit au titre du 4° de L. 2315-41 — les modalités de la formation, conformément aux articles L. 2315-16 à L. 2315-18 — et, le cas échéant, la formation spécifique correspondant aux risques ou facteurs de risques particuliers en rapport avec l'activité (L. 2315-41, 6°).",
+      "Vérifier ce que l'accord prévoit au titre du 4° de L. 2315-41 - les modalités de la formation, conformément aux articles L. 2315-16 à L. 2315-18 - et, le cas échéant, la formation spécifique correspondant aux risques ou facteurs de risques particuliers en rapport avec l'activité (L. 2315-41, 6°).",
       "Programmer les jours manquants : le temps consacré aux formations est pris sur le temps de travail, rémunéré comme tel, et n'est pas déduit des heures de délégation (L. 2315-16).",
       "Faire prendre en charge le financement par l'employeur (L. 2315-18, dernier alinéa) et recueillir les attestations de présence.",
     ],
@@ -3131,7 +3131,7 @@ const R = {
     ],
     verifs: [
       { cle: "com02Accord", question: "Un accord de L. 2315-45 écarte-t-il la commission économique supplétive ?", attendu: "L'accord daté, ou la mention qu'il n'en existe pas." },
-      { cle: "com02Membres", question: "Combien de membres la commission économique compte-t-elle, et combien représentent la catégorie des cadres ?", attendu: "Le nombre total — cinq au maximum — et le nombre de cadres, avec la résolution de désignation." },
+      { cle: "com02Membres", question: "Combien de membres la commission économique compte-t-elle, et combien représentent la catégorie des cadres ?", attendu: "Le nombre total - cinq au maximum - et le nombre de cadres, avec la résolution de désignation." },
       { cle: "com02Reunions", question: "À quelles dates la commission s'est-elle réunie cette année ?", attendu: "Les dates ; deux réunions au moins par an." },
     ],
   },
@@ -3251,7 +3251,7 @@ const R = {
       "Si le délai est expiré, ne pas engager une contestation irrecevable : reprendre le calendrier de la consultation en tenant la délibération pour acquise.",
     ],
     verifs: [
-      { cle: "exp02Objet", question: "Que conteste l'employeur — la nécessité de l'expertise, le choix de l'expert, le coût prévisionnel, l'étendue, la durée, ou le coût final ?", attendu: "L'objet, rattaché à l'un des quatre cas de L. 2315-86." },
+      { cle: "exp02Objet", question: "Que conteste l'employeur - la nécessité de l'expertise, le choix de l'expert, le coût prévisionnel, l'étendue, la durée, ou le coût final ?", attendu: "L'objet, rattaché à l'un des quatre cas de L. 2315-86." },
       { cle: "exp02Depart", question: "Quelle est la date de l'acte qui fait courir le délai pour cet objet ?", attendu: "La date de la délibération, de la désignation ou de la notification, avec la pièce correspondante." },
       { cle: "exp02Saisine", question: "À quelle date le juge a-t-il été saisi ?", attendu: "La date de l'assignation ; l'écart avec l'acte de départ ne peut excéder dix jours." },
     ],
@@ -3308,13 +3308,13 @@ const R = {
     etapes: [
       "Recenser les accords applicables au comité et relever, pour chacun, la date de notification aux organisations disposant d'une section syndicale et la date de publication : ce sont ces dates qui ouvrent le délai de deux mois (L. 2262-14, 1° et 2°).",
       "Confronter chaque clause aux textes d'ordre public que le module cite : la délégation consentie à la commission santé, sécurité et conditions de travail ne peut porter ni sur les attributions consultatives du comité, ni sur le recours à l'expert (L. 2315-38) ; la désignation des membres de cette commission obéit à L. 2315-39 et L. 2315-32.",
-      "Vérifier, à l'inverse, ce qu'un accord peut légitimement faire : définir le contenu, la périodicité — au plus trois ans —, les modalités et les niveaux des consultations récurrentes, la liste et le contenu des informations nécessaires, le nombre de réunions annuelles qui ne peut être inférieur à six, et les délais dans lesquels les avis sont rendus (L. 2312-19).",
+      "Vérifier, à l'inverse, ce qu'un accord peut légitimement faire : définir le contenu, la périodicité - au plus trois ans -, les modalités et les niveaux des consultations récurrentes, la liste et le contenu des informations nécessaires, le nombre de réunions annuelles qui ne peut être inférieur à six, et les délais dans lesquels les avis sont rendus (L. 2312-19).",
       "Faire relire l'accord par un professionnel : la base ne lit pas les stipulations, elle signale qu'elles existent.",
       "Selon le délai restant, engager l'action en nullité dans les deux mois de L. 2262-14, ou préparer l'exception d'illégalité, qui n'est enfermée dans aucun délai.",
     ],
     verifs: [
       { cle: "det01Accords", question: "Quels accords collectifs sont applicables au comité, et à quelles dates ont-ils été notifiés puis publiés ?", attendu: "La liste des accords avec, pour chacun, la date de notification et celle de publication." },
-      { cle: "det01Clauses", question: "Quelles clauses touchent aux prérogatives du comité — consultations, délégation à la commission, désignation, expertise ?", attendu: "Les clauses citées, article par article de l'accord." },
+      { cle: "det01Clauses", question: "Quelles clauses touchent aux prérogatives du comité - consultations, délégation à la commission, désignation, expertise ?", attendu: "Les clauses citées, article par article de l'accord." },
       { cle: "det01Examen", question: "Qui a examiné ces clauses, et à quelle date ?", attendu: "La note d'analyse, datée et signée." },
     ],
   },
@@ -3335,7 +3335,7 @@ const R = {
     document: "Note de constat des faits signalés et des mesures prises",
     etapes: [
       "Recenser les faits signalés et les dater un par un : c'est la date qui dira s'ils se poursuivent ou s'ils sont épuisés.",
-      "Distinguer ce que le texte distingue : l'entrave à la constitution ou à la libre désignation des membres d'une part, l'entrave au fonctionnement régulier d'autre part — les peines ne sont pas les mêmes (L. 2317-1).",
+      "Distinguer ce que le texte distingue : l'entrave à la constitution ou à la libre désignation des membres d'une part, l'entrave au fonctionnement régulier d'autre part - les peines ne sont pas les mêmes (L. 2317-1).",
       "Faire cesser immédiatement ce qui peut l'être : rétablir les moyens retirés, convoquer la réunion non tenue, communiquer l'information non remise.",
       "Accomplir l'acte omis dans les formes qui lui sont propres et le consigner au procès-verbal du comité : c'est la régularisation qui compte, non la déclaration d'intention.",
       "Faire examiner les faits par un professionnel : l'entrave est une infraction pénale, et la base détecte sans qualifier.",
@@ -3387,18 +3387,18 @@ if (require.main === module) {
   const aRegulariser = Object.values(R).filter(x => x !== null).length;
   const verifs = Object.values(R).filter(x => x).reduce((n, x) => n + x.verifs.length, 0);
   console.log(`${C.length} contrôle(s) · ${aRegulariser} régularisation(s) · ${verifs} vérification(s)`);
-  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART — " + e)); process.exit(1); }
+  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART - " + e)); process.exit(1); }
   console.log("chaque contrôle a son issue, et chaque issue son contrôle");
 }
 
 });
 
 __def("./modeles-cse.js", function(module, exports, require){
-/* Les modèles de régularisation — étape 5 du parcours client.
+/* Les modèles de régularisation - étape 5 du parcours client.
 
    Même principe que moteur/bdese/modeles-bdese.js, transposé au comité : pour
    chaque contrôle qui n'est pas conforme, une note chiffrée sur le dossier
-   réel — effectif, dates, montants, compositions déclarées — jamais un exemple
+   réel - effectif, dates, montants, compositions déclarées - jamais un exemple
    figé. Quand une donnée manque pour calculer, la note le dit et affiche un
    exemple marqué « [exemple] ».
 
@@ -3423,7 +3423,7 @@ const nomE = f => q(f.entreprise) || "l'entreprise auditée";
 const eff = f => nb(f.effectif);
 const effTxte = f => eff(f) === null ? ex("120") : String(eff(f));
 const jour0 = f => /^\d{4}-\d{2}-\d{2}$/.test(String(f.dateAudit || "")) ? f.dateAudit : new Date().toISOString().slice(0, 10);
-const euros = n => n === null || n === undefined ? "—" : n.toLocaleString("fr-FR") + " €";
+const euros = n => n === null || n === undefined ? "-" : n.toLocaleString("fr-FR") + " €";
 
 /* Une addition de jours calendaires simple : elle ne sert qu'à illustrer un
    délai, jamais à trancher une échéance légale à la place du client. */
@@ -3438,10 +3438,10 @@ function ajouterJours(dateISO, n) {
 function modeleRec01(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
   const V = require("./valider-cse.js");
-  t1("Relevé des anomalies de saisie — " + nomE(f));
+  t1("Relevé des anomalies de saisie - " + nomE(f));
   const anomalies = V.valider(f);
   h1(`${anomalies.length} anomalie(s) détectée(s) sur ${V.examines(f)} donnée(s) examinée(s)`);
-  if (anomalies.length) anomalies.forEach(x => puce(`${x.champ} = « ${x.valeur} » — ${x.motif} (attendu : ${x.attendu || "—"}).`));
+  if (anomalies.length) anomalies.forEach(x => puce(`${x.champ} = « ${x.valeur} » - ${x.motif} (attendu : ${x.attendu || "-"}).`));
   else p("Aucune anomalie n'est détectée sur les données actuellement examinables.");
   note("Cette liste se recalcule à chaque modification du questionnaire de l'étape 2 : corrigez un champ, elle se met à jour.");
   return A.D;
@@ -3450,7 +3450,7 @@ function modeleRec01(f) {
 /* ──────────────────── CSE-CTL-COH-01 et COH-02 : cohérence d'effectif ────── */
 function modeleCoherence(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Note de cohérence de l'effectif — " + nomE(f));
+  t1("Note de cohérence de l'effectif - " + nomE(f));
   const co = M.coherenceEffectif({ effectif: f.effectif, effectifsMensuels: f.effectifsMensuels });
   h1("Ce que déclare le dossier, confronté aux relevés mensuels");
   if (!co) { p("Effectif ou relevés mensuels non renseignés à ce jour : rien à confronter."); return A.D; }
@@ -3460,11 +3460,11 @@ function modeleCoherence(f) {
     ["Relevés mensuels exploités", String(co.releves)],
     ["Minimum / maximum des relevés", `${co.min} / ${co.max}`],
     ["Moyenne des relevés", String(co.moyenne)],
-    ["Effectif déclaré dans l'intervalle des relevés ?", co.dans ? "oui" : `non — écart de ${co.ecart}`],
+    ["Effectif déclaré dans l'intervalle des relevés ?", co.dans ? "oui" : `non - écart de ${co.ecart}`],
   ]);
   if (co.seuilsFranchis.length) {
     h1("Seuils franchis par les relevés, non par l'effectif déclaré");
-    co.seuilsFranchis.forEach(s => p(`Seuil de ${s.seuil} salariés — ${s.regle} Ce que le franchissement ouvre : ${s.effet}.`));
+    co.seuilsFranchis.forEach(s => p(`Seuil de ${s.seuil} salariés - ${s.regle} Ce que le franchissement ouvre : ${s.effet}.`));
   } else p("Aucun seuil n'est franchi par les relevés sans l'être par l'effectif déclaré.");
   note("Rétablissez l'effectif sur les états mensuels avant de relancer l'audit : tout le régime du comité s'y recalcule.");
   return A.D;
@@ -3473,7 +3473,7 @@ function modeleCoherence(f) {
 /* ──────────────────────────── CSE-CTL-MEP-01 : seuil de onze salariés ───── */
 function modeleMep01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note de franchissement du seuil de onze salariés — " + nomE(f));
+  t1("Note de franchissement du seuil de onze salariés - " + nomE(f));
   h1("Ce que disent les relevés mensuels");
   const mois = Array.isArray(f.effectifsMensuels) ? f.effectifsMensuels : null;
   if (!mois) { p(`Aucun relevé mensuel n'est renseigné. À titre d'illustration, une série de douze mois à ${ex("11")} salariés ou plus établirait le franchissement.`); return A.D; }
@@ -3486,13 +3486,13 @@ function modeleMep01(f) {
 /* ────────────────────── CSE-CTL-MEP-02 : mise en place ou carence ───────── */
 function modeleMep02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calendrier de mise en place du comité — " + nomE(f));
+  t1("Calendrier de mise en place du comité - " + nomE(f));
   h1("Ce que déclare le dossier");
   p(`Comité existant : ${f.comiteExistant === true ? "oui" : (f.comiteExistant === false ? "non" : "non renseigné")}.`);
   const info = q(f.dateInformationPersonnel);
   if (info) {
     const limite = ajouterJours(info, 90);
-    p(`Information du personnel diffusée le ${info} : le premier tour doit se tenir au plus tard le ${limite || "—"} (quatre-vingt-dix jours, L. 2314-4).`);
+    p(`Information du personnel diffusée le ${info} : le premier tour doit se tenir au plus tard le ${limite || "-"} (quatre-vingt-dix jours, L. 2314-4).`);
   } else {
     const ex0 = ex(jour0(f));
     p(`Date de diffusion non renseignée. À titre d'illustration, une diffusion le ${ex0} donnerait une limite de premier tour au ${ajouterJours(ex0.replace(" [exemple]", ""), 90)} [exemple].`);
@@ -3504,7 +3504,7 @@ function modeleMep02(f) {
 /* ─────────────────── CSE-CTL-MEP-03 et MEP-04 : mandat et son terme ─────── */
 function modeleMandat(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note de durée et de terme du mandat — " + nomE(f));
+  t1("Note de durée et de terme du mandat - " + nomE(f));
   const m = M.mandat(f);
   h1("La durée retenue");
   p(m.motif);
@@ -3521,7 +3521,7 @@ function modeleMandat(f) {
 /* ─────────────── CSE-CTL-PER-01, PER-02, PER-03 : périmètre et sources ──── */
 function modelePerimetre(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
-  t1("Note sur le périmètre et sa source — " + nomE(f));
+  t1("Note sur le périmètre et sa source - " + nomE(f));
   h1("Ce que déclare le dossier");
   puce(`Établissements distincts : ${f.etablissementsMultiples === true ? "oui" : (f.etablissementsMultiples === false ? "non" : "non renseigné")}.`);
   if (f.etablissementsMultiples === true) puce(`Source du découpage déclarée : ${q(f.sourceDecoupage) || "non renseignée"}.`);
@@ -3533,7 +3533,7 @@ function modelePerimetre(f) {
 /* ────────────────────────── CSE-CTL-ELE-01 : invitation des syndicats ───── */
 function modeleEle01(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
-  t1("Bordereau d'invitation des organisations syndicales — " + nomE(f));
+  t1("Bordereau d'invitation des organisations syndicales - " + nomE(f));
   const liste = Array.isArray(f.syndicatsInvites) ? f.syndicatsInvites : [];
   h1(`${liste.length} organisation(s) invitée(s), selon le dossier`);
   if (liste.length) liste.forEach(s => puce(String(s)));
@@ -3545,13 +3545,13 @@ function modeleEle01(f) {
 /* ───────────────── CSE-CTL-ELE-02 : délai de quatre-vingt-dix jours ─────── */
 function modeleEle02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calcul du délai de quatre-vingt-dix jours — " + nomE(f));
+  t1("Calcul du délai de quatre-vingt-dix jours - " + nomE(f));
   const info = q(f.dateInformationPersonnel), tour = q(f.datePremierTour);
   h1("Le calcul, sur les dates du dossier");
   if (info) {
     const limite = ajouterJours(info, 90);
     p(`Information diffusée le ${info} : limite légale du premier tour au ${limite} (L. 2314-4).`);
-    if (tour) p(`Premier tour déclaré au ${tour} — ${tour <= limite ? "dans le délai." : "au-delà de la limite calculée : le processus doit être repris par une nouvelle information."}`);
+    if (tour) p(`Premier tour déclaré au ${tour} - ${tour <= limite ? "dans le délai." : "au-delà de la limite calculée : le processus doit être repris par une nouvelle information."}`);
   } else p(`Date de diffusion non renseignée. Exemple : une diffusion au ${ex(jour0(f))} placerait la limite quatre-vingt-dix jours plus tard.`);
   return A.D;
 }
@@ -3559,7 +3559,7 @@ function modeleEle02(f) {
 /* ───────────────────── CSE-CTL-ELE-03 : double majorité ─────────────────── */
 function modeleEle03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Vérification de la double majorité du protocole — " + nomE(f));
+  t1("Vérification de la double majorité du protocole - " + nomE(f));
   const pr = f.protocole || {};
   h1("Le calcul sur les chiffres déclarés");
   if (typeof pr.nbSignataires === "number" && typeof pr.nbParticipants === "number" && typeof pr.suffragesSignataires === "number") {
@@ -3577,7 +3577,7 @@ function modeleEle03(f) {
 /* ─────────────────────── CSE-CTL-ELE-04 : proportion F/H au protocole ───── */
 function modeleEle04(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur la mention de la proportion femmes-hommes — " + nomE(f));
+  t1("Note sur la mention de la proportion femmes-hommes - " + nomE(f));
   const v = f.protocole && f.protocole.proportionFH;
   h1("Ce que déclare le dossier");
   p(`Mention de la proportion par collège au protocole : ${v === true ? "présente" : (v === false ? "absente" : "non renseignée")}.`);
@@ -3588,14 +3588,14 @@ function modeleEle04(f) {
 /* ─────────── CSE-CTL-ELE-05 : composition paritaire des listes déposées ─── */
 function modeleEle05(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille de composition paritaire des listes — " + nomE(f));
+  t1("Grille de composition paritaire des listes - " + nomE(f));
   const listes = Array.isArray(f.listesDeposees) ? f.listesDeposees : [];
   h1(`${listes.length} liste(s) déposée(s), selon le dossier`);
   if (!listes.length) { p(`Aucune liste n'est encore décrite. Exemple : un collège de ${ex("60")} femmes et ${ex("40")} hommes inscrits, pour trois sièges, imposerait deux femmes et un homme.`); return A.D; }
   tab(["Liste", "Résultat du calcul"], listes.map(l => {
     const r = M.listeParitaire({ femmes: l.femmesInscrites, hommes: l.hommesInscrits,
       candidats: (l.candidats || []).length, sieges: l.siegesAPourvoir });
-    return [l.nom || "—", r ? r.motif : "données insuffisantes pour calculer la composition due"];
+    return [l.nom || "-", r ? r.motif : "données insuffisantes pour calculer la composition due"];
   }));
   note("La règle s'applique séparément à la liste des titulaires et à celle des suppléants (L. 2314-30, dernier alinéa).");
   return A.D;
@@ -3604,7 +3604,7 @@ function modeleEle05(f) {
 /* ─────────────────── CSE-CTL-ELE-06 : support du vote électronique ──────── */
 function modeleEle06(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur le support du vote électronique — " + nomE(f));
+  t1("Note sur le support du vote électronique - " + nomE(f));
   h1("Ce que déclare le dossier");
   p(`Vote électronique utilisé : ${f.voteElectronique === true ? "oui" : "non"}.`);
   note("Le recours doit reposer sur un accord d'entreprise ou de groupe, et sur une décision de l'employeur seulement à défaut d'accord (R. 2314-5) : recherchez l'accord d'abord, établissez le cahier des charges ensuite, et tenez-le à la disposition des salariés.");
@@ -3614,7 +3614,7 @@ function modeleEle06(f) {
 /* ────────────────────── CSE-CTL-ELE-07 : élections partielles ───────────── */
 function modeleEle07(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur l'obligation d'élections partielles — " + nomE(f));
+  t1("Note sur l'obligation d'élections partielles - " + nomE(f));
   const e = M.electionsPartielles(f);
   h1("Le calcul sur les chiffres déclarés");
   if (e) p(e.motif);
@@ -3625,7 +3625,7 @@ function modeleEle07(f) {
 /* ──────────────────── CSE-CTL-CON-01 : trois consultations récurrentes ──── */
 function modeleCon01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Suivi des trois consultations récurrentes — " + nomE(f));
+  t1("Suivi des trois consultations récurrentes - " + nomE(f));
   const dues = ["orientations stratégiques", "situation économique et financière", "politique sociale"];
   const conduites = Array.isArray(f.consultationsRecurrentes) ? f.consultationsRecurrentes.map(x => (x.objet || "")) : [];
   h1("Ce que le dossier établit, exercice par exercice");
@@ -3638,7 +3638,7 @@ function modeleCon01(f) {
 /* ───────────────────── CSE-CTL-CON-02 : délai de consultation ───────────── */
 function modeleCon02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calcul du délai de consultation — " + nomE(f));
+  t1("Calcul du délai de consultation - " + nomE(f));
   const c = f.consultation || {};
   const d = M.delaiConsultation(c);
   h1("Le délai applicable, et son terme sur les dates du dossier");
@@ -3646,7 +3646,7 @@ function modeleCon02(f) {
   const remise = q(c.dateRemiseInformations);
   if (remise) {
     const limite = ajouterJours(remise, d.jours);
-    p(`Informations remises le ${remise} : le comité est réputé avoir rendu un avis négatif à défaut d'avis rendu au plus tard le ${limite || "—"}.`);
+    p(`Informations remises le ${remise} : le comité est réputé avoir rendu un avis négatif à défaut d'avis rendu au plus tard le ${limite || "-"}.`);
   } else p(`Date de remise non renseignée. Exemple : une remise au ${ex(jour0(f))} placerait le terme ${d.jours} jours plus tard.`);
   return A.D;
 }
@@ -3654,7 +3654,7 @@ function modeleCon02(f) {
 /* ───────────────── CSE-CTL-CON-03 : informations précises et écrites ────── */
 function modeleCon03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note d'information au comité — modèle de bordereau — " + nomE(f));
+  t1("Note d'information au comité - modèle de bordereau - " + nomE(f));
   h1("Objet");
   p(`${nomE(f)} remet au comité social et économique la présente note, précise et écrite, sur le sujet soumis à consultation, en application de l'article L. 2312-15. Elle est mise à disposition dans la base de données économiques, sociales et environnementales à la date du [date de mise à disposition].`);
   note("Datez la remise : c'est elle, et non la réunion, qui fait courir le délai de consultation (R. 2312-5).");
@@ -3664,7 +3664,7 @@ function modeleCon03(f) {
 /* ─────────────────────── CSE-CTL-CON-04 : instance consultée ────────────── */
 function modeleCon04(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur le niveau de consultation — " + nomE(f));
+  t1("Note sur le niveau de consultation - " + nomE(f));
   h1("Ce que déclare le dossier");
   p(`Instance consultée : ${q(f.instanceConsultee) || "non renseignée"}. Mesures d'adaptation spécifiques à un ou plusieurs établissements : ${f.mesuresAdaptation === true ? "oui" : (f.mesuresAdaptation === false ? "non" : "non renseigné")}.`);
   note("Si le projet comporte de telles mesures, les comités d'établissement doivent être consultés en plus du comité central (L. 2316-1, L. 2316-20).");
@@ -3674,7 +3674,7 @@ function modeleCon04(f) {
 /* ────────────────────────── CSE-CTL-CON-05 : nombre de réunions ─────────── */
 function modeleCon05(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Décompte des réunions annuelles — " + nomE(f));
+  t1("Décompte des réunions annuelles - " + nomE(f));
   const u = M.reunions(f);
   h1("Le nombre dû, sur l'effectif et l'accord déclarés");
   if (u) p(`${u.motif} Réunions tenues, selon le dossier : ${typeof f.reunionsTenues === "number" ? f.reunionsTenues : "non renseigné"}.`);
@@ -3685,23 +3685,23 @@ function modeleCon05(f) {
 /* ──────────────────── CSE-CTL-CON-06 : réunions santé-sécurité ──────────── */
 function modeleCon06(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Décompte des réunions portant sur la santé et la sécurité — " + nomE(f));
+  t1("Décompte des réunions portant sur la santé et la sécurité - " + nomE(f));
   h1("Le calcul sur le dossier");
   const n = nb(f.reunionsSante);
   p(n === null ? `Nombre non renseigné. Le plancher légal est de quatre réunions par an (L. 2315-27).`
-    : `${n} réunion(s) déclarée(s) sur les quatre exigées par L. 2315-27${n < 4 ? ` — il en manque ${4 - n}` : ""}.`);
+    : `${n} réunion(s) déclarée(s) sur les quatre exigées par L. 2315-27${n < 4 ? ` - il en manque ${4 - n}` : ""}.`);
   return A.D;
 }
 
 /* ───────────────────────── CSE-CTL-MOY-01 : crédit d'heures ─────────────── */
 function modeleMoy01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calcul du crédit d'heures minimal — " + nomE(f));
+  t1("Calcul du crédit d'heures minimal - " + nomE(f));
   const d = M.delegation(eff(f));
   h1(`Le minimum légal, pour ${effTxte(f)} salarié(s)`);
   if (d && d.du) {
     p(`${d.titulaires} titulaire(s) × ${d.heures} heures = ${d.total} heures mensuelles au total (tranche ${d.tranche}, ${d.texte}).`);
-    p(`Volume accordé, selon le dossier : ${typeof f.heuresAccordees === "number" ? f.heuresAccordees + " heures" : "non renseigné"}${typeof f.heuresAccordees === "number" && f.heuresAccordees < d.total ? ` — il manque ${d.total - f.heuresAccordees} heure(s)` : ""}.`);
+    p(`Volume accordé, selon le dossier : ${typeof f.heuresAccordees === "number" ? f.heuresAccordees + " heures" : "non renseigné"}${typeof f.heuresAccordees === "number" && f.heuresAccordees < d.total ? ` - il manque ${d.total - f.heuresAccordees} heure(s)` : ""}.`);
   } else p(d ? d.motif : "Effectif non renseigné : le minimum ne peut pas être calculé.");
   return A.D;
 }
@@ -3709,7 +3709,7 @@ function modeleMoy01(f) {
 /* ─────────────────── CSE-CTL-MOY-02 : nombre de titulaires ──────────────── */
 function modeleMoy02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Comparaison au tableau réglementaire — " + nomE(f));
+  t1("Comparaison au tableau réglementaire - " + nomE(f));
   const d = M.delegation(eff(f));
   h1(`Le nombre dû, pour ${effTxte(f)} salarié(s)`);
   if (d && d.du) p(`${d.titulaires} titulaire(s) prévu(s) par R. 2314-1 (tranche ${d.tranche}). Titulaires élus selon le dossier : ${typeof f.titulairesElus === "number" ? f.titulairesElus : "non renseigné"}.`);
@@ -3721,7 +3721,7 @@ function modeleMoy02(f) {
 /* ───────────────── CSE-CTL-MOY-03 : paiement des heures de délégation ───── */
 function modeleMoy03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur le paiement des heures de délégation — " + nomE(f));
+  t1("Note sur le paiement des heures de délégation - " + nomE(f));
   h1("Ce que déclare le dossier");
   p(`Retenue opérée sur les heures de délégation : ${f.heuresRetenues === true ? "oui" : (f.heuresRetenues === false ? "non" : "non renseigné")}.`);
   note("Le temps de délégation est de plein droit payé à l'échéance normale (L. 2315-10) : l'employeur qui conteste l'usage qui en a été fait doit payer d'abord, et saisir le juge ensuite.");
@@ -3731,7 +3731,7 @@ function modeleMoy03(f) {
 /* ────────────────────── CSE-CTL-MOY-04 : formations obligatoires ────────── */
 function modeleMoy04(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
-  t1("Suivi des formations obligatoires des élus — " + nomE(f));
+  t1("Suivi des formations obligatoires des élus - " + nomE(f));
   const l = Array.isArray(f.formationsDispensees) ? f.formationsDispensees : [];
   h1(`${l.length} formation(s) déclarée(s)`);
   if (l.length) l.forEach(x => puce(String(x)));
@@ -3743,7 +3743,7 @@ function modeleMoy04(f) {
 /* ───────────────────────── CSE-CTL-SST-01 : commission obligatoire ──────── */
 function modeleSst01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur l'obligation de la commission santé, sécurité et conditions de travail — " + nomE(f));
+  t1("Note sur l'obligation de la commission santé, sécurité et conditions de travail - " + nomE(f));
   const s = M.cssct({ effectif: eff(f), seveso: f.seveso });
   h1(`Situation pour ${effTxte(f)} salarié(s)`);
   if (s) { p(s.motif + " " + (s.reserve || "")); p(`Commission déclarée en place : ${f.cssct === true ? "oui" : (f.cssct === false ? "non" : "non renseigné")}.`); }
@@ -3754,14 +3754,14 @@ function modeleSst01(f) {
 /* ───────────────────────── CSE-CTL-SST-02 : composition de la commission ── */
 function modeleSst02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille de composition de la commission — " + nomE(f));
+  t1("Grille de composition de la commission - " + nomE(f));
   const membres = Array.isArray(f.membresCssct) ? f.membresCssct : [];
   const col = M.colleges({ effectif: eff(f), nbCadres: nb(f.nbCadres) });
   h1(`${membres.length} membre(s) déclaré(s)`);
   if (col) p(col.motif);
   const troisieme = !!(col && col.nombre === 3);
   const attendu = troisieme ? 3 : 2;
-  tab(["Membre", "Collège"], membres.map((m, i) => [`Membre ${i + 1}`, m.college !== undefined ? String(m.college) : "—"]));
+  tab(["Membre", "Collège"], membres.map((m, i) => [`Membre ${i + 1}`, m.college !== undefined ? String(m.college) : "-"]));
   note(`Au moins un membre du ${troisieme ? "troisième" : "second"} collège (n° ${attendu}) est requis, sur un minimum de trois membres (L. 2315-39).`);
   return A.D;
 }
@@ -3769,7 +3769,7 @@ function modeleSst02(f) {
 /* ─────────────────────── CSE-CTL-SST-03 : désignation par résolution ────── */
 function modeleSst03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Vérification des conditions de désignation — " + nomE(f));
+  t1("Vérification des conditions de désignation - " + nomE(f));
   const d = f.designationCssct || {};
   h1("Ce que déclare le dossier");
   p(`Désignation par résolution du comité : ${d.resolution === true ? "oui" : (d.resolution === false ? "non" : "non renseigné")}.`);
@@ -3781,7 +3781,7 @@ function modeleSst03(f) {
 /* ────────────────────── CSE-CTL-SST-04 : remplacement d'un membre ───────── */
 function modeleSst04(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur le remplacement d'un membre de la commission — " + nomE(f));
+  t1("Note sur le remplacement d'un membre de la commission - " + nomE(f));
   const r = f.remplacementCssct || {};
   h1("Ce que déclare le dossier");
   p(`Remplacement intervenu : ${r.effectue === true ? "oui" : (r.effectue === false ? "non" : "non renseigné")}.`);
@@ -3795,11 +3795,11 @@ function modeleSst04(f) {
 /* ───────────────── CSE-CTL-SST-05 : étendue de la délégation ────────────── */
 function modeleSst05(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur l'étendue de la délégation consentie à la commission — " + nomE(f));
+  t1("Note sur l'étendue de la délégation consentie à la commission - " + nomE(f));
   const d = f.delegationCssct || {};
   h1("Ce que déclare le dossier");
-  p(`Attributions consultatives déléguées à la commission : ${d.avisDelegue === true ? "oui — irrégulier" : (d.avisDelegue === false ? "non" : "non renseigné")}.`);
-  p(`Décision de recourir à l'expert déléguée à la commission : ${d.expertDelegue === true ? "oui — irrégulier" : (d.expertDelegue === false ? "non" : "non renseigné")}.`);
+  p(`Attributions consultatives déléguées à la commission : ${d.avisDelegue === true ? "oui - irrégulier" : (d.avisDelegue === false ? "non" : "non renseigné")}.`);
+  p(`Décision de recourir à l'expert déléguée à la commission : ${d.expertDelegue === true ? "oui - irrégulier" : (d.expertDelegue === false ? "non" : "non renseigné")}.`);
   note("L. 2315-38 exclut ces deux attributions de ce qui peut être délégué à la commission, texte d'ordre public.");
   return A.D;
 }
@@ -3807,7 +3807,7 @@ function modeleSst05(f) {
 /* ──────────────────── CSE-CTL-SST-06 : source des modalités ─────────────── */
 function modeleSst06(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur la source des modalités de la commission — " + nomE(f));
+  t1("Note sur la source des modalités de la commission - " + nomE(f));
   h1("Ce que déclare le dossier");
   const s = q(f.sourceModalitesCssct);
   const src = s ? M.SOURCES_MODALITES_CSSCT[s] : null;
@@ -3819,18 +3819,18 @@ function modeleSst06(f) {
 /* ──────────────────── CSE-CTL-SST-07 : durée de formation ───────────────── */
 function modeleSst07(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calcul de la durée de formation santé, sécurité et conditions de travail — " + nomE(f));
+  t1("Calcul de la durée de formation santé, sécurité et conditions de travail - " + nomE(f));
   const d = M.dureeFormationSSCT({ mandatRenouvele: f.mandatRenouvele === true, effectif: eff(f) });
   h1("Le minimum applicable, sur le dossier");
   p(`${d.motif} (${d.jours} jours, ${d.texte}).`);
-  p(`Jours dispensés selon le dossier : ${typeof f.joursFormationSSCT === "number" ? f.joursFormationSSCT : "non renseigné"}${typeof f.joursFormationSSCT === "number" && f.joursFormationSSCT < d.jours ? ` — il en manque ${d.jours - f.joursFormationSSCT}` : ""}.`);
+  p(`Jours dispensés selon le dossier : ${typeof f.joursFormationSSCT === "number" ? f.joursFormationSSCT : "non renseigné"}${typeof f.joursFormationSSCT === "number" && f.joursFormationSSCT < d.jours ? ` - il en manque ${d.jours - f.joursFormationSSCT}` : ""}.`);
   return A.D;
 }
 
 /* ────────────────── CSE-CTL-COM-01 : commissions supplétives à 300 ──────── */
 function modeleCom01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille des trois commissions supplétives — " + nomE(f));
+  t1("Grille des trois commissions supplétives - " + nomE(f));
   const s = M.commissionsSuppletives({ effectif: eff(f) });
   h1(`Situation pour ${effTxte(f)} salarié(s)`);
   p(s.motif);
@@ -3846,7 +3846,7 @@ function modeleCom01(f) {
 /* ───────────────────── CSE-CTL-COM-02 : commission économique ───────────── */
 function modeleCom02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur la commission économique — " + nomE(f));
+  t1("Note sur la commission économique - " + nomE(f));
   const e = M.commissionEconomique({ effectif: eff(f) });
   h1(`Situation pour ${effTxte(f)} salarié(s)`);
   p(e.motif);
@@ -3861,24 +3861,24 @@ function modeleCom02(f) {
 /* ─────────────────────── CSE-CTL-COM-03 : commission des marchés ────────── */
 function modeleCom03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur la commission des marchés — " + nomE(f));
+  t1("Note sur la commission des marchés - " + nomE(f));
   h1("Ce que déclare le dossier");
   p(`Les comptes du comité dépassent-ils au moins deux des trois seuils de D. 2315-29 : ${f.seuilsComptesComite === true ? "oui" : (f.seuilsComptesComite === false ? "non" : "non renseigné")}.`);
   if (f.seuilsComptesComite === true) p(`Commission des marchés créée : ${f.commissionMarches === true ? "oui" : "non"}.`);
-  note("Le critère tient aux comptes du comité lui-même — nombre de salariés du comité, ressources annuelles, total du bilan — non à l'effectif de l'entreprise : recontrôlez ce point à chaque clôture des comptes du comité.");
+  note("Le critère tient aux comptes du comité lui-même - nombre de salariés du comité, ressources annuelles, total du bilan - non à l'effectif de l'entreprise : recontrôlez ce point à chaque clôture des comptes du comité.");
   return A.D;
 }
 
 /* ─────────────────────── CSE-CTL-BUD-01 : subvention de fonctionnement ──── */
 function modeleBud01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calcul de la subvention de fonctionnement — " + nomE(f));
+  t1("Calcul de la subvention de fonctionnement - " + nomE(f));
   const ms = nb(f.masseSalariale);
   const b = M.budgetFonctionnement(eff(f), ms);
   h1(`Le minimum légal, pour ${effTxte(f)} salarié(s)`);
   if (b && b.du) {
     p(`Taux applicable : ${b.tauxTexte} (${b.texte}). Masse salariale brute déclarée : ${ms === null ? "non renseignée" : euros(ms)}.`);
-    if (b.montant !== null) p(`Minimum légal : ${euros(b.montant)}. Subvention versée selon le dossier : ${typeof f.subventionVersee === "number" ? euros(f.subventionVersee) : "non renseignée"}${typeof f.subventionVersee === "number" && f.subventionVersee < b.montant ? ` — il manque ${euros(b.montant - f.subventionVersee)}` : ""}.`);
+    if (b.montant !== null) p(`Minimum légal : ${euros(b.montant)}. Subvention versée selon le dossier : ${typeof f.subventionVersee === "number" ? euros(f.subventionVersee) : "non renseignée"}${typeof f.subventionVersee === "number" && f.subventionVersee < b.montant ? ` - il manque ${euros(b.montant - f.subventionVersee)}` : ""}.`);
     else p(`Masse salariale non renseignée : le montant minimal ne peut pas être chiffré. Exemple, sur une masse de ${ex("16 800 000")} euros : ${euros(Math.round(16800000 * b.taux))}.`);
   } else p(b ? b.motif : "Effectif non renseigné : le taux ne peut pas être déterminé.");
   return A.D;
@@ -3887,7 +3887,7 @@ function modeleBud01(f) {
 /* ─────────────────── CSE-CTL-BUD-02 : contribution aux activités sociales ─ */
 function modeleBud02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Comparaison du rapport de contribution aux activités sociales — " + nomE(f));
+  t1("Comparaison du rapport de contribution aux activités sociales - " + nomE(f));
   h1("Le calcul sur les deux derniers exercices déclarés");
   const asN = nb(f.ascAnneeN), asN1 = nb(f.ascAnneeN1), msN = nb(f.masseSalariale), msN1 = nb(f.masseSalarialeN1);
   if (asN !== null && asN1 !== null && msN !== null && msN1 !== null && msN > 0 && msN1 > 0) {
@@ -3902,9 +3902,9 @@ function modeleBud02(f) {
 /* ─────────────── CSE-CTL-BUD-03 : ancienneté et accès aux ASC ───────────── */
 function modeleBud03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur la condition d'ancienneté aux activités sociales — " + nomE(f));
+  t1("Note sur la condition d'ancienneté aux activités sociales - " + nomE(f));
   h1("Ce que déclare le dossier");
-  p(`Condition d'ancienneté conditionnant l'accès : ${f.ancienneteASC === true ? "oui — non conforme" : (f.ancienneteASC === false ? "non" : "non renseigné")}.`);
+  p(`Condition d'ancienneté conditionnant l'accès : ${f.ancienneteASC === true ? "oui - non conforme" : (f.ancienneteASC === false ? "non" : "non renseigné")}.`);
   note("L'ouverture du droit ne peut pas être subordonnée à une ancienneté : tous les salariés et les stagiaires y ont vocation (L. 2312-78, R. 2312-35).");
   return A.D;
 }
@@ -3912,7 +3912,7 @@ function modeleBud03(f) {
 /* ─────────────────────── CSE-CTL-EXP-01 : financement de l'expertise ────── */
 function modeleExp01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note de financement de l'expertise — " + nomE(f));
+  t1("Note de financement de l'expertise - " + nomE(f));
   const ex0 = f.expertise || {};
   const e = ex0.cas ? M.financementExpertise(ex0.cas) : null;
   h1("Ce que déclare le dossier");
@@ -3926,14 +3926,14 @@ function modeleExp01(f) {
 /* ───────────────────── CSE-CTL-EXP-02 : délai de contestation ───────────── */
 function modeleExp02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calcul du délai de contestation de l'expertise — " + nomE(f));
+  t1("Calcul du délai de contestation de l'expertise - " + nomE(f));
   const ex0 = f.expertise || {};
   h1("Le calcul, sur les dates du dossier");
   const depart = q(ex0.dateDepart);
   if (depart) {
     const limite = ajouterJours(depart, 10);
     p(`Point de départ le ${depart} : la saisine du juge doit intervenir au plus tard le ${limite} (dix jours, L. 2315-86).`);
-    if (q(ex0.dateSaisine)) p(`Saisine déclarée le ${ex0.dateSaisine} — ${ex0.dateSaisine <= limite ? "dans le délai." : "hors délai."}`);
+    if (q(ex0.dateSaisine)) p(`Saisine déclarée le ${ex0.dateSaisine} - ${ex0.dateSaisine <= limite ? "dans le délai." : "hors délai."}`);
   } else p(`Point de départ non renseigné. Exemple : un point de départ au ${ex(jour0(f))} donnerait une limite dix jours plus tard.`);
   return A.D;
 }
@@ -3941,7 +3941,7 @@ function modeleExp02(f) {
 /* ────────────────── CSE-CTL-EXP-03 : cas de recours à l'expertise ───────── */
 function modeleExp03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur le cas de recours à l'expertise — " + nomE(f));
+  t1("Note sur le cas de recours à l'expertise - " + nomE(f));
   const ex0 = f.expertise || {};
   const n = nb(f.nbLicenciements);
   h1("Ce que déclare le dossier");
@@ -3953,11 +3953,11 @@ function modeleExp03(f) {
 /* ─────────────────── CSE-CTL-EXP-04 : auteur de la décision ─────────────── */
 function modeleExp04(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur l'auteur de la décision de recourir à l'expertise — " + nomE(f));
+  t1("Note sur l'auteur de la décision de recourir à l'expertise - " + nomE(f));
   const ex0 = f.expertise || {};
   h1("Ce que déclare le dossier");
   p(`Décision attribuée à : ${q(ex0.decideePar) || "non renseigné"}.`);
-  note("Seul le comité social et économique peut décider de recourir à un expert — le cas échéant sur proposition d'une commission — jamais la commission santé, sécurité et conditions de travail ni l'employeur (L. 1233-34, L. 2315-38).");
+  note("Seul le comité social et économique peut décider de recourir à un expert - le cas échéant sur proposition d'une commission - jamais la commission santé, sécurité et conditions de travail ni l'employeur (L. 1233-34, L. 2315-38).");
   return A.D;
 }
 
@@ -3965,7 +3965,7 @@ function modeleExp04(f) {
 function modeleDetection(champ, titre, phrase) {
   return f => {
     const A = O(); const { t1, h1, p, puce, note } = A;
-    t1(titre + " — " + nomE(f));
+    t1(titre + " - " + nomE(f));
     const l = Array.isArray(f[champ]) ? f[champ] : (q(f[champ]) ? [f[champ]] : []);
     h1(`${l.length || (q(f[champ]) ? 1 : 0)} élément(s) signalé(s)`);
     if (l.length) l.forEach(x => puce(String(x)));
@@ -4038,15 +4038,15 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    dans quel ordre. L'ordre n'est pas un détail de présentation : il a été
    arrêté explicitement, et il commande la logique.
 
-   PREMIER TEMPS — ce qu'elle n'a pas fait.
+   PREMIER TEMPS - ce qu'elle n'a pas fait.
    On liste les manquements, du plus grave au moins grave ; pour chacun on
    donne l'acte à accomplir, le modèle et la procédure ; puis on vérifie la
    correction. Le temps se termine quand tout ce qui manquait est validé.
 
-   SECOND TEMPS — ce qu'elle dit avoir fait.
+   SECOND TEMPS - ce qu'elle dit avoir fait.
    Et seulement alors. Les contrôles que l'audit a rendus « conformes » ne le
    sont que sur la parole du client : ils sont ici marqués « déclaré », repris
-   un par un avec la grille du texte, et validés — ou refusés, auquel cas ils
+   un par un avec la grille du texte, et validés - ou refusés, auquel cas ils
    retournent au premier temps comme manquements.
 
    La règle qui tient tout : UN « OUI » N'EST PAS UNE PREUVE. Rien ne passe de
@@ -4054,8 +4054,8 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    pourquoi ce module renomme l'état « conforme » plutôt que de le recopier :
    le mot « conforme » ne doit pas apparaître avant sa vérification. */
 
-const DECLARE = "déclaré — à vérifier";
-const REGLE = "en règle — vérifié";
+const DECLARE = "déclaré - à vérifier";
+const REGLE = "en règle - vérifié";
 
 /* Les quatre degrés de gravité, dans l'ordre où le guide les présente. Ils
    sont communs à tous les modules : un délit d'entrave se traite avant une
@@ -4063,7 +4063,7 @@ const REGLE = "en règle — vérifié";
 const DEGRES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -4076,8 +4076,8 @@ function etatParcours(etat) {
 
 /* Le premier temps : ce qui manque.
 
-   Sont retenus les contrôles « non conforme » — le texte n'est pas respecté —
-   et « risque à vérifier » — l'application ne tranche pas, mais quelque chose
+   Sont retenus les contrôles « non conforme » - le texte n'est pas respecté -
+   et « risque à vérifier » - l'application ne tranche pas, mais quelque chose
    est à faire. Les « donnée manquante » ne sont pas des manquements : ce sont
    des questions sans réponse, et elles retournent au questionnaire. */
 function premierTemps(C, R, verdicts, faits) {
@@ -4115,7 +4115,7 @@ function premierTemps(C, R, verdicts, faits) {
    Un contrôle « conforme » l'est parce que le client a déclaré la pièce, la
    date ou l'acte. Le second temps le reprend et demande de le montrer. Un
    contrôle sans grille de vérification ne peut pas être vérifié : il reste
-   « déclaré », et le dit — plutôt que de passer pour vérifié. */
+   « déclaré », et le dit - plutôt que de passer pour vérifié. */
 function secondTemps(C, R, verdicts, controles) {
   const points = [];
   for (const c of C) {
@@ -4164,7 +4164,7 @@ function verdictVerification(point) {
   if (refusees.length)
     return { issue: "refusé", refusees, motif:
       "Ce que vous déclariez en place ne l'est pas : " +
-      refusees.map(v => "« " + v.question + " » — attendu : " + v.attendu).join(" ; ") +
+      refusees.map(v => "« " + v.question + " » - attendu : " + v.attendu).join(" ; ") +
       ". Ce point retourne au premier temps." };
   if (manquantes.length)
     return { issue: "ne conclut pas", manquantes, motif:
@@ -4199,7 +4199,7 @@ function parcours(C, R, verdicts, etat) {
       refusesDuSecond: refuses,
       restants: restantsA.length + refuses.length,
       /* Achevé veut dire : plus rien à corriger. Un refus du second temps
-         rejoint la liste du premier — le compteur le dit déjà — et il doit
+         rejoint la liste du premier - le compteur le dit déjà - et il doit
          donc empêcher l'achèvement, sans quoi le compte rendu annonçait
          « tous les manquements sont déclarés corrigés » juste au-dessous de
          la liste de ceux qui reviennent refusés. */
@@ -4213,7 +4213,7 @@ function parcours(C, R, verdicts, etat) {
       /* Le second temps ne s'ouvre qu'une fois relevés tous les manquements
          du premier : c'est l'ordre qui a été arrêté, et la page le fait
          respecter. Il reste ouvert, en revanche, quand un point en revient
-         refusé — sinon le client serait renvoyé corriger sans pouvoir faire
+         refusé - sinon le client serait renvoyé corriger sans pouvoir faire
          revérifier ce qu'il a corrigé. */
       ouvert: restantsA.length === 0,
     },
@@ -4291,7 +4291,7 @@ __def("./manifeste-cse.json", function(module){ module.exports = {
     actions: require("./actions-cse.js"),
     manifeste: __MANIFESTE,
     champs: [["Comité",[["comiteExistant","Un comité social et économique est-il en place ?","oui / non"],["dateDernieresElections","Date du premier tour des dernières élections","AAAA-MM-JJ"],["dureeAccord","Durée conventionnelle des mandats, si un accord en fixe une","nombre d'années"],["titulairesElus","Nombre de titulaires effectivement élus","nombre"],["titulairesInitiaux","Nombre de titulaires élus à l'origine","nombre"],["titulairesRestants","Nombre de titulaires encore en fonction","nombre"],["collegeVide","Un collège électoral n'est-il plus représenté au comité ?","oui / non"],["moisAvantTerme","Nombre de mois restant à courir jusqu'au terme des mandats","nombre de mois"],["partiellesOrganisees","Des élections partielles ont-elles été organisées ?","oui / non"]]],["Identité",[["entreprise","Dénomination sociale et numéro SIREN","texte"],["dateAudit","Date à laquelle la situation est décrite","AAAA-MM-JJ"]]],["Effectifs",[["effectif","Effectif de l'entreprise au sens de l'article L. 1111-2","nombre"],["effectifsMensuels","Effectif mois par mois sur les quatorze derniers mois","liste de nombres"],["nbCadres","Nombre d'ingénieurs, chefs de service et cadres assimilés","nombre"],["masseSalariale","Masse salariale brute de l'exercice, assiette de l'article L. 2312-83","euros"],["masseSalarialeN1","Masse salariale brute de l'exercice précédent","euros"]]],["Périmètre",[["etablissementsMultiples","L'entreprise comporte-t-elle plusieurs établissements distincts ?","oui / non"],["sourceDecoupage","Source du découpage : accord, décision unilatérale, décision administrative","texte"],["ues","L'entreprise fait-elle partie d'une unité économique et sociale ?","oui / non"],["representantsProximite","Des représentants de proximité sont-ils en place ?","oui / non"]]],["Élections",[["electionsEnCours","Un processus électoral est-il en cours ?","oui / non"],["dateInformationPersonnel","Date de l'information du personnel sur l'organisation des élections","AAAA-MM-JJ"],["datePremierTour","Date envisagée ou tenue du premier tour","AAAA-MM-JJ"],["syndicatsInvites","Organisations syndicales invitées à négocier le protocole","liste"],["protocole","Protocole : nombre de signataires, de participants, part des suffrages, mention de la proportion femmes-hommes","objet"],["listesDeposees","Pour chaque liste : inscrits femmes et hommes du collège, nombre de sièges à pourvoir dans ce collège, et sexe de chaque candidat dans l'ordre de dépôt","liste d'objets"],["voteElectronique","Le vote électronique est-il utilisé ?","oui / non"]]],["Consultations",[["consultationsRecurrentes","Consultations récurrentes conduites sur l'exercice","liste d'objets"],["consultation","Pour la consultation en cours : date de remise des informations, date de l'avis, existence d'une expertise","objet"],["instanceConsultee","Instance consultée : centrale, d'établissement, ou les deux","texte"],["mesuresAdaptation","Le projet comporte-t-il des mesures d'adaptation spécifiques à un ou plusieurs établissements ?","oui / non"]]],["Fonctionnement",[["reunionsTenues","Nombre de réunions du comité tenues sur l'année","nombre"],["reunionsSante","Nombre de réunions ayant porté, en tout ou partie, sur la santé et la sécurité","nombre"],["accordPeriodicite","Un accord fixe-t-il la périodicité des consultations et le nombre de réunions ?","oui / non"],["reunionsAccord","Nombre de réunions annuelles prévu par cet accord","nombre"],["heuresAccordees","Volume mensuel total d'heures de délégation accordé","nombre"],["heuresRetenues","Des heures de délégation ont-elles été retenues sur la paie ?","oui / non"],["formationsDispensees","Formations dispensées aux élus","liste"]]],["Santé et sécurité",[["cssct","Une commission santé, sécurité et conditions de travail est-elle en place ?","oui / non"],["seveso","L'établissement relève-t-il des articles L. 4521-1 et suivants ?","oui / non"],["membresCssct","Membres de la commission, avec le collège de chacun","liste d'objets"],["designationCssct","Désignation des membres : une résolution du comité a-t-elle été adoptée, et à la majorité des membres présents ?","objet"],["remplacementCssct","Des membres de la commission ont-ils été remplacés depuis leur désignation, et pour quelle cause ?","objet"],["delegationCssct","Délégation consentie à la commission : les attributions consultatives et le recours à l'expert lui sont-ils délégués ?","objet"],["sourceModalitesCssct","Ce qui fixe les modalités de la commission : accord d'entreprise, accord avec le comité, règlement intérieur du comité, ou rien","texte"],["mandatRenouvele","Le mandat des membres de la commission est-il un renouvellement ?","oui / non"],["joursFormationSSCT","Nombre de jours de formation santé, sécurité et conditions de travail dispensés aux membres de la commission","nombre"]]],["Commissions",[["accordCommissions","Un accord d'entreprise prévu à l'article L. 2315-45 organise-t-il les commissions du comité ?","oui / non"],["commissionsConstituees","Commissions supplétives effectivement constituées à défaut d'accord","liste"],["commissionEconomique","Une commission économique est-elle créée au sein du comité ou du comité central ?","oui / non"],["membresCommissionEconomique","Membres de la commission économique, en indiquant lesquels représentent la catégorie des cadres","liste d'objets"],["seuilsComptesComite","Les comptes du comité dépassent-ils au moins deux des trois seuils de l'article D. 2315-29 ?","oui / non"],["commissionMarches","Une commission des marchés est-elle créée au sein du comité ?","oui / non"]]],["Budgets",[["subventionVersee","Subvention de fonctionnement versée sur l'exercice","euros"],["ascAnneeN","Contribution aux activités sociales et culturelles de l'exercice","euros"],["ascAnneeN1","Même contribution, exercice précédent","euros"],["ancienneteASC","L'accès aux activités sociales est-il subordonné à une condition d'ancienneté ?","oui / non"]]],["Expertises",[["expertise","Expertise en cours : cas de recours, part employeur, date du point de départ, date de saisine du juge, auteur de la décision de recourir à l'expert","objet"],["nbLicenciements","Nombre de licenciements économiques envisagés sur trente jours","nombre"]]],["Normes",[["accordsCse","Accords collectifs applicables au comité","liste"],["contentieuxCse","Contentieux ou procédure en cours concernant le comité","texte"],["faitsEntrave","Faits susceptibles de caractériser une entrave","texte"]]],["Pièces",[["pieces","Identifiants des pièces effectivement versées","liste"]]]],
-    propositions: {"sourceDecoupage":{"valeurs":["accord"],"autres":["décision unilatérale","décision administrative"],"libre":true,"aide":"L'ordre des sources est strict : accord d'entreprise majoritaire d'abord, décision de l'employeur à défaut, décision administrative en dernier lieu."},"instanceConsultee":{"valeurs":["central"],"autres":["établissement","les deux"],"libre":true,"aide":"Le comité central pour ce qui excède les pouvoirs des chefs d'établissement ; les comités d'établissement pour les mesures d'adaptation qui leur sont propres."},"expertise.cas":{"valeurs":["situation économique et financière","politique sociale","risque grave","licenciement collectif pour motif économique","orientations stratégiques","consultation ponctuelle","expertise libre"],"libre":false,"aide":"Le cas de recours commande la répartition du coût : la base ne connaît que ceux-là, et refuse de conclure sur un autre."},"expertise.decideePar":{"valeurs":["le comité social et économique","la commission santé, sécurité et conditions de travail","l'employeur"],"libre":false,"aide":"Le recours à l'expert appartient au comité, qui en délibère — le cas échéant sur proposition des commissions constituées en son sein (L. 1233-34). L. 2315-38 l'exclut expressément des attributions délégables à la commission santé, sécurité et conditions de travail, et ce texte est d'ordre public."},"sourceModalitesCssct":{"valeurs":["accord d'entreprise","accord avec le comité","règlement intérieur du comité","aucune"],"libre":false,"aide":"Nombre de membres, missions déléguées, fonctionnement et heures de délégation, formation, moyens : un accord d'entreprise les fixe (L. 2315-41) ; sans délégué syndical, un accord entre l'employeur et le comité (L. 2315-42) ; à défaut d'accord, le règlement intérieur du comité (L. 2315-44). Répondez « aucune » si rien ne les fixe."},"remplacementCssct.cause":{"valeurs":["décès","démission","rupture du contrat de travail","perte des conditions requises pour être éligible"],"libre":true,"aide":"Seules les fins anticipées de mandat de L. 2314-33 autorisent le remplacement d'un membre de la commission avant le terme du mandat des élus. Toute autre cause — perte de confiance, réorganisation, changement d'équilibre syndical — n'y figure pas."},"commissionsConstituees":{"valeurs":["formation","logement","égalité professionnelle"],"libre":false,"multiple":true,"aide":"À défaut d'accord prévu à l'article L. 2315-45, les trois commissions sont dues à partir de trois cents salariés : formation (L. 2315-49), information et aide au logement (L. 2315-50) et égalité professionnelle (L. 2315-56)."},"pieces":{"valeurs":["accord-decoupage","accord-representants-proximite","accord-vote-electronique","attestations-formation","decision-vote-electronique","delegations-pouvoir","etats-effectifs","invitations-syndicats","note-information-cse","pv-carence"],"libre":true,"multiple":true,"aide":"Les pièces effectivement versées. Une déclaration sans pièce ne produit jamais « conforme » : elle produit « risque à vérifier »."},"consultationsRecurrentes":{"valeurs":["orientations stratégiques","situation économique et financière","politique sociale"],"libre":true,"multiple":true,"objet":"objet","aide":"À défaut d'accord en aménageant la périodicité, les trois sont annuelles."},"formationsDispensees":{"valeurs":["santé, sécurité et conditions de travail","formation économique"],"libre":true,"multiple":true,"indicatif":true,"aide":"La formation en santé, sécurité et conditions de travail est due à tous les membres de la délégation du personnel ; le contrôle la reconnaît à sa mention, quelle qu'en soit la formulation exacte."}},
+    propositions: {"sourceDecoupage":{"valeurs":["accord"],"autres":["décision unilatérale","décision administrative"],"libre":true,"aide":"L'ordre des sources est strict : accord d'entreprise majoritaire d'abord, décision de l'employeur à défaut, décision administrative en dernier lieu."},"instanceConsultee":{"valeurs":["central"],"autres":["établissement","les deux"],"libre":true,"aide":"Le comité central pour ce qui excède les pouvoirs des chefs d'établissement ; les comités d'établissement pour les mesures d'adaptation qui leur sont propres."},"expertise.cas":{"valeurs":["situation économique et financière","politique sociale","risque grave","licenciement collectif pour motif économique","orientations stratégiques","consultation ponctuelle","expertise libre"],"libre":false,"aide":"Le cas de recours commande la répartition du coût : la base ne connaît que ceux-là, et refuse de conclure sur un autre."},"expertise.decideePar":{"valeurs":["le comité social et économique","la commission santé, sécurité et conditions de travail","l'employeur"],"libre":false,"aide":"Le recours à l'expert appartient au comité, qui en délibère - le cas échéant sur proposition des commissions constituées en son sein (L. 1233-34). L. 2315-38 l'exclut expressément des attributions délégables à la commission santé, sécurité et conditions de travail, et ce texte est d'ordre public."},"sourceModalitesCssct":{"valeurs":["accord d'entreprise","accord avec le comité","règlement intérieur du comité","aucune"],"libre":false,"aide":"Nombre de membres, missions déléguées, fonctionnement et heures de délégation, formation, moyens : un accord d'entreprise les fixe (L. 2315-41) ; sans délégué syndical, un accord entre l'employeur et le comité (L. 2315-42) ; à défaut d'accord, le règlement intérieur du comité (L. 2315-44). Répondez « aucune » si rien ne les fixe."},"remplacementCssct.cause":{"valeurs":["décès","démission","rupture du contrat de travail","perte des conditions requises pour être éligible"],"libre":true,"aide":"Seules les fins anticipées de mandat de L. 2314-33 autorisent le remplacement d'un membre de la commission avant le terme du mandat des élus. Toute autre cause - perte de confiance, réorganisation, changement d'équilibre syndical - n'y figure pas."},"commissionsConstituees":{"valeurs":["formation","logement","égalité professionnelle"],"libre":false,"multiple":true,"aide":"À défaut d'accord prévu à l'article L. 2315-45, les trois commissions sont dues à partir de trois cents salariés : formation (L. 2315-49), information et aide au logement (L. 2315-50) et égalité professionnelle (L. 2315-56)."},"pieces":{"valeurs":["accord-decoupage","accord-representants-proximite","accord-vote-electronique","attestations-formation","decision-vote-electronique","delegations-pouvoir","etats-effectifs","invitations-syndicats","note-information-cse","pv-carence"],"libre":true,"multiple":true,"aide":"Les pièces effectivement versées. Une déclaration sans pièce ne produit jamais « conforme » : elle produit « risque à vérifier »."},"consultationsRecurrentes":{"valeurs":["orientations stratégiques","situation économique et financière","politique sociale"],"libre":true,"multiple":true,"objet":"objet","aide":"À défaut d'accord en aménageant la périodicité, les trois sont annuelles."},"formationsDispensees":{"valeurs":["santé, sécurité et conditions de travail","formation économique"],"libre":true,"multiple":true,"indicatif":true,"aide":"La formation en santé, sécurité et conditions de travail est due à tous les membres de la délégation du personnel ; le contrôle la reconnaît à sa mention, quelle qu'en soit la formulation exacte."}},
     listes: [],
     colonnes: {},
     piecesAppelees: {},

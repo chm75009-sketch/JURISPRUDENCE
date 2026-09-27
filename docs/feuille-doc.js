@@ -46,7 +46,7 @@
     });
   }
   function propre(t) {
-    return String(t == null ? "" : t).replace(/[—–]/g, "-").replace(/ /g, " ")
+    return String(t == null ? "" : t).replace(/[-]/g, "-").replace(/ /g, " ")
       .replace(/│/g, "|");
   }
   /* LES TABLEAUX DESSINÉS AU TRAIT.

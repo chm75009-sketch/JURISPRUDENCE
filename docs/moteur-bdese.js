@@ -1,8 +1,8 @@
-/* Moteur d'audit « bdese » — version navigateur (MoteurBDESE).
+/* Moteur d'audit « bdese » - version navigateur (MoteurBDESE).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
    de moteur/bdese, et versé au dépôt : le site ne construit rien.
-   Ne pas le modifier à la main — rejouer l'empaquetage.
+   Ne pas le modifier à la main - rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : b31fc92a4ae8
    {"articlesLus":32,"themesDuPlancher":10,"versionPlancher":"LEGIARTI000043975329","rubriquesR2312_8":10,"rubriquesR2312_9":10,"couvertureR2312_8":100,"couvertureR2312_9":100,"controles":17,"detection":1,"coherence":1,"donneesDemandees":33,"casRegime":12,"casDates":5,"casDelais":4,"casContradictoires":14,"verdicts":323,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"contenuAuditeSurRegimeIndetermine":0,"preuveConcluantConforme":0}
@@ -62,7 +62,7 @@ function audit(f) {
   const del = R.delaiConsultation(f);
   const B = CONTENU.construire();
 
-  sur("Audit — base de données économiques, sociales et environnementales · articles L. 2312-18 et suivants du code du travail");
+  sur("Audit - base de données économiques, sociales et environnementales · articles L. 2312-18 et suivants du code du travail");
   t1(f.entreprise || "Audit de la base de données");
   sur(`${C.length} contrôles · plancher de ${PLANCHER.length} thèmes · contenu du décret découpé depuis son texte`);
   trait();
@@ -82,10 +82,10 @@ function audit(f) {
   const cv = [B.contenu["moins300"].couverture, B.contenu["au moins300"].couverture];
   const reste = cv.reduce((n, c) => n + (c.reliquat || 0), 0);
   if (reste)
-    enc("État du catalogue réglementaire — développement",
+    enc("État du catalogue réglementaire - développement",
       `Le découpage laisse ${reste} caractère(s) du décret hors de son périmètre. Le critère de sortie est cent pour cent : tant qu'il n'est pas atteint, le catalogue n'est pas exhaustif, et ce rapport ne doit pas être lu comme une vérification de l'intégralité du décret.`);
   else
-    enc("État du catalogue réglementaire — complet",
+    enc("État du catalogue réglementaire - complet",
       "Le texte des articles R. 2312-8 et R. 2312-9 a été repris intégralement, sans coupure : ce rapport peut être lu comme complet au regard de ces deux articles.");
 
   enc("Ce que ce module fait, et ce qu'il ne fait pas",
@@ -96,7 +96,7 @@ function audit(f) {
   p(reg.motif);
   if (indetermine)
     enc("Pourquoi l'audit du contenu s'arrête ici",
-      "Le régime supplétif ne s'applique pas « à défaut d'avoir trouvé » : il s'applique en l'absence d'accord, ce qui est un fait à établir. Auditer un contenu sans savoir quel texte le commande produirait des non-conformités inventées — un accord peut légalement organiser la base autrement, sous la seule réserve du plancher légal. Renseignez la recherche d'accord, joignez l'accord s'il en existe un, et relancez.");
+      "Le régime supplétif ne s'applique pas « à défaut d'avoir trouvé » : il s'applique en l'absence d'accord, ce qui est un fait à établir. Auditer un contenu sans savoir quel texte le commande produirait des non-conformités inventées - un accord peut légalement organiser la base autrement, sous la seule réserve du plancher légal. Renseignez la recherche d'accord, joignez l'accord s'il en existe un, et relancez.");
 
   h2("Les dates d'exigibilité");
   if (exi.attributions) p(exi.attributions.motif);
@@ -111,7 +111,7 @@ function audit(f) {
   }
   if (mq.length) {
     h1("Ce qui manque pour conclure");
-    for (const x of mq) puce(`${x.objet} — ${x.v.motif} · ${x.id}`);
+    for (const x of mq) puce(`${x.objet} - ${x.v.motif} · ${x.id}`);
   }
   if (rq.length) {
     h1("Ce qui appelle une vérification");
@@ -122,15 +122,15 @@ function audit(f) {
   }
 
   /* --- le plancher, qu'aucun accord ne peut descendre --- */
-  h1("Le plancher légal — les dix thèmes de l'accord");
+  h1("Le plancher légal - les dix thèmes de l'accord");
   p("Ces thèmes sont ceux du troisième alinéa de l'article L. 2312-21, relevés dans son texte : « la base de données comporte au moins les thèmes suivants ». Aucun accord ne descend en dessous. Ils ne se confondent pas avec les dix thèmes de la consultation de l'article L. 2312-36 : ce sont deux listes de dix qui ne sont pas les mêmes dix.");
   const declares = Array.isArray((f.base || {}).themes) ? f.base.themes.map(x => String(x.theme || x)) : [];
-  tab(["Thème du plancher — tel que la loi l'écrit", "Ce que le décret nomme", "Déclaré dans la base ?"],
+  tab(["Thème du plancher - tel que la loi l'écrit", "Ce que le décret nomme", "Déclaré dans la base ?"],
     PLANCHER.map(t => {
       const c = PL.CORRESPONDANCE.find(x => PL.net(x.plancher) === PL.net(t));
-      return [t, c ? c.decret.join(" ; ") : "—", PL.couvert(t, declares) ? "oui" : "non déclaré"];
+      return [t, c ? c.decret.join(" ; ") : "-", PL.couvert(t, declares) ? "oui" : "non déclaré"];
     }));
-  note("Deux thèmes du décret ne figurent pas au plancher — la sous-traitance, que le décret nomme « partenariats », et les transferts intragroupe : un accord peut donc les supprimer, et l'application le dit plutôt que de les réclamer.");
+  note("Deux thèmes du décret ne figurent pas au plancher - la sous-traitance, que le décret nomme « partenariats », et les transferts intragroupe : un accord peut donc les supprimer, et l'application le dit plutôt que de les réclamer.");
 
   /* --- le contenu attendu, seulement si le régime est connu --- */
   if (!indetermine) {
@@ -140,7 +140,7 @@ function audit(f) {
       const arbre = B.contenu[cle];
       const info = arbre.rubriques.reduce((n, r) => n + r.sections.reduce((m, s) =>
         m + s.sujets.reduce((k, j) => k + j.informations.length, 0), 0), 0);
-      p(`Aucun accord ne définit la base : le contenu est celui de l'article ${reg.article}, découpé depuis son texte — ${arbre.rubriques.length} rubriques, ${info} informations, couverture du découpage ${arbre.couverture.part} %.`);
+      p(`Aucun accord ne définit la base : le contenu est celui de l'article ${reg.article}, découpé depuis son texte - ${arbre.rubriques.length} rubriques, ${info} informations, couverture du découpage ${arbre.couverture.part} %.`);
       tab(["Rubrique du décret", "Sections", "Informations", "Déclarée ?"],
         arbre.rubriques.map(r => {
           const nbInfo = r.sections.reduce((m, s) => m + s.sujets.reduce((k, j) => k + j.informations.length, 0), 0);
@@ -151,9 +151,9 @@ function audit(f) {
       const an = R.annees(f, Number(String(f.dateAudit || "").slice(0, 4)) || undefined);
       h2("Les années couvertes");
       p(an.motif);
-      note(`Concrètement : ${an.passees.join(", ")}, ${an.courante}, puis ${an.suivantes.join(", ")}. Les trois dernières peuvent être données en grandes tendances — l'exiger en chiffres produirait des non-conformités fausses.`);
+      note(`Concrètement : ${an.passees.join(", ")}, ${an.courante}, puis ${an.suivantes.join(", ")}. Les trois dernières peuvent être données en grandes tendances - l'exiger en chiffres produirait des non-conformités fausses.`);
     } else {
-      p(`Le contenu est celui que définit ${reg.regime} (${reg.article}). L'application ne peut pas le vérifier ligne à ligne : elle ne lit pas les stipulations de votre accord. Elle vérifie ce qui s'impose à lui — le plancher de l'article L. 2312-21, alinéa 3 — et la mise à disposition.`);
+      p(`Le contenu est celui que définit ${reg.regime} (${reg.article}). L'application ne peut pas le vérifier ligne à ligne : elle ne lit pas les stipulations de votre accord. Elle vérifie ce qui s'impose à lui - le plancher de l'article L. 2312-21, alinéa 3 - et la mise à disposition.`);
     }
   }
 
@@ -175,7 +175,7 @@ function audit(f) {
     ["Données manquantes", `${mq.length}`, "Aucune conclusion n'en a été tirée, dans aucun sens."],
     ["Sans objet", `${so.length}`, "L'exigence ne s'applique pas, et une donnée renseignée permet de le dire."],
     ["Régime retenu", reg.regime, indetermine ? "Aucun contenu n'a été audité, et c'est la bonne réponse." : `Fondement : ${reg.article || "L. 2312-21"}.`],
-    ["Thèmes du plancher légal", `${PLANCHER.length}`, `Relevés dans le texte de L. 2312-21, al. 3 — version ${B.planchierVersion || "—"}.`],
+    ["Thèmes du plancher légal", `${PLANCHER.length}`, `Relevés dans le texte de L. 2312-21, al. 3 - version ${B.planchierVersion || "-"}.`],
     ["Couverture du découpage du décret",
       `R. 2312-8 : ${B.contenu["moins300"].couverture.part} % · R. 2312-9 : ${B.contenu["au moins300"].couverture.part} %`,
       "Part du texte du décret que le découpage a consommée. Ce qui n'a pas été reconnu est compté et publié, jamais passé sous silence."],
@@ -197,7 +197,7 @@ function verdicts(f) {
   return v;
 }
 
-/* Le parcours en deux temps — corriger ce qui manque, puis vérifier ce qui est
+/* Le parcours en deux temps - corriger ce qui manque, puis vérifier ce qui est
    déclaré. `etat` porte ce que la page a recueilli : les corrections déclarées
    faites et les réponses à la grille de vérification. */
 function parcours(f, etat) {
@@ -208,7 +208,7 @@ function parcours(f, etat) {
 
    L'audit dit si la base est complète ; la page « ma base de données » la fait
    remplir. Elle a donc besoin du découpage du décret, que contenu-bdese.js
-   produit déjà — il n'est pas refait ici, il est simplement rendu accessible.
+   produit déjà - il n'est pas refait ici, il est simplement rendu accessible.
 
    La grille ne se choisit pas au hasard : elle dépend de l'effectif, et elle
    n'est due qu'À DÉFAUT d'accord. Un accord d'entreprise définit l'organisation,
@@ -230,7 +230,7 @@ function grilleDue(effectif, accordExiste) {
 /* Les six années de chaque ligne. L. 2312-36 : les informations « portent sur
    les deux années précédentes et l'année en cours et intègrent des perspectives
    sur les trois années suivantes ». Une base à une seule colonne est le premier
-   oubli du terrain — elle ne montre ni l'évolution passée ni la trajectoire. */
+   oubli du terrain - elle ne montre ni l'évolution passée ni la trajectoire. */
 function millesimes(anneeEnCours) {
   const a = Number(anneeEnCours);
   if (!Number.isFinite(a)) return [];
@@ -244,7 +244,7 @@ function millesimes(anneeEnCours) {
   ];
 }
 
-/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+/* Le modèle concret d'un point de régularisation - étape 5 du parcours.
    Chiffré sur le dossier remis, jamais sur un exemple figé : voir
    modeles-bdese.js. Rend null si aucun modèle n'est écrit pour cet id. */
 function modele(f, id) {
@@ -304,8 +304,8 @@ __def("./regime-bdese.js", function(module, exports, require){
 
    TROIS RÈGLES DE MÉTHODE, écrites ici plutôt que dispersées :
 
-   1. Une seule question commande : y a-t-il un accord ? Non — la loi
-      s'applique, c'est-à-dire le décret. Oui — on demande l'accord, puisque
+   1. Une seule question commande : y a-t-il un accord ? Non - la loi
+      s'applique, c'est-à-dire le décret. Oui - on demande l'accord, puisque
       c'est lui qui fixe alors le contenu et qu'on ne peut pas vérifier un
       texte qu'on n'a pas. Le régime n'est INDÉTERMINÉ que dans deux cas :
       la question n'a pas reçu de réponse, ou l'accord annoncé n'est pas joint.
@@ -313,18 +313,18 @@ __def("./regime-bdese.js", function(module, exports, require){
       aucun régime.
 
    2. Le seuil qui commande la BDESE n'est pas celui du comité. Le comité se met
-      en place à onze salariés ; les attributions récurrentes — dont la base
-      relève — s'exercent à cinquante (L. 2312-2). Le contenu supplétif, lui,
+      en place à onze salariés ; les attributions récurrentes - dont la base
+      relève - s'exercent à cinquante (L. 2312-2). Le contenu supplétif, lui,
       change à trois cents (R. 2312-8 en deçà, R. 2312-9 au-delà).
 
    3. Deux délais, souvent confondus, et un troisième que le texte ajoute :
-      — L. 2312-2 : effectif d'au moins cinquante pendant douze mois consécutifs,
+      - L. 2312-2 : effectif d'au moins cinquante pendant douze mois consécutifs,
         puis DOUZE MOIS de plus avant que les attributions récurrentes s'exercent.
         Et si, à l'expiration de ce délai, le mandat restant à courir est
-        inférieur à un an, le délai court à compter du renouvellement du comité —
+        inférieur à un an, le délai court à compter du renouvellement du comité -
         seconde phrase que le module lit, faute de quoi il annoncerait une date
         fausse ;
-      — L. 2312-34 : le seuil de trois cents est réputé franchi après douze mois
+      - L. 2312-34 : le seuil de trois cents est réputé franchi après douze mois
         consécutifs de dépassement, et l'employeur dispose ensuite d'UN AN pour
         s'y conformer complètement.
 
@@ -372,7 +372,7 @@ function regime(f) {
       return { regime: REGIMES.INDETERMINE, cause: "accord déclaré non versé",
         motif: "Un accord d'entreprise est déclaré mais n'est pas versé. Le contenu exigible est celui qu'il définit : sans son texte, l'application ne peut vérifier ni ce qu'il contient, ni qu'il respecte le plancher de l'article L. 2312-21, alinéa 3. Joignez-le." };
     return { regime: REGIMES.ACCORD_ENTREPRISE, article: "L. 2312-21, al. 1er",
-      motif: "Un accord d'entreprise définit l'organisation, l'architecture, le contenu et les modalités de fonctionnement de la base. C'est lui qui commande — sous la réserve du plancher de l'alinéa 3, auquel aucun accord ne peut descendre." };
+      motif: "Un accord d'entreprise définit l'organisation, l'architecture, le contenu et les modalités de fonctionnement de la base. C'est lui qui commande - sous la réserve du plancher de l'alinéa 3, auquel aucun accord ne peut descendre." };
   }
 
   if (dit(f.accordBranche)) {
@@ -413,7 +413,7 @@ function exigibilite(f) {
   const eff = nombre(f.effectif);
   const out = { attributions: null, contenu300: null, avertissements: [] };
 
-  /* L. 2312-2 — l'entrée dans les attributions récurrentes. */
+  /* L. 2312-2 - l'entrée dans les attributions récurrentes. */
   const d50 = f.dateSeuil50Atteint;          /* fin des douze mois consécutifs à cinquante */
   if (renseigne(d50)) {
     let terme = ajouterMois(d50, 12);
@@ -423,14 +423,14 @@ function exigibilite(f) {
       const reste = moisEntre(terme, finMandat);
       if (reste !== null && reste < 12) {
         /* Seconde phrase : le délai court à compter du renouvellement du comité.
-           La date du renouvellement n'est pas déductible du reste — elle est
+           La date du renouvellement n'est pas déductible du reste - elle est
            demandée, et sans elle le module ne donne pas de date. */
         regle = "L. 2312-2, seconde phrase";
         if (renseigne(f.dateRenouvellementCSE)) {
           terme = ajouterMois(f.dateRenouvellementCSE, 12);
         } else {
           terme = null;
-          out.avertissements.push("Le mandat du comité restant à courir est inférieur à un an à l'expiration du délai de douze mois : le délai court alors à compter du renouvellement du comité (L. 2312-2, seconde phrase). La date de ce renouvellement n'est pas renseignée — aucune date d'exigibilité n'est annoncée, plutôt qu'une date fausse.");
+          out.avertissements.push("Le mandat du comité restant à courir est inférieur à un an à l'expiration du délai de douze mois : le délai court alors à compter du renouvellement du comité (L. 2312-2, seconde phrase). La date de ce renouvellement n'est pas renseignée - aucune date d'exigibilité n'est annoncée, plutôt qu'une date fausse.");
         }
       }
     } else if (renseigne(f.dateSeuil50Atteint) && !renseigne(finMandat)) {
@@ -438,16 +438,16 @@ function exigibilite(f) {
     }
     out.attributions = { date: terme, regle,
       motif: terme
-        ? `L'effectif ayant atteint cinquante salariés pendant douze mois consécutifs au ${d50}, les attributions récurrentes — dont la base de données relève — s'exercent à compter du ${terme} (${regle}).`
+        ? `L'effectif ayant atteint cinquante salariés pendant douze mois consécutifs au ${d50}, les attributions récurrentes - dont la base de données relève - s'exercent à compter du ${terme} (${regle}).`
         : `Le terme ne peut pas être calculé : ${regle} renvoie au renouvellement du comité, dont la date n'est pas connue.` };
   }
 
-  /* L. 2312-34 — le passage au contenu des entreprises de trois cents et plus. */
+  /* L. 2312-34 - le passage au contenu des entreprises de trois cents et plus. */
   const d300 = f.dateSeuil300Franchi;        /* fin des douze mois consécutifs de dépassement */
   if (renseigne(d300)) {
     const terme = ajouterMois(d300, 12);
     out.contenu300 = { date: terme, regle: "L. 2312-34",
-      motif: `Le seuil de trois cents salariés est réputé franchi au ${d300}, après douze mois consécutifs de dépassement. L'employeur dispose d'un an à compter de ce franchissement — soit jusqu'au ${terme} — pour se conformer complètement aux obligations qui en découlent, dont le contenu de l'article R. 2312-9.` };
+      motif: `Le seuil de trois cents salariés est réputé franchi au ${d300}, après douze mois consécutifs de dépassement. L'employeur dispose d'un an à compter de ce franchissement - soit jusqu'au ${terme} - pour se conformer complètement aux obligations qui en découlent, dont le contenu de l'article R. 2312-9.` };
   } else if (eff !== null && eff >= SEUIL_CONTENU) {
     out.avertissements.push("L'effectif atteint trois cents salariés, mais la date de franchissement du seuil n'est pas renseignée. Le seuil n'est réputé franchi qu'après douze mois consécutifs de dépassement, et l'employeur dispose ensuite d'un an (L. 2312-34) : sans cette date, l'application ne sait pas si le contenu de R. 2312-9 est déjà exigible.");
   }
@@ -466,7 +466,7 @@ function delaiConsultation(f) {
   const c = f.consultation || {};
   if (dit(f.accordDelaisConsultation)) {
     return { connu: false, article: "L. 2312-19, 4°",
-      motif: "Un accord fixe les délais dans lesquels les avis du comité sont rendus (L. 2312-19, 4°). C'est lui qui commande, non le mois supplétif de l'article R. 2312-6 — et l'application ne peut vérifier que ce qu'elle lit : joignez-le." };
+      motif: "Un accord fixe les délais dans lesquels les avis du comité sont rendus (L. 2312-19, 4°). C'est lui qui commande, non le mois supplétif de l'article R. 2312-6 - et l'application ne peut vérifier que ce qu'elle lit : joignez-le." };
   }
   const expertises = nombre(c.nbExpertises);
   const central = dit(c.centralEtEtablissements);
@@ -477,14 +477,14 @@ function delaiConsultation(f) {
   return { connu: true, mois, cas, depart,
     terme: depart ? ajouterMois(depart, mois) : null,
     article: "R. 2312-5, R. 2312-6",
-    motif: `Le délai court de la communication des informations ou de l'information de leur mise à disposition dans la base (R. 2312-5). À défaut d'accord, le comité est réputé consulté et avoir rendu un AVIS NÉGATIF à l'expiration d'un délai de ${mois} mois — ${cas} (R. 2312-6, I)${depart ? `, soit au ${ajouterMois(depart, mois)}` : ""}. Lorsque le comité central et des comités d'établissement sont consultés, l'avis de chaque établissement est rendu au plus tard sept jours avant ce terme, à défaut de quoi il est réputé négatif (R. 2312-6, II).` };
+    motif: `Le délai court de la communication des informations ou de l'information de leur mise à disposition dans la base (R. 2312-5). À défaut d'accord, le comité est réputé consulté et avoir rendu un AVIS NÉGATIF à l'expiration d'un délai de ${mois} mois - ${cas} (R. 2312-6, I)${depart ? `, soit au ${ajouterMois(depart, mois)}` : ""}. Lorsque le comité central et des comités d'établissement sont consultés, l'avis de chaque établissement est rendu au plus tard sept jours avant ce terme, à défaut de quoi il est réputé négatif (R. 2312-6, II).` };
 }
 
 /* -------------------------------------------------- les années couvertes
 
    R. 2312-10 : l'année en cours, les deux précédentes et les trois suivantes.
    Les trois suivantes peuvent être données EN GRANDES TENDANCES, à défaut de
-   chiffres — et l'employeur doit indiquer, en les motivant, les informations
+   chiffres - et l'employeur doit indiquer, en les motivant, les informations
    qui ne peuvent recevoir ni chiffres ni tendances. Un contrôle qui exigerait
    six colonnes chiffrées produirait des non-conformités fausses. */
 function annees(f, anneeCourante) {
@@ -508,7 +508,7 @@ __def("./contenu-bdese.js", function(module, exports, require){
    extrait du texte et non recopié.
 
    Onze mille caractères en deçà de trois cents salariés, trente et un mille huit
-   cents au-delà. Recopier cela à la main, c'est garantir des écarts — et surtout
+   cents au-delà. Recopier cela à la main, c'est garantir des écarts - et surtout
    des écarts silencieux à la prochaine modification du décret. Le contenu est
    donc découpé depuis le texte lui-même, comme l'a été le tableau de l'article
    R. 2314-1, et la couverture du découpage est mesurée : ce qui n'a pas été
@@ -516,14 +516,14 @@ __def("./contenu-bdese.js", function(module, exports, require){
 
    Trois étages, et l'ordre entre eux commande tout :
 
-   — le plancher de l'article L. 2312-21, troisième alinéa : les thèmes que la
+   - le plancher de l'article L. 2312-21, troisième alinéa : les thèmes que la
      base comporte « au moins ». Aucun accord ne descend en dessous. Deux thèmes
-     du décret n'y figurent pas — la sous-traitance, que le décret nomme
+     du décret n'y figurent pas - la sous-traitance, que le décret nomme
      « partenariats », et les transferts intragroupe : un accord peut donc les
      supprimer, et l'application doit le dire ;
-   — l'accord de l'article L. 2312-21, d'entreprise ou, à défaut et en deçà de
+   - l'accord de l'article L. 2312-21, d'entreprise ou, à défaut et en deçà de
      trois cents salariés, de branche ;
-   — le supplétif des articles R. 2312-8 et R. 2312-9, qui ne s'applique qu'à
+   - le supplétif des articles R. 2312-8 et R. 2312-9, qui ne s'applique qu'à
      défaut d'accord.
 
    Le découpage suit la ponctuation du décret :
@@ -596,7 +596,7 @@ function decouper(brut) {
   /* Les rubriques : « 1° … » jusqu'au « 2° … » suivant. */
   /* Le numéro d'une rubrique ressemble à un renvoi : « 2° de l'article
      L. 2312-27 » et « 1° A e et f de l'article R. 2312-8 » en sont, et le décret
-     en compte plusieurs. Trois marques distinguent le titre du renvoi — il
+     en compte plusieurs. Trois marques distinguent le titre du renvoi - il
      commence par une majuscule, il ne cite pas d'article, et il ne contient pas
      de point avant les deux-points qui le ferment. Sans ces trois marques, le
      découpage prenait un renvoi pour une rubrique et en perdait une. */
@@ -624,7 +624,7 @@ function decouper(brut) {
        qu'une revenait à perdre le contenu des autres : « A-Investissement
        social », « I. Indicateurs sur la situation comparée » et, dans la
        rubrique environnementale, « I-Pour les entreprises soumises… ». La
-       mesure l'a dit — trois mille sept cent quarante-neuf caractères du seul
+       mesure l'a dit - trois mille sept cent quarante-neuf caractères du seul
        10° de R. 2312-9 tombaient hors du découpage. */
     const sb = [...r.corps.matchAll(/(?:^|\s)((?:[A-Z]|I{1,3}|IV|V|VI{0,3})\s?[-.]\s?)(?=[A-ZÉÈÀ])/g)]
       .map(m => Object.assign(m, { 1: m[1].replace(/[\s\-.]+$/, "") }));
@@ -633,7 +633,7 @@ function decouper(brut) {
           corps: net(r.corps.slice(m.index + m[0].length, i + 1 < sb.length ? sb[i + 1].index : r.corps.length)) }))
       : [{ lettre: null, corps: r.corps.replace(/^[^:]{0,140}:\s*/, "") }];
     /* Ce qui précède la première section n'est pas perdu : il appartient à la
-       rubrique elle-même — « montant de la contribution aux activités sociales
+       rubrique elle-même - « montant de la contribution aux activités sociales
        et culturelles », qui vient avant « A-Représentation du personnel ». */
     if (sb.length && sb[0].index > 0) {
       const tete = net(r.corps.slice(0, sb[0].index)).replace(/^[^:]{0,160}:\s*/, "");
@@ -643,7 +643,7 @@ function decouper(brut) {
       /* Une section peut n'avoir pas de titre à elle : le décret enchaîne
          alors directement sur le premier sujet, et le découpage en prend la
          tête. Cette tête n'est pas un titre, et elle ne doit pas s'afficher
-         comme tel — c'est ce qui donnait « …des sociétés du » au-dessus de la
+         comme tel - c'est ce qui donnait « …des sociétés du » au-dessus de la
          phrase entière. La marque est posée ici, une fois, plutôt que devinée
          à l'affichage. Relevé le 25 septembre 2026. */
       const mTitre = z.corps.match(/^([^:;]{3,160})\s*[:;]/);
@@ -673,14 +673,14 @@ function decouper(brut) {
 }
 
 /* La couverture : quelle part du texte se retrouve dans le découpage. Une
-   mesure, non une promesse — c'est elle qui dira si le décret a changé de
+   mesure, non une promesse - c'est elle qui dira si le décret a changé de
    ponctuation et si l'extraction doit être reprise. */
 const ENTETE = /^.*?comporte (?:les informations suivantes|les informations prévues dans le tableau ci-dessous\.?)\s*:?\s*/i;
 /* R. 2312-9 ne se suffit pas à lui-même : il importe deux sujets de R. 2312-8.
-   La phrase n'est pas du contenu, c'est un renvoi — mais ce qu'elle importe en
+   La phrase n'est pas du contenu, c'est un renvoi - mais ce qu'elle importe en
    est, et l'omettre priverait les entreprises d'au moins trois cents salariés
    de la formation professionnelle et des conditions de travail. */
-/* Le renvoi se termine par un numéro d'article — « … de l'article R. 2312-8. » —
+/* Le renvoi se termine par un numéro d'article - « … de l'article R. 2312-8. » -
    dont le point interne trompait la borne : la phrase était coupée après
    « R. », et « 2312-8. » restait sur le carreau. La borne suit donc le numéro. */
 const RENVOI = /Elle comporte également les informations relatives.*?article R\.\s*\d+-\d+(?:-\d+)?\.\s*/i;
@@ -688,13 +688,13 @@ const RENVOI = /Elle comporte également les informations relatives.*?article R\
 
    La première mesure annonçait 96,2 % et 96,6 %, et il fallait comprendre ce
    que valaient les 3,8 % restants avant de promettre cent pour cent. Ils ont été
-   sortis un à un : ce sont des marqueurs et de la ponctuation — « ; a) »,
-   « ; iii- », « ; 2° », « . II. » — c'est-à-dire l'ossature même du découpage.
+   sortis un à un : ce sont des marqueurs et de la ponctuation - « ; a) »,
+   « ; iii- », « ; 2° », « . II. » - c'est-à-dire l'ossature même du découpage.
    Le plus long trou de R. 2312-9, cent soixante et un caractères, est la phrase
    de renvoi vers R. 2312-8, déjà exécutée ailleurs.
 
    Autrement dit : rien n'était perdu, la mesure était fausse. Elle comptait
-   comme reliquat ce que le découpage consomme en tant que structure — comme si
+   comme reliquat ce que le découpage consomme en tant que structure - comme si
    l'on reprochait à une table des matières de ne pas contenir ses propres
    numéros de page.
 
@@ -717,7 +717,7 @@ function couverture(brut, rubriques) {
   /* Compter la longueur des libellés extraits donnait plus de cent pour cent :
      un titre de rubrique est aussi le début du premier sujet, et se comptait
      deux fois. On mesure donc ce que le découpage couvre du texte, en marquant
-     les intervalles réellement consommés — une mesure ne vaut que si elle ne
+     les intervalles réellement consommés - une mesure ne vaut que si elle ne
      peut pas dépasser son maximum. */
   const pris = new Uint8Array(brut.length);
   let curseur = 0;
@@ -729,15 +729,15 @@ function couverture(brut, rubriques) {
     pris.fill(1, i, i + x.length);
     curseur = Math.max(curseur, i);
   }
-  /* L'en-tête énonce le régime — « En l'absence d'accord prévu à l'article
-     L. 2312-21, dans les entreprises de moins de trois cents salariés… » — il
+  /* L'en-tête énonce le régime - « En l'absence d'accord prévu à l'article
+     L. 2312-21, dans les entreprises de moins de trois cents salariés… » - il
      n'est pas du contenu, et il n'a rien à faire au dénominateur : le mesurer
      comme une perte reviendrait à se reprocher de ne pas l'avoir découpé. */
   const tete = (brut.match(ENTETE) || [""])[0].length;
   const renvoi = brut.match(RENVOI);
   if (renvoi) pris.fill(1, renvoi.index, renvoi.index + renvoi[0].length);
   /* Les intervalles restés hors du découpage, classés un à un : structure
-     d'un côté — elle est consommée —, reliquat de l'autre — il ne l'est pas.
+     d'un côté - elle est consommée -, reliquat de l'autre - il ne l'est pas.
      Le classement se fait sur le texte lui-même, jamais sur sa longueur. */
   const structure = [], reliquat = [];
   let debut = -1;
@@ -1144,8 +1144,8 @@ function construire() {
     out[cle] = { article: art, version: T[art].id, seuil, rubriques,
       couverture: couverture(brut, rubriques), infidelites: fidelite(brut, rubriques) };
   }
-  /* Le renvoi de R. 2312-9 exécuté : les sujets e) et f) du 1° A de R. 2312-8 —
-     la formation professionnelle et les conditions de travail — sont ajoutés au
+  /* Le renvoi de R. 2312-9 exécuté : les sujets e) et f) du 1° A de R. 2312-8 -
+     la formation professionnelle et les conditions de travail - sont ajoutés au
      régime des entreprises d'au moins trois cents salariés, en portant la marque
      de leur origine. Les citer sans les importer aurait laissé un trou de deux
      sujets dans le contenu du régime le plus exigeant.
@@ -1165,8 +1165,8 @@ function construire() {
       if (su && !cA.sujets.some(x => x.intitule === su.intitule))
         cA.sujets.push({ ...su, renvoi: "R. 2312-8, 1° A " + lettre + ")" });
     }
-    out["au moins300"].renvois = ["R. 2312-8, 1° A e) — formation professionnelle",
-                                  "R. 2312-8, 1° A f) — conditions de travail, avec ses alinéas i) à iv)"];
+    out["au moins300"].renvois = ["R. 2312-8, 1° A e) - formation professionnelle",
+                                  "R. 2312-8, 1° A f) - conditions de travail, avec ses alinéas i) à iv)"];
   }
 
   return { plancher: PLANCHER, planchierTexte: "L. 2312-21, al. 3",
@@ -1177,33 +1177,33 @@ module.exports = { construire, decouper, PLANCHER, auPlancher };
 
 if (require.main === module) {
   const b = construire();
-  console.log(`plancher de L. 2312-21, al. 3 — ${b.plancher.length} thèmes énumérés :`);
+  console.log(`plancher de L. 2312-21, al. 3 - ${b.plancher.length} thèmes énumérés :`);
   b.plancher.forEach(t => console.log("   · " + t));
   let ko = 0;
   for (const [cle, d] of Object.entries(b.contenu)) {
     const info = d.rubriques.reduce((n, r) => n + r.sections.reduce((m, s) =>
       m + s.sujets.reduce((k, su) => k + 1 + su.informations.length, 0), 0), 0);
     const hors = d.rubriques.filter(r => !r.plancher).map(r => r.n + "° " + r.titre.slice(0, 40));
-    console.log(`\n${d.article} — ${d.seuil} — version ${d.version}`);
+    console.log(`\n${d.article} - ${d.seuil} - version ${d.version}`);
     console.log(`  ${d.rubriques.length} rubriques · ${info} informations · couverture ${d.couverture.part} % du texte`);
     console.log(`  hors du plancher, donc supprimables par accord : ${hors.join(" ; ") || "aucune"}`);
     if (d.infidelites.length) { ko += d.infidelites.length;
-      console.log(`  ÉCHEC — ${d.infidelites.length} libellé(s) ne se retrouvent pas mot pour mot dans le texte :`);
+      console.log(`  ÉCHEC - ${d.infidelites.length} libellé(s) ne se retrouvent pas mot pour mot dans le texte :`);
       d.infidelites.slice(0, 5).forEach(x => console.log("      " + x)); }
   }
   /* Le seuil de publication. Une couverture inférieure à cent pour cent ne dit
      pas que la BDESE est incomplète : elle dit que le découpage ne rend pas
      tout le texte, et qu'il faut le regarder avant de publier. La règle est de
-     gouvernance, non de droit — elle est écrite ici pour ne pas être décidée au
+     gouvernance, non de droit - elle est écrite ici pour ne pas être décidée au
      cas par cas, et ce qui reste hors du découpage est nommé, jamais toléré en
      silence. */
   /* Le critère de sortie est cent pour cent, et il bloque. Tout intervalle du
-     texte doit être, soit extrait comme contenu, soit reconnu comme structure —
+     texte doit être, soit extrait comme contenu, soit reconnu comme structure -
      marqueur, numérotation, séparateur. Le moindre caractère qui n'est ni l'un
      ni l'autre est un reliquat : il est affiché, et la publication échoue. */
   const bas = Object.values(b.contenu).filter(d => d.couverture.reliquat > 0);
   if (bas.length) {
-    console.log("\nÉCHEC — le découpage laisse du texte de côté :");
+    console.log("\nÉCHEC - le découpage laisse du texte de côté :");
     for (const d of bas) {
       console.log(`  ${d.article} : ${d.couverture.part} % · ${d.couverture.reliquat} caractère(s) hors du découpage`);
       d.couverture.fragments.forEach(f => console.log(`      · ${JSON.stringify(f.slice(0, 120))}`));
@@ -1211,7 +1211,7 @@ if (require.main === module) {
     }
   } else {
     for (const d of Object.values(b.contenu))
-      console.log(`  ${d.article} : 100 % — ${d.couverture.couverts} caractères, dont ${d.couverture.structure} de structure (marqueurs, numérotations, séparateurs). Reliquat : aucun.`);
+      console.log(`  ${d.article} : 100 % - ${d.couverture.couverts} caractères, dont ${d.couverture.structure} de structure (marqueurs, numérotations, séparateurs). Reliquat : aucun.`);
   }
   if (b.contenu["au moins300"].renvois)
     console.log("\nrenvois exécutés vers R. 2312-8 : " + b.contenu["au moins300"].renvois.join(" · "));
@@ -1239,11 +1239,11 @@ __def("./controles-bdese.js", function(module, exports, require){
 
    L'ordre des questions est celui du droit, et il ne se contourne pas :
 
-     1. quel régime s'applique — accord d'entreprise, accord de branche,
+     1. quel régime s'applique - accord d'entreprise, accord de branche,
         supplétif, ou indéterminé ;
      2. à quelle date le contenu devient exigible ;
      3. ce que ce régime commande, thème par thème ;
-     4. ce que l'accord ne pouvait pas retirer — le plancher de L. 2312-21, al. 3 ;
+     4. ce que l'accord ne pouvait pas retirer - le plancher de L. 2312-21, al. 3 ;
      5. la mise à disposition, son support, son actualisation ;
      6. les délais de consultation, qui relèvent d'un AUTRE accord.
 
@@ -1267,7 +1267,7 @@ const nie = x => x === false || x === "non";
 
 /* Le plancher : les dix thèmes que l'accord ne peut pas descendre, relevés dans
    le troisième alinéa de L. 2312-21 et non recopiés. Ce sont LES DIX THÈMES DU
-   PLANCHER DE L'ACCORD — à ne pas confondre avec les dix thèmes de la
+   PLANCHER DE L'ACCORD - à ne pas confondre avec les dix thèmes de la
    consultation sur les orientations stratégiques, la situation économique et la
    politique sociale (L. 2312-36), qui sont dix autres. Le plancher scinde les
    investissements et les fonds propres/endettement, et il laisse tomber la
@@ -1280,7 +1280,7 @@ const themesDeclares = f => Array.isArray((f.base || {}).themes) ? f.base.themes
 /* Le garde commun : rien ne se contrôle sur un régime inconnu. */
 /* LA BASE EXISTE-T-ELLE ? La question précède tout le reste, et elle n'était
    pas posée. Défaut mesuré le 2 septembre 2026 : le questionnaire attaquait
-   directement le régime — accord d'entreprise, accord de branche —, donc il
+   directement le régime - accord d'entreprise, accord de branche -, donc il
    présupposait une base et demandait seulement comment elle est encadrée. Un
    employeur qui n'en a pas n'avait rien à répondre, et aucune bascule ne le
    menait vers le parcours qui la construit.
@@ -1295,7 +1295,7 @@ function siBase(f, suite) {
   if (vide(b.existe)) return { etat: MANQ, motif:
     "Il n'est pas indiqué si l'entreprise dispose d'une base de données économiques, sociales et environnementales : ni son contenu ni sa mise à disposition ne peuvent être contrôlés." };
   if (nie(b.existe)) return { etat: SO, enAttente: true, motif:
-    "EN ATTENTE DE LA BASE — ce contrôle n'est pas écarté, il est suspendu. L'entreprise n'a pas de base de données, " +
+    "EN ATTENTE DE LA BASE - ce contrôle n'est pas écarté, il est suspendu. L'entreprise n'a pas de base de données, " +
     "et les attributions récurrentes du comité, dont la base relève, s'exercent à partir de cinquante salariés " +
     "(L. 2312-1, L. 2312-2). Le jour où la base existera, cette exigence s'appliquera intégralement : elle est donc " +
     "à traiter en même temps que sa constitution, non après. Le parcours « Constituer la base de données » la construit." };
@@ -1347,7 +1347,7 @@ ctl("BDESE-CTL-DAT-01", "Dates d'exigibilité",
     const eff = nb(f.effectif);
     if (eff === null) return { etat: MANQ, motif: "L'effectif n'est pas renseigné." };
     if (eff < R.SEUIL_ATTRIBUTIONS)
-      return { etat: SO, motif: `Effectif de ${eff} salariés : les attributions récurrentes, dont la base de données relève, ne s'exercent qu'à partir de cinquante (L. 2312-2). Le comité, lui, se met en place à onze — les deux seuils sont distincts.` };
+      return { etat: SO, motif: `Effectif de ${eff} salariés : les attributions récurrentes, dont la base de données relève, ne s'exercent qu'à partir de cinquante (L. 2312-2). Le comité, lui, se met en place à onze - les deux seuils sont distincts.` };
     const e = R.exigibilite(f);
     if (!e.attributions) return { etat: MANQ, motif: "La date à laquelle l'effectif a atteint cinquante salariés pendant douze mois consécutifs n'est pas renseignée : le point de départ du délai de douze mois de l'article L. 2312-2 est inconnu." };
     if (!e.attributions.date)
@@ -1381,13 +1381,13 @@ ctl("BDESE-CTL-CNT-01", "Contenu",
     if (t === null) return { etat: MANQ, motif: "Les thèmes que la base comporte ne sont pas renseignés." };
     /* La loi et le décret ne nomment pas les mêmes choses de la même façon :
        la correspondance est déclarée et vérifiée dans plancher-bdese.js, et
-       c'est elle qui décide — non une comparaison de libellés mot à mot, qui
+       c'est elle qui décide - non une comparaison de libellés mot à mot, qui
        produisait cinq faux manquements sur un dossier complet. */
     const vus = t.map(x => String(x.theme || x));
     const absents = PL.absents(vus);
     return absents.length
       ? { etat: NC, motif: `${absents.length} thème(s) du plancher de l'article L. 2312-21, alinéa 3, ne figurent pas dans la base : ${absents.join(" ; ")}. Ce plancher s'impose à tout accord : « la base de données comporte au moins les thèmes suivants ». Un accord qui les retire est, sur ce point, sans effet.` }
-      : { etat: CONF, motif: `Les ${PLANCHER.length} thèmes du plancher de l'article L. 2312-21, alinéa 3, figurent dans la base. Ce sont les dix thèmes du plancher de l'accord — à ne pas confondre avec les dix thèmes de la consultation de l'article L. 2312-36.` };
+      : { etat: CONF, motif: `Les ${PLANCHER.length} thèmes du plancher de l'article L. 2312-21, alinéa 3, figurent dans la base. Ce sont les dix thèmes du plancher de l'accord - à ne pas confondre avec les dix thèmes de la consultation de l'article L. 2312-36.` };
   }));
 
 ctl("BDESE-CTL-CNT-02", "Contenu",
@@ -1443,7 +1443,7 @@ ctl("BDESE-CTL-CNT-04", "Contenu",
     if (!admise)
       return { etat: NC, motif: `Forme déclarée : « ${b.formePerspectives} ». Les trois années suivantes sont présentées sous forme de données chiffrées ou, à défaut, sous forme de grandes tendances (R. 2312-10). Une absence pure et simple n'est pas une de ces deux formes.` };
     if (vide(b.informationsNonRenseignables))
-      return { etat: RISQ, motif: `Les perspectives sont renseignées sous forme ${/tendance/.test(forme) ? "de grandes tendances — ce que le décret admet expressément" : "chiffrée"}. Mais l'article R. 2312-10 ajoute une obligation que l'on oublie : l'employeur indique, POUR CES ANNÉES, les informations qui ne peuvent pas faire l'objet de données chiffrées ou de grandes tendances, ET les raisons qu'il en donne. Rien n'est déclaré à ce titre : soit tout est renseignable, et il faut pouvoir le dire, soit la liste manque.` };
+      return { etat: RISQ, motif: `Les perspectives sont renseignées sous forme ${/tendance/.test(forme) ? "de grandes tendances - ce que le décret admet expressément" : "chiffrée"}. Mais l'article R. 2312-10 ajoute une obligation que l'on oublie : l'employeur indique, POUR CES ANNÉES, les informations qui ne peuvent pas faire l'objet de données chiffrées ou de grandes tendances, ET les raisons qu'il en donne. Rien n'est déclaré à ce titre : soit tout est renseignable, et il faut pouvoir le dire, soit la liste manque.` };
     return { etat: CONF, motif: `Perspectives renseignées sous forme ${/tendance/.test(forme) ? "de grandes tendances, ce que l'article R. 2312-10 admet pour les années suivantes" : "chiffrée"}, et les informations qui ne peuvent recevoir ni chiffres ni tendances sont indiquées avec leurs raisons.` };
   }));
 
@@ -1489,7 +1489,7 @@ ctl("BDESE-CTL-MAD-03", "Mise à disposition",
       return { etat: MANQ, motif: "Il n'est pas déclaré si les bénéficiaires sont informés de l'actualisation de la base." };
     if (nie(b.informationMiseAJour))
       return { etat: NC, motif: "Les bénéficiaires ne sont pas informés des mises à jour. C'est cette information qui fait courir le délai de consultation (R. 2312-5) : sans elle, le délai ne court pas, et l'avis ne peut pas être réputé rendu." };
-    return { etat: CONF, motif: "Les bénéficiaires sont informés de l'actualisation. C'est cette information — ou la communication des informations — qui fait courir le délai de consultation (R. 2312-5)." };
+    return { etat: CONF, motif: "Les bénéficiaires sont informés de l'actualisation. C'est cette information - ou la communication des informations - qui fait courir le délai de consultation (R. 2312-5)." };
   });
 
 /* --------------------------------------------------- les consultations */
@@ -1529,10 +1529,10 @@ ctl("BDESE-CTL-CSL-03", "Consultations",
     const d = R.delaiConsultation(f);
     if (!d.connu) return { etat: RISQ, motif: d.motif };
     if (!d.depart)
-      return { etat: MANQ, motif: `${d.motif} La date de mise à disposition — ou de communication — n'est pas renseignée : le point de départ du délai est inconnu.` };
+      return { etat: MANQ, motif: `${d.motif} La date de mise à disposition - ou de communication - n'est pas renseignée : le point de départ du délai est inconnu.` };
     const avis = (f.consultation || {}).dateAvis;
     if (vide(avis))
-      return { etat: RISQ, motif: `${d.motif} Aucun avis n'est enregistré : à ce terme, le comité sera réputé consulté ET AVOIR RENDU UN AVIS NÉGATIF — ce qui n'est pas un silence neutre.` };
+      return { etat: RISQ, motif: `${d.motif} Aucun avis n'est enregistré : à ce terme, le comité sera réputé consulté ET AVOIR RENDU UN AVIS NÉGATIF - ce qui n'est pas un silence neutre.` };
     return avis <= d.terme
       ? { etat: CONF, motif: `Avis rendu le ${avis}, dans le délai de ${d.mois} mois expirant le ${d.terme}.` }
       : { etat: RISQ, motif: `Avis daté du ${avis}, postérieur au terme du ${d.terme}. Passé ce terme, le comité était déjà réputé avoir rendu un avis négatif (R. 2312-6, I).` };
@@ -1573,7 +1573,7 @@ ctl("BDESE-CTL-COH-01", "Cohérence",
   });
 
 /* Les contrôles de détection ne concluent jamais à la conformité. Ici, un seul :
-   ce que l'application ne peut pas prouver — que la base a effectivement été
+   ce que l'application ne peut pas prouver - que la base a effectivement été
    mise à la disposition du comité. Elle constitue le contenu ; la mise à
    disposition est un acte de l'employeur, qui se prouve autrement. */
 const DETECTION = ["BDESE-CTL-PRV-01"];
@@ -1591,21 +1591,21 @@ ctl("BDESE-CTL-PRV-01", "Preuve",
     if (!elements.length)
       return { etat: MANQ, motif: "Aucun élément ne documente la mise à disposition." };
     return { etat: RISQ, elements,
-      motif: `Éléments réunis : ${elements.join(" ; ")}. Ce module constitue, structure, date et audite le contenu de la base — il ne la met pas à disposition et n'est pas la base. La mise à disposition reste un acte de l'employeur : elle se prouve par le support lui-même, ses traces d'accès et l'information donnée aux bénéficiaires. L'application ne peut pas en attester à votre place, et elle ne le fera pas.` };
+      motif: `Éléments réunis : ${elements.join(" ; ")}. Ce module constitue, structure, date et audite le contenu de la base - il ne la met pas à disposition et n'est pas la base. La mise à disposition reste un acte de l'employeur : elle se prouve par le support lui-même, ses traces d'accès et l'information donnée aux bénéficiaires. L'application ne peut pas en attester à votre place, et elle ne le fera pas.` };
   });
 
 /* ------------------------------------------ la base n'est pas due partout
 
    L'audit annonçait à une entreprise de vingt salariés qu'elle enfreignait
    L. 2312-21 et R. 2312-8 : dix thèmes du plancher absents, dix rubriques du
-   décret non renseignées. Elle n'enfreignait rien — la base n'était pas due.
+   décret non renseignées. Elle n'enfreignait rien - la base n'était pas due.
 
    L'article L. 2312-1 partage le chapitre en deux : « Les attributions du
    comité social et économique des entreprises de moins de cinquante salariés
    sont définies par la section 2 (…) ; celles des entreprises d'au moins
    cinquante salariés par la section 3. » L. 2312-18, qui institue la base, est
    dans la section 3. Et L. 2312-2 ne fait exercer les attributions récurrentes
-   — celles que la base sert — qu'à partir de cinquante salariés atteints
+   - celles que la base sert - qu'à partir de cinquante salariés atteints
    pendant douze mois consécutifs. Lu à la source, deux lectures concordantes le
    27 août 2026 : LEGIARTI000036262407 pour L. 2312-1, LEGIARTI000035650754 pour
    L. 2312-2.
@@ -1624,7 +1624,7 @@ for (const ctl of C) {
     const eff = nb(f.effectif);
     if (eff === null || eff >= R.SEUIL_ATTRIBUTIONS) return brut(f);
     return { etat: SO, horsChamp: true,
-      motif: `Effectif de ${eff} salariés. La base de données relève des attributions récurrentes du comité, que L. 2312-1 réserve aux entreprises d'au moins cinquante salariés et que L. 2312-2 ne fait exercer qu'à partir de ce seuil atteint pendant douze mois consécutifs : elle n'est pas due ici, et rien de ce qui suit ne peut être reproché. Le comité, lui, se met en place à onze — les deux seuils sont distincts.` };
+      motif: `Effectif de ${eff} salariés. La base de données relève des attributions récurrentes du comité, que L. 2312-1 réserve aux entreprises d'au moins cinquante salariés et que L. 2312-2 ne fait exercer qu'à partir de ce seuil atteint pendant douze mois consécutifs : elle n'est pas due ici, et rien de ce qui suit ne peut être reproché. Le comité, lui, se met en place à onze - les deux seuils sont distincts.` };
   });
 }
 
@@ -1636,10 +1636,10 @@ if (require.main === module) {
   console.log(`${C.length} contrôles · plancher de ${PLANCHER.length} thèmes`);
   const rub = {};
   for (const c of C) (rub[c.rubrique] = rub[c.rubrique] || []).push(c.id);
-  for (const r of Object.keys(rub)) console.log(`  ${r} — ${rub[r].length} : ${rub[r].join(", ")}`);
+  for (const r of Object.keys(rub)) console.log(`  ${r} - ${rub[r].length} : ${rub[r].join(", ")}`);
   const sansTexte = C.filter(c => !c.fondement || !c.fondement.length);
   if (sansTexte.length) { console.error("Contrôles sans fondement : " + sansTexte.map(c => c.id).join(", ")); process.exit(1); }
-  console.log(`dont détection ${DETECTION.length}, cohérence ${COHERENCE.length} — tous fondés sur un article`);
+  console.log(`dont détection ${DETECTION.length}, cohérence ${COHERENCE.length} - tous fondés sur un article`);
 }
 
 });
@@ -1653,12 +1653,12 @@ __def("./plancher-bdese.js", function(module, exports, require){
    immatériel » ; le décret, lui, réunit les deux sous une rubrique
    « Investissements » et les distingue en sections. Un contrôle qui
    comparerait les libellés mot à mot conclurait que le plancher n'est pas
-   couvert alors qu'il l'est — cinq faux manquements sur un dossier parfait, ce
+   couvert alors qu'il l'est - cinq faux manquements sur un dossier parfait, ce
    qui s'est produit à la première écriture.
 
    La correspondance est donc déclarée ici, et VÉRIFIÉE : chaque intitulé cité
    comme équivalent doit exister dans le découpage du décret, en rubrique ou en
-   section. S'il n'existe pas — parce que le décret a changé —, le module refuse
+   section. S'il n'existe pas - parce que le décret a changé -, le module refuse
    de se charger. Une table de correspondance qui dérive en silence est pire que
    pas de table du tout. */
 const CONTENU = require("./contenu-bdese.js");
@@ -1769,14 +1769,14 @@ __def("./recevabilite.js", function(module, exports, require){
 
    La règle appliquée ici est plus simple que les exceptions qu'il faudrait
    écrire sans elle : un contrôle qui a lu un champ illisible n'a rien constaté.
-   Son verdict devient « donnée manquante » — la donnée n'est pas absente, elle
-   est inexploitable, ce qui revient au même pour la conclusion — et le motif
+   Son verdict devient « donnée manquante » - la donnée n'est pas absente, elle
+   est inexploitable, ce qui revient au même pour la conclusion - et le motif
    dit lequel des champs lus est en cause. Le contrôle de recevabilité, lui,
    garde son « non conforme » : c'est lui qui porte l'anomalie, et il bloque.
 
    Comment savoir ce qu'un contrôle a lu, sans le deviner ? En l'observant. La
    fiche est enveloppée dans un Proxy le temps de l'exécution, et l'on relève
-   les champs réellement touchés — f.nom, f["nom"] et la déstructuration
+   les champs réellement touchés - f.nom, f["nom"] et la déstructuration
    comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
 
 const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier", SO = "sans objet";
@@ -1786,7 +1786,7 @@ const CONCLUSIFS = new Set([CONF, "non conforme"]);
 
    Le registre et le questionnaire déduisent les champs lus en inspectant le
    texte de la fonction. Une enveloppe qui masque ce texte casserait la
-   garantie de non-divergence — la première tentative l'a fait, et trois
+   garantie de non-divergence - la première tentative l'a fait, et trois
    contre-épreuves l'ont dit aussitôt. L'enveloppe rend donc, quand on
    l'imprime, le texte de la fonction qu'elle enveloppe. */
 function remplacer(ctl, fn) {
@@ -1828,10 +1828,10 @@ function envelopper(controles, valider, exemptes) {
       if (touchees.length)
         return { etat: MANQ, illisible: true,
           motif: `Ce contrôle a lu ${touchees.length > 1 ? "des données inexploitables" : "une donnée inexploitable"} : `
-            + touchees.map(a => `${a.champ} = « ${a.valeur} » — ${a.motif}`).join(" ; ")
+            + touchees.map(a => `${a.champ} = « ${a.valeur} » - ${a.motif}`).join(" ; ")
             + ". Aucune conclusion n'en est tirée, dans aucun sens. Corrigez la saisie et relancez l'audit ; le constat qu'aurait rendu ce contrôle est sans valeur tant que la donnée n'existe pas." };
       /* Le contrôle n'a lu aucune des données fautives : son constat tient par
-         lui-même. Il ne peut pas pour autant valoir conformité — le document
+         lui-même. Il ne peut pas pour autant valoir conformité - le document
          se lit d'un bloc, et une page qui affirme qu'une donnée est impossible
          ne peut pas en présenter une autre comme acquise. Le manquement
          constaté, lui, reste constaté : une non-conformité n'est pas effacée
@@ -1847,23 +1847,23 @@ function envelopper(controles, valider, exemptes) {
 /* ------------------------------------------------------------ le silence
 
    Un contrôle qui se déclare « sans objet » ferme la question : il affirme que
-   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien — « l'entreprise
+   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien - « l'entreprise
    n'appartient à aucun groupe », « aucune élection en cours », « l'entreprise ne
-   comporte pas plusieurs établissements distincts » — alors que la fiche ne
+   comporte pas plusieurs établissements distincts » - alors que la fiche ne
    disait rien du groupe, des élections ni des établissements. Sur un dossier
    entièrement vide, quarante-quatre contrôles des deux modules affirmaient ainsi
    des faits que personne n'avait déclarés.
 
    C'est la règle du dépôt appliquée à un état de plus : une donnée non
    renseignée ne produit jamais « conforme », et elle ne doit pas davantage
-   produire « sans objet ». Le silence n'est pas une réponse — ni dans un sens,
+   produire « sans objet ». Le silence n'est pas une réponse - ni dans un sens,
    ni dans l'autre.
 
    La mesure est la même que pour la recevabilité : on observe l'exécution. Si le
    contrôle a conclu « sans objet » sans qu'aucun des champs qu'il a lus ne soit
    déclaré sur la fiche, sa conclusion ne repose sur rien et devient « donnée
-   manquante ». S'il a lu ne serait-ce qu'un champ renseigné — un effectif de
-   vingt, qui écarte une obligation due à cinquante — le « sans objet » tient. */
+   manquante ». S'il a lu ne serait-ce qu'un champ renseigné - un effectif de
+   vingt, qui écarte une obligation due à cinquante - le « sans objet » tient. */
 function surSilence(controles, exemptes) {
   const hors = new Set(exemptes || []);
   for (const ctl of controles) {
@@ -1885,7 +1885,7 @@ function surSilence(controles, exemptes) {
       if (declares.length) return v;
       const attendus = [...lus].filter(k => !/^(then|constructor|toJSON|inspect|Symbol)/.test(k));
       return { etat: MANQ, surSilence: true,
-        motif: `Ce contrôle s'écarterait de lui-même — « ${v.motif} » — mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
+        motif: `Ce contrôle s'écarterait de lui-même - « ${v.motif} » - mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
     });
   }
   return controles;
@@ -1899,12 +1899,12 @@ __def("./regularisation-bdese.js", function(module, exports, require){
 /* Ce qu'il faut faire quand un contrôle de la base de données ne passe pas.
 
    Le module d'audit dit ce qui manque ; ce fichier dit comment y remédier. Un
-   contrôle sans entrée ici fait échouer la publication — l'oubli se voit, il ne
+   contrôle sans entrée ici fait échouer la publication - l'oubli se voit, il ne
    se devine pas. Une entrée peut valoir « null » : c'est le cas des contrôles
    qui ne constatent rien à corriger, et ce null doit être écrit.
 
    Chaque entrée porte :
-     gravite    1 le plus grave, 4 le moins — c'est l'ordre du guide
+     gravite    1 le plus grave, 4 le moins - c'est l'ordre du guide
      quoiFaire  une phrase, à l'infinitif : l'acte à accomplir
      risque     ce que coûte l'inaction, fondé sur un article lu
      delai      le temps qu'il faut y consacrer, en clair
@@ -1916,8 +1916,8 @@ __def("./regularisation-bdese.js", function(module, exports, require){
    L'ORDRE PROPRE À CE MODULE, et il ne se contourne pas. Régulariser une base
    incomplète, c'est monter la grille due, puis la remplir sur six années. La
    grille due n'est pas la même selon le texte qui commande : celle de l'accord
-   s'il en existe un — L. 2312-21 lui laisse définir l'organisation, l'architecture
-   et le contenu de la base —, sinon celle du décret, R. 2312-8 en dessous de
+   s'il en existe un - L. 2312-21 lui laisse définir l'organisation, l'architecture
+   et le contenu de la base -, sinon celle du décret, R. 2312-8 en dessous de
    trois cents salariés et R. 2312-9 à partir de trois cents. C'est pourquoi
    chaque procédure de contenu commence par la même étape : chercher l'accord
    AVANT de retenir le supplétif. Monter la grille du décret dans une entreprise
@@ -1933,7 +1933,7 @@ __def("./regularisation-bdese.js", function(module, exports, require){
    texte pénal ni pénalité financière propres à la base de données. Affirmer une
    sanction sans avoir lu l'article qui la fonde serait exactement ce que le
    dépôt s'interdit. Ce qui est encouru et qui a été lu, c'est l'irrégularité
-   opposable — degré 3.
+   opposable - degré 3.
 
    Les articles cités ont été lus à la source ; leur identifiant de version est
    dans textes-bdese.json, et publier-bdese.js confronte les deux. */
@@ -1944,7 +1944,7 @@ const { C } = require("./controles-bdese.js");
 const GRAVITES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -1955,16 +1955,16 @@ const R = {
     quoiFaire: "Établir par écrit le texte qui commande le contenu de la base : l'accord d'entreprise de L. 2312-21, à défaut l'accord de branche dans les entreprises de moins de trois cents salariés, à défaut le contenu supplétif du décret.",
     risque: "Tant que ce texte n'est pas identifié, la grille due est inconnue : l'entreprise monte une base au hasard, et ne peut établir devant le comité qu'elle porte ce qui lui est dû. L'article L. 2312-21 laisse l'accord définir l'organisation, l'architecture et le contenu de la base ; le décret ne s'applique qu'en son absence. Les deux grilles ne se recouvrent pas, et l'erreur de texte se paie en rubriques manquantes.",
     delai: "Une à deux semaines : c'est une recherche dans les accords en vigueur, pas une négociation.",
-    document: "Note de régime — le texte applicable à la base et la pièce qui l'établit",
+    document: "Note de régime - le texte applicable à la base et la pièce qui l'établit",
     etapes: [
-      "Rechercher un accord d'entreprise définissant la base : L. 2312-21 n'en connaît que deux formes — l'accord conclu dans les conditions du premier alinéa de L. 2232-12, ou, en l'absence de délégué syndical, l'accord entre l'employeur et le comité social et économique adopté à la majorité des membres titulaires de la délégation du personnel.",
+      "Rechercher un accord d'entreprise définissant la base : L. 2312-21 n'en connaît que deux formes - l'accord conclu dans les conditions du premier alinéa de L. 2232-12, ou, en l'absence de délégué syndical, l'accord entre l'employeur et le comité social et économique adopté à la majorité des membres titulaires de la délégation du personnel.",
       "S'il en existe un, le verser en entier au dossier : c'est son texte, et non son résumé, qui fixe la grille à monter.",
       "À défaut d'accord d'entreprise, rechercher un accord de branche : le dernier alinéa de L. 2312-21 ne l'ouvre qu'aux entreprises de moins de trois cents salariés.",
       "À défaut des deux, retenir le contenu supplétif du décret, l'article dépendant de l'effectif : R. 2312-8 en dessous de trois cents salariés, R. 2312-9 à partir de trois cents.",
       "Consigner le régime retenu, sa date et la pièce qui le porte : aucun contrôle de contenu ne conclut avant lui, et tout le reste de la régularisation s'y adosse.",
     ],
     verifs: [
-      { cle: "regimeTexte", question: "Quel texte commande le contenu de votre base — un accord d'entreprise, un accord de branche, ou le décret ?", attendu: "Le texte nommé, et la raison pour laquelle c'est celui-là." },
+      { cle: "regimeTexte", question: "Quel texte commande le contenu de votre base - un accord d'entreprise, un accord de branche, ou le décret ?", attendu: "Le texte nommé, et la raison pour laquelle c'est celui-là." },
       { cle: "regimePiece", question: "Si un accord est invoqué, quelle est sa date de signature et où est son texte ?", attendu: "L'accord lui-même, daté et signé. Un régime conventionnel se prouve par son texte." },
       { cle: "regimeEffectif", question: "Quel est l'effectif de l'entreprise à la date de l'audit ?", attendu: "L'effectif chiffré : c'est lui qui départage R. 2312-8 et R. 2312-9, et qui ouvre ou ferme l'accord de branche." },
     ],
@@ -1973,13 +1973,13 @@ const R = {
   "BDESE-CTL-REG-02": {
     gravite: 3,
     quoiFaire: "Écarter l'accord de branche lorsqu'il ne peut pas régir cette entreprise, et retenir le texte qui s'y applique réellement.",
-    risque: "Le dernier alinéa de L. 2312-21 ne permet à un accord de branche de définir la base qu'à défaut d'accord d'entreprise, et dans les entreprises de moins de trois cents salariés. Hors de ces deux conditions, la base est bâtie sur un texte qui ne la commande pas : elle sera incomplète au regard de celui qui la commande — l'accord d'entreprise, ou l'article R. 2312-9 — et le comité peut le lui opposer.",
+    risque: "Le dernier alinéa de L. 2312-21 ne permet à un accord de branche de définir la base qu'à défaut d'accord d'entreprise, et dans les entreprises de moins de trois cents salariés. Hors de ces deux conditions, la base est bâtie sur un texte qui ne la commande pas : elle sera incomplète au regard de celui qui la commande - l'accord d'entreprise, ou l'article R. 2312-9 - et le comité peut le lui opposer.",
     delai: "Quelques jours pour le constat ; le temps de monter la grille due si elle change.",
-    document: "Note de régime rectificative — le texte réellement applicable à la base",
+    document: "Note de régime rectificative - le texte réellement applicable à la base",
     etapes: [
       "Reprendre l'effectif et la date à laquelle le seuil de trois cents salariés a été franchi : ce seuil ferme à lui seul la voie de l'accord de branche.",
       "Vérifier s'il existe un accord d'entreprise au sens du premier alinéa de L. 2312-21 : s'il en existe un, l'accord de branche ne s'applique pas, puisqu'il ne vaut qu'à défaut.",
-      "Retenir le texte qui s'applique réellement — l'accord d'entreprise, ou, à partir de trois cents salariés et sans accord, l'article R. 2312-9 — et le consigner dans la note de régime.",
+      "Retenir le texte qui s'applique réellement - l'accord d'entreprise, ou, à partir de trois cents salariés et sans accord, l'article R. 2312-9 - et le consigner dans la note de régime.",
       "Comparer la grille déjà montée à celle que ce texte commande, rubrique par rubrique, et inscrire les écarts au plan de complètement.",
       "Combler ces écarts avant la prochaine mise à disposition, puis en informer les bénéficiaires.",
     ],
@@ -1995,7 +1995,7 @@ const R = {
     quoiFaire: "Établir et consigner la date à laquelle les attributions récurrentes du comité s'exercent, en partant de celle où l'effectif a atteint cinquante salariés pendant douze mois consécutifs.",
     risque: "L'article L. 2312-2 fait courir un délai de douze mois à compter de cette date, et ce n'est qu'à son expiration que le comité exerce l'ensemble des attributions récurrentes dont la base relève. Tant que la date n'est pas arrêtée, l'entreprise ne sait ni depuis quand la base est due, ni depuis quand elle est en retard, et elle ne peut opposer aucun délai à qui le lui reproche.",
     delai: "Quelques jours : la date se lit dans les déclarations sociales déjà produites.",
-    document: "Note d'exigibilité — atteinte du seuil de cinquante salariés et point de départ du délai de douze mois",
+    document: "Note d'exigibilité - atteinte du seuil de cinquante salariés et point de départ du délai de douze mois",
     etapes: [
       "Relever l'effectif mois par mois, et identifier la date à laquelle cinquante salariés ont été atteints pendant douze mois consécutifs : c'est ce point de départ que L. 2312-2 retient, et non la date de mise en place du comité, qui relève d'un seuil distinct.",
       "En déduire le terme du délai de douze mois à l'expiration duquel le comité exerce l'ensemble des attributions récurrentes.",
@@ -2019,7 +2019,7 @@ const R = {
       "Relever l'effectif mois par mois et identifier la période de douze mois consécutifs pendant laquelle il a dépassé trois cents salariés : le seuil est réputé franchi à ce terme.",
       "Fixer la date limite de mise en conformité complète : un an à compter de ce franchissement.",
       "Vérifier d'abord si un accord de L. 2312-21 définit la base : s'il en existe un, c'est sa grille qui reste due, et le changement de seuil ne la déplace pas.",
-      "À défaut d'accord, préparer le passage de la grille de l'article R. 2312-8 à celle de l'article R. 2312-9, en se reportant au texte de ce dernier — il ajoute expressément à son tableau la formation professionnelle et les conditions de travail du 1° A, e et f de R. 2312-8.",
+      "À défaut d'accord, préparer le passage de la grille de l'article R. 2312-8 à celle de l'article R. 2312-9, en se reportant au texte de ce dernier - il ajoute expressément à son tableau la formation professionnelle et les conditions de travail du 1° A, e et f de R. 2312-8.",
       "Étaler le complètement sur le calendrier, rubrique par rubrique, de sorte que la base soit complète à la date limite.",
     ],
     verifs: [
@@ -2034,11 +2034,11 @@ const R = {
     quoiFaire: "Compléter la base des thèmes du plancher de L. 2312-21, alinéa 3, qui n'y figurent pas.",
     risque: "Le troisième alinéa de L. 2312-21 dit que « la base de données comporte au moins les thèmes suivants » : ce plancher s'impose à tout accord, et un accord qui retire l'un de ces thèmes est, sur ce point, sans effet. Une base amputée ne rassemble pas l'ensemble des informations nécessaires aux consultations récurrentes que L. 2312-18 lui fait porter : la consultation qui s'en réclame peut être jugée irrégulière, et le délai de R. 2312-5 ne court pas sur ce qui n'a pas été mis à disposition.",
     delai: "Un à deux mois, selon le nombre de thèmes à monter et l'ancienneté des données.",
-    document: "Grille de la base — thèmes du plancher légal et pièces qui les alimentent",
+    document: "Grille de la base - thèmes du plancher légal et pièces qui les alimentent",
     etapes: [
       "Reprendre les thèmes que la base comporte réellement, un par un, et non le sommaire de l'outil qui la porte : c'est le contenu qui se contrôle.",
       "Vérifier AVANT toute chose s'il existe un accord au sens de L. 2312-21 : c'est lui qui définit l'organisation, l'architecture et le contenu de la base, et la grille à monter est la sienne. Le plancher de son troisième alinéa lui reste opposable, quoi qu'il stipule.",
-      "À défaut d'accord seulement, la grille à monter est celle du décret — R. 2312-8 en dessous de trois cents salariés, R. 2312-9 à partir de trois cents. Ne pas la reconstituer de mémoire : s'y reporter rubrique par rubrique.",
+      "À défaut d'accord seulement, la grille à monter est celle du décret - R. 2312-8 en dessous de trois cents salariés, R. 2312-9 à partir de trois cents. Ne pas la reconstituer de mémoire : s'y reporter rubrique par rubrique.",
       "Pour chaque thème du plancher absent, désigner le service qui détient la donnée et la date à laquelle il la fournit.",
       "Alimenter le thème sur les années dues, puis dater la mise à jour et en informer les bénéficiaires : sans cette information, le délai de consultation ne court pas.",
     ],
@@ -2052,9 +2052,9 @@ const R = {
   "BDESE-CTL-CNT-02": {
     gravite: 3,
     quoiFaire: "Monter la grille du décret, rubrique par rubrique, et la renseigner : article R. 2312-8 en dessous de trois cents salariés, article R. 2312-9 à partir de trois cents.",
-    risque: "En l'absence d'accord, c'est le décret qui fixe le contenu de la base, et les rubriques qu'il énumère sont dues. Une rubrique absente prive le comité d'une information que L. 2312-18 range parmi celles nécessaires à ses consultations récurrentes : la consultation peut être jugée irrégulière, et l'avis n'être pas valablement rendu. L'article R. 2312-7 ajoute que l'ensemble des informations de la base contribue à donner une vision claire et globale de la formation et de la répartition de la valeur créée par l'activité — une grille trouée ne la donne pas.",
+    risque: "En l'absence d'accord, c'est le décret qui fixe le contenu de la base, et les rubriques qu'il énumère sont dues. Une rubrique absente prive le comité d'une information que L. 2312-18 range parmi celles nécessaires à ses consultations récurrentes : la consultation peut être jugée irrégulière, et l'avis n'être pas valablement rendu. L'article R. 2312-7 ajoute que l'ensemble des informations de la base contribue à donner une vision claire et globale de la formation et de la répartition de la valeur créée par l'activité - une grille trouée ne la donne pas.",
     delai: "Deux à quatre mois : la grille des entreprises d'au moins trois cents salariés compte plusieurs centaines d'informations.",
-    document: "Grille du contenu supplétif — rubriques du décret, pièces qui les alimentent, service responsable",
+    document: "Grille du contenu supplétif - rubriques du décret, pièces qui les alimentent, service responsable",
     etapes: [
       "Vérifier AVANT toute chose qu'aucun accord de L. 2312-21 ne définit la base : le contenu du décret n'est dû qu'en son absence. S'il existe un accord, c'est sa grille qu'il faut monter, et ce contrôle n'a pas lieu d'être.",
       "À défaut d'accord, déterminer par l'effectif lequel des deux articles s'applique : R. 2312-8 en dessous de trois cents salariés, R. 2312-9 à partir de trois cents.",
@@ -2074,13 +2074,13 @@ const R = {
   "BDESE-CTL-CNT-03": {
     gravite: 3,
     quoiFaire: "Étendre la base aux six années dues : l'année en cours, les deux années précédentes et les trois années suivantes.",
-    risque: "L'article R. 2312-10 fixe, en l'absence d'accord, les années sur lesquelles portent les informations — et l'article L. 2312-36 le dit déjà de la loi : les informations portent sur les deux années précédentes et l'année en cours, et intègrent des perspectives sur les trois années suivantes. Une base qui ne présente qu'un exercice ne montre ni l'évolution passée ni la trajectoire : le comité n'est pas mis en état d'exercer utilement ses compétences, ce que L. 2312-21 exige de l'organisation et du contenu de la base.",
+    risque: "L'article R. 2312-10 fixe, en l'absence d'accord, les années sur lesquelles portent les informations - et l'article L. 2312-36 le dit déjà de la loi : les informations portent sur les deux années précédentes et l'année en cours, et intègrent des perspectives sur les trois années suivantes. Une base qui ne présente qu'un exercice ne montre ni l'évolution passée ni la trajectoire : le comité n'est pas mis en état d'exercer utilement ses compétences, ce que L. 2312-21 exige de l'organisation et du contenu de la base.",
     delai: "Un à deux mois : les années passées se retrouvent dans les données déjà produites, elles ne se recalculent pas.",
-    document: "Tableau des six années — deux exercices passés, l'année en cours, trois exercices à venir",
+    document: "Tableau des six années - deux exercices passés, l'année en cours, trois exercices à venir",
     etapes: [
       "Vérifier d'abord qu'aucun accord de L. 2312-21 ne définit lui-même les années couvertes : l'article R. 2312-10 ne vaut qu'en l'absence d'accord, et un accord peut retenir une autre profondeur.",
       "À défaut d'accord, ouvrir pour chaque rubrique six colonnes : les deux années précédentes, l'année en cours, les trois années suivantes.",
-      "Reprendre les deux années passées dans les documents déjà produits — comptes, déclarations sociales, bilans antérieurs — plutôt que de les reconstituer.",
+      "Reprendre les deux années passées dans les documents déjà produits - comptes, déclarations sociales, bilans antérieurs - plutôt que de les reconstituer.",
       "Renseigner les trois années suivantes en données chiffrées ou, à défaut, sous forme de grandes tendances : le décret admet expressément les deux, et exiger le chiffre partout retarderait la base sans l'améliorer.",
       "Dater la mise à jour et en informer les bénéficiaires.",
     ],
@@ -2096,16 +2096,16 @@ const R = {
     quoiFaire: "Renseigner les trois années suivantes en données chiffrées ou en grandes tendances, et indiquer, pour ces années, les informations qui ne peuvent recevoir ni l'une ni l'autre, avec les raisons qui l'expliquent.",
     risque: "L'article R. 2312-10 admet les grandes tendances, mais il ajoute une obligation qu'on oublie : l'employeur indique, pour ces années, les informations qui ne peuvent pas faire l'objet de données chiffrées ou de grandes tendances, et les raisons qu'il en donne. Une case laissée vide sans cette explication ne se distingue pas d'une information manquante, et le comité peut soutenir qu'il n'a pas été mis en état d'exercer utilement ses compétences.",
     delai: "Deux semaines : c'est une mention à écrire, rubrique par rubrique, non une donnée à produire.",
-    document: "Note sur les perspectives — forme retenue et informations non renseignables, avec leurs raisons",
+    document: "Note sur les perspectives - forme retenue et informations non renseignables, avec leurs raisons",
     etapes: [
       "Vérifier d'abord qu'aucun accord de L. 2312-21 ne règle la question : l'article R. 2312-10 ne vaut qu'en l'absence d'accord.",
       "Pour chaque rubrique, arrêter la forme des trois années suivantes : données chiffrées lorsque le chiffre a un sens, grandes tendances lorsqu'il n'en a pas.",
-      "Relever les informations qui ne peuvent recevoir ni chiffres ni tendances, et écrire pour chacune la raison — la nature de l'information, ou les circonstances.",
+      "Relever les informations qui ne peuvent recevoir ni chiffres ni tendances, et écrire pour chacune la raison - la nature de l'information, ou les circonstances.",
       "Faire figurer cette liste motivée dans la base elle-même, et non dans un document séparé : c'est là que le comité la lit, et c'est là que le décret la place.",
       "Dater la mise à jour et en informer les bénéficiaires.",
     ],
     verifs: [
-      { cle: "cnt04Forme", question: "Sous quelle forme les trois années suivantes sont-elles présentées — chiffres, grandes tendances, ou les deux selon les rubriques ?", attendu: "La forme, rubrique par rubrique. Les grandes tendances suffisent : le décret les admet." },
+      { cle: "cnt04Forme", question: "Sous quelle forme les trois années suivantes sont-elles présentées - chiffres, grandes tendances, ou les deux selon les rubriques ?", attendu: "La forme, rubrique par rubrique. Les grandes tendances suffisent : le décret les admet." },
       { cle: "cnt04Liste", question: "Où, dans la base, figure la liste des informations qui ne peuvent recevoir ni chiffres ni tendances ?", attendu: "L'emplacement dans la base ; une note conservée à part ne vaut pas mention dans la base." },
       { cle: "cnt04Motifs", question: "Chaque information de cette liste porte-t-elle la raison qui l'explique ?", attendu: "La raison, information par information : le décret exige les raisons, non le seul constat." },
     ],
@@ -2113,8 +2113,8 @@ const R = {
 
   "BDESE-CTL-MAD-01": {
     gravite: 3,
-    quoiFaire: "Ouvrir l'accès à la base, en permanence, aux membres de la délégation du personnel du comité — et du comité central s'il en existe un — ainsi qu'aux délégués syndicaux.",
-    risque: "L'article L. 2312-18 met la base à la disposition du comité, et le dernier alinéa de L. 2312-36 la rend accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux. Un accord peut organiser les droits d'accès — L. 2312-21, 2° le lui permet — il ne peut pas les supprimer. Une base qu'une catégorie de bénéficiaires n'atteint pas n'est pas mise à sa disposition, et la consultation qui s'en réclame est contestable.",
+    quoiFaire: "Ouvrir l'accès à la base, en permanence, aux membres de la délégation du personnel du comité - et du comité central s'il en existe un - ainsi qu'aux délégués syndicaux.",
+    risque: "L'article L. 2312-18 met la base à la disposition du comité, et le dernier alinéa de L. 2312-36 la rend accessible en permanence aux membres de la délégation du personnel du comité, à ceux du comité central et aux délégués syndicaux. Un accord peut organiser les droits d'accès - L. 2312-21, 2° le lui permet - il ne peut pas les supprimer. Une base qu'une catégorie de bénéficiaires n'atteint pas n'est pas mise à sa disposition, et la consultation qui s'en réclame est contestable.",
     delai: "Quelques jours : ce sont des droits à ouvrir, pas un contenu à produire.",
     document: "Liste nominative des accès à la base et modalités de consultation et d'utilisation",
     etapes: [
@@ -2126,7 +2126,7 @@ const R = {
     ],
     verifs: [
       { cle: "mad01Liste", question: "Qui a aujourd'hui accès à la base, nominativement ?", attendu: "La liste : élus du comité, élus du comité central s'il existe, délégués syndicaux." },
-      { cle: "mad01Support", question: "Sur quel support la base est-elle tenue — informatique ou papier ?", attendu: "Le support. À partir de trois cents salariés et à défaut d'accord, R. 2312-12 impose l'informatique." },
+      { cle: "mad01Support", question: "Sur quel support la base est-elle tenue - informatique ou papier ?", attendu: "Le support. À partir de trois cents salariés et à défaut d'accord, R. 2312-12 impose l'informatique." },
       { cle: "mad01Ouverture", question: "À quelle date l'accès de chaque bénéficiaire a-t-il été ouvert, et est-il resté ouvert entre deux réunions ?", attendu: "Les dates d'ouverture et la trace des accès hors période de consultation : l'accès est permanent, non ponctuel." },
     ],
   },
@@ -2136,7 +2136,7 @@ const R = {
     quoiFaire: "Actualiser la base et organiser son actualisation : une date de mise à jour par rubrique, une périodicité, et la personne qui en répond.",
     risque: "Les informations de la base portent sur l'année en cours : une base qui n'a pas bougé depuis plus d'un an ne les porte plus, quoi qu'affirme son sommaire. L'article L. 2312-18 parle d'une mise à disposition actualisée, et c'est elle qui vaut communication des rapports et informations au comité ; l'article R. 2312-11 fait mettre à jour régulièrement les éléments d'information, au moins dans le respect des périodicités prévues par le code. Une base périmée fait tomber ce bénéfice : l'employeur croit avoir communiqué, et il n'a rien communiqué.",
     delai: "Un mois pour la remise à niveau ; la périodicité, elle, se fixe une fois pour toutes.",
-    document: "Calendrier d'actualisation — rubrique, responsable, périodicité, date de dernière mise à jour",
+    document: "Calendrier d'actualisation - rubrique, responsable, périodicité, date de dernière mise à jour",
     etapes: [
       "Relever, rubrique par rubrique, la date de la dernière mise à jour : une date globale ne dit rien de la rubrique qui n'a pas bougé depuis trois ans.",
       "Vérifier d'abord ce que prévoit l'accord de L. 2312-21 : son 2° porte les modalités de fonctionnement de la base, et l'actualisation en fait partie. À défaut d'accord, R. 2312-11 impose une mise à jour régulière, au moins selon les périodicités prévues par le code.",
@@ -2161,10 +2161,10 @@ const R = {
       "Arrêter le moyen d'information et l'écrire dans les modalités de fonctionnement de la base : en l'absence d'accord, R. 2312-12 laisse l'employeur déterminer ces modalités, mais il les lui fait fixer.",
       "À chaque actualisation, informer les personnes qui ont accès à la base en désignant ce qui a été mis à jour et à quelle date.",
       "Conserver la preuve d'envoi : c'est elle qui datera le point de départ du délai de consultation.",
-      "Pour les consultations récurrentes, rappeler dans cette information que la mise à disposition actualisée vaut communication des rapports et informations au comité (L. 2312-18) — c'est ce qui donne à l'envoi sa portée.",
+      "Pour les consultations récurrentes, rappeler dans cette information que la mise à disposition actualisée vaut communication des rapports et informations au comité (L. 2312-18) - c'est ce qui donne à l'envoi sa portée.",
     ],
     verifs: [
-      { cle: "mad03Moyen", question: "Par quel moyen les bénéficiaires sont-ils informés d'une mise à jour, et où ce moyen est-il écrit ?", attendu: "Le moyen retenu et le document qui le fixe — l'accord, ou les modalités arrêtées par l'employeur." },
+      { cle: "mad03Moyen", question: "Par quel moyen les bénéficiaires sont-ils informés d'une mise à jour, et où ce moyen est-il écrit ?", attendu: "Le moyen retenu et le document qui le fixe - l'accord, ou les modalités arrêtées par l'employeur." },
       { cle: "mad03Dernier", question: "À quelle date la dernière information de mise à jour a-t-elle été envoyée, et à qui ?", attendu: "La date et la liste des destinataires." },
       { cle: "mad03Preuve", question: "Quelle preuve d'envoi conservez-vous de ces informations ?", attendu: "Les accusés, courriels ou décharges datés : c'est la pièce qui fait courir le délai." },
     ],
@@ -2175,7 +2175,7 @@ const R = {
     quoiFaire: "Ramener la périodicité des consultations récurrentes dans la limite de trois ans, et ne pas confondre l'accord qui la fixe avec celui qui définit la base.",
     risque: "Le dernier alinéa de L. 2312-19 plafonne à trois ans la périodicité que l'accord peut prévoir : au-delà, la stipulation est sans effet, et les consultations restent dues à l'échéance que le code fixe. L'employeur qui s'en croit dispensé laisse passer une consultation récurrente en pensant l'avoir aménagée.",
     delai: "Le temps d'un avenant : trois à six mois si l'accord doit être rouvert.",
-    document: "Avenant à l'accord sur les consultations récurrentes — périodicité ramenée dans la limite de trois ans",
+    document: "Avenant à l'accord sur les consultations récurrentes - périodicité ramenée dans la limite de trois ans",
     etapes: [
       "Distinguer les deux accords, car ils se confondent souvent : celui de L. 2312-19 définit le contenu, la périodicité et les modalités des consultations récurrentes ; celui de L. 2312-21 définit la base. Un accord sur la base ne déplace pas la périodicité des consultations.",
       "Relire l'accord de L. 2312-19 et relever la périodicité qu'il fixe, consultation par consultation.",
@@ -2212,9 +2212,9 @@ const R = {
   "BDESE-CTL-CSL-03": {
     gravite: 3,
     quoiFaire: "Établir le point de départ et le terme du délai de consultation, et faire rendre l'avis avant ce terme.",
-    risque: "À défaut d'accord, le I de l'article R. 2312-6 répute le comité consulté ET AYANT RENDU UN AVIS NÉGATIF à l'expiration d'un mois — porté à deux mois en cas d'intervention d'un expert, à trois lorsque des expertises interviennent à la fois au niveau du comité central et d'un ou plusieurs comités d'établissement. Le terme n'est pas un silence neutre : il produit un avis défavorable, opposable, que l'employeur n'a pas voulu et qu'il ne peut plus effacer.",
+    risque: "À défaut d'accord, le I de l'article R. 2312-6 répute le comité consulté ET AYANT RENDU UN AVIS NÉGATIF à l'expiration d'un mois - porté à deux mois en cas d'intervention d'un expert, à trois lorsque des expertises interviennent à la fois au niveau du comité central et d'un ou plusieurs comités d'établissement. Le terme n'est pas un silence neutre : il produit un avis défavorable, opposable, que l'employeur n'a pas voulu et qu'il ne peut plus effacer.",
     delai: "Le délai lui-même : un mois, deux ou trois selon l'expertise.",
-    document: "Fiche de délai de consultation — mise à disposition, terme applicable, date de l'avis",
+    document: "Fiche de délai de consultation - mise à disposition, terme applicable, date de l'avis",
     etapes: [
       "Dater la communication des informations, ou l'information de leur mise à disposition dans la base : c'est de là que court le délai (R. 2312-5), et non de la première réunion.",
       "Retenir le terme applicable : un mois à défaut d'accord, deux en cas d'intervention d'un expert, trois lorsque des expertises interviennent à la fois au niveau du comité central et d'un ou plusieurs comités d'établissement.",
@@ -2242,7 +2242,7 @@ const R = {
     ],
     verifs: [
       { cle: "etb01Etablissements", question: "Combien d'établissements distincts l'entreprise comporte-t-elle, et quels comités y sont installés ?", attendu: "La liste des établissements et des comités, avec le comité central." },
-      { cle: "etb01Niveau", question: "À quel niveau la base est-elle mise en place, et où cela est-il écrit ?", attendu: "Le niveau et la pièce qui le fixe — l'accord, ou la note de l'employeur à défaut d'accord." },
+      { cle: "etb01Niveau", question: "À quel niveau la base est-elle mise en place, et où cela est-il écrit ?", attendu: "Le niveau et la pièce qui le fixe - l'accord, ou la note de l'employeur à défaut d'accord." },
       { cle: "etb01Acces", question: "Quels droits d'accès chaque comité d'établissement a-t-il sur la base ?", attendu: "Les droits, comité par comité, et la notification qui les a portés à leur connaissance." },
     ],
   },
@@ -2252,7 +2252,7 @@ const R = {
     quoiFaire: "Mettre d'accord le régime déclaré et les pièces versées : produire l'accord qui définit la base, ou retirer du dossier celui qui n'en traite pas.",
     risque: "Un régime conventionnel se prouve par son texte. Déclarer un accord sans le produire, ou se dire sous le régime supplétif tout en versant un accord, laisse le dossier contradictoire : l'un des deux est faux. Devant le comité comme devant le juge, l'employeur ne peut pas opposer un accord qu'il ne produit pas, et la grille qu'il aura montée sera jugée au regard du texte que les pièces établissent, non de celui qu'il affirme.",
     delai: "Quelques jours : il s'agit de retrouver une pièce, ou de rectifier une déclaration.",
-    document: "Bordereau des pièces — accords versés, leur objet, et régime retenu",
+    document: "Bordereau des pièces - accords versés, leur objet, et régime retenu",
     etapes: [
       "Reprendre le régime déclaré et la liste des pièces versées, et dire lequel des deux est erroné.",
       "Si un accord définit la base, le verser en entier : c'est son texte qui fixe l'organisation, l'architecture, le contenu et les modalités de fonctionnement, et un résumé n'en tient pas lieu.",
@@ -2263,16 +2263,16 @@ const R = {
     verifs: [
       { cle: "coh01Piece", question: "Quelles pièces établissent le régime que vous déclarez, et où sont-elles ?", attendu: "L'accord complet et daté, ou le constat écrit qu'il n'en existe aucun." },
       { cle: "coh01Objet", question: "L'accord versé définit-il l'organisation, l'architecture et le contenu de la base, ou la périodicité des consultations ?", attendu: "L'article ou la stipulation qui le montre : L. 2312-21 pour la base, L. 2312-19 pour les consultations." },
-      { cle: "coh01Signature", question: "Dans quelles conditions cet accord a-t-il été conclu ?", attendu: "Les signatures des organisations syndicales dans les conditions du premier alinéa de L. 2232-12, ou, en l'absence de délégué syndical, le procès-verbal d'adoption par le comité à la majorité des membres titulaires de la délégation du personnel — L. 2312-21 n'ouvre que ces deux voies." },
+      { cle: "coh01Signature", question: "Dans quelles conditions cet accord a-t-il été conclu ?", attendu: "Les signatures des organisations syndicales dans les conditions du premier alinéa de L. 2232-12, ou, en l'absence de délégué syndical, le procès-verbal d'adoption par le comité à la majorité des membres titulaires de la délégation du personnel - L. 2312-21 n'ouvre que ces deux voies." },
     ],
   },
 
   "BDESE-CTL-PRV-01": {
     gravite: 4,
     quoiFaire: "Réunir et tenir à jour le dossier qui prouve la mise à disposition effective : le support, ses traces d'accès, et les informations données aux bénéficiaires.",
-    risque: "L'article L. 2312-18 met la base à disposition, et c'est un acte de l'employeur : c'est à lui de l'établir. Le module prépare, structure, date et audite le contenu — il n'est pas la base, et il n'atteste pas la mise à disposition. Sans dossier de preuve, l'employeur qui affirme avoir mis la base à disposition ne peut pas le démontrer, et il ne peut pas se prévaloir de la règle du même article selon laquelle la mise à disposition actualisée vaut communication des rapports et informations au comité.",
+    risque: "L'article L. 2312-18 met la base à disposition, et c'est un acte de l'employeur : c'est à lui de l'établir. Le module prépare, structure, date et audite le contenu - il n'est pas la base, et il n'atteste pas la mise à disposition. Sans dossier de preuve, l'employeur qui affirme avoir mis la base à disposition ne peut pas le démontrer, et il ne peut pas se prévaloir de la règle du même article selon laquelle la mise à disposition actualisée vaut communication des rapports et informations au comité.",
     delai: "Une semaine pour constituer le dossier, puis en continu : la preuve se réunit au fil des mises à jour, jamais après coup.",
-    document: "Dossier de preuve de la mise à disposition — support, accès, notifications",
+    document: "Dossier de preuve de la mise à disposition - support, accès, notifications",
     etapes: [
       "Décrire le support de la base : en l'absence d'accord, R. 2312-12 impose l'informatique à partir de trois cents salariés et admet l'informatique ou le papier en dessous.",
       "Réunir les traces d'accès que ce support produit : journal de connexions, décharges de remise, registre de consultation selon le cas.",
@@ -2323,17 +2323,17 @@ if (require.main === module) {
   const aRegulariser = Object.values(R).filter(x => x !== null).length;
   const verifs = Object.values(R).filter(x => x).reduce((n, x) => n + x.verifs.length, 0);
   console.log(`${C.length} contrôle(s) · ${aRegulariser} régularisation(s) · ${verifs} vérification(s)`);
-  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART — " + e)); process.exit(1); }
+  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART - " + e)); process.exit(1); }
   console.log("chaque contrôle a son issue, et chaque issue son contrôle");
 }
 
 });
 
 __def("./modeles-bdese.js", function(module, exports, require){
-/* Les modèles de régularisation — étape 5 du parcours client.
+/* Les modèles de régularisation - étape 5 du parcours client.
 
    Chaque contrôle qui n'est pas conforme a droit à mieux qu'un rappel de
-   texte : une note concrète, écrite avec les chiffres du dossier — l'effectif
+   texte : une note concrète, écrite avec les chiffres du dossier - l'effectif
    déclaré, le régime retenu, les thèmes réellement absents de la base, les
    dates calculées à partir de celles que le client a saisies. Rien n'est une
    coquille générique : quand une donnée manque pour calculer, la note le dit
@@ -2341,8 +2341,8 @@ __def("./modeles-bdese.js", function(module, exports, require){
    présentée comme la sienne.
 
    Chaque fonction reçoit le même dossier `f` que les contrôles et le moteur
-   de régime — celui que `profil-entreprise` et le questionnaire de l'étape 2
-   composent ensemble — et rend un classeur de pièces (moteur/commun/outils.js) :
+   de régime - celui que `profil-entreprise` et le questionnaire de l'étape 2
+   composent ensemble - et rend un classeur de pièces (moteur/commun/outils.js) :
    la même fabrique que le rapport d'audit et l'export Word, pour que ce
    modèle s'imprime et s'exporte exactement comme le reste du module.
 
@@ -2371,18 +2371,18 @@ const declares = f => Array.isArray((f.base || {}).themes)
 
 function modeleRegime(f, rectificatif) {
   const A = O(); const { t1, h1, h2, p, puce, note, tab } = A;
-  t1((rectificatif ? "Note de régime rectificative" : "Note de régime") + " — " + nomE(f));
+  t1((rectificatif ? "Note de régime rectificative" : "Note de régime") + " - " + nomE(f));
   const reg = R.regime(f);
   h1("Ce que dit le dossier, aujourd'hui");
   p(reg.motif);
   h2("L'effectif retenu");
-  puce(`Effectif déclaré : ${effTxte(f)} salarié(s)${eff(f) === null ? " — donnée absente, exemple posé pour illustrer le calcul" : ""}.`);
+  puce(`Effectif déclaré : ${effTxte(f)} salarié(s)${eff(f) === null ? " - donnée absente, exemple posé pour illustrer le calcul" : ""}.`);
   puce(`Seuil de trois cents salariés : ${eff(f) === null ? "indéterminé, faute d'effectif"
-    : eff(f) >= 300 ? "franchi — c'est R. 2312-9 qui s'applique à défaut d'accord" : "non atteint — c'est R. 2312-8 qui s'applique à défaut d'accord"}.`);
+    : eff(f) >= 300 ? "franchi - c'est R. 2312-9 qui s'applique à défaut d'accord" : "non atteint - c'est R. 2312-8 qui s'applique à défaut d'accord"}.`);
   h2("Les pièces à joindre pour clore ce point");
-  if (dit(f.accordEntreprise)) puce("L'accord d'entreprise lui-même, signé et daté — c'est son texte, non son résumé, qui fixe la grille.");
+  if (dit(f.accordEntreprise)) puce("L'accord d'entreprise lui-même, signé et daté - c'est son texte, non son résumé, qui fixe la grille.");
   else if (dit(f.accordBranche)) puce("L'accord de branche lui-même, signé et daté, et la preuve que l'entreprise entre dans son champ.");
-  else puce("Aucune pièce d'accord à joindre : à défaut d'accord, c'est le décret qui s'applique — " + (eff(f) === null ? "R. 2312-8 ou R. 2312-9 selon l'effectif à confirmer." : (eff(f) >= 300 ? "R. 2312-9." : "R. 2312-8.")));
+  else puce("Aucune pièce d'accord à joindre : à défaut d'accord, c'est le décret qui s'applique - " + (eff(f) === null ? "R. 2312-8 ou R. 2312-9 selon l'effectif à confirmer." : (eff(f) >= 300 ? "R. 2312-9." : "R. 2312-8.")));
   note("Cette note reprend le dossier tel qu'il est saisi à ce jour : elle se recalcule à chaque modification du questionnaire de l'étape 2.");
   return A.D;
 }
@@ -2391,7 +2391,7 @@ function modeleRegime(f, rectificatif) {
 
 function modeleDates(f) {
   const A = O(); const { t1, h1, h2, p, puce, note } = A;
-  t1("Note d'exigibilité — " + nomE(f));
+  t1("Note d'exigibilité - " + nomE(f));
   const exi = R.exigibilite(f);
   h1("Le point de départ des attributions récurrentes (L. 2312-2)");
   if (exi.attributions) {
@@ -2399,7 +2399,7 @@ function modeleDates(f) {
   } else {
     const d50 = q(f.dateSeuil50Atteint) || ex(jour0(f));
     const terme = R.ajouterMois(d50, 12);
-    p(`Donnée manquante à ce jour : la date à laquelle l'effectif a atteint cinquante salariés pendant douze mois consécutifs. À titre d'illustration, avec un franchissement au ${d50}, le terme de douze mois se situerait au ${terme || "—"}.`);
+    p(`Donnée manquante à ce jour : la date à laquelle l'effectif a atteint cinquante salariés pendant douze mois consécutifs. À titre d'illustration, avec un franchissement au ${d50}, le terme de douze mois se situerait au ${terme || "-"}.`);
   }
   exi.avertissements.forEach(a => note(a));
   h2("Le passage au contenu des entreprises de trois cents salariés et plus (L. 2312-34)");
@@ -2419,7 +2419,7 @@ function modeleDates(f) {
 
 function modeleCnt01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille du plancher légal — " + nomE(f));
+  t1("Grille du plancher légal - " + nomE(f));
   const d = declares(f);
   const abs = PL.absents(d);
   h1("Ce que la base comporte déjà, et ce qui lui manque");
@@ -2428,7 +2428,7 @@ function modeleCnt01(f) {
     tab(["Thème du plancher, absent de la base", "Ce que le décret nomme"],
       abs.map(t => {
         const c = PL.CORRESPONDANCE.find(x => PL.net(x.plancher) === PL.net(t));
-        return [t, c ? c.decret.join(" ; ") : "—"];
+        return [t, c ? c.decret.join(" ; ") : "-"];
       }));
   else p("Les dix thèmes du plancher sont tous retrouvés dans la base, sur le seul rapprochement des intitulés déclarés.");
   note("Un thème « retrouvé » l'est sur le rapprochement des intitulés : cela ne dit rien du contenu effectivement renseigné derrière lui, que ce module ne lit pas.");
@@ -2439,18 +2439,18 @@ function modeleCnt01(f) {
 
 function modeleCnt02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille du contenu supplétif — " + nomE(f));
+  t1("Grille du contenu supplétif - " + nomE(f));
   const reg = R.regime(f);
   if (reg.regime !== R.REGIMES.SUPPLETIF) {
     A.D.push({ k: "p", t: reg.regime === R.REGIMES.INDETERMINE
-      ? "Le régime n'est pas encore établi : ce modèle de grille ne peut être servi tant que le décret n'est pas confirmé comme texte applicable — voir la note de régime."
+      ? "Le régime n'est pas encore établi : ce modèle de grille ne peut être servi tant que le décret n'est pas confirmé comme texte applicable - voir la note de régime."
       : `Un accord définit la base (${reg.regime}) : c'est sa grille qui prévaut, non celle du décret. Ce modèle ne s'applique pas ici.` });
     return A.D;
   }
   const cle = reg.article === "R. 2312-9" ? "au moins300" : "moins300";
   const B = CONTENU.construire(); const arbre = B.contenu[cle];
   const d = declares(f);
-  h1(`La grille due — article ${reg.article}, entreprise de ${effTxte(f)} salarié(s)`);
+  h1(`La grille due - article ${reg.article}, entreprise de ${effTxte(f)} salarié(s)`);
   p(`${arbre.rubriques.length} rubrique(s), découpées depuis le texte de l'article (couverture du découpage : ${arbre.couverture.part} %).`);
   tab(["Rubrique du décret", "Sections", "Retrouvée dans la base ?"],
     arbre.rubriques.map(r => {
@@ -2467,7 +2467,7 @@ function modeleCnt02(f) {
 
 function modeleAnnees(f) {
   const A = O(); const { t1, h1, h2, p, tab, puce, note } = A;
-  t1("Tableau des six années dues — " + nomE(f));
+  t1("Tableau des six années dues - " + nomE(f));
   const annee = nb(String(jour0(f)).slice(0, 4));
   const an = R.annees(f, annee);
   h1("Les millésimes attendus, calculés depuis la date d'audit");
@@ -2490,7 +2490,7 @@ function modeleAnnees(f) {
 
 function modeleMad01(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
-  t1("Liste des accès à la base — " + nomE(f));
+  t1("Liste des accès à la base - " + nomE(f));
   const benef = q(((f.base || {}).beneficiaires));
   h1("Ce qui est dû, au vu de l'effectif déclaré");
   puce("Membres de la délégation du personnel du comité social et économique.");
@@ -2511,7 +2511,7 @@ function modeleMad01(f) {
 
 function modeleMad02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calendrier d'actualisation — " + nomE(f));
+  t1("Calendrier d'actualisation - " + nomE(f));
   const date = q(((f.base || {}).dateDerniereMiseAJour));
   h1("L'ancienneté de la dernière mise à jour déclarée");
   if (date) {
@@ -2522,7 +2522,7 @@ function modeleMad02(f) {
   } else {
     p("Aucune date de dernière mise à jour n'est déclarée : sans elle, impossible d'établir que la base porte l'année en cours.");
   }
-  note("Fixez, rubrique par rubrique, une périodicité d'actualisation et le service qui en répond — une date globale ne dit rien de la rubrique qui n'a pas bougé.");
+  note("Fixez, rubrique par rubrique, une périodicité d'actualisation et le service qui en répond - une date globale ne dit rien de la rubrique qui n'a pas bougé.");
   return A.D;
 }
 
@@ -2530,14 +2530,14 @@ function modeleMad02(f) {
 
 function modeleMad03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Modèle d'information des bénéficiaires — " + nomE(f));
+  t1("Modèle d'information des bénéficiaires - " + nomE(f));
   const info = f.base && f.base.informationMiseAJour;
   const preuve = q(((f.base || {}).preuveAcces));
-  h1("Objet — actualisation de la base de données économiques, sociales et environnementales");
+  h1("Objet - actualisation de la base de données économiques, sociales et environnementales");
   p(`${nomE(f)} informe les personnes ayant accès à la base que celle-ci a été actualisée le ${q(((f.base || {}).dateDerniereMiseAJour)) || "[date de la mise à jour]"}. Les rubriques mises à jour sont les suivantes : [à préciser].`);
   p("Cette information vaut communication des rapports et informations au comité, au sens de l'article L. 2312-18, et fait courir le délai de consultation de l'article R. 2312-5 lorsqu'elle porte sur une consultation récurrente.");
   h1("Ce que le dossier déclare");
-  p(`Information systématique des bénéficiaires à chaque actualisation : ${info === "oui" ? "déclarée oui." : info === "non" ? "déclarée non — c'est un manquement direct à établir en priorité." : "non renseignée."}`);
+  p(`Information systématique des bénéficiaires à chaque actualisation : ${info === "oui" ? "déclarée oui." : info === "non" ? "déclarée non - c'est un manquement direct à établir en priorité." : "non renseignée."}`);
   p(`Trace conservée de la mise à disposition : ${preuve || "non renseignée"}.`);
   note("Conservez la preuve d'envoi datée : c'est elle qui fixe le point de départ du délai de consultation, pas la date de la réunion.");
   return A.D;
@@ -2547,7 +2547,7 @@ function modeleMad03(f) {
 
 function modeleCsl01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Avenant sur la périodicité des consultations récurrentes — " + nomE(f));
+  t1("Avenant sur la périodicité des consultations récurrentes - " + nomE(f));
   const per = nb(f.periodiciteConsultations);
   h1("Ce que l'accord de l'article L. 2312-19 fixe");
   if (dit(f.accordPeriodiciteConsultations) && per !== null) {
@@ -2565,7 +2565,7 @@ function modeleCsl01(f) {
 
 function modeleCsl02(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Calendrier annuel des réunions du comité — " + nomE(f));
+  t1("Calendrier annuel des réunions du comité - " + nomE(f));
   const n = nb(f.reunionsAnnuellesAccord);
   h1("Le nombre de réunions annuelles, au regard du plancher légal");
   if (n !== null) {
@@ -2583,7 +2583,7 @@ function modeleCsl02(f) {
 
 function modeleCsl03(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Fiche de délai de consultation — " + nomE(f));
+  t1("Fiche de délai de consultation - " + nomE(f));
   const del = R.delaiConsultation(f);
   h1("Le délai applicable, calculé sur le dossier");
   p(del.motif);
@@ -2595,7 +2595,7 @@ function modeleCsl03(f) {
 
 function modeleEtb01(f) {
   const A = O(); const { t1, h1, p, note } = A;
-  t1("Note sur le niveau de mise en place de la base — " + nomE(f));
+  t1("Note sur le niveau de mise en place de la base - " + nomE(f));
   if (String(f.etablissementsDistincts) !== "oui") {
     A.D.push({ k: "p", t: "Sans objet en l'état du dossier : l'entreprise n'est pas déclarée comme comportant des établissements distincts." });
     return A.D;
@@ -2611,7 +2611,7 @@ function modeleEtb01(f) {
 
 function modeleCoh01(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
-  t1("Bordereau des pièces — " + nomE(f));
+  t1("Bordereau des pièces - " + nomE(f));
   const reg = R.regime(f);
   const pieces = Array.isArray(f.pieces) ? f.pieces : [];
   h1("Le régime déclaré, au regard des pièces versées");
@@ -2619,7 +2619,7 @@ function modeleCoh01(f) {
   if (pieces.length) puce(`${pieces.length} pièce(s) versée(s) au dossier.`);
   else puce("Aucune pièce n'est versée au dossier à ce jour.");
   if (reg.regime === R.REGIMES.ACCORD_ENTREPRISE || reg.regime === R.REGIMES.ACCORD_BRANCHE) {
-    if (!pieces.length) note("Un régime conventionnel est déclaré, mais aucune pièce n'est versée : produisez l'accord lui-même — un régime conventionnel se prouve par son texte, jamais par sa seule déclaration.");
+    if (!pieces.length) note("Un régime conventionnel est déclaré, mais aucune pièce n'est versée : produisez l'accord lui-même - un régime conventionnel se prouve par son texte, jamais par sa seule déclaration.");
   } else if (pieces.length) {
     note("Le régime déclaré est le supplétif du décret, alors que des pièces sont versées au dossier : vérifiez qu'aucune d'elles n'est en réalité l'accord qui définirait la base, auquel cas c'est lui qui devrait commander le régime.");
   }
@@ -2630,12 +2630,12 @@ function modeleCoh01(f) {
 
 function modelePrv01(f) {
   const A = O(); const { t1, h1, p, puce, note } = A;
-  t1("Dossier de preuve de la mise à disposition — " + nomE(f));
+  t1("Dossier de preuve de la mise à disposition - " + nomE(f));
   h1("Ce que le dossier réunit à ce jour");
   puce(`Support : ${q(((f.base || {}).support)) || "non renseigné"}.`);
   puce(`Traces d'accès : ${q(((f.base || {}).preuveAcces)) || "non renseignées"}.`);
   puce(`Bénéficiaires déclarés : ${q(((f.base || {}).beneficiaires)) || "non renseignés"}.`);
-  note("Ce module prépare, structure, documente et audite la base ; il n'atteste pas, lui-même, la mise à disposition. Ce dossier de preuve — support, traces d'accès, notifications datées — reste un acte propre de l'employeur, distinct du rapport d'audit.");
+  note("Ce module prépare, structure, documente et audite la base ; il n'atteste pas, lui-même, la mise à disposition. Ce dossier de preuve - support, traces d'accès, notifications datées - reste un acte propre de l'employeur, distinct du rapport d'audit.");
   return A.D;
 }
 
@@ -2670,15 +2670,15 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    dans quel ordre. L'ordre n'est pas un détail de présentation : il a été
    arrêté explicitement, et il commande la logique.
 
-   PREMIER TEMPS — ce qu'elle n'a pas fait.
+   PREMIER TEMPS - ce qu'elle n'a pas fait.
    On liste les manquements, du plus grave au moins grave ; pour chacun on
    donne l'acte à accomplir, le modèle et la procédure ; puis on vérifie la
    correction. Le temps se termine quand tout ce qui manquait est validé.
 
-   SECOND TEMPS — ce qu'elle dit avoir fait.
+   SECOND TEMPS - ce qu'elle dit avoir fait.
    Et seulement alors. Les contrôles que l'audit a rendus « conformes » ne le
    sont que sur la parole du client : ils sont ici marqués « déclaré », repris
-   un par un avec la grille du texte, et validés — ou refusés, auquel cas ils
+   un par un avec la grille du texte, et validés - ou refusés, auquel cas ils
    retournent au premier temps comme manquements.
 
    La règle qui tient tout : UN « OUI » N'EST PAS UNE PREUVE. Rien ne passe de
@@ -2686,8 +2686,8 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    pourquoi ce module renomme l'état « conforme » plutôt que de le recopier :
    le mot « conforme » ne doit pas apparaître avant sa vérification. */
 
-const DECLARE = "déclaré — à vérifier";
-const REGLE = "en règle — vérifié";
+const DECLARE = "déclaré - à vérifier";
+const REGLE = "en règle - vérifié";
 
 /* Les quatre degrés de gravité, dans l'ordre où le guide les présente. Ils
    sont communs à tous les modules : un délit d'entrave se traite avant une
@@ -2695,7 +2695,7 @@ const REGLE = "en règle — vérifié";
 const DEGRES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -2708,8 +2708,8 @@ function etatParcours(etat) {
 
 /* Le premier temps : ce qui manque.
 
-   Sont retenus les contrôles « non conforme » — le texte n'est pas respecté —
-   et « risque à vérifier » — l'application ne tranche pas, mais quelque chose
+   Sont retenus les contrôles « non conforme » - le texte n'est pas respecté -
+   et « risque à vérifier » - l'application ne tranche pas, mais quelque chose
    est à faire. Les « donnée manquante » ne sont pas des manquements : ce sont
    des questions sans réponse, et elles retournent au questionnaire. */
 function premierTemps(C, R, verdicts, faits) {
@@ -2747,7 +2747,7 @@ function premierTemps(C, R, verdicts, faits) {
    Un contrôle « conforme » l'est parce que le client a déclaré la pièce, la
    date ou l'acte. Le second temps le reprend et demande de le montrer. Un
    contrôle sans grille de vérification ne peut pas être vérifié : il reste
-   « déclaré », et le dit — plutôt que de passer pour vérifié. */
+   « déclaré », et le dit - plutôt que de passer pour vérifié. */
 function secondTemps(C, R, verdicts, controles) {
   const points = [];
   for (const c of C) {
@@ -2796,7 +2796,7 @@ function verdictVerification(point) {
   if (refusees.length)
     return { issue: "refusé", refusees, motif:
       "Ce que vous déclariez en place ne l'est pas : " +
-      refusees.map(v => "« " + v.question + " » — attendu : " + v.attendu).join(" ; ") +
+      refusees.map(v => "« " + v.question + " » - attendu : " + v.attendu).join(" ; ") +
       ". Ce point retourne au premier temps." };
   if (manquantes.length)
     return { issue: "ne conclut pas", manquantes, motif:
@@ -2831,7 +2831,7 @@ function parcours(C, R, verdicts, etat) {
       refusesDuSecond: refuses,
       restants: restantsA.length + refuses.length,
       /* Achevé veut dire : plus rien à corriger. Un refus du second temps
-         rejoint la liste du premier — le compteur le dit déjà — et il doit
+         rejoint la liste du premier - le compteur le dit déjà - et il doit
          donc empêcher l'achèvement, sans quoi le compte rendu annonçait
          « tous les manquements sont déclarés corrigés » juste au-dessous de
          la liste de ceux qui reviennent refusés. */
@@ -2845,7 +2845,7 @@ function parcours(C, R, verdicts, etat) {
       /* Le second temps ne s'ouvre qu'une fois relevés tous les manquements
          du premier : c'est l'ordre qui a été arrêté, et la page le fait
          respecter. Il reste ouvert, en revanche, quand un point en revient
-         refusé — sinon le client serait renvoyé corriger sans pouvoir faire
+         refusé - sinon le client serait renvoyé corriger sans pouvoir faire
          revérifier ce qu'il a corrigé. */
       ouvert: restantsA.length === 0,
     },
@@ -3032,7 +3032,7 @@ __def("./textes-bdese.json", function(module){ module.exports = {
     controles: require("./controles-bdese.js"),
     manifeste: __MANIFESTE,
     champs: [["La base existe-t-elle ?",[["base.existe","Avez-vous une base de données économiques, sociales et environnementales ?","oui / non"]]],["Identité",[["entreprise","Dénomination sociale","texte"],["dateAudit","Date à laquelle la situation est décrite","AAAA-MM-JJ"],["effectif","Effectif de l'entreprise au sens de l'article L. 1111-2","nombre"],["etablissementsDistincts","L'entreprise comporte-t-elle plusieurs établissements distincts ?","oui / non"]]],["Le régime applicable",[["accordEntreprise","Avez-vous un accord d'entreprise sur la base de données ?","oui / non"],["accordEntrepriseVerse","Si oui, l'avez-vous joint ?","oui / non"],["accordBranche","Sinon, avez-vous un accord de branche sur la base ?","oui / non"],["accordBrancheVerse","Si oui, l'avez-vous joint ?","oui / non"],["pieces","Pièces versées au dossier","liste d'objets"]]],["Les dates",[["dateSeuil50Atteint","Date à laquelle l'effectif a atteint cinquante salariés pendant douze mois consécutifs","AAAA-MM-JJ"],["dateFinMandat","Date de fin des mandats en cours","AAAA-MM-JJ"],["dateRenouvellementCSE","Date de renouvellement du comité, si elle est arrêtée","AAAA-MM-JJ"],["dateSeuil300Franchi","Date à laquelle le seuil de trois cents salariés est réputé franchi, après douze mois consécutifs de dépassement","AAAA-MM-JJ"]]],["Le contenu",[["base.themes","Les thèmes et rubriques que la base comporte, un par ligne","liste d'objets"],["base.anneesPassees","Nombre d'années passées couvertes","nombre"],["base.anneesSuivantes","Nombre d'années à venir couvertes","nombre"],["base.formePerspectives","Forme sous laquelle les années à venir sont renseignées : chiffrée, grandes tendances, ou mixte","texte"],["base.informationsNonRenseignables","Informations qui ne peuvent recevoir ni chiffres ni tendances, avec les raisons données","liste"]]],["La mise à disposition",[["base.support","Support de la base : informatique, papier, ou autre","texte"],["base.beneficiaires","Personnes ayant accès à la base","liste"],["base.niveau","Niveau auquel la base est mise en place : entreprise, établissement, ou les deux","texte"],["base.dateDerniereMiseAJour","Date de la dernière mise à jour","AAAA-MM-JJ"],["base.informationMiseAJour","Les bénéficiaires sont-ils informés de chaque actualisation ?","oui / non"],["base.preuveAcces","Trace des accès ou de la remise : journal, accusés, émargements","texte"]]],["Les consultations",[["accordPeriodiciteConsultations","Un accord fixe-t-il le contenu, la périodicité et les modalités des consultations récurrentes ?","oui / non"],["periodiciteConsultations","Périodicité que cet accord fixe, en années","nombre"],["reunionsAnnuellesAccord","Nombre de réunions annuelles que cet accord prévoit","nombre"],["accordDelaisConsultation","Un accord fixe-t-il les délais dans lesquels les avis sont rendus ?","oui / non"],["consultation.dateMiseADisposition","Date de mise à disposition des informations dans la base, ou de leur communication","AAAA-MM-JJ"],["consultation.nbExpertises","Nombre d'expertises en cours sur cette consultation","nombre"],["consultation.centralEtEtablissements","La consultation se déroule-t-elle à la fois au niveau central et d'établissement ?","oui / non"],["consultation.dateAvis","Date à laquelle l'avis a été rendu","AAAA-MM-JJ"]]]],
-    propositions: {"accordEntreprise":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord signé avec les syndicats — ou, s'il n'y a pas de délégué syndical, avec le comité à la majorité de ses membres titulaires. Si vous n'en avez pas, répondez non : c'est alors la loi qui fixe le contenu de la base."},"accordEntrepriseVerse":{"valeurs":["oui","non"],"libre":false,"aide":"Joignez-le. C'est lui qui dit ce que votre base doit contenir : sans son texte, l'application n'a rien à vérifier."},"accordBranche":{"valeurs":["oui","non"],"libre":false,"aide":"À poser seulement si vous n'avez pas d'accord d'entreprise. Un accord de branche ne vaut que dans les entreprises de moins de 300 salariés."},"accordBrancheVerse":{"valeurs":["oui","non"],"libre":false,"aide":"Joignez-le, comme l'accord d'entreprise."},"etablissementsDistincts":{"valeurs":["oui","non"],"libre":false,"aide":"Une entreprise à plusieurs sites peut tenir sa base au niveau de l'entreprise, de chaque établissement, ou des deux. C'est l'accord qui le dit."},"accordPeriodiciteConsultations":{"valeurs":["oui","non"],"libre":false,"aide":"Attention, ce n'est pas le même accord que celui sur la base de données. Celui-ci dit tous les combien vous consultez le comité. Un accord sur la base ne change pas ce rythme."},"accordDelaisConsultation":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord peut fixer le temps laissé au comité pour rendre son avis. Sans accord : un mois, deux s'il y a un expert, trois si l'expertise porte à la fois sur le comité central et sur des établissements."},"base.informationMiseAJour":{"valeurs":["oui","non"],"libre":false,"aide":"Prévenez-vous les élus à chaque mise à jour ? C'est ce message qui déclenche le délai de consultation. Sans lui, le délai ne commence jamais à courir."},"base.formePerspectives":{"valeurs":["chiffrée","grandes tendances","mixte"],"libre":true,"indicatif":true,"aide":"Pour les trois années à venir, vous pouvez donner des chiffres — ou, si vous ne les avez pas, de grandes tendances. Les deux sont admis. En revanche, ce que vous ne pouvez donner ni en chiffres ni en tendances, il faut le dire et expliquer pourquoi."},"base.niveau":{"valeurs":["entreprise","établissement","les deux"],"libre":true,"indicatif":true,"aide":"Sans accord, la base se tient au niveau de l'entreprise. Un accord peut en décider autrement si vous avez plusieurs établissements."},"base.themes.theme":{"valeurs":["Investissements","Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise","Fonds propres, endettement et impôts","Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments","Activités sociales et culturelles","Rémunération des financeurs, en dehors des éléments mentionnés au 4°","Flux financiers à destination de l'entreprise","Partenariats","Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe","Environnement (1) A-Politique générale en matière environnementale","Représentation du personnel et Activités sociales et culturelles","Environnement (52)"],"libre":true,"indicatif":true,"aide":"Les rubriques que le décret prévoit. Un accord peut en choisir d'autres, mais dix thèmes restent obligatoires quoi qu'il arrive."},"pieces":{"valeurs":["accord-bdese"],"autres":["accord-branche"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les documents que vous joignez. Un accord ne se prouve que par son texte."}},
+    propositions: {"accordEntreprise":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord signé avec les syndicats - ou, s'il n'y a pas de délégué syndical, avec le comité à la majorité de ses membres titulaires. Si vous n'en avez pas, répondez non : c'est alors la loi qui fixe le contenu de la base."},"accordEntrepriseVerse":{"valeurs":["oui","non"],"libre":false,"aide":"Joignez-le. C'est lui qui dit ce que votre base doit contenir : sans son texte, l'application n'a rien à vérifier."},"accordBranche":{"valeurs":["oui","non"],"libre":false,"aide":"À poser seulement si vous n'avez pas d'accord d'entreprise. Un accord de branche ne vaut que dans les entreprises de moins de 300 salariés."},"accordBrancheVerse":{"valeurs":["oui","non"],"libre":false,"aide":"Joignez-le, comme l'accord d'entreprise."},"etablissementsDistincts":{"valeurs":["oui","non"],"libre":false,"aide":"Une entreprise à plusieurs sites peut tenir sa base au niveau de l'entreprise, de chaque établissement, ou des deux. C'est l'accord qui le dit."},"accordPeriodiciteConsultations":{"valeurs":["oui","non"],"libre":false,"aide":"Attention, ce n'est pas le même accord que celui sur la base de données. Celui-ci dit tous les combien vous consultez le comité. Un accord sur la base ne change pas ce rythme."},"accordDelaisConsultation":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord peut fixer le temps laissé au comité pour rendre son avis. Sans accord : un mois, deux s'il y a un expert, trois si l'expertise porte à la fois sur le comité central et sur des établissements."},"base.informationMiseAJour":{"valeurs":["oui","non"],"libre":false,"aide":"Prévenez-vous les élus à chaque mise à jour ? C'est ce message qui déclenche le délai de consultation. Sans lui, le délai ne commence jamais à courir."},"base.formePerspectives":{"valeurs":["chiffrée","grandes tendances","mixte"],"libre":true,"indicatif":true,"aide":"Pour les trois années à venir, vous pouvez donner des chiffres - ou, si vous ne les avez pas, de grandes tendances. Les deux sont admis. En revanche, ce que vous ne pouvez donner ni en chiffres ni en tendances, il faut le dire et expliquer pourquoi."},"base.niveau":{"valeurs":["entreprise","établissement","les deux"],"libre":true,"indicatif":true,"aide":"Sans accord, la base se tient au niveau de l'entreprise. Un accord peut en décider autrement si vous avez plusieurs établissements."},"base.themes.theme":{"valeurs":["Investissements","Egalité professionnelle entre les femmes et les hommes au sein de l'entreprise","Fonds propres, endettement et impôts","Rémunération des salariés et dirigeants, dans l'ensemble de leurs éléments","Activités sociales et culturelles","Rémunération des financeurs, en dehors des éléments mentionnés au 4°","Flux financiers à destination de l'entreprise","Partenariats","Pour les entreprises appartenant à un groupe, transferts commerciaux et financiers entre les entités du groupe","Environnement (1) A-Politique générale en matière environnementale","Représentation du personnel et Activités sociales et culturelles","Environnement (52)"],"libre":true,"indicatif":true,"aide":"Les rubriques que le décret prévoit. Un accord peut en choisir d'autres, mais dix thèmes restent obligatoires quoi qu'il arrive."},"pieces":{"valeurs":["accord-bdese"],"autres":["accord-branche"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les documents que vous joignez. Un accord ne se prouve que par son texte."}},
     listes: [],
     colonnes: {},
     piecesAppelees: {},

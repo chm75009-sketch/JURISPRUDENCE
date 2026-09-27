@@ -3,7 +3,7 @@
 
 RÈGLE DU DÉPÔT : tous les .docx se produisent avec python-docx, jamais avec la
 bibliothèque JavaScript « docx ». Les fichiers produits par celle-ci sont
-refusés par Microsoft Word — « Impossible d'ouvrir le fichier Office Open XML.
+refusés par Microsoft Word - « Impossible d'ouvrir le fichier Office Open XML.
 Des problèmes ont été décelés dans son contenu. » python-docx écrit un format
 plus conservateur, que Word accepte.
 
@@ -38,7 +38,7 @@ ENCRE = RGBColor(0x16, 0x18, 0x1D)
 
 
 def _bord(par):
-    """Un filet sous le paragraphe — le trait de séparation."""
+    """Un filet sous le paragraphe - le trait de séparation."""
     p = par._p.get_or_add_pPr()
     bd = OxmlElement("w:pBdr")
     bas = OxmlElement("w:bottom")
@@ -205,4 +205,4 @@ if __name__ == "__main__":
     with open(sys.argv[1], encoding="utf-8") as f:
         elements = json.load(f)
     construire(elements, sys.argv[2])
-    print("%s — %d éléments" % (sys.argv[2], len(elements)))
+    print("%s - %d éléments" % (sys.argv[2], len(elements)))

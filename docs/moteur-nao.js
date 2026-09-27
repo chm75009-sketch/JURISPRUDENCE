@@ -1,8 +1,8 @@
-/* Moteur d'audit « nao » — version navigateur (MoteurNAO).
+/* Moteur d'audit « nao » - version navigateur (MoteurNAO).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
    de moteur/nao, et versé au dépôt : le site ne construit rien.
-   Ne pas le modifier à la main — rejouer l'empaquetage.
+   Ne pas le modifier à la main - rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : ecd1a04e6907
    {"articlesLus":25,"themes":4,"mentionsAccordMethode":5,"controles":17,"exposition":1,"coherence":0,"donneesDemandees":32,"casContradictoires":16,"verdicts":306,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"expositionConcluantConforme":0}
@@ -51,8 +51,8 @@ function audit(f) {
   const par = e => V.filter(x => x.v.etat === e);
   const nc = par(NC), rq = par(RISQ), mq = par(MANQ), ok = par(CONF), so = par(SO);
 
-  sur("Audit — négociation obligatoire en entreprise · articles L. 2242-1 et suivants du code du travail");
-  t1(f.entreprise ? `Négociations obligatoires — ${f.entreprise}` : "Négociations obligatoires");
+  sur("Audit - négociation obligatoire en entreprise · articles L. 2242-1 et suivants du code du travail");
+  t1(f.entreprise ? `Négociations obligatoires - ${f.entreprise}` : "Négociations obligatoires");
   trait();
 
   /* --- le régime, dit d'abord --- */
@@ -65,7 +65,7 @@ function audit(f) {
       Object.values(e.themes).map(t => [
         t.titre,
         t.du === false ? "non due" : (t.periodiciteMois / 12) + " an(s)",
-        (t.nego || {}).dateEngagement || "—",
+        (t.nego || {}).dateEngagement || "-",
         t.etat + (t.etat === "en retard" ? ` (≈ ${t.retardMois} mois)` : ""),
       ]));
   }
@@ -76,7 +76,7 @@ function audit(f) {
     h1(`${titre} (${liste.length})`);
     if (explication) note(explication);
     for (const x of liste) {
-      h2(`${x.id} — ${x.objet}`);
+      h2(`${x.id} - ${x.objet}`);
       note("Fondement : " + x.fondement.join(", "));
       p(x.v.motif);
     }
@@ -112,14 +112,14 @@ function verdicts(f) {
   return v;
 }
 
-/* Le parcours en deux temps — corriger ce qui manque, puis vérifier ce qui est
+/* Le parcours en deux temps - corriger ce qui manque, puis vérifier ce qui est
    déclaré. `etat` porte ce que la page a recueilli : les corrections déclarées
    faites et les réponses à la grille de vérification. */
 function parcours(f, etat) {
   return DT.parcours(C, R, verdicts(f), etat);
 }
 
-/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+/* Le modèle concret d'un point de régularisation - étape 5 du parcours.
    Chiffré sur le dossier remis, jamais sur un exemple figé : voir
    modeles-nao.js. Rend null si aucun modèle n'est écrit pour cet id. */
 function modele(f, id) {
@@ -167,13 +167,13 @@ __def("./moteur-nao.js", function(module, exports, require){
    1. L'obligation naît des sections syndicales, pas de l'effectif. L. 2242-1
       vise « les entreprises où sont constituées une ou plusieurs sections
       syndicales d'organisations représentatives ». Sans section syndicale,
-      aucune négociation n'est due — tout le module est sans objet. Tant qu'on
+      aucune négociation n'est due - tout le module est sans objet. Tant qu'on
       ne sait pas si une section existe, rien ne se contrôle.
 
    2. Deux régimes, jamais mélangés. Un accord de méthode (L. 2242-10 et
       L. 2242-11) peut fixer les périodicités, dans la limite de quatre ans et
       à condition de porter les cinq mentions que L. 2242-11 énumère. À défaut
-      d'accord — ou si l'accord ne respecte pas ses propres stipulations —,
+      d'accord - ou si l'accord ne respecte pas ses propres stipulations -,
       le régime supplétif de L. 2242-13 s'applique : rémunération chaque
       année, égalité chaque année, gestion des emplois et des parcours tous
       les trois ans à partir de trois cents salariés, salariés expérimentés
@@ -226,7 +226,7 @@ function assujettissement(f) {
     return { connu: true, du: false,
       motif: "Aucune section syndicale d'organisation représentative n'est constituée : les négociations obligatoires de L. 2242-1 ne sont pas dues. L'information sur les mises à disposition de salariés reste due aux salariés qui la demandent (L. 2242-16, second alinéa)." };
   return { connu: true, du: true,
-    motif: "Une ou plusieurs sections syndicales d'organisations représentatives sont constituées : l'employeur engage les négociations de L. 2242-1 — et, selon l'effectif, celles de L. 2242-2 et L. 2242-2-1." };
+    motif: "Une ou plusieurs sections syndicales d'organisations représentatives sont constituées : l'employeur engage les négociations de L. 2242-1 - et, selon l'effectif, celles de L. 2242-2 et L. 2242-2-1." };
 }
 
 /* Le seuil de trois cents : entreprise ou groupe (L. 2331-1), ou entreprise de
@@ -247,7 +247,7 @@ function seuil300(f) {
 
 /* L'accord de méthode : valable s'il porte les cinq mentions de L. 2242-11,
    si sa durée n'excède pas quatre ans, et si aucune périodicité ne dépasse
-   quatre ans. Un accord déclaré mais non versé laisse le régime indéterminé —
+   quatre ans. Un accord déclaré mais non versé laisse le régime indéterminé -
    la règle est la même que partout dans le dépôt : on ne conclut pas sur un
    texte qu'on n'a pas. */
 const MENTIONS = [
@@ -268,7 +268,7 @@ function regime(f) {
 
   if (nie(acc.existe))
     return { regime: "supplétif", article: "L. 2242-13",
-      motif: "Aucun accord de méthode : le régime supplétif s'applique — rémunération chaque année, égalité chaque année, et, à partir de trois cents salariés, gestion des emplois et des parcours puis salariés expérimentés tous les trois ans (L. 2242-13)." };
+      motif: "Aucun accord de méthode : le régime supplétif s'applique - rémunération chaque année, égalité chaque année, et, à partir de trois cents salariés, gestion des emplois et des parcours puis salariés expérimentés tous les trois ans (L. 2242-13)." };
 
   if (!dit(acc.verse))
     return { regime: "indéterminé", cause: "accord de méthode non versé",
@@ -280,13 +280,13 @@ function regime(f) {
       motif: "La durée de l'accord de méthode n'est pas renseignée. L. 2242-11 la plafonne à quatre ans : sans elle, la validité de l'accord ne peut pas être appréciée." };
   if (duree > 4)
     return { regime: "supplétif", article: "L. 2242-13", accordInvalide: true,
-      motif: `L'accord de méthode affiche une durée de ${duree} ans : L. 2242-11 la plafonne à quatre. Un accord qui ne respecte pas ses conditions ne fait pas écran — le régime supplétif de L. 2242-13 s'applique.` };
+      motif: `L'accord de méthode affiche une durée de ${duree} ans : L. 2242-11 la plafonne à quatre. Un accord qui ne respecte pas ses conditions ne fait pas écran - le régime supplétif de L. 2242-13 s'applique.` };
 
   const mentions = Array.isArray(acc.mentions) ? acc.mentions : [];
   const absentes = MENTIONS.filter(([cle]) => !mentions.includes(cle));
   if (absentes.length)
     return { regime: "supplétif", article: "L. 2242-13", accordInvalide: true,
-      motif: `L'accord de méthode ne porte pas toutes les mentions de L. 2242-11 — manquent : ${absentes.map(x => x[1]).join(" ; ")}. À défaut d'accord conforme, le régime supplétif de L. 2242-13 s'applique.` };
+      motif: `L'accord de méthode ne porte pas toutes les mentions de L. 2242-11 - manquent : ${absentes.map(x => x[1]).join(" ; ")}. À défaut d'accord conforme, le régime supplétif de L. 2242-13 s'applique.` };
 
   const per = {};
   for (const t of Object.values(THEMES)) {
@@ -379,7 +379,7 @@ const estDateISO = s => {
 const JOUR = 86400000;
 const jour = s => Date.UTC(...s.split("-").map((x, i) => i === 1 ? +x - 1 : +x));
 
-/* ecart(depuis, jusqu) — le nombre de jours écoulés du premier au second.
+/* ecart(depuis, jusqu) - le nombre de jours écoulés du premier au second.
    Rend { valide: true, jours } si, et seulement si, les deux dates existent et
    sont dans cet ordre. Sinon { valide: false, cause, motif } : « format » quand
    une date n'existe pas, « ordre » quand la chronologie est inversée. */
@@ -409,14 +409,14 @@ __def("./controles-nao.js", function(module, exports, require){
 /* Les contrôles de la négociation obligatoire en entreprise.
 
    L'objet du module : vérifier que l'employeur a engagé, mené et conclu les
-   négociations que la loi lui impose — aux périodicités qui s'imposent à lui —
+   négociations que la loi lui impose - aux périodicités qui s'imposent à lui -
    et mesurer ce à quoi il s'expose quand il ne l'a pas fait.
 
    Une chose ne se contrôle pas et il faut le dire ici : AUCUN TEXTE N'OBLIGE À
    CONCLURE. L'obligation est de négocier, sérieusement et loyalement
    (L. 2242-6) ; l'échec se constate par un procès-verbal de désaccord
    (L. 2242-5). Aucun contrôle ne rend donc « non conforme » au motif qu'aucun
-   accord n'a été signé — mais l'absence de toute issue formalisée, elle, se
+   accord n'a été signé - mais l'absence de toute issue formalisée, elle, se
    constate.
 
    Cinq états, comme partout dans le dépôt : conforme, non conforme, risque à
@@ -443,7 +443,7 @@ function siAssujetti(f, suite) {
 }
 
 /* Le second garde : un régime indéterminé n'autorise aucun contrôle de
-   périodicité — on ne mesure pas un retard sur un calendrier inconnu. */
+   périodicité - on ne mesure pas un retard sur un calendrier inconnu. */
 function siRegimeConnu(f, suite) {
   return siAssujetti(f, () => {
     const r = M.regime(f);
@@ -479,7 +479,7 @@ ctl("NAO-CTL-REG-01", "Régime applicable",
     " La représentativité s'apprécie au niveau de l'entreprise, non d'un seul établissement : " + ARRETS.gepp })));
 
 ctl("NAO-CTL-REG-02", "Régime applicable",
-  "Le calendrier qui s'impose à l'entreprise est-il identifié — accord de méthode conforme, ou régime supplétif ?",
+  "Le calendrier qui s'impose à l'entreprise est-il identifié - accord de méthode conforme, ou régime supplétif ?",
   ["L. 2242-10", "L. 2242-11", "L. 2242-13", "Soc., 3 avril 2024, n° 22-15.784"],
   f => siRegimeConnu(f, r => {
     if (r.accordInvalide) return { etat: NC, motif: r.motif + " " + ARRETS.niveauxParAccord };
@@ -501,14 +501,14 @@ function ctlPeriodicite(id, cle, penalite) {
       if (e.du === null) return { etat: MANQ, motif: M.seuil300(f).motif };
       /* La question d'entrée du module, posée avant toute autre : les
          négociations ont-elles été engagées ? Un « non » ne laisse rien à
-         mesurer — il constitue le manquement. Jusqu'au 2 septembre 2026, cet
+         mesurer - il constitue le manquement. Jusqu'au 2 septembre 2026, cet
          employeur-là lisait « donnée manquante », c'est-à-dire un reproche de
          dossier incomplet là où le manquement était entier. */
       if (nie(f.negosEngagees))
         return { etat: NC, motif: `Aucune négociation obligatoire n'a été engagée : la périodicité de ${e.periodiciteMois / 12} an(s) ne peut donc pas être tenue${penalite ? ", et " + penalite : ""}. Le parcours « Conduire les négociations obligatoires » en déroule l'engagement, la convocation et le procès-verbal.` };
       if (e.du === false) return { etat: SO, motif: M.seuil300(f).motif };
       if (/jamais engagée/.test(e.etat))
-        return { etat: MANQ, motif: `Aucune date d'engagement n'est renseignée pour cette négociation. Si elle n'a réellement jamais été engagée, le manquement est constitué — la périodicité applicable est de ${e.periodiciteMois / 12} an(s)${penalite ? ", et " + penalite : ""}.` };
+        return { etat: MANQ, motif: `Aucune date d'engagement n'est renseignée pour cette négociation. Si elle n'a réellement jamais été engagée, le manquement est constitué - la périodicité applicable est de ${e.periodiciteMois / 12} an(s)${penalite ? ", et " + penalite : ""}.` };
       if (/inexploitables/.test(e.etat)) return { etat: MANQ, motif: e.etat };
       if (e.etat === "en retard")
         return { etat: NC, motif: `Dernière négociation engagée le ${e.nego.dateEngagement} : la périodicité de ${e.periodiciteMois / 12} an(s) est dépassée d'environ ${e.retardMois} mois au ${f.dateAudit}${penalite ? ". " + penalite : "."}` };
@@ -516,9 +516,9 @@ function ctlPeriodicite(id, cle, penalite) {
     }));
 }
 ctlPeriodicite("NAO-CTL-PER-01", "remuneration",
-  "le défaut de négociation sur les salaires effectifs expose à la pénalité de L. 2242-7 — jusqu'à 10 % des exonérations de cotisations de L. 241-13 du code de la sécurité sociale, portés à 100 % en cas de manquement réitéré dans les six ans");
+  "le défaut de négociation sur les salaires effectifs expose à la pénalité de L. 2242-7 - jusqu'à 10 % des exonérations de cotisations de L. 241-13 du code de la sécurité sociale, portés à 100 % en cas de manquement réitéré dans les six ans");
 ctlPeriodicite("NAO-CTL-PER-02", "egalite",
-  "l'absence d'accord ou de plan d'action expose à la pénalité de L. 2242-8 — jusqu'à 1 % des rémunérations");
+  "l'absence d'accord ou de plan d'action expose à la pénalité de L. 2242-8 - jusqu'à 1 % des rémunérations");
 ctlPeriodicite("NAO-CTL-PER-03", "gepp", "");
 ctlPeriodicite("NAO-CTL-PER-04", "experimentes", "");
 
@@ -558,7 +558,7 @@ ctl("NAO-CTL-LOY-01", "Loyauté de la négociation",
   }));
 
 ctl("NAO-CTL-LOY-02", "Loyauté de la négociation",
-  "Les conditions de dépôt d'un accord sur les salaires effectifs sont-elles réunies — procès-verbal d'ouverture des négociations sur les écarts de rémunération, réponses motivées aux propositions syndicales ?",
+  "Les conditions de dépôt d'un accord sur les salaires effectifs sont-elles réunies - procès-verbal d'ouverture des négociations sur les écarts de rémunération, réponses motivées aux propositions syndicales ?",
   ["L. 2242-6"],
   f => siAssujetti(f, () => {
     const n = nego(f, "remuneration");
@@ -595,9 +595,9 @@ ctl("NAO-CTL-ISS-01", "Issue des négociations",
       if (n.issue === "accord" && !dit(n.depot))
         griefs.push(`« ${t.titre} » : accord conclu mais dépôt non établi (L. 2231-6)`);
       if (n.issue === "PV de désaccord" && !dit(n.depot))
-        griefs.push(`« ${t.titre} » : procès-verbal de désaccord non déposé — L. 2242-5 et R. 2242-1 imposent son dépôt dans les conditions de D. 2231-2, avec les dernières propositions des parties et les mesures que l'employeur entend appliquer unilatéralement`);
+        griefs.push(`« ${t.titre} » : procès-verbal de désaccord non déposé - L. 2242-5 et R. 2242-1 imposent son dépôt dans les conditions de D. 2231-2, avec les dernières propositions des parties et les mesures que l'employeur entend appliquer unilatéralement`);
     }
-    if (!vus.length) return { etat: MANQ, motif: "Aucune négociation n'est déclarée terminée (accord ou procès-verbal de désaccord) : l'issue ne peut pas être contrôlée. Le procès-verbal de désaccord n'est pas une formalité de classement — il marque le terme de la négociation. " + ARRETS.finDesNegociations };
+    if (!vus.length) return { etat: MANQ, motif: "Aucune négociation n'est déclarée terminée (accord ou procès-verbal de désaccord) : l'issue ne peut pas être contrôlée. Le procès-verbal de désaccord n'est pas une formalité de classement - il marque le terme de la négociation. " + ARRETS.finDesNegociations };
     if (griefs.length) return { etat: NC, motif: griefs.join(" ; ") + ". " + ARRETS.finDesNegociations };
     return { etat: CONF, motif: `Chaque négociation terminée a son issue formalisée et déposée (${vus.length} négociation(s)). L'obligation porte sur la négociation, non sur sa conclusion : ${ARRETS.engagerNonConclure} Mais l'échec doit être constaté : ${ARRETS.finDesNegociations}` };
   }));
@@ -613,14 +613,14 @@ ctl("NAO-CTL-EGA-01", "Égalité professionnelle",
     if (vide(n.issue) || n.issue === "en cours") return { etat: MANQ, motif: "L'issue de la négociation sur l'égalité professionnelle n'est pas établie : le besoin d'un plan d'action ne peut pas être apprécié." };
     const p = n.planAction || {};
     if (!dit(p.existe))
-      return { etat: NC, motif: "Aucun accord sur l'égalité professionnelle et aucun plan d'action annuel : L. 2242-3 impose ce plan — objectifs de progression, actions qualitatives et quantitatives, coût — et son dépôt auprès de l'autorité administrative. La négociation sur les salaires effectifs doit alors porter aussi sur la programmation des mesures de suppression des écarts." };
+      return { etat: NC, motif: "Aucun accord sur l'égalité professionnelle et aucun plan d'action annuel : L. 2242-3 impose ce plan - objectifs de progression, actions qualitatives et quantitatives, coût - et son dépôt auprès de l'autorité administrative. La négociation sur les salaires effectifs doit alors porter aussi sur la programmation des mesures de suppression des écarts." };
     if (!dit(p.depot))
       return { etat: NC, motif: "Le plan d'action égalité existe mais son dépôt auprès de l'autorité administrative n'est pas établi : L. 2242-3 l'impose." };
     return { etat: CONF, motif: "À défaut d'accord, un plan d'action annuel est établi et déposé, conformément à L. 2242-3." };
   }));
 
 ctl("NAO-CTL-EGA-02", "Égalité professionnelle",
-  "L'entreprise d'au moins cinquante salariés est-elle couverte — accord ou plan d'action — et l'index de L. 1142-8 est-il publié ?",
+  "L'entreprise d'au moins cinquante salariés est-elle couverte - accord ou plan d'action - et l'index de L. 1142-8 est-il publié ?",
   ["L. 2242-8"],
   f => siAssujetti(f, () => {
     const eff = typeof f.effectif === "number" ? f.effectif : null;
@@ -660,12 +660,12 @@ function ctlContenu(id, cle, items, fondement) {
     [fondement],
     f => siAssujetti(f, () => {
       const n = nego(f, cle);
-      if (vide(n.dateEngagement)) return { etat: SO, motif: "Cette négociation n'est pas déclarée engagée : son contenu n'a pas d'objet — sa périodicité, elle, est contrôlée par ailleurs." };
+      if (vide(n.dateEngagement)) return { etat: SO, motif: "Cette négociation n'est pas déclarée engagée : son contenu n'a pas d'objet - sa périodicité, elle, est contrôlée par ailleurs." };
       const traites = Array.isArray(n.themesTraites) ? n.themesTraites : [];
       if (!traites.length) return { etat: MANQ, motif: "Les thèmes traités ne sont pas renseignés : la couverture du contenu légal ne peut pas être appréciée." };
       const absents = items.filter(([marque]) => !traites.includes(marque));
       if (!absents.length) return { etat: CONF, motif: `Les ${items.length} thèmes de ${fondement} sont couverts.` };
-      return { etat: RISQ, motif: `${absents.length} thème(s) de ${fondement} ne sont pas rattachés à la négociation : ${absents.map(x => x[1]).join(" ; ")}. Un thème légal laissé hors de la table doit l'être en connaissance de cause — l'obligation porte sur la négociation du thème, pas sur sa conclusion.` };
+      return { etat: RISQ, motif: `${absents.length} thème(s) de ${fondement} ne sont pas rattachés à la négociation : ${absents.map(x => x[1]).join(" ; ")}. Un thème légal laissé hors de la table doit l'être en connaissance de cause - l'obligation porte sur la négociation du thème, pas sur sa conclusion.` };
     }));
 }
 ctlContenu("NAO-CTL-CON-01", "remuneration", ITEMS_REMUNERATION, "L. 2242-15");
@@ -679,7 +679,7 @@ ctl("NAO-CTL-CON-03", "Contenu des négociations",
     if (vide(n.dateEngagement)) return { etat: SO, motif: "La négociation égalité n'est pas déclarée engagée : l'appui sur la base n'a pas d'objet." };
     if (vide(n.appuiBDESE)) return { etat: MANQ, motif: "Il n'est pas indiqué si la négociation s'est appuyée sur les données de la base de données économiques, sociales et environnementales. L. 2242-17, 2°, l'impose : « cette négociation s'appuie sur les données mentionnées au 2° de l'article L. 2312-36 »." };
     if (nie(n.appuiBDESE))
-      return { etat: NC, motif: "La négociation sur l'égalité professionnelle a été conduite sans s'appuyer sur les données de la base : L. 2242-17, 2°, l'impose. Des négociateurs privés du diagnostic comparé femmes-hommes de la base ne négocient pas en connaissance de cause — c'est un grief de loyauté autant que de contenu. Le module « base de données (BDESE) » de cette application audite la rubrique en cause." };
+      return { etat: NC, motif: "La négociation sur l'égalité professionnelle a été conduite sans s'appuyer sur les données de la base : L. 2242-17, 2°, l'impose. Des négociateurs privés du diagnostic comparé femmes-hommes de la base ne négocient pas en connaissance de cause - c'est un grief de loyauté autant que de contenu. Le module « base de données (BDESE) » de cette application audite la rubrique en cause." };
     return { etat: CONF, motif: "La négociation s'est appuyée sur les données de la base, comme L. 2242-17, 2°, l'impose." };
   }));
 
@@ -694,10 +694,10 @@ ctl("NAO-CTL-PEN-01", "Exposition aux sanctions",
     const inconnus = Object.values(e.themes).filter(t => /jamais engagée|inexploitables/.test(t.etat) && t.du === true);
     if (retards.length) {
       const l = retards.map(t => `« ${t.titre} »`).join(", ");
-      return { etat: NC, motif: `Négociation(s) hors périodicité : ${l}. L'exposition est triple — le délit d'entrave de L. 2243-1 et L. 2243-2 (un an d'emprisonnement, 3 750 € d'amende), la pénalité salaires de L. 2242-7 s'agissant de la rémunération, la pénalité de 1 % de L. 2242-8 s'agissant de l'égalité. Le montant en est fixé par l'administration selon les efforts constatés : c'est une exposition, pas un chiffrage. Ce qui est reproché ici est de n'avoir pas engagé la négociation, non de n'avoir pas conclu : ${ARRETS.engagerNonConclure}` };
+      return { etat: NC, motif: `Négociation(s) hors périodicité : ${l}. L'exposition est triple - le délit d'entrave de L. 2243-1 et L. 2243-2 (un an d'emprisonnement, 3 750 € d'amende), la pénalité salaires de L. 2242-7 s'agissant de la rémunération, la pénalité de 1 % de L. 2242-8 s'agissant de l'égalité. Le montant en est fixé par l'administration selon les efforts constatés : c'est une exposition, pas un chiffrage. Ce qui est reproché ici est de n'avoir pas engagé la négociation, non de n'avoir pas conclu : ${ARRETS.engagerNonConclure}` };
     }
     if (inconnus.length) return { etat: MANQ, motif: "Des négociations dues n'ont pas de date d'engagement renseignée : l'exposition ne peut pas être appréciée." };
-    return { etat: RISQ, motif: "Aucun manquement de périodicité constaté en l'état du dossier. L'exposition n'est pas nulle pour autant : la loyauté de chaque négociation (L. 2242-6, L. 2242-14) et la couverture égalité (L. 2242-8) s'apprécient en continu — ce contrôle ne prononce jamais un blanc-seing. " + ARRETS.engagerNonConclure };
+    return { etat: RISQ, motif: "Aucun manquement de périodicité constaté en l'état du dossier. L'exposition n'est pas nulle pour autant : la loyauté de chaque négociation (L. 2242-6, L. 2242-14) et la couverture égalité (L. 2242-8) s'apprécient en continu - ce contrôle ne prononce jamais un blanc-seing. " + ARRETS.engagerNonConclure };
   }));
 
 /* Les contrôles qui, par construction, ne rendent jamais « conforme ». */
@@ -713,13 +713,13 @@ __def("./regularisation-nao.js", function(module, exports, require){
 /* Ce qu'il faut faire quand un contrôle de la négociation obligatoire ne passe pas.
 
    Le module d'audit dit ce qui manque ; ce fichier dit comment y remédier. Un
-   contrôle sans entrée ici fait échouer la publication — l'oubli se voit, il ne
+   contrôle sans entrée ici fait échouer la publication - l'oubli se voit, il ne
    se devine pas. Une entrée peut valoir « null » : c'est le cas des contrôles
    qui ne constatent rien à corriger (l'assujettissement, l'exposition aux
    sanctions), et ce null doit être écrit.
 
    Chaque entrée porte :
-     gravite    1 le plus grave, 4 le moins — c'est l'ordre du guide
+     gravite    1 le plus grave, 4 le moins - c'est l'ordre du guide
      quoiFaire  une phrase, à l'infinitif : l'acte à accomplir
      risque     ce que coûte l'inaction, chiffré et fondé
      delai      le temps qu'il faut y consacrer, en clair
@@ -737,7 +737,7 @@ const { C } = require("./controles-nao.js");
 const GRAVITES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -750,17 +750,17 @@ const R = {
   "NAO-CTL-REG-02": {
     gravite: 3,
     quoiFaire: "Établir le calendrier qui s'impose : soit conclure l'accord de méthode de L. 2242-11, soit constater que le régime supplétif annuel et triennal de L. 2242-13 s'applique.",
-    risque: "Sans calendrier identifié, aucun retard ne se mesure — et l'employeur ne peut opposer aucune périodicité aménagée à une organisation syndicale qui demande l'ouverture d'une négociation.",
+    risque: "Sans calendrier identifié, aucun retard ne se mesure - et l'employeur ne peut opposer aucune périodicité aménagée à une organisation syndicale qui demande l'ouverture d'une négociation.",
     delai: "Une réunion pour constater le régime ; trois à six mois si un accord de méthode est négocié.",
     document: "Accord de méthode sur la périodicité des négociations obligatoires (L. 2242-11)",
     etapes: [
       "Rechercher un accord de méthode en vigueur : l'accord de L. 2242-11 fixe la périodicité, les thèmes, le calendrier et le contenu des négociations.",
-      "S'il existe, vérifier qu'il respecte les bornes de L. 2242-12 — la périodicité d'un thème ne peut excéder quatre ans — et que ses stipulations sont respectées : leur non-respect fait retomber l'entreprise dans le régime supplétif (L. 2242-13).",
+      "S'il existe, vérifier qu'il respecte les bornes de L. 2242-12 - la périodicité d'un thème ne peut excéder quatre ans - et que ses stipulations sont respectées : leur non-respect fait retomber l'entreprise dans le régime supplétif (L. 2242-13).",
       "S'il n'existe pas, ou s'il n'est pas respecté, appliquer L. 2242-13 : négociation annuelle sur la rémunération, négociation annuelle sur l'égalité professionnelle, et à partir de trois cents salariés, négociation triennale sur la gestion des emplois et négociation triennale sur les salariés expérimentés.",
       "Consigner le régime retenu par écrit, avec sa source, et le porter au dossier : c'est lui qui datera tous les retards.",
     ],
     verifs: [
-      { cle: "regimeSource", question: "Sur quoi repose le calendrier que vous appliquez — un accord de méthode, ou le régime supplétif ?", attendu: "L'accord daté et déposé, ou la mention expresse du régime supplétif de L. 2242-13." },
+      { cle: "regimeSource", question: "Sur quoi repose le calendrier que vous appliquez - un accord de méthode, ou le régime supplétif ?", attendu: "L'accord daté et déposé, ou la mention expresse du régime supplétif de L. 2242-13." },
       { cle: "regimeBornes", question: "Si un accord de méthode existe, aucune périodicité qu'il fixe ne dépasse-t-elle quatre ans ?", attendu: "L. 2242-12 plafonne à quatre ans ; au-delà, la stipulation ne tient pas." },
     ],
   },
@@ -775,20 +775,20 @@ const R = {
       "Recenser les organisations syndicales représentatives dans l'entreprise : toutes doivent être convoquées, sans exception.",
       "Les convoquer par écrit, en indiquant l'objet de la négociation, le lieu et la date de la première réunion.",
       "Lors de la première réunion, fixer le lieu et le calendrier des réunions, la liste des informations qui seront remises et la date de leur remise (L. 2242-14). Ce point est distinct : il est contrôlé pour lui-même.",
-      "Remettre les informations à la date annoncée, et répondre de manière motivée aux propositions syndicales — c'est la condition de la loyauté (L. 2242-6).",
+      "Remettre les informations à la date annoncée, et répondre de manière motivée aux propositions syndicales - c'est la condition de la loyauté (L. 2242-6).",
       "Conclure : accord signé et déposé, ou procès-verbal de désaccord établi et déposé (L. 2242-5, R. 2242-1).",
     ],
     verifs: [
       { cle: "per01Convocation", question: "À quelle date les organisations syndicales représentatives ont-elles été convoquées, et lesquelles ?", attendu: "La date et la liste ; une seule organisation oubliée suffit à vicier la négociation." },
       { cle: "per01Reunions", question: "Combien de réunions se sont tenues, et à quelles dates ?", attendu: "Les dates, avec les feuilles d'émargement ou les convocations." },
-      { cle: "per01Issue", question: "Quelle a été l'issue — accord ou procès-verbal de désaccord — et à quelle date a-t-elle été déposée ?", attendu: "Le récépissé de dépôt. Sans dépôt, la négociation n'est pas achevée." },
+      { cle: "per01Issue", question: "Quelle a été l'issue - accord ou procès-verbal de désaccord - et à quelle date a-t-elle été déposée ?", attendu: "Le récépissé de dépôt. Sans dépôt, la négociation n'est pas achevée." },
     ],
   },
 
   "NAO-CTL-PER-02": {
     gravite: 1,
     quoiFaire: "Engager la négociation sur l'égalité professionnelle entre les femmes et les hommes et la qualité de vie et des conditions de travail.",
-    risque: "Un an d'emprisonnement et 3 750 € d'amende (L. 2243-1), et la pénalité de L. 2242-8 — jusqu'à 1 % des rémunérations versées au titre des périodes non couvertes.",
+    risque: "Un an d'emprisonnement et 3 750 € d'amende (L. 2243-1), et la pénalité de L. 2242-8 - jusqu'à 1 % des rémunérations versées au titre des périodes non couvertes.",
     delai: "Deux à trois mois.",
     document: "Convocation des organisations syndicales représentatives à la négociation sur l'égalité professionnelle",
     etapes: [
@@ -801,7 +801,7 @@ const R = {
     verifs: [
       { cle: "per02Convocation", question: "À quelle date les organisations syndicales ont-elles été convoquées ?", attendu: "La date et la liste des organisations." },
       { cle: "per02Themes", question: "Quels thèmes de L. 2242-17 la négociation a-t-elle couverts ?", attendu: "La liste ; un thème non abordé se constate sur le procès-verbal." },
-      { cle: "per02Couverture", question: "L'entreprise est-elle couverte par un accord, ou par un plan d'action déposé ?", attendu: "L'accord déposé ou le plan d'action déposé — l'un des deux, jamais rien." },
+      { cle: "per02Couverture", question: "L'entreprise est-elle couverte par un accord, ou par un plan d'action déposé ?", attendu: "L'accord déposé ou le plan d'action déposé - l'un des deux, jamais rien." },
     ],
   },
 
@@ -814,7 +814,7 @@ const R = {
     etapes: [
       "Vérifier le seuil : la négociation est due à partir de trois cents salariés (L. 2242-2), et tous les trois ans (L. 2242-13, 3°).",
       "Convoquer toutes les organisations syndicales représentatives.",
-      "Préparer les données d'emploi : pyramide des âges, métiers en tension, projets de mutation technologique — la négociation porte sur la mise en place d'un dispositif de gestion prévisionnelle et sur les mesures d'accompagnement.",
+      "Préparer les données d'emploi : pyramide des âges, métiers en tension, projets de mutation technologique - la négociation porte sur la mise en place d'un dispositif de gestion prévisionnelle et sur les mesures d'accompagnement.",
       "Déposer l'accord ou le procès-verbal de désaccord.",
     ],
     verifs: [
@@ -851,14 +851,14 @@ const R = {
     document: "Transmission de la demande syndicale aux autres organisations, et convocation des parties",
     etapes: [
       "Dater la réception de la demande : c'est de cette date que courent les deux délais.",
-      "Dans les huit jours, transmettre la demande aux autres organisations syndicales représentatives — toutes, y compris celles qui n'ont pas demandé l'ouverture.",
+      "Dans les huit jours, transmettre la demande aux autres organisations syndicales représentatives - toutes, y compris celles qui n'ont pas demandé l'ouverture.",
       "Dans les quinze jours de la demande, convoquer les parties à la négociation, par écrit, en indiquant l'objet, le lieu et la date.",
       "Conserver les preuves d'envoi des deux actes : ce sont elles qui établiront le respect des délais.",
     ],
     verifs: [
       { cle: "dem01Recue", question: "À quelle date la demande syndicale a-t-elle été reçue ?", attendu: "La date, avec le courrier ou le courriel." },
-      { cle: "dem01Transmise", question: "À quelle date a-t-elle été transmise aux autres organisations, et à quelles organisations ?", attendu: "La date — au plus huit jours après la demande — et la liste." },
-      { cle: "dem01Convocation", question: "À quelle date les parties ont-elles été convoquées ?", attendu: "La date — au plus quinze jours après la demande — et la preuve d'envoi." },
+      { cle: "dem01Transmise", question: "À quelle date a-t-elle été transmise aux autres organisations, et à quelles organisations ?", attendu: "La date - au plus huit jours après la demande - et la liste." },
+      { cle: "dem01Convocation", question: "À quelle date les parties ont-elles été convoquées ?", attendu: "La date - au plus quinze jours après la demande - et la preuve d'envoi." },
     ],
   },
 
@@ -867,7 +867,7 @@ const R = {
     quoiFaire: "Faire figurer au procès-verbal de la première réunion les quatre mentions de L. 2242-14 : le lieu, le calendrier, les informations que l'employeur remettra, et la date de cette remise.",
     risque: "Sans ces mentions, la loyauté de la négociation n'est pas établie : un accord sur les salaires effectifs ne peut alors pas être valablement déposé (L. 2242-6), et le juge peut annuler une décision unilatérale prise dans le champ négocié.",
     delai: "Une réunion. La régularisation tient en un procès-verbal.",
-    document: "Procès-verbal de première réunion — lieu, calendrier, informations et date de remise",
+    document: "Procès-verbal de première réunion - lieu, calendrier, informations et date de remise",
     etapes: [
       "Reprendre le procès-verbal de la première réunion et vérifier qu'il porte les quatre mentions.",
       "S'il en manque une, convoquer une réunion de cadrage et l'y arrêter avec les organisations syndicales : le calendrier et la liste des informations se fixent contradictoirement.",
@@ -921,18 +921,18 @@ const R = {
   "NAO-CTL-ISS-01": {
     gravite: 2,
     quoiFaire: "Clore chaque négociation achevée par un accord déposé, ou par un procès-verbal de désaccord déposé.",
-    risque: "Aucun texte n'oblige à conclure — mais l'absence de toute issue formalisée laisse la période non couverte, et expose aux pénalités de L. 2242-7 et L. 2242-8. Le procès-verbal de désaccord doit être déposé (L. 2242-5, R. 2242-1), à défaut de quoi il ne produit aucun effet.",
+    risque: "Aucun texte n'oblige à conclure - mais l'absence de toute issue formalisée laisse la période non couverte, et expose aux pénalités de L. 2242-7 et L. 2242-8. Le procès-verbal de désaccord doit être déposé (L. 2242-5, R. 2242-1), à défaut de quoi il ne produit aucun effet.",
     delai: "Quinze jours après la dernière réunion.",
-    document: "Procès-verbal de désaccord — propositions en leur dernier état et mesures unilatérales",
+    document: "Procès-verbal de désaccord - propositions en leur dernier état et mesures unilatérales",
     etapes: [
       "Pour chaque négociation achevée sans accord, établir le procès-verbal de désaccord.",
-      "Y consigner, en leur dernier état, les propositions respectives des parties — et non un simple constat d'échec.",
+      "Y consigner, en leur dernier état, les propositions respectives des parties - et non un simple constat d'échec.",
       "Y consigner les mesures que l'employeur entend appliquer unilatéralement : L. 2242-5 l'exige, et c'est ce qui fonde ensuite leur opposabilité.",
-      "Le déposer dans les conditions de D. 2231-2, à l'initiative de la partie la plus diligente — l'employeur ne peut pas attendre que les syndicats s'en chargent.",
+      "Le déposer dans les conditions de D. 2231-2, à l'initiative de la partie la plus diligente - l'employeur ne peut pas attendre que les syndicats s'en chargent.",
       "Conserver le récépissé : c'est lui, et non le procès-verbal, qui prouve le dépôt.",
     ],
     verifs: [
-      { cle: "iss01Liste", question: "Pour chaque négociation achevée, quelle en a été l'issue — accord ou procès-verbal de désaccord ?", attendu: "L'issue, négociation par négociation." },
+      { cle: "iss01Liste", question: "Pour chaque négociation achevée, quelle en a été l'issue - accord ou procès-verbal de désaccord ?", attendu: "L'issue, négociation par négociation." },
       { cle: "iss01Contenu", question: "Le procès-verbal de désaccord consigne-t-il les propositions en leur dernier état et les mesures unilatérales de l'employeur ?", attendu: "Les deux mentions. Un procès-verbal qui ne les porte pas est incomplet au sens de L. 2242-5." },
       { cle: "iss01Depot", question: "À quelle date le dépôt a-t-il été effectué, et où est le récépissé ?", attendu: "La date et le récépissé." },
     ],
@@ -970,7 +970,7 @@ const R = {
       "Calculer les indicateurs de l'index sur la période de référence retenue.",
       "Publier le résultat de manière visible et lisible sur le site internet de l'entreprise, ou à défaut le porter à la connaissance des salariés par tout moyen.",
       "Le déclarer à l'administration et au comité social et économique.",
-      "Si le résultat est inférieur au seuil réglementaire, définir les mesures de correction — leur absence est un manquement distinct.",
+      "Si le résultat est inférieur au seuil réglementaire, définir les mesures de correction - leur absence est un manquement distinct.",
     ],
     verifs: [
       { cle: "ega02Couverture", question: "L'entreprise est-elle couverte par un accord ou par un plan d'action, et depuis quelle date ?", attendu: "L'accord ou le plan, daté et déposé." },
@@ -984,7 +984,7 @@ const R = {
     quoiFaire: "Couvrir, dans la négociation sur la rémunération, tous les thèmes que L. 2242-15 énumère.",
     risque: "Une négociation qui laisse un thème de côté n'est pas complète : le manquement se constate sur le procès-verbal, et nourrit le grief de négociation déloyale.",
     delai: "Une réunion supplémentaire par thème omis.",
-    document: "Ordre du jour de la négociation sur la rémunération — les thèmes de L. 2242-15",
+    document: "Ordre du jour de la négociation sur la rémunération - les thèmes de L. 2242-15",
     etapes: [
       "Reprendre le procès-verbal et pointer, thème par thème, ceux que L. 2242-15 énumère : salaires effectifs, durée effective et organisation du temps de travail, intéressement, participation et épargne salariale, suivi de la mise en œuvre des mesures de suppression des écarts de rémunération.",
       "Pour chaque thème omis, inscrire le point à l'ordre du jour d'une réunion complémentaire.",
@@ -1002,7 +1002,7 @@ const R = {
     quoiFaire: "Couvrir, dans la négociation sur l'égalité professionnelle, tous les thèmes que L. 2242-17 énumère.",
     risque: "Même constat que pour la négociation sur la rémunération, avec en outre l'exposition à la pénalité de L. 2242-8 si la période n'est pas valablement couverte.",
     delai: "Une réunion supplémentaire par thème omis.",
-    document: "Ordre du jour de la négociation sur l'égalité professionnelle — les thèmes de L. 2242-17",
+    document: "Ordre du jour de la négociation sur l'égalité professionnelle - les thèmes de L. 2242-17",
     etapes: [
       "Pointer sur le procès-verbal les thèmes de L. 2242-17 : articulation entre vie personnelle et vie professionnelle, suppression des écarts de rémunération, accès à l'emploi, à la formation et à la promotion, conditions de travail et d'emploi, insertion et maintien dans l'emploi des travailleurs handicapés, régimes de prévoyance et de complémentaire santé, droit à la déconnexion.",
       "Pour chaque thème omis, l'inscrire à l'ordre du jour d'une réunion complémentaire.",
@@ -1034,7 +1034,7 @@ const R = {
   },
 
   /* Ce contrôle mesure l'exposition résultant des autres : il ne se régularise
-     pas pour lui-même — on régularise ce qui la cause. */
+     pas pour lui-même - on régularise ce qui la cause. */
   "NAO-CTL-PEN-01": null,
 };
 
@@ -1082,17 +1082,17 @@ if (require.main === module) {
   const aRegulariser = Object.values(R).filter(x => x !== null).length;
   const verifs = Object.values(R).filter(x => x).reduce((n, x) => n + x.verifs.length, 0);
   console.log(`${C.length} contrôle(s) · ${aRegulariser} régularisation(s) · ${verifs} vérification(s)`);
-  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART — " + e)); process.exit(1); }
+  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART - " + e)); process.exit(1); }
   console.log("chaque contrôle a son issue, et chaque issue son contrôle");
 }
 
 });
 
 __def("./modeles-nao.js", function(module, exports, require){
-/* Les modèles de régularisation — étape 5 du parcours client.
+/* Les modèles de régularisation - étape 5 du parcours client.
 
    Chaque contrôle non conforme ou à vérifier a droit à mieux qu'un rappel de
-   texte : une note chiffrée sur le dossier remis — les délais de convocation,
+   texte : une note chiffrée sur le dossier remis - les délais de convocation,
    la périodicité de chaque négociation, le seuil de trois cents salariés, les
    dates réellement déclarées. Rien n'est une coquille générique : quand une
    donnée manque pour calculer, la note le dit et pose un exemple marqué
@@ -1100,15 +1100,15 @@ __def("./modeles-nao.js", function(module, exports, require){
 
    Chaque fonction reçoit le même dossier `f` que les contrôles et le moteur
    de régime (moteur-nao.js), et rend un classeur de pièces
-   (moteur/commun/outils.js) — la même fabrique que le rapport d'audit, pour
+   (moteur/commun/outils.js) - la même fabrique que le rapport d'audit, pour
    que ce modèle s'imprime exactement comme le reste du module.
 
    Les seuls textes, délais et thèmes cités sont ceux déjà lus et posés par
    moteur-nao.js et controles-nao.js : ce fichier ne capture aucun article, il
-   met en chiffres ce qui l'est déjà. Deux contrôles n'ont pas de modèle —
+   met en chiffres ce qui l'est déjà. Deux contrôles n'ont pas de modèle -
    NAO-CTL-REG-01 (l'assujettissement, qui ne se régularise pas) et
    NAO-CTL-PEN-01 (l'exposition, qui mesure les autres et ne se régularise pas
-   pour elle-même) — comme regularisation-nao.js les laisse à null. */
+   pour elle-même) - comme regularisation-nao.js les laisse à null. */
 const O = require("./outils.js");
 const D = require("./dates.js");
 const M = require("./moteur-nao.js");
@@ -1123,7 +1123,7 @@ const nomE = f => q(f.entreprise) || "l'entreprise auditée";
 const jour0 = f => (D.estDateISO(f.dateAudit) ? f.dateAudit : new Date().toISOString().slice(0, 10));
 const nego = (f, cle) => (f.negos || {})[cle] || {};
 
-/* Un mois après, en respectant les fins de mois — même règle que les autres
+/* Un mois après, en respectant les fins de mois - même règle que les autres
    modules du dépôt. */
 function moisApres(iso, n) {
   if (!D.estDateISO(iso)) return null;
@@ -1143,7 +1143,7 @@ function joursApres(iso, n) {
 
 function modeleReg02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le calendrier des négociations — accord de méthode ou régime supplétif — " + nomE(f));
+  t1("Le calendrier des négociations - accord de méthode ou régime supplétif - " + nomE(f));
   const r = M.regime(f);
   h1("Le régime, calculé sur ce dossier");
   p(r.motif);
@@ -1153,7 +1153,7 @@ function modeleReg02(f) {
     h1("Les cinq mentions de L. 2242-11, sur ce que le dossier déclare");
     tab(["Mention", "Déclarée"], M.MENTIONS.map(([cle, lib]) => [lib, mentions.includes(cle) ? "présente" : "absente"]));
     const duree = nb(acc.dureeAns);
-    p(`Durée déclarée de l'accord : ${duree === null ? "non renseignée" : duree + " an(s)"} — le plafond légal est de quatre ans (L. 2242-11).`);
+    p(`Durée déclarée de l'accord : ${duree === null ? "non renseignée" : duree + " an(s)"} - le plafond légal est de quatre ans (L. 2242-11).`);
   }
   if (r.regime === "accord de méthode" && r.periodicites) {
     h1("Les périodicités que cet accord fixe, thème par thème");
@@ -1168,7 +1168,7 @@ function modeleReg02(f) {
 function noteEcheance(f, cle) {
   const A = O(); const { t1, h1, p, tab, note } = A;
   const t = M.THEMES[cle];
-  t1(`Calcul de la périodicité — ${t.titre} — ` + nomE(f));
+  t1(`Calcul de la périodicité - ${t.titre} - ` + nomE(f));
   const e = M.echeances(f).themes[cle];
   if (e.du === false) { A.D.push({ k: "p", t: "Sans objet en l'état de l'effectif déclaré : cette négociation triennale n'est pas due en deçà de trois cents salariés (" + t.fondement + ")." }); return A.D; }
   if (e.du === null) { A.D.push({ k: "p", t: "Donnée manquante pour calculer : l'assujettissement ou le seuil de trois cents salariés n'est pas établi sur ce dossier." }); return A.D; }
@@ -1201,7 +1201,7 @@ const modelePer04 = f => noteEcheance(f, "experimentes");
 
 function modeleDem01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Calcul des deux délais de la demande syndicale — L. 2242-13, dernier alinéa — " + nomE(f));
+  t1("Calcul des deux délais de la demande syndicale - L. 2242-13, dernier alinéa - " + nomE(f));
   const d = M.demandeSyndicale(f);
   h1("Le calcul, sur ce dossier");
   if (!d.connue || !d.recue) { p(d.motif); return A.D; }
@@ -1210,10 +1210,10 @@ function modeleDem01(f) {
   const limiteConvocation = joursApres(ds.date, 15);
   tab(["Étape", "Date", "Délai légal"], [
     ["Demande syndicale reçue", ds.date, "point de départ"],
-    ["Terme des huit jours (transmission aux autres organisations)", ds.date ? limiteTransmission : "—", "8 jours"],
-    ["Transmission déclarée", q(ds.dateTransmissionAutresOS) || "non renseignée", d.transmission && d.transmission.jours != null ? d.transmission.jours + " jour(s) après la demande" : "—"],
-    ["Terme des quinze jours (convocation des parties)", ds.date ? limiteConvocation : "—", "15 jours"],
-    ["Convocation déclarée", q(ds.dateConvocation) || "non renseignée", d.convocation && d.convocation.jours != null ? d.convocation.jours + " jour(s) après la demande" : "—"],
+    ["Terme des huit jours (transmission aux autres organisations)", ds.date ? limiteTransmission : "-", "8 jours"],
+    ["Transmission déclarée", q(ds.dateTransmissionAutresOS) || "non renseignée", d.transmission && d.transmission.jours != null ? d.transmission.jours + " jour(s) après la demande" : "-"],
+    ["Terme des quinze jours (convocation des parties)", ds.date ? limiteConvocation : "-", "15 jours"],
+    ["Convocation déclarée", q(ds.dateConvocation) || "non renseignée", d.convocation && d.convocation.jours != null ? d.convocation.jours + " jour(s) après la demande" : "-"],
   ]);
   const griefs = [];
   if (d.transmission && d.transmission.fait === false) griefs.push("la transmission aux autres organisations n'est pas dans les huit jours");
@@ -1227,7 +1227,7 @@ function modeleDem01(f) {
 
 function modeleLoy01(f) {
   const A = O(); const { t1, h1, tab, note } = A;
-  t1("Grille des quatre mentions de la première réunion — L. 2242-14 — " + nomE(f));
+  t1("Grille des quatre mentions de la première réunion - L. 2242-14 - " + nomE(f));
   const r = f.premiereReunion || {};
   h1("Ce que le dossier déclare");
   tab(["Mention (L. 2242-14)", "État déclaré"], [
@@ -1242,7 +1242,7 @@ function modeleLoy01(f) {
 
 function modeleLoy02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille des conditions de dépôt — accord sur les salaires effectifs — L. 2242-6 — " + nomE(f));
+  t1("Grille des conditions de dépôt - accord sur les salaires effectifs - L. 2242-6 - " + nomE(f));
   const n = nego(f, "remuneration");
   h1("Ce que le dossier déclare");
   tab(["Point", "État déclaré"], [
@@ -1252,19 +1252,19 @@ function modeleLoy02(f) {
   ]);
   if (n.issue === "accord" && (!dit(n.pvOuvertureEcarts) || !dit(f.reponsesMotivees)))
     p("L'accord sur les salaires effectifs ne peut pas être régulièrement déposé tant que ces deux conditions ne sont pas réunies (L. 2242-6) : sans dépôt, la période n'est pas couverte au regard des pénalités.");
-  note("« Produire le document » écrit le procès-verbal d'ouverture, prêt à compléter des propositions réellement échangées — jamais devinées par l'application.");
+  note("« Produire le document » écrit le procès-verbal d'ouverture, prêt à compléter des propositions réellement échangées - jamais devinées par l'application.");
   return A.D;
 }
 
 function modeleUni01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Note de retrait — décision unilatérale pendant négociation — L. 2242-4 — " + nomE(f));
+  t1("Note de retrait - décision unilatérale pendant négociation - L. 2242-4 - " + nomE(f));
   const d = f.decisionUnilaterale || {};
   h1("Ce que le dossier déclare");
   tab(["Point", "État déclaré"], [
     ["Décision unilatérale prise pendant une négociation en cours", dit(d.prise) ? "oui" : nie(d.prise) ? "non" : "non renseigné"],
     ["Matière concernée", q(d.matiere) || "non renseignée"],
-    ["Urgence invoquée", dit(d.urgence) ? "oui — à documenter" : nie(d.urgence) ? "non" : "non renseigné"],
+    ["Urgence invoquée", dit(d.urgence) ? "oui - à documenter" : nie(d.urgence) ? "non" : "non renseigné"],
   ]);
   if (dit(d.prise) && !dit(d.urgence))
     p("Sans urgence établie, L. 2242-4 interdit cette décision tant que la négociation est en cours dans la matière concernée : elle est annulable, et son maintien nourrit le grief d'entrave.");
@@ -1276,11 +1276,11 @@ function modeleUni01(f) {
 
 function modeleIss01(f) {
   const A = O(); const { t1, h1, tab, note } = A;
-  t1("Grille des issues et des dépôts, négociation par négociation — L. 2242-5 — " + nomE(f));
+  t1("Grille des issues et des dépôts, négociation par négociation - L. 2242-5 - " + nomE(f));
   h1("Ce que le dossier déclare");
   const rows = Object.values(M.THEMES).map(t => {
     const n = nego(f, t.cle);
-    return [t.titre, q(n.issue) || "non renseignée", dit(n.depot) ? "oui" : nie(n.depot) ? "non" : "—"];
+    return [t.titre, q(n.issue) || "non renseignée", dit(n.depot) ? "oui" : nie(n.depot) ? "non" : "-"];
   });
   tab(["Négociation", "Issue déclarée", "Dépôt déclaré"], rows);
   note("Le procès-verbal de désaccord n'est complet que s'il consigne les propositions respectives des parties en leur dernier état et les mesures que l'employeur entend appliquer unilatéralement (L. 2242-5) ; sans dépôt dans les conditions de D. 2231-2, il ne produit aucun effet (R. 2242-1).");
@@ -1291,7 +1291,7 @@ function modeleIss01(f) {
 
 function modeleEga01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Grille du plan d'action annuel — égalité professionnelle — L. 2242-3 — " + nomE(f));
+  t1("Grille du plan d'action annuel - égalité professionnelle - L. 2242-3 - " + nomE(f));
   const n = nego(f, "egalite");
   const pl = n.planAction || {};
   h1("Ce que le dossier déclare");
@@ -1308,14 +1308,14 @@ function modeleEga01(f) {
 
 function modeleEga02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Calcul de la couverture et de la publication de l'index — L. 2242-8 — " + nomE(f));
+  t1("Calcul de la couverture et de la publication de l'index - L. 2242-8 - " + nomE(f));
   const eff = nb(f.effectif);
   const n = nego(f, "egalite");
   const couvert = n.issue === "accord" || dit((n.planAction || {}).existe);
   h1("Le calcul, sur ce dossier");
   tab(["Point", "Valeur"], [
     ["Effectif déclaré", eff === null ? "non renseigné" : eff + " salarié(s)"],
-    ["Seuil de cinquante salariés (L. 2242-8)", eff === null ? "non apprécié faute d'effectif" : (eff >= 50 ? "atteint" : "non atteint — sans objet")],
+    ["Seuil de cinquante salariés (L. 2242-8)", eff === null ? "non apprécié faute d'effectif" : (eff >= 50 ? "atteint" : "non atteint - sans objet")],
     ["Couverture par un accord ou un plan d'action", couvert ? "oui" : "non établie en l'état"],
     ["Index de L. 1142-8 publié", dit(f.indexEgalitePublie) ? "oui" : nie(f.indexEgalitePublie) ? "non" : "non renseigné"],
   ]);
@@ -1329,7 +1329,7 @@ function modeleEga02(f) {
 
 function noteContenu(f, cle, items, fondement, titre) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1(`Grille du contenu — ${titre} — ${fondement} — ` + nomE(f));
+  t1(`Grille du contenu - ${titre} - ${fondement} - ` + nomE(f));
   const n = nego(f, cle);
   h1("Ce que le dossier déclare");
   const traites = Array.isArray(n.themesTraites) ? n.themesTraites : [];
@@ -1346,7 +1346,7 @@ const modeleCon02 = f => noteContenu(f, "egalite", ITEMS_EGALITE, "L. 2242-17", 
 
 function modeleCon03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Note d'appui sur la base de données — négociation égalité — L. 2242-17, 2° — " + nomE(f));
+  t1("Note d'appui sur la base de données - négociation égalité - L. 2242-17, 2° - " + nomE(f));
   const n = nego(f, "egalite");
   h1("Ce que le dossier déclare");
   tab(["Point", "État déclaré"], [
@@ -1388,15 +1388,15 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    dans quel ordre. L'ordre n'est pas un détail de présentation : il a été
    arrêté explicitement, et il commande la logique.
 
-   PREMIER TEMPS — ce qu'elle n'a pas fait.
+   PREMIER TEMPS - ce qu'elle n'a pas fait.
    On liste les manquements, du plus grave au moins grave ; pour chacun on
    donne l'acte à accomplir, le modèle et la procédure ; puis on vérifie la
    correction. Le temps se termine quand tout ce qui manquait est validé.
 
-   SECOND TEMPS — ce qu'elle dit avoir fait.
+   SECOND TEMPS - ce qu'elle dit avoir fait.
    Et seulement alors. Les contrôles que l'audit a rendus « conformes » ne le
    sont que sur la parole du client : ils sont ici marqués « déclaré », repris
-   un par un avec la grille du texte, et validés — ou refusés, auquel cas ils
+   un par un avec la grille du texte, et validés - ou refusés, auquel cas ils
    retournent au premier temps comme manquements.
 
    La règle qui tient tout : UN « OUI » N'EST PAS UNE PREUVE. Rien ne passe de
@@ -1404,8 +1404,8 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    pourquoi ce module renomme l'état « conforme » plutôt que de le recopier :
    le mot « conforme » ne doit pas apparaître avant sa vérification. */
 
-const DECLARE = "déclaré — à vérifier";
-const REGLE = "en règle — vérifié";
+const DECLARE = "déclaré - à vérifier";
+const REGLE = "en règle - vérifié";
 
 /* Les quatre degrés de gravité, dans l'ordre où le guide les présente. Ils
    sont communs à tous les modules : un délit d'entrave se traite avant une
@@ -1413,7 +1413,7 @@ const REGLE = "en règle — vérifié";
 const DEGRES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -1426,8 +1426,8 @@ function etatParcours(etat) {
 
 /* Le premier temps : ce qui manque.
 
-   Sont retenus les contrôles « non conforme » — le texte n'est pas respecté —
-   et « risque à vérifier » — l'application ne tranche pas, mais quelque chose
+   Sont retenus les contrôles « non conforme » - le texte n'est pas respecté -
+   et « risque à vérifier » - l'application ne tranche pas, mais quelque chose
    est à faire. Les « donnée manquante » ne sont pas des manquements : ce sont
    des questions sans réponse, et elles retournent au questionnaire. */
 function premierTemps(C, R, verdicts, faits) {
@@ -1465,7 +1465,7 @@ function premierTemps(C, R, verdicts, faits) {
    Un contrôle « conforme » l'est parce que le client a déclaré la pièce, la
    date ou l'acte. Le second temps le reprend et demande de le montrer. Un
    contrôle sans grille de vérification ne peut pas être vérifié : il reste
-   « déclaré », et le dit — plutôt que de passer pour vérifié. */
+   « déclaré », et le dit - plutôt que de passer pour vérifié. */
 function secondTemps(C, R, verdicts, controles) {
   const points = [];
   for (const c of C) {
@@ -1514,7 +1514,7 @@ function verdictVerification(point) {
   if (refusees.length)
     return { issue: "refusé", refusees, motif:
       "Ce que vous déclariez en place ne l'est pas : " +
-      refusees.map(v => "« " + v.question + " » — attendu : " + v.attendu).join(" ; ") +
+      refusees.map(v => "« " + v.question + " » - attendu : " + v.attendu).join(" ; ") +
       ". Ce point retourne au premier temps." };
   if (manquantes.length)
     return { issue: "ne conclut pas", manquantes, motif:
@@ -1549,7 +1549,7 @@ function parcours(C, R, verdicts, etat) {
       refusesDuSecond: refuses,
       restants: restantsA.length + refuses.length,
       /* Achevé veut dire : plus rien à corriger. Un refus du second temps
-         rejoint la liste du premier — le compteur le dit déjà — et il doit
+         rejoint la liste du premier - le compteur le dit déjà - et il doit
          donc empêcher l'achèvement, sans quoi le compte rendu annonçait
          « tous les manquements sont déclarés corrigés » juste au-dessous de
          la liste de ceux qui reviennent refusés. */
@@ -1563,7 +1563,7 @@ function parcours(C, R, verdicts, etat) {
       /* Le second temps ne s'ouvre qu'une fois relevés tous les manquements
          du premier : c'est l'ordre qui a été arrêté, et la page le fait
          respecter. Il reste ouvert, en revanche, quand un point en revient
-         refusé — sinon le client serait renvoyé corriger sans pouvoir faire
+         refusé - sinon le client serait renvoyé corriger sans pouvoir faire
          revérifier ce qu'il a corrigé. */
       ouvert: restantsA.length === 0,
     },
@@ -1588,7 +1588,7 @@ module.exports = { parcours, premierTemps, secondTemps, verdictVerification,
     controles: require("./controles-nao.js"),
     manifeste: __MANIFESTE,
     champs: [["Les négociations obligatoires",[["negosEngagees","Avez-vous engagé les négociations obligatoires de la période en cours ?","oui / non"]]],["Identité",[["entreprise","Dénomination sociale","texte"],["dateAudit","Date à laquelle la situation est décrite","AAAA-MM-JJ"],["effectif","Effectif de l'entreprise","nombre"],["groupe","L'entreprise appartient-elle à un groupe (L. 2331-1) ?","oui / non"],["effectifGroupe","Effectif total du groupe","nombre"],["dimensionCommunautaire","Le groupe est-il de dimension communautaire ?","oui / non"],["effectifFrance","Effectif employé en France si le groupe est communautaire","nombre"]]],["Le déclencheur",[["sectionsSyndicales","Une ou plusieurs sections syndicales d'organisations représentatives sont-elles constituées ?","oui / non"]]],["L'accord de méthode",[["accordMethode.existe","Un accord fixe-t-il le calendrier, la périodicité, les thèmes et les modalités des négociations ?","oui / non"],["accordMethode.verse","Cet accord est-il joint au dossier ?","oui / non"],["accordMethode.dureeAns","Durée de l'accord, en années","nombre"],["accordMethode.mentions","Mentions que l'accord porte : themes, contenu, calendrier, informations, suivi","liste"],["accordMethode.periodicites","Périodicités fixées par thème, en années","objet"]]],["Les négociations menées",[["negos.remuneration","Rémunération : date d'engagement, issue, dépôt, procès-verbal d'ouverture sur les écarts, thèmes traités","objet"],["negos.egalite","Égalité et qualité de vie : date d'engagement, issue, dépôt, plan d'action, thèmes traités, appui sur la BDESE","objet"],["negos.gepp","Gestion des emplois et des parcours : date d'engagement, issue, dépôt","objet"],["negos.experimentes","Salariés expérimentés : date d'engagement, issue","objet"]]],["La conduite",[["premiereReunion.date","Date de la première réunion","AAAA-MM-JJ"],["premiereReunion.lieuCalendrierFixes","Le lieu et le calendrier des réunions y ont-ils été fixés ?","oui / non"],["premiereReunion.informationsRemises","Les informations ont-elles été remises aux négociateurs ?","oui / non"],["premiereReunion.dateRemiseInformations","Date de remise de ces informations","AAAA-MM-JJ"],["reponsesMotivees","Les propositions syndicales ont-elles reçu une réponse motivée ?","oui / non"],["decisionUnilaterale.prise","Une décision unilatérale a-t-elle été arrêtée dans une matière en cours de négociation ?","oui / non"],["decisionUnilaterale.matiere","Si oui, laquelle","texte"],["decisionUnilaterale.urgence","L'urgence était-elle invoquée ?","oui / non"]]],["La demande syndicale",[["demandeSyndicale.recue","Une organisation syndicale a-t-elle demandé l'ouverture d'une négociation ?","oui / non"],["demandeSyndicale.date","Date de cette demande","AAAA-MM-JJ"],["demandeSyndicale.dateTransmissionAutresOS","Date de transmission aux autres organisations représentatives","AAAA-MM-JJ"],["demandeSyndicale.dateConvocation","Date de convocation des parties","AAAA-MM-JJ"]]],["L'égalité professionnelle",[["indexEgalitePublie","Les indicateurs d'écarts de rémunération (index de L. 1142-8) sont-ils publiés ?","oui / non"]]],["Pièces",[["pieces","Pièces versées au dossier","liste d'objets"]]]],
-    propositions: {"sectionsSyndicales":{"valeurs":["oui","non"],"libre":false,"aide":"Une section syndicale existe dès qu'un syndicat représentatif a désigné un délégué syndical ou constitué une section. C'est elle — pas l'effectif — qui oblige à négocier. Sans section syndicale : rien n'est dû."},"groupe":{"valeurs":["oui","non"],"libre":false,"aide":"Le groupe au sens du comité de groupe : une entreprise dominante et celles qu'elle contrôle. Il compte pour le seuil de 300 salariés des négociations triennales."},"dimensionCommunautaire":{"valeurs":["oui","non"],"libre":false,"aide":"Un groupe présent dans plusieurs pays de l'Union. S'il emploie au moins 150 salariés en France, les négociations triennales sont dues."},"accordMethode.existe":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord peut organiser vos négociations : quels thèmes, tous les combien (au plus tous les 4 ans), avec quelles informations. Sans accord, la loi impose son rythme : rémunération et égalité chaque année, gestion des emplois tous les 3 ans à partir de 300 salariés."},"accordMethode.verse":{"valeurs":["oui","non"],"libre":false,"aide":"Joignez-le. C'est lui qui fixe votre calendrier : sans son texte, l'audit ne peut pas dire si vous êtes à jour."},"accordMethode.mentions":{"valeurs":["themes","contenu","calendrier","informations","suivi"],"libre":false,"multiple":true,"aide":"Les cinq mentions que la loi impose à cet accord : les thèmes et leur périodicité, le contenu de chacun, le calendrier et les lieux, les informations remises et leur date, le suivi des engagements. S'il en manque une, l'accord ne fait pas écran et le rythme légal s'applique."},"negos.remuneration.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Comment la négociation s'est terminée. La loi n'oblige pas à conclure — elle oblige à négocier, et à formaliser l'échec par un procès-verbal de désaccord, déposé."},"negos.egalite.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Même règle. Attention : sans accord sur l'égalité, un plan d'action annuel devient obligatoire, et il se dépose."},"negos.gepp.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Même règle, pour la gestion des emplois et des parcours professionnels."},"negos.experimentes.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Même règle, pour la négociation sur les salariés expérimentés."},"negos.remuneration.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Accord comme procès-verbal de désaccord se déposent auprès de l'administration. Un texte signé mais non déposé n'est pas en règle."},"negos.egalite.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Même règle de dépôt."},"negos.gepp.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Même règle de dépôt."},"negos.remuneration.pvOuvertureEcarts":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord sur les salaires ne peut être déposé qu'accompagné du procès-verbal d'ouverture des négociations sur les écarts de rémunération entre les femmes et les hommes. Sans lui, le dépôt sera refusé."},"negos.remuneration.themesTraites":{"valeurs":["salaires","temps de travail","épargne salariale","écarts femmes-hommes"],"libre":false,"multiple":true,"aide":"Les quatre thèmes que la loi met sur la table pour cette négociation. Cochez ceux qui y ont réellement été traités."},"negos.egalite.themesTraites":{"valeurs":["articulation","écarts femmes-hommes","discriminations","handicap","prévoyance","déconnexion"],"libre":false,"multiple":true,"aide":"Les six thèmes que la loi met sur la table pour cette négociation. Cochez ceux qui y ont réellement été traités."},"negos.egalite.appuiBDESE":{"valeurs":["oui","non"],"libre":false,"aide":"La loi impose que cette négociation s'appuie sur les données de la BDESE — le diagnostic comparé femmes-hommes. Remettez ces extraits aux négociateurs, et gardez la preuve de la remise."},"negos.egalite.planAction.existe":{"valeurs":["oui","non"],"libre":false,"aide":"Sans accord sur l'égalité, un plan d'action annuel est obligatoire : objectifs de progression, actions chiffrées, coût."},"negos.egalite.planAction.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Le plan d'action se dépose auprès de l'administration, comme un accord."},"premiereReunion.lieuCalendrierFixes":{"valeurs":["oui","non"],"libre":false,"aide":"La première réunion doit fixer le lieu et le calendrier des suivantes. C'est une exigence de loyauté, pas une formalité."},"premiereReunion.informationsRemises":{"valeurs":["oui","non"],"libre":false,"aide":"Les négociateurs doivent recevoir les informations nécessaires pour négocier en connaissance de cause, et savoir quand ils les recevront."},"reponsesMotivees":{"valeurs":["oui","non"],"libre":false,"aide":"Répondre — et répondre motivé — aux propositions syndicales fait partie de la négociation loyale. Le silence se retient contre l'employeur."},"decisionUnilaterale.prise":{"valeurs":["oui","non"],"libre":false,"aide":"Pendant qu'une négociation est en cours, l'employeur ne peut pas décider seul dans les matières discutées, sauf urgence justifiée."},"decisionUnilaterale.urgence":{"valeurs":["oui","non"],"libre":false,"aide":"L'urgence est l'exception que la loi réserve. Elle se prouve : gardez ce qui l'établit."},"demandeSyndicale.recue":{"valeurs":["oui","non"],"libre":false,"aide":"Quand un syndicat demande l'ouverture d'une négociation en retard, l'employeur transmet la demande aux autres syndicats sous 8 jours et convoque tout le monde sous 15 jours."},"indexEgalitePublie":{"valeurs":["oui","non"],"libre":false,"aide":"L'index de l'égalité professionnelle (écarts de rémunération) doit être publié chaque année à partir de 50 salariés. Sa non-publication expose, à elle seule, à la pénalité de 1 %."},"pieces":{"valeurs":[],"autres":["accord-methode","pv-desaccord","plan-action-egalite"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les documents que vous joignez. Un accord ne se prouve que par son texte."}},
+    propositions: {"sectionsSyndicales":{"valeurs":["oui","non"],"libre":false,"aide":"Une section syndicale existe dès qu'un syndicat représentatif a désigné un délégué syndical ou constitué une section. C'est elle - pas l'effectif - qui oblige à négocier. Sans section syndicale : rien n'est dû."},"groupe":{"valeurs":["oui","non"],"libre":false,"aide":"Le groupe au sens du comité de groupe : une entreprise dominante et celles qu'elle contrôle. Il compte pour le seuil de 300 salariés des négociations triennales."},"dimensionCommunautaire":{"valeurs":["oui","non"],"libre":false,"aide":"Un groupe présent dans plusieurs pays de l'Union. S'il emploie au moins 150 salariés en France, les négociations triennales sont dues."},"accordMethode.existe":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord peut organiser vos négociations : quels thèmes, tous les combien (au plus tous les 4 ans), avec quelles informations. Sans accord, la loi impose son rythme : rémunération et égalité chaque année, gestion des emplois tous les 3 ans à partir de 300 salariés."},"accordMethode.verse":{"valeurs":["oui","non"],"libre":false,"aide":"Joignez-le. C'est lui qui fixe votre calendrier : sans son texte, l'audit ne peut pas dire si vous êtes à jour."},"accordMethode.mentions":{"valeurs":["themes","contenu","calendrier","informations","suivi"],"libre":false,"multiple":true,"aide":"Les cinq mentions que la loi impose à cet accord : les thèmes et leur périodicité, le contenu de chacun, le calendrier et les lieux, les informations remises et leur date, le suivi des engagements. S'il en manque une, l'accord ne fait pas écran et le rythme légal s'applique."},"negos.remuneration.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Comment la négociation s'est terminée. La loi n'oblige pas à conclure - elle oblige à négocier, et à formaliser l'échec par un procès-verbal de désaccord, déposé."},"negos.egalite.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Même règle. Attention : sans accord sur l'égalité, un plan d'action annuel devient obligatoire, et il se dépose."},"negos.gepp.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Même règle, pour la gestion des emplois et des parcours professionnels."},"negos.experimentes.issue":{"valeurs":["accord","PV de désaccord","en cours","aucune"],"libre":false,"aide":"Même règle, pour la négociation sur les salariés expérimentés."},"negos.remuneration.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Accord comme procès-verbal de désaccord se déposent auprès de l'administration. Un texte signé mais non déposé n'est pas en règle."},"negos.egalite.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Même règle de dépôt."},"negos.gepp.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Même règle de dépôt."},"negos.remuneration.pvOuvertureEcarts":{"valeurs":["oui","non"],"libre":false,"aide":"Un accord sur les salaires ne peut être déposé qu'accompagné du procès-verbal d'ouverture des négociations sur les écarts de rémunération entre les femmes et les hommes. Sans lui, le dépôt sera refusé."},"negos.remuneration.themesTraites":{"valeurs":["salaires","temps de travail","épargne salariale","écarts femmes-hommes"],"libre":false,"multiple":true,"aide":"Les quatre thèmes que la loi met sur la table pour cette négociation. Cochez ceux qui y ont réellement été traités."},"negos.egalite.themesTraites":{"valeurs":["articulation","écarts femmes-hommes","discriminations","handicap","prévoyance","déconnexion"],"libre":false,"multiple":true,"aide":"Les six thèmes que la loi met sur la table pour cette négociation. Cochez ceux qui y ont réellement été traités."},"negos.egalite.appuiBDESE":{"valeurs":["oui","non"],"libre":false,"aide":"La loi impose que cette négociation s'appuie sur les données de la BDESE - le diagnostic comparé femmes-hommes. Remettez ces extraits aux négociateurs, et gardez la preuve de la remise."},"negos.egalite.planAction.existe":{"valeurs":["oui","non"],"libre":false,"aide":"Sans accord sur l'égalité, un plan d'action annuel est obligatoire : objectifs de progression, actions chiffrées, coût."},"negos.egalite.planAction.depot":{"valeurs":["oui","non"],"libre":false,"aide":"Le plan d'action se dépose auprès de l'administration, comme un accord."},"premiereReunion.lieuCalendrierFixes":{"valeurs":["oui","non"],"libre":false,"aide":"La première réunion doit fixer le lieu et le calendrier des suivantes. C'est une exigence de loyauté, pas une formalité."},"premiereReunion.informationsRemises":{"valeurs":["oui","non"],"libre":false,"aide":"Les négociateurs doivent recevoir les informations nécessaires pour négocier en connaissance de cause, et savoir quand ils les recevront."},"reponsesMotivees":{"valeurs":["oui","non"],"libre":false,"aide":"Répondre - et répondre motivé - aux propositions syndicales fait partie de la négociation loyale. Le silence se retient contre l'employeur."},"decisionUnilaterale.prise":{"valeurs":["oui","non"],"libre":false,"aide":"Pendant qu'une négociation est en cours, l'employeur ne peut pas décider seul dans les matières discutées, sauf urgence justifiée."},"decisionUnilaterale.urgence":{"valeurs":["oui","non"],"libre":false,"aide":"L'urgence est l'exception que la loi réserve. Elle se prouve : gardez ce qui l'établit."},"demandeSyndicale.recue":{"valeurs":["oui","non"],"libre":false,"aide":"Quand un syndicat demande l'ouverture d'une négociation en retard, l'employeur transmet la demande aux autres syndicats sous 8 jours et convoque tout le monde sous 15 jours."},"indexEgalitePublie":{"valeurs":["oui","non"],"libre":false,"aide":"L'index de l'égalité professionnelle (écarts de rémunération) doit être publié chaque année à partir de 50 salariés. Sa non-publication expose, à elle seule, à la pénalité de 1 %."},"pieces":{"valeurs":[],"autres":["accord-methode","pv-desaccord","plan-action-egalite"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les documents que vous joignez. Un accord ne se prouve que par son texte."}},
     listes: [],
     colonnes: {},
     piecesAppelees: {},

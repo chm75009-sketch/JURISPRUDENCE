@@ -108,7 +108,7 @@ for i in items:
         r = p.add_run(f"   [{i['priorite']}]"); r.font.size = Pt(8)
         r.font.color.rgb = RGBColor.from_string(c)
         bordure_gauche(p, c)
-        tete = f"{i['etat']} — " if i.get("etat") else ""
+        tete = f"{i['etat']} - " if i.get("etat") else ""
         q = par(f"{tete}{i['pourquoi']}  ·  {i['id']}", 9, coul=GRIS, apres=6)
         bordure_gauche(q, c)
         continue
@@ -129,7 +129,7 @@ for i in items:
         r = p.add_run("✓  "); r.bold = True; r.font.size = Pt(10)
         r.font.color.rgb = RGBColor(0x1C, 0x5E, 0x36)
         r = p.add_run(i["t"]); r.font.size = Pt(10)
-        r = p.add_run(" — " + i["base"]); r.font.size = Pt(10); r.font.color.rgb = GRIS
+        r = p.add_run(" - " + i["base"]); r.font.size = Pt(10); r.font.color.rgb = GRIS
         continue
     if k == "sur":   par(i["t"], 10, coul=GRIS, apres=3)
     elif k == "t1":  par(i["t"], 20, gras=True, coul=BLEU, apres=4, just=False)
@@ -142,13 +142,13 @@ for i in items:
     elif k == "h3":  par(i["t"], 12, gras=True, coul=BLEU, avant=10, apres=5, just=False)
     elif k == "p":   par(i["t"])
     elif k == "note":par(i["t"], 10, coul=GRIS)
-    elif k == "puce":par("—  " + i["t"], retrait=14)
+    elif k == "puce":par("-  " + i["t"], retrait=14)
     elif k == "enc":
         par(i["titre"], 12, gras=True, coul=BLEU, avant=10, apres=3, just=False)
         par(i["t"], 11, ital=True, apres=10)
     elif k == "table": tableau(i["head"], i["rows"])
     elif k == "piece":
-        par(f"Pièce n° {i['num']} — {i['titre']}", 13, gras=True, coul=BLEU, avant=14, apres=3, just=False)
+        par(f"Pièce n° {i['num']} - {i['titre']}", 13, gras=True, coul=BLEU, avant=14, apres=3, just=False)
         par(f"Nature : {i['nature']} · Émetteur : {i['emetteur']} · Date : {i['date']}", 9, coul=GRIS, apres=2)
         par(f"Ce qu'elle prouve : {i['prouve']}" + (f" · Fondement : {i['texte']}" if i.get("texte") else ""), 9, coul=GRIS, apres=6)
     elif k == "doc":

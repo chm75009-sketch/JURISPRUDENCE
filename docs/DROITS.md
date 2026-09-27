@@ -1,4 +1,4 @@
-# Équipe, droits et journal — le contrat
+# Équipe, droits et journal - le contrat
 
 Ce document décrit le dispositif de gestion d'équipe de l'application : ce qu'il
 garantit, ce qu'il ne garantit pas, le schéma de ses données, l'interface du
@@ -14,7 +14,7 @@ connaissent que les deux fonctions publiques ci-dessous.
 **Les droits sont organisationnels, non sécuritaires.** Tant que l'application
 fonctionne sans serveur, tout vit dans le navigateur du poste : les utilisateurs,
 les droits, le journal, la session. Quiconque a accès au poste peut les
-contourner — la console du navigateur suffit à réécrire `equipe-utilisateurs` ou
+contourner - la console du navigateur suffit à réécrire `equipe-utilisateurs` ou
 à appeler `Droits.brancher` avec un fournisseur complaisant.
 
 Ce dispositif sert donc à **répartir le travail dans une équipe de bonne foi** :
@@ -28,7 +28,7 @@ l'écran de connexion. Elle n'est pas une précaution de style.
 **Les codes d'accès ne sont pas stockés en clair.** Chaque utilisateur porte un
 sel de 16 octets tiré au hasard ; ce qui est enregistré est
 `SHA-256(sel + ":" + code)`, en hexadécimal. Cela protège de la **lecture
-accidentelle** — un collègue qui ouvre le stockage local ne lit pas les codes de
+accidentelle** - un collègue qui ouvre le stockage local ne lit pas les codes de
 l'équipe, et un code réutilisé ailleurs n'est pas révélé. Cela ne protège **pas
 d'un utilisateur déterminé** : le condensat est sur le poste, sans étirement de
 clé ; il peut être attaqué hors ligne par dictionnaire, ou simplement remplacé.
@@ -38,7 +38,7 @@ par `crypto.subtle`, pour une raison précise : l'API Web Crypto n'existe qu'en
 contexte sécurisé (https ou localhost), et l'application s'ouvre aussi depuis un
 fichier local. Un condensat qui changerait selon le mode d'ouverture rendrait les
 codes invérifiables d'un jour à l'autre. L'implémentation rend exactement ce que
-rend `crypto.subtle.digest("SHA-256", …)` — vérifié sur les vecteurs d'essai.
+rend `crypto.subtle.digest("SHA-256", …)` - vérifié sur les vecteurs d'essai.
 
 **Mode ouvert.** Tant qu'aucun utilisateur n'a été créé, l'application se
 comporte exactement comme avant : pas d'écran de connexion, tous les droits
@@ -114,18 +114,18 @@ conséquence.
 Les pages n'ont pas été retouchées : c'est `droits.js` qui applique le refus, et
 lui seul. Trois applications générales, à l'ouverture de chaque page :
 
-- **`consulter` refusé** — la page entière est remplacée par un écran de refus
+- **`consulter` refusé** - la page entière est remplacée par un écran de refus
   nommé (« ce module ne vous est pas ouvert »), avec un bouton pour changer
   d'utilisateur. Le refus est journalisé.
-- **`saisir` refusé** — tous les champs et boutons de la page passent en lecture
+- **`saisir` refusé** - tous les champs et boutons de la page passent en lecture
   seule, et un bandeau le dit en toutes lettres. Un observateur de mutations
   regèle les champs ajoutés après coup.
-- **`exporter` refusé** — `window.print` est remplacé, le raccourci d'impression
+- **`exporter` refusé** - `window.print` est remplacé, le raccourci d'impression
   intercepté, et tout clic sur une ancre porteuse de `download` interrompu.
 
 **Ce qui n'est pas encore intercepté, et il faut le dire :** `produire` n'a pas
 de signature générique dans les pages actuelles. Un document s'y saisit puis s'y
-imprime — les deux gestes sont couverts par `saisir` et `exporter`. Le jour où
+imprime - les deux gestes sont couverts par `saisir` et `exporter`. Le jour où
 une page sera retouchée par ailleurs, il suffira de poser sur le bouton qui
 engendre :
 
@@ -134,7 +134,7 @@ engendre :
 ```
 
 `droits.js` intercepte déjà cet attribut, en capture, et journalise le geste ou
-le refuse. C'est le seul point d'accroche que les pages auront jamais à écrire —
+le refuse. C'est le seul point d'accroche que les pages auront jamais à écrire -
 et il reste déclaratif : pas une ligne de logique de droit dans une page.
 
 ### Le journal se remplit sans toucher aux pages
@@ -214,7 +214,7 @@ jusqu'à tenir ; au-delà, la photo est refusée avec un message).
       "nom": "Léa Chikhaoui",
       "module": "audit-cse",
       "action": "consulter",
-      "detail": "Ouverture de Audit — comité social et économique",
+      "detail": "Ouverture de Audit - comité social et économique",
       "page": "audit-cse.html"
     }
   ]
@@ -243,7 +243,7 @@ le réseau, rien ne changera pour l'appelant.
 fournisseur = {
   nom: "local" | "distant" | …,
 
-  // facultatif — photographie SYNCHRONE de l'état
+  // facultatif - photographie SYNCHRONE de l'état
   instantane() -> { utilisateurs: [Utilisateur], session: Session|null }
 
   // utilisateurs
@@ -272,8 +272,8 @@ l'hydratation, et la page reste masquée par le verrou de démarrage pendant ce
 temps. Les pages qui ont besoin de l'état avant d'agir utilisent
 `Droits.quandPret(fn)` ou `Droits.pret()` (une promesse).
 
-**Le fournisseur ne décide de rien.** Il range et il rend. Les règles — qui peut
-quoi, qui peut créer, on ne supprime pas le dernier administrateur — sont dans le
+**Le fournisseur ne décide de rien.** Il range et il rend. Les règles - qui peut
+quoi, qui peut créer, on ne supprime pas le dernier administrateur - sont dans le
 noyau, et y restent quel que soit le fournisseur. C'est ce qui rend la bascule
 possible sans réécriture ; c'est aussi ce qui fait qu'un fournisseur distant
 devra **rejouer ces règles côté serveur** (voir §7).
@@ -283,7 +283,7 @@ devra **rejouer ces règles côté serveur** (voir §7).
 ## 6. L'interface publique, pour les pages
 
 ```js
-// autorisation — le point unique
+// autorisation - le point unique
 Droits.peut(module, action)         Droits.peutAdmin(action)
 
 // état
@@ -360,16 +360,16 @@ Rien à changer dans les pages. Voici ce qu'il y aura à faire, dans l'ordre.
 4. **Rejouer les règles côté serveur.** C'est le point qui fait passer les droits
    d'organisationnels à sécuritaires, et il ne se contourne pas : chaque route du
    serveur doit revérifier ce que `Droits.peut` vérifie dans le navigateur. Le
-   contrôle côté navigateur reste utile — il évite les gestes inutiles et il
-   explique le refus — mais il cesse d'être le contrôle.
+   contrôle côté navigateur reste utile - il évite les gestes inutiles et il
+   explique le refus - mais il cesse d'être le contrôle.
 
 5. **Migrer les données existantes.** Le schéma du §4 est celui à téléverser tel
    quel : `schema: 1`, mêmes noms de champs. Les condensats locaux peuvent être
-   repris (même algorithme), ou invalidés en demandant à chacun un nouveau code —
+   repris (même algorithme), ou invalidés en demandant à chacun un nouveau code -
    c'est plus propre, parce que les condensats locaux n'ont pas d'étirement de
    clé.
 
-6. **Retirer la phrase d'honnêteté de `equipe.html`** — mais alors seulement, et
+6. **Retirer la phrase d'honnêteté de `equipe.html`** - mais alors seulement, et
    pas avant que le point 4 soit fait. Tant que le serveur ne revérifie pas, la
    phrase reste vraie.
 

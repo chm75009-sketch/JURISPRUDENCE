@@ -1,8 +1,8 @@
-/* Moteur d'audit « pse » — version navigateur (MoteurPSE).
+/* Moteur d'audit « pse » - version navigateur (MoteurPSE).
 
    Ce fichier est produit par moteur/commun/empaqueter.js à partir des sources
    de moteur/pse, et versé au dépôt : le site ne construit rien.
-   Ne pas le modifier à la main — rejouer l'empaquetage.
+   Ne pas le modifier à la main - rejouer l'empaquetage.
 
    Empreinte du moteur au moment de l'empaquetage : 264a0d27e681
    {"articlesLus":22,"rubriquesL1233_62":7,"couvertureDecoupage":98.1,"versionL1233_62":"LEGIARTI000036261725","controles":21,"calibrage":2,"coherence":1,"donneesDemandees":29,"reglesJurisprudence":13,"arretsAuCorpus":20,"casContradictoires":16,"verdicts":378,"exceptions":0,"conformitesOuSansObjetSurFicheVide":0,"calibrageConcluantConforme":0}
@@ -34,7 +34,7 @@ __def("./audit-pse-client.js", function(module, exports, require){
    rendu. Toute phrase juridique vient d'un contrôle, qui la tient d'un article.
 
    L'ordre de lecture est celui du dossier : ce qui bloque d'abord, ce qui
-   manque ensuite, ce que l'administration appréciera enfin — et le calibrage
+   manque ensuite, ce que l'administration appréciera enfin - et le calibrage
    est présenté pour ce qu'il est, une mesure sans seuil légal. */
 const O = require("./outils.js");
 const M = require("./moteur-pse.js");
@@ -46,7 +46,7 @@ const { MODELES } = require("./modeles-pse.js");
 const DT = require("../commun/parcours-deux-temps.js");
 
 const { CONF, NC, RISQ, MANQ, SO } = ETATS;
-const euros = n => (typeof n === "number" && isFinite(n) ? n.toLocaleString("fr-FR") + " €" : "—");
+const euros = n => (typeof n === "number" && isFinite(n) ? n.toLocaleString("fr-FR") + " €" : "-");
 
 function audit(f) {
   const A = O(); const { sur, t1, trait, h1, h2, h3, p, note, puce, enc, tab } = A;
@@ -60,7 +60,7 @@ function audit(f) {
   const regime = M.planDu(f);
   const acc = M.accompagnement(f);
 
-  sur("Audit — plan de sauvegarde de l'emploi · articles L. 1233-61 à L. 1233-63 du code du travail");
+  sur("Audit - plan de sauvegarde de l'emploi · articles L. 1233-61 à L. 1233-63 du code du travail");
   t1(f.entreprise || "Audit du plan");
   sur(`${C.length} contrôles · ${L1233_62.mesures.length} rubriques de l'article L. 1233-62, découpées depuis le texte`);
   trait();
@@ -77,7 +77,7 @@ function audit(f) {
   A.D.push({ k: "bandeau", couleur: statut.c, t: statut.t, sous: statut.sous });
 
   enc("Ce que ce module ne peut pas dire",
-    "Aucun texte ne fixe le montant d'un plan de sauvegarde de l'emploi. L'article L. 1233-57-3 confie à l'autorité administrative — puis au juge administratif — l'appréciation de la proportionnalité des mesures aux moyens de l'entreprise, de l'unité économique et sociale et du groupe. Les contrôles de calibrage calculent des rapports et les affichent ; aucun ne conclut à la conformité sur le montant. Un feu vert sur ce point serait faux.");
+    "Aucun texte ne fixe le montant d'un plan de sauvegarde de l'emploi. L'article L. 1233-57-3 confie à l'autorité administrative - puis au juge administratif - l'appréciation de la proportionnalité des mesures aux moyens de l'entreprise, de l'unité économique et sociale et du groupe. Les contrôles de calibrage calculent des rapports et les affichent ; aucun ne conclut à la conformité sur le montant. Un feu vert sur ce point serait faux.");
 
   /* --- le régime --- */
   h1("Le régime");
@@ -95,7 +95,7 @@ function audit(f) {
   /* --- ce qui manque --- */
   if (mq.length) {
     h1("Ce qui manque pour conclure");
-    for (const x of mq) puce(`${x.objet} — ${x.v.motif} · ${x.id}`);
+    for (const x of mq) puce(`${x.objet} - ${x.v.motif} · ${x.id}`);
   }
 
   /* --- ce que l'administration appréciera --- */
@@ -110,15 +110,15 @@ function audit(f) {
 
   /* --- le contenu du plan, rubrique par rubrique --- */
   h1("Le contenu du plan, rubrique par rubrique");
-  p("Les rubriques ci-dessous sont celles de l'article L. 1233-62, découpées depuis son texte et non recopiées. L'article énonce « des mesures telles que » : la liste n'est pas limitative, et une rubrique peut être écartée — mais en connaissance de cause.");
+  p("Les rubriques ci-dessous sont celles de l'article L. 1233-62, découpées depuis son texte et non recopiées. L'article énonce « des mesures telles que » : la liste n'est pas limitative, et une rubrique peut être écartée - mais en connaissance de cause.");
   const L = Array.isArray((f.plan || {}).mesures) ? f.plan.mesures : [];
   tab(["Rubrique", "Ce que l'article vise", "Mesures saisies", "Bénéficiaires", "Budget"],
     L1233_62.mesures.map(m => {
       const s = L.filter(x => String(x.rubrique || "").trim() === m.marque);
       return [m.marque, m.intitule,
         s.length ? s.map(x => x.intitule || "sans intitulé").join(" ; ") : "aucune",
-        s.length ? String(s.reduce((n, x) => n + (Number(x.beneficiaires) || 0), 0)) : "—",
-        s.length ? euros(s.reduce((n, x) => n + (Number(x.budget) || 0), 0)) : "—"];
+        s.length ? String(s.reduce((n, x) => n + (Number(x.beneficiaires) || 0), 0)) : "-",
+        s.length ? euros(s.reduce((n, x) => n + (Number(x.budget) || 0), 0)) : "-"];
     }));
 
   /* --- ce qui est acquis --- */
@@ -131,14 +131,14 @@ function audit(f) {
   const regles = GRILLE.retenues(f);
   h1("Ce que la Cour de cassation a jugé");
   p(`${regles.length} règle(s) de la grille s'appliquent à votre situation, sur ${GRILLE.G.length}. Chacune renvoie à un arrêt publié, dont le sommaire est reproduit : jugez vous-même si la règle dit bien ce que l'arrêt dit. Une règle dont la condition n'est pas remplie ne dit rien, ni dans un sens ni dans l'autre.`);
-  note("Un arrêt de la chambre sociale ne lie pas l'autorité administrative. Depuis la loi du 14 juin 2013, le contenu du plan et la régularité de la procédure relèvent du juge administratif — plusieurs des arrêts ci-dessous le disent expressément.");
+  note("Un arrêt de la chambre sociale ne lie pas l'autorité administrative. Depuis la loi du 14 juin 2013, le contenu du plan et la régularité de la procédure relèvent du juge administratif - plusieurs des arrêts ci-dessous le disent expressément.");
   for (const r of regles) {
-    h3(`${r.sujet} — ${r.id}`);
+    h3(`${r.sujet} - ${r.id}`);
     p(r.dit);
     for (const num of r.arrets) {
       const a = GRILLE.arret(num);
       if (!a) continue;
-      note(`Cass. ${a.ch || "soc."} ${a.date}, n° ${a.num}${a.sol ? ", " + a.sol : ""}${a.pub ? " — " + a.pub : ""}`);
+      note(`Cass. ${a.ch || "soc."} ${a.date}, n° ${a.num}${a.sol ? ", " + a.sol : ""}${a.pub ? " - " + a.pub : ""}`);
       if (a.sommaire) note("« " + a.sommaire.replace(/\s+/g, " ").trim() + " »");
     }
   }
@@ -173,14 +173,14 @@ function verdicts(f) {
   return v;
 }
 
-/* Le parcours en deux temps — corriger ce qui manque, puis vérifier ce qui est
+/* Le parcours en deux temps - corriger ce qui manque, puis vérifier ce qui est
    déclaré. `etat` porte ce que la page a recueilli : les corrections déclarées
    faites et les réponses à la grille de vérification. */
 function parcours(f, etat) {
   return DT.parcours(C, R, verdicts(f), etat);
 }
 
-/* Le modèle concret d'un point de régularisation — étape 5 du parcours.
+/* Le modèle concret d'un point de régularisation - étape 5 du parcours.
    Chiffré sur le dossier remis, jamais sur un exemple figé : voir
    modeles-pse.js. Rend null si aucun modèle n'est écrit pour cet id. */
 function modele(f, id) {
@@ -224,14 +224,14 @@ __def("./moteur-pse.js", function(module, exports, require){
 
    Trois bascules, et rien d'autre n'est décidé ici :
 
-   — le plan est dû : cinquante salariés dans l'entreprise et dix licenciements
+   - le plan est dû : cinquante salariés dans l'entreprise et dix licenciements
      envisagés dans une même période de trente jours (L. 1233-61) ;
-   — l'accompagnement individuel bascule à mille salariés : congé de reclassement
+   - l'accompagnement individuel bascule à mille salariés : congé de reclassement
      au-dessus (L. 1233-71), contrat de sécurisation professionnelle en deçà
      (L. 1233-66, qui vise « les entreprises non soumises à l'article
-     L. 1233-71 ») — les deux ne se cumulent pas, et l'un des deux est toujours
+     L. 1233-71 ») - les deux ne se cumulent pas, et l'un des deux est toujours
      dû dès lors qu'un licenciement économique est envisagé ;
-   — le délai d'instruction dépend de la voie : quinze jours pour la validation
+   - le délai d'instruction dépend de la voie : quinze jours pour la validation
      d'un accord, vingt et un pour l'homologation d'un document unilatéral
      (L. 1233-57-4), le silence valant acceptation.
 
@@ -242,7 +242,7 @@ const ECART = require("./dates.js");
 const nombre = x => (typeof x === "number" && isFinite(x) ? x : null);
 
 /* Le plan est-il dû ? Le décompte des dix licenciements sur trente jours est
-   celui du module économique — il intègre les licenciements déjà prononcés et
+   celui du module économique - il intègre les licenciements déjà prononcés et
    les refus de modification du contrat. Il n'est pas refait ici. */
 function planDu(f) {
   const eff = nombre(f.effectif);
@@ -300,12 +300,12 @@ function ajouter(iso, jours) {
    Deux choses distinctes, et le module les distingue parce que les confondre
    est l'erreur ordinaire :
 
-   — le comité tient AU MOINS DEUX RÉUNIONS espacées d'au moins quinze jours ;
-   — il rend ses deux avis dans un délai qui, à compter de la première réunion,
+   - le comité tient AU MOINS DEUX RÉUNIONS espacées d'au moins quinze jours ;
+   - il rend ses deux avis dans un délai qui, à compter de la première réunion,
      ne peut excéder deux, trois ou quatre mois selon le nombre de licenciements.
 
    Le second est un plafond légal supplétif : une convention ou un accord
-   collectif peut prévoir des délais différents — plus longs comme plus courts.
+   collectif peut prévoir des délais différents - plus longs comme plus courts.
    Le moteur le dit et refuse de conclure quand un accord est déclaré sans être
    versé. À défaut d'avis dans le délai, le comité est réputé consulté. */
 const DELAIS_AVIS = [
@@ -323,7 +323,7 @@ function consultation(f) {
   return { connu: true, mois: t.mois, tranche: t.texte, reunions,
     premiere: reunions[0] || null,
     echeance: reunions[0] ? ajouterMois(reunions[0], t.mois) : null,
-    motif: `${n} licenciements — ${t.texte} : le comité rend ses deux avis dans un délai qui ne peut excéder ${t.mois} mois à compter de sa première réunion. Une convention ou un accord collectif peut prévoir des délais différents. À défaut d'avis dans le délai, le comité est réputé avoir été consulté.` };
+    motif: `${n} licenciements - ${t.texte} : le comité rend ses deux avis dans un délai qui ne peut excéder ${t.mois} mois à compter de sa première réunion. Une convention ou un accord collectif peut prévoir des délais différents. À défaut d'avis dans le délai, le comité est réputé avoir été consulté.` };
 }
 function ajouterMois(iso, mois) {
   const d = new Date(iso + "T00:00:00Z");
@@ -379,7 +379,7 @@ const estDateISO = s => {
 const JOUR = 86400000;
 const jour = s => Date.UTC(...s.split("-").map((x, i) => i === 1 ? +x - 1 : +x));
 
-/* ecart(depuis, jusqu) — le nombre de jours écoulés du premier au second.
+/* ecart(depuis, jusqu) - le nombre de jours écoulés du premier au second.
    Rend { valide: true, jours } si, et seulement si, les deux dates existent et
    sont dans cet ordre. Sinon { valide: false, cause, motif } : « format » quand
    une date n'existe pas, « ordre » quand la chronologie est inversée. */
@@ -411,8 +411,8 @@ __def("./controles-pse.js", function(module, exports, require){
    Ce module est distinct du module économique parce que son objet l'est : le
    module économique vérifie qu'un licenciement peut être prononcé ; celui-ci
    vérifie qu'un plan tient devant l'administration. Il travaille néanmoins sur
-   la même fiche — l'effectif, le nombre de licenciements et le calendrier ne se
-   ressaisissent pas — et le régime du plan est calculé par moteur-pse.js.
+   la même fiche - l'effectif, le nombre de licenciements et le calendrier ne se
+   ressaisissent pas - et le régime du plan est calculé par moteur-pse.js.
 
    Une chose ne peut pas être contrôlée et il faut le dire ici plutôt que dans
    une note : AUCUN TEXTE NE FIXE LE MONTANT D'UN PLAN. La proportionnalité aux
@@ -437,7 +437,7 @@ const ETATS = { CONF, NC, RISQ, MANQ, SO };
 const vide = x => x === undefined || x === null || x === "" ||
   (Array.isArray(x) && !x.length) || (typeof x === "string" && !x.trim());
 const nb = x => (typeof x === "number" && isFinite(x) ? x : null);
-const euros = n => n === null ? "—" : n.toLocaleString("fr-FR") + " €";
+const euros = n => n === null ? "-" : n.toLocaleString("fr-FR") + " €";
 
 /* Le garde commun : tant que le plan n'est pas dû, aucun contrôle du module
    n'a d'objet ; et tant que l'on ne sait pas s'il est dû, aucun ne conclut. */
@@ -449,7 +449,7 @@ function siPlanDu(f, suite) {
 }
 
 /* La liste des mesures saisies. Le formulaire la remplit sous forme de tableau
-   — une ligne par mesure — importable depuis Excel ou Word. */
+   - une ligne par mesure - importable depuis Excel ou Word. */
 const lignes = f => Array.isArray((f.plan || {}).mesures) ? (f.plan || {}).mesures : null;
 
 const C = [];
@@ -467,11 +467,11 @@ ctl("PSE-CTL-CON-01", "Contenu du plan",
     const absentes = L1233_62.mesures.filter(m => !vues.has(m.marque));
     if (!absentes.length)
       return { etat: CONF, motif: `Les ${L1233_62.mesures.length} rubriques de l'article sont toutes rattachées à au moins une mesure du plan.` };
-    /* La liste n'est pas limitative — « des mesures telles que » — et l'absence
+    /* La liste n'est pas limitative - « des mesures telles que » - et l'absence
        d'une rubrique n'est donc pas une non-conformité par elle-même. Mais
        l'administration contrôle le plan au regard de ces rubriques : une
        rubrique laissée vide sans explication est un motif de refus ordinaire. */
-    return { etat: RISQ, motif: `${absentes.length} rubrique(s) de l'article L. 1233-62 ne sont rattachées à aucune mesure : ${absentes.map(m => m.marque).join(", ")}. La liste de l'article n'est pas limitative — il énonce « des mesures telles que » — mais l'administration apprécie le plan au regard de ces rubriques. Une rubrique écartée doit l'être en connaissance de cause, et le motif de son écartement doit pouvoir être donné.` };
+    return { etat: RISQ, motif: `${absentes.length} rubrique(s) de l'article L. 1233-62 ne sont rattachées à aucune mesure : ${absentes.map(m => m.marque).join(", ")}. La liste de l'article n'est pas limitative - il énonce « des mesures telles que » - mais l'administration apprécie le plan au regard de ces rubriques. Une rubrique écartée doit l'être en connaissance de cause, et le motif de son écartement doit pouvoir être donné.` };
   }));
 
 ctl("PSE-CTL-CON-02", "Contenu du plan",
@@ -484,7 +484,7 @@ ctl("PSE-CTL-CON-02", "Contenu du plan",
     if (!rec.length)
       return { etat: NC, motif: `Aucune action de reclassement interne n'est saisie. ${RECLASSEMENT.texte} Le plan de reclassement n'est pas une mesure parmi d'autres : l'article en fait le cœur du plan.` };
     if (vide((f.plan || {}).salariesExposes))
-      return { etat: MANQ, motif: "Les salariés dont la réinsertion est particulièrement difficile — âge, caractéristiques sociales, qualification — ne sont pas identifiés. L'article les vise nommément." };
+      return { etat: MANQ, motif: "Les salariés dont la réinsertion est particulièrement difficile - âge, caractéristiques sociales, qualification - ne sont pas identifiés. L'article les vise nommément." };
     return { etat: CONF, motif: `${rec.length} action(s) de reclassement interne saisie(s), et les salariés dont la réinsertion est particulièrement difficile sont identifiés.` };
   }));
 
@@ -559,7 +559,7 @@ ctl("PSE-CTL-CAL-02", "Calibrage",
       return { etat: MANQ, motif: "Le budget du plan ou le résultat consolidé du groupe n'est pas renseigné. Un plan calibré sur les seuls moyens de la filiale est le motif de refus d'homologation le plus fréquent : le rapport doit pouvoir être présenté." };
     const part = res > 0 ? Math.round((annonce / res) * 1000) / 10 : null;
     return { etat: RISQ, calcul: { budget: annonce, resultatGroupe: res, part },
-      motif: `Budget du plan : ${euros(annonce)}. Résultat consolidé du groupe : ${euros(res)}${part !== null ? `, soit ${part} % de celui-ci` : ""}. L'article L. 1233-57-3 fait des moyens du groupe le premier critère d'appréciation. Le rapport est calculé et affiché ; il n'est pas jugé ici — aucun seuil n'existe.` };
+      motif: `Budget du plan : ${euros(annonce)}. Résultat consolidé du groupe : ${euros(res)}${part !== null ? `, soit ${part} % de celui-ci` : ""}. L'article L. 1233-57-3 fait des moyens du groupe le premier critère d'appréciation. Le rapport est calculé et affiché ; il n'est pas jugé ici - aucun seuil n'existe.` };
   }));
 
 ctl("PSE-CTL-CAL-03", "Calibrage",
@@ -601,7 +601,7 @@ ctl("PSE-CTL-ACC-02", "Accompagnement individuel",
     const reconversion = (f.plan || {}).formationReconversion === true || (f.plan || {}).formationReconversion === "oui";
     const max = reconversion ? 24 : 12;
     if (d > max)
-      return { etat: NC, motif: `Congé de ${d} mois. La durée ne peut excéder douze mois, portés à vingt-quatre en cas de formation de reconversion professionnelle${reconversion ? "" : " — que le dossier ne mentionne pas"} (L. 1233-71).` };
+      return { etat: NC, motif: `Congé de ${d} mois. La durée ne peut excéder douze mois, portés à vingt-quatre en cas de formation de reconversion professionnelle${reconversion ? "" : " - que le dossier ne mentionne pas"} (L. 1233-71).` };
     return { etat: CONF, motif: `Congé de ${d} mois, dans la limite de ${max}. Il est pris pendant le préavis, que le salarié est dispensé d'exécuter ; lorsqu'il excède le préavis, le terme de celui-ci est reporté jusqu'à la fin du congé, et la rémunération de la période excédentaire est celle de l'allocation de conversion (L. 1233-72). L'employeur finance l'ensemble des actions.` };
   });
 
@@ -632,7 +632,7 @@ ctl("PSE-CTL-VOI-01", "Voie et instruction",
   ["L. 1233-24-1", "L. 1233-57-3"],
   f => siPlanDu(f, () => {
     const v = (f.pse || {}).voie;
-    if (vide(v)) return { etat: MANQ, motif: "La voie n'est pas arrêtée. Elle détermine tout le calendrier — quinze jours d'instruction contre vingt et un — et se choisit avant la première réunion." };
+    if (vide(v)) return { etat: MANQ, motif: "La voie n'est pas arrêtée. Elle détermine tout le calendrier - quinze jours d'instruction contre vingt et un - et se choisit avant la première réunion." };
     return { etat: CONF, motif: v === "accord"
       ? "Accord majoritaire : signature par des syndicats ayant recueilli au moins 50 % des suffrages exprimés au premier tour des dernières élections, puis validation administrative dans les quinze jours."
       : "Document unilatéral soumis à homologation dans les vingt et un jours : l'administration vérifie le contenu, la régularité de la consultation et le respect des articles L. 1233-61 à L. 1233-63." };
@@ -740,7 +740,7 @@ ctl("PSE-CTL-CSE-02", "Consultation du comité",
         return { etat: RISQ, motif: `Un accord fixant des délais différents est déclaré mais n'est pas versé. Le plafond légal de ${c.mois} mois n'est donc pas opposable en l'état, et l'application ne peut pas vérifier celui que vous appliquez : joignez l'accord.` };
     }
     const avis = (f.pse || {}).dateAvisCSE || f.dateAvisCSE;
-    if (vide(avis)) return { etat: RISQ, motif: `${c.motif} Aucun avis n'est enregistré : à défaut d'avis rendu au ${c.echeance}, le comité sera réputé consulté — ce qui ne dispense pas d'avoir tenu les réunions.` };
+    if (vide(avis)) return { etat: RISQ, motif: `${c.motif} Aucun avis n'est enregistré : à défaut d'avis rendu au ${c.echeance}, le comité sera réputé consulté - ce qui ne dispense pas d'avoir tenu les réunions.` };
     return avis <= c.echeance
       ? { etat: CONF, motif: `Première réunion le ${c.premiere}, avis du ${avis} : le délai de ${c.mois} mois, qui expirait le ${c.echeance}, est tenu.` }
       : { etat: RISQ, motif: `Avis du ${avis}, postérieur au terme du ${c.echeance} (${c.mois} mois après la première réunion du ${c.premiere}). Passé ce terme, le comité était déjà réputé consulté : l'avis tardif n'a pas d'effet sur la régularité, mais un calendrier qui déborde le délai légal signale que le dossier n'a pas suivi le rythme prévu.` };
@@ -777,15 +777,15 @@ ctl("PSE-CTL-COH-01", "Cohérence",
        proposés aux salariés dont le licenciement est envisagé. La reprise
        d'activité (1° bis), la création d'activités nouvelles (2°), la
        réactivation du bassin d'emploi (3°) et la réduction du temps de travail
-       ou des heures supplémentaires (6°) peuvent concerner tout l'effectif —
+       ou des heures supplémentaires (6°) peuvent concerner tout l'effectif -
        la dernière n'a même de sens que si elle le dépasse largement. */
     const INDIVIDUELLES = new Set(["1°", "4°", "5°"]);
     const visees = L.filter(x => INDIVIDUELLES.has(String(x.rubrique || "").trim()));
     const max = visees.reduce((m, x) => Math.max(m, nb(x.beneficiaires) || 0), 0);
     if (!max) return { etat: MANQ, motif: "Aucune mesure de reclassement, d'aide à la création ou de formation ne porte de nombre de bénéficiaires." };
     return max > n
-      ? { etat: NC, motif: `Une mesure individuelle vise ${max} bénéficiaires alors que ${n} licenciements sont envisagés. Le reclassement interne, l'aide à la création d'activité et la formation de reconversion s'adressent aux salariés dont le licenciement est envisagé : soit le décompte des licenciements est faux, soit le chiffrage l'est — et l'un comme l'autre se voient en séance.` }
-      : { etat: CONF, motif: `Le nombre de bénéficiaires le plus élevé parmi les mesures individuelles (${max}) n'excède pas les ${n} licenciements envisagés. Les mesures collectives — reprise d'activité, création d'activités nouvelles, bassin d'emploi, temps de travail — ne sont pas comparées à ce nombre : elles peuvent légitimement viser au-delà.` };
+      ? { etat: NC, motif: `Une mesure individuelle vise ${max} bénéficiaires alors que ${n} licenciements sont envisagés. Le reclassement interne, l'aide à la création d'activité et la formation de reconversion s'adressent aux salariés dont le licenciement est envisagé : soit le décompte des licenciements est faux, soit le chiffrage l'est - et l'un comme l'autre se voient en séance.` }
+      : { etat: CONF, motif: `Le nombre de bénéficiaires le plus élevé parmi les mesures individuelles (${max}) n'excède pas les ${n} licenciements envisagés. Les mesures collectives - reprise d'activité, création d'activités nouvelles, bassin d'emploi, temps de travail - ne sont pas comparées à ce nombre : elles peuvent légitimement viser au-delà.` };
   }));
 
 /* Les contrôles de détection ne concluent jamais à la conformité : ils
@@ -801,10 +801,10 @@ if (require.main === module) {
   console.log(`${C.length} contrôles`);
   const rub = {};
   for (const c of C) (rub[c.rubrique] = rub[c.rubrique] || []).push(c.id);
-  for (const r of Object.keys(rub)) console.log(`  ${r} — ${rub[r].length} : ${rub[r].join(", ")}`);
+  for (const r of Object.keys(rub)) console.log(`  ${r} - ${rub[r].length} : ${rub[r].join(", ")}`);
   const sansTexte = C.filter(c => !c.fondement || !c.fondement.length);
   if (sansTexte.length) { console.error("Contrôles sans fondement : " + sansTexte.map(c => c.id).join(", ")); process.exit(1); }
-  console.log(`dont détection ${DETECTION.length}, cohérence ${COHERENCE.length} — tous fondés sur un article`);
+  console.log(`dont détection ${DETECTION.length}, cohérence ${COHERENCE.length} - tous fondés sur un article`);
 }
 
 });
@@ -814,7 +814,7 @@ __def("./mesures.js", function(module, exports, require){
    recopiées.
 
    Le module économique tenait cinq rubriques écrites à la main. L'article
-   L. 1233-62 en énumère sept — le 1° bis, introduit pour la reprise d'activité,
+   L. 1233-62 en énumère sept - le 1° bis, introduit pour la reprise d'activité,
    ne s'y trouvait pas, et le 3° (reclassement externe, réactivation du bassin
    d'emploi) et le 6° (réduction ou aménagement du temps de travail) non plus.
    Une liste recopiée dérive à la première modification du texte ; celle-ci est
@@ -824,7 +824,7 @@ __def("./mesures.js", function(module, exports, require){
      « Le plan prévoit des mesures telles que : 1° … ; 1° bis … ; 2° … ; 6° … »
 
    Le « telles que » est décisif et il est rendu tel quel : la liste n'est pas
-   limitative — un plan peut comporter d'autres mesures — mais l'administration
+   limitative - un plan peut comporter d'autres mesures - mais l'administration
    contrôle le plan au regard de ces rubriques. L'absence d'une rubrique n'est
    donc pas une non-conformité en soi ; c'est un point que le plan doit avoir
    examiné et, s'il l'écarte, avoir motivé.
@@ -833,7 +833,7 @@ __def("./mesures.js", function(module, exports, require){
 
 /* Le dépôt de textes du module : les douze articles dont il a besoin, repris du
    dépôt économique avec leur identifiant de version. Un article peut être
-   modifié sans changer de numéro — c'est LEGIARTI… qui dit laquelle des
+   modifié sans changer de numéro - c'est LEGIARTI… qui dit laquelle des
    versions successives a été lue. */
 const T = require("./textes-pse.json");
 
@@ -930,13 +930,13 @@ module.exports = { L1233_62, RECLASSEMENT, SUIVI, decouper };
 
 if (require.main === module) {
   const d = L1233_62;
-  console.log(`L. 1233-62 — version ${d.version}`);
+  console.log(`L. 1233-62 - version ${d.version}`);
   console.log(`${d.mesures.length} mesures énumérées, liste ${d.limitative ? "limitative" : "non limitative (« telles que »)"}`);
   for (const m of d.mesures) console.log(`  ${m.marque.padEnd(7)} ${m.intitule}`);
-  console.log(`couverture ${d.couverture} % — ${d.caracteres.consomme}/${d.caracteres.total} caractères, reste ${d.caracteres.reste}`);
+  console.log(`couverture ${d.couverture} % - ${d.caracteres.consomme}/${d.caracteres.total} caractères, reste ${d.caracteres.reste}`);
   if (d.couverture < 95) { console.error("Couverture insuffisante : le découpage laisse du texte de côté."); process.exit(1); }
-  console.log(`\nL. 1233-61 — plan de reclassement (version ${RECLASSEMENT.version})\n  ${RECLASSEMENT.texte}`);
-  console.log(`\nL. 1233-63 — suivi (version ${SUIVI.version}) : ${SUIVI.exige.length} obligations`);
+  console.log(`\nL. 1233-61 - plan de reclassement (version ${RECLASSEMENT.version})\n  ${RECLASSEMENT.texte}`);
+  console.log(`\nL. 1233-63 - suivi (version ${SUIVI.version}) : ${SUIVI.exige.length} obligations`);
 }
 
 });
@@ -954,14 +954,14 @@ __def("./recevabilite.js", function(module, exports, require){
 
    La règle appliquée ici est plus simple que les exceptions qu'il faudrait
    écrire sans elle : un contrôle qui a lu un champ illisible n'a rien constaté.
-   Son verdict devient « donnée manquante » — la donnée n'est pas absente, elle
-   est inexploitable, ce qui revient au même pour la conclusion — et le motif
+   Son verdict devient « donnée manquante » - la donnée n'est pas absente, elle
+   est inexploitable, ce qui revient au même pour la conclusion - et le motif
    dit lequel des champs lus est en cause. Le contrôle de recevabilité, lui,
    garde son « non conforme » : c'est lui qui porte l'anomalie, et il bloque.
 
    Comment savoir ce qu'un contrôle a lu, sans le deviner ? En l'observant. La
    fiche est enveloppée dans un Proxy le temps de l'exécution, et l'on relève
-   les champs réellement touchés — f.nom, f["nom"] et la déstructuration
+   les champs réellement touchés - f.nom, f["nom"] et la déstructuration
    comprises. Aucune liste tenue à la main, donc rien qui puisse dériver. */
 
 const MANQ = "donnée manquante", CONF = "conforme", RISQ = "risque à vérifier", SO = "sans objet";
@@ -971,7 +971,7 @@ const CONCLUSIFS = new Set([CONF, "non conforme"]);
 
    Le registre et le questionnaire déduisent les champs lus en inspectant le
    texte de la fonction. Une enveloppe qui masque ce texte casserait la
-   garantie de non-divergence — la première tentative l'a fait, et trois
+   garantie de non-divergence - la première tentative l'a fait, et trois
    contre-épreuves l'ont dit aussitôt. L'enveloppe rend donc, quand on
    l'imprime, le texte de la fonction qu'elle enveloppe. */
 function remplacer(ctl, fn) {
@@ -1013,10 +1013,10 @@ function envelopper(controles, valider, exemptes) {
       if (touchees.length)
         return { etat: MANQ, illisible: true,
           motif: `Ce contrôle a lu ${touchees.length > 1 ? "des données inexploitables" : "une donnée inexploitable"} : `
-            + touchees.map(a => `${a.champ} = « ${a.valeur} » — ${a.motif}`).join(" ; ")
+            + touchees.map(a => `${a.champ} = « ${a.valeur} » - ${a.motif}`).join(" ; ")
             + ". Aucune conclusion n'en est tirée, dans aucun sens. Corrigez la saisie et relancez l'audit ; le constat qu'aurait rendu ce contrôle est sans valeur tant que la donnée n'existe pas." };
       /* Le contrôle n'a lu aucune des données fautives : son constat tient par
-         lui-même. Il ne peut pas pour autant valoir conformité — le document
+         lui-même. Il ne peut pas pour autant valoir conformité - le document
          se lit d'un bloc, et une page qui affirme qu'une donnée est impossible
          ne peut pas en présenter une autre comme acquise. Le manquement
          constaté, lui, reste constaté : une non-conformité n'est pas effacée
@@ -1032,23 +1032,23 @@ function envelopper(controles, valider, exemptes) {
 /* ------------------------------------------------------------ le silence
 
    Un contrôle qui se déclare « sans objet » ferme la question : il affirme que
-   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien — « l'entreprise
+   l'exigence ne s'applique pas. Or beaucoup se fermaient sur rien - « l'entreprise
    n'appartient à aucun groupe », « aucune élection en cours », « l'entreprise ne
-   comporte pas plusieurs établissements distincts » — alors que la fiche ne
+   comporte pas plusieurs établissements distincts » - alors que la fiche ne
    disait rien du groupe, des élections ni des établissements. Sur un dossier
    entièrement vide, quarante-quatre contrôles des deux modules affirmaient ainsi
    des faits que personne n'avait déclarés.
 
    C'est la règle du dépôt appliquée à un état de plus : une donnée non
    renseignée ne produit jamais « conforme », et elle ne doit pas davantage
-   produire « sans objet ». Le silence n'est pas une réponse — ni dans un sens,
+   produire « sans objet ». Le silence n'est pas une réponse - ni dans un sens,
    ni dans l'autre.
 
    La mesure est la même que pour la recevabilité : on observe l'exécution. Si le
    contrôle a conclu « sans objet » sans qu'aucun des champs qu'il a lus ne soit
    déclaré sur la fiche, sa conclusion ne repose sur rien et devient « donnée
-   manquante ». S'il a lu ne serait-ce qu'un champ renseigné — un effectif de
-   vingt, qui écarte une obligation due à cinquante — le « sans objet » tient. */
+   manquante ». S'il a lu ne serait-ce qu'un champ renseigné - un effectif de
+   vingt, qui écarte une obligation due à cinquante - le « sans objet » tient. */
 function surSilence(controles, exemptes) {
   const hors = new Set(exemptes || []);
   for (const ctl of controles) {
@@ -1070,7 +1070,7 @@ function surSilence(controles, exemptes) {
       if (declares.length) return v;
       const attendus = [...lus].filter(k => !/^(then|constructor|toJSON|inspect|Symbol)/.test(k));
       return { etat: MANQ, surSilence: true,
-        motif: `Ce contrôle s'écarterait de lui-même — « ${v.motif} » — mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
+        motif: `Ce contrôle s'écarterait de lui-même - « ${v.motif} » - mais aucune des données sur lesquelles il se fonde n'est renseignée${attendus.length ? " : " + attendus.join(", ") : ""}. Le silence n'est pas une réponse : renseignez-les, ou déclarez expressément qu'il n'y a rien à déclarer.` };
     });
   }
   return controles;
@@ -1090,13 +1090,13 @@ __def("./grille-pse.js", function(module, exports, require){
    si la règle dit bien ce que l'arrêt dit.
 
    Une règle ne s'affiche que si sa condition est remplie par le dossier. Celles
-   qui ne le sont pas ne disent rien — ni dans un sens ni dans l'autre — et leur
+   qui ne le sont pas ne disent rien - ni dans un sens ni dans l'autre - et leur
    nombre est publié : c'est la mesure honnête de ce que la grille n'a pas eu à
    dire.
 
    Ce que cette grille ne fait pas : elle ne tranche pas. Un arrêt de la chambre
    sociale ne lie pas l'autorité administrative, et le contentieux du contenu du
-   plan relève du juge administratif depuis la loi du 14 juin 2013 — plusieurs
+   plan relève du juge administratif depuis la loi du 14 juin 2013 - plusieurs
    des arrêts retenus le disent expressément. La grille signale ; elle ne
    conclut jamais à la conformité. */
 
@@ -1120,7 +1120,7 @@ r("PSE-JUR-01", "Calibrage",
 
 r("PSE-JUR-02", "Sanction",
   f => planDu(f),
-  "La nullité de la procédure ne peut être prononcée qu'en cas d'absence ou d'insuffisance du plan — non pour un défaut tenant à la cause du licenciement. L'indemnité allouée à ce titre répare intégralement le préjudice résultant du caractère illicite du licenciement.",
+  "La nullité de la procédure ne peut être prononcée qu'en cas d'absence ou d'insuffisance du plan - non pour un défaut tenant à la cause du licenciement. L'indemnité allouée à ce titre répare intégralement le préjudice résultant du caractère illicite du licenciement.",
   ["11-20.741", "16-11.563"]);
 
 r("PSE-JUR-03", "Égalité de traitement",
@@ -1130,12 +1130,12 @@ r("PSE-JUR-03", "Égalité de traitement",
 
 r("PSE-JUR-04", "Seuils",
   f => oui(f.groupe) || nb(f.effectifEtablissement) !== null,
-  "Les conditions d'effectif et de nombre qui imposent l'établissement d'un plan s'apprécient au niveau de l'entreprise que dirige l'employeur — non au niveau de l'unité économique et sociale ou du groupement d'intérêt économique.",
+  "Les conditions d'effectif et de nombre qui imposent l'établissement d'un plan s'apprécient au niveau de l'entreprise que dirige l'employeur - non au niveau de l'unité économique et sociale ou du groupement d'intérêt économique.",
   ["07-45.481"]);
 
 r("PSE-JUR-05", "Seuils",
   f => nb(f.effectif) !== null && f.effectif < 50 && mesures(f).length > 0,
-  "Un plan mis en place volontairement par un employeur employant moins de cinquante salariés n'a pas à satisfaire aux exigences des articles L. 1233-61 et L. 1233-62. Les contrôles de contenu de ce module sont donc sans objet sur votre dossier — mais l'engagement pris, lui, oblige.",
+  "Un plan mis en place volontairement par un employeur employant moins de cinquante salariés n'a pas à satisfaire aux exigences des articles L. 1233-61 et L. 1233-62. Les contrôles de contenu de ce module sont donc sans objet sur votre dossier - mais l'engagement pris, lui, oblige.",
   ["14-10.031"]);
 
 r("PSE-JUR-06", "Priorité de réembauche",
@@ -1145,7 +1145,7 @@ r("PSE-JUR-06", "Priorité de réembauche",
 
 r("PSE-JUR-07", "Priorité de réembauche",
   f => (f.plan || {}).dateRupture || f.dateNotification,
-  "L'employeur qui établit qu'aucun emploi disponible en rapport avec les compétences des salariés n'existait — ni avant le prononcé des licenciements, ni ensuite dans le cadre de la priorité de réembauche, au besoin après une formation d'adaptation — échappe à la nullité du plan.",
+  "L'employeur qui établit qu'aucun emploi disponible en rapport avec les compétences des salariés n'existait - ni avant le prononcé des licenciements, ni ensuite dans le cadre de la priorité de réembauche, au besoin après une formation d'adaptation - échappe à la nullité du plan.",
   ["14-10.766"]);
 
 r("PSE-JUR-08", "Contrat de sécurisation professionnelle",
@@ -1204,7 +1204,7 @@ __def("./tests-pse.js", function(module, exports, require){
    La règle du dépôt : tout contrôle capable de constater une non-conformité
    doit la constater au moins une fois sur ces dossiers, sans quoi la
    publication échoue. Un contrôle qui n'a jamais dit « non » n'a jamais été
-   éprouvé — il peut être écrit à l'envers sans que rien ne le révèle.
+   éprouvé - il peut être écrit à l'envers sans que rien ne le révèle.
 
    S'y ajoutent deux épreuves de principe, qui valent pour tout le module :
    sur un dossier vide, aucun contrôle ne rend « conforme » ni « sans objet » ;
@@ -1275,7 +1275,7 @@ const CAS = [
 
   /* Les dossiers ci-dessous n'attendent pas de non-conformité : ils vérifient
      qu'un contrôle rend bien l'état intermédiaire prévu là où le texte ne
-     tranche pas — un risque, jamais un feu vert et jamais un couperet. */
+     tranche pas - un risque, jamais un feu vert et jamais un couperet. */
   { nom: "Avis rendu après le terme de deux mois", attendu: [], risque: ["PSE-CTL-CSE-02"],
     f: avec(f => { f.datesReunionsCSE = ["2026-03-23", "2026-04-14"]; f.dateAvisCSE = "2026-06-30"; }) },
   { nom: "Accord de méthode déclaré mais non versé", attendu: [], risque: ["PSE-CTL-CSE-02"],
@@ -1337,7 +1337,7 @@ if (require.main === module) {
   }
 
   /* La grille de jurisprudence : aucune règle ne doit citer un arrêt absent du
-     corpus, et chaque règle doit être atteinte par au moins un dossier — une
+     corpus, et chaque règle doit être atteinte par au moins un dossier - une
      règle qu'aucun dossier ne déclenche n'a jamais été exercée. */
   const GR = require("./grille-pse.js");
   const horsCorpus = GR.G.flatMap(x => x.arrets).filter(n => !GR.CORPUS[n]);
@@ -1364,7 +1364,7 @@ __def("./regularisation-pse.js", function(module, exports, require){
    passe pas.
 
    Le module d'audit dit ce qui manque ; ce fichier dit comment y remédier. Un
-   contrôle sans entrée ici fait échouer la publication — l'oubli se voit, il ne
+   contrôle sans entrée ici fait échouer la publication - l'oubli se voit, il ne
    se devine pas. Une entrée peut valoir « null » : c'est le cas des contrôles
    de calibrage, qui calculent un rapport et l'affichent sans rien constater, et
    ce null doit être écrit.
@@ -1372,11 +1372,11 @@ __def("./regularisation-pse.js", function(module, exports, require){
    UNE PARTICULARITÉ DE CE MODULE, ET IL FAUT LA DIRE D'EMBLÉE. Beaucoup
    d'irrégularités du plan ne se régularisent pas après coup : elles imposent de
    reprendre la procédure à un point donné. Le comité est consulté sur les
-   mesures sociales d'accompagnement prévues par le plan (L. 1233-30, I, 2°) —
+   mesures sociales d'accompagnement prévues par le plan (L. 1233-30, I, 2°) -
    une mesure ajoutée après la dernière réunion n'a donc pas été soumise à lui.
    L'administration vérifie la régularité de la procédure d'information et de
    consultation et le respect des articles L. 1233-61 à L. 1233-63
-   (L. 1233-57-3) — ce qu'elle a sous les yeux est le dossier tel qu'il a été
+   (L. 1233-57-3) - ce qu'elle a sous les yeux est le dossier tel qu'il a été
    déposé. Et l'employeur ne peut procéder à la rupture des contrats, à peine de
    nullité, avant la décision (L. 1233-39). Là où c'est le cas, l'entrée le dit
    dans « quoiFaire » et fait commencer les étapes par le point de reprise.
@@ -1384,7 +1384,7 @@ __def("./regularisation-pse.js", function(module, exports, require){
    pas.
 
    Chaque entrée porte :
-     gravite    1 le plus grave, 4 le moins — c'est l'ordre du guide
+     gravite    1 le plus grave, 4 le moins - c'est l'ordre du guide
      quoiFaire  une phrase, à l'infinitif : l'acte à accomplir
      risque     ce que coûte l'inaction, fondé sur un article lu
      delai      le temps qu'il faut y consacrer, en clair
@@ -1406,7 +1406,7 @@ const { C } = require("./controles-pse.js");
 const GRAVITES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — la validation ou l'homologation peut être refusée ou annulée",
+  3: "Irrégularité opposable - la validation ou l'homologation peut être refusée ou annulée",
   4: "Régularisation rapide",
 };
 
@@ -1414,8 +1414,8 @@ const R = {
 
   "PSE-CTL-CON-01": {
     gravite: 3,
-    quoiFaire: "Rattacher une mesure à chaque rubrique de l'article L. 1233-62, ou porter au dossier le motif pour lequel une rubrique est écartée — et, si la dernière réunion du comité a déjà eu lieu, soumettre le plan complété à une nouvelle réunion avant de saisir l'administration.",
-    risque: "L'administration vérifie le respect par le plan des articles L. 1233-61 à L. 1233-63 (L. 1233-57-3). La liste de L. 1233-62 n'est pas limitative — l'article énonce « des mesures telles que » — mais une rubrique laissée vide sans explication est un motif de refus ordinaire, et le refus renvoie tout le dossier au point de départ.",
+    quoiFaire: "Rattacher une mesure à chaque rubrique de l'article L. 1233-62, ou porter au dossier le motif pour lequel une rubrique est écartée - et, si la dernière réunion du comité a déjà eu lieu, soumettre le plan complété à une nouvelle réunion avant de saisir l'administration.",
+    risque: "L'administration vérifie le respect par le plan des articles L. 1233-61 à L. 1233-63 (L. 1233-57-3). La liste de L. 1233-62 n'est pas limitative - l'article énonce « des mesures telles que » - mais une rubrique laissée vide sans explication est un motif de refus ordinaire, et le refus renvoie tout le dossier au point de départ.",
     delai: "Une à deux semaines pour compléter le plan ; une réunion supplémentaire du comité si le plan a déjà été présenté en dernière réunion.",
     document: "Tableau des mesures du plan, rubrique par rubrique de l'article L. 1233-62",
     etapes: [
@@ -1433,20 +1433,20 @@ const R = {
 
   "PSE-CTL-CON-02": {
     gravite: 3,
-    quoiFaire: "Intégrer au plan un véritable plan de reclassement interne et y identifier nommément les catégories de salariés dont la réinsertion professionnelle est particulièrement difficile — puis, la dernière réunion du comité ayant déjà eu lieu le cas échéant, reprendre la consultation sur ce plan.",
+    quoiFaire: "Intégrer au plan un véritable plan de reclassement interne et y identifier nommément les catégories de salariés dont la réinsertion professionnelle est particulièrement difficile - puis, la dernière réunion du comité ayant déjà eu lieu le cas échéant, reprendre la consultation sur ce plan.",
     risque: "L'article L. 1233-61 fait du plan de reclassement le cœur du plan de sauvegarde de l'emploi : le plan « intègre un plan de reclassement visant à faciliter le reclassement sur le territoire national des salariés dont le licenciement ne pourrait être évité, notamment celui des salariés âgés ou présentant des caractéristiques sociales ou de qualification rendant leur réinsertion professionnelle particulièrement difficile ». L'administration vérifie le respect de cet article (L. 1233-57-3) : un plan sans reclassement interne n'est pas un plan incomplet, c'est un plan qui n'a pas son objet.",
     delai: "Trois à quatre semaines : le recensement des postes disponibles dans l'entreprise et, s'il y a lieu, dans le groupe, en est le préalable.",
-    document: "Plan de reclassement interne — postes recensés, catégories visées, salariés à réinsertion difficile",
+    document: "Plan de reclassement interne - postes recensés, catégories visées, salariés à réinsertion difficile",
     etapes: [
       "Recenser les postes disponibles relevant de la même catégorie d'emplois ou équivalents à ceux qu'occupent les salariés concernés, et ceux de catégorie inférieure, ces derniers ne pouvant être proposés que sous réserve de l'accord exprès du salarié (L. 1233-62, 1°).",
-      "Identifier les salariés dont la réinsertion est particulièrement difficile — âge, caractéristiques sociales, qualification — et écrire ce qui leur est spécifiquement proposé : l'article les vise nommément.",
+      "Identifier les salariés dont la réinsertion est particulièrement difficile - âge, caractéristiques sociales, qualification - et écrire ce qui leur est spécifiquement proposé : l'article les vise nommément.",
       "Chiffrer chaque action de reclassement : nombre de postes, nombre de bénéficiaires attendus, durée de la période de recherche, budget.",
       "Soumettre le plan ainsi complété au comité social et économique, la consultation portant sur les mesures sociales d'accompagnement prévues par le plan (L. 1233-30, I, 2°).",
       "Ne déposer la demande de validation ou d'homologation qu'ensuite.",
     ],
     verifs: [
       { cle: "con02Postes", question: "Combien de postes de reclassement interne sont recensés, et à quelle date ce recensement a-t-il été arrêté ?", attendu: "La liste des postes et sa date d'arrêté." },
-      { cle: "con02Exposes", question: "Quelles catégories de salariés à réinsertion particulièrement difficile sont identifiées, et où le sont-elles ?", attendu: "La partie du plan qui les nomme — âge, caractéristiques sociales, qualification." },
+      { cle: "con02Exposes", question: "Quelles catégories de salariés à réinsertion particulièrement difficile sont identifiées, et où le sont-elles ?", attendu: "La partie du plan qui les nomme - âge, caractéristiques sociales, qualification." },
       { cle: "con02Consultation", question: "À quelle date le comité a-t-il été consulté sur le plan de reclassement dans sa version déposée ?", attendu: "La date de la réunion et le procès-verbal." },
     ],
   },
@@ -1456,12 +1456,12 @@ const R = {
     quoiFaire: "Distinguer dans le plan les offres de reclassement situées sur le territoire national de celles qui ne le sont pas, et ne faire compter que les premières au titre de l'obligation.",
     risque: "Le plan de reclassement de l'article L. 1233-61 vise le reclassement sur le territoire national, et l'article L. 1233-62, 1° vise les actions de reclassement interne sur ce même territoire. Une offre située hors de France ne compte pas dans l'obligation : un plan qui l'y compte affiche un volume de reclassement qu'il n'a pas, et l'écart se voit dès l'instruction.",
     delai: "Quelques jours : c'est un travail de tri sur les mesures déjà écrites.",
-    document: "Ventilation des offres de reclassement — territoire national et hors territoire national",
+    document: "Ventilation des offres de reclassement - territoire national et hors territoire national",
     etapes: [
       "Reprendre chaque mesure de reclassement et localiser les emplois qu'elle vise.",
       "Séparer les deux colonnes : ce qui est sur le territoire national, ce qui ne l'est pas. Rien n'interdit de proposer en sus des postes situés à l'étranger, mais ils s'ajoutent, ils ne remplacent pas.",
       "Recalculer le nombre de bénéficiaires et le budget de l'obligation sur la seule colonne nationale.",
-      "Si le retrait des offres étrangères vide la rubrique du reclassement interne, le plan est à compléter avant toute saisine — le point est traité par le contrôle du plan de reclassement.",
+      "Si le retrait des offres étrangères vide la rubrique du reclassement interne, le plan est à compléter avant toute saisine - le point est traité par le contrôle du plan de reclassement.",
     ],
     verifs: [
       { cle: "con03Localisation", question: "Pour chaque mesure de reclassement, où sont situés les emplois visés ?", attendu: "La localisation, mesure par mesure." },
@@ -1474,7 +1474,7 @@ const R = {
     quoiFaire: "Doter chaque mesure du plan d'un budget, d'un nombre de bénéficiaires et d'une durée, avant la saisine de l'administration.",
     risque: "L'administration apprécie les mesures d'accompagnement au regard de l'importance du projet de licenciement et des moyens dont disposent l'entreprise, l'unité économique et sociale et le groupe (L. 1233-57-3, 1° et 2°). Une mesure non chiffrée n'est pas appréciable : elle ne pèse rien dans cette appréciation, et le plan est jugé sur ce qui reste.",
     delai: "Une à deux semaines si les données de gestion existent ; davantage si les coûts unitaires sont à établir.",
-    document: "Tableau de chiffrage des mesures — budget, bénéficiaires, durée",
+    document: "Tableau de chiffrage des mesures - budget, bénéficiaires, durée",
     etapes: [
       "Lister les mesures dépourvues de l'un des trois éléments : budget, nombre de bénéficiaires, durée.",
       "Pour chacune, établir le coût unitaire et le nombre de bénéficiaires attendus, et en déduire le budget. Une enveloppe globale sans base de calcul n'est pas un chiffrage.",
@@ -1497,7 +1497,7 @@ const R = {
     etapes: [
       "Poser côte à côte le total annoncé et la somme ligne à ligne des budgets de mesures, et isoler l'écart.",
       "Déterminer d'où vient l'écart : une mesure oubliée dans le détail, une mesure comptée deux fois, une provision non ventilée, ou un total arrêté avant la dernière version du plan.",
-      "Corriger la source de l'écart — et non le total, si c'est le détail qui est faux : un total ajusté à la main sur un détail erroné se voit à la ligne suivante.",
+      "Corriger la source de l'écart - et non le total, si c'est le détail qui est faux : un total ajusté à la main sur un détail erroné se voit à la ligne suivante.",
       "Republier le tableau des mesures et le total dans une même pièce, et la soumettre au comité si le plan avait déjà été présenté.",
     ],
     verifs: [
@@ -1508,13 +1508,13 @@ const R = {
 
   /* Le coût par salarié est une mesure, pas un verdict : aucun texte ne fixe le
      montant d'un plan, et le contrôle le dit lui-même. Il n'y a donc rien à
-     régulariser au titre de ce contrôle — ce qui se corrige, c'est le chiffrage
+     régulariser au titre de ce contrôle - ce qui se corrige, c'est le chiffrage
      des mesures et les pièces versées, traités pour eux-mêmes. */
   "PSE-CTL-CAL-01": null,
 
   /* Même raison : le rapport entre le budget du plan et les moyens du groupe est
      calculé et affiché, il n'est jugé par aucun seuil. L'acte qui se fait
-     — verser les comptes du groupe — relève du contrôle suivant. */
+     - verser les comptes du groupe - relève du contrôle suivant. */
   "PSE-CTL-CAL-02": null,
 
   "PSE-CTL-CAL-03": {
@@ -1524,7 +1524,7 @@ const R = {
     delai: "Quelques jours si les comptes sont publiés ; deux à trois semaines s'ils doivent être obtenus de la société mère.",
     document: "Comptes consolidés du groupe versés au dossier de demande",
     etapes: [
-      "Identifier le périmètre : entreprise, unité économique et sociale s'il en existe une, groupe — ce sont les trois niveaux que l'article énumère.",
+      "Identifier le périmètre : entreprise, unité économique et sociale s'il en existe une, groupe - ce sont les trois niveaux que l'article énumère.",
       "Réunir les comptes consolidés du dernier exercice clos et, s'ils existent, les comptes intermédiaires plus récents.",
       "Les joindre à la demande adressée à l'administration, et les mettre à disposition du comité social et économique dans le cadre de sa consultation.",
       "Écrire, dans une note du dossier, le rapport entre le budget du plan et ces moyens : le calcul appartient à l'employeur, l'appréciation à l'administration.",
@@ -1537,14 +1537,14 @@ const R = {
 
   "PSE-CTL-ACC-01": {
     gravite: 3,
-    quoiFaire: "Substituer au dispositif retenu celui que l'effectif commande — congé de reclassement à partir de mille salariés (L. 1233-71), contrat de sécurisation professionnelle en deçà (L. 1233-66) — et soumettre le plan ainsi corrigé au comité.",
+    quoiFaire: "Substituer au dispositif retenu celui que l'effectif commande - congé de reclassement à partir de mille salariés (L. 1233-71), contrat de sécurisation professionnelle en deçà (L. 1233-66) - et soumettre le plan ainsi corrigé au comité.",
     risque: "L'administration s'assure que l'employeur a prévu le recours au contrat de sécurisation professionnelle mentionné à l'article L. 1233-65 ou la mise en place du congé de reclassement mentionné à l'article L. 1233-71 (L. 1233-57-3, dernier alinéa). Les deux dispositifs ne se cumulent pas et ne se choisissent pas : le mauvais dispositif dans le plan est un motif de refus, et il ne se corrige pas par une note en séance.",
     delai: "Deux à trois semaines : le dispositif change le coût du plan et son calendrier.",
-    document: "Volet accompagnement individuel du plan — dispositif dû et modalités",
+    document: "Volet accompagnement individuel du plan - dispositif dû et modalités",
     etapes: [
       "Arrêter l'effectif au niveau où le seuil se lit : l'entreprise, l'établissement, et le groupe lorsque l'entreprise en relève.",
       "En déduire le dispositif dû, et le seul : congé de reclassement au-dessus de mille salariés, contrat de sécurisation professionnelle en deçà.",
-      "Réécrire le volet accompagnement du plan sur ce dispositif — durée, financement, moment de la proposition — et en tirer les conséquences sur le budget.",
+      "Réécrire le volet accompagnement du plan sur ce dispositif - durée, financement, moment de la proposition - et en tirer les conséquences sur le budget.",
       "Soumettre le plan corrigé au comité social et économique avant toute saisine de l'administration : le dispositif d'accompagnement fait partie des mesures sociales sur lesquelles il est consulté (L. 1233-30, I, 2°).",
     ],
     verifs: [
@@ -1555,20 +1555,20 @@ const R = {
 
   "PSE-CTL-ACC-02": {
     gravite: 3,
-    quoiFaire: "Ramener la durée du congé de reclassement dans la limite de l'article L. 1233-71 — douze mois, vingt-quatre en cas de formation de reconversion professionnelle — ou verser au dossier la formation de reconversion qui justifie la durée retenue.",
+    quoiFaire: "Ramener la durée du congé de reclassement dans la limite de l'article L. 1233-71 - douze mois, vingt-quatre en cas de formation de reconversion professionnelle - ou verser au dossier la formation de reconversion qui justifie la durée retenue.",
     risque: "L'article L. 1233-71 plafonne la durée du congé : « La durée du congé de reclassement ne peut excéder douze mois, pouvant être portés à vingt-quatre mois en cas de formation de reconversion professionnelle. » Une durée annoncée hors de cette limite, sans la formation qui la justifie, est une stipulation que le plan ne peut pas tenir, et l'administration vérifie le respect des articles L. 1233-61 à L. 1233-63 comme la mise en place du congé (L. 1233-57-3).",
     delai: "Une semaine si la formation de reconversion existe et n'est que non documentée ; trois à quatre semaines s'il faut réécrire le parcours de formation.",
-    document: "Volet congé de reclassement — durée, bilan de compétences, actions de formation, financement",
+    document: "Volet congé de reclassement - durée, bilan de compétences, actions de formation, financement",
     etapes: [
       "Vérifier si le plan prévoit une formation de reconversion professionnelle : c'est elle, et elle seule, qui porte le plafond de douze à vingt-quatre mois.",
-      "Si elle existe, la décrire au dossier — nature, organisme, durée, coût — et rattacher la durée du congé à cette formation.",
+      "Si elle existe, la décrire au dossier - nature, organisme, durée, coût - et rattacher la durée du congé à cette formation.",
       "Si elle n'existe pas, ramener la durée à douze mois au plus et recalculer le budget du volet.",
       "Écrire les modalités que le texte attache au congé : il débute si nécessaire par un bilan de compétences, l'employeur finance l'ensemble des actions (L. 1233-71) ; il est pris pendant le préavis, que le salarié est dispensé d'exécuter, et lorsqu'il excède le préavis, le terme de celui-ci est reporté jusqu'à la fin du congé (L. 1233-72).",
       "Soumettre la version corrigée au comité avant la saisine.",
     ],
     verifs: [
       { cle: "acc02Duree", question: "Quelle durée de congé de reclassement le plan retient-il ?", attendu: "La durée en mois, telle qu'elle est écrite au plan." },
-      { cle: "acc02Reconversion", question: "Si la durée dépasse douze mois, quelle formation de reconversion professionnelle la justifie ?", attendu: "La formation décrite au dossier — nature, organisme, durée." },
+      { cle: "acc02Reconversion", question: "Si la durée dépasse douze mois, quelle formation de reconversion professionnelle la justifie ?", attendu: "La formation décrite au dossier - nature, organisme, durée." },
       { cle: "acc02Preavis", question: "Le plan prévoit-il que le congé est pris pendant le préavis et que le terme de celui-ci est reporté lorsque le congé l'excède ?", attendu: "La clause du plan reprenant L. 1233-72." },
     ],
   },
@@ -1578,10 +1578,10 @@ const R = {
     quoiFaire: "Refaire la proposition du contrat de sécurisation professionnelle après la notification de la décision de validation ou d'homologation : une proposition faite avant cette notification, lorsqu'un plan est dû, n'est pas celle que le texte prévoit et ne se rétrodate pas.",
     risque: "À défaut de proposition, France Travail propose le contrat au salarié, et l'employeur verse à l'organisme de gestion du régime d'assurance chômage une contribution égale à deux mois de salaire brut, portée à trois mois lorsque l'ancien salarié adhère sur proposition de cette institution (L. 1233-66). La contribution est due par salarié, et elle se recouvre comme les contributions d'assurance chômage.",
     delai: "Immédiat après la notification de la décision : la proposition précède la notification du licenciement.",
-    document: "Proposition de contrat de sécurisation professionnelle — remise contre décharge datée",
+    document: "Proposition de contrat de sécurisation professionnelle - remise contre décharge datée",
     etapes: [
       "Attendre la notification par l'autorité administrative de sa décision de validation ou d'homologation : lorsque le licenciement donne lieu à un plan dans les conditions des articles L. 1233-24-2 et L. 1233-24-4, la proposition est faite après cette notification (L. 1233-66).",
-      "Remettre à chaque salarié dont le licenciement est envisagé le document de proposition, contre décharge datée — c'est la décharge qui prouvera la proposition, pas le courrier type.",
+      "Remettre à chaque salarié dont le licenciement est envisagé le document de proposition, contre décharge datée - c'est la décharge qui prouvera la proposition, pas le courrier type.",
       "Tenir le tableau nominatif des propositions : salarié, date de remise, date de réponse.",
       "Ne notifier les licenciements qu'après la décision administrative, l'article L. 1233-39 le commandant par ailleurs.",
       "Conserver les décharges : c'est sur elles que se règle la question de la contribution due à l'assurance chômage.",
@@ -1595,7 +1595,7 @@ const R = {
 
   "PSE-CTL-VOI-01": {
     gravite: 3,
-    quoiFaire: "Arrêter la voie — accord collectif majoritaire ou document unilatéral — avant la première réunion du comité, et écrire ce choix au dossier.",
+    quoiFaire: "Arrêter la voie - accord collectif majoritaire ou document unilatéral - avant la première réunion du comité, et écrire ce choix au dossier.",
     risque: "La voie commande tout le calendrier : quinze jours d'instruction pour la validation de l'accord, vingt et un pour l'homologation du document unilatéral (L. 1233-57-4). Elle commande aussi ce que l'administration contrôle et le moment où le document est élaboré, celui-ci l'étant après la dernière réunion du comité (L. 1233-24-4). Une voie non arrêtée est un calendrier non arrêté, et la procédure se déroule alors sans échéance connue.",
     delai: "Une décision, prise avant l'ouverture de la procédure ; l'information de l'administration sur l'ouverture d'une négociation est due sans délai.",
     document: "Note de choix de la voie et calendrier prévisionnel de la procédure",
@@ -1614,7 +1614,7 @@ const R = {
 
   "PSE-CTL-VOI-02": {
     gravite: 3,
-    quoiFaire: "Constater que l'accord signé en deçà de 50 % des suffrages n'existe pas comme accord majoritaire — il ne se complète pas après coup — et choisir : recueillir la signature d'organisations portant le total à 50 %, ou basculer sur le document unilatéral et reprendre la procédure à ce point.",
+    quoiFaire: "Constater que l'accord signé en deçà de 50 % des suffrages n'existe pas comme accord majoritaire - il ne se complète pas après coup - et choisir : recueillir la signature d'organisations portant le total à 50 %, ou basculer sur le document unilatéral et reprendre la procédure à ce point.",
     risque: "L'article L. 1233-24-1 subordonne l'accord à la signature d'organisations ayant recueilli au moins 50 % des suffrages exprimés en faveur d'organisations reconnues représentatives au premier tour des dernières élections des titulaires au comité. En deçà, il n'y a pas d'accord au sens du texte : la demande de validation est sans objet, et le dossier repart sur la voie de l'homologation, dont le délai d'instruction est de vingt et un jours et non de quinze (L. 1233-57-4).",
     delai: "Deux à quatre semaines : le temps de reprendre la négociation, ou d'élaborer le document unilatéral après la dernière réunion du comité.",
     document: "Relevé des suffrages du premier tour des dernières élections et acte de choix de la voie",
@@ -1628,34 +1628,34 @@ const R = {
     verifs: [
       { cle: "voi02Suffrages", question: "Quel pourcentage de suffrages les organisations signataires ont-elles recueilli au premier tour des dernières élections des titulaires ?", attendu: "Le pourcentage, et le procès-verbal des élections qui l'établit." },
       { cle: "voi02Signataires", question: "Quelles organisations ont signé, et à quelle date ?", attendu: "La liste des signataires et la date de signature." },
-      { cle: "voi02VoieFinale", question: "Quelle demande a finalement été déposée — validation ou homologation — et à quelle date ?", attendu: "La demande déposée et sa date, cohérente avec la voie retenue." },
+      { cle: "voi02VoieFinale", question: "Quelle demande a finalement été déposée - validation ou homologation - et à quelle date ?", attendu: "La demande déposée et sa date, cohérente avec la voie retenue." },
     ],
   },
 
   "PSE-CTL-VOI-03": {
     gravite: 3,
-    quoiFaire: "Établir la date de réception du dossier complet, en déduire l'échéance d'instruction, et, si le silence a couru jusqu'à son terme, accomplir les actes que l'article L. 1233-57-4 met alors à la charge de l'employeur — le silence vaut acceptation, il ne dispense de rien.",
-    risque: "Le délai est de quinze jours pour la validation à compter de la réception de l'accord, de vingt et un jours pour l'homologation à compter de la réception du document complet (L. 1233-57-4). Le silence gardé pendant ce délai vaut décision d'acceptation ; l'employeur transmet alors au comité — et, si la demande portait sur un accord, aux organisations syndicales représentatives signataires — une copie de la demande accompagnée de son accusé de réception. La décision, ou à défaut ces documents, ainsi que les voies et délais de recours, sont portés à la connaissance des salariés par affichage sur les lieux de travail ou par tout autre moyen conférant date certaine. Rien de tout cela ne se présume : ce sont ces actes qui font courir les recours.",
+    quoiFaire: "Établir la date de réception du dossier complet, en déduire l'échéance d'instruction, et, si le silence a couru jusqu'à son terme, accomplir les actes que l'article L. 1233-57-4 met alors à la charge de l'employeur - le silence vaut acceptation, il ne dispense de rien.",
+    risque: "Le délai est de quinze jours pour la validation à compter de la réception de l'accord, de vingt et un jours pour l'homologation à compter de la réception du document complet (L. 1233-57-4). Le silence gardé pendant ce délai vaut décision d'acceptation ; l'employeur transmet alors au comité - et, si la demande portait sur un accord, aux organisations syndicales représentatives signataires - une copie de la demande accompagnée de son accusé de réception. La décision, ou à défaut ces documents, ainsi que les voies et délais de recours, sont portés à la connaissance des salariés par affichage sur les lieux de travail ou par tout autre moyen conférant date certaine. Rien de tout cela ne se présume : ce sont ces actes qui font courir les recours.",
     delai: "Quinze ou vingt et un jours d'instruction selon la voie ; les actes qui suivent l'échéance se font dans les jours qui la suivent.",
     document: "Transmission au comité de la demande et de son accusé de réception, et affichage aux salariés",
     etapes: [
-      "Retrouver l'accusé de réception du dossier : c'est la réception de la demande — de l'accord, ou du document complet — qui fait courir le délai, et non la date d'envoi.",
+      "Retrouver l'accusé de réception du dossier : c'est la réception de la demande - de l'accord, ou du document complet - qui fait courir le délai, et non la date d'envoi.",
       "Calculer l'échéance : quinze jours pour la validation, vingt et un pour l'homologation.",
       "Si une décision a été notifiée, vérifier qu'elle l'a été dans ce délai, qu'elle est motivée, et qu'elle a été notifiée dans les mêmes délais au comité et, s'il y a lieu, aux organisations syndicales signataires.",
-      "Si le délai s'est écoulé sans décision, transmettre au comité — et aux organisations signataires si la demande portait sur un accord — une copie de la demande accompagnée de son accusé de réception par l'administration.",
-      "Porter à la connaissance des salariés la décision ou, à défaut, ces documents, ainsi que les voies et délais de recours, par affichage sur les lieux de travail ou par tout moyen conférant date certaine — et conserver la preuve de cette date.",
+      "Si le délai s'est écoulé sans décision, transmettre au comité - et aux organisations signataires si la demande portait sur un accord - une copie de la demande accompagnée de son accusé de réception par l'administration.",
+      "Porter à la connaissance des salariés la décision ou, à défaut, ces documents, ainsi que les voies et délais de recours, par affichage sur les lieux de travail ou par tout moyen conférant date certaine - et conserver la preuve de cette date.",
     ],
     verifs: [
       { cle: "voi03Reception", question: "À quelle date l'administration a-t-elle accusé réception du dossier complet ?", attendu: "L'accusé de réception et sa date." },
       { cle: "voi03Echeance", question: "Quelle est l'échéance du délai d'instruction, et de quinze ou de vingt et un jours s'agit-il ?", attendu: "La date d'échéance et le délai applicable à la voie retenue." },
       { cle: "voi03Decision", question: "Une décision a-t-elle été notifiée, à quelle date, et est-elle motivée ?", attendu: "La décision datée et motivée, ou la mention que le délai s'est écoulé sans décision." },
-      { cle: "voi03Affichage", question: "À quelle date la décision — ou, à défaut, la demande et son accusé de réception — a-t-elle été portée à la connaissance des salariés, et par quel moyen ?", attendu: "La date certaine et le moyen employé, avec sa preuve." },
+      { cle: "voi03Affichage", question: "À quelle date la décision - ou, à défaut, la demande et son accusé de réception - a-t-elle été portée à la connaissance des salariés, et par quel moyen ?", attendu: "La date certaine et le moyen employé, avec sa preuve." },
     ],
   },
 
   "PSE-CTL-VOI-04": {
     gravite: 3,
-    quoiFaire: "Ne pas notifier, et suspendre toute notification déjà programmée, jusqu'à la notification de la décision administrative ou l'expiration du délai d'instruction — une lettre de licenciement déjà envoyée avant cette date ne se régularise pas : le texte frappe la rupture de nullité.",
+    quoiFaire: "Ne pas notifier, et suspendre toute notification déjà programmée, jusqu'à la notification de la décision administrative ou l'expiration du délai d'instruction - une lettre de licenciement déjà envoyée avant cette date ne se régularise pas : le texte frappe la rupture de nullité.",
     risque: "Dans les entreprises de cinquante salariés ou plus, lorsque le projet concerne dix salariés ou plus dans une même période de trente jours, l'employeur notifie le licenciement après la notification par l'autorité administrative de la décision de validation ou d'homologation, ou à l'expiration des délais prévus à l'article L. 1233-57-4. « Il ne peut procéder, à peine de nullité, à la rupture des contrats de travail avant la notification de cette décision d'homologation ou de validation ou l'expiration des délais » (L. 1233-39). La nullité n'est pas une irrégularité que l'on couvre : elle atteint la rupture elle-même.",
     delai: "Immédiat : c'est l'envoi qu'il faut arrêter, avant qu'il ne parte.",
     document: "Note de suspension des notifications et calendrier de notification postérieur à la décision",
@@ -1675,13 +1675,13 @@ const R = {
 
   "PSE-CTL-SUI-01": {
     gravite: 3,
-    quoiFaire: "Compléter le plan sur les trois obligations de l'article L. 1233-63 — modalités de suivi, consultation du comité, bilan à l'administration — avant la saisine, le suivi faisant partie de ce que l'administration contrôle.",
+    quoiFaire: "Compléter le plan sur les trois obligations de l'article L. 1233-63 - modalités de suivi, consultation du comité, bilan à l'administration - avant la saisine, le suivi faisant partie de ce que l'administration contrôle.",
     risque: "L'article L. 1233-63 met trois obligations distinctes à la charge de l'employeur : le plan détermine les modalités de suivi de la mise en œuvre effective des mesures du plan de reclassement ; ce suivi fait l'objet d'une consultation régulière et détaillée du comité, dont l'avis est transmis à l'autorité administrative ; l'autorité administrative est associée au suivi et reçoit un bilan, établi par l'employeur, de la mise en œuvre effective du plan. L'administration vérifie le respect des articles L. 1233-61 à L. 1233-63 (L. 1233-57-3) : un plan muet sur son suivi est incomplet au regard du texte.",
     delai: "Une semaine : il s'agit d'écrire une clause et un calendrier, non de créer un dispositif.",
-    document: "Clause de suivi du plan — commission, périodicité, avis du comité, bilan à l'administration",
+    document: "Clause de suivi du plan - commission, périodicité, avis du comité, bilan à l'administration",
     etapes: [
       "Écrire dans le plan les modalités de suivi de la mise en œuvre effective des mesures du plan de reclassement : qui suit, sur quels indicateurs, à quelle fréquence.",
-      "Fixer le calendrier des consultations du comité sur ce suivi — le texte les veut régulières et détaillées — et prévoir la transmission de son avis à l'autorité administrative.",
+      "Fixer le calendrier des consultations du comité sur ce suivi - le texte les veut régulières et détaillées - et prévoir la transmission de son avis à l'autorité administrative.",
       "Prévoir le bilan de la mise en œuvre effective du plan que l'employeur établit et que l'administration reçoit, et arrêter la date à laquelle il sera transmis.",
       "Soumettre la clause de suivi au comité avec le reste du plan, puis la verser au dossier de demande.",
     ],
@@ -1694,7 +1694,7 @@ const R = {
 
   "PSE-CTL-REM-01": {
     gravite: 4,
-    quoiFaire: "Informer les représentants du personnel des postes disponibles et tenir le registre des demandes de priorité de réembauche — étant entendu qu'un poste déjà pourvu sans avoir été proposé au salarié qui avait demandé le bénéfice de la priorité ne se rattrape pas.",
+    quoiFaire: "Informer les représentants du personnel des postes disponibles et tenir le registre des demandes de priorité de réembauche - étant entendu qu'un poste déjà pourvu sans avoir été proposé au salarié qui avait demandé le bénéfice de la priorité ne se rattrape pas.",
     risque: "L'article L. 1233-45 met deux obligations distinctes à la charge de l'employeur : informer le salarié qui a demandé le bénéfice de la priorité de tout emploi devenu disponible et compatible avec sa qualification, et informer les représentants du personnel des postes disponibles. La seconde ne dépend d'aucune demande d'un salarié : elle est due par elle-même. La priorité court un an à compter de la rupture, et le salarié qui a acquis une nouvelle qualification en bénéficie aussi au titre de celle-ci s'il en informe l'employeur.",
     delai: "Immédiat pour l'information des élus ; le registre se tient ensuite au fil des postes, pendant l'année qui suit chaque rupture.",
     document: "Registre des demandes de priorité de réembauche et information périodique des représentants du personnel",
@@ -1714,13 +1714,13 @@ const R = {
 
   "PSE-CTL-CSE-01": {
     gravite: 3,
-    quoiFaire: "Reprendre la consultation au point où l'exigence n'a pas été tenue : tenir la seconde réunion, ou la réunion qui rétablit l'espacement d'au moins quinze jours — un espacement trop court ne se corrige pas sur le procès-verbal, il se corrige en tenant la réunion.",
+    quoiFaire: "Reprendre la consultation au point où l'exigence n'a pas été tenue : tenir la seconde réunion, ou la réunion qui rétablit l'espacement d'au moins quinze jours - un espacement trop court ne se corrige pas sur le procès-verbal, il se corrige en tenant la réunion.",
     risque: "L'article L. 1233-30, I impose que le comité tienne au moins deux réunions espacées d'au moins quinze jours. L'administration vérifie la régularité de la procédure d'information et de consultation du comité (L. 1233-57-3) : une consultation qui n'a pas respecté ce rythme est irrégulière, et la décision qui l'homologue ou la valide encourt l'annulation. C'est l'irrégularité la plus visible du dossier, parce qu'elle se lit sur deux dates.",
     delai: "Au moins quinze jours : c'est l'espacement lui-même qu'il faut laisser courir.",
     document: "Convocation à la réunion de reprise et procès-verbaux des réunions du comité",
     etapes: [
       "Poser les dates des réunions déjà tenues et mesurer l'écart entre chacune : c'est l'écart qui est en cause, pas le nombre de points à l'ordre du jour.",
-      "Si une seule réunion s'est tenue, convoquer la seconde — celle où l'avis se rend — en respectant l'espacement d'au moins quinze jours depuis la première.",
+      "Si une seule réunion s'est tenue, convoquer la seconde - celle où l'avis se rend - en respectant l'espacement d'au moins quinze jours depuis la première.",
       "Si deux réunions ont été tenues à moins de quinze jours d'intervalle, tenir une nouvelle réunion à plus de quinze jours de la précédente et y reprendre la consultation sur les points concernés : la première réunion trop rapprochée ne se déplace pas.",
       "Mettre à l'étude les suggestions relatives aux mesures sociales envisagées et les propositions alternatives formulées par le comité, et y donner une réponse motivée (L. 1233-33) : c'est ce qui donne son objet à l'espacement.",
       "Ne saisir l'administration qu'une fois ce rythme rétabli, et joindre les procès-verbaux datés.",
@@ -1734,40 +1734,40 @@ const R = {
 
   "PSE-CTL-CSE-02": {
     gravite: 3,
-    quoiFaire: "Arrêter la date d'expiration du délai d'avis à partir de la date de la première réunion, et verser au dossier l'accord qui fixe des délais différents lorsqu'il en existe un — à défaut, c'est le plafond légal qui s'applique.",
+    quoiFaire: "Arrêter la date d'expiration du délai d'avis à partir de la date de la première réunion, et verser au dossier l'accord qui fixe des délais différents lorsqu'il en existe un - à défaut, c'est le plafond légal qui s'applique.",
     risque: "Le comité rend ses deux avis dans un délai qui ne peut excéder, à compter de la date de sa première réunion, deux mois lorsque le nombre de licenciements est inférieur à cent, trois mois lorsqu'il est au moins égal à cent et inférieur à deux cent cinquante, quatre mois lorsqu'il est au moins égal à deux cent cinquante ; une convention ou un accord collectif peut prévoir des délais différents, et à défaut d'avis dans le délai le comité est réputé avoir été consulté (L. 1233-30, II). Un accord invoqué mais non versé n'est opposable à personne : ni l'administration ni l'application ne peuvent vérifier le délai que l'employeur applique.",
     delai: "Quelques jours pour verser l'accord et poser le calendrier ; le délai d'avis lui-même court de la première réunion.",
-    document: "Calendrier de consultation — première réunion, délai applicable, date d'expiration",
+    document: "Calendrier de consultation - première réunion, délai applicable, date d'expiration",
     etapes: [
       "Fixer la date de la première réunion au cours de laquelle le comité est consulté sur l'opération projetée et sur le projet de licenciement collectif : c'est d'elle que court le délai.",
-      "Déterminer le délai applicable au nombre de licenciements envisagés — deux, trois ou quatre mois selon les tranches de L. 1233-30, II.",
+      "Déterminer le délai applicable au nombre de licenciements envisagés - deux, trois ou quatre mois selon les tranches de L. 1233-30, II.",
       "Si un accord ou une convention fixe des délais différents, le verser au dossier et y renvoyer expressément ; sans cette pièce, le plafond légal reste la seule référence.",
       "Écrire la date d'expiration du délai et la porter au calendrier remis au comité.",
       "Recueillir les deux avis avant ce terme ; à défaut, constater que le comité est réputé consulté, ce qui ne dispense pas d'avoir tenu les réunions ni d'avoir répondu à ses propositions.",
     ],
     verifs: [
       { cle: "cse02Premiere", question: "À quelle date exacte s'est tenue la première réunion au cours de laquelle le comité a été consulté sur l'opération et sur le projet de licenciement ?", attendu: "La date, avec la convocation et le procès-verbal." },
-      { cle: "cse02Delai", question: "Quel délai d'avis s'applique, et pourquoi — nombre de licenciements envisagés, ou accord fixant un délai différent ?", attendu: "Le délai en mois et sa source ; si c'est un accord, l'accord versé au dossier." },
+      { cle: "cse02Delai", question: "Quel délai d'avis s'applique, et pourquoi - nombre de licenciements envisagés, ou accord fixant un délai différent ?", attendu: "Le délai en mois et sa source ; si c'est un accord, l'accord versé au dossier." },
       { cle: "cse02Avis", question: "À quelles dates les deux avis du comité ont-ils été rendus ?", attendu: "Les dates des avis, ou le constat daté qu'ils n'ont pas été rendus dans le délai." },
     ],
   },
 
   "PSE-CTL-CSE-03": {
     gravite: 3,
-    quoiFaire: "Verser au dossier la délibération du comité désignant l'expert avec sa date, et tenir les délais d'échange que l'article L. 1233-35 impose — une désignation postérieure à la première réunion ne se rétrodate pas, et le délai d'avis n'en est pas prolongé.",
-    risque: "L'article L. 1233-34 place la décision de recourir à l'expertise à la première réunion prévue à l'article L. 1233-30. Une désignation postérieure expose la procédure à la contestation devant l'administration, qui vérifie la régularité de l'information et de la consultation du comité (L. 1233-57-3), sans que le délai d'avis en soit allongé pour autant : le calendrier reste celui de L. 1233-30, II. Le rapport de l'expert est remis au comité — et, le cas échéant, aux organisations syndicales — au plus tard quinze jours avant l'expiration de ce délai.",
+    quoiFaire: "Verser au dossier la délibération du comité désignant l'expert avec sa date, et tenir les délais d'échange que l'article L. 1233-35 impose - une désignation postérieure à la première réunion ne se rétrodate pas, et le délai d'avis n'en est pas prolongé.",
+    risque: "L'article L. 1233-34 place la décision de recourir à l'expertise à la première réunion prévue à l'article L. 1233-30. Une désignation postérieure expose la procédure à la contestation devant l'administration, qui vérifie la régularité de l'information et de la consultation du comité (L. 1233-57-3), sans que le délai d'avis en soit allongé pour autant : le calendrier reste celui de L. 1233-30, II. Le rapport de l'expert est remis au comité - et, le cas échéant, aux organisations syndicales - au plus tard quinze jours avant l'expiration de ce délai.",
     delai: "Dix jours pour la demande d'informations de l'expert, huit jours pour la réponse de l'employeur ; le rapport est dû quinze jours avant l'expiration du délai d'avis.",
     document: "Délibération de désignation de l'expert et journal des échanges d'informations",
     etapes: [
       "Verser au dossier la délibération du comité et sa date, ainsi que le procès-verbal de la réunion au cours de laquelle elle a été prise : la date est ce qu'elle est, et elle sera lue.",
       "Répondre dans les huit jours à la demande d'informations que l'expert adresse dans les dix jours de sa désignation, puis dans les huit jours à toute demande complémentaire formulée dans les dix jours (L. 1233-35).",
-      "Tenir le journal daté de ces échanges : demande, date, réponse, date — c'est lui qui établira que les délais ont été tenus.",
+      "Tenir le journal daté de ces échanges : demande, date, réponse, date - c'est lui qui établira que les délais ont été tenus.",
       "Arrêter la date à laquelle le rapport doit être remis : au plus tard quinze jours avant l'expiration du délai de l'article L. 1233-30, et la porter au calendrier.",
       "Ne pas différer la saisine de l'administration au motif de l'expertise : le délai d'avis n'est pas prolongé par elle.",
     ],
     verifs: [
       { cle: "cse03Designation", question: "À quelle date le comité a-t-il décidé de recourir à l'expertise, et à quelle réunion ?", attendu: "La date de la délibération et le procès-verbal de la réunion correspondante." },
-      { cle: "cse03Echanges", question: "À quelles dates l'expert a-t-il demandé des informations et à quelles dates l'employeur a-t-il répondu ?", attendu: "Le journal daté des demandes et des réponses — dix jours pour demander, huit pour répondre." },
+      { cle: "cse03Echanges", question: "À quelles dates l'expert a-t-il demandé des informations et à quelles dates l'employeur a-t-il répondu ?", attendu: "Le journal daté des demandes et des réponses - dix jours pour demander, huit pour répondre." },
       { cle: "cse03Rapport", question: "À quelle date le rapport de l'expert a-t-il été remis au comité, et le cas échéant aux organisations syndicales ?", attendu: "La date de remise, au plus tard quinze jours avant l'expiration du délai d'avis." },
     ],
   },
@@ -1775,14 +1775,14 @@ const R = {
   "PSE-CTL-COH-01": {
     gravite: 3,
     quoiFaire: "Reprendre le décompte des licenciements envisagés et le nombre de bénéficiaires des mesures individuelles jusqu'à ce que les deux soient cohérents, puis corriger celle des deux pièces qui est fausse.",
-    risque: "Le reclassement interne (L. 1233-62, 1°), le soutien à la création ou à la reprise d'activités par les salariés (4°) et la formation ou la reconversion (5°) s'adressent aux salariés dont le licenciement est envisagé. Une mesure individuelle qui vise plus de bénéficiaires qu'il n'y a de licenciements signale que l'un des deux chiffres est faux — et les deux emportent des conséquences : le nombre de licenciements commande le délai d'avis du comité (L. 1233-30, II), et le chiffrage commande l'appréciation des mesures d'accompagnement au regard de l'importance du projet (L. 1233-57-3, 2°).",
+    risque: "Le reclassement interne (L. 1233-62, 1°), le soutien à la création ou à la reprise d'activités par les salariés (4°) et la formation ou la reconversion (5°) s'adressent aux salariés dont le licenciement est envisagé. Une mesure individuelle qui vise plus de bénéficiaires qu'il n'y a de licenciements signale que l'un des deux chiffres est faux - et les deux emportent des conséquences : le nombre de licenciements commande le délai d'avis du comité (L. 1233-30, II), et le chiffrage commande l'appréciation des mesures d'accompagnement au regard de l'importance du projet (L. 1233-57-3, 2°).",
     delai: "Une semaine : c'est un rapprochement de deux décomptes, mais il peut déplacer le calendrier.",
     document: "Rapprochement du décompte des licenciements et des bénéficiaires des mesures individuelles",
     etapes: [
       "Reprendre le décompte des licenciements envisagés sur une même période de trente jours, en y intégrant, s'il y a lieu, les refus de modification d'un élément essentiel du contrat proposée pour un motif économique (L. 1233-25) et la règle des licenciements successifs de l'article L. 1233-26.",
       "Reprendre le nombre de bénéficiaires de chaque mesure relevant des rubriques 1°, 4° et 5°, qui visent les salariés dont le licenciement est envisagé.",
-      "Corriger le chiffre qui est faux — et non celui qui est le plus commode : si c'est le décompte des licenciements, tout le calendrier de consultation s'en trouve déplacé et doit être refait.",
-      "Vérifier ensuite que les mesures collectives — reprise d'activité, création d'activités nouvelles, bassin d'emploi, temps de travail — restent identifiées comme telles : elles peuvent légitimement viser au-delà du nombre de licenciements.",
+      "Corriger le chiffre qui est faux - et non celui qui est le plus commode : si c'est le décompte des licenciements, tout le calendrier de consultation s'en trouve déplacé et doit être refait.",
+      "Vérifier ensuite que les mesures collectives - reprise d'activité, création d'activités nouvelles, bassin d'emploi, temps de travail - restent identifiées comme telles : elles peuvent légitimement viser au-delà du nombre de licenciements.",
       "Reporter les corrections dans le tableau des mesures, dans le budget total et dans le calendrier, puis présenter la version corrigée au comité si elle intervient après une réunion.",
     ],
     verifs: [
@@ -1829,17 +1829,17 @@ if (require.main === module) {
   const aRegulariser = Object.values(R).filter(x => x !== null).length;
   const verifs = Object.values(R).filter(x => x).reduce((n, x) => n + x.verifs.length, 0);
   console.log(`${C.length} contrôle(s) · ${aRegulariser} régularisation(s) · ${verifs} vérification(s)`);
-  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART — " + e)); process.exit(1); }
+  if (ECARTS.length) { ECARTS.forEach(e => console.log("ÉCART - " + e)); process.exit(1); }
   console.log("chaque contrôle a son issue, et chaque issue son contrôle");
 }
 
 });
 
 __def("./modeles-pse.js", function(module, exports, require){
-/* Les modèles de régularisation — étape 5 du parcours client.
+/* Les modèles de régularisation - étape 5 du parcours client.
 
    Chaque contrôle non conforme ou à vérifier a droit à mieux qu'un rappel de
-   texte : une note chiffrée sur le dossier remis — l'effectif déclaré, les
+   texte : une note chiffrée sur le dossier remis - l'effectif déclaré, les
    dates de réunion, le budget saisi mesure par mesure, les seuils de 50/10 et
    de mille salariés. Rien n'est une coquille générique : quand une donnée
    manque pour calculer, la note le dit et pose un exemple marqué
@@ -1847,14 +1847,14 @@ __def("./modeles-pse.js", function(module, exports, require){
 
    Chaque fonction reçoit le même dossier `f` que les contrôles et le moteur
    de régime (moteur-pse.js), et rend un classeur de pièces
-   (moteur/commun/outils.js) — la même fabrique que le rapport d'audit, pour
+   (moteur/commun/outils.js) - la même fabrique que le rapport d'audit, pour
    que ce modèle s'imprime exactement comme le reste du module.
 
    Les seuls textes, délais et rubriques cités sont ceux déjà lus et posés par
    moteur-pse.js, mesures.js et controles-pse.js : ce fichier ne capture aucun
    article, il met en chiffres ce qui l'est déjà. Deux contrôles n'ont pas de
-   modèle — PSE-CTL-CAL-01 et PSE-CTL-CAL-02, qui calculent un rapport et
-   l'affichent sans rien constater — comme regularisation-pse.js les laisse à
+   modèle - PSE-CTL-CAL-01 et PSE-CTL-CAL-02, qui calculent un rapport et
+   l'affichent sans rien constater - comme regularisation-pse.js les laisse à
    null. */
 const O = require("./outils.js");
 const M = require("./moteur-pse.js");
@@ -1864,7 +1864,7 @@ const q = x => (x !== undefined && x !== null && String(x).trim() !== "" ? Strin
 const nb = x => (typeof x === "number" && isFinite(x) ? x : (x !== undefined && x !== null && x !== "" && isFinite(+x) ? +x : null));
 const dit = x => x === true || x === "oui";
 const nie = x => x === false || x === "non";
-const euros = n => (n === null || n === undefined ? "—" : n.toLocaleString("fr-FR") + " €");
+const euros = n => (n === null || n === undefined ? "-" : n.toLocaleString("fr-FR") + " €");
 const nomE = f => q(f.entreprise) || "l'entreprise auditée";
 const mesures = f => Array.isArray((f.plan || {}).mesures) ? f.plan.mesures : [];
 const n30j = f => nb(f.total30j !== undefined ? f.total30j : f.nbLicenciements);
@@ -1873,7 +1873,7 @@ const n30j = f => nb(f.total30j !== undefined ? f.total30j : f.nbLicenciements);
 
 function modeleCon01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Les sept rubriques de l'article L. 1233-62, sur ce dossier — " + nomE(f));
+  t1("Les sept rubriques de l'article L. 1233-62, sur ce dossier - " + nomE(f));
   const L = mesures(f);
   h1("Ce que le dossier rattache à chaque rubrique");
   const vues = new Map();
@@ -1886,7 +1886,7 @@ function modeleCon01(f) {
       return [m.marque, m.intitule, s.length ? s.map(x => q(x.intitule) || "sans intitulé").join(" ; ") : "aucune"];
     }));
   if (absentes.length)
-    p(`${absentes.length} rubrique(s) sur ${L1233_62.mesures.length} ne sont rattachées à aucune mesure : ${absentes.join(", ")}. La liste de l'article n'est pas limitative — il énonce « des mesures telles que » — mais chacune doit avoir été examinée, et son écartement motivé s'il y a lieu.`);
+    p(`${absentes.length} rubrique(s) sur ${L1233_62.mesures.length} ne sont rattachées à aucune mesure : ${absentes.join(", ")}. La liste de l'article n'est pas limitative - il énonce « des mesures telles que » - mais chacune doit avoir été examinée, et son écartement motivé s'il y a lieu.`);
   else p("Les sept rubriques sont toutes rattachées à au moins une mesure.");
   note(`Version de l'article lue à la source : ${L1233_62.version}.`);
   return A.D;
@@ -1894,30 +1894,30 @@ function modeleCon01(f) {
 
 function modeleCon02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le plan de reclassement interne et les salariés les plus exposés — " + nomE(f));
+  t1("Le plan de reclassement interne et les salariés les plus exposés - " + nomE(f));
   const L = mesures(f);
   const rec = L.filter(m => String(m.rubrique || "").trim() === "1°");
   const exposes = Array.isArray((f.plan || {}).salariesExposes) ? f.plan.salariesExposes : [];
   h1("Ce que le dossier déclare");
   tab(["Point", "État déclaré"], [
     ["Actions de reclassement interne (rubrique 1°)", rec.length ? rec.length + " action(s)" : "aucune"],
-    ["Bénéficiaires visés par ces actions", rec.length ? String(rec.reduce((n, m) => n + (nb(m.beneficiaires) || 0), 0)) : "—"],
+    ["Bénéficiaires visés par ces actions", rec.length ? String(rec.reduce((n, m) => n + (nb(m.beneficiaires) || 0), 0)) : "-"],
     ["Salariés à réinsertion particulièrement difficile identifiés", exposes.length ? String(exposes.length) : "non identifiés"],
   ]);
-  if (exposes.length) { h1("Les salariés identifiés"); exposes.forEach(x => A.D.push({ k: "puce", t: q(x) || "—" })); }
+  if (exposes.length) { h1("Les salariés identifiés"); exposes.forEach(x => A.D.push({ k: "puce", t: q(x) || "-" })); }
   if (!rec.length) p("Aucune action de reclassement interne n'est saisie : l'article L. 1233-61 fait de ce plan le cœur du plan de sauvegarde, non une mesure parmi d'autres.");
-  else if (!exposes.length) p("Les actions existent, mais aucun salarié à réinsertion particulièrement difficile — âge, caractéristiques sociales, qualification — n'est identifié. L'article les vise nommément.");
+  else if (!exposes.length) p("Les actions existent, mais aucun salarié à réinsertion particulièrement difficile - âge, caractéristiques sociales, qualification - n'est identifié. L'article les vise nommément.");
   note("Version de l'article L. 1233-61 lue à la source citée dans mesures.js.");
   return A.D;
 }
 
 function modeleCon03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Localisation des offres de reclassement — territoire national — " + nomE(f));
+  t1("Localisation des offres de reclassement - territoire national - " + nomE(f));
   const L = mesures(f);
   h1("Ce que le dossier laisse voir");
   const suspects = L.filter(m => /étranger|hors de France|international|filiale étrangère/i.test(String(m.intitule || "") + " " + String(m.detail || "")));
-  tab(["Mesure", "Rubrique", "Bénéficiaires"], L.map(m => [q(m.intitule) || "sans intitulé", q(m.rubrique) || "—", m.beneficiaires != null ? String(m.beneficiaires) : "—"]));
+  tab(["Mesure", "Rubrique", "Bénéficiaires"], L.map(m => [q(m.intitule) || "sans intitulé", q(m.rubrique) || "-", m.beneficiaires != null ? String(m.beneficiaires) : "-"]));
   if (suspects.length)
     p(`${suspects.length} mesure(s) paraissent porter sur des emplois situés hors du territoire national, d'après leur intitulé : ${suspects.map(m => q(m.intitule) || m.rubrique).join(" ; ")}. Seules les offres situées sur le territoire national comptent dans l'obligation de reclassement (L. 1233-61).`);
   else p("Aucune mesure ne laisse deviner, d'après son intitulé, un emploi situé hors du territoire national.");
@@ -1929,7 +1929,7 @@ function modeleCon03(f) {
 
 function modeleChf01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le chiffrage de chaque mesure, une par une — " + nomE(f));
+  t1("Le chiffrage de chaque mesure, une par une - " + nomE(f));
   const L = mesures(f);
   h1(`Les ${L.length} mesure(s) saisie(s)`);
   const incomplets = [];
@@ -1937,21 +1937,21 @@ function modeleChf01(f) {
     const ok = nb(m.beneficiaires) !== null && nb(m.budget) !== null && q(m.duree);
     if (!ok) incomplets.push(m);
     return [q(m.intitule) || m.rubrique || "sans intitulé",
-      m.beneficiaires != null ? String(m.beneficiaires) : "—",
-      m.budget != null ? euros(nb(m.budget)) : "—",
-      q(m.duree) || "—"];
+      m.beneficiaires != null ? String(m.beneficiaires) : "-",
+      m.budget != null ? euros(nb(m.budget)) : "-",
+      q(m.duree) || "-"];
   }));
   if (incomplets.length)
     p(`${incomplets.length} mesure(s) sur ${L.length} ne portent pas à la fois un budget, un nombre de bénéficiaires et une durée. Une mesure non chiffrée ne pèse rien dans l'appréciation que l'administration porte sur les moyens du groupe (L. 1233-57-3, 2°).`);
   else if (L.length) p("Les mesures saisies portent toutes un budget, un nombre de bénéficiaires et une durée.");
   else p("Aucune mesure n'est saisie.");
-  note("Le coût unitaire — budget divisé par bénéficiaires — se lit directement de ce tableau : il est la première question posée en séance.");
+  note("Le coût unitaire - budget divisé par bénéficiaires - se lit directement de ce tableau : il est la première question posée en séance.");
   return A.D;
 }
 
 function modeleChf02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le rapprochement du budget total et du détail des mesures — " + nomE(f));
+  t1("Le rapprochement du budget total et du détail des mesures - " + nomE(f));
   const L = mesures(f);
   const annonce = nb((f.plan || {}).budgetTotal);
   const somme = L.reduce((n, m) => n + (nb(m.budget) || 0), 0);
@@ -1959,7 +1959,7 @@ function modeleChf02(f) {
   tab(["Point", "Montant"], [
     ["Budget total annoncé du plan", euros(annonce)],
     ["Somme des budgets de mesures", euros(somme)],
-    ["Écart", annonce !== null ? euros(Math.abs(somme - annonce)) : "—"],
+    ["Écart", annonce !== null ? euros(Math.abs(somme - annonce)) : "-"],
   ]);
   if (annonce !== null && somme && Math.abs(somme - annonce) / annonce > 0.02)
     p(`L'écart représente ${Math.round((Math.abs(somme - annonce) / annonce) * 1000) / 10} % du total annoncé. C'est la première vérification faite en séance : elle se retourne contre celui qui la présente.`);
@@ -1972,7 +1972,7 @@ function modeleChf02(f) {
 
 function modeleCal03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Les comptes du groupe versés au dossier — " + nomE(f));
+  t1("Les comptes du groupe versés au dossier - " + nomE(f));
   const P = Array.isArray(f.pieces) ? f.pieces : [];
   const versee = P.some(x => /comptes.?groupe|consolid/i.test(String(x.type || x.nom || "")));
   h1("Ce que le dossier déclare");
@@ -1992,14 +1992,14 @@ function modeleCal03(f) {
 
 function modeleAcc01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le dispositif d'accompagnement dû, sur les effectifs déclarés — " + nomE(f));
+  t1("Le dispositif d'accompagnement dû, sur les effectifs déclarés - " + nomE(f));
   const a = M.accompagnement(f);
   const choisi = q((f.plan || {}).accompagnement);
   h1("Les effectifs, au regard du seuil de mille salariés (L. 1233-71 / L. 1233-66)");
   tab(["Niveau", "Effectif déclaré"], [
     ["Entreprise", nb(f.effectif) !== null ? nb(f.effectif) + " salarié(s)" : "non renseigné"],
     ["Établissement concerné", nb(f.effectifEtablissement) !== null ? nb(f.effectifEtablissement) + " salarié(s)" : "non renseigné"],
-    ["Groupe", dit(f.groupe) ? (nb(f.effectifGroupe) !== null ? nb(f.effectifGroupe) + " salarié(s)" : "non renseigné") : "sans objet — pas de groupe déclaré"],
+    ["Groupe", dit(f.groupe) ? (nb(f.effectifGroupe) !== null ? nb(f.effectifGroupe) + " salarié(s)" : "non renseigné") : "sans objet - pas de groupe déclaré"],
   ]);
   h1("Le dispositif que ces effectifs commandent");
   p(a.motif);
@@ -2015,14 +2015,14 @@ function modeleAcc01(f) {
 
 function modeleAcc02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("La durée du congé de reclassement, au regard du plafond de L. 1233-71 — " + nomE(f));
+  t1("La durée du congé de reclassement, au regard du plafond de L. 1233-71 - " + nomE(f));
   const d = nb((f.plan || {}).dureeConge);
   const reconversion = dit((f.plan || {}).formationReconversion);
   const max = reconversion ? 24 : 12;
   h1("Ce que le dossier déclare");
   tab(["Point", "État déclaré"], [
     ["Durée du congé de reclassement retenue", d !== null ? d + " mois" : "non renseignée"],
-    ["Formation de reconversion professionnelle", reconversion ? "oui — plafond porté à 24 mois" : "non — plafond de 12 mois"],
+    ["Formation de reconversion professionnelle", reconversion ? "oui - plafond porté à 24 mois" : "non - plafond de 12 mois"],
     ["Plafond applicable", max + " mois"],
   ]);
   if (d !== null && d > max)
@@ -2034,7 +2034,7 @@ function modeleAcc02(f) {
 
 function modeleAcc03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le moment de la proposition du contrat de sécurisation professionnelle — L. 1233-66 — " + nomE(f));
+  t1("Le moment de la proposition du contrat de sécurisation professionnelle - L. 1233-66 - " + nomE(f));
   const dateProp = q((f.plan || {}).dateProposition);
   const dateDec = q((f.pse || {}).dateDecisionAdmin);
   const r = M.planDu(f);
@@ -2055,7 +2055,7 @@ function modeleAcc03(f) {
 
 function modeleVoi01(f) {
   const A = O(); const { t1, h1, tab, note } = A;
-  t1("La voie retenue et le calendrier qu'elle ouvre — " + nomE(f));
+  t1("La voie retenue et le calendrier qu'elle ouvre - " + nomE(f));
   const v = q((f.pse || {}).voie);
   h1("Ce que le dossier déclare");
   tab(["Point", "État déclaré"], [
@@ -2068,7 +2068,7 @@ function modeleVoi01(f) {
 
 function modeleVoi02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("La condition de représentativité de l'accord majoritaire — L. 1233-24-1 — " + nomE(f));
+  t1("La condition de représentativité de l'accord majoritaire - L. 1233-24-1 - " + nomE(f));
   const s = nb((f.pse || {}).suffrages);
   h1("Le calcul, sur ce dossier");
   tab(["Point", "Valeur"], [
@@ -2086,7 +2086,7 @@ function modeleVoi02(f) {
 
 function modeleVoi03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le délai d'instruction, calculé sur la date de dépôt — L. 1233-57-4 — " + nomE(f));
+  t1("Le délai d'instruction, calculé sur la date de dépôt - L. 1233-57-4 - " + nomE(f));
   const i = M.instruction(f);
   h1("Le calcul, sur ce dossier");
   if (!i.connu) { p(i.motif); return A.D; }
@@ -2094,7 +2094,7 @@ function modeleVoi03(f) {
     ["Voie retenue", i.quoi],
     ["Délai d'instruction", i.jours + " jours"],
     ["Dossier déposé le", i.depot || "non renseigné"],
-    ["Échéance calculée", i.echeance || "—"],
+    ["Échéance calculée", i.echeance || "-"],
     ["Décision notifiée le", q((f.pse || {}).dateDecisionAdmin) || "non renseignée à ce jour"],
   ]);
   p(i.motif);
@@ -2104,7 +2104,7 @@ function modeleVoi03(f) {
 
 function modeleVoi04(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("L'ordre entre la décision administrative et la notification — L. 1233-39 — " + nomE(f));
+  t1("L'ordre entre la décision administrative et la notification - L. 1233-39 - " + nomE(f));
   const d = q((f.pse || {}).dateDecisionAdmin);
   const not = q(f.dateNotification);
   h1("Ce que le dossier déclare");
@@ -2124,7 +2124,7 @@ function modeleVoi04(f) {
 
 function modeleSui01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Les trois obligations de suivi de l'article L. 1233-63 — " + nomE(f));
+  t1("Les trois obligations de suivi de l'article L. 1233-63 - " + nomE(f));
   const s = (f.plan || {}).suivi || {};
   h1("Ce que le dossier déclare");
   tab(["Obligation (L. 1233-63)", "État déclaré"],
@@ -2140,7 +2140,7 @@ function modeleSui01(f) {
 
 function modeleRem01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("La priorité de réembauche, sur la date de rupture déclarée — L. 1233-45 — " + nomE(f));
+  t1("La priorité de réembauche, sur la date de rupture déclarée - L. 1233-45 - " + nomE(f));
   const pr = M.priorite(f);
   const demandes = Array.isArray((f.plan || {}).demandesReembauche) ? f.plan.demandesReembauche : [];
   const info = (f.plan || {}).informationElusPostes;
@@ -2161,7 +2161,7 @@ function modeleRem01(f) {
 
 function modeleCse01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("L'espacement des réunions du comité — au moins quinze jours — L. 1233-30, I — " + nomE(f));
+  t1("L'espacement des réunions du comité - au moins quinze jours - L. 1233-30, I - " + nomE(f));
   const r = Array.isArray(f.datesReunionsCSE) ? f.datesReunionsCSE.filter(Boolean).slice().sort() : [];
   h1(`Les ${r.length} date(s) de réunion déclarée(s)`);
   if (r.length < 2) { p(r.length ? "Une seule réunion est renseignée : le comité en tient au moins deux (L. 1233-30, I)." : "Aucune date de réunion n'est renseignée."); return A.D; }
@@ -2176,7 +2176,7 @@ function modeleCse01(f) {
 
 function modeleCse02(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le délai des deux avis du comité — L. 1233-30, II — " + nomE(f));
+  t1("Le délai des deux avis du comité - L. 1233-30, II - " + nomE(f));
   const c = M.consultation(f);
   h1("Le calcul, sur ce dossier");
   if (!c.connu) { p(c.motif); return A.D; }
@@ -2186,7 +2186,7 @@ function modeleCse02(f) {
     ["Tranche applicable", c.tranche],
     ["Délai maximal d'avis", c.mois + " mois"],
     ["Première réunion", c.premiere || "non renseignée"],
-    ["Échéance calculée", c.echeance || "—"],
+    ["Échéance calculée", c.echeance || "-"],
     ["Avis rendu le", avis || "non renseigné à ce jour"],
   ]);
   if (avis && c.echeance) p(avis <= c.echeance ? `Avis du ${avis}, dans le délai qui expirait le ${c.echeance}.` : `Avis du ${avis}, postérieur au terme du ${c.echeance} : passé ce terme, le comité était déjà réputé consulté.`);
@@ -2196,7 +2196,7 @@ function modeleCse02(f) {
 
 function modeleCse03(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le calendrier de l'expertise décidée par le comité — L. 1233-34 et L. 1233-35 — " + nomE(f));
+  t1("Le calendrier de l'expertise décidée par le comité - L. 1233-34 et L. 1233-35 - " + nomE(f));
   const c = M.consultation(f);
   const d = q((f.pse || {}).dateDesignationExpert);
   h1("Ce que le dossier déclare");
@@ -2215,7 +2215,7 @@ function modeleCse03(f) {
 
 function modeleCoh01(f) {
   const A = O(); const { t1, h1, p, tab, note } = A;
-  t1("Le décompte des licenciements et les bénéficiaires des mesures individuelles — " + nomE(f));
+  t1("Le décompte des licenciements et les bénéficiaires des mesures individuelles - " + nomE(f));
   const L = mesures(f);
   const n = n30j(f);
   const INDIVIDUELLES = new Set(["1°", "4°", "5°"]);
@@ -2225,13 +2225,13 @@ function modeleCoh01(f) {
     ["Licenciements envisagés (30 jours)", n !== null ? String(n) : "non renseigné"],
     ["Mesures individuelles (rubriques 1°, 4°, 5°)", String(visees.length)],
   ]);
-  if (visees.length) tab(["Mesure", "Rubrique", "Bénéficiaires"], visees.map(m => [q(m.intitule) || "sans intitulé", m.rubrique, m.beneficiaires != null ? String(m.beneficiaires) : "—"]));
+  if (visees.length) tab(["Mesure", "Rubrique", "Bénéficiaires"], visees.map(m => [q(m.intitule) || "sans intitulé", m.rubrique, m.beneficiaires != null ? String(m.beneficiaires) : "-"]));
   const max = visees.reduce((m, x) => Math.max(m, nb(x.beneficiaires) || 0), 0);
   if (n !== null && max)
     p(max > n
       ? `Une mesure individuelle vise ${max} bénéficiaires alors que ${n} licenciements sont envisagés : soit le décompte des licenciements est faux, soit le chiffrage l'est.`
       : `Le nombre de bénéficiaires le plus élevé (${max}) n'excède pas les ${n} licenciements envisagés.`);
-  note("Les mesures collectives — reprise d'activité, création d'activités nouvelles, bassin d'emploi, temps de travail — ne sont pas comparées à ce nombre : elles peuvent légitimement viser au-delà.");
+  note("Les mesures collectives - reprise d'activité, création d'activités nouvelles, bassin d'emploi, temps de travail - ne sont pas comparées à ce nombre : elles peuvent légitimement viser au-delà.");
   return A.D;
 }
 
@@ -2266,8 +2266,8 @@ if (require.main === module) {
   const surplus = Object.keys(MODELES).filter(id => !attendus.includes(id));
   console.log(`${Object.keys(MODELES).length} modèle(s) sur ${attendus.length} contrôle(s) régularisables`);
   if (manquants.length || surplus.length) {
-    if (manquants.length) console.error("ÉCART — modèle manquant pour : " + manquants.join(", "));
-    if (surplus.length) console.error("ÉCART — modèle sans contrôle régularisable : " + surplus.join(", "));
+    if (manquants.length) console.error("ÉCART - modèle manquant pour : " + manquants.join(", "));
+    if (surplus.length) console.error("ÉCART - modèle sans contrôle régularisable : " + surplus.join(", "));
     process.exit(1);
   }
   const { BASE } = require("./tests-pse.js");
@@ -2284,15 +2284,15 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    dans quel ordre. L'ordre n'est pas un détail de présentation : il a été
    arrêté explicitement, et il commande la logique.
 
-   PREMIER TEMPS — ce qu'elle n'a pas fait.
+   PREMIER TEMPS - ce qu'elle n'a pas fait.
    On liste les manquements, du plus grave au moins grave ; pour chacun on
    donne l'acte à accomplir, le modèle et la procédure ; puis on vérifie la
    correction. Le temps se termine quand tout ce qui manquait est validé.
 
-   SECOND TEMPS — ce qu'elle dit avoir fait.
+   SECOND TEMPS - ce qu'elle dit avoir fait.
    Et seulement alors. Les contrôles que l'audit a rendus « conformes » ne le
    sont que sur la parole du client : ils sont ici marqués « déclaré », repris
-   un par un avec la grille du texte, et validés — ou refusés, auquel cas ils
+   un par un avec la grille du texte, et validés - ou refusés, auquel cas ils
    retournent au premier temps comme manquements.
 
    La règle qui tient tout : UN « OUI » N'EST PAS UNE PREUVE. Rien ne passe de
@@ -2300,8 +2300,8 @@ __def("./parcours-deux-temps.js", function(module, exports, require){
    pourquoi ce module renomme l'état « conforme » plutôt que de le recopier :
    le mot « conforme » ne doit pas apparaître avant sa vérification. */
 
-const DECLARE = "déclaré — à vérifier";
-const REGLE = "en règle — vérifié";
+const DECLARE = "déclaré - à vérifier";
+const REGLE = "en règle - vérifié";
 
 /* Les quatre degrés de gravité, dans l'ordre où le guide les présente. Ils
    sont communs à tous les modules : un délit d'entrave se traite avant une
@@ -2309,7 +2309,7 @@ const REGLE = "en règle — vérifié";
 const DEGRES = {
   1: "Sanction pénale encourue",
   2: "Pénalité financière encourue",
-  3: "Irrégularité opposable — l'accord ou la décision peut tomber",
+  3: "Irrégularité opposable - l'accord ou la décision peut tomber",
   4: "Régularisation rapide",
 };
 
@@ -2322,8 +2322,8 @@ function etatParcours(etat) {
 
 /* Le premier temps : ce qui manque.
 
-   Sont retenus les contrôles « non conforme » — le texte n'est pas respecté —
-   et « risque à vérifier » — l'application ne tranche pas, mais quelque chose
+   Sont retenus les contrôles « non conforme » - le texte n'est pas respecté -
+   et « risque à vérifier » - l'application ne tranche pas, mais quelque chose
    est à faire. Les « donnée manquante » ne sont pas des manquements : ce sont
    des questions sans réponse, et elles retournent au questionnaire. */
 function premierTemps(C, R, verdicts, faits) {
@@ -2361,7 +2361,7 @@ function premierTemps(C, R, verdicts, faits) {
    Un contrôle « conforme » l'est parce que le client a déclaré la pièce, la
    date ou l'acte. Le second temps le reprend et demande de le montrer. Un
    contrôle sans grille de vérification ne peut pas être vérifié : il reste
-   « déclaré », et le dit — plutôt que de passer pour vérifié. */
+   « déclaré », et le dit - plutôt que de passer pour vérifié. */
 function secondTemps(C, R, verdicts, controles) {
   const points = [];
   for (const c of C) {
@@ -2410,7 +2410,7 @@ function verdictVerification(point) {
   if (refusees.length)
     return { issue: "refusé", refusees, motif:
       "Ce que vous déclariez en place ne l'est pas : " +
-      refusees.map(v => "« " + v.question + " » — attendu : " + v.attendu).join(" ; ") +
+      refusees.map(v => "« " + v.question + " » - attendu : " + v.attendu).join(" ; ") +
       ". Ce point retourne au premier temps." };
   if (manquantes.length)
     return { issue: "ne conclut pas", manquantes, motif:
@@ -2445,7 +2445,7 @@ function parcours(C, R, verdicts, etat) {
       refusesDuSecond: refuses,
       restants: restantsA.length + refuses.length,
       /* Achevé veut dire : plus rien à corriger. Un refus du second temps
-         rejoint la liste du premier — le compteur le dit déjà — et il doit
+         rejoint la liste du premier - le compteur le dit déjà - et il doit
          donc empêcher l'achèvement, sans quoi le compte rendu annonçait
          « tous les manquements sont déclarés corrigés » juste au-dessous de
          la liste de ceux qui reviennent refusés. */
@@ -2459,7 +2459,7 @@ function parcours(C, R, verdicts, etat) {
       /* Le second temps ne s'ouvre qu'une fois relevés tous les manquements
          du premier : c'est l'ordre qui a été arrêté, et la page le fait
          respecter. Il reste ouvert, en revanche, quand un point en revient
-         refusé — sinon le client serait renvoyé corriger sans pouvoir faire
+         refusé - sinon le client serait renvoyé corriger sans pouvoir faire
          revérifier ce qu'il a corrigé. */
       ouvert: restantsA.length === 0,
     },
@@ -3063,8 +3063,8 @@ __def("./pse_corpus.json", function(module){ module.exports = {
     grille: require("./grille-pse.js"),
     controles: require("./controles-pse.js"),
     manifeste: __MANIFESTE,
-    champs: [["Reprises de l'audit économique",[["effectif","Effectif de l'entreprise","nombre"],["effectifEtablissement","Effectif de l'établissement concerné","nombre"],["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],["effectifGroupe","Effectif total du groupe","nombre"],["nbLicenciements","Nombre de licenciements envisagés sur trente jours","nombre"],["total30j","Décompte des trente jours retenu par l'audit économique, refus de modification et licenciements déjà prononcés compris","nombre"],["dateNotification","Date de notification des licenciements","AAAA-MM-JJ"],["pieces","Pièces versées au dossier","liste d'objets"]]],["Le plan",[["plan.mesures","Les mesures du plan, une par ligne : rubrique de l'article L. 1233-62, intitulé, détail, nombre de bénéficiaires, budget, durée","liste d'objets"],["plan.budgetTotal","Budget total annoncé du plan","euros"],["plan.salariesExposes","Salariés dont la réinsertion est particulièrement difficile — âge, caractéristiques sociales, qualification","liste"],["plan.resultatGroupe","Résultat consolidé du groupe sur le dernier exercice clos","euros"],["plan.suivi","Modalités de suivi : suivi des mesures, consultation du comité, bilan à l'administration","objet"]]],["Accompagnement individuel",[["plan.accompagnement","Dispositif retenu : congé de reclassement ou contrat de sécurisation professionnelle","texte"],["plan.dureeConge","Durée du congé de reclassement","nombre de mois"],["plan.formationReconversion","Le congé comporte-t-il une formation de reconversion professionnelle ?","oui / non"],["plan.dateProposition","Date de proposition du contrat de sécurisation professionnelle","AAAA-MM-JJ"]]],["Voie et instruction",[["pse.voie","Voie retenue : accord majoritaire ou document unilatéral","texte"],["pse.suffrages","Part des suffrages recueillie par les organisations signataires au premier tour des dernières élections","nombre"],["pse.dateDepotAdmin","Date de réception par l'administration du dossier complet","AAAA-MM-JJ"],["pse.dateDecisionAdmin","Date de la décision de validation ou d'homologation","AAAA-MM-JJ"]]],["Consultation du comité",[["datesReunionsCSE","Dates des réunions du comité sur le projet, dans l'ordre","liste de dates"],["dateAvisCSE","Date à laquelle le comité a rendu son avis","AAAA-MM-JJ"],["accordDelaisConsultation","Un accord fixe-t-il des délais de consultation différents de ceux de la loi ?","oui / non"],["expertisePSE","Le comité a-t-il décidé de recourir à une expertise ?","oui / non"],["pse.dateDesignationExpert","Date de désignation de l'expert","AAAA-MM-JJ"]]],["Après le licenciement",[["plan.dateRupture","Date de rupture des contrats","AAAA-MM-JJ"],["plan.demandesReembauche","Demandes de priorité de réembauche reçues","liste"],["plan.informationElusPostes","Les représentants du personnel sont-ils informés des postes devenus disponibles ?","oui / non"]]]],
-    propositions: {"plan.mesures.rubrique":{"valeurs":["1°","1° bis","2°","3°","4°","5°","6°"],"libre":true,"indicatif":true,"aide":"La rubrique de l'article L. 1233-62 à laquelle la mesure se rattache. L'article énonce « des mesures telles que » : la liste n'est pas limitative, et une mesure peut n'entrer dans aucune rubrique — mais l'administration apprécie le plan au regard de celles-ci."},"pse.voie":{"valeurs":["accord"],"autres":["unilateral"],"libre":false,"aide":"Accord collectif majoritaire validé en quinze jours, ou document unilatéral homologué en vingt et un. Le choix commande tout le calendrier et se fait avant la première réunion."},"plan.accompagnement":{"valeurs":["congé de reclassement","contrat de sécurisation professionnelle"],"libre":false,"aide":"Le dispositif n'est pas au choix : au moins mille salariés, c'est le congé de reclassement (L. 1233-71) ; en deçà, le contrat de sécurisation professionnelle (L. 1233-66). Les deux ne se cumulent pas."},"groupe":{"valeurs":["oui","non"],"libre":false,"aide":"L'appartenance à un groupe commande le périmètre d'appréciation des moyens : l'article L. 1233-57-3 fait des moyens du groupe le premier critère."},"accordDelaisConsultation":{"valeurs":["oui","non"],"libre":false,"aide":"Le plafond de deux, trois ou quatre mois de l'article L. 1233-30 est supplétif : une convention ou un accord collectif peut prévoir des délais différents. S'il en existe un, joignez-le — sans lui, l'application ne peut vérifier ni la règle légale ni la vôtre."},"expertisePSE":{"valeurs":["oui","non"],"libre":false,"aide":"Le comité décide du recours à l'expertise lors de la première réunion (L. 1233-34). L'expertise ne prolonge pas le délai d'avis."},"pieces":{"valeurs":["comptes-groupe"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les pièces effectivement versées. Les comptes consolidés du groupe sont la pièce décisive du calibrage : à défaut, l'administration apprécie les moyens sur ce qu'elle a."}},
+    champs: [["Reprises de l'audit économique",[["effectif","Effectif de l'entreprise","nombre"],["effectifEtablissement","Effectif de l'établissement concerné","nombre"],["groupe","L'entreprise appartient-elle à un groupe ?","oui / non"],["effectifGroupe","Effectif total du groupe","nombre"],["nbLicenciements","Nombre de licenciements envisagés sur trente jours","nombre"],["total30j","Décompte des trente jours retenu par l'audit économique, refus de modification et licenciements déjà prononcés compris","nombre"],["dateNotification","Date de notification des licenciements","AAAA-MM-JJ"],["pieces","Pièces versées au dossier","liste d'objets"]]],["Le plan",[["plan.mesures","Les mesures du plan, une par ligne : rubrique de l'article L. 1233-62, intitulé, détail, nombre de bénéficiaires, budget, durée","liste d'objets"],["plan.budgetTotal","Budget total annoncé du plan","euros"],["plan.salariesExposes","Salariés dont la réinsertion est particulièrement difficile - âge, caractéristiques sociales, qualification","liste"],["plan.resultatGroupe","Résultat consolidé du groupe sur le dernier exercice clos","euros"],["plan.suivi","Modalités de suivi : suivi des mesures, consultation du comité, bilan à l'administration","objet"]]],["Accompagnement individuel",[["plan.accompagnement","Dispositif retenu : congé de reclassement ou contrat de sécurisation professionnelle","texte"],["plan.dureeConge","Durée du congé de reclassement","nombre de mois"],["plan.formationReconversion","Le congé comporte-t-il une formation de reconversion professionnelle ?","oui / non"],["plan.dateProposition","Date de proposition du contrat de sécurisation professionnelle","AAAA-MM-JJ"]]],["Voie et instruction",[["pse.voie","Voie retenue : accord majoritaire ou document unilatéral","texte"],["pse.suffrages","Part des suffrages recueillie par les organisations signataires au premier tour des dernières élections","nombre"],["pse.dateDepotAdmin","Date de réception par l'administration du dossier complet","AAAA-MM-JJ"],["pse.dateDecisionAdmin","Date de la décision de validation ou d'homologation","AAAA-MM-JJ"]]],["Consultation du comité",[["datesReunionsCSE","Dates des réunions du comité sur le projet, dans l'ordre","liste de dates"],["dateAvisCSE","Date à laquelle le comité a rendu son avis","AAAA-MM-JJ"],["accordDelaisConsultation","Un accord fixe-t-il des délais de consultation différents de ceux de la loi ?","oui / non"],["expertisePSE","Le comité a-t-il décidé de recourir à une expertise ?","oui / non"],["pse.dateDesignationExpert","Date de désignation de l'expert","AAAA-MM-JJ"]]],["Après le licenciement",[["plan.dateRupture","Date de rupture des contrats","AAAA-MM-JJ"],["plan.demandesReembauche","Demandes de priorité de réembauche reçues","liste"],["plan.informationElusPostes","Les représentants du personnel sont-ils informés des postes devenus disponibles ?","oui / non"]]]],
+    propositions: {"plan.mesures.rubrique":{"valeurs":["1°","1° bis","2°","3°","4°","5°","6°"],"libre":true,"indicatif":true,"aide":"La rubrique de l'article L. 1233-62 à laquelle la mesure se rattache. L'article énonce « des mesures telles que » : la liste n'est pas limitative, et une mesure peut n'entrer dans aucune rubrique - mais l'administration apprécie le plan au regard de celles-ci."},"pse.voie":{"valeurs":["accord"],"autres":["unilateral"],"libre":false,"aide":"Accord collectif majoritaire validé en quinze jours, ou document unilatéral homologué en vingt et un. Le choix commande tout le calendrier et se fait avant la première réunion."},"plan.accompagnement":{"valeurs":["congé de reclassement","contrat de sécurisation professionnelle"],"libre":false,"aide":"Le dispositif n'est pas au choix : au moins mille salariés, c'est le congé de reclassement (L. 1233-71) ; en deçà, le contrat de sécurisation professionnelle (L. 1233-66). Les deux ne se cumulent pas."},"groupe":{"valeurs":["oui","non"],"libre":false,"aide":"L'appartenance à un groupe commande le périmètre d'appréciation des moyens : l'article L. 1233-57-3 fait des moyens du groupe le premier critère."},"accordDelaisConsultation":{"valeurs":["oui","non"],"libre":false,"aide":"Le plafond de deux, trois ou quatre mois de l'article L. 1233-30 est supplétif : une convention ou un accord collectif peut prévoir des délais différents. S'il en existe un, joignez-le - sans lui, l'application ne peut vérifier ni la règle légale ni la vôtre."},"expertisePSE":{"valeurs":["oui","non"],"libre":false,"aide":"Le comité décide du recours à l'expertise lors de la première réunion (L. 1233-34). L'expertise ne prolonge pas le délai d'avis."},"pieces":{"valeurs":["comptes-groupe"],"libre":true,"multiple":true,"indicatif":true,"aide":"Les pièces effectivement versées. Les comptes consolidés du groupe sont la pièce décisive du calibrage : à défaut, l'administration apprécie les moyens sur ce qu'elle a."}},
     listes: [],
     colonnes: {"pieces":[["type","texte"],["date","AAAA-MM-JJ"]],"plan.mesures":[["rubrique","texte"],["intitule","texte"],["beneficiaires","nombre"],["budget","nombre"],["duree","texte"]]},
     piecesAppelees: {},
