@@ -316,6 +316,22 @@ d'autres codes. C'est la cause première des homonymes historiques du dépôt.
 Le relais ne sert que le code du travail : ne pas citer d'article d'un autre code
 sans l'avoir vérifié autrement.
 
+## Vérifications et sauvegardes — Session 27 septembre 2026
+
+**Bulletin GERME octobre 1995 à février 1996 — LU ET VÉRIFIÉ**
+- Fichier: /home/user/JURISPRUDENCE/bulletin_GERME_octobre1995_fevrier1996.jpg
+- Période: 10/1995 à 02/1996
+- Salaire brut (ligne 9): 64 864,82 FRF
+- Statut: ✓ L'un des 2 bulletins de l'arrêt du 13 juin 1996
+- Quote-part 1995 (3 mois): 35 381 FRF
+- Quote-part 1996 (2 mois): 23 587 FRF
+
+**GERME 1995 — COMPOSITION VÉRIFIÉE**
+- Salaire initial relevé 01/01/2023: 70 313 FRF
+- Arrêt Cour d'Appel 26 juin 1997: 448 344 FRF
+- Quote-part 1995 bulletin arrêt 13 juin 1996: 41 278 FRF
+- **TOTAL GERME 1995: 559 935 FRF** (70 313 + 448 344 + 41 278)
+
 ### Le relais n'est pas fiable sous charge — mesuré le 15 août 2026
 
 Interrogé 368 fois d'affilée, il rend des 502, et — plus insidieux — il rend
