@@ -1466,6 +1466,27 @@
     if (/^(m|h)/.test(x)) return "Monsieur";
     return "Madame, Monsieur";
   }
+  /* CE QUE LE REGISTRE DIT DU CONTRAT. Une fin de contrat à durée déterminée
+     était écrite pour un salarié que le registre porte en contrat à durée
+     indéterminée, et pour un salarié déjà sorti, sans un mot. Relevé le
+     26 septembre 2026. */
+  function alerteRegistre(nomS, attendu) {
+    var s = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    if (!s) return null;
+    var nat = String(s.nature || "").trim();
+    var L = [];
+    if (attendu && nat && nat !== attendu) {
+      var lib = { cdi: "contrat à durée indéterminée", cdd: "contrat à durée déterminée",
+        apprenti: "contrat d'apprentissage", pro: "contrat de professionnalisation",
+        temporaire: "contrat de travail temporaire", groupement: "mise à disposition par un groupement" };
+      L.push("Le registre du personnel porte un " + (lib[nat] || nat) + " pour ce salarié : " +
+        "vérifiez avant d'envoyer, ce document suppose un " + (lib[attendu] || attendu) + ".");
+    }
+    if (String(s.sor || "").trim())
+      L.push("Le registre porte une date de sortie au " + (dateFr(dateDe(s.sor)) || s.sor) +
+        " : ce salarié a déjà quitté l'entreprise.");
+    return L.length ? L : null;
+  }
   /* L'adresse vient de la fiche du salarié, au registre du personnel, où elle
      se saisit une fois. Sans fiche correspondante, le crochet reste : il se
      voit, et c'est ce qu'on veut. */
@@ -2746,13 +2767,18 @@
     var b = [];
     b.push({ k: "t1", t: "Fin de votre contrat à durée déterminée" });
     enTete(b, nomS, "terme de votre contrat à durée déterminée", "Lettre remise en main propre contre décharge ou recommandée avec avis de réception");
-    b.push({ k: "p", t: "Votre contrat de travail à durée déterminée, conclu le [date du contrat] pour l'emploi de " + (v.poste || "[emploi]") + ", arrive à son terme le " + dateFr(terme) + ". Il cesse de plein droit à cette date (" + ref(["L1243-5"]) + "), et nous vous confirmons qu'il ne sera pas poursuivi par un contrat à durée indéterminée." });
+    var sCdd = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var concluLe = sCdd && sCdd.ent ? dateFr(dateDe(sCdd.ent)) : "";
+    b.push({ k: "p", t: "Votre contrat de travail à durée déterminée, conclu le " +
+      (concluLe || "[date du contrat]") + " " + (v.poste || (sCdd && sCdd.emp) || "[emploi]") + ", arrive à son terme le " + dateFr(terme) + ". Il cesse de plein droit à cette date (" + ref(["L1243-5"]) + "), et nous vous confirmons qu'il ne sera pas poursuivi par un contrat à durée indéterminée." });
     b.push({ k: "p", t: "Vous percevrez, avec votre dernier salaire et sur le bulletin correspondant, l'indemnité de fin de contrat égale à 10 % de la rémunération totale brute qui vous a été versée (" + ref(["L1243-8"]) + ") [sauf si le contrat relève d'un des cas de l'article " + ref(["L1243-10"]) + " : emploi saisonnier ou d'usage, refus d'un contrat à durée indéterminée pour le même emploi, rupture anticipée à votre initiative ou pour faute grave], ainsi que l'indemnité compensatrice de congés payés." });
     b.push({ k: "p", t: "Votre certificat de travail, votre reçu pour solde de tout compte et l'attestation destinée à France Travail vous seront remis le " + dateFr(terme) + " (" + ref(["L1234-19", "L1234-20", "R1234-9"]) + ")." });
     b.push({ k: "p", t: "Nous vous remercions de votre collaboration." });
     formule(b, civ);
     b.push({ k: "note", t: "Si la relation de travail se poursuivait après le terme, le contrat deviendrait à durée indéterminée, l'ancienneté acquise étant conservée (" + ref(["L1243-11"]) + ")." });
-    return { blocs: b, loi: ["L1243-5", "L1243-8", "L1243-10", "L1243-11", "L1234-19", "L1234-20", "R1234-9"],
+    var alCdd = alerteRegistre(nomS, "cdd");
+    return { blocs: b, alertes: alCdd || [],
+      loi: ["L1243-5", "L1243-8", "L1243-10", "L1243-11", "L1234-19", "L1234-20", "R1234-9"],
       dates: [{ q: "Terme du contrat", d: terme ? dateFrJour(terme) : "[date du terme à saisir]", f: "le contrat cesse de plein droit à l'échéance du terme (" + ref(["L1243-5"]) + ")", c: "" }] };
   }
 
