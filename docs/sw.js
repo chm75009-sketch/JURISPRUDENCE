@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-12.56";
+const CACHE = "jurisprudence-12.57";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -113,6 +113,10 @@ const ESSENTIELS = [
   "./liste-choix.js", "./listes-valeurs.js", "./listes-auto.js", "./documents-transport.js",
   "./duerp-transport.js",
   "./audit-form.js", "./apercu.js", "./lire-pdf.js", "./lire-ocr.js", "./audit-export.js", "./tableur-export.js", "./feuille-doc.js", "./parcours-deux-temps.js",
+  /* Les onze fêtes légales de L. 3133-1, en un seul endroit : sans ce fichier,
+     les écrans annoncent une échéance un samedi ou un 25 décembre sans le
+     dire. */
+  "./jours-feries.js",
   /* Les documents que l'application rédige elle-même. */
   "./documents-produits.js",
   "./documents-cse.js", "./documents-pse.js", "./documents-discipline.js",

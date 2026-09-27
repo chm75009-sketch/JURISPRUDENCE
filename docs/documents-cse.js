@@ -635,8 +635,11 @@
         "communique ensuite copie du procès-verbal aux organisations syndicales de",
         "salariés du département concerné : ne vous en chargez pas à sa place.",
       ]);
+      /* L'adresse de l'inspection vient de la fiche, où elle est saisie une
+         fois pour tous les courriers : deux crochets de moins dans une lettre
+         qui part en recommandé. Relevé le 27 septembre 2026. */
       papier(L, ctx, ["Monsieur l'Inspecteur du travail",
-                      "[Unité de contrôle compétente]", "[Adresse]"], "[DATE D'ENVOI]");
+        org(ctx, "orgInspection", "unité de contrôle compétente, et son adresse")], "[DATE D'ENVOI]");
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
       L.push("Objet : transmission du procès-verbal de carence (L. 2314-9)");
@@ -3344,6 +3347,18 @@
     var d = dateLocale(v);
     return d ? leJour(dans(d, n)) : "[" + (quoi || "date") + "]";
   }
+  /* UNE ÉCHÉANCE QUI TOMBE UN SAMEDI NE SE TIENT PAS CE JOUR-LÀ. Le kit des
+     élections annonçait un premier tour « au plus tard le samedi 26 décembre »
+     sans rien en dire. Demandé le 27 septembre 2026 : « alerter sur les
+     fériés ». La liste des onze fêtes légales est celle de L. 3133-1, dans
+     jours-feries.js. */
+  function alerteJour(v, n) {
+    var d = dateLocale(v);
+    if (!d) return "";
+    var cible = dans(d, n || 0);
+    return (global.JoursFeries && global.JoursFeries.avertissement)
+      ? global.JoursFeries.avertissement(cible) : "";
+  }
   /* Jours ouvrables : tous les jours sauf le dimanche. Les jours fériés ne
      sont pas décomptés ici, et le document le dit. */
   function plusOuvrables(v, n, quoi) {
@@ -3401,19 +3416,25 @@
       L.push("La date envisagée pour le premier tour est le " + jourLocal(dTour, "date du premier tour") +
         ". Le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant la diffusion de la présente note, soit le " +
         plus(dInfo, 90, "date de diffusion plus quatre-vingt-dix jours") + " (article L. 2314-4).");
+      var avNote = alerteJour(dInfo, 90);
+      if (avNote) L.push("[Ce quatre-vingt-dixième jour ne se tient pas :" + avNote.replace(/^ Attention :/, "").replace(/ Tenez l'acte avant\.$/, "") + " Avancez le scrutin.]");
+      var avTour = alerteJour(dTour, 0);
+      if (avTour) L.push("[La date envisagée pour le premier tour ne convient pas :" + avTour.replace(/^ Attention :/, "").replace(/ Tenez l'acte avant\.$/, "") + " Choisissez un autre jour.]");
       var a = dateLocale(dInfo), b = dateLocale(dTour);
       if (a && b && (b - a) / 86400000 > 90)
         L.push("[La date envisagée dépasse ce délai : fixez le premier tour au plus tard le " + leJour(dans(a, 90)) + ", ou diffusez une nouvelle information.]");
       L.push("");
       L.push("Les organisations syndicales mentionnées à l'article L. 2314-5 sont invitées à négocier le protocole d'accord préélectoral et à établir les listes de leurs candidats. La première réunion de négociation se tient le " +
-        jourLocal(dNeg, "date de la première réunion") + " à [heure], à [lieu].");
+        jourLocal(dNeg, "date de la première réunion") + " à " + cro(f.heure, "heure") +
+        ", à " + cro(f.lieuReunion, "lieu") + ".");
       L.push("");
       if (eff != null && eff >= 11 && eff <= 20) {
         L.push("L'entreprise employant entre onze et vingt salariés, ces organisations ne sont invitées à la négociation qu'à la condition qu'au moins un salarié se soit porté candidat dans les trente jours de la présente information, soit jusqu'au " +
           plus(dInfo, 30, "date de diffusion plus trente jours") + " (article L. 2314-5, dernier alinéa). Le salarié candidat bénéficie de la protection des articles L. 2411-7, L. 2412-3 et L. 2413-1 dès que l'employeur a connaissance de l'imminence de sa candidature.");
         L.push("");
       }
-      L.push("Les candidatures sont déposées auprès de [service ou personne] au plus tard le [date].");
+      L.push("Les candidatures sont déposées auprès de " + cro(f.depotCandidatures, "service ou personne") +
+        " au plus tard le " + (f.dateCandidatures ? jourLocal(f.dateCandidatures, "date") : "[date]") + ".");
       L.push("");
       L.push("La présente note est diffusée le " + jourLocal(dInfo, "date de diffusion") +
         " par [moyen conférant date certaine : affichage daté, remise contre émargement, courriel avec accusé de réception].");
@@ -3424,32 +3445,55 @@
       L.push("INVITATION DES ORGANISATIONS SYNDICALES");
       L.push(DOUBLE);
       L.push("");
-      L.push("[Organisation syndicale]");
-      L.push("[Adresse]");
-      L.push("");
-      L.push(lieu(ctx) + ", le " + jourLocal(dInfo, "date"));
-      L.push("Lettre recommandée avec avis de réception");
-      L.push("");
-      L.push("Objet : élections du comité social et économique, invitation à négocier le protocole d'accord préélectoral");
-      L.push("");
-      L.push("Mesdames, Messieurs,");
-      L.push("");
-      L.push("En application de l'article L. 2314-5 du code du travail, je vous informe de l'organisation des élections des membres de la délégation du personnel du comité social et économique de " +
-        nom(ctx) + " et vous invite à négocier le protocole d'accord préélectoral et à établir les listes de vos candidats.");
-      L.push("");
-      L.push("La première réunion de négociation se tient le " + jourLocal(dNeg, "date de la première réunion") +
-        " à [heure], à [lieu]. La présente invitation vous parvient au plus tard quinze jours avant cette date, soit le " +
-        plus(dNeg, -15, "date de la première réunion moins quinze jours") + " (article L. 2314-5).");
-      L.push("");
-      L.push("Le personnel a été informé de l'organisation des élections le " + jourLocal(dInfo, "date de diffusion") +
-        ". La date envisagée pour le premier tour est le " + jourLocal(dTour, "date du premier tour") + ".");
-      L.push("");
-      L.push("[En cas de renouvellement du comité : la présente invitation est adressée deux mois avant l'expiration des mandats en cours, et le premier tour a lieu dans la quinzaine qui précède cette expiration (article L. 2314-5).]");
-      L.push("");
-      L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
-      L.push("");
-      L.push(signataire(ctx));
-      L.push("");
+      /* LES ORGANISATIONS INVITÉES SE SAISISSENT, ET LA LETTRE SE RÉPÈTE.
+         Le document sortait une seule lettre à « [Organisation syndicale] », à
+         « [Adresse] », que le dirigeant recopiait autant de fois qu'il y a de
+         syndicats. L'écran demande maintenant la liste, une par ligne, et le
+         document écrit une lettre par nom. Relevé le 27 septembre 2026. */
+      var orgs = String(f.organisations || "").split(/\n+/)
+        .map(function (x) { return x.trim(); }).filter(Boolean);
+      function uneInvitation(dest) {
+        dest.forEach(function (x) { L.push(x); });
+        L.push("");
+        L.push(lieu(ctx) + ", le " + jourLocal(dInfo, "date"));
+        L.push("Lettre recommandée avec avis de réception");
+        L.push("");
+        L.push("Objet : élections du comité social et économique, invitation à négocier le protocole d'accord préélectoral");
+        L.push("");
+        L.push("Mesdames, Messieurs,");
+        L.push("");
+        L.push("En application de l'article L. 2314-5 du code du travail, je vous informe de l'organisation des élections des membres de la délégation du personnel du comité social et économique de " +
+          nom(ctx) + " et vous invite à négocier le protocole d'accord préélectoral et à établir les listes de vos candidats.");
+        L.push("");
+        L.push("La première réunion de négociation se tient le " + jourLocal(dNeg, "date de la première réunion") +
+          " à " + cro(f.heure, "heure") + ", à " + cro(f.lieuReunion, "lieu") +
+          ". La présente invitation vous parvient au plus tard quinze jours avant cette date, soit le " +
+          plus(dNeg, -15, "date de la première réunion moins quinze jours") + " (article L. 2314-5).");
+        var avInv = alerteJour(dNeg, -15);
+        if (avInv) L.push("[Cette date de réception ne convient pas :" +
+          avInv.replace(/^ Attention :/, "").replace(/ Tenez l'acte avant\.$/, "") +
+          " Postez assez tôt pour que la lettre soit parvenue avant.]");
+        L.push("");
+        L.push("Le personnel a été informé de l'organisation des élections le " + jourLocal(dInfo, "date de diffusion") +
+          ". La date envisagée pour le premier tour est le " + jourLocal(dTour, "date du premier tour") + ".");
+        L.push("");
+        L.push("[En cas de renouvellement du comité : la présente invitation est adressée deux mois avant l'expiration des mandats en cours, et le premier tour a lieu dans la quinzaine qui précède cette expiration (article L. 2314-5).]");
+        L.push("");
+        L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
+        L.push("");
+        L.push(signataire(ctx));
+        L.push("");
+      }
+      if (orgs.length) {
+        L.push("Une lettre par organisation, " + orgs.length + " en tout.");
+        L.push("");
+        orgs.forEach(function (o, i) {
+          if (i) { L.push(TRAIT); L.push(""); }
+          uneInvitation([o]);
+        });
+      } else {
+        uneInvitation(["[Organisation syndicale]", "[Adresse]"]);
+      }
       L.push("DESTINATAIRES (article L. 2314-5)");
       L.push("");
       L.push("  Informées par tout moyen : les organisations syndicales qui satisfont aux critères de respect des valeurs républicaines et d'indépendance, légalement constituées depuis au moins deux ans et dont le champ professionnel et géographique couvre l'entreprise : [liste].");

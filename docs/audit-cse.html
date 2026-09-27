@@ -191,6 +191,7 @@
 <script src="listes-valeurs.js"></script>
 <script src="listes-auto.js"></script>
 <script src="apercu.js"></script>
+<script src="jours-feries.js"></script>
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
 <script src="documents-produits.js"></script>
@@ -301,6 +302,13 @@
     if (!d) return "[date]";
     return JOURS[d.getDay()] + " " + (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear();
   }
+  /* Un avertissement quand une échéance tombe un samedi, un dimanche ou un
+     jour férié : le kit annonçait un premier tour « au plus tard le samedi
+     26 décembre » sans rien dire. Relevé le 27 septembre 2026. */
+  function ferie(d) {
+    return (window.JoursFeries && window.JoursFeries.avertissement)
+      ? window.JoursFeries.avertissement(d) : "";
+  }
   function carte(q, d, f) {
     return '<div class="d"><span class="q">' + ech(q) + '</span><span class="v">' + ech(dateFrJour(d)) + '</span><span class="f">' + ech(f) + "</span></div>";
   }
@@ -323,15 +331,33 @@
   var LIGNES = [
     { cle: "elections", nom: "Élections du comité", seuil: 11, titre: "Élections",
       doc: ["CSE-DOC-ELECTIONS", "CSE-CTL-MEP-02"], oui: "controler-cse.html?d=protocole",
+      /* LES DATES VIENNENT DE LA FICHE QUAND ELLE LES PORTE. Le formulaire
+         s'ouvrait sur aujourd'hui, plus trente jours, plus soixante, et le
+         dirigeant ressaisissait les trois dates qu'il venait d'écrire dans sa
+         fiche. Relevé le 27 septembre 2026. L'heure, le lieu et le dépôt des
+         candidatures manquaient aussi, et sortaient entre crochets. */
       champs: [
-        { id: "dateInformationPersonnel", nom: "Information du personnel", t: "date", defaut: iso(AUJOURDHUI) },
-        { id: "dateReunionNegociation", nom: "Première réunion de négociation", t: "date", defaut: iso(jour(AUJOURDHUI, 30)) },
-        { id: "datePremierTour", nom: "Premier tour", t: "date", defaut: iso(jour(AUJOURDHUI, 60)) }],
+        { id: "dateInformationPersonnel", nom: "Information du personnel", t: "date",
+          defaut: estIso(DATE_INFO) ? DATE_INFO : iso(AUJOURDHUI) },
+        { id: "dateReunionNegociation", nom: "Première réunion de négociation", t: "date",
+          defaut: estIso(DATE_NEGO) ? DATE_NEGO : iso(jour(AUJOURDHUI, 30)) },
+        { id: "heure", nom: "Heure de la réunion", t: "text", ph: "10 h", defaut: "10 h" },
+        { id: "lieuReunion", nom: "Lieu de la réunion", t: "text", ph: "salle de réunion du siège",
+          defaut: profil.adresse || "" },
+        { id: "datePremierTour", nom: "Premier tour", t: "date",
+          defaut: estIso(DATE_INFO) ? iso(jour(new Date(DATE_INFO + "T12:00:00"), 60)) : iso(jour(AUJOURDHUI, 60)) },
+        { id: "depotCandidatures", nom: "Candidatures déposées auprès de", t: "text",
+          ph: "la direction, au bureau d'exploitation",
+          defaut: (profil.responsableNom || "") ? "la direction" : "" },
+        { id: "dateCandidatures", nom: "Candidatures déposées au plus tard le", t: "date" },
+        { id: "organisations", nom: "Organisations syndicales invitées, une par ligne (dénomination, puis adresse)",
+          t: "textarea", pleine: true,
+          ph: "Union départementale CGT du Val-d'Oise, 26 rue Francis Combe, 95100 Argenteuil\nUnion départementale CFDT du Val-d'Oise, 9 rue de l'Égalité, 95100 Argenteuil" }],
       dates: function (v) {
         var a = dateDe(v.dateInformationPersonnel), b = dateDe(v.dateReunionNegociation), out = [];
-        if (a) out.push(carte("Premier tour au plus tard le", jour(a, 90), "quatre-vingt-dixième jour suivant l'information du personnel (L. 2314-4)"));
-        if (b) out.push(carte("Invitation reçue par les syndicats au plus tard le", jour(b, -15), "quinze jours avant la première réunion de négociation (L. 2314-5)"));
-        if (eff >= 11 && eff <= 20 && a) out.push(carte("Candidatures reçues jusqu'au", jour(a, 30), "trente jours à compter de l'information, de onze à vingt salariés (L. 2314-5)"));
+        if (a) out.push(carte("Premier tour au plus tard le", jour(a, 90), "quatre-vingt-dixième jour suivant l'information du personnel (L. 2314-4)" + ferie(jour(a, 90))));
+        if (b) out.push(carte("Invitation reçue par les syndicats au plus tard le", jour(b, -15), "quinze jours avant la première réunion de négociation (L. 2314-5)" + ferie(jour(b, -15))));
+        if (eff >= 11 && eff <= 20 && a) out.push(carte("Candidatures reçues jusqu'au", jour(a, 30), "trente jours à compter de l'information, de onze à vingt salariés (L. 2314-5)" + ferie(jour(a, 30))));
         return out;
       },
       loi: ["L2311-2", "L2314-4", "L2314-5"] },
