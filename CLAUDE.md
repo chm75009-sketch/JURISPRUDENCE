@@ -328,7 +328,7 @@ sans l'avoir vérifié autrement.
 
 **GERME 1995 — COMPOSITION VÉRIFIÉE**
 - Salaire initial relevé 01/01/2023: 70 313 FRF
-- Arrêt Cour d'Appel 26 juin 1997: 448 344 FRF
+- **Rappel 90/95 Arrêt Cour d'Appel 26 juin 1997: 448 344 FRF**
 - Quote-part 1995 bulletin arrêt 13 juin 1996: 41 278 FRF
 - **TOTAL GERME 1995: 559 935 FRF** (70 313 + 448 344 + 41 278)
 
