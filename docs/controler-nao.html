@@ -1029,6 +1029,32 @@
       .replace(/[’']/g, "'").replace(/\s+/g, " ");
   }
 
+  /* UN SINGULIER N'EST PAS UNE ABSENCE.
+
+     Relevé le 27 septembre 2026 : un procès-verbal qui écrit « la direction
+     appliquera une mesure unilatérale de +2 % » se voyait répondre « 0 point
+     déjà traité », et l'application lui rédigeait l'article qu'il contenait
+     déjà. La cause est le repérage : il cherchait la chaîne « mesures
+     unilaterales » au pluriel, et ne la trouvait pas dans « mesure
+     unilaterale ». Même chose pour « réponse motivée » au singulier, pour
+     « proposition respective », pour « document remis ».
+
+     Chaque marque devient donc un motif où le « s » final de chaque mot est
+     optionnel, et où les mots peuvent être séparés par autre chose qu'une
+     espace (un tiret, une parenthèse, un retour à la ligne). Les motifs sont
+     gardés, le texte déposé faisant plusieurs milliers de signes. */
+  var MOTIFS = {};
+  function motifDe(m) {
+    if (MOTIFS[m]) return MOTIFS[m];
+    var mots = normaliser(m).split(/[^a-z0-9°]+/).filter(Boolean);
+    var src = mots.map(function (mot) {
+      return mot.replace(/s$/, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "s?";
+    }).join("[^a-z0-9]{1,4}");
+    MOTIFS[m] = new RegExp(src);
+    return MOTIFS[m];
+  }
+  function contient(n, m) { return motifDe(m).test(n); }
+
   var etat = { texte: "", absents: [], nbPresents: 0, retenus: {}, redige: {} };
 
   /* Quelle négociation ? La question n'est pas posée avant le document : elle
@@ -1053,7 +1079,7 @@
     var meilleur = "remuneration", score = 0;
     Object.keys(MARQUES_NEGO).forEach(function (cle) {
       var s = MARQUES_NEGO[cle].reduce(function (acc, m) {
-        return acc + (n.indexOf(normaliser(m)) >= 0 ? 1 : 0); }, 0);
+        return acc + (contient(n, m) ? 1 : 0); }, 0);
       if (s > score) { score = s; meilleur = cle; }
     });
     return meilleur;
@@ -1068,7 +1094,7 @@
       .concat((THEMES[f.nego] || []).map(function (x) {
         return { fam: "Les thèmes de l'article " + NEGOS[f.nego].contenu, it: x }; }));
     liste.forEach(function (e) {
-      var vu = e.it.marques.some(function (m) { return n.indexOf(normaliser(m)) >= 0; });
+      var vu = e.it.marques.some(function (m) { return contient(n, m); });
       if (vu) { etat.nbPresents++; return; }
       etat.absents.push(e);
       etat.redige[e.it.cle] = e.it.chiffres && etat.chiffres.length
@@ -1105,7 +1131,13 @@
       '<span class="c ok">' + etat.nbPresents + " point" + (etat.nbPresents > 1 ? "s" : "") +
       " déjà traité" + (etat.nbPresents > 1 ? "s" : "") + "</span>" +
       '<span class="c abs">' + etat.absents.length + " paragraphe" + (etat.absents.length > 1 ? "s" : "") +
-      " rédigé" + (etat.absents.length > 1 ? "s" : "") + " ci-dessous</span>";
+      " rédigé" + (etat.absents.length > 1 ? "s" : "") + " ci-dessous</span>" +
+      /* Les chiffres relevés se comptent à côté du reste : c'est ce que le
+         procès-verbal déposé apporte, et ce que les paragraphes reprennent. */
+      (etat.chiffres && etat.chiffres.length
+        ? '<span class="c">' + etat.chiffres.length + " chiffre" +
+          (etat.chiffres.length > 1 ? "s relevés" : " relevé") + " dans votre texte</span>"
+        : "");
 
     var h = "", famille = null;
     if (!etat.absents.length)
@@ -1252,18 +1284,24 @@
     L.push(etat.texte);
     var r = retenus();
     if (r.length) {
+      /* LE DOCUMENT NE PORTE PLUS DE BANDEAU DE TRAVAIL.
+         Relevé le 27 septembre 2026 : le Word sortait avec « PARAGRAPHES
+         AJOUTÉS » et, entre chaque paragraphe, une règle de soixante-douze
+         tirets. Chaque paragraphe porte déjà son titre en capitales, que la
+         feuille rend en tête de section : la règle de tirets ne séparait
+         rien. Le titre de la section, lui, se lit comme une partie du
+         procès-verbal, pas comme une note de l'outil. */
       L.push("");
-        L.push("PARAGRAPHES AJOUTÉS");
-        L.push("");
-      L.push("À déplacer à leur rang. Les valeurs entre crochets sont à compléter :");
-      L.push("aucune proposition, aucun chiffre n'est écrit à votre place.");
+      L.push("ARTICLES À INSÉRER À LEUR RANG");
       L.push("");
+      L.push("Ce qui suit complète le procès-verbal ci-dessus : chaque article se");
+      L.push("replace à sa place, et les valeurs entre crochets se remplissent. Aucune");
+      L.push("proposition et aucun chiffre ne sont écrits à votre place.");
       r.forEach(function (e) {
+        L.push("");
         L.push(etat.redige[e.it.cle]);
-        L.push("");
-        L.push("------------------------------------------------------------------------");
-        L.push("");
       });
+      L.push("");
     }
     L.push("LE DÉSACCORD ET SON DÉPÔT");
     L.push("");
@@ -1327,14 +1365,12 @@
     var r = retenus();
     if (r.length) {
       L.push("");
-        L.push("ARTICLES AJOUTÉS");
-        L.push("");
+      L.push("ARTICLES À INSÉRER À LEUR RANG");
       r.forEach(function (e) {
+        L.push("");
         L.push(etat.redige[e.it.cle]);
-        L.push("");
-        L.push("------------------------------------------------------------------------");
-        L.push("");
       });
+      L.push("");
     }
     L.push("ARTICLES DE FORME");
     L.push("");
