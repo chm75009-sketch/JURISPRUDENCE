@@ -676,23 +676,25 @@
       L.push("");
       L.push(ex.nom.toUpperCase());
       L.push(ex.adresse);
-      L.push("Exemple d'un accord de méthode");
+      /* L'EN-TÊTE N'EST PAS UNE LIGNE DU DOCUMENT.
+         Relevé le 27 septembre 2026 : « Exemple d'un accord de méthode » était
+         collé sous l'adresse, dans le même paragraphe, et se lisait comme la
+         troisième ligne de l'en-tête de l'entreprise. Il devient le titre de
+         ce qui suit, précédé d'une ligne blanche.
+         Et chaque cellule du tableau tient sur une ligne : les intitulés
+         étaient coupés en trois, et les deux dernières colonnes sortaient
+         vides sur deux lignes de tableau pour chaque thème. */
+      L.push("");
+      L.push("UN EXEMPLE D'ACCORD DE MÉTHODE");
       L.push("");
       L.push("ARTICLE 2 - LES THÈMES ET LEUR PÉRIODICITÉ (L. 2242-11, 1°)");
       L.push("");
-      L.push("  thème                                    | périodicité | prochaine");
-      L.push("  ───────────────────────────────────────── |  ──────────── |  ──────────");
-      L.push("  Rémunération, temps de travail et        | 1 an        | " + leJour(dans(d0, 365)));
-      L.push("  partage de la valeur ajoutée (L. 2242-1, |             |");
-      L.push("  1°)                                      |             |");
-      L.push("  Égalité professionnelle femmes-hommes et | 1 an        | " + leJour(dans(d0, 365)));
-      L.push("  qualité de vie et des conditions de      |             |");
-      L.push("  travail (L. 2242-1, 2°)                  |             |");
+      L.push("  thème                                  | périodicité | prochaine");
+      L.push("  Rémunération, temps de travail et partage de la valeur ajoutée (L. 2242-1, 1°) | 1 an | " + leJour(dans(d0, 365)));
+      L.push("  Égalité professionnelle et qualité de vie et des conditions de travail (L. 2242-1, 2°) | 1 an | " + leJour(dans(d0, 365)));
       if (!s.connu || s.atteint) {
-        L.push("  Gestion des emplois et des parcours      | 3 ans       | " + leJour(dans(d0, 1095)));
-        L.push("  professionnels (L. 2242-2)               |             |");
-        L.push("  Emploi et conditions de travail des      | 3 ans       | " + leJour(dans(d0, 1095)));
-        L.push("  salariés expérimentés (L. 2242-2-1)      |             |");
+        L.push("  Gestion des emplois et des parcours professionnels (L. 2242-2) | 3 ans | " + leJour(dans(d0, 1095)));
+        L.push("  Emploi et conditions de travail des salariés expérimentés (L. 2242-2-1) | 3 ans | " + leJour(dans(d0, 1095)));
       }
       L.push("");
       L.push("");
@@ -3647,17 +3649,38 @@
          nombre ne viennent d'un texte. Les quatre indicateurs des entreprises
          de cinquante à deux cent cinquante salariés sont ceux de D. 1142-2-1,
          lu à la source le 26 septembre 2026 (LEGIARTI000038026015). */
-      L.push("Les quatre indicateurs de l'article D. 1142-2-1, pour une entreprise de cinquante à");
-      L.push("deux cent cinquante salariés :");
-      L.push("");
-      L.push("  indicateur                                             | résultat | points");
-      L.push("  Écart de rémunération femmes-hommes, par tranche d'âge  | [      ] | [    ]");
-      L.push("  et par catégorie de postes équivalents                  |          |");
-      L.push("  Écart de taux d'augmentations individuelles             | [      ] | [    ]");
-      L.push("  Augmentation au retour de congé de maternité            | [      ] | [    ]");
-      L.push("  Sexe sous-représenté parmi les dix plus hautes          | [      ] | [    ]");
-      L.push("  rémunérations                                           |          |");
-      L.push("  NIVEAU DE RÉSULTAT, sur 100                             |          | [    ]");
+      /* UNE CELLULE TIENT SUR UNE LIGNE.
+         Relevé le 27 septembre 2026 : deux intitulés étaient écrits sur deux
+         lignes, et la seconde formait une ligne de tableau à elle seule, avec
+         deux colonnes vides. À l'écran comme dans le Word, le tableau sortait
+         avec des lignes creuses. L'intitulé complet de chaque indicateur est
+         plus bas, dans la liste numérotée : ici, il est abrégé et numéroté
+         comme elle.
+         Et le tableau de l'exemple suit l'effectif, comme la liste : cinq
+         indicateurs au-delà de deux cent cinquante salariés (D. 1142-2),
+         quatre en dessous (D. 1142-2-1). */
+      var plusDe250 = eff !== null && eff > 250;
+      if (plusDe250) {
+        L.push("Les cinq indicateurs de l'article D. 1142-2, pour une entreprise de plus de deux");
+        L.push("cent cinquante salariés :");
+        L.push("");
+        L.push("  indicateur (D. 1142-2)                        | résultat | points");
+        L.push("  1. Écart de rémunération femmes-hommes        | [      ] | [    ]");
+        L.push("  2. Écart de taux d'augmentations individuelles | [      ] | [    ]");
+        L.push("  3. Écart de taux de promotions                | [      ] | [    ]");
+        L.push("  4. Augmentation au retour de congé de maternité | [      ] | [    ]");
+        L.push("  5. Sexe sous-représenté, dix plus hautes rémunérations | [      ] | [    ]");
+      } else {
+        L.push("Les quatre indicateurs de l'article D. 1142-2-1, pour une entreprise de cinquante à");
+        L.push("deux cent cinquante salariés :");
+        L.push("");
+        L.push("  indicateur (D. 1142-2-1)                      | résultat | points");
+        L.push("  1. Écart de rémunération femmes-hommes        | [      ] | [    ]");
+        L.push("  2. Écart de taux d'augmentations individuelles | [      ] | [    ]");
+        L.push("  3. Augmentation au retour de congé de maternité | [      ] | [    ]");
+        L.push("  4. Sexe sous-représenté, dix plus hautes rémunérations | [      ] | [    ]");
+      }
+      L.push("  NIVEAU DE RÉSULTAT, sur 100                   |          | [    ]");
       L.push("");
       L.push("");
       L.push("À COMPLÉTER");

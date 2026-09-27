@@ -3456,6 +3456,11 @@
         dest.forEach(function (x) { L.push(x); });
         L.push("");
         L.push(lieu(ctx) + ", le " + jourLocal(dInfo, "date"));
+        /* La mention d'envoi est une ligne à elle : sans la ligne blanche, elle
+           se collait à la date et se lisait « Argenteuil, le 27 septembre 2026
+           Lettre recommandée avec avis de réception ». Relevé le 27 septembre
+           2026. */
+        L.push("");
         L.push("Lettre recommandée avec avis de réception");
         L.push("");
         L.push("Objet : élections du comité social et économique, invitation à négocier le protocole d'accord préélectoral");
@@ -3492,7 +3497,10 @@
           uneInvitation([o]);
         });
       } else {
-        uneInvitation(["[Organisation syndicale]", "[Adresse]"]);
+        /* Le nom et l'adresse sont deux lignes de l'en-tête : sans la ligne
+           blanche, elles se lisaient « [Organisation syndicale] [Adresse] »
+           sur une seule. Relevé le 27 septembre 2026. */
+        uneInvitation(["[Organisation syndicale]", "", "[Adresse]"]);
       }
       L.push("DESTINATAIRES (article L. 2314-5)");
       L.push("");

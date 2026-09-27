@@ -97,6 +97,25 @@
           });
           return;
         }
+        /* SANS TRAIT NON PLUS, UNE CELLULE COUPÉE RESTE UNE CELLULE.
+
+           Relevé le 27 septembre 2026 dans le calendrier des négociations : le
+           tableau n'était pas dessiné au trait, et un intitulé de trois lignes
+           donnait trois lignes de tableau, dont deux n'avaient que leur
+           première colonne. La suite d'un intitulé se reconnaît à ce que la
+           ligne précédente n'est pas finie : elle ne s'arrête ni sur un point,
+           ni sur un point-virgule, ni sur un deux-points. */
+        var tete = String(l[0] == null ? "" : l[0]).trim();
+        var suite = avant && tete &&
+          l.slice(1).every(function (c) { return !String(c == null ? "" : c).trim(); }) &&
+          !/[.;:!?]$/.test(String(avant[0] == null ? "" : avant[0]).trim()) &&
+          /* Une ligne entièrement en capitales est un intitulé à elle seule,
+             « TOTAL » ou « NIVEAU DE RÉSULTAT » : elle ne continue rien. */
+          !/^[A-ZÀ-Þ][A-ZÀ-Þ\s'’,-]*$/.test(tete);
+        if (suite) {
+          avant[0] = avant[0] + " " + String(l[0]).trim();
+          return;
+        }
         jointes.push(l.slice());
       });
       var nb = jointes.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
@@ -349,6 +368,16 @@
     ".fd .b-lien a{color:#1f4e9a}" +
     ".fd .b-note{margin:9px 0 12px;padding:0 0 0 10px;border-left:2px dashed #cfd4dc;font-size:13.5px;color:#5f6874}" +
     ".fd [contenteditable]{outline:none}.fd [contenteditable]:focus{background:#fffbe9}" +
+    /* SUR UN TÉLÉPHONE, LA TROISIÈME COLONNE SORTAIT DE L'ÉCRAN.
+       Chaque cellule réservait cent dix pixels au moins et deux cent soixante
+       au plus : à trois colonnes, le tableau mesurait plus large que l'écran, et
+       la dernière colonne ne se lisait qu'en faisant glisser. Sous quatre cent
+       trente pixels, les colonnes se serrent et le texte passe à la ligne.
+       Relevé le 27 septembre 2026. */
+    "@media (max-width:430px){.fd table.fd-table{font-size:12.5px}" +
+    ".fd table.fd-table th,.fd table.fd-table td{min-width:0;max-width:none;padding:5px 6px;" +
+    "font-size:12.5px;overflow-wrap:break-word;hyphens:auto}" +
+    ".fd table.fd-table th{font-size:12px}}" +
     "@media print{.fd .fd-cadre{overflow:visible;border:0}.fd table.fd-table th{position:static}}";
   var styleMis = false;
   function style() {

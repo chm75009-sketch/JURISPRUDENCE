@@ -530,9 +530,20 @@
 
   /* ───────────────────────────────────────────────── le document, seul
 
-     Le générateur rend un texte, une ligne par paragraphe. Chaque ligne
-     devient un bloc modifiable à l'écran et repart tel quel dans le .docx.
-     Un bloc corrigé à la main est retenu sur son texte d'origine. */
+     Le générateur rend un texte écrit en lignes courtes. Un paragraphe y tient
+     sur quatre ou cinq lignes de soixante-douze signes, et c'est le paragraphe
+     qui est l'unité, pas la ligne. Chaque bloc devient une ligne modifiable à
+     l'écran et repart telle quelle dans le .docx. Un bloc corrigé à la main est
+     retenu sur son texte d'origine.
+
+     UNE LIGNE N'EST PAS UN PARAGRAPHE. Relevé le 27 septembre 2026 : cette
+     page prenait chaque ligne du générateur pour un bloc. Le kit des élections
+     sortait donc en phrases cassées à soixante-douze signes, une par ligne
+     avec son interligne, et les listes en retrait sortaient en puces coupées
+     au milieu des mots. Les lignes d'un même paragraphe se rejoignent, et,
+     dans une liste, une ligne sans marque qui commence en minuscule après une
+     ligne inachevée continue la précédente. C'est la règle de feuille-doc.js,
+     écrite ici pour les blocs de cette page. */
   var corrections = {};
   function empreinte(s) {
     var h = 5381;
@@ -547,16 +558,52 @@
     while (i < lignes.length && lignes[i].trim() === "") i++;
     if (i < lignes.length) { b.push({ k: "t1", t: lignes[i].trim() }); i++; }
     if (i < lignes.length && /^\(/.test(lignes[i].trim())) { b.push({ k: "st", t: lignes[i].trim().replace(/^\(|\)$/g, "") }); i++; }
+    var para = [];
+    /* Un même paragraphe peut porter une phrase d'introduction puis une liste :
+       « … sont invitées à négocier : » suivi de deux lignes en retrait. On ne
+       décide donc pas du groupe entier, on avance ligne par ligne. */
+    function enListe(x) { return /^\s{2,}/.test(x) || /^\s*[-•·]\s/.test(x); }
+    function vider() {
+      if (!para.length) return;
+      var j = 0;
+      while (j < para.length) {
+        if (enListe(para[j])) {
+          var items = [];
+          while (j < para.length && enListe(para[j])) {
+            var brut = para[j].trim();
+            var puce = /^[-•·]\s*/.test(brut);
+            var numero = /^(\d{1,2}[.)]|\d°)\s/.test(brut);
+            var avant = items.length ? items[items.length - 1] : null;
+            if (avant && !puce && !numero && /^[a-zà-ÿ«("]/.test(brut) && !/[.:;»)\]]$/.test(avant))
+              items[items.length - 1] = avant + " " + brut;
+            else items.push(brut.replace(/^[-•·]\s*/, ""));
+            j++;
+          }
+          items.forEach(function (x) { b.push({ k: "puce", t: x }); });
+        } else {
+          var lignesP = [];
+          while (j < para.length && !enListe(para[j])) { lignesP.push(para[j].trim()); j++; }
+          var texte = lignesP.join(" ");
+          if (!/[a-zà-ÿ]/.test(texte) && texte.length < 100) b.push({ k: "h1", t: texte });
+          else b.push({ k: "p", t: texte });
+        }
+      }
+      para = [];
+    }
     for (; i < lignes.length; i++) {
       var l = lignes[i];
-      if (!l.trim()) continue;
-      if (/^[═]{4,}$/.test(l.trim())) continue;
-      if (/^[─_\-]{4,}$/.test(l.trim())) { b.push({ k: "trait", t: "" }); continue; }
-      if (/^Fondement :/.test(l.trim())) { b.push({ k: "fond", t: l.trim() }); continue; }
-      if (/^\s{2,}/.test(l)) { b.push({ k: "puce", t: l.trim() }); continue; }
-      if (!/[a-zà-ÿ]/.test(l) && l.trim().length < 100) { b.push({ k: "h1", t: l.trim() }); continue; }
-      b.push({ k: "p", t: l.trim() });
+      if (!l.trim()) { vider(); continue; }
+      if (/^[═]{4,}$/.test(l.trim())) { vider(); continue; }
+      if (/^[─_\-]{4,}$/.test(l.trim())) { vider(); b.push({ k: "trait", t: "" }); continue; }
+      if (/^Fondement :/.test(l.trim())) { vider(); b.push({ k: "fond", t: l.trim() }); continue; }
+      /* Un titre en capitales seul sur sa ligne ferme le paragraphe qui
+         précède : sans cela, il se collerait à sa dernière phrase. */
+      if (!/[a-zà-ÿ]/.test(l) && l.trim().length < 100 && !/^\s{2,}/.test(l)) {
+        vider(); b.push({ k: "h1", t: l.trim() }); continue;
+      }
+      para.push(l);
     }
+    vider();
     return b;
   }
   function crochets(html) {
