@@ -429,6 +429,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       E.profil = p;
       if (!E.cadre.nom) E.cadre.nom = p.denomination || p.entreprise || p.nom || "";
       if (!E.cadre.adresse) E.cadre.adresse = p.adresse || p.siege || "";
+      /* L'ÉTABLISSEMENT, REPRIS DE LA FICHE. Le modèle vierge sortait avec
+         « établissement : [à nommer] » alors que la fiche donne l'adresse du
+         siège : une entreprise d'un seul établissement n'a rien d'autre à
+         écrire. Relevé le 27 septembre 2026. Le champ reste modifiable, et
+         l'entreprise à plusieurs établissements y met le nom du sien. */
+      if (!E.cadre.etab && String(p.etablissementsDistincts || "").trim().toLowerCase() !== "oui")
+        E.cadre.etab = p.adresse || p.siege || "";
       if ((E.cadre.effectif == null || E.cadre.effectif === "") && p.effectif != null && p.effectif !== "")
         E.cadre.effectif = p.effectif;
     }
@@ -469,16 +476,43 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      un contrat à durée indéterminée à temps complet, un contrat à durée
      déterminée, et un travailleur étranger à temps partiel, dont le titre
      appelle les mentions de D. 1221-23, 8° et la copie de D. 1221-24. */
+  /* LES EXEMPLES SUIVENT LE SECTEUR DE LA FICHE. Trois lignes de bureau pour
+     un transporteur ne montrent pas ce qu'il doit écrire : les emplois et les
+     qualifications sont ceux de son activité. Relevé le 27 septembre 2026. */
+  var EMPLOIS = {
+    "transport et logistique": [
+      ["Conducteur poids lourd", "Groupe 7, coefficient 150 M"],
+      ["Agent de quai", "Groupe 3, coefficient 115 M"],
+      ["Exploitant transport", "Employé, coefficient 132,5"]],
+    "bâtiment et travaux publics": [
+      ["Maçon", "Niveau II, position 2"],
+      ["Chef d'équipe", "Niveau IV, position 1"],
+      ["Manoeuvre", "Niveau I, position 1"]],
+    "commerce de détail": [
+      ["Vendeur", "Niveau 2, échelon B"],
+      ["Caissier", "Niveau 1, échelon A"],
+      ["Employé de rayon", "Niveau 1, échelon B"]],
+    "hôtellerie, cafés, restaurants": [
+      ["Cuisinier", "Niveau III, échelon 1"],
+      ["Serveur", "Niveau II, échelon 1"],
+      ["Plongeur", "Niveau I, échelon 1"]],
+  };
+  function emploisDuSecteur() {
+    var sec = String((E.profil || {}).secteur || "").trim().toLowerCase();
+    return EMPLOIS[sec] || [["Cariste", "Niveau 2, coefficient 140"],
+      ["Comptable", "Niveau 4, coefficient 230"], ["Agent de quai", "Niveau 1, coefficient 120"]];
+  }
   function exemples() {
+    var EM = emploisDuSecteur();
     var base = [
       { nom: "MARTIN", pre: "Paul", nat: "Française", nais: "1985-03-12", sexe: "Masculin",
-        emp: "Cariste", qua: "Niveau 2, coefficient 140", ent: "2021-06-01", sor: "",
+        emp: EM[0][0], qua: EM[0][1], ent: "2021-06-01", sor: "",
         nature: "cdi", part: "complet", aut: "non", etr: "non", insc: "2021-06-01" },
       { nom: "DURAND", pre: "Sophie", nat: "Française", nais: "1992-11-07", sexe: "Féminin",
-        emp: "Comptable", qua: "Niveau 4, coefficient 230", ent: "2026-02-05", sor: "",
+        emp: EM[1][0], qua: EM[1][1], ent: "2026-02-05", sor: "",
         nature: "cdd", part: "complet", aut: "non", etr: "non", insc: "2026-02-05" },
       { nom: "NGOM", pre: "Awa", nat: "Sénégalaise", nais: "1990-09-22", sexe: "Féminin",
-        emp: "Agent de quai", qua: "Niveau 1, coefficient 120", ent: "2024-01-15", sor: "",
+        emp: EM[2][0], qua: EM[2][1], ent: "2024-01-15", sor: "",
         nature: "cdi", part: "partiel", aut: "non", etr: "oui", titT: "Titre de séjour pluriannuel",
         titN: "9512AB34567", titCop: "oui", insc: "2024-01-15" },
     ];
@@ -2244,7 +2278,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   function itemsModele() {
     var ex = exemples();
     var rows = ex.map(function (s, i) { return ligneModele(s, i + 1); });
-    for (var i = 0; i < 12; i++)
+    /* CENT LIGNES, PAS QUINZE. Un registre de quatre-vingts salariés ne tient
+       pas sur douze lignes vides, et on ne rallonge pas un tableau Word à la
+       main sans en casser la mise en page. Demandé le 27 septembre 2026. */
+    for (var i = 0; ex.length + i < 100; i++)
       rows.push([String(ex.length + i + 1), "", "", "", "", "", "", "", "", "", ""]);
     return [
       { k: "t1", t: "Registre unique du personnel" },
@@ -2263,10 +2300,20 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         "travailleurs étrangers le type et le numéro d'ordre du titre valant autorisation de travail." },
       { k: "table", head: COL_MODELE, rows: rows },
       { k: "h1", t: "Partie spécifique : stagiaires et volontaires en service civique" },
-      { k: "p", t: "Leurs nom et prénoms s'inscrivent ici dans l'ordre d'arrivée (L. 1221-13)." },
-      { k: "table", head: ["N°", "Nom", "Prénoms", "Qualité", "Date d'arrivée"],
-        rows: [["1", "", "", "", ""], ["2", "", "", "", ""], ["3", "", "", "", ""],
-               ["4", "", "", "", ""], ["5", "", "", "", ""]] },
+      { k: "p", t: "Leurs nom et prénoms s'inscrivent ici dans l'ordre d'arrivée (L. 1221-13). " +
+        "Pour chaque stagiaire, l'article D. 1221-23-1 ajoute les dates de début et de fin du " +
+        "stage, les nom et prénoms du tuteur et le lieu de présence : ce sont les quatre " +
+        "dernières colonnes, qui ne concernent pas le volontaire en service civique." },
+      { k: "table", head: ["N°", "Nom", "Prénoms", "Qualité", "Date d'arrivée",
+        "Début du stage", "Fin du stage", "Tuteur", "Lieu de présence"],
+        rows: (function () {
+          /* Les quatre indications de D. 1221-23-1 pour le stagiaire : dates de
+             début et de fin, nom et prénoms du tuteur, lieu de présence. Le
+             modèle portait les colonnes du seul L. 1221-13. */
+          var r = [];
+          for (var k = 1; k <= 20; k++) r.push([String(k), "", "", "", "", "", "", "", ""]);
+          return r;
+        })() },
       { k: "h1", t: "La tenue" },
       { k: "p", t: "Support : [papier ou support de substitution]. Lieu de consultation : [à " +
         "renseigner]. Tenu depuis le : [date]. Le registre est tenu à la disposition du comité " +
