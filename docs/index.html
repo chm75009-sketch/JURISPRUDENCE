@@ -158,6 +158,13 @@
     <details id="pli-representation" class="pli-org">
       <summary>Représentation du personnel <span>comité, élections, délégué syndical</span></summary>
       <div id="fiche-representation"></div>
+      <!-- LA RÉPONSE APPELLE UNE DATE, ET LA FICHE LA RÉCLAME. Demande du
+           27 septembre 2026 : « si organisation des élections fautée, alors
+           procès-verbal de carence, et à ce moment demander la date pour faire
+           une alerte 4 ans après ». Sans cette date, ni les six mois de
+           L. 2314-8 ni les quatre ans de L. 2314-4 ne se calculent : le
+           message le dit sous la question, à l'endroit où l'on répond. -->
+      <p class="doux" id="fr-manque" hidden></p>
     </details>
 
     <!-- CE QUI NE CHANGE JAMAIS SE SAISIT ICI, ET UNE SEULE FOIS.
@@ -648,6 +655,37 @@
        le délégué syndical. Ces quatre réponses commandent ce qui s'affiche
        dans presque tous les modules. */
     if ($("fiche-representation") && window.Profil.REPRESENTATION) {
+      /* Ce que la réponse sur le comité rend nécessaire : une date, et laquelle.
+         Le message se met à jour à chaque frappe. */
+      var direComite = function (p) {
+        var el = $("fr-manque");
+        if (!el) return;
+        var r = String((p || {}).cseExiste || "").trim().toLowerCase();
+        var estDate = function (v) { return /^\d{4}-\d{2}-\d{2}$/.test(String(v || "").trim()); };
+        var dit = "";
+        if (r.indexOf("carence") >= 0 && !estDate((p || {}).cseCarence))
+          dit = "Renseignez la date du procès-verbal de carence : c'est elle qui ouvre les six mois " +
+            "pendant lesquels aucune demande d'élections n'est recevable (L. 2314-8), et les quatre " +
+            "ans au terme desquels l'information du personnel se refait (L. 2314-4). Sans elle, " +
+            "l'agenda ne peut annoncer ni l'une ni l'autre.";
+        else if (r.indexOf("cours") >= 0 &&
+            (!estDate((p || {}).cseInfoPersonnel) || !estDate((p || {}).cseReunionNego)))
+          dit = "Renseignez les deux dates des élections en cours : celle de l'information du " +
+            "personnel, qui ouvre les quatre-vingt-dix jours du premier tour (L. 2314-4), et celle " +
+            "de la première réunion de négociation, qui fixe le jour où les invitations doivent " +
+            "être parvenues aux organisations syndicales, quinze jours plus tôt (L. 2314-5).";
+        else if (r.indexOf("oui") === 0 && !estDate((p || {}).cseElections))
+          dit = "Renseignez la date des dernières élections : les mandats durent quatre ans " +
+            "(L. 2314-33), et c'est elle qui dit quand rouvrir le processus électoral.";
+        else if (r.indexOf("aucune") >= 0)
+          dit = "Aucune élection organisée : ce qui s'impose est d'informer le personnel de leur " +
+            "organisation et d'inviter les organisations syndicales à négocier le protocole. " +
+            "L'entrave à la constitution du comité est punie d'un an d'emprisonnement et de " +
+            "7 500 euros d'amende (L. 2317-1). L'audit du comité écrit la note, les invitations " +
+            "et le protocole.";
+        el.textContent = dit;
+        el.hidden = !dit;
+      };
       window.Profil.rendre($("fiche-representation"), {
         champs: window.Profil.REPRESENTATION,
         prefixe: "fr",
@@ -655,8 +693,14 @@
         aide: "Elles décident de ce qui vous est dû : la consultation du comité, " +
           "le procès-verbal de carence, la négociation annuelle. Laissées vides, " +
           "aucun module ne conclut à votre place.",
-        echange: false
+        echange: false,
+        onChange: direComite
       });
+      direComite(window.Profil.lire() || {});
+      /* La réponse sur le comité est dans la partie du haut de la fiche : quand
+         elle change là-haut, le message de cette partie doit suivre. On écoute
+         donc tout changement de la fiche, ce qui ne coûte qu'une lecture. */
+      document.addEventListener("change", function () { direComite(window.Profil.lire() || {}); });
     }
     window.Profil.rendre($("fiche-organismes"), {
       champs: window.Profil.ORGANISMES,
