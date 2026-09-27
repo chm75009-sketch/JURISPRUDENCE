@@ -261,10 +261,10 @@
     L.push(TRAIT);
     L.push("");
     L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
-    L.push("lus à la source. Les versions lues sont celles du dépôt de textes du module");
-    L.push("(moteur/economique/textes_eco.json), qui porte pour chacune son identifiant");
-    L.push("LEGIARTI : un article peut être modifié sans changer de numéro, et seul cet");
-    L.push("identifiant dit laquelle des versions successives a été lue.");
+    L.push("lus à la source, dans leur version en vigueur à la date ci-dessus. Chacun");
+    L.push("est cité avec son identifiant LEGIARTI : un article peut être modifié sans");
+    L.push("changer de numéro, et seul cet identifiant dit laquelle des versions");
+    L.push("successives a été lue.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
     L.push("Aucune peine n'est annoncée dans ce document : les textes lus ne portent");
@@ -355,7 +355,7 @@
       if (r.pse) L.push("  Plan de sauvegarde ......... dû (L. 1233-61)");
     } else {
       L.push("");
-      L.push("  Le moteur du module n'est pas chargé sur cette page : le régime n'est pas");
+      L.push("  Le régime applicable n'a pas été déterminé sur cette page : il n'est pas");
       L.push("  rappelé ici. Le document énonce les branches du texte au lieu d'en choisir");
       L.push("  une - reportez-vous au rapport d'audit, qui l'a tranché.");
     }
@@ -459,7 +459,7 @@
           L.push("");
         }
       } else {
-        L.push("Le moteur du module n'est pas chargé : les deux branches du texte sont");
+        L.push("Le régime applicable n'a pas été déterminé : les deux branches du texte sont");
         L.push("énoncées ci-dessous, et c'est à vous - ou au rapport d'audit - de dire");
         L.push("laquelle s'applique.");
         L.push("");
@@ -1036,7 +1036,7 @@
         L.push("la première réunion, tous renseignements utiles sur le projet de");
         L.push("licenciement collectif. »");
       } else {
-        L.push("Le moteur du module n'est pas chargé : les deux textes sont rappelés, et");
+        L.push("Le régime applicable n'a pas été déterminé : les deux textes sont rappelés, et");
         L.push("c'est le nombre de licenciements sur trente jours qui décide.");
         L.push("");
         L.push("L. 1233-10 - moins de dix licenciements : « L'employeur adresse aux");
@@ -1257,7 +1257,7 @@
               tableau(L, ["Salarié", "1° Charges", "2° Ancienneté", "3° Social", "4° Qualités", "Total"], lignes);
               L.push("");
               L.push("  Les notes sont celles de la fiche. Le classement n'est pas dressé ici :");
-              L.push("  le moteur du module n'est pas chargé sur cette page.");
+              L.push("  le régime applicable n'a pas été déterminé sur cette page.");
             }
           }
           L.push("");
@@ -1742,7 +1742,7 @@
         L.push("   voie dématérialisée » (D. 1233-4), au plus tôt le lendemain de la date");
         L.push("   prévue pour la première réunion.");
       } else {
-        L.push("Le moteur du module n'est pas chargé, ou le régime ne commande ni l'un ni");
+        L.push("Le régime applicable n'a pas été déterminé, ou il ne commande ni l'un ni");
         L.push("l'autre acte. Les deux branches sont écrites ci-dessous : celle de moins de");
         L.push("dix licenciements sur trente jours (information, L. 1233-19), celle d'au");
         L.push("moins dix (notification du projet, L. 1233-46).");
@@ -2661,7 +2661,7 @@
       L.push("l'entourent - n'ont pas été lus pour ce document. Ils sont nommés ; ni");
       L.push("leur contenu ni leurs délais ne sont écrits.");
       L.push("");
-      L.push("Le module « comité social et économique » traite de l'organisation des");
+      L.push("Les documents du comité social et économique traitent de l'organisation des");
       L.push("élections et porte ces textes : c'est là qu'il faut aller, et non ici.");
       L.push("");
       L.push("Ce que ce document peut dire, en revanche, et qui suffit à décider :");
@@ -3143,7 +3143,7 @@
       L.push("  [Le document unique d'évaluation des risques est la source naturelle de");
       L.push("  ce tableau, et il devra être mis à jour de ce qui change. Les articles");
       L.push("  du code du travail qui règlent cette évaluation et cette mise à jour");
-      L.push("  n'ont pas été lus ici : ils ne sont donc pas cités. Le module « santé,");
+      L.push("  n'ont pas été lus ici : ils ne sont donc pas cités. Les documents de la santé,");
       L.push("  sécurité et conditions de travail » les porte.]");
       L.push("");
       L.push("5. SUIVI");
@@ -3239,7 +3239,7 @@
 
       pied(L, ["L. 1233-10, 7°", "L. 1233-31, 7°", "L. 1233-30, I, 2°", "L. 1233-33"],
         "Les articles du code du travail relatifs à l'évaluation des risques et au\n" +
-        "document unique ne figurent pas dans le corpus de textes de ce module :\n" +
+        "document unique ne sont pas reproduits ici :\n" +
         "ils n'ont pas été lus et ne sont pas cités.\n" +
         "\n" +
         "Ce qui se joue : l'omission du septième renseignement vicie la consultation.\n" +
@@ -3329,7 +3329,7 @@
         L.push("");
         L.push("Fondement retenu : " + (e.texte || "[texte]") + ".");
       } else {
-        L.push("Le moteur du module n'est pas chargé : les deux branches du texte sont");
+        L.push("Le régime applicable n'a pas été déterminé : les deux branches du texte sont");
         L.push("données, et c'est le nombre de licenciements sur trente jours et");
         L.push("l'existence d'un comité qui décident.");
       }
@@ -3564,7 +3564,7 @@
         L.push("Jours ouvrables : le samedi compte, le dimanche non. " +
           (ouvrablesExacts()
             ? "Le calcul ci-dessus retire les jours fériés."
-            : "Le calcul ci-dessus ne retire PAS les jours fériés - le moteur du module,"));
+            : "Le calcul ci-dessus ne retire PAS les jours fériés - le contrôle,"));
         if (!ouvrablesExacts()) {
           L.push("qui les porte, n'est pas chargé sur cette page. Vérifiez les échéances qui");
           L.push("traversent un jour férié : elles se décalent d'autant.");
@@ -3716,7 +3716,7 @@
       L.push("  Licenciements sur trente jours ...... " +
         (n === null ? "[non renseigné]" : n));
       L.push("  Plan dû, selon l'audit .............. " +
-        (r ? (r.pse ? "OUI" : "non") : "[le moteur du module n'est pas chargé]"));
+        (r ? (r.pse ? "OUI" : "non") : "[régime non déterminé ici]"));
       L.push("");
       L.push("Les deux conditions se cumulent, et le nombre s'apprécie sur la période de");
       L.push("trente jours : un licenciement supplémentaire dans cette fenêtre fait");
@@ -3885,8 +3885,8 @@
           L.push("s'apprécie aussi à ce niveau. Vérifiez-le avant de retenir ce dispositif.");
         }
       } else {
-        L.push("Le moteur du module n'est pas chargé : le dispositif n'est pas déterminé");
-        L.push("ici. Deux branches, et l'effectif décide.");
+        L.push("Le dispositif applicable n'a pas été déterminé ici. Deux branches, et");
+        L.push("l'effectif décide.");
         L.push("");
         L.push("Congé de reclassement - L. 1233-71 : « Dans les entreprises ou les");
         L.push("établissements d'au moins mille salariés, ainsi que dans les entreprises");

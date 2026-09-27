@@ -272,8 +272,8 @@
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("FONDEMENT : " + articles + ".");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur");
-    L.push("identifiant de version dans moteur/economique/textes_eco.json.");
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
+    L.push("date ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) {
       L.push("");
       notes.forEach(function (n) { L.push(n); });
@@ -701,7 +701,7 @@
       L.push("");
       return L.concat(pied("L. 1233-3",
         [RESERVE_GROUPE,
-         "Aucun texte capté par ce module ne définit la fraude ni n'en tire de",
+         "Aucun des textes lus ne définit la fraude ni n'en tire de",
          "conséquence chiffrée. Le seul mot lu est celui de L. 1233-3, « sauf",
          "fraude », et il n'est pas davantage commenté ici."])).join("\n");
     },
@@ -725,7 +725,7 @@
       L.push("");
       L.push("Ce n'est pas une note de qualification : il n'est pas dit ici s'il y a");
       L.push("co-emploi, et il ne le sera pas. Aucun article du code du travail lu");
-      L.push("par ce module ne définit le co-emploi - la notion est jurisprudentielle, et");
+      L.push("lu ne définit le co-emploi - la notion est jurisprudentielle, et");
       L.push("sa qualification excède ce qu'une base de textes peut faire.");
       L.push("");
       L.push("Ce document ORGANISE LA SAISINE : il range les faits signalés, il attache à");
@@ -847,7 +847,7 @@
          "CTL-COE-01 ne repose sur aucun texte : son champ « fondement » est vide.",
          "Le co-emploi est une construction jurisprudentielle, et rien n'est écrit",
          "ici qui n'ait été lu. La formule reprise au préambule est",
-         "celle du contrôle lui-même, telle que le module la porte - elle sert à",
+         "celle du contrôle lui-même - elle sert à",
          "poser la question, pas à y répondre.",
          "",
          "La note du professionnel, elle, citera ses sources : c'est son office,",
@@ -1124,7 +1124,7 @@
       L.push("l'entretien préalable et au préavis du licenciement pour motif personnel.");
       L.push("CES ARTICLES N'ONT PAS ÉTÉ LUS ICI : ils sont nommés parce que L. 2254-2");
       L.push("les nomme, leur contenu n'est pas reproduit et ce qu'ils imposent n'est");
-      L.push("pas dit. Reportez-vous au module « discipline et procédure de");
+      L.push("pas dit. Reportez-vous aux documents de la discipline et de la procédure de");
       L.push("licenciement », ou au code du travail.");
       L.push("");
       L.push("Le VI de L. 2254-2, lu à la source, prévoit que le salarié « peut s'inscrire");
@@ -1164,10 +1164,10 @@
         "L. 1233-46, L. 1233-61",
         ["Les articles L. 1232-2 à L. 1232-14, L. 1234-1 à L. 1234-11, L. 1234-14,",
          "L. 1234-18, L. 1234-19, L. 1234-20 et L. 3221-3, que le V et le I de",
-         "L. 2254-2 nomment, n'ont pas été lus à la source par ce module : ils sont",
+         "L. 2254-2 nomment, n'ont pas été lus à la source : ils sont",
          "nommés, jamais reproduits.",
          "Aucune peine n'est annoncée par ce document : le corpus de textes de ce",
-         "module ne contient aucun article de sanction pénale."])).join("\n");
+         "aucun des textes lus ne contient d'article de sanction pénale."])).join("\n");
     },
   });
 
@@ -1648,7 +1648,7 @@
          "colonnes « ce que la loi dit » sont écrites ici, à partir des",
          "textes lus à la source. Tout le reste est à établir, accord en main.",
          "Parmi les articles que ces textes nomment, L. 1233-4, L. 1233-5 et",
-         "L. 1233-61 à L. 1233-63 ont été lus à la source par ce module ; L. 2321-9",
+         "L. 1233-61 à L. 1233-63 ont été lus à la source ; L. 2321-9",
          "et L. 3221-3 ne l'ont pas été : ils sont nommés, et leur contenu n'est ni",
          "reproduit ni résumé."])).join("\n");
     },
@@ -1873,7 +1873,7 @@
 
       L.push("2. CE QUI COURT, ET DEPUIS QUAND");
       L.push("");
-      L.push("Un seul délai est lu à la source par ce module, et il concerne directement");
+      L.push("Un seul délai a été lu à la source, et il concerne directement");
       L.push("ce projet : « Toute contestation portant sur le licenciement pour motif");
       L.push("économique se prescrit par douze mois à compter de la dernière réunion du");
       L.push("comité social et économique ou, dans le cadre de l'exercice par le salarié");
@@ -2053,7 +2053,7 @@
           lignesPreuve.push([p.code, "au dossier", ceQuePreuve(p.code)]);
       });
       tableau(L, ["Code", "État", "Ce que la pièce doit établir"], lignesPreuve);
-      L.push("Cette liste est celle du registre de pièces du module. Elle n'est pas");
+      L.push("Cette liste est celle du registre de pièces de l'audit. Elle n'est pas");
       L.push("limitative : ajoutez les pièces propres à votre dossier, avec leur objet");
       L.push("probatoire écrit de la même manière - un fait précis, daté, opposable.");
       L.push("");
@@ -2265,7 +2265,7 @@
          "l'impossibilité du reclassement des CONDITIONS du licenciement - donc des",
          "éléments qui doivent exister au jour où il est prononcé.",
          "",
-         "Aucune peine n'est annoncée : le corpus de ce module ne contient aucun",
+         "Aucune peine n'est annoncée : aucun des textes lus ne contient de",
          "article de sanction pénale."])).join("\n");
     },
   });
@@ -2536,7 +2536,7 @@
       L.push("3. LES ÉCARTS TYPES, ET OÙ ILS SE LOGENT");
       L.push("");
       L.push("Ce ne sont pas des hypothèses d'école : ce sont les écarts que les contrôles");
-      L.push("de ce module cherchent, parce que ce sont ceux qui font tomber les dossiers");
+      L.push("de l'audit cherchent, parce que ce sont ceux qui font tomber les dossiers");
       L.push("formellement complets.");
       L.push("");
       tableau(L, ["Où chercher", "L'écart qui s'y loge"], [
@@ -2595,7 +2595,7 @@
          "qu'on n'a pas lus.",
          "",
          "Les renvois aux autres contrôles du point 3 désignent des points de ce",
-         "module, non des articles."])).join("\n");
+         "de l'audit, non des articles."])).join("\n");
     },
   });
 
@@ -2926,7 +2926,7 @@
         "il est nommé parce que le texte le nomme, aucune de ses données n'est",
         "reproduite, et la zone où se trouve votre établissement n'est pas dite.",
          "",
-         "Aucune peine n'est annoncée : le corpus de ce module ne contient aucun",
+         "Aucune peine n'est annoncée : aucun des textes lus ne contient de",
          "article de sanction pénale. Ce qui se joue est l'irrégularité de l'ordre",
          "des licenciements, et l'indemnité de L. 1235-3."])).join("\n");
     },
@@ -3124,7 +3124,7 @@
       return L.concat(pied("L. 1233-5, L. 1233-43",
         ["La définition de la catégorie professionnelle - fonctions de même nature",
          "supposant une formation professionnelle commune - ne figure dans aucun",
-         "article capté par ce module : elle est reprise du contrôle CTL-ORD-02",
+         "article lu : elle est reprise du contrôle CTL-ORD-02",
          "lui-même, tel que la base la porte. Ce que L. 1233-5 dit, et qui est lu à",
          "la source, c'est que les qualités professionnelles s'apprécient « par",
          "catégorie » - d'où l'importance de la manière dont les catégories sont",

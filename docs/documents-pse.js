@@ -243,9 +243,8 @@
     L.push(TRAIT);
     L.push("");
     L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
-    L.push("lus à la source. Les versions lues sont celles du dépôt de textes du");
-    L.push("module (moteur/pse/textes-pse.json), qui porte pour chacune son");
-    L.push("identifiant LEGIARTI.");
+    L.push("lus à la source, dans leur version en vigueur à la date ci-dessus.");
+    L.push("Chacun est cité avec son identifiant LEGIARTI.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
     L.push("Réserve - ce document ne vaut pas consultation. Ni votre convention");
@@ -3134,7 +3133,7 @@
 
       pied(L, ["L. 1233-39", "L. 1233-57-4", "L. 1233-66"],
         "L'article L. 1233-57-2, que L. 1233-39 cite pour la décision de validation,\n" +
-        "n'est pas au dépôt de textes du module : il n'est mentionné ici que parce que\n" +
+        "n'est pas reproduit ici : il n'est mentionné que parce que\n" +
         "L. 1233-39 le mentionne, et son contenu n'est pas rapporté.");
       return L.join("\n");
     });
@@ -4253,7 +4252,7 @@
       pied(L, ["L. 1233-34", "L. 1233-35", "L. 1233-30", "L. 1233-24-1", "L. 1233-57-3"],
         "L'article L. 2315-81, auquel L. 1233-34 renvoie pour l'assistance de\n" +
         "l'expert, et le décret en Conseil d'État qui fixe les modalités de\n" +
-        "l'expertise ne sont pas au dépôt de textes du module : ils sont mentionnés\n" +
+        "l'expertise ne sont pas reproduits ici : ils sont mentionnés\n" +
         "parce que l'article les mentionne, sans que leur contenu soit rapporté.");
       return L.join("\n");
     });

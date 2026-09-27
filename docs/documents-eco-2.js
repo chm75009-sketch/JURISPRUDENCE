@@ -210,10 +210,10 @@
     L.push(TRAIT);
     L.push("");
     L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
-    L.push("lus à la source. Les versions lues sont celles du dépôt de textes du module");
-    L.push("(moteur/economique/textes_eco.json), qui porte pour chacune son identifiant");
-    L.push("LEGIARTI : un article peut être modifié sans changer de numéro, et seul cet");
-    L.push("identifiant dit laquelle des versions successives a été lue.");
+    L.push("lus à la source, dans leur version en vigueur à la date ci-dessus. Chacun");
+    L.push("est cité avec son identifiant LEGIARTI : un article peut être modifié sans");
+    L.push("changer de numéro, et seul cet identifiant dit laquelle des versions");
+    L.push("successives a été lue.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
     L.push("Aucune peine n'est annoncée dans ce document : les textes lus ne portent");
@@ -313,7 +313,7 @@
       if (r.pse) L.push("  Plan de sauvegarde ......... dû (L. 1233-61)");
     } else {
       L.push("");
-      L.push("  Le moteur du module n'est pas chargé sur cette page : le régime n'est pas");
+      L.push("  Le régime applicable n'a pas été déterminé sur cette page : il n'est pas");
       L.push("  rappelé ici. Le document énonce les branches du texte au lieu d'en choisir");
       L.push("  une - reportez-vous au rapport d'audit, qui l'a tranché.");
     }
@@ -2338,12 +2338,11 @@
 
       titre(L, "I. Qui est protégé, et ce que la protection exige");
 
-      L.push("Les deux articles ci-dessous sont le fondement du contrôle. Ils ne figurent");
-      L.push("pas au corpus du module « licenciement économique » : ils sont lus dans celui");
-      L.push("du module « comité social et économique » (moteur/cse/textes_cse.json),");
-      L.push("versions LEGIARTI000035652370 et LEGIARTI000035652360. Le dire ici n'est pas");
-      L.push("une précaution de style : c'est ce qui permet de vérifier laquelle des");
-      L.push("versions successives a été lue.");
+      L.push("Les deux articles ci-dessous sont le fondement du contrôle. Ils relèvent de");
+      L.push("la représentation du personnel et non du licenciement économique ; ils ont");
+      L.push("été lus à la source dans les versions LEGIARTI000035652370 et");
+      L.push("LEGIARTI000035652360. Le dire ici n'est pas une précaution de style : c'est");
+      L.push("ce qui permet de vérifier laquelle des versions successives a été lue.");
       L.push("");
       L.push("L. 2411-1 : « Bénéficie de la protection contre le licenciement prévue par le");
       L.push("présent chapitre, y compris lors d'une procédure de sauvegarde, de");
@@ -2596,10 +2595,9 @@
       L.push("et pour lui seul : les autres lettres ne sont pas retenues par la sienne.");
 
       pied(L, ["L. 1233-3", "L. 1233-39"],
-        "Les articles L. 2411-1 et L. 2411-5, fondement de ce contrôle, ne sont pas au\n" +
-        "corpus du module « licenciement économique ». Ils sont reproduits ci-dessus\n" +
-        "depuis le corpus du module « comité social et économique »\n" +
-        "(moteur/cse/textes_cse.json), versions LEGIARTI000035652370 et\n" +
+        "Les articles L. 2411-1 et L. 2411-5, fondement de ce contrôle, relèvent de la\n" +
+        "représentation du personnel et non du licenciement économique. Ils sont\n" +
+        "reproduits ci-dessus dans les versions LEGIARTI000035652370 et\n" +
         "LEGIARTI000035652360.\n" +
         "\n" +
         "Ce que ce document N'ÉNONCE PAS : les articles qui règlent la procédure de la\n" +
@@ -2647,7 +2645,7 @@
         "contrôle sans fondement textuel propre - voyez la partie I"));
 
       modeEmploi(L, [
-        "Ce document est le seul du module qui ne conclut jamais. Ce n'est pas une",
+        "Ce document est le seul de l'audit qui ne conclut jamais. Ce n'est pas une",
         "faiblesse : c'est la seule attitude honnête.",
         "",
         "L'arrêt de travail, le congé de maternité et l'inaptitude constatée par le",
@@ -2992,7 +2990,7 @@
       L.push("est envisagé sur une même période de trente jours. L'article L. 1233-25 règle");
       L.push("le cas où les refus atteignent dix à eux seuls ; il n'écarte pas ces salariés");
       L.push("du décompte général lorsqu'ils s'ajoutent à d'autres licenciements. C'est la");
-      L.push("lecture que le moteur du module applique, et le document ne s'en écarte pas.");
+      L.push("lecture retenue par le contrôle, et le document ne s'en écarte pas.");
       L.push("");
       L.push("Le risque de double compte se règle au questionnaire, non ici : la question");
       L.push("posée est celle des refus « non compris dans le nombre de licenciements");
@@ -3055,7 +3053,7 @@
       ]);
       L.push("");
       if (c) {
-        L.push("Ce que le moteur du module retient : " + c.motif);
+        L.push("Ce que le contrôle retient : " + c.motif);
         L.push("");
       }
       L.push("  Effectif de l'entreprise ..... " +
@@ -3081,7 +3079,7 @@
         if (r.pse) L.push("Plan de sauvegarde de l'emploi : dû (L. 1233-61).");
         L.push("");
       } else {
-        L.push("Le moteur du module n'est pas chargé sur cette page : le régime n'est pas");
+        L.push("Le régime applicable n'a pas été déterminé sur cette page : il n'est pas");
         L.push("tranché ici. Le tableau ci-dessus énonce les branches ; le rapport d'audit a");
         L.push("dit laquelle s'applique.");
         L.push("");
@@ -3216,7 +3214,7 @@
         "L. 1233-57-1", "L. 1233-57-4", "L. 1233-61", "D. 1233-4", "D. 1233-5",
         "D. 1233-14"],
         "L'article L. 1441-13, que L. 1233-15 cite pour le personnel d'encadrement,\n" +
-        "n'est pas au corpus du module : il est nommé, non reproduit.\n" +
+        "n'est pas reproduit ici : il est seulement nommé.\n" +
         "\n" +
         "Ce qui se joue : conduire la procédure au régime des moins de dix salariés\n" +
         "quand le seuil est franchi, c'est omettre la consultation, la notification du\n" +
@@ -3363,7 +3361,7 @@
       titre(L, "III. Ce que le décompte commande");
 
       if (c && c.motifRefus) {
-        L.push("Ce que le moteur du module retient : " + c.motifRefus);
+        L.push("Ce que le contrôle retient : " + c.motifRefus);
         L.push("");
       }
       tableau(L, ["Si le nombre de refus est", "alors"], [
@@ -4047,9 +4045,8 @@
 
       pied(L, ["L. 1233-3"],
         "Ce contrôle n'a aucun article au champ « fondement ». La table du III et les\n" +
-        "quatre cohérences du même titre sont reprises de\n" +
-        "moteur/economique/valider.js, qui est le seul juge de la lisibilité d'une\n" +
-        "donnée dans ce module - le document n'en invente pas une seconde.\n" +
+        "quatre cohérences du même titre sont celles qui servent partout ailleurs à\n" +
+        "juger si une donnée est lisible : le document n'en invente pas une seconde.\n" +
         "\n" +
         "Ce qui se joue : rien de juridique, et c'est bien le problème. Une donnée\n" +
         "impossible ne se sanctionne pas ; elle fausse tout ce qui en dépend, sans que\n" +
@@ -4196,7 +4193,7 @@
           : "3° - L. 1233-30, I et dernier alinéa du II, et 7°"));
       L.push("");
       L.push("Le texte cite aussi les articles L. 2325-35, L. 4614-12-1 et L. 2323-31, qui");
-      L.push("ne sont pas au corpus du module : ils sont nommés, non reproduits.");
+      L.push("ne sont pas reproduits ici : ils sont seulement nommés.");
       L.push("");
       L.push("ET LE PLAN RESTE DÛ. Le 6° renvoie expressément aux articles L. 1233-61 et");
       L.push("L. 1233-62 : l'ouverture d'une procédure collective ne dispense pas du plan");
@@ -4863,7 +4860,7 @@
         ["Nature de la procédure", type ? (PROC[type] || type) : "[non renseignée]"],
         ["Date du jugement de liquidation", estDate(dJug) ? jour(dJug) : "[non renseignée]"],
         ["Un plan de sauvegarde de l'emploi est-il élaboré ?",
-          pse === null ? "[le moteur du module n'est pas chargé]" : (pse ? "oui" : "non")],
+          pse === null ? "[régime non déterminé ici]" : (pse ? "oui" : "non")],
         ["Durée de la fenêtre", jours === null ? "[15 jours, ou 21 avec plan]" : jours + " jours"],
         ["Dernier jour de la fenêtre",
           (estDate(dJug) && jours !== null) ? jourPlus(dJug, jours) : "[à calculer]"],
@@ -4880,7 +4877,7 @@
         L.push("");
       }
       if (pse === null) {
-        L.push("  Le moteur du module n'est pas chargé : le document ne tranche pas entre");
+        L.push("  Le régime applicable n'a pas été déterminé : le document ne tranche pas entre");
         L.push("  quinze et vingt et un jours. Reportez-vous au rapport d'audit, qui a dit");
         L.push("  si un plan est dû.");
         L.push("");
@@ -5023,7 +5020,7 @@
         "L. 3253-8", "D. 1233-14"],
         "L'article L. 3253-6, que L. 3253-8 mentionne pour désigner l'assurance, et\n" +
         "l'article 204 A du code général des impôts, qu'il cite pour la retenue à la\n" +
-        "source, ne sont pas au corpus du module : ils sont nommés, non reproduits.\n" +
+        "source, ne sont pas reproduits ici : ils sont seulement nommés.\n" +
         "\n" +
         "Ce qui se joue : hors de la fenêtre, les créances résultant de la rupture ne\n" +
         "sont pas couvertes par l'assurance de l'article L. 3253-8. Indemnités et\n" +
@@ -5397,7 +5394,7 @@
         NON_LUS_57_9 + "\n" +
         "\n" +
         "L'article L. 2323-3, que L. 1233-57-19 cite pour le délai d'avis du comité,\n" +
-        "n'est pas au corpus du module : il est nommé, non reproduit.\n" +
+        "n'est pas reproduit ici : il est seulement nommé.\n" +
         "\n" +
         "Ce qui se joue : l'autorité administrative vérifie « la mise en œuvre\n" +
         "effective, le cas échéant, des obligations prévues aux articles L. 1233-57-9\n" +

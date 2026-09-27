@@ -1376,17 +1376,20 @@
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur identifiant");
-    L.push("de version dans moteur/bdese/textes-bdese.json.");
+    /* CE QUI EST INTERNE RESTE INTERNE : le pied nommait le fichier du dépôt
+       où les textes sont rangés. Un document qui sort du cabinet dit d'où vient
+       le droit, pas comment il a été rangé. Relevé le 27 septembre 2026. */
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la date");
+    L.push("ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
-    L.push("CE QUE CE MODULE N'EST PAS. Il prépare, structure, documente et audite la");
-    L.push("base. Il ne fournit pas une base collaborative accessible simultanément à");
-    L.push("plusieurs catégories d'utilisateurs, et IL N'EST PAS LA BASE : la mise à");
-    L.push("disposition reste un acte de l'employeur, qui se prouve autrement.");
+    L.push("CE QUE CE DOCUMENT N'EST PAS. Il prépare, structure et documente la base.");
+    L.push("Il ne la remplace pas, et il ne la rend pas accessible simultanément à");
+    L.push("plusieurs catégories d'utilisateurs : la mise à disposition reste un acte");
+    L.push("de l'employeur, qui se prouve autrement.");
     L.push("");
     L.push("Aucune sanction pénale ni pénalité financière n'est annoncée dans ce");
-    L.push("document : le corpus lu par ce module n'en porte aucune qui soit propre à");
+    L.push("document : aucun des textes lus n'en porte qui soit propre à");
     L.push("la base de données. Ce qui est encouru, et qui a été lu, est");
     L.push("l'irrégularité opposable, la consultation dont le délai n'a pas couru, et");
     L.push("l'avis négatif acquis au terme.");

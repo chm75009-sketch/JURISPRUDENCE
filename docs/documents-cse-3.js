@@ -1429,7 +1429,7 @@
         L.push("  L. 2315-61 vise les entreprises « de cinquante à moins de deux mille »");
         L.push("  salariés : en deçà, ce texte ne fixe aucune subvention. Vérifiez d'abord");
         L.push("  l'effectif et la façon dont le seuil de cinquante salariés a été apprécié");
-        L.push("  - c'est le point CSE-CTL-MEP de ce module qui le traite -, puis reprenez");
+        L.push("  - c'est le point CSE-CTL-MEP qui le traite -, puis reprenez");
         L.push("  ce document si le seuil est en réalité franchi.");
       } else {
         L.push("  Effectif de l'entreprise ...... " + eff + " salariés");
@@ -2839,7 +2839,7 @@
         L.push("  + 10 jours].");
       }
       L.push("");
-      L.push("  COMPUTATION - le module retient que le délai exprimé en jours ne commence à");
+      L.push("  COMPUTATION - le délai exprimé en jours ne commence à");
       L.push("  courir QUE LE LENDEMAIN de l'acte qui le fait courir, par application des");
       L.push("  ARTICLES 641 ET 642 DU CODE DE PROCÉDURE CIVILE. Ces deux articles sont");
       L.push("  NOMMÉS : ils n'appartiennent pas au code du travail et n'ont pas été lus");
@@ -2875,7 +2875,7 @@
       L.push("    qu'à compter de la notification de ce coût, donc bien après les autres ;");
       L.push("  · s'assurer que la RÉPARTITION DU FINANCEMENT est correcte : c'est un sujet");
       L.push("    distinct, qui n'est enfermé dans aucun délai de dix jours, et que le");
-      L.push("    document CSE-CTL-EXP-01 de ce module traite ;");
+      L.push("    document CSE-CTL-EXP-01 traite ;");
       L.push("  · écrire au dossier POURQUOI la contestation n'a pas été engagée. Une");
       L.push("    renonciation motivée est une décision ; un silence est un oubli.");
       L.push("");
@@ -3140,7 +3140,7 @@
       L.push("  technologies ou projet important modifiant les conditions de santé et de");
       L.push("  sécurité ou les conditions de travail, prévus au 4° du II de L. 2312-8 :");
       L.push("");
-      L.push("     Le fondement du contrôle de ce module retient que, LORSQUE CE PROJET");
+      L.push("     Le fondement du contrôle retient que, LORSQUE CE PROJET");
       L.push("     ENTRAÎNE DES LICENCIEMENTS ÉCONOMIQUES DONNANT LIEU À UN PLAN DE");
       L.push("     SAUVEGARDE DE L'EMPLOI, la faculté de recourir à une expertise portant");
       L.push("     sur l'incidence du projet sur les conditions de santé, de sécurité et de");
@@ -3352,7 +3352,7 @@
       L.push("    conditions de travail, À L'EXCEPTION DU RECOURS À UN EXPERT PRÉVU À LA");
       L.push("    SOUS-SECTION 10 et des attributions consultatives du comité » (L. 2315-38).");
       L.push("");
-      L.push("    Le fondement du contrôle de ce module retient que CES DISPOSITIONS SONT");
+      L.push("    Le fondement du contrôle retient que CES DISPOSITIONS SONT");
       L.push("    D'ORDRE PUBLIC (Soc., 13 mai 2026, n° 25-12.560). Un accord ne peut donc");
       L.push("    pas y déroger : une clause qui déléguerait le recours à l'expert à la");
       L.push("    commission ne produit pas d'effet, et la décision prise sur son fondement");
@@ -3360,7 +3360,7 @@
       L.push("");
       L.push("  · L'EMPLOYEUR CONTESTE, il ne décide pas - sa voie est la saisine du");
       L.push("    président du tribunal judiciaire dans les dix jours (L. 2315-86,");
-      L.push("    R. 2315-49 ; document CSE-CTL-EXP-02 de ce module).");
+      L.push("    R. 2315-49 ; document CSE-CTL-EXP-02).");
       L.push("");
       L.push("Ce qui se joue : une décision prise par la commission, ou attribuée à");
       L.push("l'employeur, est irrégulière. Aucune peine n'est encourue de ce chef ; c'est");
@@ -3503,7 +3503,7 @@
       L.push("  SI L'ACCORD OU LE RÈGLEMENT INTÉRIEUR DU COMITÉ DIT LE CONTRAIRE - la clause");
       L.push("  qui délègue le recours à l'expert à la commission ne produit pas d'effet,");
       L.push("  L. 2315-38 étant d'ordre public. Signalez-la, et faites-la examiner : c'est");
-      L.push("  l'objet du document CSE-CTL-DET-01 de ce module. En attendant, ne vous");
+      L.push("  l'objet du document CSE-CTL-DET-01. En attendant, ne vous");
       L.push("  fondez pas sur elle.");
       L.push("");
 
@@ -3707,7 +3707,7 @@
       L.push("  ouvrirait un délai expirant aux environs du " + leJour(dans(d0, 61)) + ". Deux mois se");
       L.push("  consomment en une relecture et une décision : ce n'est pas beaucoup.");
       L.push("");
-      L.push("  LES ACCORDS À CHERCHER EN PRIORITÉ, parce que le module en dépend :");
+      L.push("  LES ACCORDS À CHERCHER EN PRIORITÉ, parce que tout le reste en dépend :");
       L.push("");
       L.push("     [ ] l'accord de L. 2313-2 déterminant LE NOMBRE ET LE PÉRIMÈTRE DES");
       L.push("         ÉTABLISSEMENTS DISTINCTS - ou, en l'absence de délégué syndical,");
@@ -3811,7 +3811,7 @@
 
       titre(L, "3 - La grille : ce qu'un accord ne peut pas faire");
       L.push("Ce sont les clauses à relever en priorité pour la relecture. Chacune renvoie");
-      L.push("à un texte lu, et à un document de ce module qui la traite.");
+      L.push("à un texte lu, et à un document qui la traite.");
       L.push("");
       L.push("  ┌───────────────────────────────────────────┬──────────────┬──────────────┐");
       L.push("  │ Ce qu'une clause ne peut pas faire        │ Texte        │ Présente ?   │");
@@ -3862,7 +3862,7 @@
           L.push("     · le recours à l'expert est délégué ;");
         L.push("  alors que L. 2315-38 les en exclut expressément l'un et l'autre. Portez");
         L.push("  cette clause en tête de la relecture. Les documents CSE-CTL-SST et");
-        L.push("  CSE-CTL-EXP-04 de ce module en tirent les conséquences pratiques.");
+        L.push("  CSE-CTL-EXP-04 en tirent les conséquences pratiques.");
         L.push("");
       }
       L.push("  UNE PRÉCISION QUI ÉVITE UN CONTRESENS - « les projets d'accord collectif,");

@@ -198,8 +198,8 @@
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur identifiant");
-    L.push("de version dans moteur/economique/textes_eco.json.");
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la date");
+    L.push("ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
@@ -1084,7 +1084,7 @@
 
       L.push("LES RÈGLES");
       L.push("");
-      L.push("Aucun article du corpus de ce module ne porte l'obligation de le tenir : le");
+      L.push("Aucun des articles lus ne porte l'obligation de le tenir : le");
       L.push("registre unique du personnel est nommé comme pièce d'appui. Ce qui le crédibilise");
       L.push("sont les autres données de l'entreprise : il doit concorder avec la paye, avec");
       L.push("les effectifs déclarés, avec l'organigramme.");
@@ -1415,9 +1415,9 @@
       L.push("");
 
       return L.concat(pied("L. 1233-3, L. 1233-2, L. 1235-1, L. 1235-3",
-        ["La faute et la légèreté blâmable du texte de L. 1233-3, 4° ne sont pas au corpus",
-         "de ce module : la réserve est d'origine prétorienne et le document l'écrit comme",
-         "telle."])).join("\n");
+        ["La faute et la légèreté blâmable ne figurent pas dans le texte de",
+         "L. 1233-3, 4° : la réserve est d'origine prétorienne et le document l'écrit",
+         "comme telle."])).join("\n");
     },
   });
 

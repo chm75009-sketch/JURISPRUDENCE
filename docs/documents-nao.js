@@ -2731,7 +2731,7 @@
 
       return L.concat(pied("L. 2242-6, L. 2242-14, L. 2242-15, L. 2242-7",
         ["L'article L. 2231-6, auquel L. 2242-6 renvoie pour les conditions du dépôt,",
-         "n'a PAS été lu à la source par ce module : il est nommé, et les modalités",
+         "n'a PAS été lu à la source : il est nommé, et les modalités",
          "matérielles du dépôt ne sont ni décrites ni supposées ici."])).join("\n");
     },
   });
@@ -3276,7 +3276,7 @@
       return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-8, L. 2242-14, " +
         "R. 2242-1 ; " + ARRETS.finDesNegociations.ref + " ; " + ARRETS.engagerNonConclure.ref,
         ["L'article D. 2231-2, auquel R. 2242-1 renvoie pour les conditions du dépôt,",
-         "n'a PAS été lu à la source par ce module : il est nommé, et les modalités",
+         "n'a PAS été lu à la source : il est nommé, et les modalités",
          "matérielles du dépôt ne sont ni décrites ni supposées ici.",
          "",
          "Aucune peine n'est annoncée pour le seul défaut de procès-verbal : aucun",

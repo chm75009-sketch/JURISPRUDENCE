@@ -87,8 +87,8 @@
   function pied(articles, notes) {
     var L = ["", "---" + "-".repeat(60), ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source et sont conservés avec leur");
-    L.push("identifiant de version dans moteur/discipline/textes-discipline.json.");
+    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
+    L.push("date ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");

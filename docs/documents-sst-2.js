@@ -2987,9 +2987,8 @@
          "articles 10-1 et 12 à 13-1 de la loi n° 2016-1691 du 9 décembre 2016 et",
          "l'article 131-35 du code pénal ne l'ont pas été davantage.",
          "",
-         "L. 1332-4, cité pour le délai de deux mois, appartient au corpus du module",
-         "« discipline » (moteur/discipline/textes-discipline.json), où il a été lu à",
-         "la source. Les autres règles de la procédure disciplinaire s'y trouvent."])).join("\n");
+         "L. 1332-4, cité pour le délai de deux mois, a été lu à la source. Les autres",
+         "règles de la procédure disciplinaire relèvent du même chapitre."])).join("\n");
     },
   });
 

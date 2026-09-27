@@ -573,7 +573,7 @@
       L.push("");
       L.push("La note d'information elle-même, ses deux invitations syndicales et le");
       L.push("procès-verbal de carence sont produits par le document du point CSE-CTL-MEP-02");
-      L.push("de ce même module : ce document-ci s'arrête au constat du franchissement.");
+      L.push("qui les rédige ; ce document-ci s'arrête au constat du franchissement.");
 
       calendrier(L, [
         "Aujourd'hui, " + leJour(d0) + " - vous datez et signez l'état des effectifs",
@@ -1415,7 +1415,7 @@
       L.push("élus pour la durée du mandat restant à courir (L. 2314-10).");
       L.push("");
       L.push("Le processus lui-même - information du personnel, invitation des organisations");
-      L.push("syndicales, protocole - est celui du point CSE-CTL-ELE-07 de ce module, dont");
+      L.push("syndicales, protocole - est celui du point CSE-CTL-ELE-07, dont");
       L.push("le document produit les pièces.");
       L.push("");
       L.push("Fait à " + lieu(ctx) + ", le " + leJour(d0) + ".");
@@ -1985,7 +1985,7 @@
       L.push("     en rapport avec l'activité de l'entreprise, peut être dispensée aux");
       L.push("     membres de la commission.");
       L.push("");
-      L.push("Le document du point CSE-CTL-SST-06 de ce module rédige cet acte, article par");
+      L.push("Le document du point CSE-CTL-SST-06 rédige cet acte, article par");
       L.push("article. Le présent document porte la désignation.");
       L.push("");
 
@@ -3080,7 +3080,7 @@
       L.push("Sont expressément exclus de la délégation, conformément à l'article L. 2315-38");
       L.push("dont les dispositions sont d'ordre public : les attributions consultatives du");
       L.push("comité et le recours à un expert prévu à la sous-section 10.");
-      L.push("[Le point CSE-CTL-SST-05 de ce module rédige cette délimitation en détail.]");
+      L.push("[Le point CSE-CTL-SST-05 rédige cette délimitation en détail.]");
       L.push("");
       L.push("ARTICLE 4 - FONCTIONNEMENT ET HEURES DE DÉLÉGATION (L. 2315-41, 3°)");
       L.push("  4.1 Présidence - la commission est présidée par l'employeur ou son");
