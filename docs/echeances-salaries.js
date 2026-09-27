@@ -120,7 +120,27 @@
     var conducteurs = lire(CLE_CONDUCTEURS, {});
     var out = [];
     salaries().forEach(function (s) {
-      if (net(s.sor)) return;                 /* parti : plus rien à suivre */
+      /* UNE SORTIE LAISSE DEUX CHOSES À FAIRE, ET PERSONNE NE LES RAPPELAIT.
+
+         L. 911-8 du code de la sécurité sociale (LEGIARTI000027549338, deux
+         lectures concordantes au relais le 27 septembre 2026), 6° :
+         « L'employeur signale le maintien de ces garanties dans le certificat
+         de travail et informe l'organisme assureur de la cessation du contrat de
+         travail. » La portabilité ne se déclenchait depuis aucune sortie du
+         registre. Relevé le 27 septembre 2026. Elle s'inscrit à la date de la
+         sortie, et reste visible deux mois : passé ce délai, elle n'a plus à
+         encombrer l'agenda, mais elle a été dite. */
+      if (net(s.sor)) {
+        var depuis = joursEntre(net(s.sor), d0);
+        if (depuis !== null && depuis >= -62 && depuis <= 1)
+          out.push({ quoi: "Portabilité des couvertures santé et prévoyance",
+            qui: (net(s.nom) + " " + net(s.pre)).trim(), date: net(s.sor),
+            jours: depuis, etat: etatDe(depuis),
+            fond: "L. 911-8 du code de la sécurité sociale, 6° : l'employeur signale le maintien des garanties dans le certificat de travail et informe l'organisme assureur de la cessation du contrat de travail",
+            faire: "la mention du maintien sur le certificat de travail, et le courrier à l'organisme assureur ; le maintien est gratuit, pour une durée égale à celle de l'indemnisation du chômage, dans la limite de celle du dernier contrat et de douze mois",
+            prov: "salaries" });
+        return;                               /* parti : rien d'autre à suivre */
+      }
       var id = idDe(s), nom = (net(s.nom) + " " + net(s.pre)).trim();
       var su = suite(id), f = conducteurs[id] || {};
       var ent = net(s.ent);

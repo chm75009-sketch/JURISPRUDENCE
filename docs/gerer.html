@@ -2101,6 +2101,12 @@
     return { blocs: b, loi: ["CSS-D911-2", "CSS-L911-7"] };
   }
 
+  /* Le premier jour du mois suivant : la date d'effet qui laisse le temps de
+     remettre l'écrit, et qui tombe sur une échéance de cotisation. */
+  function premierDuMoisSuivant() {
+    var d = new Date(AUJOURDHUI.getFullYear(), AUJOURDHUI.getMonth() + 1, 1, 12, 0, 0);
+    return d;
+  }
   function mutuelle(v) {
     var effet = dateDe(v.effet);
     var org = String((profil && profil.orgSante) || "").trim();
@@ -2158,9 +2164,19 @@
       "remboursement complémentaire de frais de santé, ainsi que la notice d'information de l'organisme " +
       "assureur." });
     b.push({ k: "p", t: "Signature :" });
-    return { blocs: b, loi: ["CSS-L911-1", "CSS-L911-7", "CSS-D911-2"],
-      dates: effet ? [{ q: "Effet du régime", d: dateFrJour(effet),
-        f: "la décision est remise à chaque salarié avant cette date (" + ref(["CSS-L911-1"]) + ")", c: "tot" }] : [] };
+    var D = [];
+    if (effet) {
+      D.push({ q: "Effet du régime", d: dateFrJour(effet),
+        f: "la décision est remise à chaque salarié avant cette date (" + ref(["CSS-L911-1"]) + ")", c: "tot" });
+      /* Une date d'effet aujourd'hui ou passée rend la remise impossible : le
+         document le dit à l'écran, à côté de la date. */
+      var auj = new Date(AUJOURDHUI.getFullYear(), AUJOURDHUI.getMonth(), AUJOURDHUI.getDate(), 12, 0, 0);
+      if (effet <= auj)
+        D.push({ q: "Attention", d: "la remise doit précéder l'effet",
+          f: "la date d'effet retenue est aujourd'hui ou passée : l'écrit ne peut pas avoir été remis " +
+            "avant. Reportez l'effet, le premier jour du mois suivant par exemple.", c: "non" });
+    }
+    return { blocs: b, loi: ["CSS-L911-1", "CSS-L911-7", "CSS-D911-2"], dates: D };
   }
 
   /* ═══════════════════ LES AVENANTS GUIDÉS ═══════════════════════════
@@ -3362,8 +3378,14 @@
     dispense: { titre: "Complémentaire santé : la demande de dispense",
       champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "conducteur" }],
       produire: dispenseMutuelle },
+    /* LA DÉCISION SE REMET AVANT DE PRENDRE EFFET. L. 911-1 du code de la
+       sécurité sociale veut un écrit « remis à chaque intéressé » : une
+       décision qui prend effet le jour de son édition ne peut pas avoir été
+       remise avant. La date proposée est donc le premier jour du mois suivant,
+       qui laisse le temps de la remise et cale le régime sur une échéance de
+       cotisation. Relevé le 27 septembre 2026. */
     mutuelle: { titre: "Complémentaire santé : la décision unilatérale",
-      champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(AUJOURDHUI) }],
+      champs: [{ id: "effet", nom: "Date d'effet du régime", t: "date", defaut: iso(premierDuMoisSuivant()) }],
       produire: mutuelle },
     vip: { titre: "Visite d'information et de prévention", champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" }, { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) }], produire: visite },
 
