@@ -39,3 +39,28 @@ La CNAV a accepté la décision de la Cour d'Appel (1997) qui reconnaissait le s
 - **= Salaire total GERME 1995: 518 657 FRF**
 
 Cette révision de GERME en 1995 a ensuite contribué à l'augmentation de l'estimation CNAV de 1995 dans le calcul des 25 meilleures années pour la retraite.
+
+## Total de tous les salaires déclarés en 1995
+
+### Détail par employeur (relevé 27/09/2026)
+
+| Employeur | Période | Montant (FRF) |
+|-----------|---------|---------------|
+| GERME | 01/01/1995 à 08/09/1995 | 518 657 |
+| INSTITUT SUP COMMERCE INFORMATIQUE ORSAY | 01/01/1995 à 31/12/1995 | 99 341 |
+| INSTITUT SUPERIEUR INTERNATIONA COMMERCE | 01/02/1995 à 30/04/1995 | 6 325 |
+| INSTITUT SUPERIEUR INTERNATIONA COMMERCE | 01/01/1995 à 30/06/1995 | 11 615 |
+| **TOTAL 1995** | | **635 938 FRF** |
+
+### Conversion en euros
+- **635 938 FRF ÷ 6,55957 = 96 976€**
+
+### Composition du total
+- Salaires réels nominaux: 635 938 FRF
+- Après plafonnement PASS 1995 (146 400 FRF par employeur): 263 681 FRF
+- Convertis en euros: 40 192€
+- Après revalorisation (coeff. 1,563): **62 860€**
+
+Plus arriérés 1990-1994 revalorialisés: ~75 000€
+
+**= Montant total 1995 estimation CNAV: 138 902,64€**
