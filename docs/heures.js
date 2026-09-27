@@ -859,7 +859,13 @@
     if (d === null || f === null) return 0;
     if (f <= d) f += 1440;
     var total = 0;
-    for (var tour = 0; tour <= 1; tour++) {
+    /* LA NUIT QUI A COMMENCÉ LA VEILLE COMPTE AUSSI. Une journée qui débute
+       après minuit, 0 h 30 - 7 h 30 par exemple, ne rencontrait aucune des
+       fenêtres testées : la période de nuit « 21 heures - 6 heures » qui la
+       recouvre a commencé la veille à 21 heures. Le décompte affichait
+       « 0,00 h » de nuit pour une journée entièrement nocturne. Relevé le
+       26 septembre 2026. On essaie donc aussi la fenêtre de la veille. */
+    for (var tour = -1; tour <= 1; tour++) {
       var a = borneA + tour * 1440, b = borneB + tour * 1440;
       if (b <= a) b += 1440;
       var deb = Math.max(d, a), fi = Math.min(f, b);
