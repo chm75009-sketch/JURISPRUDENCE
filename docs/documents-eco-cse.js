@@ -284,6 +284,13 @@
     var p = ctx.profil || {}, f = ctx.fiche || {};
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
+
+  /* « de Argenteuil », « de ADP Services » : l'élision manquait partout où la
+     dénomination suit « de ». Relevé le 27 septembre 2026. */
+  function deNom(ctx) {
+    var s = nom(ctx);
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
   function ville(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
   function signataire(ctx) { return cro((ctx.profil || {}).responsable, "Nom et qualité du représentant légal"); }
   function effectifDe(ctx) {
@@ -548,7 +555,7 @@
       titre(L, "III. L'ordre du jour");
 
       L.push("ORDRE DU JOUR DE LA RÉUNION DU [DATE]");
-      L.push("Comité social et économique de " + nom(ctx));
+      L.push("Comité social et économique " + deNom(ctx));
       L.push("");
       L.push("  1. Information du comité sur le projet de licenciement collectif pour");
       L.push("     motif économique, et remise des renseignements prévus par le code du");
@@ -1899,7 +1906,7 @@
       L.push("");
       L.push("En application de l'article L. 1233-19 du code du travail et dans le délai");
       L.push("de huit jours fixé par l'article D. 1233-3, je vous informe des");
-      L.push("licenciements pour motif économique prononcés au sein de " + nom(ctx) + ".");
+      L.push("licenciements pour motif économique prononcés au sein " + deNom(ctx) + ".");
       L.push("");
       L.push("  1° " + nom(ctx) + ", " + cro((ctx.profil || {}).adresse, "adresse") + ".");
       L.push("  2° Nature de l'activité : " +
@@ -2427,7 +2434,7 @@
       L.push("Madame, Monsieur,");
       L.push("");
       L.push("Le projet de licenciement collectif pour motif économique envisagé au sein");
-      L.push("de " + nom(ctx) + " donne lieu à consultation du comité social et");
+      L.push(deNom(ctx) + " donne lieu à consultation du comité social et");
       L.push("économique central, en application de l'article L. 1233-9 du code du");
       L.push("travail.");
       L.push("");
@@ -2910,7 +2917,7 @@
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + " a décidé, lors de sa");
+      L.push("Le comité social et économique " + deNom(ctx) + " a décidé, lors de sa");
       L.push("réunion du " + (depart ? jour(depart) : "[DATE]") + ", de recourir à une expertise et vous a désigné le");
       L.push("[DATE].");
       L.push("");

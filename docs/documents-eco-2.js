@@ -233,6 +233,13 @@
     var p = (ctx && ctx.profil) || {}, f = (ctx && ctx.fiche) || {};
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
+
+  /* « de Argenteuil », « de ADP Services » : l'élision manquait partout où la
+     dénomination suit « de ». Relevé le 27 septembre 2026. */
+  function deNom(ctx) {
+    var s = nom(ctx);
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
   function adresse(ctx) { return cro(((ctx && ctx.profil) || {}).adresse, "adresse du siège"); }
   function ville(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
   function signataire(ctx) {
@@ -525,7 +532,7 @@
 
       L.push("À reprendre sur papier à en-tête, signée, et versée au dossier.");
       L.push("");
-      L.push("« Le plan de sauvegarde de l'emploi de " + nom(ctx) + " a été");
+      L.push("« Le plan de sauvegarde de l'emploi " + deNom(ctx) + " a été");
       L.push("établi au regard des moyens suivants.");
       L.push("");
       L.push("Moyens de l'entreprise - [rappeler les chiffres du tableau II, exercice par");
@@ -616,7 +623,7 @@
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
-      L.push("Je verse au dossier de " + nom(ctx) + " la note par laquelle le");
+      L.push("Je verse au dossier " + deNom(ctx) + " la note par laquelle le");
       L.push("calibrage du plan de sauvegarde de l'emploi est rapporté aux moyens de");
       L.push("l'entreprise, de l'unité économique et sociale le cas échéant, et du groupe,");
       L.push("ainsi que les comptes qui établissent ces moyens.");
@@ -914,7 +921,7 @@
       L.push("Conformément au dernier alinéa de l'article L. 1233-24-1 du code du travail,");
       L.push("je vous informe de l'ouverture, le [DATE], d'une négociation en vue de");
       L.push("l'accord collectif déterminant le contenu du plan de sauvegarde de l'emploi");
-      L.push("de " + nom(ctx) + ".");
+      L.push(deNom(ctx) + ".");
       L.push("");
       L.push("Les organisations syndicales représentatives invitées à cette négociation");
       L.push("sont : [les nommer]. La première séance est fixée au [DATE].");
@@ -4612,7 +4619,7 @@
       L.push("");
       L.push("En application de l'article L. 1233-60 du code du travail, je vous informe,");
       L.push("avant qu'il y soit procédé, des licenciements pour motif économique envisagés");
-      L.push("au sein de " + nom(ctx) + ".");
+      L.push("au sein " + deNom(ctx) + ".");
       L.push("");
       L.push("  Nature de la procédure ....... " +
         (type ? (PROC[type] || type) : "[à préciser]"));

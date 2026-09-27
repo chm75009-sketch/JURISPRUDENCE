@@ -161,9 +161,22 @@
       voile.hidden = false;
       doc.body.style.overflow = "hidden";
       cadre = listeVoile;
-      champVoile.value = "";
-      montrer("");
-      setTimeout(function () { try { champVoile.focus(); } catch (e) {} }, 50);
+      /* LA PREMIÈRE LETTRE ÉTAIT PERDUE.
+
+         Sur un téléphone, toucher le champ le vide de son focus et ouvre le
+         voile, dont le champ ne prenait le focus que cinquante millisecondes
+         plus tard : la première lettre tapée dans l'élan partait dans le champ
+         abandonné, et la recherche commençait à la deuxième. Relevé le
+         27 septembre 2026. Le focus se prend tout de suite, et se reprend après
+         le délai pour les navigateurs qui l'exigent ; ce qui était déjà écrit
+         dans le champ ouvre la recherche. */
+      var depart = String(arguments[0] || input.value || "").trim();
+      champVoile.value = depart;
+      montrer(depart);
+      try { champVoile.focus(); } catch (e) {}
+      setTimeout(function () {
+        try { if (doc.activeElement !== champVoile) champVoile.focus(); } catch (e) {}
+      }, 50);
     }
     function fermerVoile() {
       if (!voile || voile.hidden) return;
@@ -254,12 +267,24 @@
       /* La saisie libre tient tant qu'on n'a pas vidé le champ : sans cela,
          revenir dans le champ rouvrait la liste par-dessus ce qu'on écrivait. */
       if (enLibre) return;
-      if (etroit()) { input.blur(); ouvrirVoile(); return; }
+      if (etroit()) { var dj = String(input.value || "").trim(); input.blur(); ouvrirVoile(dj); return; }
       try { input.select(); } catch (e) {}
       ouvrir();
     });
     input.addEventListener("input", function () {
       if (ignorer) { ignorer = false; return; }
+      /* Une lettre tombée dans le champ pendant que le voile s'ouvrait : elle
+         rejoint la recherche au lieu de disparaître. */
+      if (voile && !voile.hidden) {
+        var tape = String(input.value || "");
+        input.value = "";
+        if (tape) {
+          champVoile.value = champVoile.value + tape;
+          montrer(champVoile.value);
+        }
+        try { champVoile.focus(); } catch (e) {}
+        return;
+      }
       /* Champ vidé à la main : on retrouve la liste. */
       if (String(input.value || "").trim() === "") enLibre = false;
       if (enLibre) return;

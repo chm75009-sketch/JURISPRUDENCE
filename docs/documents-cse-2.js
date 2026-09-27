@@ -149,6 +149,13 @@
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
 
+  /* « de Argenteuil », « de ADP Services » : l'élision manquait partout où la
+     dénomination suit « de ». Relevé le 27 septembre 2026. */
+  function deNom(ctx) {
+    var s = nom(ctx);
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
+
   function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
 
   function signataire(ctx) {
@@ -1848,7 +1855,7 @@
       L.push("Madame, Monsieur,");
       L.push("");
       L.push("Je souhaite inscrire [NOMBRE] membres de la délégation du personnel du comité");
-      L.push("social et économique de " + nom(ctx) + " à la formation prévue à");
+      L.push("social et économique " + deNom(ctx) + " à la formation prévue à");
       L.push("l'article L. 2315-18 du code du travail, pour une durée de [ ] jours.");
       L.push("");
       L.push("Je vous remercie de me confirmer :");
@@ -2047,7 +2054,7 @@
       L.push("RÉSOLUTION N° [ ] - DÉSIGNATION DES MEMBRES DE LA COMMISSION SANTÉ, SÉCURITÉ ET");
       L.push("CONDITIONS DE TRAVAIL");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ", réuni le [DATE],");
+      L.push("Le comité social et économique " + deNom(ctx) + ", réuni le [DATE],");
       L.push("");
       L.push("Vu les articles L. 2315-36 à L. 2315-44 du code du travail ;");
       L.push("Vu l'article L. 2315-39 ;");
@@ -2283,7 +2290,7 @@
       L.push("RÉSOLUTION N° [ ] - DÉSIGNATION RECTIFICATIVE DES MEMBRES DE LA COMMISSION");
       L.push("SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ", réuni le [DATE],");
+      L.push("Le comité social et économique " + deNom(ctx) + ", réuni le [DATE],");
       L.push("");
       L.push("Vu l'article L. 2315-39 du code du travail, dont les dispositions sont d'ordre");
       L.push("public ;");
@@ -2644,7 +2651,7 @@
       L.push("RÉSOLUTION N° [ ] - RÉTABLISSEMENT DE LA COMPOSITION INITIALE DE LA COMMISSION");
       L.push("SANTÉ, SÉCURITÉ ET CONDITIONS DE TRAVAIL");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ", réuni le [DATE],");
+      L.push("Le comité social et économique " + deNom(ctx) + ", réuni le [DATE],");
       L.push("");
       L.push("Vu l'article L. 2315-39 du code du travail, dont les dispositions sont d'ordre");
       L.push("public, aux termes duquel les membres de la commission sont désignés pour une");
@@ -3070,7 +3077,7 @@
       L.push("ARTICLE 1 - CHAMP ET FONDEMENT");
       L.push("Le présent acte fixe les modalités de mise en place et de fonctionnement de la");
       L.push("commission santé, sécurité et conditions de travail créée au sein du comité");
-      L.push("social et économique de " + nom(ctx) + " en application de");
+      L.push("social et économique " + deNom(ctx) + " en application de");
       L.push("[l'article L. 2315-36, 1° ou 2° - entreprise ou établissement distinct d'au");
       L.push("moins trois cents salariés / l'article L. 2315-36, 3° / la décision de");
       L.push("l'inspecteur du travail du [date], prise en application de L. 2315-37 / une");

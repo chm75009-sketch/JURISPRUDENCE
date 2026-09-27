@@ -262,6 +262,13 @@
     var p = ctx.profil || {}, f = ctx.fiche || {};
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
+
+  /* « de Argenteuil », « de ADP Services » : l'élision manquait partout où la
+     dénomination suit « de ». Relevé le 27 septembre 2026. */
+  function deNom(ctx) {
+    var s = nom(ctx);
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
   function ville(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
   function signataire(ctx) { return cro((ctx.profil || {}).responsable, "Nom et qualité du représentant légal"); }
 
@@ -2817,7 +2824,7 @@
         L.push("[validation / homologation] du " +
           (v === "accord" ? "l'accord collectif" : "document unilatéral") +
           " portant sur le plan de");
-        L.push("sauvegarde de l'emploi de " + nom(ctx) + ".");
+        L.push("sauvegarde de l'emploi " + deNom(ctx) + ".");
         L.push("");
         L.push("Cette décision est consultable [lieu, service, horaires] et affichée");
         L.push("ci-joint.");
@@ -2825,7 +2832,7 @@
         L.push("La demande de " + (v === "accord" ? "validation de l'accord collectif" :
           v === "unilateral" ? "homologation du document unilatéral" : "validation ou d'homologation") +
           " portant sur le plan");
-        L.push("de sauvegarde de l'emploi de " + nom(ctx) + " a été reçue par l'autorité");
+        L.push("de sauvegarde de l'emploi " + deNom(ctx) + " a été reçue par l'autorité");
         L.push("administrative le " + jour(depot, "DATE DE RÉCEPTION") + ".");
         L.push("");
         L.push("Le délai de " + (inst.jours ? inst.jours : "[15 ou 21]") +
@@ -3545,7 +3552,7 @@
         jour(rupture, "DATE DE RUPTURE") + ".");
       L.push("");
       L.push("Un emploi de [INTITULÉ DU POSTE], compatible avec votre qualification de");
-      L.push("[QUALIFICATION], est devenu disponible au sein de " + nom(ctx));
+      L.push("[QUALIFICATION], est devenu disponible au sein " + deNom(ctx));
       L.push("à compter du [DATE DE DISPONIBILITÉ].");
       L.push("");
       L.push("  Lieu d'exercice ........ [établissement, adresse]");

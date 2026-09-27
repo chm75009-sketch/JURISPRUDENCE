@@ -135,6 +135,13 @@
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
 
+  /* « de Argenteuil », « de ADP Services » : l'élision manquait partout où la
+     dénomination suit « de ». Relevé le 27 septembre 2026. */
+  function deNom(ctx) {
+    var s = nom(ctx);
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
+
   function lieu(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
   function signataire(ctx) { return cro((ctx.profil || {}).responsable, "Nom et qualité du représentant légal"); }
 
@@ -268,7 +275,7 @@
 
       L.push("I - L'ÉTAT MOIS PAR MOIS");
       L.push("");
-      L.push("Effectif de " + nom(ctx) + ", calculé selon l'article L. 1111-2 :");
+      L.push("Effectif " + deNom(ctx) + ", calculé selon l'article L. 1111-2 :");
       L.push("");
       if (mois.length) {
         mois.forEach(function (v, i) {
@@ -491,7 +498,7 @@
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
-      L.push("L'effectif de " + nom(ctx) + (eff != null ? ", qui s'établit à " + eff + " salariés," : ",") );
+      L.push("L'effectif " + deNom(ctx) + (eff != null ? ", qui s'établit à " + eff + " salariés," : ",") );
       L.push("ayant atteint le seuil de onze salariés pendant douze mois consécutifs");
       L.push("(L. 2311-2), il est procédé à l'élection des membres de la délégation du");
       L.push("personnel du comité social et économique.");
@@ -555,7 +562,7 @@
       L.push("");
       L.push("En application de l'article L. 2314-5 du code du travail, je vous informe de");
       L.push("l'organisation des élections des membres de la délégation du personnel du");
-      L.push("comité social et économique de " + nom(ctx) + " et vous invite :");
+      L.push("comité social et économique " + deNom(ctx) + " et vous invite :");
       L.push("");
       L.push("  · à négocier le protocole d'accord préélectoral ;");
       L.push("  · à établir les listes de vos candidats aux fonctions de membre de la");
@@ -664,7 +671,7 @@
       L.push("");
       L.push("En application de l'article L. 2314-9 du code du travail, je vous transmets");
       L.push("le procès-verbal de carence établi le [DATE D'ÉTABLISSEMENT] à l'issue du");
-      L.push("processus électoral engagé au sein de " + nom(ctx) + ".");
+      L.push("processus électoral engagé au sein " + deNom(ctx) + ".");
       L.push("");
       L.push("Ce procès-verbal a été porté à la connaissance des salariés le [date], par");
       L.push("[moyen conférant date certaine].");
@@ -813,7 +820,7 @@
       L.push("Mesdames, Messieurs,");
       L.push("");
       L.push("Le mandat des membres de la délégation du personnel du comité social et");
-      L.push("économique de " + nom(ctx) + " vient à son terme le");
+      L.push("économique " + deNom(ctx) + " vient à son terme le");
       L.push((terme ? leJour(terme) : "[date]") + ".");
       L.push("");
       L.push("Conformément à l'article L. 2314-4 du code du travail, aux termes duquel");
@@ -852,7 +859,7 @@
       L.push("Mesdames, Messieurs,");
       L.push("");
       L.push("Le mandat des membres de la délégation du personnel du comité social et");
-      L.push("économique de " + nom(ctx) + " expire le " + (terme ? leJour(terme) : "[date]") + ".");
+      L.push("économique " + deNom(ctx) + " expire le " + (terme ? leJour(terme) : "[date]") + ".");
       L.push("");
       L.push("En application de l'article L. 2314-5 du code du travail, qui prévoit que");
       L.push("dans le cas d'un renouvellement de l'institution cette invitation est");
@@ -1068,7 +1075,7 @@
       L.push("");
       L.push("ARTICLE 1 - NOMBRE D'ÉTABLISSEMENTS DISTINCTS");
       L.push("");
-      L.push("Le nombre d'établissements distincts au sein de " + nom(ctx));
+      L.push("Le nombre d'établissements distincts au sein " + deNom(ctx));
       L.push("est fixé à [NOMBRE].");
       L.push("");
       L.push("ARTICLE 2 - PÉRIMÈTRE DE CHAQUE ÉTABLISSEMENT");
@@ -1282,7 +1289,7 @@
       L.push("représentants de proximité à l'accord d'entreprise défini à l'article");
       L.push("L. 2313-2.");
       L.push("");
-      L.push("Aucun accord de cette nature n'a été conclu au sein de " + nom(ctx) + ".");
+      L.push("Aucun accord de cette nature n'a été conclu au sein " + deNom(ctx) + ".");
       L.push("[Le cas échéant : une négociation a été engagée le [date] et n'a pas abouti");
       L.push("le [date].]");
       L.push("");
@@ -1376,7 +1383,7 @@
       L.push("");
       L.push("En application de l'article L. 2314-5 du code du travail, je vous informe de");
       L.push("l'organisation des élections des membres de la délégation du personnel du");
-      L.push("comité social et économique de " + nom(ctx) + ", et vous invite :");
+      L.push("comité social et économique " + deNom(ctx) + ", et vous invite :");
       L.push("");
       L.push("  · à négocier le protocole d'accord préélectoral ;");
       L.push("  · à établir les listes de vos candidats aux fonctions de membre de la");
@@ -1550,7 +1557,7 @@
       L.push("");
       L.push("Conformément à l'article L. 2314-4 du code du travail, vous êtes informés de");
       L.push("l'organisation des élections des membres de la délégation du personnel du");
-      L.push("comité social et économique de " + nom(ctx) + ".");
+      L.push("comité social et économique " + deNom(ctx) + ".");
       L.push("");
       if (dinfo && dtour && Math.round((dtour - dinfo) / 86400000) > 90) {
         L.push("[Mention de reprise, à conserver si le processus précédent est repris : une");
@@ -1653,7 +1660,7 @@
       titre(L, "Protocole d'accord préélectoral");
       L.push("PROTOCOLE D'ACCORD PRÉÉLECTORAL");
       L.push("Élections des membres de la délégation du personnel");
-      L.push("du comité social et économique de " + nom(ctx));
+      L.push("du comité social et économique " + deNom(ctx));
       L.push("");
       L.push("Entre " + nom(ctx) + ", " + cro((ctx.profil || {}).adresse, "adresse du siège") + ",");
       L.push("représentée par " + signataire(ctx) + ",");
@@ -1665,7 +1672,7 @@
       L.push("ARTICLE 1 - CHAMP ET EFFECTIF");
       L.push("");
       L.push("Le présent protocole s'applique à l'élection des membres de la délégation du");
-      L.push("personnel du comité social et économique de " + nom(ctx));
+      L.push("personnel du comité social et économique " + deNom(ctx));
       L.push("[/ de l'établissement distinct de …].");
       L.push("Effectif retenu, calculé selon l'article L. 1111-2 : " +
         (eff == null ? "[effectif]" : eff) + " salariés.");
@@ -1973,7 +1980,7 @@
       L.push("En application de l'article L. 2314-31 du code du travail, vous êtes informés");
       L.push("de la proportion de femmes et d'hommes composant chaque collège électoral");
       L.push("pour les élections des membres de la délégation du personnel du comité social");
-      L.push("et économique de " + nom(ctx) + ".");
+      L.push("et économique " + deNom(ctx) + ".");
       L.push("");
       L.push("Cette proportion, arrêtée sur la liste électorale du [DATE], est la suivante :");
       L.push("");
@@ -3274,7 +3281,7 @@
       L.push("Madame, Monsieur,");
       L.push("");
       L.push("En application de l'article L. 2315-27 du code du travail, je vous confirme la");
-      L.push("tenue de la réunion du comité social et économique de " + nom(ctx));
+      L.push("tenue de la réunion du comité social et économique " + deNom(ctx));
       L.push("qui portera, en tout ou partie, sur les attributions du comité en matière de");
       L.push("santé, de sécurité et de conditions de travail :");
       L.push("");
@@ -3426,7 +3433,7 @@
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
-      L.push("L'effectif de " + nom(ctx) + (eff != null ? ", qui s'établit à " + eff + " salariés," : "") +
+      L.push("L'effectif " + deNom(ctx) + (eff != null ? ", qui s'établit à " + eff + " salariés," : "") +
         " ayant atteint au moins onze salariés pendant douze mois consécutifs, il est procédé à l'élection des membres de la délégation du personnel du comité social et économique (article L. 2311-2 du code du travail).");
       L.push("");
       L.push("La date envisagée pour le premier tour est le " + jourLocal(dTour, "date du premier tour") +
@@ -3588,7 +3595,7 @@
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + " est convoqué le " + jourLocal(dR, "date de la réunion") + " à " + heure + ", à " + salle + ".");
+      L.push("Le comité social et économique " + deNom(ctx) + " est convoqué le " + jourLocal(dR, "date de la réunion") + " à " + heure + ", à " + salle + ".");
       L.push("");
       L.push((eff != null && eff >= 300
         ? "L'entreprise employant au moins trois cents salariés, le comité se réunit au moins une fois par mois"
@@ -3697,7 +3704,7 @@
       var eff = effectifDe(ctx);
       var L = tete(ctx, "Règlement intérieur du comité social et économique",
         "article L. 2315-24 du code du travail");
-      L.push("Adopté par le comité social et économique de " + nom(ctx) + " le " + jourLocal(f.dateAdoption, "date d'adoption") + ", par résolution prise à la majorité des membres présents (article L. 2315-32).");
+      L.push("Adopté par le comité social et économique " + deNom(ctx) + " le " + jourLocal(f.dateAdoption, "date d'adoption") + ", par résolution prise à la majorité des membres présents (article L. 2315-32).");
       L.push("");
       L.push("ARTICLE 1. OBJET");
       L.push("");

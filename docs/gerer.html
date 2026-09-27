@@ -80,7 +80,13 @@
   .doc-ligne .l small{display:block;font:400 var(--t2)/1.4 system-ui;color:var(--texte-2);margin-top:2px}
 
   /* écran 5 : les champs, les dates, la feuille, les boutons */
-  .champs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  /* UNE COLONNE SUR UN TÉLÉPHONE, DEUX SUR UN ÉCRAN LARGE.
+
+     Les champs étaient sur deux colonnes à toutes les largeurs : sur 390
+     pixels, une date et son étiquette tenaient dans 185, et les intitulés
+     passaient à la ligne au milieu d'un mot. Relevé le 27 septembre 2026. */
+  .champs{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}
+  @media (min-width:700px){.champs{grid-template-columns:1fr 1fr}}
   .champs label{display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--texte-2)}
   .champs label.pleine{grid-column:1/-1}
   .champs input,.champs select,.champs textarea{font-size:16px;padding:10px 12px;min-height:44px;
@@ -204,6 +210,7 @@
       <button type="button" class="retour" id="btn-retour">&larr; Retour</button>
       <b id="d-titre"></b>
     </div>
+    <p class="doux" id="d-reprise" hidden></p>
     <form class="champs" id="d-champs" autocomplete="off" onsubmit="return false"></form>
     <p class="doux" id="d-registre" hidden></p>
     <div class="dates" id="d-dates"></div>
@@ -1262,13 +1269,13 @@
       ? window.ListesValeurs.titreDeTravailRequis(d.nationalite) : null;
 
     A("Engagement");
-    p("La Société engage le salarié, qui accepte, en qualité de " + poste + ", statut " + statutMot(d.statut) +
+    p("La Société engage le salarié, qui accepte, en qualité " + de(poste) + ", statut " + statutMot(d.statut) +
       (niveau ? ", niveau " + niveau + ", échelon " + echelon + " de la grille de classification" : "") +
       ", à compter du " + dateFr(d.entree) + ", sous réserve du résultat de la visite d'information et de prévention.");
     if (d.cdd) {
       p("Le présent contrat est conclu pour le motif suivant : " +
         (d.motif ? d.motif.t.charAt(0).toLowerCase() + d.motif.t.slice(1) : "[motif du recours]") +
-        (d.motif && d.motif.remplace ? ", en la personne de " + (d.remplace || "[nom et qualification de la personne remplacée]") : "") +
+        (d.motif && d.motif.remplace ? ", en la personne " + de(d.remplace || "[nom et qualification de la personne remplacée]") : "") +
         (d.motif ? ", cas prévu au " + d.motif.al + " de l'article " + ref([d.motif.base]) + " du code du travail" : "") + ".");
       if (d.precision) p(d.precision);
       p("Il ne peut avoir ni pour objet ni pour effet de pourvoir durablement un emploi lié à l'activité normale et permanente de la Société (" + ref(["L1242-1"]) + ").");
@@ -1317,7 +1324,7 @@
     p("Toute absence suspend la période d'essai, dont le terme est reporté d'autant.");
 
     A("Fonctions");
-    p("Le salarié exerce les fonctions de " + poste + ". Elles comprennent notamment :");
+    p("Le salarié exerce les fonctions " + de(poste) + ". Elles comprennent notamment :");
     b.push({ k: "puce", t: "- [première tâche] ;" });
     b.push({ k: "puce", t: "- [deuxième tâche] ;" });
     b.push({ k: "puce", t: "- [troisième tâche]." });
@@ -1517,8 +1524,8 @@
        dans le contrat sans crochets : demande du 9 septembre 2026, « son
        adresse, date et lieu de naissance, insérés directement dans le
        contrat sans que ça prenne trop de place ». */
-    var c = champsTransport().concat([{ id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" },
-             { id: "poste", nom: "Emploi", t: "text", ph: "serveur" },
+    var c = champsTransport().concat([{ id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: exNom() },
+             { id: "poste", nom: "Emploi", t: "text", ph: exEmploi() },
              { id: "naissance", nom: "Né(e) le", t: "date" },
              { id: "lieuNaissance", nom: "À", t: "text", ph: "Argenteuil" },
              { id: "nationalite", nom: "Nationalité", t: "text", ph: "française" },
@@ -2288,7 +2295,7 @@
       (String(profil.orgSanteTravail || "").trim() || "[nom et adresse du service]") });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: ville() + ", le " + dateFr(AUJOURDHUI) });
-    b.push({ k: "p", t: "Objet : visite d'information et de prévention de " + nomS });
+    b.push({ k: "p", t: "Objet : visite d'information et de prévention " + de(nomS) });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: "Madame, Monsieur," });
     b.push({ k: "p", t: "Nous avons engagé " + nomS + " en qualité " + de(v.poste || "[emploi]") + ", à compter du " + dateFr(e) + "." });
@@ -2382,7 +2389,7 @@
     return [
       { k: "saut", t: "" },
       { k: "t1", t: "Maintien des garanties de frais de santé et de prévoyance après la rupture" },
-      { k: "p", t: "À porter sur le certificat de travail de " + nomS + " : « Conformément à " +
+      { k: "p", t: "À porter sur le certificat de travail " + de(nomS) + " : « Conformément à " +
         ref(["CSS-L911-8"]) + ", l'intéressé bénéficie du maintien à titre gratuit des garanties de " +
         "frais de santé et de prévoyance en vigueur dans l'entreprise, pour une durée égale à la " +
         "période d'indemnisation du chômage, dans la limite de la durée du dernier contrat de travail " +
@@ -2394,9 +2401,9 @@
         "l'ouverture puis en cours de maintien, qu'il remplit les conditions." },
       { k: "h1", t: "L'information de l'organisme assureur, le jour de la sortie" },
       { k: "p", t: "À " + (org || "[nom et adresse de l'organisme assureur]") + "." },
-      { k: "p", t: "Objet : cessation du contrat de travail de " + nomS + " et maintien des garanties " +
+      { k: "p", t: "Objet : cessation du contrat de travail " + de(nomS) + " et maintien des garanties " +
         "(" + ref(["CSS-L911-8"]) + ")." },
-      { k: "p", t: "Nous vous informons que le contrat de travail de " + nomS + " a pris fin le " +
+      { k: "p", t: "Nous vous informons que le contrat de travail " + de(nomS) + " a pris fin le " +
         dateFr(sortie) + ". La rupture ouvre droit à la prise en charge par le régime d'assurance " +
         "chômage et ne résulte pas d'une faute lourde : les garanties sont maintenues à titre gratuit " +
         "dans les conditions de " + ref(["CSS-L911-8"]) + ", pour [durée en mois, égale à la durée du " +
@@ -2422,10 +2429,18 @@
     b.push({ k: "p", t: "À remettre par le salarié à l'employeur, qui la conserve (" +
       ref(["CSS-D911-2"]) + ")." });
     b.push({ k: "vide", t: "" });
-    b.push({ k: "p", t: "Je soussigné " + nomS + ", " + (v.poste || "[emploi]") + " au sein de " +
-      profil.denomination + ", demande à être dispensé de l'adhésion au régime collectif et " +
-      "obligatoire de remboursement complémentaire de frais de santé souscrit auprès de " +
-      (org || "[organisme assureur]") + "." });
+    /* « DEMANDE À ÊTRE DISPENSÉ » POUR UNE SALARIÉE, ET « AU SEIN DE SARL ».
+
+       Le participe ne s'accordait pas, et l'élision manquait devant la
+       dénomination et devant l'organisme. Relevé le 27 septembre 2026. Le sexe
+       vient du registre, par la civilité. */
+    var femmeD = civiliteDe(nomS) === "Madame";
+    var sD = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    b.push({ k: "p", t: "Je soussigné" + (femmeD ? "e" : "") + " " + nomS + ", " +
+      (String(v.poste || "").trim() || (sD && String(sD.emp || "").trim()) || "[emploi]") +
+      " au sein " + de(profil.denomination) + ", demande à être dispensé" + (femmeD ? "e" : "") +
+      " de l'adhésion au régime collectif et obligatoire de remboursement complémentaire de frais " +
+      "de santé souscrit auprès " + de(org || "[organisme assureur]") + "." });
     b.push({ k: "p", t: "Je me trouve dans le cas suivant, prévu par l'article D. 911-2 du code de la " +
       "sécurité sociale (cocher un seul cas) :" });
     b.push({ k: "puce", t: "[ ] bénéficiaire de la complémentaire santé solidaire (L. 861-3) ; la " +
@@ -3937,7 +3952,65 @@
   /* ═══════════════════════════════════════════════════════════════════════
      5. LA LISTE, ET CHAQUE DOCUMENT
      ══════════════════════════════════════════════════════════════════════ */
-  var NOM = { id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: "Madame Lucie MARTIN" };
+  /* ═══════════════════════════════════════════════════════════════════════
+     LES EXEMPLES VIENNENT DU DOSSIER, PAS DE LA RESTAURATION.
+
+     « Madame Lucie MARTIN », « cuisinier », « serveur », « Cuisine du
+     restaurant » : les invites des formulaires étaient celles d'un restaurant,
+     dans une application ouverte par un transporteur. Relevé le 27 septembre
+     2026. Le premier salarié du registre donne le nom et l'emploi ; à défaut,
+     le secteur de la fiche décide, et à défaut de secteur on ne montre qu'une
+     forme, « NOM Prénom ».
+     ══════════════════════════════════════════════════════════════════════ */
+  var EX_SECTEUR = {
+    "transport et logistique": { emploi: "conducteur poids lourd",
+      lieu: "quai de chargement, 23 avenue du Château, 95100 Argenteuil",
+      circonstances: "En descendant de la cabine, a manqué la marche et est tombé sur le poignet droit." },
+    "bâtiment et travaux publics": { emploi: "maçon",
+      lieu: "chantier, 12 rue des Peupliers, 93200 Saint-Denis",
+      circonstances: "En portant un sac de ciment, a glissé sur une plaque de coffrage et est tombé." },
+    "industrie": { emploi: "opérateur de production",
+      lieu: "atelier d'assemblage",
+      circonstances: "En dégageant une pièce coincée, s'est coupé la main sur une arête." },
+    "commerce": { emploi: "vendeur",
+      lieu: "réserve du magasin",
+      circonstances: "En descendant un carton d'une étagère haute, a reçu la charge sur l'épaule." },
+    "services": { emploi: "agent d'exploitation",
+      lieu: "bureau, rez-de-chaussée",
+      circonstances: "En reculant sur son siège, a heurté un carton laissé dans le passage." }
+  };
+  function exSecteur() {
+    return EX_SECTEUR[String((profil && profil.secteur) || "").trim().toLowerCase()] || null;
+  }
+  var EX_REG = null;
+  function exRegistre() {
+    if (EX_REG === null) {
+      var L = [];
+      try { L = salariesRegistre(); } catch (e) { L = []; }
+      EX_REG = L.length ? L[0] : false;
+    }
+    return EX_REG || null;
+  }
+  function exNom() {
+    var r = exRegistre();
+    return (r && r.nom) || "NOM Prénom";
+  }
+  function exEmploi() {
+    var r = exRegistre();
+    if (r && r.emp) return r.emp;
+    var s = exSecteur();
+    return s ? s.emploi : "intitulé de l'emploi";
+  }
+  function exLieu() {
+    var s = exSecteur();
+    return s ? s.lieu : "lieu précis, avec l'adresse";
+  }
+  function exCirconstances() {
+    var s = exSecteur();
+    return s ? s.circonstances
+      : "ce qui s'est passé, dans l'ordre, avec les mots de la victime et ceux des témoins";
+  }
+  var NOM = { id: "nom", nom: "Nom et prénom du salarié", t: "text", ph: exNom() };
   /* ──────────────────────────── LE TRANSPORT ────────────────────────────
 
      Deux documents que le transport routier réclame en propre, et qui
@@ -4148,7 +4221,7 @@
         return { id: x.c, nom: x.nom, t: x.t, pleine: x.c === "titreSejour" };
       })), produire: titresConducteur },
     dpae: { titre: "Déclaration d'embauche DPAE", ext: ["RH-CTL-EMB-03"], famille: "RH",
-      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: "Lucie MARTIN" }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
+      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieEmbauche", ph: exNom() }, { id: "entree", nom: "Date d'embauche", t: "date", cle: "dateEmbauche", defaut: iso(AUJOURDHUI) }],
       loi: ["L1221-10", "R1221-1", "R1221-4"],
       /* La déclaration se fait jusqu'au jour de l'embauche, avant la prise de
          poste : la fenêtre s'arrêtait la veille, et le calendrier du Word
@@ -4183,7 +4256,7 @@
        prévention » et se fait « préalablement à l'affectation sur le poste ».
        Une demande qui ignore ces deux cas fait perdre le délai. */
     vip: { titre: "Visite d'information et de prévention",
-      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: "cuisinier" },
+      champs: [NOM, { id: "poste", nom: "Emploi", t: "text", ph: exEmploi() },
         { id: "entree", nom: "Date d'entrée", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "nuit", nom: "Travailleur de nuit, ou de moins de dix-huit ans ?", t: "select",
           opts: [["non", "Non"], ["oui", "Oui"]], defaut: "non",
@@ -4218,7 +4291,7 @@
         { id: "groupe", nom: "Groupe", t: "text", ph: "7" },
         { id: "heures", nom: "Durée hebdomadaire, en heures", t: "number", ph: "24" },
         { id: "salaire", nom: "Rémunération mensuelle brute (euros)", t: "number", ph: "2 100" },
-        { id: "ou", nom: "Nouveau lieu de travail", t: "text", pleine: true, ph: "12 rue des Peupliers, 93200 Saint-Denis" },
+        { id: "ou", nom: "Nouveau lieu de travail", t: "text", pleine: true, ph: "adresse complète du nouveau lieu" },
         { id: "objet", nom: "Ce qui change, ou ce que vous ajoutez", t: "textarea", pleine: true, ph: "La durée du travail est portée à 35 heures par semaine et la rémunération mensuelle brute à 2 100 euros." }], produire: avenant },
     conges: { titre: "Congés payés", ext: ["RH-CTL-CGP-01"], famille: "RH",
       champs: [{ id: "debut", nom: "Début de la période de prise", t: "date", cle: "debutPeriode", defaut: iso(new Date(AUJOURDHUI.getFullYear() + (AUJOURDHUI.getMonth() >= 4 ? 1 : 0), 4, 1)) },
@@ -4232,10 +4305,10 @@
         { id: "connu", nom: "Accident connu de l'employeur le", t: "date", defaut: iso(AUJOURDHUI),
           sous: "c'est de ce jour que court le délai de quarante-huit heures (L. 441-2 du code de la sécurité sociale)" },
         { id: "connuHeure", nom: "À quelle heure", t: "text", ph: "15 h" },
-        { id: "lieu", nom: "Lieu précis de l'accident", t: "text", pleine: true, ph: "Cuisine du restaurant, 12 rue des Peupliers, 93200 Saint-Denis" },
-        { id: "circonstances", nom: "Circonstances", t: "textarea", pleine: true, ph: "En portant un carton de la réserve à la cuisine, a glissé sur le sol mouillé et est tombé sur le poignet droit." }], produire: accident },
+        { id: "lieu", nom: "Lieu précis de l'accident", t: "text", pleine: true, ph: exLieu() },
+        { id: "circonstances", nom: "Circonstances", t: "textarea", pleine: true, ph: exCirconstances() }], produire: accident },
     entretien: { titre: "Entretien professionnel", ext: ["RH-CTL-ENT-01"], famille: "RH",
-      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarie", ph: "Lucie MARTIN" },
+      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarie", ph: exNom() },
         /* Sans la date d'entrée, le calendrier de l'entretien se comptait
            depuis le jour de l'édition : un « premier entretien » en 2027 pour
            une salariée entrée en 2021. Elle se reprend du registre. */
@@ -4394,7 +4467,7 @@
           ph: "la moyenne des douze derniers mois, ou le tiers des trois derniers si elle est plus favorable" }],
       produire: miseRetraite },
     fin: { titre: "Certificat de travail, solde de tout compte, attestation", ext: ["RH-CTL-FIN-01", "RH-CTL-FIN-02"], famille: "RH",
-      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieSortie", ph: "Lucie MARTIN" }, { id: "sortie", nom: "Date de sortie", t: "date", cle: "dateSortie", defaut: iso(AUJOURDHUI) },
+      champs: [{ id: "nom", nom: "Nom et prénom du salarié", t: "text", cle: "salarieSortie", ph: exNom() }, { id: "sortie", nom: "Date de sortie", t: "date", cle: "dateSortie", defaut: iso(AUJOURDHUI) },
                { id: "entree", nom: "Date d'entrée", t: "date", cle: "dateEmbauche" }],
       loi: ["L1234-19", "L1234-20", "R1234-9"],
       apres: function (v) {
@@ -4413,7 +4486,7 @@
     convoc: { comite: true, titre: "Convocation du CSE", ext: ["CSE-CTL-CON-05"], famille: "CSE",
       champs: [{ id: "annee", nom: "Année", t: "text", crochet: "[ANNÉE]", defaut: String(AUJOURDHUI.getFullYear()) }], loi: ["L2315-27", "L2315-28", "L2312-19", "L2315-34"] },
     odj: { comite: true, titre: "Ordre du jour", ext: ["CSE-CTL-CON-01"], famille: "CSE", champs: [], loi: ["L2312-17", "L2312-19", "L2312-22"] },
-    pv: { comite: true, titre: "Procès-verbal", champs: [{ id: "reunion", nom: "Date de la réunion", t: "date", defaut: iso(AUJOURDHUI) }, { id: "secretaire", nom: "Secrétaire du comité", t: "text", ph: "Madame Nadia ROUX" },
+    pv: { comite: true, titre: "Procès-verbal", champs: [{ id: "reunion", nom: "Date de la réunion", t: "date", defaut: iso(AUJOURDHUI) }, { id: "secretaire", nom: "Secrétaire du comité", t: "text", ph: "nom et prénom du secrétaire" },
         { id: "ordre", nom: "Ordre du jour, un point par ligne", t: "textarea", pleine: true, ph: "Approbation du procès-verbal précédent\nInformation sur les résultats du trimestre\nQuestions diverses" }], produire: pvCse },
     nao: { titre: "Accord NAO", champs: [{ id: "signature", nom: "Date de signature", t: "date", defaut: iso(AUJOURDHUI) }, { id: "syndicats", nom: "Organisations signataires", t: "text", ph: "CFDT, représentée par Monsieur Paul GIRARD" },
         { id: "mesures", nom: "Les mesures salariales convenues", t: "textarea", pleine: true, ph: "Augmentation générale de 2,5 % des salaires de base à compter du 1er janvier 2027." }], produire: accordNao },
@@ -5069,11 +5142,51 @@
     return pris.length;
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     LA SAISIE NE SE PERD PAS AU RECHARGEMENT.
+
+     Un formulaire de douze champs était vidé au moindre rechargement de la
+     page, et sur un téléphone la page se recharge toute seule quand on passe
+     dans une autre application. Relevé le 27 septembre 2026. Ce qui est tapé
+     est gardé sur cet appareil, pour le document en cours, et se retrouve à
+     l'ouverture suivante. Il ne quitte jamais l'appareil, et un bouton le
+     jette d'un coup.
+     ══════════════════════════════════════════════════════════════════════ */
+  var CLE_SAISIE = "gerer-saisie";
+  function garderSaisie() {
+    if (!ACTIF) return;
+    var quelque = Object.keys(V).some(function (k) { return String(V[k] || "").trim(); });
+    if (!quelque) { oublierSaisie(); return; }
+    try {
+      localStorage.setItem(CLE_SAISIE, JSON.stringify({ doc: ACTIF, V: V,
+        le: new Date().toISOString() }));
+    } catch (e) {}
+  }
+  function lireSaisie() {
+    try { return JSON.parse(localStorage.getItem(CLE_SAISIE) || "null"); } catch (e) { return null; }
+  }
+  function oublierSaisie() {
+    try { localStorage.removeItem(CLE_SAISIE); } catch (e) {}
+  }
+  /* Une saisie de plus de sept jours n'est plus la saisie en cours. */
+  function saisiePour(cle) {
+    var b = lireSaisie();
+    if (!b || b.doc !== cle || !b.V) return null;
+    var t = Date.parse(b.le || "");
+    if (isFinite(t) && (Date.now() - t) > 7 * 864e5) return null;
+    return b.V;
+  }
+
   function ouvrir(cle) {
     var doc = DOCS[cle]; if (!doc) return;
     function montrer() {
       ACTIF = cle; V = {}; corrections = {}; VENU_DU_REGISTRE = {};
       doc.champs.forEach(function (c) { V[c.id] = c.defaut == null ? "" : c.defaut; });
+      var reprise = saisiePour(cle);
+      if (reprise) doc.champs.forEach(function (c) {
+        if (Object.prototype.hasOwnProperty.call(reprise, c.id) &&
+            String(reprise[c.id] || "").trim()) V[c.id] = reprise[c.id];
+      });
       $("d-titre").textContent = doc.titre;
       $("d-champs").innerHTML = doc.champs.map(champHtml).join("");
       $("d-champs").hidden = !doc.champs.length;
@@ -5098,6 +5211,14 @@
           libelle: "un salarié du registre",
         });
       });
+      var zr = $("d-reprise");
+      if (zr) {
+        zr.hidden = !reprise;
+        zr.innerHTML = reprise
+          ? "Votre saisie précédente a été reprise. " +
+            '<button type="button" class="s" id="d-vider">Vider les champs</button>'
+          : "";
+      }
       rendreDoc();
       $("e-liste").hidden = true;
       $("e-doc").hidden = false;
@@ -5129,12 +5250,20 @@
     if (b) ouvrir(b.getAttribute("data-doc"));
   });
   $("btn-retour").addEventListener("click", revenir);
+  $("d-reprise").addEventListener("click", function (ev) {
+    if (!ev.target || ev.target.id !== "d-vider") return;
+    oublierSaisie();
+    var cle = ACTIF;
+    ACTIF = null;
+    ouvrir(cle);
+  });
   function surChamp(ev) {
     var el = ev.target; if (!el || !el.getAttribute) return;
     var id = el.getAttribute("data-ch"); if (!id) return;
     V[id] = el.value;
     if (id === "nom" && DOCS[ACTIF]) reprendreDuRegistre(DOCS[ACTIF]);
     if (DOCS[ACTIF]) majChampsVisibles(DOCS[ACTIF]);
+    garderSaisie();
     rendreDoc();
   }
   $("d-champs").addEventListener("input", surChamp);

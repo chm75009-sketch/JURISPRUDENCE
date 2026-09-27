@@ -211,6 +211,13 @@
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
 
+  /* « de Argenteuil », « de ADP Services » : l'élision manquait partout où la
+     dénomination suit « de ». Relevé le 27 septembre 2026. */
+  function deNom(ctx) {
+    var s = nom(ctx);
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
+  }
+
   function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
 
   function signataire(ctx) {
@@ -506,7 +513,7 @@
       L.push("");
       L.push("RÉSOLUTION N° 1 - COMMISSION DE LA FORMATION");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ", constatant qu'aucun accord");
+      L.push("Le comité social et économique " + deNom(ctx) + ", constatant qu'aucun accord");
       L.push("prévu à l'article L. 2315-45 du code du travail n'organise ses commissions et");
       L.push("que l'entreprise emploie au moins trois cents salariés, CONSTITUE une");
       L.push("commission de la formation, en application de l'article L. 2315-49.");
@@ -622,7 +629,7 @@
       titre(L, "4 - Le procès-verbal de la délibération");
       L.push("PROCÈS-VERBAL - extrait");
       L.push("");
-      L.push("Comité social et économique de " + nom(ctx));
+      L.push("Comité social et économique " + deNom(ctx));
       L.push("Réunion du [DATE] · lieu : [ ]");
       L.push("Président : " + cro(((ctx.profil) || {}).responsable, "l'employeur ou son représentant"));
       L.push("Secrétaire : [nom du secrétaire du comité]");
@@ -876,7 +883,7 @@
       L.push("");
       L.push("RÉSOLUTION - CRÉATION DE LA COMMISSION ÉCONOMIQUE");
       L.push("");
-      L.push("Le comité social et économique [central] de " + nom(ctx) + ", constatant");
+      L.push("Le comité social et économique [central] " + deNom(ctx) + ", constatant");
       L.push("qu'aucun accord prévu à l'article L. 2315-45 du code du travail n'organise ses");
       L.push("commissions et que l'entreprise emploie au moins mille salariés :");
       L.push("");
@@ -915,7 +922,7 @@
       titre(L, "3 - Le procès-verbal de la délibération");
       L.push("PROCÈS-VERBAL - extrait");
       L.push("");
-      L.push("Comité social et économique [central] de " + nom(ctx));
+      L.push("Comité social et économique [central] " + deNom(ctx));
       L.push("Réunion du [DATE]");
       L.push("Président : " + cro(((ctx.profil) || {}).responsable, "l'employeur ou son représentant"));
       L.push("Secrétaire : [nom]");
@@ -1022,7 +1029,7 @@
         "par lequel la commission le demande, et la réponse doit être écrite.",
       ]);
       L.push("Commission économique du comité social et économique [central]");
-      L.push("de " + nom(ctx));
+      L.push(deNom(ctx));
       L.push("");
       L.push("À l'attention de " + cro(((ctx.profil) || {}).responsable, "l'employeur"));
       L.push("Président de la commission économique");
@@ -1204,7 +1211,7 @@
       L.push("");
       L.push("RÉSOLUTION - CRÉATION DE LA COMMISSION DES MARCHÉS");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("Le comité social et économique " + deNom(ctx) + ",");
       L.push("");
       L.push("VU l'article L. 2315-44-1 du code du travail ;");
       L.push("VU l'article D. 2315-29 du même code ;");
@@ -1582,7 +1589,7 @@
       L.push("Vu l'article L. 2315-61 du code du travail ;");
       L.push("Vu le tableau de calcul annexé ;");
       L.push("");
-      L.push("Il est ordonné le versement, au comité social et économique de " + nom(ctx) + ",");
+      L.push("Il est ordonné le versement, au comité social et économique " + deNom(ctx) + ",");
       L.push("d'une somme de " + (solde != null && solde > 0 ? eur(solde) : "[COMPLÉMENT]") +
         " au titre du complément de subvention de");
       L.push("fonctionnement de l'exercice [ ].");
@@ -1602,7 +1609,7 @@
       L.push("");
       L.push("PROCÈS-VERBAL DE VERSEMENT - extrait à porter au procès-verbal du comité");
       L.push("");
-      L.push("Comité social et économique de " + nom(ctx));
+      L.push("Comité social et économique " + deNom(ctx));
       L.push("Réunion du [DATE]");
       L.push("");
       L.push("Point [n°] - Subvention de fonctionnement de l'exercice [ ].");
@@ -1674,7 +1681,7 @@
       L.push("PROTOCOLE DE RÉGULARISATION");
       L.push("");
       L.push("Entre " + nom(ctx) + ", représentée par " + signataire(ctx) + ",");
-      L.push("et le comité social et économique de " + nom(ctx) + ", représenté par");
+      L.push("et le comité social et économique " + deNom(ctx) + ", représenté par");
       L.push("[secrétaire et trésorier, autorisés par la délibération du [DATE]],");
       L.push("");
       L.push("Article 1 - Reconnaissance de la dette");
@@ -1970,7 +1977,7 @@
       L.push("Vu l'absence d'accord d'entreprise fixant la contribution ;");
       L.push("Vu le tableau de calcul des rapports annexé ;");
       L.push("");
-      L.push("Il est ordonné le versement, au comité social et économique de " + nom(ctx) + ",");
+      L.push("Il est ordonné le versement, au comité social et économique " + deNom(ctx) + ",");
       L.push("d'une somme de " + (comp != null && comp > 0 ? eur(comp) : "[COMPLÉMENT]") +
         ", portant la contribution de l'exercice");
       L.push((duN == null ? "à [CONTRIBUTION MINIMALE]" : "à " + eur(duN)) +
@@ -1991,7 +1998,7 @@
       L.push("");
       L.push("PROCÈS-VERBAL - extrait");
       L.push("");
-      L.push("Comité social et économique de " + nom(ctx) + " · réunion du [DATE]");
+      L.push("Comité social et économique " + deNom(ctx) + " · réunion du [DATE]");
       L.push("");
       L.push("Point [n°] - Contribution aux activités sociales et culturelles de");
       L.push("l'exercice [ ].");
@@ -2256,7 +2263,7 @@
       L.push("DÉLIBÉRATION - SUPPRESSION DE LA CONDITION D'ANCIENNETÉ D'ACCÈS AUX ACTIVITÉS");
       L.push("SOCIALES ET CULTURELLES");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("Le comité social et économique " + deNom(ctx) + ",");
       L.push("");
       L.push("VU l'article L. 2312-78 du code du travail, aux termes duquel il assure,");
       L.push("contrôle ou participe à la gestion de toutes les activités sociales et");
@@ -2662,7 +2669,7 @@
       L.push("");
       L.push("Madame, Monsieur,");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + " vous a désigné, par une");
+      L.push("Le comité social et économique " + deNom(ctx) + " vous a désigné, par une");
       L.push("délibération du [DATE], au titre de [cas de recours et article visé].");
       L.push("");
       L.push("1. FINANCEMENT. En application de l'article L. 2315-80 du code du travail, les");
@@ -2922,7 +2929,7 @@
       L.push("");
       L.push("  1. LES PARTIES - l'entreprise demanderesse : " + nom(ctx) + ", " +
         cro(((ctx.profil) || {}).adresse, "adresse du siège") + " ;");
-      L.push("     le défendeur : LE COMITÉ SOCIAL ET ÉCONOMIQUE de " + nom(ctx) + ", pris");
+      L.push("     le défendeur : LE COMITÉ SOCIAL ET ÉCONOMIQUE " + deNom(ctx) + ", pris");
       L.push("     en la personne de son secrétaire. [L'expert désigné est-il appelé à la");
       L.push("     cause ? À décider avec votre conseil : ce document ne tranche pas.]");
       L.push("");
@@ -3184,7 +3191,7 @@
       L.push("");
       L.push("DÉLIBÉRATION RECTIFICATIVE - FONDEMENT DU RECOURS À L'EXPERTISE");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("Le comité social et économique " + deNom(ctx) + ",");
       L.push("");
       L.push("VU sa délibération du [DATE] décidant le recours à une expertise sur le");
       L.push("fondement de [article visé à l'origine] ;");
@@ -3437,7 +3444,7 @@
       L.push("");
       L.push("DÉLIBÉRATION - RECOURS À UNE EXPERTISE");
       L.push("");
-      L.push("Le comité social et économique de " + nom(ctx) + ",");
+      L.push("Le comité social et économique " + deNom(ctx) + ",");
       L.push("");
       L.push("VU l'article L. 2315-78 du code du travail ;");
       L.push("VU [l'article qui porte le cas de recours : L. 2315-87, L. 2315-88,");
@@ -3528,7 +3535,7 @@
         "l'employeur en mesure de connaître la délibération, et donc de la contester dans",
         "les dix jours (L. 2315-86, 1° ; R. 2315-49). Sa date doit être certaine.",
       ]);
-      L.push("Comité social et économique de " + nom(ctx));
+      L.push("Comité social et économique " + deNom(ctx));
       L.push("");
       L.push("À l'attention de " + cro(((ctx.profil) || {}).responsable, "l'employeur"));
       L.push("");
@@ -3563,7 +3570,7 @@
         "demander les informations complémentaires, dix jours pour notifier le coût",
         "prévisionnel.",
       ]);
-      L.push("Comité social et économique de " + nom(ctx));
+      L.push("Comité social et économique " + deNom(ctx));
       L.push("");
       L.push("À l'attention de [cabinet / expert]");
       L.push("[adresse]");
@@ -3575,7 +3582,7 @@
       L.push("Madame, Monsieur,");
       L.push("");
       L.push("Par une délibération du [DATE], adoptée à la majorité des membres présents, le");
-      L.push("comité social et économique de " + nom(ctx) + " vous a désigné en qualité");
+      L.push("comité social et économique " + deNom(ctx) + " vous a désigné en qualité");
       L.push("d'expert sur le fondement de l'article [ ] du code du travail, pour une");
       L.push("mission portant sur [objet].");
       L.push("");
@@ -3953,7 +3960,7 @@
       L.push("Maître, [ou Madame, Monsieur,]");
       L.push("");
       L.push("Je vous adresse les accords collectifs applicables au comité social et");
-      L.push("économique de " + nom(ctx) + ", ainsi qu'une grille des points sur lesquels");
+      L.push("économique " + deNom(ctx) + ", ainsi qu'une grille des points sur lesquels");
       L.push("j'appelle votre attention.");
       L.push("");
       L.push("Je souhaiterais votre avis sur trois questions :");
