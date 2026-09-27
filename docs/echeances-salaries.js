@@ -115,6 +115,44 @@
     });
   }
 
+  /* Les dépassements relevés dans le décompte des heures, sur les quatre
+     derniers mois. Au-delà, ils n'ont plus à encombrer l'agenda : ils restent
+     dans le décompte, qui est la pièce. */
+  function depassementsDesHeures(id, nom, d0) {
+    var t = lire("heures-decompte", {}), out = [];
+    Object.keys(t).forEach(function (cle) {
+      var coupe = cle.split("|");
+      if (coupe[0] !== id || !/^\d{4}-\d{2}$/.test(coupe[1] || "")) return;
+      var m = t[cle], a = m && m.alertes;
+      if (!a) return;
+      var annee = parseInt(coupe[1].slice(0, 4), 10), mois = parseInt(coupe[1].slice(5, 7), 10);
+      var fin = jour(new Date(annee, mois, 0));          /* dernier jour du mois */
+      var depuis = joursEntre(fin, d0);
+      /* Le mois en cours compte aussi : sa fin est devant nous, mais le
+         dépassement, lui, est déjà là. */
+      if (depuis === null || depuis < -124 || depuis > 31) return;
+      var dits = [];
+      if (a.jours) dits.push(a.jours + " journée" + (a.jours > 1 ? "s" : "") + " au-delà de " +
+        a.jour + " heures");
+      if (a.nuit) dits.push(a.nuit + " journée" + (a.nuit > 1 ? "s" : "") + " au-delà de dix heures " +
+        "avec du travail entre minuit et cinq heures");
+      if (a.semaines) dits.push(a.semaines + " semaine" + (a.semaines > 1 ? "s" : "") + " au-delà de " +
+        a.sem + " heures");
+      if (a.pauses) dits.push(a.pauses + " journée" + (a.pauses > 1 ? "s" : "") + " sans la pause due");
+      out.push({ quoi: "Dépassements de durée relevés sur " + MOIS_NOM[mois - 1] + " " + annee,
+        qui: nom, date: fin, jours: depuis, etat: "rouge",
+        fond: "R. 3312-50 et R. 3312-51 du code des transports pour un roulant, L. 3121-18 et " +
+          "L. 3121-20 du code du travail sinon ; L. 3312-1 pour les dix heures de nuit et " +
+          "L. 3312-2 pour les pauses",
+        faire: dits.join(", ") + ". À reprendre dans le décompte du mois : le motif de chaque " +
+          "dépassement s'écrit, et le repos qui en découle se pose",
+        prov: "salaries" });
+    });
+    return out;
+  }
+  var MOIS_NOM = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",
+    "août", "septembre", "octobre", "novembre", "décembre"];
+
   function echeances(aujourdhui) {
     var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
     var conducteurs = lire(CLE_CONDUCTEURS, {});
@@ -165,6 +203,17 @@
         out.push({ quoi: quoi, qui: nom, date: date, jours: n, etat: etatDe(n),
           fond: fond, faire: quoiFaire || "", prov: "salaries" });
       }
+
+      /* CE QU'UN DÉPASSEMENT D'HORAIRE DOIT À L'AGENDA.
+
+         Relevé le 27 septembre 2026 : les dépassements de durée se lisaient
+         dans l'écran des heures, et nulle part ailleurs. Un dirigeant qui
+         n'ouvre pas le décompte d'un conducteur ne pouvait pas savoir qu'une
+         journée avait dépassé douze heures, qu'une semaine avait dépassé son
+         plafond, qu'une nuit avait dépassé dix heures ou qu'une pause
+         manquait. L'écran des heures garde le compte sur le mois ; l'agenda
+         le reprend, daté du dernier jour du mois, avec son motif. */
+      depassementsDesHeures(id, nom, d0).forEach(function (e) { out.push(e); });
 
       /* La déclaration préalable ne se rappelle que si l'embauche est devant
          nous ou d'hier : passé ce délai, elle est faite ou elle ne se

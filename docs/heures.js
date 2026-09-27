@@ -630,24 +630,71 @@
      l'emploi : sans elle, ce sont le seuil et les plafonds du code du travail.
      Lectures faites au relais Légifrance le 26 septembre 2026, deux fois
      chacune. */
+  /* LA MOYENNE SUR TROIS MOIS EST DANS LE MÊME TABLEAU QUE LA SEMAINE ISOLÉE.
+
+     R. 3312-50 (LEGIARTI000033450337, deux lectures concordantes au relais le
+     27 septembre 2026) porte deux colonnes : la durée maximale sur une semaine
+     isolée, et la durée maximale hebdomadaire « sur trois mois ». Seule la
+     première était appliquée, et la moyenne sur trois mois d'un roulant était
+     remplacée par celle des sédentaires, les quarante-quatre heures sur douze
+     semaines de L. 3121-22. Le tableau, pour des transports exécutés avec des
+     véhicules de plus de 3,5 tonnes : grand routier, 53 heures ou 689 heures
+     par trimestre ; autres roulants marchandises, 50 heures ou 650 heures ;
+     messagerie et convoyeurs de fonds, 44 heures ou 572 heures. La note (*) du
+     tableau ajoute une limite de 48 heures, ou 624 heures par trimestre, au
+     sens du a de l'article 3 de la directive 2002/15/CE : elle n'est pas
+     calculée ici, elle est écrite. */
   var PLAFONDS_TRANSPORT = {
-    grand: { sem: 56, jour: 12, seuil: 43, trimestre: 559,
+    grand: { sem: 56, jour: 12, seuil: 43, trimestre: 559, triMax: 689, triMoy: 53,
       dit: "personnel roulant grand routier ou longue distance" },
-    courte: { sem: 52, jour: 12, seuil: 39, trimestre: 507,
+    courte: { sem: 52, jour: 12, seuil: 39, trimestre: 507, triMax: 650, triMoy: 50,
       dit: "autre personnel roulant marchandises" },
-    messagerie: { sem: 48, jour: 12, seuil: 35, trimestre: 455,
+    messagerie: { sem: 48, jour: 12, seuil: 35, trimestre: 455, triMax: 572, triMoy: 44,
       dit: "conducteur de messagerie ou convoyeur de fonds" },
   };
   function plafonds() {
     var su = (qui && window.EcheancesSalaries) ? (window.EcheancesSalaries.suite(qui.id) || {}) : {};
     var p = PLAFONDS_TRANSPORT[net(su.categorieTransport)];
     if (p) return { jour: p.jour, sem: p.sem, seuil: p.seuil, trimestre: p.trimestre,
+      triMax: p.triMax, triMoy: p.triMoy,
       roulant: true, dit: p.dit,
       source: "R. 3312-51 et R. 3312-50 du code des transports",
       sourceSeuil: "D. 3312-45 et R. 3312-47 du code des transports" };
-    return { jour: 10, sem: 48, seuil: LEGALE, trimestre: null, roulant: false, dit: "",
+    return { jour: 10, sem: 48, seuil: LEGALE, trimestre: null, triMax: null, triMoy: null,
+      roulant: false, dit: "",
       source: "L. 3121-18 et L. 3121-20 du code du travail",
       sourceSeuil: "L. 3121-27 et L. 3121-28 du code du travail" };
+  }
+
+  /* DEUX CONTRÔLES QUE LE TRANSPORT IMPOSE, ET QUI N'ÉTAIENT PAS FAITS.
+
+     L. 3312-1 du code des transports (LEGIARTI000033021297, deux lectures
+     concordantes au relais le 27 septembre 2026) : quand un roulant « accomplit,
+     sur une période de vingt-quatre heures, une partie de son travail dans
+     l'intervalle compris entre 24 heures et 5 heures, sa durée quotidienne du
+     travail ne peut excéder dix heures ». Ce n'est pas la limite de douze
+     heures de R. 3312-51 : une journée de onze heures qui mord sur cette plage
+     passait sans un mot.
+
+     L. 3312-2 (LEGIARTI000026054561) : le roulant « ne travaille en aucun cas
+     pendant plus de six heures consécutives sans pause » ; la pause est d'au
+     moins trente minutes quand le total des heures de travail est compris
+     entre six et neuf heures, d'au moins quarante-cinq au-delà de neuf, et
+     peut être fractionnée en périodes d'un quart d'heure au moins. Aucune
+     pause n'était contrôlée. */
+  function touchePlageNuit(l) {
+    if (!l || l.n !== "travail") return false;
+    var a = enMinutes(l.d), b = enMinutes(l.f);
+    if (a === null || b === null) return false;
+    if (b <= a) b += 1440;
+    /* Deux fenêtres : de minuit à cinq heures du jour même, et la même plage
+       du lendemain quand la journée passe minuit. */
+    return a < 300 || b > 1440;
+  }
+  function pauseDue(h) {
+    if (h > 9.0001) return 45;
+    if (h >= 5.9999) return 30;
+    return 0;
   }
 
   /* Les jours qui manquent à une semaine, pris dans le mois voisin. La semaine
@@ -684,10 +731,15 @@
      du premier et du dernier jour débordent sur le mois voisin, et se
      complètent alors avec lui. */
   function analyse() {
-    var pl = plafonds(), out = { pl: pl, jours: [], semaines: [], hs: 0, a25: 0, a50: 0, partielles: 0 };
+    var pl = plafonds(), out = { pl: pl, jours: [], semaines: [], hs: 0, a25: 0, a50: 0,
+      partielles: 0, nuit: [], pauses: [] };
     lignes.forEach(function (l) {
       var v = duree(l);
       if (v > pl.jour + 0.001) out.jours.push({ j: l.j, h: v });
+      if (!pl.roulant || !v) return;
+      if (touchePlageNuit(l) && v > 10.001) out.nuit.push({ j: l.j, h: v });
+      var du = pauseDue(v), p = parseInt(l.p, 10) || 0;
+      if (du && p < du) out.pauses.push({ j: l.j, h: v, p: p, du: du });
     });
     /* UNE SEMAINE À CHEVAL SUR DEUX MOIS EST UNE SEMAINE.
 
@@ -747,11 +799,22 @@
       if (t0[cleMois()]) { delete t0[cleMois()]; garderCle(CLE_DEC, t0); }
       return out;
     }
-    var avant = JSON.stringify([m.calcul, m.hs, m.seuil]);
+    /* CE QUI EST FRANCHI SORT DE CET ÉCRAN.
+
+       Relevé le 27 septembre 2026 : les dépassements se lisaient ici et nulle
+       part ailleurs. Le mois garde donc leur compte, et l'agenda va le
+       chercher : un dirigeant qui n'ouvre pas le décompte d'un conducteur ne
+       peut pas savoir qu'une journée a dépassé. */
+    var avant = JSON.stringify([m.calcul, m.hs, m.seuil, m.alertes]);
     m.calcul = Math.round(totalMois() * 100) / 100;
     m.hs = Math.round(out.hs * 100) / 100;
     m.seuil = pl.seuil;
-    if (JSON.stringify([m.calcul, m.hs, m.seuil]) !== avant) garderMois(m);
+    var nbSem = out.semaines.filter(function (x) { return x.depasse; }).length;
+    m.alertes = (out.jours.length || nbSem || out.nuit.length || out.pauses.length)
+      ? { jours: out.jours.length, semaines: nbSem, nuit: out.nuit.length,
+          pauses: out.pauses.length, jour: pl.jour, sem: pl.sem }
+      : null;
+    if (JSON.stringify([m.calcul, m.hs, m.seuil, m.alertes]) !== avant) garderMois(m);
     return out;
   }
 
@@ -790,6 +853,18 @@
     }
     return { hs: Math.round(total * 100) / 100, tenus: tenus, manquants: manquants };
   }
+  /* Le temps de service du trimestre, et non les seules heures
+     supplémentaires : c'est lui que R. 3312-50 plafonne. */
+  function cumulHeures(depuisMois, jusquaMois) {
+    var t = lireCle(CLE_DEC, {}), total = 0, tenus = [], manquants = [];
+    for (var k = depuisMois; k <= jusquaMois; k++) {
+      var cle = qui.id + "|" + an + "-" + ("0" + (k + 1)).slice(-2);
+      var m = t[cle];
+      if (tenu(m) && typeof m.calcul === "number") { total += m.calcul; tenus.push(k); }
+      else manquants.push(k);
+    }
+    return { h: Math.round(total * 100) / 100, tenus: tenus, manquants: manquants };
+  }
   function reposTrimestre(hs) {
     if (hs <= 40) return 0;
     if (hs <= 79) return 1;
@@ -825,6 +900,31 @@
         : a.jours.length + " journées dépassent " + a.pl.jour + " heures, dont " + dits.join(", ") +
           (a.jours.length > 4 ? ", et " + (a.jours.length - 4) + " autres marquées dans la grille" : "")) +
         ". Plafond de " + ech(a.pl.source.split(" et ")[0]) + ".</p>");
+    }
+    /* La limite de dix heures des journées qui mordent sur la nuit, et les
+       pauses : deux contrôles propres au transport, qui n'existaient pas. */
+    if (a.nuit.length) {
+      L.push('<p class="al rouge">' + (a.nuit.length === 1
+        ? "Une journée dépasse dix heures alors qu'une partie du travail tombe entre minuit et " +
+          "cinq heures : " + leJourDit(a.nuit[0].j) + " (" + nbh(a.nuit[0].h) + ")"
+        : a.nuit.length + " journées dépassent dix heures alors qu'une partie du travail tombe " +
+          "entre minuit et cinq heures : " + a.nuit.slice(0, 4).map(function (x) {
+            return leJourDit(x.j) + " (" + nbh(x.h) + ")"; }).join(", ") +
+          (a.nuit.length > 4 ? ", et " + (a.nuit.length - 4) + " autres" : "")) +
+        ". La durée quotidienne ne peut alors excéder dix heures (L. 3312-1 du code des " +
+        "transports), et il n'y est dérogé qu'en cas de circonstances exceptionnelles.</p>");
+    }
+    if (a.pauses.length) {
+      L.push('<p class="al rouge">' + (a.pauses.length === 1
+        ? "Une journée n'a pas la pause due : " + leJourDit(a.pauses[0].j) + " (" +
+          nbh(a.pauses[0].h) + " de travail, " + a.pauses[0].p + " minutes de pause au lieu de " +
+          a.pauses[0].du + ")"
+        : a.pauses.length + " journées n'ont pas la pause due : " + a.pauses.slice(0, 4).map(function (x) {
+            return leJourDit(x.j) + " (" + x.p + " au lieu de " + x.du + " minutes)"; }).join(", ") +
+          (a.pauses.length > 4 ? ", et " + (a.pauses.length - 4) + " autres" : "")) +
+        ". Trente minutes au moins de six à neuf heures de travail, quarante-cinq au-delà, " +
+        "fractionnables par quarts d'heure, et jamais plus de six heures consécutives sans pause " +
+        "(L. 3312-2 du code des transports).</p>");
     }
     var dep = a.semaines.filter(function (x) { return x.depasse; });
     if (dep.length) {
@@ -872,6 +972,25 @@
         (jRepos ? ", soit " + String(jRepos).replace(".", ",") + " jour" + (jRepos > 1 ? "s" : "") +
           " de repos compensateur trimestriel (R. 3312-48)." : ", pas encore de repos compensateur " +
           "trimestriel : il s'ouvre à la quarante et unième heure (R. 3312-48).") + "</p>");
+      /* LA MOYENNE SUR TROIS MOIS, CELLE DU TRANSPORT.
+         Elle ne se compare que si les trois mois sont tenus : sur deux mois,
+         un total au-dessous du plafond ne prouve rien. */
+      var ch = cumulHeures(tri * 3, tri * 3 + 2);
+      if (a.pl.triMax) {
+        if (ch.manquants.length) {
+          L.push('<p class="doux">La moyenne sur trois mois de R. 3312-50, ' + a.pl.triMoy +
+            " heures par semaine ou " + a.pl.triMax + " heures par trimestre pour cette catégorie, " +
+            "ne se vérifie pas : " + ch.manquants.length + " mois du trimestre " +
+            (ch.manquants.length > 1 ? "ne sont pas tenus" : "n'est pas tenu") + " ici.</p>");
+        } else {
+          var trop = ch.h - a.pl.triMax;
+          L.push('<p class="al' + (trop > 0.005 ? " rouge" : "") + '">Temps de service du trimestre : ' +
+            nbh(ch.h) + " sur un maximum de " + a.pl.triMax + " heures, soit " + a.pl.triMoy +
+            " heures par semaine en moyenne (R. 3312-50)" +
+            (trop > 0.005 ? ". Le plafond est dépassé de " + nbh(trop) + " : la moyenne sur trois " +
+              "mois ne se rattrape pas en fin de trimestre, elle se corrige pendant." : ".") + "</p>");
+        }
+      }
     } else {
       var ct = contingent();
       L.push('<p class="al">Année ' + an + " : " + nbh(ct.hs) + " d'heures supplémentaires sur " +
@@ -912,8 +1031,16 @@
       "<p>Plafonds appliqués sur ce relevé : " + a.pl.jour + " heures par jour et " + a.pl.sem +
       " heures par semaine, " + ech(a.pl.source) +
       (a.pl.dit ? ", catégorie « " + ech(a.pl.dit) + " »" : "") + ".</p>" +
-      "<p>La moyenne de quarante-quatre heures sur douze semaines consécutives (L. 3121-22) ne se " +
-      "calcule pas sur un mois : elle se vérifie sur trois mois de relevés.</p>" +
+      (a.pl.roulant
+        ? "<p>La moyenne sur trois mois est celle de R. 3312-50 : " + a.pl.triMoy + " heures par " +
+          "semaine, ou " + a.pl.triMax + " heures par trimestre, pour des transports exécutés " +
+          "avec des véhicules de plus de 3,5 tonnes. Le tableau ajoute, en note, une limite de " +
+          "quarante-huit heures ou six cent vingt-quatre heures par trimestre au sens du a de " +
+          "l'article 3 de la directive 2002/15/CE : elle n'est pas calculée ici. Ce n'est pas la " +
+          "moyenne de quarante-quatre heures sur douze semaines de L. 3121-22, qui vaut pour les " +
+          "sédentaires.</p>"
+        : "<p>La moyenne de quarante-quatre heures sur douze semaines consécutives (L. 3121-22) ne " +
+          "se calcule pas sur un mois : elle se vérifie sur trois mois de relevés.</p>") +
       "</div></details>");
     z.innerHTML = L.join("");
     /* La case du motif n'apparaît que s'il y a quelque chose à expliquer. */
