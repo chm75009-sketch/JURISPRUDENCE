@@ -1747,6 +1747,25 @@
       c: dm.prescrit ? "tard" : "" };
   }
   /* Ce qui interdit de produire la lettre, dit en une phrase, ou rien. */
+  /* Les crochets qui restent dans le texte produit, sans doublon et dans
+     l'ordre où ils apparaissent. Les crochets d'une instruction longue, plus de
+     soixante caractères, ne sont pas comptés : ce sont des consignes, pas des
+     mentions à remplir. */
+  function crochetsRestants(blocs) {
+    var vus = {}, out = [];
+    (blocs || []).forEach(function (b) {
+      var t = b && typeof b.t === "string" ? b.t : "";
+      if (b && b.k === "note") return;
+      (t.match(/\[[^\[\]\n]{1,60}\]/g) || []).forEach(function (x) {
+        var c = x.trim();
+        if (vus[c]) return;
+        vus[c] = 1;
+        out.push(c);
+      });
+    });
+    return out;
+  }
+
   function blocageDe(dm, m) {
     if (dm && dm.prescrit) return "les faits sont prescrits : aucune sanction ne peut plus être " +
       "prononcée sur ces seuls faits (L. 1332-4)";
@@ -3848,8 +3867,26 @@
     $("btn-imprimer").disabled = !!r.refus || !!r.bloque;
     var db = $("d-bloque");
     if (db) {
-      db.hidden = !r.bloque;
-      db.textContent = r.bloque ? "Le téléchargement est fermé tant que " + r.bloque + "." : "";
+      /* CE QUI RESTE ENTRE CROCHETS SE COMPTE, ET SE DIT.
+
+         Relevé le 27 septembre 2026 : trois documents sur vingt-cinq fermaient
+         le téléchargement quand une mention manquait ; les autres sortaient
+         avec leurs crochets, « [heure] », « [lieu] », « [date] », sans un mot.
+         Fermer le bouton partout serait faux, beaucoup de crochets sont là
+         pour être remplis à la main dans Word. Mais on ne les découvre plus en
+         ouvrant le fichier : ils sont comptés et nommés sous les boutons. */
+      if (r.bloque) {
+        db.hidden = false;
+        db.textContent = "Le téléchargement est fermé tant que " + r.bloque + ".";
+      } else {
+        var cro = crochetsRestants(r.refus ? [] : (r.blocs || []));
+        db.hidden = !cro.length;
+        db.textContent = cro.length
+          ? (cro.length === 1 ? "Une mention reste à compléter dans le fichier : "
+             : cro.length + " mentions restent à compléter dans le fichier : ") +
+            cro.slice(0, 8).join(", ") + (cro.length > 8 ? ", et " + (cro.length - 8) + " autres." : ".")
+          : "";
+      }
     }
     var embauche = !!DOCS_EMBAUCHE[ACTIF] && !r.refus && !!window.EcheancesSalaries;
     $("btn-inscrire").hidden = !embauche;
