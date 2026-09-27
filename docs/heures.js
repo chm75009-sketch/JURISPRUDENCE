@@ -728,16 +728,44 @@
         out.a50 += Math.max(0, sup - 8);
       }
     });
-    /* Le mois garde ce qu'il a compté : c'est ce qui permet au trimestre et à
-       l'année de s'additionner sans recalculer des mois qu'on n'a pas
-       ouverts. Seuls les mois tenus ici comptent, et l'écran le dit. */
+    /* UN MOIS OUVERT N'EST PAS UN MOIS TENU.
+
+       Relevé le 27 septembre 2026 : ouvrir juillet sans rien y saisir
+       l'enregistrait à cent soixante et une heures, l'horaire de référence
+       recopié sur tout le mois, et l'état du mois sortait un salarié jamais
+       saisi à cent cinquante-quatre heures. Ces heures-là n'ont été comptées
+       par personne : les écrire est pire que de ne rien écrire, parce qu'elles
+       se retrouvent dans un état Excel remis à un salarié ou à l'inspection.
+
+       Le mois ne s'enregistre donc que s'il porte quelque chose : un jour
+       saisi, une clôture, une rectification, une réclamation, une ouverture de
+       contingent, des frais ou un motif. Sinon, l'enregistrement qui aurait été
+       laissé par un simple passage est retiré. */
     var m = moisDe();
+    if (!tenu(m)) {
+      var t0 = lireCle(CLE_DEC, {});
+      if (t0[cleMois()]) { delete t0[cleMois()]; garderCle(CLE_DEC, t0); }
+      return out;
+    }
     var avant = JSON.stringify([m.calcul, m.hs, m.seuil]);
     m.calcul = Math.round(totalMois() * 100) / 100;
     m.hs = Math.round(out.hs * 100) / 100;
     m.seuil = pl.seuil;
     if (JSON.stringify([m.calcul, m.hs, m.seuil]) !== avant) garderMois(m);
     return out;
+  }
+
+  /* Ce qui fait qu'un mois a été tenu : une trace d'un geste, pas la simple
+     visite de l'écran. Les champs « calcul », « hs » et « seuil » ne comptent
+     pas : ils sont le résultat, non la saisie. */
+  function tenu(m) {
+    if (!m) return false;
+    if (m.jours && Object.keys(m.jours).length) return true;
+    if (m.clos && m.clos.le) return true;
+    if ((m.rectifs || []).length || (m.recl || []).length || (m.ouvertures || []).length) return true;
+    if (m.frais && Object.keys(m.frais).some(function (k) { return net(m.frais[k]); })) return true;
+    if (net(m.motif) || net(m.motifDep) || net(m.retenu)) return true;
+    return false;
   }
 
   /* CE QUE LE TRIMESTRE ET L'ANNÉE DOIVENT AU MOIS.
@@ -757,7 +785,7 @@
     for (var k = depuisMois; k <= jusquaMois; k++) {
       var cle = qui.id + "|" + an + "-" + ("0" + (k + 1)).slice(-2);
       var m = t[cle];
-      if (m && typeof m.hs === "number") { total += m.hs; tenus.push(k); }
+      if (tenu(m) && typeof m.hs === "number") { total += m.hs; tenus.push(k); }
       else manquants.push(k);
     }
     return { hs: Math.round(total * 100) / 100, tenus: tenus, manquants: manquants };
@@ -1595,8 +1623,10 @@
     var trimestre = Math.floor(mo / 3);
     return salaries().map(function (s) {
       var m = t[s.id + "|" + cleM];
-      var o = { id: s.id, nom: s.nom, emp: s.emp || "", tenu: !!m };
-      if (!m) return o;
+      /* « Tenu » veut dire saisi, pas visité : un enregistrement qui ne porte
+         qu'un total calculé n'est pas un mois tenu. */
+      var o = { id: s.id, nom: s.nom, emp: s.emp || "", tenu: tenu(m) };
+      if (!o.tenu) return o;
       o.calcul = typeof m.calcul === "number" ? m.calcul : null;
       o.retenu = nombre(m.retenu);
       o.hs = typeof m.hs === "number" ? m.hs : null;
@@ -1609,7 +1639,7 @@
       var hsT = 0, manquants = [];
       for (var k = trimestre * 3; k < trimestre * 3 + 3; k++) {
         var mm = t[s.id + "|" + an + "-" + ("0" + (k + 1)).slice(-2)];
-        if (mm && typeof mm.hs === "number") hsT += mm.hs;
+        if (tenu(mm) && typeof mm.hs === "number") hsT += mm.hs;
         else manquants.push(MOIS[k]);
       }
       o.hsTrimestre = Math.round(hsT * 100) / 100;
