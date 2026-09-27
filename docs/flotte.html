@@ -215,8 +215,20 @@
     <div class="barre">
       <button type="button" id="v-ajouter">+ Ajouter un véhicule</button>
       <button type="button" class="second" id="v-annuler" hidden>Annuler la dernière importation</button>
-      <button type="button" class="second danger" id="v-vider" hidden>Vider la flotte</button>
     </div>
+    <!-- « Vider la flotte » était posé à côté de « Ajouter un véhicule », sur
+         la même barre, à un pouce de distance sur un téléphone. Il passe
+         derrière un repli. Relevé le 27 septembre 2026. -->
+    <details class="repli" id="repli-vider" hidden>
+      <summary>Effacer</summary>
+      <div class="corps">
+        <p class="doux">Cette action retire tous les véhicules enregistrés sur cet appareil. Elle ne
+          se rattrape pas.</p>
+        <div class="barre">
+          <button type="button" class="second danger" id="v-vider">Vider la flotte</button>
+        </div>
+      </div>
+    </details>
 
     <div id="acompleter"></div>
 

@@ -133,7 +133,15 @@
        aucun calcul d'ancienneté. Relevé le 26 septembre 2026. */
     '<xf numFmtId="164" fontId="0" fillId="0" borderId="1" xfId="0" applyNumberFormat="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
     '<xf numFmtId="164" fontId="0" fillId="3" borderId="1" xfId="0" applyNumberFormat="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="right" vertical="top"/></xf>' +
-    '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+    '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+    /* UNE DATE PASSÉE SE VOIT. Style de mise en forme conditionnelle : fond
+       rose pâle et texte rouge sombre, appliqué aux colonnes de dates dont la
+       valeur est antérieure à aujourd'hui. Le classeur de la flotte sortait
+       quatre-vingt-sept lignes de dates sans qu'aucune échéance dépassée ne
+       se distingue. Relevé le 27 septembre 2026. */
+    '<dxfs count="1"><dxf><font><color rgb="FF9B1C1C"/></font>' +
+    '<fill><patternFill><bgColor rgb="FFFDE4E4"/></patternFill></fill></dxf></dxfs>' +
+    "</styleSheet>";
 
   /* La ligne d'en-tête d'une feuille : la première qui porte au moins quatre
      cellules pleines. La même règle sert à figer le volet, à styler la ligne
@@ -173,7 +181,21 @@
       var titre = i < tete || tete < 0 ? (pleines(ligne) === 1 && i === 0 ? 1 : 4) : 0;
       var numero = /^\d+$/.test(String(ligne[0] == null ? "" : ligne[0]));
       var note = tete >= 0 && i > tete && pleines(ligne) === 1 && !numero;
-      var enTete = i === tete || (tete >= 0 && i > tete && pleines(ligne) >= 4 && !numero);
+      /* UNE LIGNE DE DONNÉES N'EST PAS UN EN-TÊTE.
+
+         Relevé le 27 septembre 2026 sur le classeur de la flotte : toute ligne
+         de quatre cellules pleines dont la première n'était pas un nombre
+         était rendue en en-tête, fond gris et gras. Une immatriculation en
+         première colonne suffisait donc à faire passer la ligne entière pour
+         un titre, et les dates y perdaient leur format. Un second en-tête,
+         dans une feuille qui porte deux tableaux, se reconnaît autrement : il
+         suit une ligne vide, et il ne porte que du texte. */
+      var queDuTexte = ligne.every(function (cel) {
+        return cel === null || cel === undefined || cel === "" || typeof cel === "string";
+      });
+      var apresVide = i > 0 && !pleines(lignes[i - 1] || []);
+      var enTete = i === tete ||
+        (tete >= 0 && i > tete && pleines(ligne) >= 4 && !numero && queDuTexte && apresVide);
       var style = titre ? titre : (enTete ? 2 : (note ? 4 : 3));
       /* Une ligne de données sur deux, très légèrement teintée. */
       if (style === 3 && tete >= 0 && (i - tete) % 2 === 0) style = 5;
@@ -217,6 +239,31 @@
       x += "</row>";
     });
     x += "</sheetData>";
+    /* LE FILTRE, ET LES DATES DÉPASSÉES EN ROUGE.
+
+       Relevé le 27 septembre 2026 : le classeur n'avait pas de filtre, et rien
+       ne distinguait une échéance passée d'une échéance à venir. Le filtre se
+       pose sur la ligne d'en-tête et sur tout ce qui la suit ; la mise en
+       forme conditionnelle sur les seules colonnes qui portent des dates. */
+    if (tete >= 0 && lignes.length > tete + 1) {
+      var derniere = lignes.length;
+      x += '<autoFilter ref="A' + (tete + 1) + ":" + colonne(nbCol) + derniere + '"/>';
+      var colonnesDates = [];
+      for (var c = 0; c < nbCol; c++) {
+        var aDesDates = false;
+        for (var r = tete + 1; r < lignes.length; r++) {
+          var cel2 = lignes[r] && lignes[r][c];
+          if (cel2 instanceof Date && isFinite(cel2.getTime())) { aDesDates = true; break; }
+        }
+        if (aDesDates) colonnesDates.push(c);
+      }
+      colonnesDates.forEach(function (c, i) {
+        var ref = colonne(c + 1) + (tete + 2) + ":" + colonne(c + 1) + derniere;
+        x += '<conditionalFormatting sqref="' + ref + '">' +
+          '<cfRule type="cellIs" dxfId="0" priority="' + (i + 1) +
+          '" operator="lessThan"><formula>TODAY()</formula></cfRule></conditionalFormatting>';
+      });
+    }
     /* LA MISE EN PAGE POUR L'IMPRESSION.
 
        Le classeur n'en avait aucune : dix colonnes sur du papier en portrait,

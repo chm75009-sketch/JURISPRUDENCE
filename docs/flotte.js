@@ -45,6 +45,19 @@
   function iso(d) {
     return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
   }
+  /* Une date, plus un nombre de jours. */
+  function plusJours(isoDate, jours) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(net(isoDate));
+    if (!m) return "";
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    if (isNaN(d.getTime())) return "";
+    d.setDate(d.getDate() + jours);
+    return iso(d);
+  }
+  function nbJours(v, defaut) {
+    var n = parseInt(String(v == null ? "" : v).replace(/[^0-9]/g, ""), 10);
+    return isFinite(n) && n > 0 ? n : defaut;
+  }
   function plusMois(isoDate, mois) {
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(net(isoDate));
     var n = parseInt(mois, 10);
@@ -117,6 +130,8 @@
     { c: "limMois", lib: "Périodicité du limiteur, en mois", t: "num" },
     { c: "chrono", lib: "Dernier contrôle du chronotachygraphe", t: "date" },
     { c: "chronoMois", lib: "Périodicité du chronotachygraphe, en mois", t: "num" },
+    { c: "telecUnite", lib: "Dernier téléchargement de l'unité embarquée", t: "date" },
+    { c: "telecUniteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
     { c: "assur", lib: "Échéance de l'assurance", t: "date" },
     { c: "licence", lib: "Copie conforme de licence, numéro", t: "text" },
     { c: "licenceFin", lib: "Échéance de la copie conforme", t: "date" },
@@ -145,6 +160,17 @@
     { c: "fcoMois", lib: "Périodicité de la FCO, en mois", t: "num" },
     { c: "carteCond", lib: "Carte de conducteur, échéance", t: "date" },
     { c: "carteQualif", lib: "Carte de qualification, échéance", t: "date" },
+    /* LE TÉLÉCHARGEMENT DES DONNÉES, QUE RIEN NE SUIVAIT.
+
+       Relevé le 27 septembre 2026 : aucune échéance de téléchargement, ni pour
+       la carte de conducteur, ni pour l'unité embarquée. Ce sont pourtant les
+       données que l'inspection demande, et elles s'effacent. La périodicité
+       usuelle est de vingt-huit jours pour la carte et de quatre-vingt-dix
+       pour l'unité embarquée ; elle vient d'un arrêté que l'application n'a
+       pas lu, comme la périodicité du chronotachygraphe : c'est un champ que
+       l'entreprise corrige. */
+    { c: "telecCarte", lib: "Dernier téléchargement de la carte conducteur", t: "date" },
+    { c: "telecCarteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
     { c: "visitePermisFin", lib: "Visite médicale du permis, valable jusqu'au", t: "date" },
     { c: "suivi", lib: "Suivi médical du travail", t: "select", opts: SUIVIS, large: true },
     { c: "visiteTravail", lib: "Dernière visite avec le médecin du travail", t: "date" },
@@ -231,6 +257,9 @@
       "R. 323-22 à R. 323-25 du code de la route, selon le genre du véhicule, à compter du dernier contrôle");
     pose("Limiteur", v.lim ? plusMois(v.lim, v.limMois || 24) : "");
     pose("Chronotachygraphe", v.chrono ? plusMois(v.chrono, v.chronoMois || 24) : "");
+    pose("Téléchargement de l'unité embarquée",
+      v.telecUnite ? plusJours(v.telecUnite, nbJours(v.telecUniteJours, 90)) : "",
+      "périodicité usuelle de quatre-vingt-dix jours, fixée par arrêté, non relue par l'application : corrigez-la si votre protocole diffère");
     pose("Assurance", v.assur);
     pose("Copie conforme", v.licenceFin);
     pose("Révision", v.revision);
@@ -258,6 +287,9 @@
     pose("Fin de suspension", f.retraitFin);
     pose("FCO", f.fco ? plusMois(f.fco, f.fcoMois || 60) : "");
     pose("Carte conducteur", f.carteCond);
+    pose("Téléchargement de la carte conducteur",
+      f.telecCarte ? plusJours(f.telecCarte, nbJours(f.telecCarteJours, 28)) : "",
+      "périodicité usuelle de vingt-huit jours, fixée par arrêté, non relue par l'application : corrigez-la si votre protocole diffère");
     pose("Carte de qualification", f.carteQualif);
     pose("Visite du permis", f.visitePermisFin);
     /* Le code du travail, lui, est lu à la source : cinq ans au plus pour le
@@ -613,16 +645,25 @@
     if (d) d.addEventListener("toggle", function () { ouvert.manques = d.open; });
   }
 
+  /* UN COMPTEUR PAR ONGLET.
+
+     Relevé le 27 septembre 2026 : le compteur additionnait les échéances des
+     véhicules et celles des conducteurs, et affichait « 87 véhicules » sur
+     l'onglet des conducteurs. Chaque onglet compte maintenant ce qu'il
+     montre, et rien d'autre. */
+  var SUR_VEHICULES = true;
   function rendreCompte() {
+    var veh = SUR_VEHICULES;
     var n = { passe: 0, rouge: 0, ambre: 0 };
-    vehicules().forEach(function (v) {
-      var E = echeancesVehicule(v);
-      E.forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
-    });
-    salaries().forEach(function (s) {
-      var E = echeancesConducteur(fiche(s.id));
-      E.forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
-    });
+    if (veh) {
+      vehicules().forEach(function (v) {
+        echeancesVehicule(v).forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
+      });
+    } else {
+      salaries().forEach(function (s) {
+        echeancesConducteur(fiche(s.id)).forEach(function (e) { if (n[e.etat] !== undefined) n[e.etat]++; });
+      });
+    }
     var h = "";
     if (n.passe) h += '<span class="c rouge">' + n.passe + " dépassée" + (n.passe > 1 ? "s" : "") + "</span>";
     if (n.rouge) h += '<span class="c rouge">' + n.rouge + " dans les 30 jours</span>";
@@ -633,10 +674,16 @@
     var sansVeh = vehicules().filter(function (v) { return !echeancesVehicule(v).length; }).length;
     var sansCond = salaries().filter(function (x) {
       return !x.sor && CONDUIT.test(x.emp) && !echeancesConducteur(fiche(x.id)).length; }).length;
-    if (sansVeh) h += '<span class="c rouge">' + sansVeh + " véhicule" + (sansVeh > 1 ? "s" : "") + " sans date</span>";
-    if (sansCond) h += '<span class="c rouge">' + sansCond + " conducteur" + (sansCond > 1 ? "s" : "") + " sans date</span>";
+    if (veh && sansVeh) h += '<span class="c rouge">' + sansVeh + " véhicule" + (sansVeh > 1 ? "s" : "") + " sans date</span>";
+    if (!veh && sansCond) h += '<span class="c rouge">' + sansCond + " conducteur" + (sansCond > 1 ? "s" : "") + " sans date</span>";
     if (!h) h = '<span class="c vert">Aucune échéance proche</span>';
-    h += '<span class="c">' + vehicules().length + " véhicule" + (vehicules().length > 1 ? "s" : "") + "</span>";
+    if (veh) {
+      var nv = vehicules().length;
+      h += '<span class="c">' + nv + " véhicule" + (nv > 1 ? "s" : "") + "</span>";
+    } else {
+      var nc = salaries().filter(function (x) { return !x.sor && CONDUIT.test(x.emp); }).length;
+      h += '<span class="c">' + nc + " conducteur" + (nc > 1 ? "s" : "") + "</span>";
+    }
     $("compte").innerHTML = h;
   }
 
@@ -645,7 +692,9 @@
     rendreACompleter();
     rendreVehicules();
     rendreConducteurs();
-    var b = $("v-vider");
+    /* Le repli qui porte « Vider la flotte » ne s'affiche que s'il y a
+       quelque chose à vider. */
+    var b = $("repli-vider");
     if (b) b.hidden = !vehicules().length;
     var a = $("v-annuler"), der = lire(CLE_IMP, null);
     if (a) {
@@ -840,6 +889,20 @@
 
   /* ──────────────────────────────── le classeur ─────────────────────────── */
 
+  /* UNE DATE DANS UN CLASSEUR EST UNE DATE.
+
+     Relevé le 27 septembre 2026 : le classeur de la flotte écrivait ses dates
+     en toutes lettres, « 15 novembre 2026 ». Elles ne se triaient pas, ne se
+     filtraient pas, et aucune ne pouvait être comparée à aujourd'hui. Le
+     tableur reçoit maintenant de vraies dates, et il les met en rouge quand
+     elles sont passées. */
+  function dateExcel(isoDate) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(net(isoDate));
+    if (!m) return "";
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    return isNaN(d.getTime()) ? "" : d;
+  }
+
   function classeur() {
     if (!window.TableurExport) return;
     var p = null;
@@ -863,13 +926,13 @@
       PIECES.forEach(function (x) { if (v.pieces && v.pieces[x.c]) pi.push(x.lib); });
       V.push([
         v.immat || "", genre, v.marque || "", nomDe[v.conducteur] || "",
-        enFrancais(v.mec), v.km || "", enFrancais(v.kmLe),
-        enFrancais(v.ct), enFrancais(v.ct ? plusMois(v.ct, v.ctMois || CT_DEFAUT[v.genre] || 12) : ""),
-        enFrancais(v.lim ? plusMois(v.lim, v.limMois || 24) : ""),
-        enFrancais(v.chrono ? plusMois(v.chrono, v.chronoMois || 24) : ""),
-        enFrancais(v.assur), enFrancais(v.licenceFin),
-        enFrancais(v.revision) || (v.revisionKm ? v.revisionKm + " km" : ""),
-        enFrancais(v.extincteur), pi.join(", "), manque(v).join(", "), v.note || "",
+        dateExcel(v.mec), v.km || "", dateExcel(v.kmLe),
+        dateExcel(v.ct), dateExcel(v.ct ? plusMois(v.ct, v.ctMois || CT_DEFAUT[v.genre] || 12) : ""),
+        dateExcel(v.lim ? plusMois(v.lim, v.limMois || 24) : ""),
+        dateExcel(v.chrono ? plusMois(v.chrono, v.chronoMois || 24) : ""),
+        dateExcel(v.assur), dateExcel(v.licenceFin),
+        dateExcel(v.revision) || (v.revisionKm ? v.revisionKm + " km" : ""),
+        dateExcel(v.extincteur), pi.join(", "), manque(v).join(", "), v.note || "",
       ]);
     });
     if (V.length === 1) V.push(V[0].map(function () { return ""; }));
@@ -887,12 +950,12 @@
       if (f.suivi === "vip" && f.visiteTravail) prochaine = plusMois(f.visiteTravail, 60);
       if (f.suivi === "sir" && f.visiteTravail) prochaine = plusMois(f.visiteTravail, 48);
       C.push([
-        s.nom, s.emp, f.permisNum || "", f.permisCat || "", enFrancais(f.permisFin),
-        f.points == null ? "" : f.points, enFrancais(f.retraitFin), enFrancais(f.fco),
-        enFrancais(f.fco ? plusMois(f.fco, f.fcoMois || 60) : ""),
-        enFrancais(f.carteCond), enFrancais(f.carteQualif), enFrancais(f.visitePermisFin),
-        enFrancais(f.attestConduite ? plusMois(f.attestConduite, 60) : ""),
-        suivi, enFrancais(f.visiteTravail), enFrancais(prochaine),
+        s.nom, s.emp, f.permisNum || "", f.permisCat || "", dateExcel(f.permisFin),
+        f.points == null ? "" : f.points, dateExcel(f.retraitFin), dateExcel(f.fco),
+        dateExcel(f.fco ? plusMois(f.fco, f.fcoMois || 60) : ""),
+        dateExcel(f.carteCond), dateExcel(f.carteQualif), dateExcel(f.visitePermisFin),
+        dateExcel(f.attestConduite ? plusMois(f.attestConduite, 60) : ""),
+        suivi, dateExcel(f.visiteTravail), dateExcel(prochaine),
         parId[f.vehicule] || "", f.note || "",
       ]);
     });
@@ -902,14 +965,14 @@
     vehicules().forEach(function (v) {
       echeancesVehicule(v).forEach(function (e) {
         if (e.etat !== "passe" && e.etat !== "rouge" && e.etat !== "ambre") return;
-        alertes.push([e.quoi, v.immat || "", e.km ? "" : enFrancais(e.date),
+        alertes.push([e.quoi, v.immat || "", e.km ? "" : dateExcel(e.date),
           e.km ? (e.reste < 0 ? "dépassée de " + (-e.reste) + " km" : "dans " + e.reste + " km") : dit(e.jours)]);
       });
     });
     salaries().forEach(function (s) {
       echeancesConducteur(fiche(s.id)).forEach(function (e) {
         if (e.etat !== "passe" && e.etat !== "rouge" && e.etat !== "ambre") return;
-        alertes.push([e.quoi, s.nom, e.points ? "" : enFrancais(e.date),
+        alertes.push([e.quoi, s.nom, e.points ? "" : dateExcel(e.date),
           e.points ? e.valeur + " points restants" : dit(e.jours)]);
       });
     });
@@ -974,10 +1037,12 @@
     $("o-veh").addEventListener("click", function () { onglet(true); });
     $("o-con").addEventListener("click", function () { onglet(false); });
     function onglet(veh) {
+      SUR_VEHICULES = veh;
       $("o-veh").setAttribute("aria-selected", veh ? "true" : "false");
       $("o-con").setAttribute("aria-selected", veh ? "false" : "true");
       $("e-veh").hidden = !veh;
       $("e-con").hidden = veh;
+      rendreCompte();
       window.scrollTo(0, 0);
     }
 
