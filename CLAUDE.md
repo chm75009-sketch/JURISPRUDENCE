@@ -332,6 +332,17 @@ sans l'avoir vérifié autrement.
 - Quote-part 1995 bulletin arrêt 13 juin 1996: 41 278 FRF
 - **TOTAL GERME 1995: 559 935 FRF** (70 313 + 448 344 + 41 278)
 
+**AUTRES EMPLOYEURS 1995 — COMPOSITION VÉRIFIÉE**
+- INSTITUT SUP COMMERCE INFORMATIQUE ORSAY (01/01-31/12/1995): 99 341 FRF
+- INSTITUT SUPERIEUR INTERNATIONA COMMERCE (01/02-30/04/1995): 6 325 FRF
+- INSTITUT SUPERIEUR INTERNATIONA COMMERCE (01/01-30/06/1995): 11 615 FRF
+- **TOTAL AUTRES EMPLOYEURS 1995: 117 281 FRF**
+
+**SYNTHÈSE ANNÉE 1995 — RELEVÉ 27/09/2026**
+- GERME: 559 935 FRF
+- Autres employeurs: 117 281 FRF
+- **TOTAL ANNÉE 1995: 677 216 FRF**
+
 ### Le relais n'est pas fiable sous charge — mesuré le 15 août 2026
 
 Interrogé 368 fois d'affilée, il rend des 502, et — plus insidieux — il rend
