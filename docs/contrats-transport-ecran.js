@@ -241,7 +241,8 @@
     L.push({ id: "taux", nom: "Taux horaire brut (euros)", t: "number",
       sous: "Taux conventionnel du coefficient, à confronter au SMIC" });
     L.push({ id: "smic", nom: "SMIC horaire en vigueur (euros)", t: "number",
-      sous: "À vérifier : les taux conventionnels marchandises datent du 1er décembre 2023" });
+      sous: "À vérifier : les taux conventionnels appliqués ici datent du 1er décembre 2023, et " +
+        "deux grilles leur sont postérieures, du 1er mai 2025 et du 1er avril 2026" });
     if (PROFIL.roulant) {
       L.push({ id: "zone", nom: "Zone de conduite", t: "text",
         sous: "par exemple : national et européen" });

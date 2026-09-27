@@ -135,6 +135,25 @@
       source: "Accord du 11 octobre 2023 relatif à la revalorisation des rémunérations",
       article: "KALIARTI000049067165",
       depuis: "2023-12-01",
+      /* DEUX GRILLES PLUS RÉCENTES EXISTENT, ET LEURS CHIFFRES N'ONT PAS PU
+         ÊTRE LUS ICI.
+
+         Relevé le 27 septembre 2026. Interrogé deux fois au relais sur la
+         convention collective IDCC 16, le texte rend deux annexes de taux
+         horaires des personnels ouvriers postérieures à celle qui est
+         recopiée ci-dessous : « Annexe 1 Personnels ouvriers Taux horaires
+         applicables à compter du 1er mai 2025 » (KALIARTI000051927437) et
+         « Annexe 1 Personnels ouvriers Taux horaires applicables à compter du
+         1er avril 2026 » (KALIARTI000054454049). Leurs tableaux ne sont pas
+         servis par le relais : la recherche ne rend que le titre de l'annexe,
+         et une interrogation sur les coefficients n'y trouve rien. Les taux
+         de décembre 2023 restent donc les seuls chiffres lus à la source, et
+         le contrat écrit qu'ils doivent être confrontés à ces deux annexes
+         avant signature. Ce qui n'a pas été lu n'est pas recopié de mémoire. */
+      posterieures: [
+        { quand: "1er mai 2025", id: "KALIARTI000051927437" },
+        { quand: "1er avril 2026", id: "KALIARTI000054454049" },
+      ],
       ouvriers: {
         "110 M": 12.09, "115 M": 12.09, "118 M": 12.09, "120 M": 12.09,
         "128 M": 12.12, "138 M": 12.14, "150 M": 12.43,
@@ -889,8 +908,21 @@
         (s.m50 > 0 ? " et " + fr(s.m50, 2) + " heures majorées de 50 %" : "")
       : fr(heures, 2) + " heures au taux horaire de " + fr(retenu, 4) + " euros";
 
+    /* DEUX MONTANTS, PAS UN SEUL.
+
+       Relevé le 27 septembre 2026 : la première phrase annonçait 2 167,35
+       euros « calculé sur la base de 186 heures au taux horaire de 12,14 » ;
+       ce calcul-là donne 2 132,71 euros. Le montant annoncé était celui de la
+       garantie annuelle, et la base écrite n'était pas la sienne. Les deux se
+       lisent maintenant l'un après l'autre : ce que le calcul horaire donne,
+       puis ce qui est dû et pourquoi. */
+    B.push({ k: "p", t: "Le calcul horaire donne " + fr(s.total, 2) + " euros par mois, sur la " +
+      "base de " + detail + "." });
     B.push({ k: "p", t: "Le salarié perçoit un salaire mensuel brut de " + fr(mensuel, 2) +
-      " euros, calculé sur la base de " + detail + "." });
+      " euros" + (mensuelGar > s.total + 0.005
+        ? ", qui est le montant de la garantie annuelle rapporté au mois, supérieur au calcul " +
+          "horaire de " + fr(mensuelGar - s.total, 2) + " euros."
+        : ".") });
     if (g && mensuelGar > s.total + 0.005) {
       B.push({ k: "p", t: "Ce montant est celui de la garantie annuelle de rémunération attachée au " +
         "coefficient " + net(v.coef) + (partiel ? ", ramenée à la durée du présent contrat" : "") +
@@ -925,6 +957,16 @@
     B.push({ k: "p", t: "S'ajoutent, le cas échéant, l'indemnisation du travail du dimanche et des " +
       "jours fériés et les autres majorations prévues par la convention collective. La rémunération " +
       "est versée mensuellement, à terme échu." });
+    /* LA DATE DE LA GRILLE SE DIT, ET CE QUI EST PLUS RÉCENT AUSSI. */
+    if ((CCN.salaires.posterieures || []).length) {
+      B.push({ k: "note", t: "Taux conventionnels appliqués ci-dessus : ceux de " +
+        CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) +
+        ". Deux annexes de taux horaires des personnels ouvriers leur sont postérieures dans la " +
+        "convention collective, " +
+        CCN.salaires.posterieures.map(function (x) { return "celle du " + x.quand; }).join(" et ") +
+        " : leurs tableaux n'ont pas été lus ici. Confrontez le taux et la garantie annuelle à la " +
+        "grille en vigueur à la date de signature avant de signer." });
+    }
 
     /* ── 7 · frais de déplacement ───────────────────────────────────── */
     if (p.clauses.indexOf("frais") >= 0) {
