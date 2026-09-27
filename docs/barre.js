@@ -232,6 +232,22 @@
       if (reste) { ev.preventDefault(); ev.stopImmediatePropagation(); }
     }, true);
 
+    /* RETOUR VEUT DIRE : LÀ D'OÙ JE VIENS.
+
+       Relevé le 27 septembre 2026 : le retour du forfait en jours ramenait à
+       Gérer, celui du registre et des visites à l'accueil, quel que soit
+       l'écran d'où l'on venait. Un dirigeant qui ouvre le registre depuis
+       l'audit se retrouvait à l'accueil, et devait refaire deux clics.
+
+       Le lien écrit dans la page reste : il est le chemin par défaut, celui qui
+       vaut quand on arrive par un favori, par une notification ou par une
+       adresse collée. Mais quand la page précédente est une page de
+       l'application, c'est elle qu'on retrouve. `retourner` fait déjà ce tri :
+       il suffit de le brancher sur le bouton qui existait. */
+    if (retour && retour.tagName === "A" && retour.getAttribute("href")) {
+      retour.addEventListener("click", retourner);
+    }
+
     if (!document.getElementById("barre-bouton-menu")) {
       var b = document.createElement("button");
       b.type = "button";

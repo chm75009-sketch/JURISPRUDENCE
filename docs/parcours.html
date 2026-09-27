@@ -213,6 +213,13 @@
   #dlg-courrier #dt-corps{max-height:62vh;overflow:auto;padding:14px 16px;
     font:15.5px/1.6 Georgia,"Times New Roman",serif;
     border:1px solid var(--filet);border-radius:3px;background:var(--surface);color:var(--encre)}
+  /* UN SEUL CADRE, PAS DEUX. Le corps du document est déjà encadré ; la feuille
+     qu'on y pose l'était aussi, et sur un téléphone on voyait deux bordures
+     imbriquées avec deux fois la marge, le texte réduit à une colonne étroite.
+     Relevé le 27 septembre 2026. À l'intérieur de la fenêtre, la feuille ne
+     garde que sa typographie. */
+  #dlg-courrier #dt-corps > .feuille{border:0;border-radius:0;background:none;
+    padding:0;max-width:none;margin:0;box-shadow:none}
   #dt-corps .b-t1{font:700 17px/1.3 Georgia,serif;margin:0 0 6px;text-align:center;text-transform:uppercase;letter-spacing:.04em}
   #dt-corps .b-st{font:600 14px/1.4 Georgia,serif;margin:0 0 18px;text-align:center;color:var(--gris)}
   #dt-corps .b-h1{font:700 15.5px/1.35 Georgia,serif;margin:18px 0 6px}
@@ -489,16 +496,10 @@ réponse nuancée.</p>
 </dialog>
 
 <footer>
-  <p>Chaque article cité est identifié par le numéro <b>et</b> par l'identifiant de la version lue
+  <p>Chaque article cité est identifié par son numéro et par l'identifiant de la version lue
   (<span style="font-family:ui-monospace,monospace">LEGIARTI…</span>) : un article peut être modifié
-  sans changer de numéro. Les 194 articles de cette page ont été lus au relais Légifrance les 21 et
-  22 août 2026, chacun en deux lectures espacées concordantes, filtre par nom du code et critère de
-  contenu contre les homonymes. La capture du 22 août a redemandé dix-neuf articles déjà au dépôt :
-  aucun écart d'identifiant de version. Un article que la capture n'a pas confirmé, D. 1221-26, 
-  n'est cité par aucune étape. Les 24 arrêts cités ont été lus à la source par l'API Judilibre les
-  mêmes jours ; aucune réponse relaxée n'a été retenue. Cette page ne cite rien qu'elle n'ait lu -
-  et lorsqu'elle n'a rien trouvé, comme sur la remise-reprise entre un comité sortant et le comité
-  entrant, elle le dit au lieu de combler le vide.</p>
+  sans changer de numéro, et seul cet identifiant dit laquelle des versions successives fait foi.
+  Lorsqu'un point n'a pas de texte, il est dit tel quel plutôt que comblé.</p>
 </footer>
 </div>
 
