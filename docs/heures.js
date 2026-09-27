@@ -216,7 +216,7 @@
       c.d1 = c.d1 || ""; c.f1 = c.f1 || ""; c.d2 = c.d2 || ""; c.f2 = c.f2 || "";
       if (c.p == null) c.p = "0";
     }
-    return { sem: sem, courriel: r.courriel || "" };
+    return { sem: sem, courriel: r.courriel || "", taux: r.taux || "" };
   }
 
   /* Les plages réellement travaillées d'un jour : une, ou deux en coupure. Les
@@ -964,6 +964,65 @@
     });
   }
 
+  /* LA RÈGLE QUI VENTILE LES MAJORATIONS, ET LES HEURES D'ÉQUIVALENCE.
+
+     À défaut d'accord, L. 3121-36 majore de 25 % les huit premières heures
+     supplémentaires de chaque semaine et de 50 % les suivantes. Mais il ne
+     vaut qu'« à défaut d'accord », et la branche des transports routiers en a
+     un : l'accord du 23 avril 2002, article 2.1 (KALIARTI000023750163, IDCC 16,
+     lu au relais le 27 septembre 2026 par deux recherches concordantes dans le
+     texte de la convention) : « Rémunération des heures en cas de décompte du
+     temps de service sur le mois : les heures de temps de service effectuées à
+     compter de la 153e heure et jusqu'à la 186e heure mensuelle incluse sont
+     rémunérées en leur appliquant une majoration de 25 % ; les heures de temps
+     de service effectuées à compter de la 187e heure mensuelle sont rémunérées
+     en leur appliquant une majoration de 50 %. »
+
+     Et l'équivalence : D. 3312-45 (LEGIARTI000033450327, deux lectures
+     concordantes le 27 septembre 2026) dit que le temps de service est « la
+     durée de travail correspondant à la durée légale du travail ou réputée
+     équivalente à celle-ci en application de l'article L. 3121-13 du code du
+     travail ». Les heures entre trente-cinq heures et le temps de service de la
+     catégorie sont donc des heures d'équivalence : travaillées, payées, et qui
+     ne sont pas des heures supplémentaires. Aucune ligne ne les nommait. */
+  function ventilation(a) {
+    var pl = a.pl, tm = totalMois();
+    var p = entreprise();
+    var cc = String(p.conventionCollective || "");
+    var idcc16 = /(^|\D)0*16(\D|$)/.test(cc) || /transports? routiers?/i.test(cc);
+    if (pl.roulant && idcc16) {
+      var seuilMois = Math.round(pl.seuil * 52 / 12);
+      return {
+        mois: true,
+        equivalence: Math.max(0, Math.min(tm, seuilMois) - 152),
+        h25: Math.max(0, Math.min(tm, 186) - 152),
+        h50: Math.max(0, tm - 186),
+        dit: "Les majorations se comptent au mois, et non à la semaine : de la 153e à la 186e " +
+          "heure de temps de service, 25 % ; à compter de la 187e, 50 % (accord du 23 avril 2002 " +
+          "sur le temps de service et la rémunération des personnels roulants, article 2.1, " +
+          "convention collective des transports routiers). C'est la règle que le contrat écrit " +
+          "ici applique aussi. L. 3121-36, qui majore les huit premières heures de chaque " +
+          "semaine, ne vaut qu'à défaut d'accord.",
+      };
+    }
+    /* Sans accord applicable, la règle de la semaine, celle du code : les
+       huit premières heures supplémentaires de chaque semaine à 25 %, les
+       suivantes à 50 %. Ce sont les chiffres que l'analyse a déjà faits. */
+    return { mois: false, equivalence: 0, h25: a.a25, h50: a.a50,
+      dit: "Les majorations se comptent à la semaine : les huit premières heures supplémentaires " +
+        "de chaque semaine sont majorées de 25 %, les suivantes de 50 % (L. 3121-36, à défaut " +
+        "d'accord). Votre convention ou votre accord peut fixer d'autres taux." };
+  }
+  function tauxHoraire() {
+    if (!qui) return 0;
+    var r = refDe(qui.id);
+    var v = parseFloat(String(r.taux || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+    return isFinite(v) && v > 0 ? v : 0;
+  }
+  function euros(n) {
+    return n.toFixed(2).replace(".", ",").replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+  }
+
   function rendreControles() {
     var z = $("controles");
     if (!z) return;
@@ -1015,13 +1074,43 @@
         dep.map(function (x) { return "du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au +
           " (" + nbh(x.h) + ")"; }).join(", ") + ".</p>");
     }
+    var vent = ventilation(a);
+    if (vent.equivalence > 0.005) {
+      L.push('<p class="al">Heures d\'équivalence : ' + nbh(vent.equivalence) +
+        ". Le temps de service de " + a.pl.seuil + " heures par semaine est « réputé équivalent » " +
+        "à la durée légale de trente-cinq heures (D. 3312-45 du code des transports, qui renvoie " +
+        "à L. 3121-13 du code du travail) : ces heures-là sont travaillées, elles ne sont pas des " +
+        "heures supplémentaires, et elles sont payées.</p>");
+    }
     if (a.hs > 0.005) {
       L.push('<p class="al">Heures supplémentaires au-delà de ' +
-        a.pl.seuil + " heures par semaine : " + nbh(a.hs) + ", dont " + nbh(a.a25) +
-        " dans les huit premières heures de chaque semaine et " + nbh(a.a50) + " au-delà.</p>");
+        a.pl.seuil + " heures par semaine : " + nbh(a.hs) + ".</p>");
     } else if (!a.jours.length && !dep.length) {
       L.push('<p class="doux">Aucun dépassement des plafonds sur ce mois, et aucune semaine ' +
         "au-delà de trente-cinq heures.</p>");
+    }
+    /* LES MAJORATIONS, UNE SEULE RÈGLE, CELLE QUI S'APPLIQUE AU SALARIÉ.
+
+       Relevé le 27 septembre 2026 : cet écran ventilait les majorations à la
+       semaine, huit heures à 25 % puis le reste à 50 %, pendant que le contrat
+       produit par la même application les ventilait au mois, de la 153e à la
+       186e heure puis au-delà. Deux chiffres différents pour le même mois, sous
+       la même en-tête. */
+    L.push('<p class="al">' + vent.dit + "</p>");
+    if (vent.h25 > 0.005 || vent.h50 > 0.005) {
+      var t = tauxHoraire();
+      var ligne = "Majorations du mois : " + nbh(vent.h25) + " à 25 % et " + nbh(vent.h50) +
+        " à 50 %";
+      if (t) {
+        var m25 = vent.h25 * t * 0.25, m50 = vent.h50 * t * 0.5;
+        ligne += ", soit " + euros(m25) + " et " + euros(m50) + " de majoration, " +
+          euros(m25 + m50) + " en tout. Les heures elles-mêmes, payées au taux de " + euros(t) +
+          ", font " + euros((vent.h25 + vent.h50) * t) + " : le total dû pour ces heures est " +
+          euros((vent.h25 + vent.h50) * t + m25 + m50) + ".";
+      } else {
+        ligne += ". Portez le taux horaire au-dessus pour en avoir les montants.";
+      }
+      L.push('<p class="al">' + ligne + "</p>");
     }
     /* Ce que devient une semaine à cheval : elle est complétée par le mois
        voisin, et comptée dans le mois où tombe son dernier jour. */
@@ -1402,6 +1491,7 @@
   function rendreRef() {
     var r = refDe(qui.id);
     $("s-courriel").value = r.courriel || "";
+    if ($("s-taux")) $("s-taux").value = r.taux || "";
     $("r-type").innerHTML = '<option value="">- appliquer un horaire type aux jours travaill\u00e9s -</option>' +
       TYPES.map(function (t, i) { return '<option value="' + i + '">' + ech(t.lib) + "</option>"; }).join("");
 
@@ -1491,7 +1581,7 @@
       }
       sem[j] = c;
     });
-    garderRef(qui.id, { sem: sem, courriel: r.courriel });
+    garderRef(qui.id, { sem: sem, courriel: r.courriel, taux: r.taux });
     direCeQuiManque(sem);
     construire();
     if (redessiner) rendreRef();
@@ -2207,7 +2297,7 @@
         var travaille = aucun ? (j >= 1 && j <= 5) : !!r.sem[j];
         sem[j] = travaille ? { d1: t.d, f1: t.f, d2: "", f2: "", p: String(t.p) } : null;
       }
-      garderRef(qui.id, { sem: sem, courriel: r.courriel });
+      garderRef(qui.id, { sem: sem, courriel: r.courriel, taux: r.taux });
       $("r-type").value = "";
       construire(); rendreRef(); rendreIdentite(); dessinerJours(); calculer();
     });
@@ -2423,6 +2513,14 @@
       var r = refDe(qui.id);
       r.courriel = $("s-courriel").value;
       garderRef(qui.id, r);
+    });
+    /* Le taux horaire : gardé avec le salarié, et les montants se refont à
+       chaque frappe. */
+    if ($("s-taux")) $("s-taux").addEventListener("input", function () {
+      var r = refDe(qui.id);
+      r.taux = $("s-taux").value;
+      garderRef(qui.id, r);
+      rendreControles();
     });
     $("b-excel").addEventListener("click", classeur);
     $("b-word").addEventListener("click", word);

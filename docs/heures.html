@@ -363,6 +363,16 @@
            seuil, ni ses plafonds. La question se pose ici, une fois, et la
            réponse est gardée avec le salarié. -->
       <div id="q-categorie" hidden></div>
+      <!-- LE TAUX HORAIRE, POUR QUE LES MAJORATIONS FASSENT DES EUROS.
+           Le décompte comptait des heures majorées et s'arrêtait là : le
+           salarié lisait « 16 h à 25 % » sans savoir ce que cela vaut. Le taux
+           se saisit une fois et reste avec le salarié ; sans lui, rien n'est
+           inventé, les heures restent des heures. -->
+      <label class="champ" style="max-width:260px;margin:0 0 12px">
+        <span>Taux horaire brut, en euros</span>
+        <input type="text" id="s-taux" inputmode="decimal" placeholder="12,14">
+        <small class="doux">Celui du bulletin de paie. Sans lui, les majorations restent en
+          heures.</small></label>
       <div id="controles"></div>
       <!-- Un dépassement scellé sans un mot est une preuve contre
            l'entreprise : le mois ne se clôt pas tant qu'il n'est pas expliqué.
