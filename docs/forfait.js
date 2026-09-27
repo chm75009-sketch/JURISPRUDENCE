@@ -59,6 +59,22 @@
     var n = parseInt(String(v == null ? "" : v).replace(/[^0-9-]/g, ""), 10);
     return isNaN(n) ? (defaut == null ? 0 : defaut) : n;
   }
+  /* UNE ANNÉE SE BORNE. Relevé le 27 septembre 2026 : l'écran acceptait 1850,
+     et calculait les jours de repos, les fériés et les plafonds d'une année où
+     le forfait en jours n'existait pas. Les bornes du champ, min et max, ne
+     valent que pour les flèches : une année tapée au clavier passe outre. Elles
+     sont donc vérifiées ici, et l'écran le dit. */
+  var AN_MIN = 2000, AN_MAX = new Date().getFullYear() + 5;
+  function anValide(v) {
+    var n = nb(v, 0);
+    return n >= AN_MIN && n <= AN_MAX;
+  }
+  function anBorne(v, defaut) {
+    var n = nb(v, defaut);
+    if (n < AN_MIN) return AN_MIN;
+    if (n > AN_MAX) return AN_MAX;
+    return n;
+  }
   function iso(d) {
     return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) +
       "-" + ("0" + d.getDate()).slice(-2);
@@ -393,7 +409,9 @@
 
   function calculJours() {
     var f = fiche();
-    var a = nb($("j-an").value, new Date().getFullYear());
+    var brute = $("j-an").value;
+    var a = anBorne(brute, new Date().getFullYear());
+    var anHors = String(brute).trim() !== "" && !anValide(brute);
     var forfait = nb($("j-nb").value, 218);
     var cp = nb($("j-cp").value, 25);
     var prorata = $("j-prorata").value === "oui";
@@ -455,6 +473,8 @@
     }).join("");
 
     var note = "";
+    if (anHors) note += "L'année saisie sort de la période que cet écran calcule, de " + AN_MIN +
+      " à " + AN_MAX + " : le décompte ci-dessus est celui de " + a + ". Corrigez l'année. ";
     if (fer) note += "Les " + fer + " fériés retenus : " + nomsFeries.join(", ") + ". ";
     if ($("c-periode").value === "juin")
       note += "Période retenue : du 1er juin " + a + " au 31 mai " + (a + 1) + ". ";
@@ -511,8 +531,10 @@
     if ($("c-refus")) {
       var r = refusDeConvention();
       var conduit = qui && CONDUIT.test(qui.emp || "");
-      $("c-refus").hidden = !conduit;
-      if (conduit) $("c-refus").textContent = r || "";
+      var rq = remarqueConvention();
+      if (conduit) { $("c-refus").textContent = r || ""; $("c-refus").hidden = false; }
+      else if (rq) { $("c-refus").textContent = rq; $("c-refus").hidden = false; }
+      else $("c-refus").hidden = true;
     }
   }
   function lireConvention() {
@@ -522,6 +544,15 @@
     f.conv.fonctions = $("c-fonctions").value;
     if ($("c-elig")) f.conv.elig = $("c-elig").value;
     garderFiche(f);
+    /* La remarque suit la réponse : choisir « cadre autonome » pour un ouvrier
+       se voit tout de suite, et non au moment du téléchargement. */
+    if ($("c-refus")) {
+      var conduit = qui && CONDUIT.test(qui.emp || "");
+      var rq = remarqueConvention();
+      if (conduit) { $("c-refus").textContent = refusDeConvention() || ""; $("c-refus").hidden = false; }
+      else if (rq) { $("c-refus").textContent = rq; $("c-refus").hidden = false; }
+      else $("c-refus").hidden = true;
+    }
   }
 
   /* ═════════════════════════ 5. le rétroplanning ═════════════════════════ */
@@ -896,7 +927,8 @@
 
   function compterPeriode() {
     var f = fiche(), b = bornesPeriode();
-    var t = { travail: 0, repos: 0, conge: 0, maladie: 0, absence: 0, vides: 0, suite: 0, pire: 0 };
+    var t = { travail: 0, repos: 0, conge: 0, maladie: 0, absence: 0, vides: 0,
+      horsOuvre: 0, suite: 0, pire: 0 };
     var a = b.deb.an, m = b.deb.mo, courante = 0;
     var aujourdhui = new Date();
     while (a < b.fin.an || (a === b.fin.an && m <= b.fin.mo)) {
@@ -914,7 +946,19 @@
           else if (v === "c") t.conge++;
           else if (v === "m") t.maladie++;
           else if (v === "a") t.absence++;
-          else if (v == null && d <= aujourdhui) t.vides++;
+          /* UN SAMEDI VIDE N'EST PAS UN JOUR NON QUALIFIÉ.
+
+             Relevé le 27 septembre 2026 : le compteur additionnait les samedis,
+             les dimanches et les fériés laissés vides, et annonçait deux cent
+             soixante-neuf jours à qualifier là où il y en avait deux cent
+             quarante-quatre. Un salarié au forfait ne qualifie que ses jours
+             ouvrés ; s'il a travaillé un samedi, il le cochera, et le jour
+             comptera comme travaillé. Les autres n'ont rien à dire. */
+          else if (v == null && d <= aujourdhui) {
+            var fin2 = d.getDay() === 0 || d.getDay() === 6;
+            if (fin2 || estFerie(a, iso(d))) t.horsOuvre++;
+            else t.vides++;
+          }
         }
       }
       m++; if (m > 11) { m = 0; a++; }
@@ -927,22 +971,24 @@
   function majCompteurs() {
     var f = fiche(), b = bornesPeriode(), t = compterPeriode();
     var forfait = nb(f.conv.jours, 218);
-    var reposDus = nb(f.conv.repos, 0);
+    /* Renommée : une variable locale du même nom que la fonction reposDus()
+       la masquait, et c'est la faute qui a coûté une correction ailleurs. */
+    var dus = nb(f.conv.repos, 0);
     var renonce = (f.renonces || []).reduce(function (s, r) {
       return s + (String(r.an) === String(b.a) ? nb(r.nb, 0) : 0); }, 0);
     var plafond = forfait + renonce;
     var restant = plafond - t.travail;
-    var reposRestants = reposDus - t.repos;
+    var reposRestants = dus - t.repos;
 
     var tuiles = [
       { et: "Jours travaillés, " + b.dit, n: String(t.travail).replace(".", ","),
         etat: t.travail > plafond ? "froid" : (restant <= 5 ? "chaud" : "") },
       { et: "Restant au forfait de " + plafond, n: String(restant).replace(".", ","),
         etat: restant < 0 ? "froid" : (restant <= 5 ? "chaud" : "") },
-      { et: "Repos du forfait pris sur " + reposDus, n: t.repos + " / " + reposDus,
+      { et: "Repos du forfait pris sur " + dus, n: t.repos + " / " + dus,
         etat: reposRestants < 0 ? "froid" : "" },
       { et: "Congés payés pris", n: String(t.conge) },
-      { et: "Jours non qualifiés", n: String(t.vides), etat: t.vides ? "froid" : "" },
+      { et: "Jours ouvrés non qualifiés", n: String(t.vides), etat: t.vides ? "froid" : "" },
       { et: "Plus longue suite de jours travaillés", n: String(t.pire),
         etat: t.pire > 6 ? "froid" : "" },
     ];
@@ -951,13 +997,13 @@
         '</span><div class="n">' + ech(x.n) + "</div></div>";
     }).join("");
 
-    majAlertes(t, plafond, restant, reposDus, reposRestants);
+    majAlertes(t, plafond, restant, dus, reposRestants);
     majRenonce();
   }
 
   /* LES ALERTES. Chacune porte son bouton : on ne montre pas un problème sans
      ce qui le règle. */
-  function majAlertes(t, plafond, restant, reposDus, reposRestants) {
+  function majAlertes(t, plafond, restant, dus, reposRestants) {
     var f = fiche(), b = bornesPeriode(), A = [];
     var aujourdhui = new Date();
 
@@ -990,7 +1036,7 @@
     var ecoules = (aujourdhui.getFullYear() - b.deb.an) * 12 +
       (aujourdhui.getMonth() - b.deb.mo) + 1;
     if (ecoules > 12) ecoules = 12;
-    if (reposDus > 0 && ecoules >= 9 && reposRestants > reposDus / 2) {
+    if (dus > 0 && ecoules >= 9 && reposRestants > dus / 2) {
       A.push({ t: reposRestants + " jours de repos du forfait restent à prendre",
         c: "Plus de la moitié, au " + ecoules + "e mois de la période. Ces jours ne se paient pas : " +
            "ils se prennent, ou ils font la preuve d'une charge excessive.",
@@ -1131,11 +1177,69 @@
     var p = entreprise();
     return { k: "sur", t: (p.denomination || "") + (p.adresse ? " - " + p.adresse : "") };
   }
+  /* CE QUE LA FICHE SAIT NE SE LAISSE PAS EN POINTILLÉS.
+
+     Relevé le 27 septembre 2026 : les courriers du forfait sortaient avec
+     « Le ........................ », « Fait à ........................ »,
+     « Conseil de prud'hommes de ........................ » et « Madame,
+     Monsieur » adressé à un salarié dont le registre donne le nom et le sexe.
+     La ville, la date du jour, le ressort et la civilité sont là : ils
+     s'écrivent. Ce qui reste en pointillés est ce que personne ne sait encore,
+     la date de remise et la signature. */
+  function villeDuSiege() {
+    var p = entreprise();
+    if (net(p.ville)) return net(p.ville);
+    var m = /\d{5}\s+(.+)$/.exec(String(p.adresse || ""));
+    return m ? m[1].trim() : "";
+  }
+  function leJourDit() { return enFrancais(iso(new Date())); }
+  /* LES JOURS DE REPOS : ZÉRO N'EST PAS UN CHIFFRE ICI.
+
+     Relevé le 27 septembre 2026 : les courriers et le rapport écrivaient « sur
+     0 » quand le décompte de l'année n'avait pas encore été fait. Zéro jour de
+     repos n'existe pas dans un forfait en jours : ou le nombre est calculé, ou
+     il est à calculer, et c'est ce que le document doit dire. */
+  function reposDus() {
+    var n = nb(fiche().conv.repos, 0);
+    return n > 0 ? n : null;
+  }
+  function reposDit() {
+    var n = reposDus();
+    return n === null ? "[à calculer : ouvrez « les jours de repos de l'année »]" : String(n);
+  }
+  function faitA() {
+    var v = villeDuSiege();
+    return "Fait à " + (v || "........................") + ", le " + leJourDit();
+  }
+  function deLieu(mot) {
+    var x = String(mot == null ? "" : mot).trim();
+    if (!x) return "";
+    return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(x) ? "d'" + x : "de " + x;
+  }
+  function prudhommes() {
+    var p = entreprise(), r = net(p.orgPrudhommes);
+    return "Conseil de prud'hommes " + (r ? deLieu(r) : "de ........................");
+  }
+  /* La civilité vient du sexe porté au registre ; sans lui, les deux restent. */
+  function civilite(s) {
+    var x = String((s && s.sexe) || "").trim().toLowerCase();
+    if (x.charAt(0) === "f") return "Madame";
+    if (x.charAt(0) === "m" || x.charAt(0) === "h") return "Monsieur";
+    return "";
+  }
+  function appel(s) {
+    var c = civilite(s);
+    return c ? c + "," : "Madame, Monsieur,";
+  }
+  function politesse(s) {
+    var c = civilite(s);
+    return "Veuillez agréer, " + (c || "Madame, Monsieur") + ", nos salutations distinguées.";
+  }
   function signature() {
     var p = entreprise();
     return [
       { k: "p", t: " " },
-      { k: "p", t: "Fait à ........................, le ........................" },
+      { k: "p", t: faitA() },
       { k: "p", t: "en deux exemplaires originaux." },
       { k: "p", t: " " },
       { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
@@ -1184,6 +1288,26 @@
     return null;
   }
 
+  /* CE QUI SE CONTREDIT SE DIT, SANS EMPÊCHER.
+
+     Relevé le 27 septembre 2026 : déclarer « cadre autonome » un salarié que le
+     registre classe ouvrier ou employé ne soulevait aucune remarque. Ce n'est
+     pas un refus, la classification peut être ancienne ou fausse ; mais c'est
+     la première chose qu'un conseil de prud'hommes verra, et il faut le savoir
+     avant de signer. */
+  var OUVRIER_EMPLOYE = /^\s*(ouvrier|employ[eé])/i;
+  function remarqueConvention() {
+    var f = fiche(), elig = net(f.conv.elig);
+    if (!qui || elig !== "cadre") return "";
+    var q = String(qui.qua || "");
+    if (!OUVRIER_EMPLOYE.test(q)) return "";
+    return "Le registre du personnel classe ce salarié « " + q + " », et la convention le dit " +
+      "cadre autonome. Les deux ne se concilient pas : ou la qualification du registre est à " +
+      "corriger, ou ce n'est pas un cadre et c'est la seconde réponse, celle du salarié dont la " +
+      "durée du travail ne peut pas être prédéterminée, qui convient. Le forfait d'un salarié dont " +
+      "la classification dit l'exécution se défend mal.";
+  }
+
   function docConvention() {
     var f = fiche(), p = entreprise(), a = accord();
     var refus = refusDeConvention();
@@ -1220,7 +1344,7 @@
       { k: "p", t: "Le forfait est de " + forfait + " jours travaillés par période de référence, " +
         "journée de solidarité comprise. La période de référence court " + periode + "." },
       { k: "p", t: "Pour la période " + (f.conv.an || "") + ", ce forfait ouvre " +
-        nb(f.conv.repos, 0) + " jours de repos, en plus des congés payés, des repos hebdomadaires " +
+        reposDit() + " jours de repos, en plus des congés payés, des repos hebdomadaires " +
         "et des jours fériés chômés dans l'entreprise." },
       { k: "p", t: "Les absences, ainsi que les arrivées et départs en cours de période, sont " +
         "traitées selon les règles de l'accord collectif visé à l'article 1er." },
@@ -1317,7 +1441,7 @@
     }[v] || [{ k: "p", t: "Pour la partie salariée, ........................" }];
     return [
       { k: "p", t: " " },
-      { k: "p", t: "Fait à ........................, le ........................" },
+      { k: "p", t: faitA() },
       { k: "p", t: "en autant d'exemplaires originaux que de parties, plus deux." },
       { k: "p", t: " " },
       { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
@@ -1513,8 +1637,8 @@
     var items = [entete(),
       { k: "dest", t: qui.nom },
       { k: "p", t: "Objet : remise de votre convention de forfait en jours" },
-      { k: "p", t: "Le ........................" },
-      { k: "p", t: "Madame, Monsieur," },
+      { k: "p", t: (villeDuSiege() ? villeDuSiege() + ", le " : "Le ") + leJourDit() },
+      { k: "p", t: appel(qui) },
       { k: "p", t: "Nous vous remettons ce jour la convention de forfait en jours qui vous " +
         "concerne, à effet du " + (enFrancais(f.conv.effet) || "........................") + ", " +
         "ainsi que l'accord collectif qui la fonde." },
@@ -1522,7 +1646,7 @@
         "écrit. Nous vous remercions de nous retourner un exemplaire signé, ou de nous faire " +
         "connaître votre refus, par écrit également. Un refus ne peut vous être reproché." },
       { k: "p", t: "Nous restons à votre disposition pour en parler." },
-      { k: "p", t: "Veuillez agréer, Madame, Monsieur, nos salutations distinguées." },
+      { k: "p", t: politesse(qui) },
       { k: "p", t: (p.responsable || "") },
       { k: "p", t: " " },
       { k: "p", t: "Reçu le ........................" },
@@ -1559,7 +1683,7 @@
       { k: "dest", t: "[Organisation syndicale]" },
       { k: "p", t: "Lettre recommandée avec avis de réception" },
       { k: "p", t: "Objet : notification de l'accord d'entreprise relatif au forfait annuel en jours" },
-      { k: "p", t: "Le ........................" },
+      { k: "p", t: (villeDuSiege() ? villeDuSiege() + ", le " : "Le ") + leJourDit() },
       { k: "p", t: "Madame, Monsieur," },
       { k: "p", t: "Conformément à l'article L. 2231-5 du code du travail, nous vous notifions le " +
         "texte de l'accord d'entreprise relatif au forfait annuel en jours, signé le " +
@@ -1576,9 +1700,9 @@
     var p = entreprise(), a = accord();
     var items = [entete(),
       { k: "dest", t: "Monsieur le Greffier en chef" },
-      { k: "dest", t: "Conseil de prud'hommes de ........................" },
+      { k: "dest", t: prudhommes() },
       { k: "p", t: "Objet : dépôt d'un accord d'entreprise" },
-      { k: "p", t: "Le ........................" },
+      { k: "p", t: (villeDuSiege() ? villeDuSiege() + ", le " : "Le ") + leJourDit() },
       { k: "p", t: "Monsieur le Greffier en chef," },
       { k: "p", t: "Conformément au III de l'article D. 2231-2 du code du travail, nous vous " +
         "adressons un exemplaire de l'accord d'entreprise relatif au forfait annuel en jours, " +
@@ -1604,7 +1728,7 @@
       { k: "h2", t: "1. La charge de travail" },
       { k: "p", t: "Nombre de jours travaillés depuis le début de la période : ............ sur " +
         nb(fiche().conv.jours, 218) + "." },
-      { k: "p", t: "Jours de repos pris : ............ sur " + nb(fiche().conv.repos, 0) + "." },
+      { k: "p", t: "Jours de repos pris : ............ sur " + reposDit() + "." },
       { k: "p", t: "La charge vous paraît-elle raisonnable ? (raisonnable / lourde mais tenable / " +
         "excessive)" },
       { k: "p", t: "Quelles périodes ont été les plus lourdes, et pourquoi ?" },
@@ -1712,15 +1836,15 @@
 
   function docRappelRepos() {
     var p = entreprise(), t = compterPeriode(), f = fiche();
-    var reposDus = nb(f.conv.repos, 0);
     var items = [entete(),
       { k: "dest", t: qui.nom },
       { k: "p", t: "Objet : vos jours de repos et vos temps de repos" },
-      { k: "p", t: "Le ........................" },
-      { k: "p", t: "Madame, Monsieur," },
+      { k: "p", t: (villeDuSiege() ? villeDuSiege() + ", le " : "Le ") + leJourDit() },
+      { k: "p", t: appel(qui) },
       { k: "p", t: "Le document de contrôle de votre forfait fait apparaître, à ce jour, " +
         String(t.travail).replace(".", ",") + " journées travaillées et " + t.repos +
-        " jours de repos pris sur les " + reposDus + " auxquels vous avez droit." },
+        " jours de repos pris" + (reposDus() === null ? "." : " sur les " + reposDus() +
+        " auxquels vous avez droit.") },
       { k: "p", t: "Ces jours ne se paient pas : ils se prennent. Nous vous demandons de nous " +
         "indiquer, avant le ........................, les dates auxquelles vous comptez les poser, " +
         "et de vous rapprocher de nous si votre charge de travail ne vous le permet pas." },
@@ -1729,7 +1853,7 @@
         "consécutives auxquelles s'ajoute ce repos quotidien. Si l'organisation de votre travail " +
         "ne vous permet pas de les respecter, dites-le nous par écrit : nous vous recevrons dans " +
         "les quinze jours." },
-      { k: "p", t: "Veuillez agréer, Madame, Monsieur, nos salutations distinguées." },
+      { k: "p", t: politesse(qui) },
       { k: "p", t: (p.responsable || "") },
     ];
     sortir(items, "Rappel des repos - " + qui.nom, "forfait-rappel-repos-" + qui.id + ".docx");
@@ -1817,7 +1941,7 @@
       { k: "table", head: T[0], rows: T.slice(1) },
       { k: "p", t: "Depuis le début de la période : " + String(t.travail).replace(".", ",") +
         " journées travaillées, " + t.repos + " jours de repos du forfait pris sur " +
-        nb(f.conv.repos, 0) + ", " + t.conge + " congés payés." },
+        reposDit() + ", " + t.conge + " congés payés." },
     ];
     /* Ce que le document de contrôle ne peut pas taire : les jours sans
        qualification, et les contradictions avec ce qui est coché. */
@@ -1855,7 +1979,7 @@
       ["Salarié", qui.nom + (qui.emp ? ", " + qui.emp : "")],
       ["Période de référence", b.dit],
       ["Forfait", String(nb(f.conv.jours, 218)) + " jours"],
-      ["Jours de repos du forfait", String(nb(f.conv.repos, 0))],
+      ["Jours de repos du forfait", reposDit()],
       [],
       ["Mois", "Jour", "Qualification", "Observation"],
     ];
@@ -1871,7 +1995,8 @@
     L.push(["Journées travaillées", String(t.travail).replace(".", ",")]);
     L.push(["Repos du forfait pris", String(t.repos)]);
     L.push(["Congés payés pris", String(t.conge)]);
-    L.push(["Jours non qualifiés", String(t.vides)]);
+    L.push(["Jours ouvrés non qualifiés", String(t.vides)]);
+    L.push(["Samedis, dimanches et fériés laissés vides", String(t.horsOuvre)]);
     L.push(["Plus longue suite de jours travaillés", String(t.pire)]);
     L.push([]);
     L.push(["Établi en application de l'article L. 3121-65, I, 1° du code du travail."]);
