@@ -311,7 +311,7 @@
     var t = texteDe(cle);
     if (intro) L.push(intro);
     if (!t) {
-      L.push("[L'article " + num(cle) + " n'est pas dans le corpus capté par ce module :");
+      L.push("[L'article " + num(cle) + " n'a pas été lu pour ce document :");
       L.push("son contenu n'est donc ni reproduit ni résumé ici.]");
       L.push("");
       return L;
@@ -555,7 +555,7 @@
     L.push("    exposition, pas un chiffrage.");
     L.push("");
     L.push("L'article L. 241-13 du code de la sécurité sociale, auquel L. 2242-7");
-    L.push("renvoie pour l'assiette, n'a PAS été lu à la source par ce module : il est");
+    L.push("renvoie pour l'assiette, n'a PAS été lu à la source pour ce document : il est");
     L.push("nommé, non reproduit. Le montant de vos exonérations se lit sur vos");
     L.push("déclarations sociales nominatives.");
     L.push("");
@@ -875,14 +875,14 @@
       L.push("");
       L.push("ARTICLE 8 - RÉVISION ET DÉNONCIATION");
       L.push("[Rédiger vos clauses. Les règles générales de révision et de dénonciation");
-      L.push("des accords collectifs n'ont pas été lues à la source par ce module : il");
+      L.push("des accords collectifs n'ont pas été lues à la source pour ce document : il");
       L.push("ne les reproduit pas et ne les résume pas.]");
       L.push("");
       L.push("ARTICLE 9 - DÉPÔT ET PUBLICITÉ");
       L.push("Le présent accord sera déposé par la partie la plus diligente. Les");
       L.push("conditions du dépôt relèvent de l'article L. 2231-6, que L. 2242-6 nomme,");
       L.push("et de l'article D. 2231-2, que R. 2242-1 nomme : ces deux articles n'ont");
-      L.push("PAS été lus à la source par ce module. Vérifiez-y les formalités avant de");
+      L.push("PAS été lus à la source pour ce document. Vérifiez-y les formalités avant de");
       L.push("déposer - support, nombre d'exemplaires, pièces à joindre.");
       L.push("");
       L.push("Fait à " + villeDe(ctx) + ", le [DATE], en [nombre] exemplaires.");
@@ -959,7 +959,7 @@
         ARRETS.niveauxParAccord.ref,
         ["Les articles L. 2231-6 et D. 2231-2, relatifs au dépôt, sont nommés parce",
          "que L. 2242-6 et R. 2242-1 les nomment : ils n'ont pas été lus à la source",
-         "par ce module et ne sont donc ni reproduits ni résumés."])).join("\n");
+         "pour ce document et ne sont donc ni reproduits ni résumés."])).join("\n");
     },
   });
 
@@ -1179,9 +1179,9 @@
       L.push("  Modalité de remise : [remise en main propre contre décharge / mise à");
       L.push("  disposition dans la base de données, avec information datée].");
       L.push("");
-      L.push("AUCUN CHIFFRE N'EST ÉCRIT CI-DESSUS, ET C'EST VOULU. Ni votre masse");
-      L.push("salariale ni vos rémunérations ne sont connues ici : le document dit où");
-      L.push("les prendre, pas ce qu'elles valent.");
+      L.push("LES CHIFFRES RESTENT À PORTER. Ni votre masse salariale ni vos");
+      L.push("rémunérations ne sont connues ici : ce qui précède dit où les prendre,");
+      L.push("pas ce qu'elles valent.");
       L.push("");
 
       L.push(GROS);
@@ -1230,7 +1230,7 @@
         ARRETS.engagerNonConclure.ref,
         ["L'article L. 241-13 du code de la sécurité sociale, auquel L. 2242-7",
          "renvoie, et l'article L. 2231-6, auquel L. 2242-6 renvoie, n'ont pas été lus",
-         "à la source par ce module : ils sont nommés, non reproduits."])).join("\n");
+         "à la source pour ce document : ils sont nommés, non reproduits."])).join("\n");
     },
   });
 
@@ -1356,8 +1356,8 @@
       L.push("");
       citerMorceau(L, "L2242-17", "Cette négociation s'appuie sur les données", "Cette négociation porte également", "  ");
       L.push("  L'article L. 2312-36, auquel ce 2° renvoie, N'A PAS été lu à la source");
-      L.push("  par ce module : il est nommé, non reproduit. Le module « base de données");
-      L.push("  (BDESE) » le lit et l'audite pour lui-même.");
+      L.push("  pour ce document : il est nommé, non reproduit. Le dossier « base de");
+      L.push("  données (BDESE) » le lit et l'audite pour lui-même.");
       L.push("");
       L.push("  Ce 2° porte aussi sur l'application de l'article L. 241-3-1 du code de la");
       L.push("  sécurité sociale et sur les conditions dans lesquelles l'employeur peut");
@@ -1373,7 +1373,7 @@
       L.push("  En matière de recrutement, d'emploi et d'accès à la formation");
       L.push("  professionnelle, en favorisant notamment les conditions d'accès aux");
       L.push("  critères définis aux II et III de l'article L. 6315-1. Cet article n'a");
-      L.push("  pas été lu à la source par ce module : il est nommé, non reproduit.");
+      L.push("  pas été lu à la source pour ce document : il est nommé, non reproduit.");
       L.push("  [Mesures envisagées : .........................................]");
       L.push("");
       L.push("POINT 4 - L'INSERTION ET LE MAINTIEN DANS L'EMPLOI DES TRAVAILLEURS");
@@ -1386,7 +1386,7 @@
       L.push("  [Rapport à établir : effectif d'assujettissement, bénéficiaires employés,");
       L.push("  état de l'obligation d'emploi - source : déclaration sociale nominative.");
       L.push("  Les articles L. 5212-1 et suivants, auxquels L. 2242-18 renvoie, n'ont");
-      L.push("  pas été lus à la source par ce module.]");
+      L.push("  pas été lus à la source pour ce document.]");
       L.push("");
       L.push("POINT 5 - PRÉVOYANCE ET REMBOURSEMENTS COMPLÉMENTAIRES (5°)");
       L.push("  Ce point n'est dû qu'À DÉFAUT de couverture par un accord de branche ou");
@@ -1394,7 +1394,7 @@
       L.push("  [Couverture en vigueur : ......................................]");
       L.push("  [Entreprises de travaux forestiers : le texte prévoit une négociation");
       L.push("  portant sur l'accès aux garanties collectives mentionnées à l'article");
-      L.push("  L. 911-2 du code de la sécurité sociale - article non lu par ce module.]");
+      L.push("  L. 911-2 du code de la sécurité sociale - article non lu pour ce document.]");
       L.push("");
       L.push("POINT 6 - LE DROIT D'EXPRESSION DIRECTE ET COLLECTIVE DES SALARIÉS (6°)");
       L.push("  Notamment au moyen des outils numériques disponibles dans l'entreprise.");
@@ -1420,7 +1420,7 @@
       L.push("  SITE. Le texte vise la réduction du coût de la mobilité, l'incitation à");
       L.push("  l'usage des modes de transport vertueux et la prise en charge des frais");
       L.push("  mentionnés aux articles L. 3261-3 et L. 3261-3-1. Ces trois articles");
-      L.push("  n'ont pas été lus à la source par ce module : ils sont nommés seulement.");
+      L.push("  n'ont pas été lus à la source pour ce document : ils sont nommés seulement.");
       L.push("  [Sites de l'entreprise et effectif de chacun : ..................]");
       L.push("");
       L.push("POINT 9 - [FACULTATIF] LA PRÉVENTION DE L'EXPOSITION AUX FACTEURS DE");
@@ -1432,7 +1432,7 @@
       L.push("  toutefois l'effet que le texte y attache : l'accord conclu sur ce thème");
       L.push("  vaut conclusion de l'accord mentionné à l'article L. 4163-3, sous réserve");
       L.push("  du respect des autres dispositions du chapitre en cause - articles non");
-      L.push("  lus à la source par ce module.");
+      L.push("  lus à la source pour ce document.");
       L.push("");
       L.push(TRAIT);
       L.push("");
@@ -1509,7 +1509,7 @@
          "L. 3261-3, L. 3261-3-1, L. 4163-3, L. 1142-8 et L. 1142-9 du code du travail,",
          "ainsi que les articles L. 241-3-1, L. 911-2 et L. 911-7 du code de la sécurité",
          "sociale, sont NOMMÉS parce que les textes lus les nomment. Aucun d'eux n'a été",
-         "lu à la source par ce module : leur contenu n'est ni reproduit ni résumé."])).join("\n");
+         "lu à la source pour ce document : leur contenu n'est ni reproduit ni résumé."])).join("\n");
     },
   });
 
@@ -1563,7 +1563,7 @@
       L.push("groupe de dimension communautaire au sens des articles L. 2341-1 et");
       L.push("L. 2341-2 comportant au moins un établissement ou une entreprise d'au");
       L.push("moins cent cinquante salariés en France. Ces trois articles sont nommés");
-      L.push("par le texte lu ; ils n'ont pas été lus eux-mêmes par ce module.");
+      L.push("par le texte lu ; ils n'ont pas été lus eux-mêmes pour ce document.");
       L.push("");
       L.push("  · effectif de l'entreprise : " +
         (s.effectif === null ? "[NON RENSEIGNÉ]" : s.effectif + " salariés"));
@@ -1610,7 +1610,7 @@
       L.push("");
 
       L = L.concat(expositionL22432([]));
-      L.push("Deux peines existent dans le corpus lu par ce module, et une seule");
+      L.push("Deux peines existent dans le corpus lu pour ce document, et une seule");
       L.push("s'applique ici. L. 2243-1 ne nomme que L. 2242-1 : il ne couvre pas cette");
       L.push("négociation. La pénalité salaires de L. 2242-7 ne vise que les salaires");
       L.push("effectifs, et la pénalité de 1 % de L. 2242-8 ne vise que l'égalité");
@@ -1671,7 +1671,7 @@
       L.push("  géographique interne à l'entreprise prévue à l'article L. 2254-2. Le");
       L.push("  texte impose une forme : en cas d'accord, ces conditions font l'objet");
       L.push("  d'un CHAPITRE SPÉCIFIQUE. L'article L. 2254-2 lui-même n'a pas été lu à");
-      L.push("  la source par ce module : il est nommé, non reproduit.");
+      L.push("  la source pour ce document : il est nommé, non reproduit.");
       L.push("");
       L.push("POINT 3 - LES GRANDES ORIENTATIONS À TROIS ANS DE LA FORMATION (3°)");
       L.push("  Et les objectifs du plan de développement des compétences : catégories");
@@ -1714,7 +1714,7 @@
       L.push("  reconversion externe - vaut conclusion de l'accord mentionné à l'article");
       L.push("  L. 6324-9. Et le 1° renvoie aux matières des articles L. 1233-21 et");
       L.push("  L. 1233-22, selon les modalités prévues à ces mêmes articles. Ces trois");
-      L.push("  articles n'ont pas été lus à la source par ce module : ils sont nommés,");
+      L.push("  articles n'ont pas été lus à la source pour ce document : ils sont nommés,");
       L.push("  non reproduits. Le module « licenciement économique » traite des");
       L.push("  articles L. 1233-21 et L. 1233-22.");
       L.push("");
@@ -1755,7 +1755,7 @@
         "L. 2242-21, L. 2243-2 ; " + ARRETS.representativite.ref,
         ["Les articles L. 2331-1, L. 2341-1, L. 2341-2, L. 2254-2, L. 1233-21,",
          "L. 1233-22, L. 6324-9, L. 1237-18 et suivants et L. 2323-10 sont NOMMÉS parce",
-         "que les textes lus les nomment : aucun n'a été lu à la source par ce module.",
+         "que les textes lus les nomment : aucun n'a été lu à la source pour ce document.",
          "",
          "Ce document n'annonce ni la pénalité de L. 2242-7 ni celle de L. 2242-8 :",
          "aucune des deux ne vise cette négociation. Seul L. 2243-2 la couvre, parce",
@@ -1855,7 +1855,7 @@
       L.push("════ CE QUI SE JOUE - ET CE QUI NE SE JOUE PAS ════");
       L.push("");
       L.push("AUCUNE PEINE N'EST ANNONCÉE ICI, et ce n'est pas un oubli. Le corpus lu");
-      L.push("par ce module porte quatre textes de sanction, et pas un ne vise cette");
+      L.push("pour ce document porte quatre textes de sanction, et pas un ne vise");
       L.push("négociation :");
       L.push("");
       L.push("  · L. 2243-1 ne nomme que l'article L. 2242-1 ;");
@@ -1869,7 +1869,7 @@
       L.push("ici une amende vous ferait négocier sous une menace inexistante - et vous");
       L.push("découvririez le vide au premier contrôle.");
       L.push("");
-      L.push("Ce qui se joue réellement, en revanche, se lit dans les textes captés :");
+      L.push("Ce qui se joue réellement, en revanche, se lit dans les textes lus :");
       L.push("");
       L.push("  1. L'OBLIGATION EXISTE. L. 2242-2-1 dit « l'employeur engage ». Ne pas");
       L.push("     l'avoir engagée est un manquement, constatable par l'inspection du");
@@ -1994,10 +1994,10 @@
       return L.concat(pied("L. 2242-2-1, L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-13, " +
         "L. 2242-14 ; " + ARRETS.finDesNegociations.ref,
         ["L'article L. 2331-1, auquel L. 2242-2-1 renvoie pour la notion de groupe,",
-         "est nommé et non reproduit : il n'a pas été lu à la source par ce module.",
+         "est nommé et non reproduit : il n'a pas été lu à la source pour ce document.",
          "",
          "AUCUNE PEINE N'EST ANNONCÉE dans ce document : aucun des textes de sanction",
-         "captés - L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 - ne nomme l'article",
+         "lus - L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 - ne nomme l'article",
          "L. 2242-2-1. Ce qui est encouru est l'irrégularité elle-même, l'ouverture",
          "imposée par une organisation syndicale, et l'interdiction de décider",
          "unilatéralement dans les matières traitées (L. 2242-4).",
@@ -2283,7 +2283,7 @@
 
       L.push("════ CE QUI SE JOUE, ET CE QUI NE SE JOUE PAS ════");
       L.push("");
-      L.push("Aucun texte capté par ce module n'attache de sanction pénale ni de");
+      L.push("Aucun des textes lus pour ce document n'attache de sanction pénale ni");
       L.push("pénalité financière au seul manquement à L. 2242-14. Ce document");
       L.push("n'annonce donc ni amende ni pénalité. Ce qui se joue réellement est");
       L.push("ailleurs, et il est écrit :");
@@ -2708,7 +2708,7 @@
         "Le procès-verbal de première réunion portant le lieu et le calendrier (L. 2242-14).",
         "Le bordereau de remise des informations, daté et signé.",
         "Les réponses motivées aux propositions syndicales, datées.",
-        "[Le cas échéant, les autres pièces exigées par les modalités de dépôt - à vérifier à l'article L. 2231-6, non lu par ce module.]",
+        "[Le cas échéant, les autres pièces exigées par les modalités de dépôt - à vérifier à l'article L. 2231-6, non lu pour ce document.]",
       ]);
 
       L = L.concat(calendrier(ctx, [
@@ -2812,7 +2812,7 @@
       L.push("════ CE QUI SE JOUE, ET CE QUI NE SE JOUE PAS ════");
       L.push("");
       L.push("AUCUNE PEINE N'EST ANNONCÉE DANS CE DOCUMENT. Les quatre textes de");
-      L.push("sanction captés par ce module - L. 2242-7, L. 2242-8, L. 2243-1 et");
+      L.push("sanction lus pour ce document - L. 2242-7, L. 2242-8, L. 2243-1 et");
       L.push("L. 2243-2 - visent l'obligation de négocier, la convocation des parties,");
       L.push("les salaires effectifs et l'égalité professionnelle. Aucun ne nomme");
       L.push("l'article L. 2242-4, et aucun ne vise l'interdiction de décider");
@@ -2916,7 +2916,7 @@
       L.push("      négociation, constaté par accord ou par procès-verbal de désaccord.");
       L.push("");
       L.push("  [Traiter le sort des situations constituées entre la décision et son");
-      L.push("  retrait : ce point n'est réglé par aucun texte lu par ce module, et il");
+      L.push("  retrait : ce point n'est réglé par aucun texte lu pour ce document, et il");
       L.push("  ne se règle pas d'une formule. Faites-le examiner.]");
       L.push("");
       L.push("ARTICLE 5 - LA SUITE");
@@ -2975,7 +2975,7 @@
       return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6 ; " +
         ARRETS.finDesNegociations.ref,
         ["Aucune peine n'est annoncée dans ce document : aucun des textes de sanction",
-         "captés par ce module - L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 - ne vise",
+         "lus pour ce document - L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 - ne vise",
          "l'article L. 2242-4. Ce qui est encouru est la contestation de la décision",
          "elle-même et le grief de déloyauté, non une amende."])).join("\n");
     },
@@ -3043,7 +3043,7 @@
       L.push("");
       citer(L, "R2242-1");
       L.push("L'article D. 2231-2, auquel R. 2242-1 renvoie, N'A PAS été lu à la source");
-      L.push("par ce module : les modalités matérielles du dépôt - support, destinataire");
+      L.push("pour ce document : les modalités matérielles du dépôt - support,");
       L.push("précis, pièces jointes - ne sont donc ni décrites ni supposées ici.");
       L.push("Vérifiez-les avant d'envoyer.");
       L.push("");
@@ -3129,8 +3129,8 @@
       L.push("  · [Proposition 2 : ...............................................]");
       L.push("  · [Proposition 3 : ...............................................]");
       L.push("");
-      L.push("[AUCUN CHIFFRE N'EST ÉCRIT ICI, ET C'EST VOULU. Vos propositions sont");
-      L.push("les vôtres : une proposition devinée vous engagerait sur ce que vous");
+      L.push("[Les chiffres restent à porter. Vos propositions sont les vôtres : une");
+      L.push("proposition qui ne serait pas la vôtre vous engagerait sur ce que vous");
       L.push("n'avez pas voulu.]");
       L.push("");
       L.push("ARTICLE 3 - LES PROPOSITIONS DES ORGANISATIONS SYNDICALES, EN LEUR");
@@ -3235,7 +3235,7 @@
         "Le bordereau de remise des informations, daté et signé.",
         "Les réponses motivées aux propositions syndicales.",
         "Les observations éventuelles des organisations syndicales sur la rédaction du procès-verbal, annexées.",
-        "[Le cas échéant, les pièces exigées par les modalités de dépôt de D. 2231-2 - article non lu par ce module.]",
+        "[Le cas échéant, les pièces exigées par les modalités de dépôt de D. 2231-2 - article non lu pour ce document.]",
         "LE RÉCÉPISSÉ DE DÉPÔT, dès sa réception : c'est lui, et non le procès-verbal, qui prouve que le dépôt a eu lieu.",
       ]);
 
@@ -3468,7 +3468,7 @@
       L.push("");
       L.push("[Modalités de suivi de la réalisation des objectifs et des mesures. Le");
       L.push("deuxième alinéa de L. 2242-8 renvoie leur fixation à un décret, qui n'a");
-      L.push("pas été lu à la source par ce module : vérifiez-le avant d'arrêter vos");
+      L.push("pas été lu à la source pour ce document : vérifiez-le avant d'arrêter vos");
       L.push("modalités. Prévoyez au minimum qui suit, à quelle fréquence, et sur quels");
       L.push("indicateurs.]");
       L.push("");
@@ -3542,7 +3542,7 @@
       L.push("    période comprise entre la date de réception de la réponse et le terme");
       L.push("    de la première année suivant le dépôt du plan.");
       L.push("  · LE SILENCE VAUT REJET, à l'issue d'un délai fixé par décret en Conseil");
-      L.push("    d'État. Ce décret n'a pas été lu à la source par ce module : le délai");
+      L.push("    d'État. Ce décret n'a pas été lu à la source pour ce document : le délai");
       L.push("    n'est donc pas écrit ici.");
       L.push("  · LA DEMANDE N'EST PLUS RECEVABLE dès lors qu'un contrôle a été engagé.");
       L.push("    Demandez AVANT, pas pendant : c'est tout l'intérêt du dispositif.");
@@ -3598,7 +3598,7 @@
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
         ["Les articles L. 1142-8 et L. 1142-9, nommés par L. 2242-8, et les décrets",
          "auxquels L. 2242-8 et L. 2242-9 renvoient, n'ont PAS été lus à la source par",
-         "ce module : ni les indicateurs, ni les délais, ni les modalités de suivi ne",
+         "pour ce document : ni les indicateurs, ni les délais, ni les modalités de",
          "sont décrits ici. Ils sont nommés, et il faut les vérifier."])).join("\n");
     },
   });
@@ -3891,7 +3891,7 @@
       L.push("");
       L.push("Si le résultat appelle des mesures au titre de l'article L. 1142-9 :");
       L.push("  · [mesures définies, calendrier, et modalités de leur suivi]");
-      L.push("  · [Vérifiez à la source ce que L. 1142-9 exige : ce module ne l'a pas");
+      L.push("  · [Vérifiez à la source ce que L. 1142-9 exige : il n'a pas été");
       L.push("    lu, et une mesure inventée ne vaut pas mieux qu'une mesure absente.]");
       L.push("");
       L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
@@ -4506,7 +4506,7 @@
       L.push("════ CE QUE CE DOCUMENT NE PEUT PAS VOUS DIRE ════");
       L.push("");
       L.push("L'article L. 2312-36, auquel ce 2° renvoie, N'EST PAS dans le corpus lu");
-      L.push("par ce module. La liste exacte des données de son 2° n'est donc ni");
+      L.push("pour ce document. La liste exacte des données de son 2° n'est donc ni");
       L.push("reproduite ni résumée ici : elle ne sera pas devinée.");
       L.push("");
       L.push("Deux sources la portent :");
@@ -4612,11 +4612,11 @@
       L.push("  [Temps partiel par sexe]             | [......] | [.......] | [..]");
       L.push("  [.................................] | [......] | [.......] | [..]");
       L.push("");
-      L.push("  CES RUBRIQUES SONT ENTRE CROCHETS ET CE N'EST PAS UN OUBLI : ce module");
-      L.push("  n'a pas lu l'article L. 2312-36, et il ne prétend donc pas énumérer les");
-      L.push("  données que son 2° désigne. Confrontez ce bordereau à la grille de votre");
-      L.push("  base - le module « base de données (BDESE) » la déploie - et à votre");
-      L.push("  accord s'il en existe un.");
+      L.push("  CES RUBRIQUES SONT ENTRE CROCHETS ET CE N'EST PAS UN OUBLI :");
+      L.push("  l'article L. 2312-36 n'a pas été lu ici, et ce bordereau ne prétend");
+      L.push("  donc pas énumérer les données que son 2° désigne. Confrontez-le à la");
+      L.push("  grille de votre base - le dossier « base de données (BDESE) » la");
+      L.push("  déploie - et à votre accord s'il en existe un.");
       L.push("");
       L.push("  Remis à : [organisation syndicale, nom et qualité du signataire]");
       L.push("  Date et signature : [.......................................]");
@@ -4685,7 +4685,7 @@
 
       return L.concat(pied("L. 2242-6, L. 2242-17, 2°",
         ["L'article L. 2312-36, auquel le 2° de L. 2242-17 renvoie, N'EST PAS dans le",
-         "corpus lu par ce module : il est nommé, et la liste des données de son 2°",
+         "corpus lu pour ce document : il est nommé, et la liste des données de son 2°",
          "n'est ni reproduite ni résumée. Le module « base de données (BDESE) » le",
          "lit à la source et déploie la grille correspondante.",
          "",

@@ -79,9 +79,25 @@
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
   var DOUBLE = "════════════════════════════════════════════════════════════════════════";
 
+  /* « 1er septembre 2026 » EST UNE DATE, ET new Date() NE LE SAIT PAS.
+
+     Les écrans de l'application passent les dates écrites en français aux
+     générateurs : jourOu rendait alors « [date de diffusion] » là où la date
+     était saisie. Relevé le 27 septembre 2026. */
+  var MOIS_LU = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août",
+    "septembre", "octobre", "novembre", "décembre"];
   function dateDe(v) {
     if (!v) return null;
-    var x = v instanceof Date ? v : new Date(String(v));
+    if (v instanceof Date) return isNaN(v) ? null : v;
+    var s = String(v).trim();
+    var m = s.match(/^(\d{1,2})(?:er)?\s+([a-zà-ÿ]+)\s+(\d{4})$/i);
+    if (m) {
+      var i = MOIS_LU.indexOf(m[2].toLowerCase());
+      if (i >= 0) return new Date(Number(m[3]), i, Number(m[1]));
+    }
+    var f = s.match(/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{4})$/);
+    if (f) return new Date(Number(f[3]), Number(f[2]) - 1, Number(f[1]));
+    var x = new Date(s);
     return isNaN(x) ? null : x;
   }
 

@@ -143,6 +143,23 @@
         para = [];
         return;
       }
+      /* UN TITRE EN CAPITALES NE SE COLLE PAS À CE QUI LE SUIT.
+
+         « CONVOCATION ET ORDRE DU JOUR Réunion du comité social et économique
+         du 12 octobre » sortait en un seul titre, et « ORDRE DU JOUR 1.
+         Approbation du procès-verbal 2. ... » en une seule ligne : le
+         générateur écrit le titre, puis ce qu'il annonce, sans ligne blanche
+         entre les deux. Relevé le 27 septembre 2026. La première ligne part en
+         titre, le reste repasse par les mêmes règles. La réserve du
+         sous-titre entre parenthèses reste avant celle-ci. */
+      if (!premier && para.length >= 2 && !/[a-zà-ÿ]/.test(para[0]) &&
+          para[0].trim().length <= 90 && !/[.;,:]$/.test(para[0].trim()) &&
+          /[a-zà-ÿ]/.test(para[1]) && !/^\s*\(/.test(para[1])) {
+        b.push({ k: "h1", t: para[0].trim() });
+        para = para.slice(1);
+        vider();
+        return;
+      }
       var texte = para.map(function (s) { return s.trim(); }).join(" ");
       var capitales = !/[a-zà-ÿ]/.test(para[0]);
       /* Le premier paragraphe est l'en-tête de l'entreprise : ses lignes se
@@ -186,9 +203,32 @@
              25 septembre 2026 : le numéro est dans le texte, la puce s'en
              va. */
           var numero = /^\d{1,2}[.)]\s/.test(brut);
+          /* UNE LIGNE DE POINTS DE CONDUITE EST UN COUPLE, PAS UNE PHRASE.
+
+             « Effectif ....... 82 salariés » se lit en deux colonnes sur une
+             page à chasse fixe et se casse n'importe où sur un téléphone, où
+             les points occupent la moitié de la largeur. Relevé le
+             27 septembre 2026. Les points deviennent un deux-points, la ligne
+             se suffit à elle-même, et rien ne s'y colle. */
+          var conduite = /\.{4,}\s*\S/.test(brut);
           var avant = items.length ? items[items.length - 1] : null;
+          if (conduite) {
+            items.push({ t: brut.replace(/\s*\.{4,}\s*/, " : ").replace(/\s+:\s+:/, " :"),
+              puce: false, numero: false, lien: false, seul: true });
+            return;
+          }
+          if (avant && avant.seul) { items.push({ t: brut, puce: puce, numero: numero, lien: lien }); return; }
+          /* UNE MISE EN VALEUR EN CAPITALES AU MILIEU D'UNE PHRASE N'OUVRE PAS
+             UN ÉLÉMENT DE PLUS.
+
+             « le comité se réunit au moins UNE FOIS PAR / MOIS ; ... au moins /
+             UNE FOIS TOUS LES DEUX MOIS » donnait trois blocs, coupés en plein
+             milieu. Relevé le 27 septembre 2026. Ce qui décide n'est pas la
+             casse de la ligne qui suit, c'est que la ligne d'avant n'est pas
+             finie : elle ne s'arrête ni sur un point, ni sur un point-virgule,
+             ni sur un deux-points, ni sur une parenthèse fermante. */
           if (avant && !puce && !numero && !lien && !avant.lien &&
-              /^[a-zà-ÿ«(]/.test(brut) && !/[.:;»)\]]$/.test(avant.t)) {
+              !/[.:;»)\]]$/.test(avant.t)) {
             avant.t += " " + brut;
             return;
           }
@@ -196,6 +236,7 @@
         });
         items.forEach(function (x) {
           if (x.lien) b.push({ k: "lien", t: x.t });
+          else if (x.seul) b.push({ k: "p", t: x.t });
           else if (x.numero) b.push({ k: "p", t: x.t });
           else if (x.puce) b.push({ k: "puce", t: x.t });
           /* Un seul bloc en retrait, sans marque : c'est un paragraphe. */

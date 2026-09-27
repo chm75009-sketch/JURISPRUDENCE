@@ -559,6 +559,21 @@
     "R2242-1": { id: "LEGIARTI000036222825", lu: 8,
       dit: "le procès-verbal de désaccord est déposé dans les conditions prévues à l'article D. 2231-2" },
 
+    /* La mise en place du comité. Lus à la source le 27 septembre 2026, deux
+       lectures concordantes chacun, filtre par le nom du code. */
+    "L2311-2": { id: "LEGIARTI000035609353", lu: 27,
+      dit: "un comité social et économique est mis en place dans les entreprises d'au moins onze salariés ; sa mise en place n'est obligatoire que si l'effectif est atteint pendant douze mois consécutifs" },
+    "L2314-4": { id: "LEGIARTI000035651165", lu: 27,
+      dit: "l'employeur informe le personnel tous les quatre ans de l'organisation des élections, par tout moyen permettant de conférer date certaine ; le document précise la date envisagée pour le premier tour, qui doit se tenir au plus tard le quatre-vingt-dixième jour suivant la diffusion" },
+    "L2314-5": { id: "LEGIARTI000035651159", lu: 27,
+      dit: "les organisations syndicales sont informées de l'organisation des élections et invitées à négocier le protocole préélectoral ; l'invitation doit parvenir au plus tard quinze jours avant la première réunion de négociation" },
+    "L2314-8": { id: "LEGIARTI000036262484", lu: 27,
+      dit: "après un procès-verbal de carence, la demande d'élections d'un salarié ou d'une organisation syndicale ne peut intervenir qu'à l'issue d'un délai de six mois suivant son établissement" },
+    "L2314-9": { id: "LEGIARTI000035651143", lu: 27,
+      dit: "un procès-verbal de carence est établi par l'employeur, porté à la connaissance des salariés par tout moyen conférant date certaine, et transmis dans les quinze jours à l'agent de contrôle de l'inspection du travail" },
+    "L2317-1": { id: "LEGIARTI000035634273", lu: 27,
+      dit: "l'entrave à la constitution d'un comité social et économique, notamment par la méconnaissance des articles L. 2314-1 à L. 2314-9, est punie d'un an d'emprisonnement et de 7 500 euros d'amende" },
+
     /* Le transport. Lus à la source le 15 septembre 2026, deux lectures
        espacées concordantes chacun, filtre par le nom du code. */
     "R4515-4": { id: "LEGIARTI000018529684", lu: 15,
@@ -3805,14 +3820,64 @@
           .concat(portabilite(v));
       } },
 
-    convoc: { titre: "Convocation du CSE", ext: ["CSE-CTL-CON-05"], famille: "CSE",
+    convoc: { comite: true, titre: "Convocation du CSE", ext: ["CSE-CTL-CON-05"], famille: "CSE",
       champs: [{ id: "annee", nom: "Année", t: "text", crochet: "[ANNÉE]", defaut: String(AUJOURDHUI.getFullYear()) }], loi: ["L2315-27", "L2315-28", "L2312-19", "L2315-34"] },
-    odj: { titre: "Ordre du jour", ext: ["CSE-CTL-CON-01"], famille: "CSE", champs: [], loi: ["L2312-17", "L2312-19", "L2312-22"] },
-    pv: { titre: "Procès-verbal", champs: [{ id: "reunion", nom: "Date de la réunion", t: "date", defaut: iso(AUJOURDHUI) }, { id: "secretaire", nom: "Secrétaire du comité", t: "text", ph: "Madame Nadia ROUX" },
+    odj: { comite: true, titre: "Ordre du jour", ext: ["CSE-CTL-CON-01"], famille: "CSE", champs: [], loi: ["L2312-17", "L2312-19", "L2312-22"] },
+    pv: { comite: true, titre: "Procès-verbal", champs: [{ id: "reunion", nom: "Date de la réunion", t: "date", defaut: iso(AUJOURDHUI) }, { id: "secretaire", nom: "Secrétaire du comité", t: "text", ph: "Madame Nadia ROUX" },
         { id: "ordre", nom: "Ordre du jour, un point par ligne", t: "textarea", pleine: true, ph: "Approbation du procès-verbal précédent\nInformation sur les résultats du trimestre\nQuestions diverses" }], produire: pvCse },
     nao: { titre: "Accord NAO", champs: [{ id: "signature", nom: "Date de signature", t: "date", defaut: iso(AUJOURDHUI) }, { id: "syndicats", nom: "Organisations signataires", t: "text", ph: "CFDT, représentée par Monsieur Paul GIRARD" },
         { id: "mesures", nom: "Les mesures salariales convenues", t: "textarea", pleine: true, ph: "Augmentation générale de 2,5 % des salaires de base à compter du 1er janvier 2027." }], produire: accordNao },
-    desaccord: { titre: "PV de désaccord", ext: ["NAO-CTL-ISS-01"], famille: "NAO", champs: [], loi: ["L2242-5", "R2242-1", "L2242-1"] }
+    desaccord: { titre: "PV de désaccord", ext: ["NAO-CTL-ISS-01"], famille: "NAO", champs: [], loi: ["L2242-5", "R2242-1", "L2242-1"] },
+
+    /* LES ÉLECTIONS ET LA CARENCE S'ÉCRIVENT ICI, PAS AILLEURS.
+
+       La liste renvoyait vers un parcours d'apprentissage, et l'entreprise
+       sans comité repartait sans une lettre. Relevé le 27 septembre 2026. Le
+       générateur existait déjà : il produit la note d'information du personnel
+       (L. 2314-4, LEGIARTI000035651165), les deux invitations syndicales
+       (L. 2314-5, LEGIARTI000035651159), le procès-verbal de carence
+       (L. 2314-9, LEGIARTI000035651143) et son envoi à l'inspection du travail
+       dans les quinze jours. Deux lectures concordantes le 27 septembre 2026. */
+    elections: { titre: "Élections du CSE : information, invitations, carence",
+      ext: ["CSE-CTL-MEP-02"], famille: "CSE",
+      champs: [
+        { id: "info", nom: "Information du personnel diffusée le", t: "date",
+          cle: "dateInformationPersonnel",
+          sous: "le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant (L. 2314-4)" },
+        { id: "tour", nom: "Date envisagée pour le premier tour", t: "date",
+          cle: "datePremierTour", crochet: "[DATE - mention obligatoire]" },
+        { id: "reunion", nom: "Première réunion de négociation du protocole, le", t: "date",
+          crochet: "[DATE DE LA PREMIÈRE RÉUNION]",
+          sous: "l'invitation doit parvenir au plus tard quinze jours avant (L. 2314-5)" },
+        { id: "syndicats", nom: "Organisations syndicales invitées", t: "text", pleine: true,
+          cle: "syndicatsInvites", ph: "CFDT, CGT, FO, CFTC, CFE-CGC" },
+        { id: "etabli", nom: "Procès-verbal de carence établi le", t: "date",
+          crochet: "[DATE D'ÉTABLISSEMENT]",
+          sous: "à ne remplir que si le scrutin n'a produit aucun élu" },
+        { id: "envoi", nom: "Transmission à l'inspection du travail, le", t: "date",
+          crochet: "[DATE D'ENVOI]" }],
+      loi: ["L2311-2", "L2314-4", "L2314-5", "L2314-8", "L2314-9", "L2317-1"],
+      dates: function (v) {
+        var D = [], i = dateDe(v.info), r = dateDe(v.reunion), e = dateDe(v.etabli);
+        if (i) D.push({ q: "Premier tour au plus tard", d: dateFrJour(jour(i, 90)),
+          f: "le quatre-vingt-dixième jour suivant la diffusion de l'information du " +
+             dateFr(i) + " (" + ref(["L2314-4"]) + ")", c: "tard" });
+        if (r) D.push({ q: "Invitation des syndicats au plus tard", d: dateFrJour(jour(r, -15)),
+          f: "quinze jours avant la première réunion de négociation du " + dateFr(r) +
+             " (" + ref(["L2314-5"]) + ")", c: "tard" });
+        if (e) {
+          D.push({ q: "Transmission du procès-verbal au plus tard", d: dateFrJour(jour(e, 15)),
+            f: "quinze jours après l'établissement du procès-verbal de carence (" +
+               ref(["L2314-9"]) + ")", c: "tard" });
+          D.push({ q: "Aucune demande d'élections recevable avant", d: dateFrJour(plusMois(e, 6)),
+            f: "six mois après l'établissement du procès-verbal de carence (" +
+               ref(["L2314-8"]) + ")", c: "" });
+          D.push({ q: "Information du personnel à refaire", d: dateFrJour(plusMois(e, 48)),
+            f: "l'information du personnel se refait tous les quatre ans (" +
+               ref(["L2314-4"]) + ")", c: "tard" });
+        }
+        return D;
+      } }
   };
 
   var GROUPES = [
@@ -3828,7 +3893,7 @@
     ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "conservatoire", "faute"]],
     ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
-    ["Collectif", ["convoc", "odj", "pv", "nao", "desaccord"]]
+    ["Collectif", ["elections", "convoc", "odj", "pv", "nao", "desaccord"]]
   ];
 
   /* ═══════════════════════════════════════════════════════════ les écrans */
@@ -3933,12 +3998,41 @@
        élection organisée » ; le parcours écrit « non ». Le premier mot
        suffit, et l'égalité stricte ne reconnaissait plus rien. */
     var sansCse = String((profil && profil.cseExiste) || "").trim().toLowerCase().indexOf("non") === 0;
+    /* CE QUE LA FICHE DIT DÉJÀ N'EST PAS UNE QUESTION À REPOSER.
+
+       L'entreprise dont la fiche porte un procès-verbal de carence daté était
+       renvoyée vers « les élections d'abord », comme si rien n'avait été fait.
+       Relevé le 27 septembre 2026. Les deux délais qui comptent alors sont les
+       six mois de L. 2314-8 et les quatre ans de L. 2314-4 : ils s'affichent,
+       calculés, et la ligne des élections reste au-dessus pour la relance. */
+    var rep = String((profil && profil.cseExiste) || "").trim().toLowerCase();
+    var noteCse = "";
+    if (rep.indexOf("non, procès-verbal") === 0 || rep.indexOf("non, proces-verbal") === 0) {
+      var dc = dateDe(profil.cseCarence);
+      noteCse = dc
+        ? "Votre fiche porte un procès-verbal de carence du " + dateFr(dc) + ". Aucune demande " +
+          "d'élections n'est recevable avant le " + dateFr(plusMois(dc, 6)) + ", six mois après " +
+          "son établissement (" + ref(["L2314-8"]) + "), et l'information du personnel se refait " +
+          "tous les quatre ans, soit au plus tard le " + dateFr(plusMois(dc, 48)) + " (" +
+          ref(["L2314-4"]) + "). La ligne ci-dessous écrit cette relance."
+        : "Votre fiche indique un procès-verbal de carence, sans sa date. Portez-la sur la fiche " +
+          "d'entreprise : c'est elle qui ouvre les six mois pendant lesquels aucune demande " +
+          "d'élections n'est recevable (" + ref(["L2314-8"]) + ") et les quatre ans au terme " +
+          "desquels l'information du personnel se refait (" + ref(["L2314-4"]) + ").";
+    } else if (rep.indexOf("non, élections en cours") === 0 || rep.indexOf("non, elections en cours") === 0) {
+      noteCse = "Vos élections sont en cours d'organisation. La ligne ci-dessous écrit la note " +
+        "d'information du personnel, les invitations syndicales et, si le scrutin ne donne aucun " +
+        "élu, le procès-verbal de carence et sa transmission.";
+    } else if (sansCse) {
+      noteCse = "Aucun comité n'est en place et aucune élection n'a été organisée. À partir de " +
+        "onze salariés pendant douze mois consécutifs, le comité est dû (" + ref(["L2311-2"]) +
+        ") : la ligne ci-dessous écrit ce qui l'engage. L'entrave à sa constitution est punie " +
+        "d'un an d'emprisonnement et de 7 500 euros d'amende (" + ref(["L2317-1"]) + ").";
+    }
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
-      if (g[0] === "Collectif" && sansCse)
-        h += ligne("parcours.html?p=installation",
-          "Aucun comité en place : les élections d'abord",
-          "information du personnel, protocole préélectoral, et procès-verbal de carence à défaut de candidat");
+      if (g[0] === "Collectif" && noteCse)
+        h += '<p class="doc-note">' + ech(noteCse) + "</p>";
       /* LA NÉGOCIATION ANNUELLE SUPPOSE UNE SECTION SYNDICALE.
 
          L'accord et le procès-verbal de désaccord étaient proposés sans
@@ -4116,6 +4210,25 @@
     $("d-dates").hidden = !h;
     var a = "";
     if (r.refus) a += '<div class="refus"><b>Ce document n\'est pas produit.</b>' + r.refus.map(function (l) { return "<div>" + ech(l) + "</div>"; }).join("") + "</div>";
+    /* UN DOCUMENT DU COMITÉ SORTAIT IDENTIQUE À UNE ENTREPRISE QUI N'EN A PAS.
+
+       Convocation, ordre du jour et procès-verbal ne disaient rien d'une fiche
+       qui répond « non ». Relevé le 27 septembre 2026. Ils restent accessibles,
+       parce qu'on prépare une première réunion avant de l'avoir, mais l'écran
+       dit d'où il faut partir. */
+    if (doc.comite) {
+      var repC = String((profil && profil.cseExiste) || "").trim().toLowerCase();
+      if (repC.indexOf("non") === 0)
+        a += '<div class="alerte">' + ech("Votre fiche indique qu'aucun comité n'est en place. " +
+          "Ce document prépare une réunion qui n'a pas d'instance pour la tenir : ce qui vient " +
+          "d'abord est l'information du personnel et les élections, ou le procès-verbal de " +
+          "carence si le scrutin ne donne aucun élu (" + ref(["L2314-4", "L2314-9"]) + "). " +
+          "L'entrée « Élections du CSE » les écrit.") + "</div>";
+      else if (!repC)
+        a += '<div class="alerte">' + ech("Votre fiche ne dit pas si un comité est en place. " +
+          "Répondez-y avant d'envoyer ce document : sans instance élue, c'est l'information du " +
+          "personnel et les élections qui viennent d'abord (" + ref(["L2314-4"]) + ").") + "</div>";
+    }
     (r.alertes || []).forEach(function (t) {
       if (t && typeof t === "object" && t.manque) {
         a += '<div class="alerte manque">' + ech(t.t) + "<ul>" +

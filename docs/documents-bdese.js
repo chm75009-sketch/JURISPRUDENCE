@@ -48,7 +48,7 @@
       à la recherche, pas une affirmation sur l'entreprise.
 
    4. Aucune peine annoncée qui ne soit portée par un texte capté. Le corpus de
-      ce module ne contient AUCUN texte pénal ni aucune pénalité financière
+      ce dossier ne contient AUCUN texte pénal ni aucune pénalité financière
       propres à la base de données, c'est déjà le constat de
       regularisation-bdese.js, qui n'emploie ni gravité 1 ni gravité 2. Aucun
       document ne menace donc d'une amende. Ce qui se joue, et qui a été lu,

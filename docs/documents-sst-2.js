@@ -1154,7 +1154,7 @@
 
       return L.concat(pied("L. 1153-5-1, D. 1151-1, L. 1153-1, L. 1153-2, L. 1153-5, " +
         "L. 1152-2, L. 4121-1",
-        ["Aucune peine n'est annoncée. Le seul texte répressif capté par ce module en",
+        ["Aucune peine n'est annoncée. Le seul texte répressif lu pour ce dossier en",
          "matière de harcèlement est L. 1155-2, qui punit « les faits de",
          "discriminations commis à la suite d'un harcèlement moral ou sexuel » : il",
          "vise les représailles, non l'absence de référent. Ce qui se joue ici est",

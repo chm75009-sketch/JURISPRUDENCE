@@ -2503,8 +2503,8 @@
         L.push("");
       }
       L.push("Les délais de convocation et de transmission au comité sont fixés par les");
-      L.push("règles propres au comité, que ce module n'a pas lues : le module « comité");
-      L.push("social et économique » les traite.");
+      L.push("règles propres au comité, qui n'ont pas été lues ici : le dossier");
+      L.push("« comité social et économique » les traite.");
 
       return L.concat(pied("L. 4121-3-1, III et IV, L. 4121-2, L. 2312-27, R. 4121-2, R. 4121-3",
         ["Aucune peine n'est annoncée ici, et ce n'est pas une omission. R. 4741-1 ne",
@@ -2901,7 +2901,7 @@
       L.push("(pièce 1) et vous inscrivez le point à l'ordre du jour (pièce 2).");
       L.push("");
       L.push("Réunion : à fixer selon les délais de convocation et de transmission");
-      L.push("propres au comité, que ce module n'a pas lus. À titre indicatif, une");
+      L.push("propres au comité, qui n'ont pas été lus ici. À titre indicatif, une");
       L.push("réunion au " + leJour(dans(d0, 21)) + " laisse trois semaines de lecture ;");
       L.push("vérifiez ce que vos règles imposent avant de retenir cette date.");
       L.push("");
@@ -2948,9 +2948,9 @@
       L.push("deux se prouvent séparément. Le délai de transmission avant la réunion,");
       L.push("les règles de convocation et l'établissement du procès-verbal sont fixés");
       L.push("par les textes propres au comité, l'accord d'entreprise et le règlement");
-      L.push("intérieur du comité, que ce module n'a pas lus : le module « comité social");
-      L.push("et économique » les traite. Une consultation menée sans délai suffisant se");
-      L.push("conteste.");
+      L.push("intérieur du comité, qui n'ont pas été lus ici : le dossier « comité");
+      L.push("social et économique » les traite. Une consultation menée sans délai");
+      L.push("suffisant se conteste.");
 
       return L.concat(pied("L. 4121-3, 1°, L. 4121-3-1, R. 4121-2, L. 2312-27, L. 2317-1",
         ["LE MANQUEMENT N'EST PAS SEULEMENT CIVIL. « Le fait d'apporter une entrave à",
@@ -3987,7 +3987,7 @@
         "sont nommés par L. 2315-41, 4° ; ils n'ont pas été lus ici, et rien n'en " +
         "est écrit"));
       L.push("Les règles d'adoption et de modification du règlement intérieur du comité");
-      L.push("relèvent du module « comité social et économique » : ce module-ci ne les");
+      L.push("relèvent du dossier « comité social et économique » : celui-ci ne les");
       L.push("a pas lues et ne les écrit pas.");
 
       return L.concat(pied(

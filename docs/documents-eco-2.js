@@ -1451,7 +1451,7 @@
           L.push("  Saisi dans la fiche : « " + s + " »");
           if (!/\d/.test(s)) {
             L.push("");
-            L.push("  AUCUN CHIFFRE. C'est ce que le contrôle a relevé. La mesure existe");
+            L.push("  Aucun chiffre n'y figure. La mesure existe");
             L.push("  peut-être, mais rien dans le dossier ne permet d'en mesurer la portée.");
           } else {
             L.push("");
