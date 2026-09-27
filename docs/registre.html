@@ -73,6 +73,13 @@
   /* Le tri du registre : trois filtres, une recherche, un compte. */
   /* La rangée des sorties : elle défile horizontalement plutôt que de se
      comprimer, quatre intitulés ne tenant pas de front sur un téléphone. */
+  /* La liste des noms douteux : une ligne par nom, le bouton dessous sur un
+     téléphone, à côté dès qu'il y a la place. */
+  .corriger-noms{margin:8px 0 0}
+  .ligne-doute{display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    padding:8px 0;border-top:1px solid var(--filet)}
+  .ligne-doute span{flex:1 1 220px;font-size:var(--t1);line-height:1.45}
+  .ligne-doute button{flex:none;min-height:40px;padding:6px 12px;width:auto;font-size:var(--t1)}
   .reg-sorties{display:flex;gap:8px;margin:0 0 12px;padding:2px 0 6px;
     overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .reg-sorties::-webkit-scrollbar{display:none}
@@ -986,6 +993,60 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   }
 
   /* Le compte et la synthèse, eux aussi à part, pour la même raison. */
+
+  /* LES NOMS MAL COUPÉS SE PROPOSENT À LA CORRECTION.
+
+     Trois formes reviennent sur un registre repris d'un PDF, et elles restaient
+     en place sans un mot : « MEHMET | OZKAN », où le prénom est en capitales et
+     appartient au nom ; « NEKACHE NEKACHE | saadi né », où le nom est répété et
+     où le prénom a happé un mot de la colonne suivante ; « DALLA | BETTA RYAN »,
+     où la coupure est tombée au milieu d'un nom composé. Relevé le
+     27 septembre 2026.
+
+     Aucune correction ne s'applique d'elle-même : la coupure d'un nom n'est pas
+     une règle, c'est un fait que seul l'employeur connaît. L'écran dit ce qui
+     est douteux, pourquoi, et propose la forme corrigée sur un bouton. */
+  var MOT_HAPPE = /^(n[eé]e?|le|du|de|d|en|poste|entr[eé]e?)$/i;
+  function douteNom(s) {
+    var nom = String(s.nom || "").trim(), pre = String(s.pre || "").trim();
+    if (!nom && !pre) return null;
+    var motsNom = nom.split(/\s+/).filter(Boolean);
+    var motsPre = pre.split(/\s+/).filter(Boolean);
+
+    /* 1. Un mot répété dans le nom : « NEKACHE NEKACHE ». */
+    for (var i = 1; i < motsNom.length; i++) {
+      if (sansAccent(motsNom[i]) === sansAccent(motsNom[i - 1])) {
+        var sansDouble = motsNom.filter(function (m, k) {
+          return k === 0 || sansAccent(m) !== sansAccent(motsNom[k - 1]);
+        });
+        return { quoi: "le nom porte deux fois le même mot",
+          nom: sansDouble.join(" "), pre: pre };
+      }
+    }
+    /* 2. Un mot de service happé par le prénom : « saadi né ». */
+    if (motsPre.length > 1 && MOT_HAPPE.test(motsPre[motsPre.length - 1]))
+      return { quoi: "le prénom finit par un mot qui n'en est pas un",
+        nom: nom, pre: motsPre.slice(0, -1).join(" ") };
+    /* 3. Le prénom tout en capitales : il appartient probablement au nom. Un
+          seul mot, il y passe en entier ; deux mots, la coupure est tombée un
+          mot trop tôt et c'est le premier qui rejoint le nom, « DALLA | BETTA
+          RYAN » devenant « DALLA BETTA | RYAN ». */
+    if (pre && pre === pre.toUpperCase() && /[A-ZÀ-Þ]{2}/.test(pre) && motsPre.length <= 2) {
+      if (motsPre.length === 1)
+        return { quoi: "le prénom est écrit en capitales, comme un nom",
+          nom: (nom + " " + pre).trim(), pre: "" };
+      return { quoi: "le prénom est en capitales et compte deux mots : la coupure est tombée trop tôt",
+        nom: (nom + " " + motsPre[0]).trim(), pre: motsPre[1] };
+    }
+    /* 4. Un prénom de trois mots ou plus : la coupure est probablement tombée
+          au milieu d'un nom composé. */
+    if (motsPre.length >= 3)
+      return { quoi: "le prénom compte " + motsPre.length + " mots",
+        nom: (nom + " " + motsPre.slice(0, motsPre.length - 1).join(" ")).trim(),
+        pre: motsPre[motsPre.length - 1] };
+    return null;
+  }
+
   function rendreSynthese() {
     var L = filtrees(ordonnes());
     var tous = E.salaries.filter(function (x) { return !x.ex && (!vide(x.nom) || !vide(x.pre)); });
@@ -1017,7 +1078,38 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (indecises.length)
       sh += '<div class="avis att"><b>' + indecises.length + " ligne(s) dont la situation n'est pas tranchée</b>" +
         douze(indecises) + ". Ouvrez leurs mentions particulières.</div>";
+    /* Les noms douteux, avec la correction proposée sur un bouton. */
+    var doutes = [];
+    tous.forEach(function (x) {
+      var d = douteNom(x);
+      if (d) doutes.push({ s: x, d: d });
+    });
+    if (doutes.length)
+      sh += '<div class="avis att"><b>' + doutes.length + " nom" + (doutes.length > 1 ? "s" : "") +
+        " peut-être mal coupé" + (doutes.length > 1 ? "s" : "") + " à la reprise</b>" +
+        "Rien n'est corrigé sans vous : la coupure d'un nom composé n'est pas une règle." +
+        '<div class="corriger-noms">' + doutes.slice(0, 12).map(function (x) {
+          return '<div class="ligne-doute"><span>« ' + ech(String(x.s.nom || "")) + " | " +
+            ech(String(x.s.pre || "")) + " » : " + ech(x.d.quoi) + "</span>" +
+            '<button type="button" class="second" data-corriger="' + ech(x.s.id) + '">' +
+            "Écrire « " + ech(x.d.nom) + (x.d.pre ? " | " + ech(x.d.pre) : "") + " »</button></div>";
+        }).join("") + "</div>" +
+        (doutes.length > 12 ? "<p>… et " + (doutes.length - 12) + " autre(s).</p>" : "") + "</div>";
     $("synthese-registre").innerHTML = sh;
+    Array.prototype.forEach.call($("synthese-registre").querySelectorAll("[data-corriger]"),
+      function (b) {
+        b.addEventListener("click", function () {
+          var id = b.getAttribute("data-corriger");
+          var x = null;
+          E.salaries.forEach(function (y) { if (String(y.id) === id) x = y; });
+          if (!x) return;
+          var d = douteNom(x);
+          if (!d) return;
+          x.nom = d.nom; x.pre = d.pre;
+          garder();
+          rendreRegistre();
+        });
+      });
     if ($("r-voir-manques")) $("r-voir-manques").addEventListener("click", function () {
       FILTRE = "manque";
       Array.prototype.forEach.call(document.querySelectorAll("#reg-filtres button"), function (x) {
