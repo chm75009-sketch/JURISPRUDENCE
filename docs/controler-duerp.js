@@ -872,6 +872,18 @@
          toutes les mesures qui y renvoient. On cherche la transmission. */
       fond: "L. 4121-3-1, VI", m: "transmis au service|transmise au service|transmis a chaque mise a jour|transmission au service|transmis au medecin du travail",
       quoi: "Le document est transmis au service de prévention et de santé au travail à chaque mise à jour." },
+    /* L'ANNEXE DES DONNÉES COLLECTIVES D'EXPOSITION, DANS LE DOCUMENT DÉPOSÉ.
+
+       R. 4121-1-1 (LEGIARTI000031818152) la rend obligatoire, et l'écran la
+       produisait dans la version corrigée sans jamais dire qu'elle manquait au
+       document déposé. « L'annexe d'exposition vide n'est pas signalée » :
+       contre-vérification du 26 septembre 2026, ajouté le 28. On cherche ce qui
+       la nomme, et l'on compte ensuite les facteurs qu'elle porte : une annexe
+       dont le titre est là et les lignes vides ne vaut pas une annexe. */
+    { cle: "annexe", nom: "Annexe des données collectives d'exposition", bloquant: true,
+      fond: "R. 4121-1-1",
+      m: "donnees collectives|proportion de salaries exposes|facteurs de risques professionnels|annexe du document unique|4121-1-1",
+      quoi: "L'employeur consigne en annexe du document unique les données collectives utiles à l'évaluation des expositions individuelles et la proportion de salariés exposés au-delà des seuils." },
   ];
 
   /* LA DATE DU DOCUMENT. Un millésime trouvé n'importe où ne prouve rien : le
@@ -905,15 +917,29 @@
        pas le document. La plus récente date passée fait foi. */
     var auj = new Date(), aujIso = auj.getFullYear() + "-" + ("0" + (auj.getMonth() + 1)).slice(-2) + "-" + ("0" + auj.getDate()).slice(-2);
     var passees = jours.filter(function (j) { return j <= aujIso; });
+    /* LA DATE DE VERSION N'EST PAS UNE ÉCHÉANCE.
+
+       Quand le document ne portait que des dates à venir, celles du programme
+       d'actions, la première d'entre elles était présentée comme sa date : le
+       verdict disait « La plus récente est de 2027 » d'un document qui n'est pas
+       daté du tout. Défaut relevé par la contre-vérification du 26 septembre
+       2026, corrigé le 28. Les deux sont désormais séparées : les dates passées
+       datent le document, les dates à venir sont ses échéances, et l'absence de
+       date passée se dit pour ce qu'elle est.
+
+       Les millésimes isolés ne servent de date de version qu'à défaut, et
+       seulement s'ils ne sont pas dans l'avenir. */
+    var aVenir = jours.filter(function (j) { return j > aujIso; });
     var annees = [], a;
     var ra = /\b(19[89]\d|20[0-4]\d)\b/g;
     while ((a = ra.exec(t)) !== null) if (annees.indexOf(a[1]) < 0) annees.push(a[1]);
     annees.sort();
-    return { jours: jours, annees: annees,
+    var anneeCe = auj.getFullYear();
+    var anneesPassees = annees.filter(function (x) { return Number(x) <= anneeCe; });
+    return { jours: jours, annees: annees, passees: passees, aVenir: aVenir,
       derniere: passees.length ? Number(passees[passees.length - 1].slice(0, 4))
-        : jours.length ? Number(jours[0].slice(0, 4))
-                             : (annees.length ? Number(annees[annees.length - 1]) : null),
-      precise: jours.length > 0 };
+        : (anneesPassees.length ? Number(anneesPassees[anneesPassees.length - 1]) : null),
+      precise: passees.length > 0 };
   }
   function analyseMentions(t) {
     var n = normaliser(t);
@@ -995,11 +1021,45 @@
           return ech(m.x.nom) + ' <span class="art">(' + ech(m.x.fond) + ")</span> : " + ech(m.x.quoi);
         }).join("</li><li>") + "</li></ul>Ce n'est pas un défaut de forme : l'évaluation est " +
         "incomplète tant que ce point n'y figure pas.</div>";
+    /* L'ANNEXE NOMMÉE MAIS VIDE.
+       Le titre de l'annexe suffisait à la déclarer présente. On compte donc les
+       facteurs de L. 4161-1 qu'elle nomme : en dessous de trois, l'annexe est
+       un titre sans contenu, et l'écran le dit. Ajouté le 28 septembre 2026. */
+    var annexeVue = mentions.filter(function (m) { return m.x.cle === "annexe"; })[0];
+    if (annexeVue && annexeVue.vu) {
+      /* L'EXPRESSION ENTIÈRE, PAS LE PREMIER MOT.
+         « Travail de nuit », « Travail en équipes » et « Travail répétitif »
+         étaient tous trois trouvés par le mot « travail » de « unité de
+         travail » : trois facteurs comptés là où aucun n'était écrit, et
+         l'annexe vide passait pour remplie. Relevé le 28 septembre 2026 en
+         écrivant le contrôle. On cherche les deux premiers mots du facteur,
+         accolés, ce qui suffit à le distinguer. */
+      var nAnnTexte = normaliser(t);
+      var nAnn = FACTEURS.filter(function (x) {
+        var mots = normaliser(x).replace(/,/g, " ").split(/\s+/).filter(Boolean);
+        var phrase = mots.slice(0, 2).join(" ");
+        if (phrase.length < 5) phrase = mots[0] || "";
+        return phrase.length >= 5 && nAnnTexte.indexOf(phrase) >= 0;
+      }).length;
+      if (nAnn < 3)
+        h += '<div class="avis non"><b>L\'annexe des données collectives d\'exposition est nommée, ' +
+          "mais elle est vide</b>Sur les dix facteurs de risques de l'article L. 4161-1, " + nAnn +
+          (nAnn > 1 ? " seulement sont nommés" : (nAnn === 1 ? " seul est nommé" : " n'est nommé")) +
+          " dans votre document. Une annexe qui porte son titre et rien d'autre ne consigne " +
+          "aucune donnée collective : R. 4121-1-1 veut les données et la proportion de salariés " +
+          "exposés au-delà des seuils, facteur par facteur. La version corrigée en porte le " +
+          "tableau, à remplir.</div>";
+    }
     h += '<p class="bloc-t r"><span class="pastille"></span>La tenue du document</p>';
+    /* Les échéances, dites à part : elles ne datent pas le document. */
+    var ditEcheances = dates.aVenir.length
+      ? " Dates à venir, qui sont des échéances et non la date du document : " +
+        ech(dates.aVenir.map(function (j) { return dateFr(j); }).join(", ")) + "."
+      : "";
     if (derniere !== null) {
       var quoi = dates.precise
-        ? "Dates portées par le document : " + ech(dates.jours.map(function (j) { return dateFr(j); }).join(", ")) + "."
-        : "Aucune date complète. Millésimes cités : " + ech(dates.annees.join(", ")) + ".";
+        ? "Le document est daté : " + ech(dates.passees.map(function (j) { return dateFr(j); }).join(", ")) + "."
+        : "Aucune date complète passée. Millésimes cités : " + ech(dates.annees.join(", ")) + ".";
       h += '<div class="avis ' + (vieux ? "non" : "info") + '"><b>' + quoi + "</b>" +
         (vieux
           ? "La plus récente remonte à " + derniere + ", soit " + (anneeCourante - derniere) +
@@ -1007,10 +1067,15 @@
             ". La mise à jour est due au moins chaque année à partir de onze salariés" +
             (eff !== null ? ", et votre effectif est de " + eff + " salariés" : "") +
             " (R. 4121-2). Un document unique qui n'a pas été mis à jour ne protège personne, et son absence de mise à jour est punie de l'amende prévue pour les contraventions de cinquième classe (R. 4741-1)."
-          : "La plus récente est de " + derniere + ".") + "</div>";
+          : "La plus récente est de " + derniere + ".") + ditEcheances + "</div>";
     } else {
-      h += '<div class="avis att"><b>Aucune date n\'a été trouvée dans le document.</b>' +
-        "Un document unique sans date d'élaboration ni de mise à jour ne permet pas de vérifier la mise à jour annuelle (R. 4121-2).</div>";
+      h += '<div class="avis att"><b>Aucune date de version n\'a été trouvée dans le document.</b>' +
+        "Un document unique sans date d'élaboration ni de mise à jour ne permet pas de vérifier la mise à jour annuelle (R. 4121-2)." +
+        (dates.aVenir.length
+          ? " Les seules dates trouvées sont à venir : " +
+            ech(dates.aVenir.map(function (j) { return dateFr(j); }).join(", ")) +
+            ". Ce sont les échéances de vos actions, non la date du document. Portez-la."
+          : "") + "</div>";
     }
 
     h += '<p class="bloc-t ' + (absentes.length ? "r" : "v") + '"><span class="pastille"></span>' +

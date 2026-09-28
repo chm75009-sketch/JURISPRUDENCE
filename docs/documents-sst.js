@@ -148,16 +148,133 @@
   function estNon(v) { return v === false || v === "non"; }
   /* Le comité selon le questionnaire, et à défaut selon la fiche de
      l'accueil, qui porte la réponse depuis le 26 septembre 2026. */
+  /* LES QUATRE RÉPONSES DE LA FICHE, ET NON DEUX.
+
+     La fiche ne répond plus « oui » ou « non » depuis le 26 septembre 2026 :
+     elle répond « oui, élu », « non, procès-verbal de carence », « non,
+     élections en cours d'organisation » ou « non, aucune élection organisée ».
+     Cette fonction ne reconnaissait que les deux formes courtes : les quatre
+     autres laissaient « existe » indéfini, et le document unique sortait
+     identique avec et sans comité. Défaut relevé par la contre-vérification du
+     26 septembre 2026, corrigé le 28. On lit le premier mot, et le détail est
+     gardé à côté pour que le document puisse dire pourquoi. */
   function cseDe(ctx) {
     var f = (ctx && ctx.fiche) || {}, c = f.cse || {};
     if (c.existe === undefined || c.existe === null || c.existe === "") {
       var v = String(((ctx && ctx.profil) || {}).cseExiste || "").trim().toLowerCase();
-      if (v === "oui" || v === "non") {
+      if (v.indexOf("oui") === 0 || v.indexOf("non") === 0) {
         var d = {}; for (var k in c) if (Object.prototype.hasOwnProperty.call(c, k)) d[k] = c[k];
-        d.existe = v; c = d;
+        d.existe = v.indexOf("oui") === 0 ? "oui" : "non";
+        d.reponse = v;
+        d.carence = /carence/.test(v);
+        d.enCours = /en cours|organisation/.test(v);
+        d.aucuneElection = /aucune/.test(v);
+        c = d;
       }
     }
     return c;
+  }
+  /* L'ACTIVITÉ, DITE PAR LA FICHE : le secteur, et la convention collective
+     qui le précise. Ajouté le 28 septembre 2026. */
+  function activiteDe(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var bits = [];
+    var s = String(p.secteur || "").trim();
+    var c = String(p.conventionCollective || "").trim();
+    if (s) bits.push(s);
+    if (c) bits.push("convention collective " + c);
+    return bits.length ? bits.join(", ") : "[ACTIVITÉ DE L'ENTREPRISE]";
+  }
+
+  /* LES UNITÉS DE TRAVAIL VIENNENT DU MÉTIER, DU REGISTRE ET DU PARC.
+
+     La section 4 sortait vide, trois lignes à remplir, et la section 5
+     recopiait seize familles de risques génériques pour n'importe quelle
+     entreprise. Or le modèle du métier, déduit de la fiche (duerp-metiers.js,
+     complété par duerp-transport.js), porte les unités de travail avec leurs
+     risques, leurs situations, leur cotation et leurs mesures : c'est celui que
+     l'article 7.3 du règlement intérieur lit déjà. Défaut relevé par la
+     contre-vérification du 26 septembre 2026, corrigé le 28.
+
+     L'effectif de chaque unité est compté au registre du personnel, sur
+     l'intitulé d'emploi : le modèle du métier donne l'expression qui reconnaît
+     l'unité, et le registre dit combien de salariés la tiennent. Un compte à
+     zéro n'est pas caché, il est écrit : c'est peut-être une unité que
+     l'entreprise n'a pas, et c'est à elle de la retirer.
+
+     Faute de modèle chargé, on garde le socle générique : rien n'est perdu. */
+  function metierDe(ctx) {
+    var DM = (typeof window !== "undefined") ? window.DuerpMetiers : null;
+    if (!DM || !DM.pour || !DM.deduire) return null;
+    try { return DM.pour(DM.deduire((ctx && ctx.profil) || {})); } catch (e) { return null; }
+  }
+  function registreSst() {
+    var R = null;
+    try {
+      R = JSON.parse((typeof window !== "undefined" && window.localStorage
+        ? window.localStorage.getItem("registre-personnel") : null) || "null");
+    } catch (e) { R = null; }
+    var L = (R && R.salaries) || [];
+    var auj = new Date().toISOString().slice(0, 10);
+    return L.filter(function (s) {
+      if (!s || s.ex) return false;
+      var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e) || e > auj) return false;
+      return !(/^\d{4}-\d{2}-\d{2}$/.test(o) && o <= auj);
+    });
+  }
+  /* Les salariés dont l'intitulé d'emploi ou la qualification répond à
+     l'expression de l'unité. Un même salarié peut relever de deux unités : on
+     ne tranche pas à sa place, on compte, et le document le dit. */
+  function effectifUnite(L, u) {
+    if (!u || !u.m) return null;
+    var re;
+    try { re = new RegExp(u.m, "i"); } catch (e) { return null; }
+    var n = 0;
+    L.forEach(function (s) {
+      if (re.test(String(s.emp || "") + " " + String(s.qua || ""))) n++;
+    });
+    return n;
+  }
+  /* Le rang du risque, avec le mot du modèle : « action immédiate »,
+     « prioritaire », « à programmer », « à surveiller ». */
+  function DMP(r) {
+    var DM = (typeof window !== "undefined") ? window.DuerpMetiers : null;
+    if (!DM || !DM.priorite || r.g == null || r.f == null) return "";
+    try {
+      var p = DM.priorite(r.g, r.f);
+      return p.mot + " (produit " + p.p + ")";
+    } catch (e) { return ""; }
+  }
+  /* L'échéance : le modèle donne un nombre de mois, le document donne la date.
+     Un délai en mois se remet au lendemain, une date non. */
+  function echeanceMois(ctx, mois) {
+    if (mois == null) return "[DATE]";
+    var d0 = (ctx && ctx.aujourdhui instanceof Date && !isNaN(ctx.aujourdhui))
+      ? ctx.aujourdhui : new Date();
+    var d = new Date(d0.getTime());
+    d.setMonth(d.getMonth() + Number(mois));
+    return leJour(d) + " (" + mois + (mois > 1 ? " mois" : " mois") + ")";
+  }
+
+  /* Le parc de véhicules, pour les unités qui roulent. */
+  function parcSst() {
+    var V = null;
+    try {
+      V = JSON.parse((typeof window !== "undefined" && window.localStorage
+        ? window.localStorage.getItem("flotte-vehicules") : null) || "null");
+    } catch (e) { V = null; }
+    return Array.isArray(V) ? V : ((V && V.vehicules) || []);
+  }
+
+  /* La raison, en une phrase, quand il n'y a pas de comité. */
+  function sansComiteParce(ctx) {
+    var c = cseDe(ctx);
+    if (!estNon(c.existe)) return "";
+    if (c.carence) return "aucun comité n'est en place, un procès-verbal de carence ayant été établi";
+    if (c.enCours) return "aucun comité n'est encore en place, les élections étant en cours d'organisation";
+    if (c.aucuneElection) return "aucun comité n'est en place, aucune élection n'ayant été organisée";
+    return "aucun comité n'est en place";
   }
 
   function nomDe(ctx) {
@@ -979,7 +1096,11 @@
         C.push("sont exposés les travailleurs et assure la traçabilité collective de ces");
         C.push("expositions (L. 4121-3-1, I).");
         C.push("");
-        C.push("Activité : " + X(E, E && E.activite, "ACTIVITÉ DE L'ENTREPRISE") + ".");
+        /* L'ACTIVITÉ EST SUR LA FICHE.
+           Le document sortait « Activité : [ACTIVITÉ DE L'ENTREPRISE] » alors
+           que la fiche porte le secteur et la convention collective. Corrigé le
+           28 septembre 2026 sur la contre-vérification du 26. */
+        C.push("Activité : " + (E ? E.activite : activiteDe(ctx)) + ".");
         C.push("Périmètre couvert : " + X(E, "l'ensemble des unités de travail listées en 4, un seul établissement",
           "ÉNUMÉRER LES ÉTABLISSEMENTS ET LES SITES COUVERTS") + ".");
         C.push("Effectif : " + (eff != null ? eff + " salariés" : "[EFFECTIF]") +
@@ -998,7 +1119,14 @@
           ]));
         } else {
           C = C.concat(tableau(contrib[0], [
-            ["Comité social et économique" + (estNon(cseDe(ctx).existe) ? " (aucun comité déclaré, sans objet)" : ""), "[réunion, référence du procès-verbal]", "[date]"],
+            /* Sans comité, la ligne ne demande plus une référence de
+               procès-verbal qui n'existera pas : elle dit ce que la fiche dit,
+               et ce qui en découle. Le 28 septembre 2026. */
+            estNon(cseDe(ctx).existe)
+              ? ["Comité social et économique", "sans objet : " + sansComiteParce(ctx) +
+                  (cseDe(ctx).enCours ? " ; sa contribution sera recueillie dès son élection, et le document mis à jour" : ""),
+                 "sans objet"]
+              : ["Comité social et économique", "[réunion, référence du procès-verbal]", "[date]"],
             ["Salarié désigné (L. 4644-1) : [nom, ou « aucun désigné »]", "[ce qu'il a fait]", "[date]"],
             /* Le service de santé au travail est saisi une fois sur la fiche,
                sous « Organismes et interlocuteurs » : le document unique le
@@ -1037,10 +1165,33 @@
         C.push("4. UNITÉS DE TRAVAIL");
         C.push("");
         var enteteUnites = ["Unité de travail", "Ce qui la définit", "Effectif", "Site"];
+        /* Le métier déduit de la fiche, et les unités qu'il porte. */
+        var MET = E ? null : metierDe(ctx);
+        var REG = E ? [] : registreSst();
+        var SITE = E ? "" : (String((ctx.profil || {}).adresse || "").trim() || "[site]");
         if (E) {
           C = C.concat(tableau(enteteUnites, E.unites.map(function (u) {
             return [u.nom, u.def, String(u.effectif), u.site];
           })));
+        } else if (MET && (MET.unites || []).length) {
+          C.push("Les unités ci-dessous sont celles de votre activité, " + activiteDe(ctx) + ".");
+          C.push("L'effectif de chacune est compté à votre registre du personnel, sur");
+          C.push("l'intitulé d'emploi. Un même salarié peut relever de deux unités, et une");
+          C.push("unité peut être à zéro : c'est à vous de la retirer si vous ne l'avez pas.");
+          C.push("");
+          C = C.concat(tableau(enteteUnites, MET.unites.map(function (u) {
+            var n = effectifUnite(REG, u);
+            return [u.nom, String(u.qui || "").replace(/\s*\.\s*$/, ""),
+              n === null ? "[effectif]" : String(n), SITE];
+          })));
+          var parc = parcSst();
+          if (parc.length) {
+            C.push("Parc de véhicules inscrit à la flotte : " + parc.length +
+              (parc.length > 1 ? " véhicules" : " véhicule") + ". Les unités qui roulent en");
+            C.push("dépendent : l'entretien, les pneumatiques et les contrôles techniques sont");
+            C.push("des mesures de prévention, et ils se tiennent dans l'écran de la flotte.");
+            C.push("");
+          }
         } else {
           C = C.concat(tableauVide(enteteUnites, 3));
         }
@@ -1053,12 +1204,92 @@
             C.push("");
             C = C.concat(tableau(GRILLE, E.grille(u)));
           });
+        } else if (MET && (MET.unites || []).length) {
+          /* L'INVENTAIRE DE VOTRE MÉTIER, UNITÉ PAR UNITÉ.
+
+             Les seize familles génériques venaient avant tout le reste, et
+             c'était le seul inventaire produit : un document unique de
+             transporteur ne parlait ni de la conduite, ni du quai, ni de
+             l'atelier. Le modèle du métier les porte, avec pour chaque risque
+             la situation qui l'illustre, la gravité, la fréquence, le
+             responsable, le délai et les mesures. Il passe devant, et le socle
+             générique le suit en annexe : ce qui n'est pas propre au métier
+             reste dû. Refait le 28 septembre 2026 sur la contre-vérification
+             du 26. */
+          C.push("L'INVENTAIRE DE VOTRE ACTIVITÉ, À CONFIRMER POSTE PAR POSTE");
+          C.push("");
+          C.push("Ce qui suit est écrit pour " + activiteDe(ctx) + ". Chaque risque porte la");
+          C.push("situation qui l'illustre, sa cotation proposée, le responsable de l'action et");
+          C.push("son délai. Rien n'est vrai d'avance : lisez chaque ligne devant le poste, et");
+          C.push("corrigez ce qui ne s'y passe pas. Un document unique recopié tel quel");
+          C.push("n'évalue rien et ne vous protégera pas.");
+          C.push("");
+          MET.unites.forEach(function (u, iu) {
+            var n = effectifUnite(REG, u);
+            C.push("Unité de travail " + (iu + 1) + " - " + u.nom +
+              (n === null ? "" : " (" + n + (n > 1 ? " salariés" : " salarié") + " au registre)"));
+            C.push("");
+            if (u.qui) { C.push("Qui : " + String(u.qui).replace(/\s*\.\s*$/, "") + "."); C.push(""); }
+            if (!(u.risques || []).length) {
+              C.push("Aucun risque n'est écrit pour cette unité dans le modèle : reprenez les");
+              C.push("familles du socle commun, en annexe, et gardez celles qui s'y appliquent.");
+              C.push("");
+              return;
+            }
+            u.risques.forEach(function (r, ir) {
+              C.push("  " + (iu + 1) + "." + (ir + 1) + " - " + r.n);
+              C.push("");
+              if (r.s) { C.push("  Ce qui se passe : " + r.s); C.push(""); }
+              C.push("  Cotation proposée : gravité " + (r.g == null ? "[g]" : r.g) +
+                ", fréquence " + (r.f == null ? "[f]" : r.f) +
+                (DMP(r) ? ", soit un risque " + DMP(r) : "") + ".");
+              C.push("");
+              if ((r.mes || []).length) {
+                C.push("  Mesures, à cocher quand elles sont en place et à dater :");
+                C.push("");
+                r.mes.forEach(function (x) { C.push("    - [ ] " + x); });
+                C.push("    - [ ] Autres mesures : [préciser]");
+                C.push("");
+              }
+              if (r.cond) { C.push("  Ce qui doit être vrai : " + r.cond + "."); C.push(""); }
+              if (r.ind) { C.push("  Ce qui se mesure : " + r.ind + "."); C.push(""); }
+              C.push("  Responsable : " + (r.r || "[NOM ET QUALITÉ]") +
+                "   -   Échéance : " + echeanceMois(ctx, r.mois));
+              C.push("");
+            });
+          });
+          /* L'ANNEXE EST UNE LISTE DE CONTRÔLE, PAS UN SECOND DOCUMENT.
+
+             Recopier les seize familles en entier derrière l'inventaire du
+             métier doublait la longueur du document et son nombre de crochets :
+             deux cent quatre-vingt-cinq devenaient cinq cents, et la
+             contre-vérification du 26 septembre 2026 reprochait déjà les
+             crochets. L'annexe nomme donc les seize familles, une ligne
+             chacune, pour vérifier qu'aucune n'a été oubliée : celle qui manque
+             se traite dans l'unité qui la porte, avec les mesures écrites
+             ci-dessus. Arrêté ainsi le 28 septembre 2026. */
+          C.push("ANNEXE - LES SEIZE FAMILLES, POUR VÉRIFIER QU'AUCUNE N'EST OUBLIÉE");
+          C.push("");
+          C.push("Ces familles valent pour n'importe quelle entreprise. Passez-les une par une");
+          C.push("sur l'inventaire ci-dessus : celle qui n'y figure pas est soit sans objet chez");
+          C.push("vous, soit un oubli. Dans le second cas, ajoutez-la à l'unité qui la porte.");
+          C.push("");
+          SOCLE.forEach(function (f, i) {
+            C.push("  " + (i + 1 < 10 ? " " : "") + (i + 1) + ". " + f.n +
+              " - cotation usuelle : probabilité " + f.cote[0] + ", gravité " + f.cote[1] +
+              ", rang " + NOM_RANG[rangDe(f.cote)]);
+          });
+          C.push("");
+          C.push("N'oubliez ni les ambiances thermiques (R. 4121-1), ni le harcèlement moral,");
+          C.push("le harcèlement sexuel et les agissements sexistes (L. 4121-2, 7°).");
+          C.push("");
         } else {
           /* LE SOCLE COMMUN, PRÉ-ÉCRIT. La grille était vide : trois lignes à
              remplir devant un tableau de sept colonnes. On donne désormais
              les seize familles rédigées, avec leurs situations types, les
              mesures courantes et une cotation proposée, pour que le client
-             ait à retrancher plutôt qu'à inventer. */
+             ait à retrancher plutôt qu'à inventer. Cette branche ne sert plus
+             que si le modèle des métiers n'est pas chargé. */
           C.push("SOCLE COMMUN, À ADAPTER IMPÉRATIVEMENT");
           C.push("");
           C.push("Les seize familles ci-dessous valent pour n'importe quelle entreprise,");
@@ -1160,7 +1391,7 @@
 
         C.push("9. TRANSMISSION AU SERVICE DE PRÉVENTION ET DE SANTÉ AU TRAVAIL (L. 4121-3-1, VI)");
         C.push("");
-        C.push("Le document est transmis à chaque mise à jour à " + X(E, E && E.spst, "NOM DU SERVICE") +
+        C.push("Le document est transmis à chaque mise à jour à " + (E ? E.spst : cro((ctx.profil || {}).orgSanteTravail, "NOM DU SERVICE")) +
           ", la présente version le " + X(E, leJour(dans(d0, 3)), "date") + ".");
         C.push("");
         C.push("Fait à " + (E ? E.ville : lieu(ctx)) + ", le " + X(E, leJour(d0), "DATE"));
@@ -1220,10 +1451,34 @@
       L.push("Au " + leJour(dans(d0, 60)) + " environ, projet de document unique rédigé,");
       L.push("unité par unité, avec les sept colonnes remplies.");
       L.push("");
-      L.push("Au " + leJour(dans(d0, 75)) + " environ, consultation du comité social et");
-      L.push("économique sur le document (L. 4121-3, 1°) : l'ordre du jour et le");
-      L.push("procès-verbal sont produits à part (SST-CTL-DUE-07).");
-      L.push("");
+      /* LE CALENDRIER SUIT LA RÉPONSE DE LA FICHE SUR LE COMITÉ.
+         « Au 10 décembre 2026 environ, consultation du comité social et
+         économique » figurait même avec un procès-verbal de carence : une
+         échéance qui ne peut pas être tenue. Défaut relevé par la
+         contre-vérification du 26 septembre 2026, corrigé le 28. */
+      if (!estNon(cseDe(ctx).existe)) {
+        L.push("Au " + leJour(dans(d0, 75)) + " environ, consultation du comité social et");
+        L.push("économique sur le document (L. 4121-3, 1°) : l'ordre du jour et le");
+        L.push("procès-verbal sont produits à part (SST-CTL-DUE-07).");
+        L.push("");
+      } else {
+        L.push("Pas de consultation du comité social et économique à cette étape : " +
+          sansComiteParce(ctx) + ".");
+        if (cseDe(ctx).carence) {
+          L.push("Joignez le procès-verbal de carence au dossier du document unique : c'est");
+          L.push("lui qui établit qu'il n'y avait personne à consulter, et l'inspection du");
+          L.push("travail le demandera avant toute autre pièce.");
+        } else if (cseDe(ctx).enCours) {
+          L.push("Le scrutin en cours décidera : s'il donne des élus, la consultation leur");
+          L.push("est due et le document unique est remis à jour ; s'il n'en donne aucun, un");
+          L.push("procès-verbal de carence est établi (L. 2314-9) et joint au dossier.");
+        } else {
+          L.push("Aucune élection n'a été organisée à ce jour : organiser les élections est");
+          L.push("une obligation distincte de celle-ci, et la consultation deviendra due dès");
+          L.push("qu'un comité sera élu. Le document unique n'attend pas pour autant.");
+        }
+        L.push("");
+      }
       L.push("Au " + leJour(dans(d0, 90)) + " au plus tard, version datée et signée,");
       L.push("avis d'accès affiché (R. 4121-4), document transmis au service de");
       L.push("prévention et de santé au travail (L. 4121-3-1, VI), et suites établies :");
@@ -1483,13 +1738,41 @@
     var exemple = coupure > 0 ? L.slice(debutExemple, coupure) : [];
     var reste = coupure > 0 ? L.slice(coupure) : L;
 
+    /* LES ONGLETS DES FORMALITÉS NE COMMENCENT PLUS À « 6 ».
+
+       Les sections 1 à 5 sont sur l'onglet du document : les sous-onglets des
+       formalités s'ouvraient donc sur « 6 Les suites », un numéro orphelin qui
+       ne renvoyait à rien de visible. Ils portent leur nom, sans numéro.
+       Corrigé le 28 septembre 2026 sur la contre-vérification du 26.
+
+       ET LES TROIS ÉCRITS QUI SUIVENT LE DOCUMENT SE PRODUISENT ICI.
+
+       Le programme annuel de prévention, la lettre au service de prévention et
+       de santé au travail et l'avis d'accès existaient chacun dans son
+       générateur, et rien n'y conduisait depuis le document unique : « Produire
+       ici le programme annuel, la lettre au service de santé au travail et
+       l'avis d'accès », demandait la liste. Ils viennent en sous-onglets, sans
+       leur exemple. */
+    function sousDoc(id, nom) {
+      var g = DP.pour(id);
+      if (!g || typeof g.produire !== "function") return null;
+      var x;
+      try { x = g.produire(ctx); } catch (e) { return null; }
+      x = typeof x === "string" ? x : String(x);
+      if (DP.sansExemple) x = DP.sansExemple(x);
+      if (DP.sansCodes) { try { x = DP.sansCodes(x); } catch (e) {} }
+      return { cle: id, nom: nom, texte: x };
+    }
     var form = [
-      { cle: "s6", nom: "6 Les suites", texte: coupeSst(reste, "6. SUITES", "7. MISE À JOUR").join("\n") },
-      { cle: "s7", nom: "7 Mise à jour", texte: coupeSst(reste, "7. MISE À JOUR", "8. CONSERVATION").join("\n") },
-      { cle: "s8", nom: "8 Conservation", texte: coupeSst(reste, "8. CONSERVATION", "9. TRANSMISSION").join("\n") },
-      { cle: "s9", nom: "9 Transmission", texte: coupeSst(reste, "9. TRANSMISSION", "VOTRE CALENDRIER").join("\n") },
+      { cle: "s6", nom: "Les suites", texte: coupeSst(reste, "6. SUITES", "7. MISE À JOUR").join("\n") },
+      { cle: "s7", nom: "Mise à jour", texte: coupeSst(reste, "7. MISE À JOUR", "8. CONSERVATION").join("\n") },
+      { cle: "s8", nom: "Conservation", texte: coupeSst(reste, "8. CONSERVATION", "9. TRANSMISSION").join("\n") },
+      { cle: "s9", nom: "Transmission", texte: coupeSst(reste, "9. TRANSMISSION", "VOTRE CALENDRIER").join("\n") },
       { cle: "cal", nom: "Le calendrier", texte: coupeSst(reste, "VOTRE CALENDRIER", "LES RÈGLES").join("\n") },
-    ].filter(function (x) { return x.texte.trim() !== ""; });
+      sousDoc("SST-CTL-DUE-05", "Programme annuel"),
+      sousDoc("SST-CTL-DUE-08", "Lettre au service de santé"),
+      sousDoc("SST-CTL-DUE-06", "Avis d'accès"),
+    ].filter(function (x) { return x && x.texte && x.texte.trim() !== ""; });
     var droit = coupeSst(reste, "LES RÈGLES", null).join("\n");
 
     /* PAS DE SOUS-BOUTONS SUR LE DOCUMENT. Ils y avaient été posés, et le
@@ -2994,7 +3277,7 @@
         var nom = E ? E.nom : nomDe(ctx);
         var sig = E ? E.signataire : signataire(ctx);
         var vers = E ? leJour(d0) : "[DATE DE LA VERSION]";
-        var service = X(E, E && E.spst, "NOM DU SERVICE DE PRÉVENTION ET DE SANTÉ AU TRAVAIL");
+        var service = (E ? E.spst : cro((ctx.profil || {}).orgSanteTravail, "NOM DU SERVICE DE PRÉVENTION ET DE SANTÉ AU TRAVAIL"));
         C.push("PIÈCE 1, COURRIER DE TRANSMISSION");
         C.push("");
         C.push(nom);

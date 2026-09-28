@@ -33,6 +33,16 @@
   "use strict";
   if (!window.DuerpMetiers || !window.DuerpMetiers.ajouter) return;
 
+  /* LES EXPRESSIONS QUI RECONNAISSENT UNE UNITÉ SONT DES RADICAUX.
+
+     « mécanique » ne reconnaît pas « Mécanicien », « administratif » ne
+     reconnaît pas « Assistante administrative » : les intitulés d'emploi du
+     registre ne sont pas les mots du modèle. Les unités de l'atelier et du
+     bureau sortaient donc à zéro salarié dans le document unique d'une
+     entreprise qui en compte. Relevé le 28 septembre 2026, en reliant les
+     unités au registre. Les expressions portent désormais le radical, et les
+     accents y sont écrits comme facultatifs. */
+
   var TRANSPORT = {
     cle: "transport",
     nom: "Transport routier de marchandises",
@@ -107,7 +117,7 @@
         ] },
 
       /* ════════════════════════════════════════════════════════════════ */
-      { cle: "chargement", nom: "Chargement, arrimage et livraison", m: "chargement|arrimage|hayon|sangle|bâchage|livraison|transpalette",
+      { cle: "chargement", nom: "Chargement, arrimage et livraison", m: "chargement|arrimage|hayon|sangle|b[âa]chage|livr|transpalette|manutentionnaire",
         qui: "Conducteurs pendant les opérations de chargement et de déchargement, personnel de quai en accompagnement.",
         risques: [
           { n: "Chute de hauteur depuis le plateau, le hayon ou la citerne", m: "chute|hauteur|hayon|plateau|bâche|échelle",
@@ -229,7 +239,7 @@
         ] },
 
       /* ════════════════════════════════════════════════════════════════ */
-      { cle: "atelier", nom: "Atelier mécanique intégré", m: "atelier|mécanique|mecanique|garage|pont élévateur|maintenance|réparation",
+      { cle: "atelier", nom: "Atelier mécanique intégré", m: "atelier|m[ée]canic|m[ée]caniq|garage|pont [ée]l[ée]vateur|maintenance|r[ée]para|carross|pneumatic",
         qui: "Mécaniciens, chefs d'atelier, apprentis et personnel affecté à l'entretien des véhicules.",
         risques: [
           { n: "Travail sous véhicule et pont élévateur", m: "pont élévateur|élévateur|sous véhicule|fosse|levage|béquille",
@@ -305,7 +315,7 @@
         ] },
 
       /* ════════════════════════════════════════════════════════════════ */
-      { cle: "cour", nom: "Cour, lavage et carburant", m: "cour|parking|lavage|carburant|cuve|gasoil|circulation",
+      { cle: "cour", nom: "Cour, lavage et carburant", m: "cour|parking|lavage|laveur|carburant|cuve|gasoil|circulation",
         qui: "Conducteurs en manœuvre sur le site, personnel de lavage, personnel affecté à la distribution de carburant.",
         risques: [
           { n: "Circulation dans la cour, piétons et poids lourds", m: "circulation|cour|piéton|manœuvre|plan de circulation",
@@ -343,7 +353,7 @@
         ] },
 
       /* ════════════════════════════════════════════════════════════════ */
-      { cle: "exploitation", nom: "Exploitation et bureau", m: "exploitation|bureau|administratif|planning|affrètement|écran",
+      { cle: "exploitation", nom: "Exploitation et bureau", m: "exploitation|bureau|administrat|assistant|secr[ée]tar|comptab|planning|affr[êe]t|[ée]cran|accueil",
         qui: "Exploitants, affréteurs, personnel administratif et d'accueil.",
         risques: [
           { n: "Charge mentale et pression du planning", m: "charge mentale|stress|pression|planning|urgence|rps",
