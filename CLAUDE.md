@@ -51,6 +51,26 @@ sans rien. Personne n'avait fixé de limite : je l'ai posée seul, et je ne l'ai
 dite. Quand le nombre d'éléments n'est pas donné, il se demande ; il ne se décide
 pas à la place de l'utilisatrice.
 
+**Quand la liste est donnée, on ne s'arrête pas et on ne demande rien : on
+continue.** Posé le 28 septembre 2026, dans ces termes : « Sans t'arrêter. Ok ?
+ne me demande rien. Chaque fois que tu vas t'arrêter tu te dis non je n'ai pas
+fini donc je continue. »
+
+La règle du 15 septembre commande de demander quand l'étendue du travail n'est
+pas connue. Celle-ci commande l'inverse dès qu'elle l'est : une liste de défauts
+remise en entier, un nombre écrit, un « fais tout », et il n'y a plus rien à
+demander. Il reste à faire, jusqu'au bout.
+
+Ce qu'elle interdit, nommément : m'arrêter au milieu pour rendre compte de
+l'avancement ; demander si je continue ; demander lequel traiter d'abord ;
+proposer la suite au lieu de la faire ; rendre un bilan quand ce qu'on attend est
+le travail. Un défaut que je ne reproduis pas ne m'arrête pas non plus : je le
+note, je passe au suivant, et je le dis à la fin.
+
+Le réflexe, au moment où je m'apprête à conclure : **non, je n'ai pas fini, donc
+je continue.** Et je ne le dis pas, je le fais : « je continue » écrit dans un
+message est précisément ce qui a été reproché le 27 septembre 2026.
+
 ## Contrôle avant chaque envoi - six questions, dans cet ordre
 
 Ce bloc existe parce que les consignes qui suivent sont connues et enfreintes
