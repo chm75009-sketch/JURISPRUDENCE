@@ -286,6 +286,17 @@
     var avant = V || {};
     var neuf = !avant.emploi;
     V = {};
+    /* CE QUI NE S'AFFICHE PAS NE SE PERD PLUS.
+
+       « V = {} » ne gardait que les champs visibles du profil : le sexe repris
+       du registre, qui n'a pas de case à l'écran, était effacé à chaque
+       reconstruction des champs, et celle-ci suit immédiatement la sélection du
+       salarié. Le contrat d'une conductrice sortait donc « ZENNADI Naïma, né
+       le … ». Relevé le 28 septembre 2026 : l'accord existait, la donnée
+       n'arrivait pas. Les valeurs invisibles que le registre remplit sont
+       recopiées avant tout le reste. */
+    ["sexe", "titreTravail", "titreNumero", "titreFin", "natureRegistre", "sortieRegistre"]
+      .forEach(function (k) { if (avant[k] !== undefined && avant[k] !== "") V[k] = avant[k]; });
     L.forEach(function (c) {
       if (avant[c.id] !== undefined && avant[c.id] !== "") { V[c.id] = avant[c.id]; return; }
       V[c.id] = (g[c.id] !== undefined && ["nom", "adresse", "naissance", "lieuNaissance",
