@@ -474,6 +474,19 @@
 
   /* ---------------------------------------------------------------- */
   /* Le dossier : ce que la fiche entreprise donne, ce que l'écran demande. */
+  /* La ville de l'entreprise : son propre champ sur la fiche, sinon la commune
+     qui suit le code postal de l'adresse. Le crochet ne sert que si les deux
+     manquent. */
+  function villeFiche() {
+    var p = null;
+    try { p = P && P.lire ? P.lire() : null; } catch (e) { p = null; }
+    p = p || {};
+    var v = String(p.ville || "").trim();
+    if (v) return v;
+    var m = String(p.adresse || "").match(/\d{5}\s+([^,;]+)\s*$/);
+    return m ? m[1].trim() : "[lieu]";
+  }
+
   function nombre(v) {
     var s = String(v == null ? "" : v).trim();
     return s !== "" && isFinite(+s) ? Number(s) : null;
@@ -490,6 +503,13 @@
       vel: $("#vel").value === "oui",
       dr: $("#dr").value, heure: $("#heure").value.trim() || "[heure]", lieur: $("#lieur").value.trim() || "[lieu]",
       sec: $("#sec").value.trim() || "[nom du secrétaire]", dadopt: $("#dadopt").value,
+      /* LE LIEU DE SIGNATURE EST CONNU : C'EST CELUI DE L'ENTREPRISE.
+
+         « Fait à [lieu] » restait dans le protocole, dans le procès-verbal
+         d'adoption et dans la décision unilatérale, alors que la fiche porte
+         la ville, ou à défaut le code postal de l'adresse. Relevé le
+         28 septembre 2026 en balayant les écrans de contrôle. */
+      ville: villeFiche(),
     };
     /* Le nombre de sièges et le nombre de collèges ne sont pas saisis : le
        moteur du module comité les tire du tableau de R. 2314-1 et de
@@ -763,7 +783,7 @@
         return [
           "Article 12. Validité et signature.",
           "La validité du présent protocole est subordonnée à sa signature par la majorité des organisations syndicales ayant participé à sa négociation, dont les organisations syndicales représentatives ayant recueilli la majorité des suffrages exprimés lors des dernières élections professionnelles ou, lorsque ces résultats ne sont pas disponibles, la majorité des organisations représentatives dans l'entreprise.",
-          "Fait à [lieu], le [date], en [nombre] exemplaires originaux.",
+          "Fait à " + c.ville + ", le [date], en [nombre] exemplaires originaux.",
           "Pour l'entreprise : [nom, qualité, signature]",
           "Pour les organisations syndicales : [organisation, nom du signataire, signature]",
         ];
@@ -833,7 +853,7 @@
           "Le comité social et économique de " + c.ent + " n'a pas été [mis en place / renouvelé] à l'issue du scrutin du " + fr(c.d1) + ", [aucune liste n'ayant été présentée / le nombre de candidats étant insuffisant].",
           "Le présent procès-verbal de carence est porté à la connaissance des salariés dans l'entreprise, par tout moyen permettant de donner date certaine à cette information.",
           "Il est transmis dans les quinze jours" + (c.d1 ? ", soit au plus tard le " + fr(jours(c.d1, 15)) : "") + ", par tout moyen permettant de conférer date certaine, à l'agent de contrôle de l'inspection du travail, qui en communique une copie aux organisations syndicales de salariés du département concerné.",
-          "Fait à [lieu], le [date]. [Nom, qualité, signature]",
+          "Fait à " + c.ville + ", le [date]. [Nom, qualité, signature]",
         ];
       },
     },
@@ -1117,7 +1137,7 @@
         return [
           "Article 9. Durée et révision.",
           "Le présent règlement s'applique à compter de son adoption, pour la durée des mandats en cours, et reste applicable jusqu'à l'adoption d'un nouveau règlement. Il peut être modifié par résolution du comité prise dans les conditions de l'article 5.",
-          "Fait à [lieu], le " + fr(c.dadopt) + ". Le président : [nom, qualité]. Le secrétaire du comité : " + c.sec + ".",
+          "Fait à " + c.ville + ", le " + fr(c.dadopt) + ". Le président : [nom, qualité]. Le secrétaire du comité : " + c.sec + ".",
         ];
       },
     },

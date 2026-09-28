@@ -104,9 +104,18 @@
   .etiq.pris{background:var(--vert-clair);color:var(--vert)}
   details.txt .id{font:400 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--encre-3)}
 
-  pre.sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
-    max-height:62vh;overflow:auto}
+  .sortie{background:var(--carte);border:1px solid var(--filet);border-radius:10px;
+    padding:16px;max-height:62vh;overflow:auto}
+  .sortie pre{white-space:pre-wrap;margin:0;
+    font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace}
+  /* La feuille : le document tel qu'il sortira sur le papier. */
+  .fd-corps .b-t1{font:700 17px/1.35 system-ui;margin:0 0 6px;text-align:center}
+  .fd-corps .b-h1{font:700 15px/1.35 system-ui;margin:18px 0 7px}
+  .fd-corps .b-h2{font:600 14px/1.35 system-ui;margin:14px 0 5px}
+  .fd-corps .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.65}
+  .fd-corps .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}
+  .fd-corps .b-sign{margin:18px 0 0;font-size:14.5px;line-height:1.7}
+  .fd-corps .b-trait{border:0;border-top:1px solid var(--filet);margin:18px 0}
 
   /* La page d'affichage de l'index : le seul bloc de cette application qui
      s'imprime pour être punaisé, donc le seul dessiné pour le papier. */
@@ -208,7 +217,7 @@
             <button class="btn second" id="dl-txt">Télécharger en texte</button>
             <button class="btn second" id="copier">Copier</button>
           </div>
-          <pre class="sortie" id="sortie"></pre>
+          <div class="sortie" id="sortie"></div>
         </div>
 
         <div id="s-courrier" class="cache">
@@ -216,7 +225,7 @@
             <button class="btn" id="dl-courrier-docx">Télécharger en Word</button>
             <button class="btn second" id="copier-courrier">Copier</button>
           </div>
-          <pre class="sortie" id="courrier"></pre>
+          <div class="sortie" id="courrier"></div>
         </div>
 
         <div id="s-index" class="cache">
@@ -1016,10 +1025,16 @@
       L.push("À déplacer à leur rang dans le corps du texte. Les valeurs entre crochets");
       L.push("sont à compléter : elles sont vôtres, l'application ne les invente pas.");
       L.push("");
+      /* UNE RÈGLE DE SOIXANTE-DOUZE TIRETS NE SÉPARE RIEN.
+
+         Chaque domaine porte déjà son titre, que la feuille rend en tête de
+         section : le trait ne servait qu'à marquer une coupure dans un texte à
+         chasse fixe, et il se lisait comme une partie du plan d'action. Le
+         même défaut avait été retiré du procès-verbal de désaccord le
+         27 septembre 2026 ; relevé ici le 28 septembre 2026, en balayant les
+         écrans de contrôle. */
       r.forEach(function (d) {
         L.push(etat.redige[d.cle]);
-        L.push("");
-        L.push("------------------------------------------------------------------------");
         L.push("");
       });
     }
@@ -1139,9 +1154,31 @@
     return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
   }
 
+  /* LE PLAN CORRIGÉ NE S'AFFICHE PLUS À PLAT.
+
+     Il sortait dans un bloc à chasse fixe, lignes coupées à soixante-douze
+     signes puis recoupées à la largeur du téléphone. Il passe par
+     feuille-doc.js, comme le fichier Word ; le texte, lui, reste la pièce, et
+     c'est lui qui part dans le presse-papiers et dans les fichiers. Relevé le
+     28 septembre 2026. */
+  var DOCUMENT = "", COURRIER = "";
+  function enFeuille(id, texte) {
+    if (window.FeuilleDoc) {
+      window.FeuilleDoc.style();
+      $(id).innerHTML = window.FeuilleDoc.html(window.FeuilleDoc.blocs(texte),
+        { editable: false, classe: "fd-corps" });
+      return;
+    }
+    var pre = document.createElement("pre");
+    pre.textContent = texte;
+    $(id).innerHTML = "";
+    $(id).appendChild(pre);
+  }
   function assembler() {
-    $("sortie").textContent = texteRevise();
-    $("courrier").textContent = courrier();
+    DOCUMENT = texteRevise();
+    COURRIER = courrier();
+    enFeuille("sortie", DOCUMENT);
+    enFeuille("courrier", COURRIER);
     rendreAffiche();
   }
 
@@ -1268,11 +1305,11 @@
     setTimeout(function () { bouton.textContent = avant; }, 1600);
   }
 
-  $("copier").addEventListener("click", function () { copier($("sortie").textContent, $("copier")); });
-  $("copier-courrier").addEventListener("click", function () { copier($("courrier").textContent, $("copier-courrier")); });
+  $("copier").addEventListener("click", function () { copier(DOCUMENT, $("copier")); });
+  $("copier-courrier").addEventListener("click", function () { copier(COURRIER, $("copier-courrier")); });
 
   $("dl-txt").addEventListener("click", function () {
-    window.AuditExport.telecharger($("sortie").textContent,
+    window.AuditExport.telecharger(DOCUMENT,
       nomFichier("egalite-version-revisee", "txt"), "text/plain;charset=utf-8");
   });
 
@@ -1288,13 +1325,13 @@
 
   $("dl-docx").addEventListener("click", function () {
     var f = fiche();
-    versWord($("sortie").textContent,
+    versWord(DOCUMENT,
       (f.nature === "plan" ? "Plan d'action" : "Accord") + " égalité professionnelle, version révisée",
       nomFichier("egalite-version-revisee", "docx"));
   });
 
   $("dl-courrier-docx").addEventListener("click", function () {
-    versWord($("courrier").textContent, "Courrier de dépôt, égalité professionnelle",
+    versWord(COURRIER, "Courrier de dépôt, égalité professionnelle",
       nomFichier("egalite-courrier-depot", "docx"));
   });
 })();
