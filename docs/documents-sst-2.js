@@ -250,17 +250,23 @@
 
   /* Le pied commun : d'où vient ce qui est écrit, et ce que le document ne
      dit pas. */
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
     /* Le pied nommait le fichier du dépôt où les textes sont conservés :
        c'est une mention interne, elle n'a rien à faire dans un document
        remis au client. Relevé le 26 septembre 2026. */
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
-    L.push("date ci-dessus.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
-    L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
+    L.push("Votre convention collective, vos");
     L.push("accords, votre règlement intérieur et les textes propres à votre activité");
     L.push("peuvent ajouter des exigences qui ne sont pas reprises ici. Ne laissez");
     L.push("aucun crochet dans le texte que vous adoptez, affichez ou transmettez.");
@@ -2959,13 +2965,12 @@
 
       return L.concat(pied("L. 1153-5, L. 1152-4, L. 1152-1, L. 1153-1, L. 1152-2, " +
         "L. 1153-2, L. 4121-1, L. 1155-2, R. 4121-2, D. 1151-1",
-        ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
-         "cassation : Soc., 18 juin 2025, n° 23-19.022, publié -",
+        ["Décision citée : Cass. soc., 18 juin 2025, n° 23-19.022, publié -",
          "la valeur probante d'une enquête interne relève de l'appréciation souveraine",
          "des juges du fond, au regard le cas échéant des autres éléments de preuve.",
          "",
-         "LA SEULE PEINE QUE CE MODULE PUISSE ANNONCER EN MATIÈRE DE HARCÈLEMENT SE",
-         "TROUVE ICI, ET ELLE NE VISE PAS CE QUE L'ON CROIT. « Sont punis d'un an",
+         "LA SEULE PEINE PRÉVUE ICI EN MATIÈRE DE HARCÈLEMENT NE VISE PAS CE QUE",
+         "L'ON CROIT. « Sont punis d'un an",
          "d'emprisonnement et d'une amende de 3 750 € les faits de discriminations",
          "commis à la suite d'un harcèlement moral ou sexuel définis aux articles",
          "L. 1152-2, L. 1153-2 et L. 1153-3 du présent code. La juridiction peut",
@@ -2987,7 +2992,7 @@
          "articles 10-1 et 12 à 13-1 de la loi n° 2016-1691 du 9 décembre 2016 et",
          "l'article 131-35 du code pénal ne l'ont pas été davantage.",
          "",
-         "L. 1332-4, cité pour le délai de deux mois, a été lu à la source. Les autres",
+         "L. 1332-4, cité pour le délai de deux mois, est reproduit ici. Les autres",
          "règles de la procédure disciplinaire relèvent du même chapitre."])).join("\n");
     },
   });

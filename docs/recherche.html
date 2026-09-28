@@ -113,7 +113,7 @@
     <div class="outils etat">
       <a href="index.html">Accueil</a>
       <span hidden><span class="pastille" id="voyant"></span> <span id="etat-cle">clé non configurée</span></span>
-      <button id="btn-cle" type="button">Changer la clé</button>
+      <button id="btn-cle" type="button">Utiliser ma propre clé Judilibre</button>
       <span id="etat-hote" hidden></span>
       <button id="btn-adresse" type="button" title="Copier l'adresse de l'application">Copier l'adresse</button>
       <button id="btn-avert" type="button" title="Ce que fait cet outil, et ce qu'il ne fait pas">Avertissement d'usage</button>
@@ -152,7 +152,7 @@
   </header>
 
   <!-- ===================== Clé API ===================== -->
-  <section class="carte" id="carte-cle">
+  <section class="carte cache" id="carte-cle">
     <h2>Votre clé Judilibre</h2>
     <p class="note">Clé personnelle et gratuite, délivrée par <a href="https://piste.gouv.fr" target="_blank" rel="noopener">PISTE</a>
       (compte → application en <b>production</b> → souscrire l'API <b>JUDILIBRE</b> → « API Key »).
@@ -540,7 +540,7 @@ function majEtat(){
   const k = cle();
   $("etat-cle").textContent = k ? "clé configurée (…"+k.slice(-6)+")" : "clé non configurée";
   $("voyant").classList.toggle("ok", !!k);
-  $("carte-cle").classList.toggle("cache", !!k);
+  $("carte-cle").classList.toggle("cache", !!k || !carteCleDemandee);
   $("etat-hote").textContent = "· " + (location.hostname || "fichier local");
   $("etat-version").textContent = "· version " + VERSION;
   /* L'adresse doit pouvoir être transmise à un confrère sans la retaper :
@@ -633,7 +633,30 @@ async function appelApi(chemin, params){
   return appelApiDirect(chemin, params);
 }
 
+/* LE BLOC DE LA CLÉ NE S'OUVRE PLUS L'ÉCRAN.
+
+   « Retirer le bloc "Votre clé Judilibre" », demande du 26 septembre 2026 :
+   l'écran de recherche s'ouvrait sur une demande de clé personnelle, alors que
+   la recherche passe par le relais de l'application et que personne n'a de clé
+   à fournir. Le champ n'est pas supprimé pour autant : la règle du dépôt veut
+   que chacun puisse saisir la sienne, et c'est le seul recours quand le relais
+   ne répond pas. Il est donc replié, et il ne s'ouvre que sur demande, ou quand
+   le relais a effectivement refusé. */
+var carteCleDemandee = false;
+function montrerCarteCle(pourquoi){
+  carteCleDemandee = true;
+  $("carte-cle").classList.remove("cache");
+  if(pourquoi) $("msg-cle").innerHTML = '<div class="msg info">' + echap(pourquoi) + "</div>";
+}
+
 function messageErreur(e){
+  /* Le relais a refusé : c'est le seul cas où la clé personnelle sert, et donc
+     le seul où le bloc a une raison de paraître. */
+  if(e && (e.message === "PAS_DE_CLE" || e.message === "ORIGINE_REFUSEE"))
+    montrerCarteCle("");
+  return messageErreurTexte(e);
+}
+function messageErreurTexte(e){
   switch(e.message){
     /* LE RELAIS N'A PAS RÉPONDU : CE N'EST PAS LA FAUTE DE L'UTILISATRICE.
        L'écran répondait « Configurez d'abord votre clé Judilibre » quand le
@@ -657,7 +680,7 @@ function messageErreur(e){
   }
 }
 
-$("btn-cle").onclick = ()=>{ $("carte-cle").classList.remove("cache"); $("in-cle").focus(); };
+$("btn-cle").onclick = ()=>{ montrerCarteCle(""); $("in-cle").focus(); };
 $("btn-tester").onclick = async ()=>{
   const k = $("in-cle").value.trim();
   if(!k){ $("msg-cle").innerHTML = '<div class="msg err">Saisissez une clé.</div>'; return; }

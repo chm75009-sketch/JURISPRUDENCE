@@ -78,6 +78,16 @@
   /* ------------------------------------------------------------------ */
   /* La fiche d'entreprise : sans elle, rien à écrire. */
   var P = (window.Profil && window.Profil.lire) ? window.Profil.lire() : {};
+  /* Le signataire, dans les deux formes de la fiche : « responsable » est
+     l'ancien champ unique, vide sur une fiche récente qui range le nom et la
+     qualité séparément. L'auteur du .docx retombait alors sur la raison
+     sociale. Relevé le 28 septembre 2026. */
+  function respFiche() {
+    var s = String(P.responsable || "").trim();
+    if (s) return s;
+    return [String(P.responsableNom || "").trim(), String(P.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
   if (!P.denomination) { location.replace("index.html"); return; }
 
   /* L'état, sur ce poste : les trois champs, le texte déposé, les blocs
@@ -677,7 +687,7 @@
       window.AuditExport.docx(items, titre, {
         /* L'auteur du fichier est celui qui signe, non la raison sociale :
            demande de la relecture du 25 septembre 2026. */
-        auteur: v("responsable") || P.responsable || P.denomination || "",
+        auteur: v("responsable") || respFiche() || P.denomination || "",
         pied: (P.denomination || "") + ", document unique, version du " +
           (dateFr(v("dateVersion")) || dateFr(aujourdhui)),
       }),

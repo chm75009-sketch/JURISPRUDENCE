@@ -269,17 +269,23 @@
 
   /* Le pied commun : d'où vient ce qui est écrit, et ce que le document ne dit
      pas. La liste des articles est celle du document, pas celle du module. */
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("FONDEMENT : " + articles + ".");
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
-    L.push("date ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) {
       L.push("");
       notes.forEach(function (n) { L.push(n); });
     }
     L.push("");
-    L.push("CE QUE CE DOCUMENT NE DIT PAS. Il ne vaut pas consultation. Votre");
+    L.push("CE QUE CE DOCUMENT NE DIT PAS. Votre");
     L.push("convention collective, vos accords d'entreprise et vos usages peuvent");
     L.push("ajouter des exigences qui ne sont pas reprises ici, et qui priment");
     L.push("lorsqu'elles sont plus favorables. Ne laissez aucun crochet dans le");
@@ -993,7 +999,7 @@
       L = L.concat(DP.liens(ctx, ["economique"]));
       L.push("");
       return L.concat(pied("L. 1224-1",
-        ["L'article L. 1233-61, lu à la source, prévoit un cas particulier : lorsque",
+        ["L'article L. 1233-61 prévoit un cas particulier : lorsque",
          "le plan de sauvegarde de l'emploi comporte, en vue d'éviter la fermeture",
          "d'un ou plusieurs établissements, le transfert d'entités économiques",
          "nécessaire à la sauvegarde d'une partie des emplois, « les dispositions de",
@@ -1036,7 +1042,7 @@
       L.push(TRAIT);
       L.push("");
 
-      L.push("1. LE TEXTE, LU À LA SOURCE");
+      L.push("1. LE TEXTE");
       L.push("");
       L.push("L'article L. 2254-2 organise l'accord de performance collective, qui peut");
       L.push("« aménager la durée du travail, ses modalités d'organisation et de");
@@ -1127,7 +1133,7 @@
       L.push("pas dit. Reportez-vous aux documents de la discipline et de la procédure de");
       L.push("licenciement », ou au code du travail.");
       L.push("");
-      L.push("Le VI de L. 2254-2, lu à la source, prévoit que le salarié « peut s'inscrire");
+      L.push("Le VI de L. 2254-2 prévoit que le salarié « peut s'inscrire");
       L.push("et être accompagné comme demandeur d'emploi à l'issue du licenciement ».");
       L.push("");
 
@@ -1164,7 +1170,7 @@
         "L. 1233-46, L. 1233-61",
         ["Les articles L. 1232-2 à L. 1232-14, L. 1234-1 à L. 1234-11, L. 1234-14,",
          "L. 1234-18, L. 1234-19, L. 1234-20 et L. 3221-3, que le V et le I de",
-         "L. 2254-2 nomment, n'ont pas été lus à la source : ils sont",
+         "L. 2254-2 nomment, ne sont pas reproduits ici : ils sont",
          "nommés, jamais reproduits.",
          "Aucune peine n'est annoncée par ce document : le corpus de textes de ce",
          "aucun des textes lus ne contient d'article de sanction pénale."])).join("\n");
@@ -1201,7 +1207,7 @@
       L.push("appliquez. Aucune ligne de ce bordereau n'affirme ce que votre convention");
       L.push("dit. Chacune demande où c'est écrit.");
       L.push("");
-      L.push("Le motif est dans deux textes lus à la source, et ils commandent tout :");
+      L.push("Le motif est dans deux textes, et ils commandent tout :");
       L.push("");
       L.push("· L. 1233-5 : « Lorsque l'employeur procède à un licenciement collectif pour");
       L.push("  motif économique ET EN L'ABSENCE DE CONVENTION OU ACCORD COLLECTIF DE");
@@ -1533,7 +1539,7 @@
       L.push("");
       L.push("MATIÈRE 1 - MODALITÉS D'INFORMATION ET DE CONSULTATION DU COMITÉ");
       L.push("");
-      L.push("Ce que la loi dit, lu à la source : « Un accord d'entreprise, de groupe ou");
+      L.push("Ce que la loi dit : « Un accord d'entreprise, de groupe ou");
       L.push("de branche peut fixer, par dérogation aux règles de consultation des");
       L.push("instances représentatives du personnel prévues par le présent titre et par");
       L.push("le livre III de la deuxième partie, les modalités d'information et de");
@@ -1552,7 +1558,7 @@
 
       L.push("MATIÈRE 2 - CONTENU DU PLAN ET MISE EN ŒUVRE DES LICENCIEMENTS");
       L.push("");
-      L.push("Ce que la loi dit, lu à la source : « Dans les entreprises de cinquante");
+      L.push("Ce que la loi dit : « Dans les entreprises de cinquante");
       L.push("salariés et plus, un accord collectif peut déterminer le contenu du plan de");
       L.push("sauvegarde de l'emploi mentionné aux articles L. 1233-61 à L. 1233-63 ainsi");
       L.push("que les modalités de consultation du comité social et économique et de mise");
@@ -1563,7 +1569,7 @@
       L.push("dernières élections des titulaires au comité social et économique, quel que");
       L.push("soit le nombre de votants, ou par le conseil d'entreprise ».");
       L.push("");
-      L.push("L'article L. 1233-24-2, lu à la source, énumère ce que cet accord peut");
+      L.push("L'article L. 1233-24-2 énumère ce que cet accord peut");
       L.push("porter, outre le contenu du plan : « 1° Les modalités d'information et de");
       L.push("consultation du comité social et économique […] ; 2° La pondération et le");
       L.push("périmètre d'application des critères d'ordre des licenciements mentionnés à");
@@ -1590,7 +1596,7 @@
 
       L.push("MATIÈRE 3 - L'ACCORD DE PERFORMANCE COLLECTIVE");
       L.push("");
-      L.push("Ce que la loi dit, lu à la source : l'article L. 2254-2 permet à un accord");
+      L.push("Ce que la loi dit : l'article L. 2254-2 permet à un accord");
       L.push("de performance collective d'« aménager la durée du travail, ses modalités");
       L.push("d'organisation et de répartition », d'« aménager la rémunération » et de");
       L.push("« déterminer les conditions de la mobilité professionnelle ou géographique");
@@ -1646,9 +1652,9 @@
       return L.concat(pied("L. 1233-21, L. 1233-24-1, L. 1233-24-2, L. 1233-57-3, L. 2254-2",
         ["AUCUNE STIPULATION DE VOS ACCORDS N'EST REPRODUITE ICI. Seules les",
          "colonnes « ce que la loi dit » sont écrites ici, à partir des",
-         "textes lus à la source. Tout le reste est à établir, accord en main.",
+         "textes cités. Tout le reste est à établir, accord en main.",
          "Parmi les articles que ces textes nomment, L. 1233-4, L. 1233-5 et",
-         "L. 1233-61 à L. 1233-63 ont été lus à la source ; L. 2321-9",
+         "L. 1233-61 à L. 1233-63 sont reproduits ici ; L. 2321-9",
          "et L. 3221-3 ne l'ont pas été : ils sont nommés, et leur contenu n'est ni",
          "reproduit ni résumé."])).join("\n");
     },
@@ -1873,7 +1879,7 @@
 
       L.push("2. CE QUI COURT, ET DEPUIS QUAND");
       L.push("");
-      L.push("Un seul délai a été lu à la source, et il concerne directement");
+      L.push("Un seul délai est reproduit ici, et il concerne directement");
       L.push("ce projet : « Toute contestation portant sur le licenciement pour motif");
       L.push("économique se prescrit par douze mois à compter de la dernière réunion du");
       L.push("comité social et économique ou, dans le cadre de l'exercice par le salarié");
@@ -2340,8 +2346,12 @@
                 etr ? "L. 1233-3 limite au territoire national" : "[nature des produits, clientèle, réseaux]"];
       });
       if (!lignesS.length) {
-        lignesS = [["[DÉNOMINATION]", "[activité]", "[pays]", "[dans le secteur ? oui/non]",
-                    "[le critère, écrit]"]];
+        /* Ce crochet ne désigne pas l'entreprise du client mais une autre
+           société du groupe, que la fiche ne connaît pas : il est nommé pour
+           ce qu'il est, afin qu'on ne le prenne pas pour un oubli. Relevé le
+           28 septembre 2026. */
+        lignesS = [["[dénomination de la société du groupe]", "[activité]", "[pays]",
+                    "[dans le secteur ? oui/non]", "[le critère, écrit]"]];
       }
       tableau(L, ["Société du groupe", "Activité", "Pays", "Dans le secteur ?",
                   "Pourquoi"], lignesS);
@@ -2742,7 +2752,7 @@
       return L.concat(pied("L. 1233-3, L. 1233-5, L. 1233-26, L. 1233-61, L. 1235-3",
         ["Le contrôle CTL-EFF-01 n'a pas de fondement textuel propre : c'est un",
          "contrôle arithmétique. Les articles cités le sont pour dire ce que",
-         "l'effectif commande, et chacun a été lu à la source.",
+         "l'effectif commande, et chacun est reproduit ici.",
          "",
          "VOTRE EFFECTIF N'EST PAS CALCULÉ ICI, et ses règles de décompte ne sont pas",
          "connues : le nombre repris est celui que vous avez saisi. Les règles de",
@@ -3167,7 +3177,7 @@
         "article L. 1233-5 du code du travail");
 
       L.push(DP.EXEMPLE);
-      L.push("LE TEXTE, LU À LA SOURCE, ET CE QU'IL EXIGE VRAIMENT");
+      L.push("LE TEXTE, ET CE QU'IL EXIGE VRAIMENT");
       L.push("");
       L.push("Les critères « prennent notamment en compte : 1° Les charges de famille, en");
       L.push("particulier celles des parents isolés ; 2° L'ancienneté de service dans");
@@ -3660,7 +3670,7 @@
 
       L.push("5. CE QUE CHAQUE OFFRE DOIT PRÉCISER");
       L.push("");
-      L.push("Le II de D. 1233-2-1, lu à la source : « Ces offres écrites précisent :");
+      L.push("Le II de D. 1233-2-1 : « Ces offres écrites précisent :");
       L.push("a) L'intitulé du poste et son descriptif ; b) Le nom de l'employeur ;");
       L.push("c) La nature du contrat de travail ; d) La localisation du poste ; e) Le");
       L.push("niveau de rémunération ; f) La classification du poste. »");

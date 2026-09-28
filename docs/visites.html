@@ -646,9 +646,19 @@
         "remercions de nous indiquer si elle figure dans votre dossier, et, à défaut, " +
         "d'organiser cette visite dans les meilleurs délais." });
     } else if (premiere) {
+      /* AUCUNE DATE PASSÉE DANS UN COURRIER, MÊME QUAND ELLE EST CONNUE.
+
+         La demande écrivait « à tenir au plus tard le 1er décembre 2009 » :
+         envoyée telle quelle, elle reconnaît par écrit dix-sept ans de
+         manquement, à un service qui n'a rien demandé. Relevé le 26 septembre
+         2026. Quand l'échéance est passée, la lettre demande la visite sans
+         plus, et c'est vrai : elle est due. Quand elle est à venir, elle la
+         donne, parce qu'elle sert à fixer le rendez-vous. */
+      var echue = premiere.jours !== null && premiere.jours < 0;
       b.push({ k: "p", t: "Nous sollicitons l'organisation de la visite suivante pour " + s.nom + ", " +
         (s.emp || "[emploi]") + (net(s.ent) ? ", entré dans l'entreprise le " + dateFr(s.ent) : "") + " : " +
-        premiere.e.quoi.toLowerCase() + ", à tenir au plus tard le " + dateFr(premiere.e.date) + "." });
+        premiere.e.quoi.toLowerCase() +
+        (echue ? ", dans les meilleurs délais." : ", à tenir au plus tard le " + dateFr(premiere.e.date) + ".") });
       b.push({ k: "p", t: premiere.e.dit.charAt(0).toUpperCase() + premiere.e.dit.slice(1) +
         " (" + art(premiere.e.fond) + ")." });
     } else {

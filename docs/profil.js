@@ -268,8 +268,27 @@
     { c: "transLicenceNum", nom: "Numéro de la licence", t: "text" },
     { c: "transLicenceFin", nom: "Licence valable jusqu'au", t: "date",
       aide: "Dix ans au plus, renouvelable (R. 3211-12). L'original reste dans l'établissement." },
-    { c: "transCopies", nom: "Copies conformes détenues", t: "number",
-      aide: "Leur nombre correspond à celui des véhicules (R. 3211-12) : la flotte donne le compte en face." },
+    { c: "transCopies", nom: "Copies conformes de cette licence", t: "number",
+      aide: "Leur nombre correspond à celui des véhicules que cette licence couvre (R. 3211-12) : la flotte donne le compte en face." },
+    /* DEUX LICENCES, PARCE QU'UN PARC MIXTE EN DEMANDE DEUX.
+       R. 3211-12 (LEGIARTI000046177442, lu à la source le 28 septembre 2026,
+       deux lectures concordantes) énumère trois licences, chacune commandée par
+       sa propre condition : « 1° Une licence communautaire lorsque l'entreprise
+       utilise un ou plusieurs véhicules dont le poids maximum autorisé excède
+       3,5 tonnes ; 2° Une licence de transport intérieur lorsque l'entreprise
+       utilise pour des opérations de transport exclusivement réalisées sur le
+       territoire national un ou plusieurs véhicules n'excédant pas cette
+       limite ». Trente poids lourds et cinquante véhicules légers en appellent
+       donc deux, et la fiche n'en acceptait qu'une. Relevé le 26 septembre
+       2026. La seconde ligne reste vide quand une seule licence suffit. */
+    { c: "transLicence2Type", nom: "Seconde licence, s'il en faut une", t: "select",
+      options: ["", "licence communautaire", "licence communautaire « inférieur ou égal à 3,5 tonnes »",
+        "licence de transport intérieur"],
+      aide: "Un parc mixte en demande deux : la communautaire pour les véhicules de plus de 3,5 tonnes, la licence de transport intérieur pour les véhicules en deçà qui ne roulent qu'en France (R. 3211-12)." },
+    { c: "transLicence2Num", nom: "Numéro de la seconde licence", t: "text" },
+    { c: "transLicence2Fin", nom: "Seconde licence valable jusqu'au", t: "date" },
+    { c: "transCopies2", nom: "Copies conformes de la seconde licence", t: "number",
+      aide: "Comptées sur les véhicules que cette seconde licence couvre." },
     { c: "transGestionnaire", nom: "Gestionnaire de transport", t: "text", pleine: true,
       aide: "La personne physique qui dirige effectivement et en permanence l'activité de transport (R. 3211-43)." },
     { c: "transGestionnaireLien", nom: "Son lien avec l'entreprise", t: "select",
@@ -313,21 +332,118 @@
      l'entreprise n'a plus de titre à faire monter dans ses véhicules. Elle
      se range avec les échéances de la flotte et des salariés, au même
      format : ni source à part, ni écran à part. */
+  /* LES TROIS TITRES D'EXERCER, ET UN PRÉAVIS QUI SERT À QUELQUE CHOSE.
+
+     La licence n'entrait dans l'agenda que par sa première ligne, trente jours
+     avant son terme : une licence est délivrée pour dix ans et se renouvelle
+     auprès du préfet de région, ce qui ne se fait pas en un mois. Les copies
+     conformes manquantes et la justification annuelle de la capacité financière
+     n'y entraient pas du tout. Relevé le 26 septembre 2026.
+
+     Le préavis est donc de six mois, et les trois échéances sont là :
+       - chaque licence saisie, avec son terme (R. 3211-12) ;
+       - les copies conformes qui manquent au parc, dès qu'il en manque
+         (R. 3211-12) ;
+       - la capacité financière, à la clôture de l'exercice : « l'entreprise
+         démontre (…) qu'elle dispose chaque année de capitaux et de réserves »
+         (R. 3211-32, LEGIARTI000046177267), et « après la clôture de chaque
+         exercice comptable, le service territorial compétent de l'État vérifie
+         que l'entreprise dispose de la capacité financière requise, au regard
+         des comptes annuels » (R. 3211-35, LEGIARTI000046177261). Les deux lus à
+         la source le 28 septembre 2026, deux lectures concordantes. */
   function echeancesTransport(aujourdhui) {
     var f = lire() || {};
-    var fin = String(f.transLicenceFin || "").trim();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(fin)) return [];
     var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
-    var d = new Date(fin + "T12:00:00");
-    if (isNaN(d.getTime())) return [];
-    var n = Math.round((d.getTime() -
-      new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), 12, 0, 0).getTime()) / 864e5);
-    var etat = n < 0 ? "passe" : (n <= 30 ? "rouge" : (n <= 60 ? "ambre" : "vert"));
-    return [{ quoi: "Licence de transport à renouveler", qui: String(f.denomination || "l'entreprise"),
-      date: fin, jours: n, etat: etat, fond: "R. 3211-12",
-      faire: "demander le renouvellement au préfet de région", prov: "transport" }];
+    var minuit = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate(), 12, 0, 0).getTime();
+    var qui = String(f.denomination || "l'entreprise");
+    var out = [];
+    var jours = function (iso) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return null;
+      var d = new Date(iso + "T12:00:00");
+      if (isNaN(d.getTime())) return null;
+      return Math.round((d.getTime() - minuit) / 864e5);
+    };
+    /* Six mois de préavis : c'est le temps d'une demande de renouvellement. */
+    var etatDe = function (n) {
+      return n < 0 ? "passe" : (n <= 60 ? "rouge" : (n <= 180 ? "ambre" : "vert"));
+    };
+    [["transLicenceFin", "transLicenceType", "transLicenceNum"],
+     ["transLicence2Fin", "transLicence2Type", "transLicence2Num"]].forEach(function (c) {
+      var fin = String(f[c[0]] || "").trim();
+      var n = jours(fin);
+      if (n === null) return;
+      var type = String(f[c[1]] || "").trim() || "licence de transport";
+      var num = String(f[c[2]] || "").trim();
+      out.push({ quoi: "Licence de transport à renouveler",
+        qui: qui + " : " + type + (num ? ", n° " + num : ""),
+        date: fin, jours: n, etat: etatDe(n),
+        fond: "R. 3211-12 : la licence est délivrée pour une durée maximale de dix ans renouvelable ; l'original reste dans l'établissement et se restitue au préfet de région à la fin de sa validité",
+        faire: "la demande de renouvellement au préfet de région, six mois avant le terme, et les copies conformes à jour",
+        prov: "transport" });
+    });
+
+    /* Les copies conformes qui manquent : elles ne sont pas datées, elles sont
+       dues aujourd'hui, parce qu'un véhicule qui roule sans sa copie roule sans
+       titre à bord. */
+    var c;
+    try { c = capaciteTransport(); } catch (e) { c = null; }
+    if (c && c.parc && c.parc.lignes) {
+      var moteurs = c.parc.lourds + c.parc.legers;
+      var typees = (c.licences || []).filter(function (x) { return x.type; });
+      var manquantes = 0, dit = [];
+      if (typees.length > 1) {
+        typees.forEach(function (x) {
+          if (!x.du) return;
+          var tenues = isFinite(x.copies) ? x.copies : 0;
+          if (tenues < x.du) {
+            manquantes += x.du - tenues;
+            dit.push((x.du - tenues) + " pour la " + x.type);
+          }
+        });
+      } else {
+        var tenues = isFinite(c.copies) ? c.copies : 0;
+        if (tenues < moteurs) { manquantes = moteurs - tenues; dit.push(manquantes + " pour le parc"); }
+      }
+      if (manquantes)
+        out.push({ quoi: "Copies conformes de licence à demander", qui: qui,
+          date: jourIso(d0), jours: 0, etat: "rouge",
+          fond: "R. 3211-12 : la licence est accompagnée de copies certifiées conformes numérotées dont le nombre correspond à celui des véhicules",
+          faire: "la demande de " + manquantes + " copie" + (manquantes > 1 ? "s" : "") +
+            " au préfet de région (" + dit.join(", ") + ") : un véhicule sans sa copie à bord roule sans titre",
+          prov: "transport" });
+
+      /* La capacité financière, un an après la clôture du dernier exercice
+         saisi : c'est à chaque clôture que le service de l'État vérifie. */
+      var clos = String(f.transExercice || "").trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(clos) && c.exige) {
+        var d = new Date(clos + "T12:00:00");
+        if (!isNaN(d.getTime())) {
+          d.setFullYear(d.getFullYear() + 1);
+          var suiv = jourIso(d), n2 = jours(suiv);
+          out.push({ quoi: "Capacité financière à justifier pour l'exercice suivant", qui: qui,
+            date: suiv, jours: n2, etat: etatDe(n2),
+            fond: "R. 3211-32 : l'entreprise démontre qu'elle dispose chaque année de capitaux et de réserves d'un montant au moins égal au barème du parc ; R. 3211-35 : après la clôture de chaque exercice comptable, le service territorial compétent de l'État le vérifie au regard des comptes annuels",
+            faire: "les comptes annuels certifiés, visés ou attestés, et le montant exigé au vu du parc" +
+              (c.manque > 0 ? " ; au dernier exercice saisi, il manquait " +
+                Math.round(c.manque) + " euros" : ""),
+            prov: "transport" });
+        }
+      }
+    }
+    return out;
+  }
+  function jourIso(d) {
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) +
+      "-" + ("0" + d.getDate()).slice(-2);
   }
 
+  /* Les montants du barème se lisent d'un bloc : « 9 000 € » se coupait en fin
+     de ligne sur un téléphone. Relevé le 26 septembre 2026. */
+  var INSEC_P = String.fromCharCode(0x00a0);
+  function euroFr(n) {
+    return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, INSEC_P) +
+      INSEC_P + "\u20ac";
+  }
   function capaciteTransport() {
     var p = parcTransport(), exige = 0, dit = "";
     /* « chacun des 1 suivants » ne s'écrit pas : au singulier, c'est le
@@ -337,21 +453,48 @@
     };
     if (p.lourds) {
       exige = 9000 + (p.lourds - 1) * 5000 + p.legers * 900;
-      dit = "9 000 € pour le premier véhicule de plus de 3,5 tonnes" +
-        (p.lourds > 1 ? ", 5 000 € " + suivants(p.lourds - 1, "véhicule de plus de 3,5 tonnes",
+      dit = euroFr(9000) + " pour le premier véhicule de plus de 3,5 tonnes" +
+        (p.lourds > 1 ? ", " + euroFr(5000) + " " + suivants(p.lourds - 1, "véhicule de plus de 3,5 tonnes",
           "véhicules de plus de 3,5 tonnes") : "") +
-        (p.legers ? ", 900 € " + (p.legers === 1 ? "pour le véhicule qui n'excède pas 3,5 tonnes"
+        (p.legers ? ", " + euroFr(900) + " " + (p.legers === 1 ? "pour le véhicule qui n'excède pas 3,5 tonnes"
           : "pour chacun des " + p.legers + " véhicules qui n'excèdent pas 3,5 tonnes") : "");
     } else if (p.legers) {
       exige = 1800 + (p.legers - 1) * 900;
-      dit = "1 800 € pour le premier véhicule" +
-        (p.legers > 1 ? ", 900 € " + suivants(p.legers - 1, "véhicule", "véhicules") : "");
+      dit = euroFr(1800) + " pour le premier véhicule" +
+        (p.legers > 1 ? ", " + euroFr(900) + " " + suivants(p.legers - 1, "véhicule", "véhicules") : "");
     }
     var f = lire() || {};
     var saisi = parseFloat(String(f.transCapitaux == null ? "" : f.transCapitaux).replace(/[^\d.,-]/g, "").replace(",", "."));
+    var nb = function (v) { return parseFloat(String(v == null ? "" : v).replace(",", ".")); };
+    /* LES COPIES SE COMPTENT PAR LICENCE, NON EN BLOC. Une seule somme était
+       comparée au parc entier : une entreprise qui tient trente copies de
+       licence communautaire pour trente poids lourds et rien pour ses cinquante
+       véhicules légers était déclarée en règle. Relevé le 26 septembre 2026.
+       On rapproche chaque licence des véhicules qu'elle couvre, et le total ne
+       sert plus que de repli quand une seule licence est saisie. */
+    var licences = [
+      { type: String(f.transLicenceType || "").trim(), num: String(f.transLicenceNum || "").trim(),
+        fin: String(f.transLicenceFin || "").trim(), copies: nb(f.transCopies) },
+      { type: String(f.transLicence2Type || "").trim(), num: String(f.transLicence2Num || "").trim(),
+        fin: String(f.transLicence2Fin || "").trim(), copies: nb(f.transCopies2) },
+    ].filter(function (x) { return x.type || x.num || isFinite(x.copies); });
+    licences.forEach(function (x) {
+      /* La licence de transport intérieur couvre les véhicules qui n'excèdent
+         pas 3,5 tonnes ; la communautaire, ceux qui la dépassent ; celle qui
+         porte la mention « inférieur ou égal à 3,5 tonnes » couvre les légers
+         en transport international. */
+      x.legere = /int[ée]rieur|inf[ée]rieur ou [ée]gal/i.test(x.type);
+      x.du = x.legere ? p.legers : p.lourds;
+    });
+    /* Ce que les deux licences couvrent ensemble : si aucune n'est typée, on
+       retombe sur le parc entier, comme avant. */
+    var typees = licences.filter(function (x) { return x.type; });
     return { parc: p, exige: exige, dit: dit,
       capitaux: isFinite(saisi) ? saisi : null,
-      copies: parseFloat(String(f.transCopies == null ? "" : f.transCopies).replace(",", ".")),
+      copies: nb(f.transCopies),
+      licences: licences,
+      /* Vrai quand le parc appelle une seconde licence et qu'elle manque. */
+      secondeDue: !!(p.lourds && p.legers && typees.length < 2),
       manque: exige && isFinite(saisi) ? Math.max(0, exige - saisi) : null };
   }
 
@@ -395,6 +538,14 @@
       return isNaN(x) ? null : x;
     }
     function heuresSemaine(s) {
+      /* L'HORAIRE DU CONTRAT D'ABORD, LE RELEVÉ D'HEURES ENSUITE.
+         L. 1111-2, 3° parle des « horaires inscrits dans leurs contrats de
+         travail » : c'est le contrat qui compte, et le registre le porte
+         désormais sous « hcSem ». Le relevé d'heures ne reste qu'un repli, pour
+         les fiches où l'horaire du contrat n'a pas encore été saisi. Relevé le
+         26 septembre 2026, corrigé le 28. */
+      var duContrat = parseFloat(String(s.hcSem == null ? "" : s.hcSem).replace(",", "."));
+      if (isFinite(duContrat) && duContrat > 0) return duContrat;
       var id = sansAccentSimple((String(s.nom || "") + " " + String(s.pre || "")).trim());
       var r = refs && refs[id];
       if (!r || !r.sem) return null;
@@ -831,6 +982,84 @@
       };
       majNbEtab();
       etabSel.addEventListener("change", majNbEtab);
+    }
+
+    /* CHAQUE DATE SOUS SA RÉPONSE, ET PAS SOUS LES AUTRES.
+
+       Les quatre dates de la représentation du personnel s'affichaient toutes,
+       quelle que soit la réponse : on pouvait enregistrer « oui, élu » avec une
+       date de procès-verbal de carence, et une entreprise sans comité se voyait
+       demander la date de ses dernières élections. Relevé le 26 septembre 2026.
+
+       Une date déjà saisie n'est jamais effacée : elle est seulement masquée, et
+       l'écran dit qu'elle ne correspond plus à la réponse. C'est l'employeur qui
+       tranche, comme partout ailleurs. */
+    /* La réponse sur le comité est dans la partie du haut de la fiche, les
+       quatre dates dans celle de la représentation : la question et ses dates
+       ne sont pas dans le même conteneur. On cherche donc le menu partout dans
+       la page, et on se rabat sur la fiche enregistrée. Relevé le 28 septembre
+       2026 en écrivant le contrôle. */
+    var cseSel = conteneur.querySelector("#" + CSS.escape(prefixe + "-cseExiste")) ||
+      document.querySelector('[id$="-cseExiste"]');
+    var aDesDates = champs.some(function (ch) { return ch.c === "cseElections"; });
+    if (cseSel || aDesDates) {
+      var SOUS_REPONSE = {
+        cseElections: function (r) { return r.indexOf("oui") === 0; },
+        cseCarence: function (r) { return /^non.*(proc[eè]s-verbal|carence)/.test(r); },
+        cseInfoPersonnel: function (r) { return /^non.*(en cours|organisation)/.test(r); },
+        cseReunionNego: function (r) { return /^non.*(en cours|organisation)/.test(r); },
+      };
+      var NOM_REPONSE = {
+        cseElections: "un comité élu",
+        cseCarence: "un procès-verbal de carence",
+        cseInfoPersonnel: "des élections en cours d'organisation",
+        cseReunionNego: "des élections en cours d'organisation",
+      };
+      var reponseCse = function () {
+        if (cseSel && String(cseSel.value || "").trim()) return String(cseSel.value).trim().toLowerCase();
+        var p = lire() || {};
+        return String(p.cseExiste || "").trim().toLowerCase();
+      };
+      var majDatesCse = function () {
+        var r = reponseCse();
+        Object.keys(SOUS_REPONSE).forEach(function (c) {
+          var champ = conteneur.querySelector("#" + CSS.escape(prefixe + "-" + c));
+          var etiq = champ ? champ.closest("label") : null;
+          if (!etiq) return;
+          var due = SOUS_REPONSE[c](r);
+          etiq.style.display = due ? "" : "none";
+          /* La date gardée qui ne va plus avec la réponse : on le dit, sous le
+             menu, et on ne touche pas à la valeur. */
+          var dit = conteneur.querySelector("#" + CSS.escape(prefixe + "-" + c + "-reste"));
+          if (!due && String(champ.value || "").trim()) {
+            if (!dit) {
+              dit = document.createElement("p");
+              dit.className = "aide-champ";
+              dit.id = prefixe + "-" + c + "-reste";
+              dit.style.margin = "4px 0 8px";
+              if (cseSel.closest("label") && cseSel.closest("label").parentNode)
+                cseSel.closest("label").parentNode.insertBefore(dit, cseSel.closest("label").nextSibling);
+            }
+            dit.textContent = "Votre fiche garde une date pour « " +
+              (NOM_REPONSE[c] || c) + " » (" + champ.value +
+              "), qui ne correspond plus à votre réponse. Elle n'est pas effacée : " +
+              "changez la réponse pour la revoir, ou laissez-la, elle ne sert à rien.";
+            dit.hidden = false;
+            /* Le menu peut être dans une autre partie de la fiche : la phrase
+               se pose alors au-dessus des dates, là où on la lira. */
+            if (!dit.parentNode && conteneur.firstChild)
+              conteneur.insertBefore(dit, conteneur.firstChild);
+          } else if (dit) {
+            dit.hidden = true;
+            dit.textContent = "";
+          }
+        });
+      };
+      majDatesCse();
+      if (cseSel) cseSel.addEventListener("change", majDatesCse);
+      /* Le menu vit ailleurs dans la page : tout changement de la fiche le
+         répercute ici, ce qui ne coûte qu'une lecture. */
+      document.addEventListener("change", majDatesCse);
     }
 
     var cc = conteneur.querySelector("#" + CSS.escape(prefixe + "-conventionCollective"));

@@ -261,7 +261,6 @@
     L.push(TRAIT);
     L.push("");
     L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
-    L.push("lus à la source, dans leur version en vigueur à la date ci-dessus. Chacun");
     L.push("est cité avec son identifiant LEGIARTI : un article peut être modifié sans");
     L.push("changer de numéro, et seul cet identifiant dit laquelle des versions");
     L.push("successives a été lue.");
@@ -2616,7 +2615,7 @@
 
       titre(L, "III. Ce que l'absence de comité change dans le dossier");
 
-      L.push("Trois textes lus à la source, et ils ne disent pas la même chose :");
+      L.push("Trois textes, et ils ne disent pas la même chose :");
       L.push("");
       L.push("D. 1233-10 - le procès-verbal de carence est joint à la notification :");
       L.push("« En cas d'absence de comité social et économique, par suite d'une carence");

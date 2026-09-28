@@ -1598,8 +1598,10 @@
       L.push("      tenant au plus tard le quatre-vingt-dixième jour suivant cette");
       L.push("      diffusion (L. 2314-4).");
       L.push("");
-      L.push("      Le modèle qui écrit ces documents :");
-      L.push("      " + SITE_APP + "audit-cse.html#elections");
+      /* Pas d'adresse dans un document qui sort : l'écran est nommé. Relevé le
+         26 septembre 2026. */
+      L.push("      Ces documents s'écrivent dans l'audit du comité, ligne");
+      L.push("      « Élections ».");
       L.push("");
       L.push("Rien n'interdit de constituer la base sans y être tenu : elle sera prête.");
       L.push("");

@@ -47,8 +47,15 @@
     background:var(--creux);font-size:var(--t2);line-height:1.45;color:var(--texte-2)}
   .eff-reg p{margin:0 0 8px}
   .eff-reg .er-ecart{color:var(--ambre);font-weight:600}
+  /* Une immatriculation ne se coupe pas : « HL-343-WA » se brisait au tiret. */
+  .imm{white-space:nowrap}
   .eff-reg .er-boutons button{font:600 15px/1 system-ui;padding:10px 14px;min-height:44px;
     border:1px solid var(--filet);border-radius:10px;background:var(--surface);color:var(--texte);cursor:pointer}
+  /* Le renvoi au registre, quand aucun chiffre n'est proposable : il a l'air et
+     la taille d'un bouton, parce que c'est là qu'on agit. */
+  .eff-reg .er-boutons .er-vers{display:inline-block;font:600 15px/1 system-ui;padding:14px;
+    min-height:44px;box-sizing:border-box;border:1px solid var(--filet);border-radius:10px;
+    background:var(--surface);color:var(--lien,#1f4e9a);text-decoration:none}
   .eff-reg .er-motif{display:flex;flex-direction:column;gap:5px;margin:10px 0 0}
   .eff-reg .er-motif input{font-size:16px;padding:11px 12px;min-height:46px;width:100%;
     box-sizing:border-box;border:1px solid var(--filet);border-radius:10px}
@@ -231,12 +238,17 @@
     </div>
   </section>
 
+  <!-- « Le lien "clé personnelle" est toujours là, ainsi que la phrase en pied
+       d'accueil sur l'assistant et "votre clé" : les retirer. » Demande du
+       26 septembre 2026. Ce qui compte pour l'utilisatrice, c'est que ses
+       données restent sur son poste et que la question posée à l'assistant,
+       elle, sort : c'est dit sans parler de clé, qu'elle n'a pas à fournir. -->
   <footer>Les contrôles, les documents déposés et ce que vous saisissez restent
-    dans votre navigateur. Seul l'assistant, si vous l'ouvrez avec votre clé,
-    envoie votre question à son fournisseur.<br>
+    dans votre navigateur. Une question posée à l'assistant, elle, part vers son
+    fournisseur pour y être traitée.<br>
     <span id="version-app"></span><br>
     <a id="adresse-app" href="#"></a><br>
-    <span class="boutons">
+    <span class="boutons" id="mes-donnees">
       <button type="button" id="copier-adresse" class="lien-copie">Copier le lien</button>
       <button type="button" id="effacer-poste" class="lien-copie efface">Effacer mes données de ce poste</button>
     </span>
@@ -535,11 +547,23 @@
       (ecart ? '<p class="er-ecart">Vous avez saisi ' + ech(nombreFr(saisi)) +
         " : l'écart avec le registre est de " + ech(nombreFr(Math.abs(saisi - calcule))) +
         ". Reprenez le registre, ou dites pourquoi vous retenez un autre chiffre.</p>" : "") +
+      /* ON NE PROPOSE PAS D'ARRÊTER UN CHIFFRE QUI N'EN EST PAS UN. Le bouton
+         « Reprendre 80 » invitait à retenir le bas d'une fourchette, c'est-à-dire
+         à écarter deux salariés du décompte. Il est fermé tant que l'horaire des
+         contrats manque, et il dit où le saisir. Relevé le 26 septembre 2026,
+         corrigé le 28. */
       (e.sansHoraire.length
-        ? '<p class="er-ecart">Le bouton reprend le chiffre bas de la fourchette : ' +
-          "il vaut mieux saisir les horaires manquants avant de l'arrêter.</p>" : "") +
-      '<div class="er-boutons"><button type="button" id="er-reprendre">Reprendre ' +
-      ech(nombreFr(calcule)) + "</button></div>" +
+        ? '<p class="er-ecart">Aucun chiffre n\'est proposé tant que la fourchette ' +
+          "n'est pas fermée : le bas reviendrait à écarter " +
+          (e.sansHoraire.length > 1 ? "ces salariés" : "ce salarié") + " du décompte, " +
+          "et le haut à supposer un temps plein. Ouvrez le registre du personnel, " +
+          (e.sansHoraire.length > 1 ? "ces lignes" : "cette ligne") +
+          ", et portez l'horaire hebdomadaire inscrit au contrat.</p>" : "") +
+      '<div class="er-boutons">' +
+      (e.sansHoraire.length
+        ? '<a class="er-vers" href="registre.html">Ouvrir le registre du personnel</a>'
+        : '<button type="button" id="er-reprendre">Reprendre ' +
+          ech(nombreFr(calcule)) + "</button>") + "</div>" +
       (ecart ? '<label class="er-motif"><span>Pourquoi ce chiffre plutôt que celui du registre</span>' +
         '<input type="text" id="er-motif" value="' + ech(lireMotif()) +
         '" placeholder="le registre ne porte pas encore les entrées du mois"></label>' : "");
@@ -615,8 +639,24 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
+  /* « 199 000 € » ÉTAIT COUPÉ EN FIN DE LIGNE. Sur un téléphone, le montant se
+     brisait entre le 199 et le 000, et le symbole partait seul à la ligne
+     suivante. Relevé le 26 septembre 2026. Les séparateurs de milliers et
+     l'espace du symbole sont des espaces insécables : le montant tient
+     ensemble ou passe entier à la ligne. */
+  var INSEC = String.fromCharCode(0x00a0);
+  /* « HL-343-WA » ÉTAIT COUPÉ AU TIRET. Une immatriculation se lit d'un bloc.
+     C'est le style qui l'empêche de se couper, non un caractère de tiret
+     particulier : le trait d'union reste celui du clavier, et le texte copié
+     dans un document n'emporte rien d'exotique. Relevé le 26 septembre 2026. */
+  function plaque(t) {
+    return ech(String(t == null ? "" : t)).replace(
+      /\b([A-Z]{2}-\d{3}-[A-Z]{2}|[0-9]{1,4}\s?[A-Z]{1,3}\s?[0-9]{2})\b/g,
+      function (m) { return '<span class="imm">' + m + "</span>"; });
+  }
   function euros(n) {
-    return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " €";
+    return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, INSEC) +
+      INSEC + "\u20ac";
   }
 
   /* LE BLOC DU TRANSPORT NE S'OUVRE QUE POUR UN TRANSPORTEUR.
@@ -661,7 +701,7 @@
       L.push('<p class="er-ecart">' + p.sansPoids.length + " véhicule" +
         (p.sansPoids.length > 1 ? "s dont le genre ne dit pas le poids ne sont pas comptés" :
           " dont le genre ne dit pas le poids n'est pas compté") + " : " +
-        ech(p.sansPoids.slice(0, 6).join(", ")) +
+        p.sansPoids.slice(0, 6).map(plaque).join(", ") +
         (p.sansPoids.length > 6 ? "…" : "") + ".</p>");
     if (c.exige) {
       L.push('<p class="er-dit">Capacité financière exigée : ' + euros(c.exige) +
@@ -676,7 +716,58 @@
         L.push('<p class="er-dit">Capitaux saisis : ' + euros(c.capitaux) +
           ", le montant exigé est atteint.</p>");
     }
-    if (moteurs) {
+    /* LE GESTIONNAIRE HABILITÉ PAR CONTRAT ET LES VINGT VÉHICULES.
+
+       R. 3211-45 (LEGIARTI000033450055, lu à la source le 28 septembre 2026,
+       deux lectures concordantes) : l'entreprise qui n'a pas de gestionnaire en
+       son sein peut en habiliter un par contrat, et cette personne « peut
+       diriger au maximum les activités de transport » de deux entreprises ;
+       « dans l'un ou l'autre cas, le nombre cumulé de véhicules motorisés des
+       deux entreprises est limité à vingt ». Un gestionnaire habilité par
+       contrat était accepté avec quatre-vingts véhicules, sans un mot. Relevé le
+       26 septembre 2026. Le plafond porte sur le cumul des deux entreprises : le
+       parc de celle-ci le dépasse à lui seul, c'est donc certain. */
+    var fiche = profil();
+    if (/habilit/i.test(String(fiche.transGestionnaireLien || "")) && moteurs > 20)
+      L.push('<p class="er-ecart">Votre gestionnaire de transport est habilité par ' +
+        "contrat, et votre parc compte " + moteurs + " véhicules motorisés. " +
+        "R. 3211-45 limite à vingt le nombre cumulé de véhicules des deux " +
+        "entreprises qu'une personne habilitée par contrat peut diriger : ce " +
+        "plafond est dépassé par votre seul parc. Il faut un gestionnaire de " +
+        "transport au sein de l'entreprise (R. 3211-44).</p>");
+
+    /* LA SECONDE LICENCE, QUAND LE PARC EN APPELLE DEUX. R. 3211-12 en énumère
+       trois, chacune commandée par sa condition : trente poids lourds et
+       cinquante véhicules légers en demandent deux. Relevé le 26 septembre
+       2026. */
+    if (c.secondeDue)
+      L.push('<p class="er-ecart">Votre parc compte des véhicules des deux côtés de ' +
+        "3,5 tonnes : il appelle deux licences, la communautaire pour les " +
+        p.lourds + " de plus de 3,5 tonnes, et la licence de transport intérieur " +
+        "pour les " + p.legers + " en deçà s'ils ne roulent qu'en France " +
+        "(R. 3211-12). Une seule est saisie sur la fiche.</p>");
+    /* Et les copies, licence par licence : une somme unique comparée au parc
+       entier déclarait en règle une entreprise qui tient trente copies pour ses
+       poids lourds et rien pour ses cinquante véhicules légers. */
+    var typees = (c.licences || []).filter(function (x) { return x.type; });
+    if (typees.length > 1) {
+      typees.forEach(function (x) {
+        var quoi = x.legere ? "véhicules qui n'excèdent pas 3,5 tonnes"
+          : "véhicules de plus de 3,5 tonnes";
+        if (!x.du) return;
+        if (!isFinite(x.copies))
+          L.push('<p class="er-ecart">' + ech(x.type) + " : le nombre de copies conformes " +
+            "n'est pas saisi, il devrait correspondre aux " + x.du + " " + quoi +
+            " (R. 3211-12).</p>");
+        else if (x.copies < x.du)
+          L.push('<p class="er-ecart">' + ech(x.type) + " : " + x.copies + " copie" +
+            (x.copies > 1 ? "s" : "") + " pour " + x.du + " " + quoi +
+            ", il en manque " + (x.du - x.copies) + " (R. 3211-12).</p>");
+        else
+          L.push('<p class="er-dit">' + ech(x.type) + " : " + x.copies +
+            " copies pour " + x.du + " " + quoi + ".</p>");
+      });
+    } else if (moteurs) {
       if (!isFinite(c.copies))
         L.push('<p class="er-ecart">Le nombre de copies conformes n\'est pas saisi : ' +
           "il devrait correspondre aux " + moteurs + " véhicules du parc (R. 3211-12).</p>");

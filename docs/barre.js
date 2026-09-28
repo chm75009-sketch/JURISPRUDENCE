@@ -55,6 +55,15 @@
     { page: "mes-documents.html", nom: "Mes documents" },
     { page: "questions.html", nom: "Mes questions" },
     { page: "recherche.html", nom: "Recherche de jurisprudence" },
+    /* TROIS ENTRÉES QUI MANQUAIENT AU MENU. « Ni contrôles, ni parcours, ni
+       "Mes données" ne figurent dans le menu » : liste du 26 septembre 2026.
+       Les contrôles et les parcours s'ouvrent depuis l'audit, mais celui qui
+       cherche un parcours guidé n'a pas à passer par une ligne d'audit pour le
+       trouver ; et les données du poste ne se géraient que par le pied de
+       l'accueil, où personne ne va les chercher. */
+    { page: "parcours.html", nom: "Parcours guidés" },
+    { page: "documents.html", nom: "Modèles de documents" },
+    { page: "index.html#mes-donnees", nom: "Mes données de ce poste" },
   ];
 
   var AVANT = null;
@@ -321,6 +330,28 @@
       return true;
     };
   }
+
+  /* L'ONGLET PORTE LE NOM DE L'ENTREPRISE, NON CELUI DU LOGICIEL.
+
+     « La barre dit T.E.C, mais les onglets disent Jurisprudence » : liste du
+     26 septembre 2026. Le nom de l'entreprise ne peut pas être écrit dans le
+     code, puisque l'application sert à d'autres : il se lit sur la fiche, au
+     chargement de chaque page. L'écran garde son nom, l'entreprise le suit.
+
+     Une fiche vide laisse le titre tel quel : on n'invente pas de nom. */
+  (function titreDeLaPage() {
+    var nom = "";
+    try {
+      var p = (window.Profil && window.Profil.lire) ? window.Profil.lire() : null;
+      if (!p) p = JSON.parse(window.localStorage.getItem("profil-entreprise") || "null");
+      nom = String((p && (p.denomination || p.entreprise)) || "").trim();
+    } catch (e) { nom = ""; }
+    if (!nom) return;
+    var t = String(document.title || "").trim();
+    /* Le suffixe du logiciel s'en va, l'entreprise prend sa place. */
+    t = t.replace(/\s*[-\u00b7]\s*Jurisprudence.*$/i, "").replace(/^Jurisprudence.*$/i, "");
+    document.title = t ? t + " \u00b7 " + nom : nom;
+  })();
 
   window.Barre = {
     avant: function (fn) { AVANT = typeof fn === "function" ? fn : null; },

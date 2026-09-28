@@ -492,7 +492,36 @@
       "DATE DU JOUR": leJour(),
       "VILLE": ville() === "[VILLE]" ? "" : ville(),
       "LIEU": ville() === "[VILLE]" ? "" : ville(),
+      /* LES TITRES D'EXERCER DU TRANSPORTEUR, QUE LA FICHE CONNAÎT.
+
+         Les courriers au service qui tient le registre des transporteurs
+         écrivaient « [NUMÉRO D'INSCRIPTION] », « [NOM ET PRÉNOM] » et
+         « [NOMBRE] véhicules » alors que la fiche porte le numéro
+         d'inscription, la licence, le gestionnaire, son attestation, et que la
+         flotte donne le parc. Relevé le 26 septembre 2026. */
+      "NUMÉRO D'INSCRIPTION": profil.transRegistreNum || "",
+      "NUMÉRO DE LICENCE": profil.transLicenceNum || "",
+      "TYPE DE LICENCE": profil.transLicenceType || "",
+      "GESTIONNAIRE DE TRANSPORT": profil.transGestionnaire || "",
+      "LIEN DU GESTIONNAIRE": profil.transGestionnaireLien || "",
+      "ATTESTATION DE CAPACITÉ": profil.transAttestation || "",
+      "NOMBRE DE VÉHICULES": parcDit().moteurs,
+      "NOMBRE DE POIDS LOURDS": parcDit().lourds,
+      "NOMBRE DE VÉHICULES LÉGERS": parcDit().legers,
     };
+  }
+
+  /* Le parc, tel que la flotte le porte : ce sont les chiffres que le courrier
+     au registre des transporteurs doit donner. */
+  function parcDit() {
+    var vide = { moteurs: "", lourds: "", legers: "" };
+    if (!window.Profil || !window.Profil.capaciteTransport) return vide;
+    var c;
+    try { c = window.Profil.capaciteTransport(); } catch (e) { return vide; }
+    var p = c && c.parc;
+    if (!p || !p.lignes) return vide;
+    return { moteurs: String(p.lourds + p.legers), lourds: String(p.lourds),
+      legers: String(p.legers) };
   }
 
   /* « en qualité de Assistante ». La préposition qui précède un crochet

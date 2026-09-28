@@ -1235,7 +1235,7 @@
       ", " + arbre.seuil.toUpperCase());
     L.push(GROS);
     L.push("");
-    L.push("Version du texte lue à la source : " + arbre.version + ".");
+    L.push("Version du texte : " + arbre.version + ".");
     L.push("Rubriques : " + arbre.rubriques.length + ". Les libellés ci-dessous sont ceux du");
     L.push("décret, mot pour mot, ils ne sont ni résumés ni reformulés.");
     L.push("");
@@ -1373,14 +1373,20 @@
   }
 
   /* Le pied : d'où vient ce qui est écrit, et ce que le document ne dit pas. */
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
     /* CE QUI EST INTERNE RESTE INTERNE : le pied nommait le fichier du dépôt
        où les textes sont rangés. Un document qui sort du cabinet dit d'où vient
        le droit, pas comment il a été rangé. Relevé le 27 septembre 2026. */
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la date");
-    L.push("ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
     L.push("CE QUE CE DOCUMENT N'EST PAS. Il prépare, structure et documente la base.");
@@ -1394,7 +1400,7 @@
     L.push("l'irrégularité opposable, la consultation dont le délai n'a pas couru, et");
     L.push("l'avis négatif acquis au terme.");
     L.push("");
-    L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
+    L.push("Votre convention collective, vos");
     L.push("accords et l'accord de l'article L. 2312-21 s'il en existe un peuvent");
     L.push("ajouter des exigences qui ne sont pas reprises ici. Ne laissez aucun");
     L.push("crochet dans le texte que vous mettez à disposition ou que vous déposez.");

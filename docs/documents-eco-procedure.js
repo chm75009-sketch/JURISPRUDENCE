@@ -195,14 +195,20 @@
   /* Le pied commun : d'où vient ce qui est écrit, et ce que le document ne dit
      pas. Même forme que dans les autres modules - deux façons d'écrire un pied
      dans deux documents de la même entreprise se remarquent tout de suite. */
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la date");
-    L.push("ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
-    L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
+    L.push("Votre convention collective, vos");
     L.push("accords d'entreprise et, le cas échéant, votre accord de méthode peuvent");
     L.push("ajouter des exigences qui ne sont pas reprises ici. Ne laissez aucun crochet");
     L.push("dans la pièce que vous versez, remettez ou envoyez.");
@@ -277,7 +283,7 @@
       L.push("");
 
       return L.concat(pied("L. 1233-4, D. 1233-2-1, L. 1233-2, L. 1235-1, L. 1235-3",
-        ["Le périmètre du groupe n'a pas été lu à la source : les articles sont",
+        ["Le périmètre du groupe n'est pas traité ici : les articles sont",
          "nommés, leur contenu n'est pas reproduit."])).join("\n");
     },
   });

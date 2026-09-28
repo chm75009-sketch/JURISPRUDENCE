@@ -245,14 +245,20 @@
     return L;
   }
 
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
-    L.push("date ci-dessus, et chacun est cité avec l'identifiant de cette version.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
-    L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
+    L.push("Votre convention collective, vos");
     L.push("accords et votre règlement intérieur peuvent ajouter des exigences qui");
     L.push("ne sont pas reprises ici. Ne laissez aucun crochet dans le texte que");
     L.push("vous remettez, déposez ou envoyez.");
@@ -787,7 +793,10 @@
       L.push("Avant de convoquer, relevez la clause applicable dans votre convention");
       L.push("collective ou votre règlement intérieur. Remplissez cette fiche.");
       L.push("");
-      L.push("Entreprise [DÉNOMINATION] - dossier disciplinaire [NOM]");
+      /* La dénomination est sur la fiche : l'en-tête du dossier la portait en
+         crochet. Relevé le 26 septembre 2026. */
+      L.push("Entreprise " + cro((ctx.profil || {}).denomination, "DÉNOMINATION") +
+        " - dossier disciplinaire [NOM]");
       L.push("Relevé établi le [DATE]");
       L.push("");
       L.push("1. CLAUSE CONSULTÉE");

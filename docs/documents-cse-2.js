@@ -204,7 +204,7 @@
     L.push(TRAIT);
     L.push("");
     if (arts && arts.length) {
-      L.push("FONDEMENT - les articles du code du travail lus à la source :");
+      L.push("FONDEMENT - les articles du code du travail :");
       L.push(arts.join(" · ") + ".");
     } else {
       L.push("FONDEMENT - aucun article n'est cité ici : ce document ne prononce aucune");
@@ -213,7 +213,7 @@
     }
     L.push("");
     if (!sansReserve) {
-      L.push("Ce document ne vaut pas consultation juridique. Votre convention collective,");
+      L.push("Votre convention collective,");
       L.push("vos accords d'entreprise, vos usages et vos engagements unilatéraux peuvent");
       L.push("ajouter des exigences qui ne sont pas reprises ici, et priment lorsqu'ils");
       L.push("sont plus favorables. Ce que la loi confie à l'appréciation du juge n'est");

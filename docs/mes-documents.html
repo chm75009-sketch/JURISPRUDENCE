@@ -330,9 +330,41 @@
       }
       $("liste").innerHTML = gardees.map(function (x) {
         return '<section class="rub"><h2>' + ech(nomDe(x.r)) + "</h2>" +
-          '<p class="compte">' + x.L.length + " document(s)</p>" +
+          /* « 2 document(s) » : le pluriel se décide, il ne se met pas entre
+             parenthèses. Relevé le 26 septembre 2026. */
+          '<p class="compte">' + x.L.length + " document" +
+            (x.L.length > 1 ? "s" : "") + "</p>" +
           x.L.map(ligne).join("") + "</section>";
       }).join("");
+      /* LES PIÈCES RETIRÉES, ET LE MOYEN DE LES RENDRE.
+
+         Une pièce retirée revenait à la reconnexion : la base ne la portait
+         plus, donc le dossier du client la reposait. Elle est désormais notée
+         comme retirée, et la repose la saute. Reste à pouvoir changer d'avis :
+         la liste est sous les rubriques, avec un bouton par nom. Relevé le
+         26 septembre 2026. */
+      var horsBase = (window.Documents.retires && window.Documents.retires()) || [];
+      if (horsBase.length)
+        $("liste").insertAdjacentHTML("beforeend",
+          '<section class="rub"><h2>Pièces retirées</h2>' +
+          '<p class="compte">' + horsBase.length + " pièce" + (horsBase.length > 1 ? "s" : "") +
+          " du dossier " + (horsBase.length > 1 ? "ont" : "a") + " été retirée" +
+          (horsBase.length > 1 ? "s" : "") + " de ce poste. " +
+          (horsBase.length > 1 ? "Elles ne reviendront" : "Elle ne reviendra") +
+          " plus à la prochaine entrée.</p>" +
+          horsBase.map(function (n) {
+            return '<div class="doc"><div class="tete"><b>' + ech(n) + "</b>" +
+              '<span class="etiq">retirée</span></div>' +
+              '<div class="barre"><button type="button" class="second" data-rendre="' +
+              ech(n) + '">Rendre cette pièce</button></div></div>';
+          }).join("") + "</section>");
+      Array.prototype.forEach.call(document.querySelectorAll("[data-rendre]"), function (b) {
+        b.addEventListener("click", function () {
+          window.Documents.rendre(b.getAttribute("data-rendre"));
+          b.disabled = true;
+          b.textContent = "Rendue : elle reviendra à la prochaine entrée";
+        });
+      });
       Array.prototype.forEach.call(document.querySelectorAll("[data-voir]"), function (b) {
         b.addEventListener("click", function () { voir(b.getAttribute("data-voir")); });
       });

@@ -1394,10 +1394,13 @@
       L.push("      se tient au plus tard le quatre-vingt-dixième jour suivant cette");
       L.push("      diffusion (L. 2314-4).");
       L.push("");
-      L.push("      Le modèle qui écrit ces documents, note d'information du");
-      L.push("      personnel, invitation des organisations syndicales et calendrier");
-      L.push("      des quatre-vingt-dix jours :");
-      L.push("      " + SITE + "audit-cse.html#elections");
+      /* PAS DE RENVOI À L'OUTIL DANS UN DOCUMENT QUI SORT. Le document portait
+         l'adresse de l'application : un écrit remis ou déposé n'a pas à dire
+         par quoi il est passé. L'écran est nommé, sans adresse. Relevé le
+         26 septembre 2026. */
+      L.push("      La note d'information du personnel, l'invitation des");
+      L.push("      organisations syndicales et le calendrier des quatre-vingt-dix");
+      L.push("      jours s'écrivent dans l'audit du comité, ligne « Élections ».");
       L.push("");
       if (enCours) {
         L.push("  [x] NON, LES ÉLECTIONS SONT EN COURS D'ORGANISATION - c'est ce que dit");
@@ -1802,13 +1805,17 @@
       L.push("version, la jurisprudence qui l'éclaire, le risque encouru et le délai");
       L.push("calculé sur vos dates.");
       L.push("");
-      L.push("  La procédure pas à pas : " + SITE + "parcours.html?p=ri");
-      L.push("  Contrôler un règlement déjà en vigueur : " + SITE + "controler-ri.html");
-      L.push("  L'audit discipline et règlement intérieur : " + SITE + "audit-discipline.html");
+      /* Les écrans sont nommés, sans adresse : un règlement intérieur déposé à
+         l'inspection du travail ne porte pas le lien de l'outil qui l'a écrit.
+         Relevé le 26 septembre 2026. */
+      L.push("  La procédure pas à pas : le parcours guidé du règlement intérieur.");
+      L.push("  Contrôler un règlement déjà en vigueur : l'écran de contrôle du");
+      L.push("  règlement intérieur.");
+      L.push("  Le droit et les risques : l'audit discipline et règlement intérieur.");
       L.push("");
       var pourAllerPlusLoin = liens(ctx, "ri");
       if (pourAllerPlusLoin.length) L = L.concat(pourAllerPlusLoin);
-      L.push("Ce document reprend les textes lus à la source : L. 1311-2, L. 1321-1,");
+      L.push("Ce document repose sur les articles L. 1311-2, L. 1321-1,");
       L.push("L. 1321-2, L. 1321-2-1, L. 1321-3, L. 1321-4, L. 1321-5, L. 1321-6,");
       L.push("L. 1322-1, L. 1331-1, L. 1331-2, L. 1332-1 à L. 1332-5, R. 1321-1 à");
       L.push("R. 1321-5.");

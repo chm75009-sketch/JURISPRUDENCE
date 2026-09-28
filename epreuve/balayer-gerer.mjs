@@ -56,6 +56,32 @@ const page = await ctx.newPage();
 let erreurs = [];
 page.on("pageerror", (e) => erreurs.push(e.message));
 
+/* CE QUI NE DOIT PAS SORTIR, CHERCHÉ DANS CHAQUE DOCUMENT DU QUOTIDIEN.
+
+   epreuve/verifier-marques.mjs fait ce travail sur les générateurs du registre
+   DocumentsProduits, sans navigateur. Les documents de Gérer, eux, se produisent
+   dans l'écran : ce sont les mêmes interdits, appliqués là où ils sortent.
+   Chacun vient d'une ligne de la contre-vérification du 26 septembre 2026,
+   section « Documents du quotidien ». */
+const INTERDITS = [
+  [/\bundefined\b/, "« undefined » dans le document"],
+  [/\bNaN\b/, "« NaN » dans le document"],
+  [/AUCUN CHIFFRE N'EST ÉCRIT ICI/, "avertissement sur les chiffres"],
+  [/n'(a|ont) PAS été lus? à la source/i, "« n'a pas été lu à la source »"],
+  [/\bce module\b/i, "le document parle du module"],
+  [/ne vaut pas (consultation|avis) juridique/i, "avertissement d'origine"],
+  [/Juris Expert|github\.io/i, "marque d'outil ou lien vers le dépôt"],
+  [/Même structure que l'exemple/, "renvoi à un exemple retiré"],
+  [/POUR ALLER PLUS LOIN/, "rubrique d'apprentissage dans une pièce signée"],
+  [/Fait à \[(lieu|LIEU)\]/, "« Fait à [lieu] » alors que la fiche porte la ville"],
+  [/\[VILLE\]|\[département\]/, "crochet d'une donnée que la fiche porte"],
+  [/\[nom et qualité du (signataire|représentant)/i, "crochet du signataire"],
+  [/(?:^|[^A-Za-zÀ-ÿ'’])de (?!onze\b|onzième|un\b|une\b|huit\b)[AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜaeiouyàâäéèêëîïôöùûü]/,
+   "élision manquée après « de »"],
+  [/HUISSIER DE JUSTICE|huissier de justice/, "« huissier de justice »"],
+  [/\ble 1 [a-zéû]/, "« le 1 » au lieu de « le 1er »"],
+];
+
 let fautes = 0, vus = 0;
 for (const cse of CSE) {
   await page.goto(RACINE + "/index.html");
@@ -82,8 +108,9 @@ for (const cse of CSE) {
       const t = document.getElementById("d-tableau");
       const titre = (document.getElementById("d-titre") || {}).textContent || "";
       const refus = /n'est pas produit/.test((document.getElementById("d-avis") || {}).innerText || "");
-      return { titre: titre,
-        signes: ((f ? f.innerText : "") + (t && !t.hidden ? t.innerText : "")).trim().length,
+      const texte = (f ? f.innerText : "") + "\n" + (t && !t.hidden ? t.innerText : "");
+      return { titre: titre, texte: texte,
+        signes: texte.trim().length,
         refus: refus, large: document.documentElement.scrollWidth > 390 };
     }, cle);
     vus++;
@@ -99,6 +126,13 @@ for (const cse of CSE) {
     }
     if (r.large) {
       console.log("FAUTE " + cse + " · " + cle + " (" + r.titre + ") : débordement horizontal");
+      fautes++;
+    }
+    if (!r.refus) for (const [re, quoi] of INTERDITS) {
+      const m = (r.texte || "").match(re);
+      if (!m) continue;
+      console.log("FAUTE " + cse + " · " + cle + " (" + r.titre + ") : " + quoi +
+        " · « " + String(m[0]).trim().slice(0, 60) + " »");
       fautes++;
     }
     await page.goto(RACINE + "/gerer.html");

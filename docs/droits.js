@@ -875,7 +875,7 @@
 
     d.innerHTML =
       '<div class="dr-boite">' +
-        '<p class="dr-fil">Application Jurisprudence</p>' +
+        '<p class="dr-fil">Droits et accès</p>' +
         "<h1>Qui travaille ?</h1>" +
         "<p>Choisissez votre nom, puis saisissez votre code d'accès. " +
         "Vos droits déterminent les modules qui s'ouvriront.</p>" +

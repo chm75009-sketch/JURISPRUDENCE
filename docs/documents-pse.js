@@ -243,7 +243,7 @@
     L.push(TRAIT);
     L.push("");
     L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
-    L.push("lus à la source, dans leur version en vigueur à la date ci-dessus.");
+    L.push("dans leur version en vigueur à la date ci-dessus.");
     L.push("Chacun est cité avec son identifiant LEGIARTI.");
     if (note) { L.push(""); L.push(note); }
     L.push("");
@@ -2596,7 +2596,7 @@
 
       pied(L, ["L. 1233-24-1", "L. 1233-24-2", "L. 1233-24-4", "L. 1233-57-4"],
         "L'article L. 2321-9, auquel L. 1233-24-1 renvoie pour la signature par le\n" +
-        "conseil d'entreprise, n'a pas été lu à la source : il est cité ici parce\n" +
+        "conseil d'entreprise, n'est pas reproduit ici : il est cité ici parce\n" +
         "que L. 1233-24-1 le cite, sans que son contenu soit rapporté.");
       return L.join("\n");
     });
@@ -2898,7 +2898,7 @@
 
       pied(L, ["L. 1233-57-4", "L. 1233-39", "L. 1233-24-1", "L. 1233-24-4"],
         "Les voies et délais de recours ne sont pas rédigés ici : les textes qui les\n" +
-        "fixent n'ont pas été lus à la source, et rien n'est écrit ici qui ne vienne\n" +
+        "fixent ne sont pas reproduits ici, et rien n'est écrit ici qui ne vienne\n" +
         "d'un texte lu.");
       return L.join("\n");
     });

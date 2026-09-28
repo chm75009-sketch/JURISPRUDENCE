@@ -4002,12 +4002,13 @@
       Object.keys(articles).map(function (a) {
         return "art. " + refArt(a) + ' <span class="ident">' + TEXTES[a].id + "</span>";
       }).join(" · ") +
-      ". Lectures des 21 et 22 août 2026 au relais Légifrance, deux lectures espacées concordantes " +
-      "chacune, filtre par nom du code et critère de contenu contre les homonymes. " +
-      "Ce récapitulatif est produit par l'application Jurisprudence à partir des seules données saisies " +
-      "sur ce poste ; il ne constitue pas une consultation juridique et ne se substitue ni au conseil " +
-      "d'un avocat, ni à la décision de l'administration ou du juge. Hors des conventions que " +
-      "l'application lit à la source, ce que la vôtre impose en plus de la loi reste à vérifier.</div>";
+      /* Le récapitulatif est une pièce de travail, non un document remis : il
+         garde la réserve utile, mais il ne se présente plus comme la sortie
+         d'un logiciel nommé. Relevé le 26 septembre 2026. */
+      ". Ce récapitulatif reprend les seules données saisies sur ce poste ; il ne " +
+      "se substitue ni au conseil d'un avocat, ni à la décision de l'administration " +
+      "ou du juge. Ce que votre convention collective impose en plus de la loi reste " +
+      "à vérifier.</div>";
 
     $("recap").style.display = "block";
     $("recap").scrollIntoView({ behavior: "smooth", block: "start" });

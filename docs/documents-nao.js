@@ -555,7 +555,7 @@
     L.push("    exposition, pas un chiffrage.");
     L.push("");
     L.push("L'article L. 241-13 du code de la sécurité sociale, auquel L. 2242-7");
-    L.push("renvoie pour l'assiette, n'a PAS été lu à la source pour ce document : il est");
+    L.push("renvoie pour l'assiette, n'est pas reproduit ici pour ce document : il est");
     L.push("nommé, non reproduit. Le montant de vos exonérations se lit sur vos");
     L.push("déclarations sociales nominatives.");
     L.push("");
@@ -590,6 +590,14 @@
   }
 
   /* Le pied : d'où vient ce qui est écrit, et ce que le document ne dit pas. */
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     pousserPlie(L, "Fondement : " + articles + ".", 70, "", "");
@@ -597,8 +605,6 @@
        du dépôt où les textes sont conservés, et qualifiait la réponse de la
        base de jurisprudence. Un document qui sort du cabinet dit d'où vient
        le droit, pas comment il a été rangé. Relevé le 26 septembre 2026. */
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la date");
-    L.push("ci-dessus. Les arrêts cités ont été lus dans la base de jurisprudence de la");
     L.push("Cour de cassation.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
@@ -609,11 +615,11 @@
     L.push("(L. 2242-5).");
     L.push("");
     L.push("Aucune peine n'est annoncée dans ce document qui ne soit portée par un");
-    L.push("texte lu à la source ET qui vise l'obligation dont il s'agit. Là où le");
+    L.push("texte cité ET qui vise l'obligation dont il s'agit. Là où le");
     L.push("corpus ne porte aucune peine, le document dit ce qui se joue réellement");
     L.push("plutôt que d'agiter une amende qui n'existe pas.");
     L.push("");
-    L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
+    L.push("Votre convention collective, vos");
     L.push("accords d'entreprise et l'accord de méthode de L. 2242-11 s'il en existe");
     L.push("un peuvent ajouter des exigences qui ne sont pas reprises ici. Ne laissez");
     L.push("aucun crochet dans le texte que vous signez, remettez ou déposez.");
@@ -882,7 +888,7 @@
       L.push("Le présent accord sera déposé par la partie la plus diligente. Les");
       L.push("conditions du dépôt relèvent de l'article L. 2231-6, que L. 2242-6 nomme,");
       L.push("et de l'article D. 2231-2, que R. 2242-1 nomme : ces deux articles n'ont");
-      L.push("PAS été lus à la source pour ce document. Vérifiez-y les formalités avant de");
+      L.push("PAS été reproduits ici. Vérifiez-y les formalités avant de");
       L.push("déposer - support, nombre d'exemplaires, pièces à joindre.");
       L.push("");
       L.push("Fait à " + villeDe(ctx) + ", le [DATE], en [nombre] exemplaires.");
@@ -958,7 +964,7 @@
       return L.concat(pied("L. 2242-10, L. 2242-11, L. 2242-12, L. 2242-13 ; " +
         ARRETS.niveauxParAccord.ref,
         ["Les articles L. 2231-6 et D. 2231-2, relatifs au dépôt, sont nommés parce",
-         "que L. 2242-6 et R. 2242-1 les nomment : ils n'ont pas été lus à la source",
+         "que L. 2242-6 et R. 2242-1 les nomment : ils ne sont pas reproduits ici",
          "pour ce document et ne sont donc ni reproduits ni résumés."])).join("\n");
     },
   });
@@ -1355,7 +1361,7 @@
       L.push("  particulier pour les salariés à temps partiel - et mixité des emplois.");
       L.push("");
       citerMorceau(L, "L2242-17", "Cette négociation s'appuie sur les données", "Cette négociation porte également", "  ");
-      L.push("  L'article L. 2312-36, auquel ce 2° renvoie, N'A PAS été lu à la source");
+      L.push("  L'article L. 2312-36, auquel ce 2° renvoie, n'est pas reproduit ici");
       L.push("  pour ce document : il est nommé, non reproduit. Le dossier « base de");
       L.push("  données (BDESE) » le lit et l'audite pour lui-même.");
       L.push("");
@@ -1373,7 +1379,7 @@
       L.push("  En matière de recrutement, d'emploi et d'accès à la formation");
       L.push("  professionnelle, en favorisant notamment les conditions d'accès aux");
       L.push("  critères définis aux II et III de l'article L. 6315-1. Cet article n'a");
-      L.push("  pas été lu à la source pour ce document : il est nommé, non reproduit.");
+      L.push("  pas été reproduit ici : il est nommé, non reproduit.");
       L.push("  [Mesures envisagées : .........................................]");
       L.push("");
       L.push("POINT 4 - L'INSERTION ET LE MAINTIEN DANS L'EMPLOI DES TRAVAILLEURS");
@@ -1386,7 +1392,7 @@
       L.push("  [Rapport à établir : effectif d'assujettissement, bénéficiaires employés,");
       L.push("  état de l'obligation d'emploi - source : déclaration sociale nominative.");
       L.push("  Les articles L. 5212-1 et suivants, auxquels L. 2242-18 renvoie, n'ont");
-      L.push("  pas été lus à la source pour ce document.]");
+      L.push("  pas été reproduits ici.]");
       L.push("");
       L.push("POINT 5 - PRÉVOYANCE ET REMBOURSEMENTS COMPLÉMENTAIRES (5°)");
       L.push("  Ce point n'est dû qu'À DÉFAUT de couverture par un accord de branche ou");
@@ -1420,7 +1426,7 @@
       L.push("  SITE. Le texte vise la réduction du coût de la mobilité, l'incitation à");
       L.push("  l'usage des modes de transport vertueux et la prise en charge des frais");
       L.push("  mentionnés aux articles L. 3261-3 et L. 3261-3-1. Ces trois articles");
-      L.push("  n'ont pas été lus à la source pour ce document : ils sont nommés seulement.");
+      L.push("  ne sont pas reproduits ici : ils sont nommés seulement.");
       L.push("  [Sites de l'entreprise et effectif de chacun : ..................]");
       L.push("");
       L.push("POINT 9 - [FACULTATIF] LA PRÉVENTION DE L'EXPOSITION AUX FACTEURS DE");
@@ -1432,7 +1438,7 @@
       L.push("  toutefois l'effet que le texte y attache : l'accord conclu sur ce thème");
       L.push("  vaut conclusion de l'accord mentionné à l'article L. 4163-3, sous réserve");
       L.push("  du respect des autres dispositions du chapitre en cause - articles non");
-      L.push("  lus à la source pour ce document.");
+      L.push("  reproduits ici.");
       L.push("");
       L.push(TRAIT);
       L.push("");
@@ -1509,7 +1515,7 @@
          "L. 3261-3, L. 3261-3-1, L. 4163-3, L. 1142-8 et L. 1142-9 du code du travail,",
          "ainsi que les articles L. 241-3-1, L. 911-2 et L. 911-7 du code de la sécurité",
          "sociale, sont NOMMÉS parce que les textes lus les nomment. Aucun d'eux n'a été",
-         "lu à la source pour ce document : leur contenu n'est ni reproduit ni résumé."])).join("\n");
+         "reproduit ici : leur contenu n'est ni reproduit ni résumé."])).join("\n");
     },
   });
 
@@ -1714,7 +1720,7 @@
       L.push("  reconversion externe - vaut conclusion de l'accord mentionné à l'article");
       L.push("  L. 6324-9. Et le 1° renvoie aux matières des articles L. 1233-21 et");
       L.push("  L. 1233-22, selon les modalités prévues à ces mêmes articles. Ces trois");
-      L.push("  articles n'ont pas été lus à la source pour ce document : ils sont nommés,");
+      L.push("  articles ne sont pas reproduits ici : ils sont nommés,");
       L.push("  non reproduits. Le module « licenciement économique » traite des");
       L.push("  articles L. 1233-21 et L. 1233-22.");
       L.push("");
@@ -1755,7 +1761,7 @@
         "L. 2242-21, L. 2243-2 ; " + ARRETS.representativite.ref,
         ["Les articles L. 2331-1, L. 2341-1, L. 2341-2, L. 2254-2, L. 1233-21,",
          "L. 1233-22, L. 6324-9, L. 1237-18 et suivants et L. 2323-10 sont NOMMÉS parce",
-         "que les textes lus les nomment : aucun n'a été lu à la source pour ce document.",
+         "que les textes lus les nomment : aucun n'a été reproduit ici.",
          "",
          "Ce document n'annonce ni la pénalité de L. 2242-7 ni celle de L. 2242-8 :",
          "aucune des deux ne vise cette négociation. Seul L. 2243-2 la couvre, parce",
@@ -1994,7 +2000,7 @@
       return L.concat(pied("L. 2242-2-1, L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-13, " +
         "L. 2242-14 ; " + ARRETS.finDesNegociations.ref,
         ["L'article L. 2331-1, auquel L. 2242-2-1 renvoie pour la notion de groupe,",
-         "est nommé et non reproduit : il n'a pas été lu à la source pour ce document.",
+         "est nommé et non reproduit : il n'est pas reproduit ici.",
          "",
          "AUCUNE PEINE N'EST ANNONCÉE dans ce document : aucun des textes de sanction",
          "lus - L. 2242-7, L. 2242-8, L. 2243-1, L. 2243-2 - ne nomme l'article",
@@ -2736,7 +2742,7 @@
 
       return L.concat(pied("L. 2242-6, L. 2242-14, L. 2242-15, L. 2242-7",
         ["L'article L. 2231-6, auquel L. 2242-6 renvoie pour les conditions du dépôt,",
-         "n'a PAS été lu à la source : il est nommé, et les modalités",
+         "n'est pas reproduit ici : il est nommé, et les modalités",
          "matérielles du dépôt ne sont ni décrites ni supposées ici."])).join("\n");
     },
   });
@@ -3286,7 +3292,7 @@
       return L.concat(pied("L. 2242-4, L. 2242-5, L. 2242-6, L. 2242-8, L. 2242-14, " +
         "R. 2242-1 ; " + ARRETS.finDesNegociations.ref + " ; " + ARRETS.engagerNonConclure.ref,
         ["L'article D. 2231-2, auquel R. 2242-1 renvoie pour les conditions du dépôt,",
-         "n'a PAS été lu à la source : il est nommé, et les modalités",
+         "n'est pas reproduit ici : il est nommé, et les modalités",
          "matérielles du dépôt ne sont ni décrites ni supposées ici.",
          "",
          "Aucune peine n'est annoncée pour le seul défaut de procès-verbal : aucun",
@@ -3476,7 +3482,7 @@
       L.push("");
       L.push("[Modalités de suivi de la réalisation des objectifs et des mesures. Le");
       L.push("deuxième alinéa de L. 2242-8 renvoie leur fixation à un décret, qui n'a");
-      L.push("pas été lu à la source pour ce document : vérifiez-le avant d'arrêter vos");
+      L.push("pas été reproduit ici : vérifiez-le avant d'arrêter vos");
       L.push("modalités. Prévoyez au minimum qui suit, à quelle fréquence, et sur quels");
       L.push("indicateurs.]");
       L.push("");
@@ -3550,7 +3556,7 @@
       L.push("    période comprise entre la date de réception de la réponse et le terme");
       L.push("    de la première année suivant le dépôt du plan.");
       L.push("  · LE SILENCE VAUT REJET, à l'issue d'un délai fixé par décret en Conseil");
-      L.push("    d'État. Ce décret n'a pas été lu à la source pour ce document : le délai");
+      L.push("    d'État. Ce décret n'est pas reproduit ici : le délai");
       L.push("    n'est donc pas écrit ici.");
       L.push("  · LA DEMANDE N'EST PLUS RECEVABLE dès lors qu'un contrôle a été engagé.");
       L.push("    Demandez AVANT, pas pendant : c'est tout l'intérêt du dispositif.");
@@ -3605,7 +3611,7 @@
 
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17",
         ["Les articles L. 1142-8 et L. 1142-9, nommés par L. 2242-8, et les décrets",
-         "auxquels L. 2242-8 et L. 2242-9 renvoient, n'ont PAS été lus à la source par",
+         "auxquels L. 2242-8 et L. 2242-9 renvoient, ne sont pas reproduits ici par",
          "pour ce document : ni les indicateurs, ni les délais, ni les modalités de",
          "sont décrits ici. Ils sont nommés, et il faut les vérifier."])).join("\n");
     },
@@ -3936,7 +3942,7 @@
         suite("s'ouvre immédiatement (documents NAO-CTL-PER-02 et NAO-CTL-EGA-01)."),
         ech(ctx, 7, "vous allez lire à la source les articles L. 1142-8 et L. 1142-9 :"),
         suite("indicateurs, mode de calcul, date limite de publication, seuil de"),
-        suite("résultat. Ce module ne les a pas lus et ne les invente pas."),
+        suite("résultat. Ils ne sont ni repris ni supposés ici."),
         ech(ctx, 30, "calcul des indicateurs sur la période de référence retenue."),
         ech(ctx, 40, "publication, et preuve horodatée versée au dossier."),
         ech(ctx, 45, "déclaration à l'administration et information du comité social"),
@@ -3988,7 +3994,7 @@
 
       return L.concat(pied("L. 2242-1, L. 2242-3, L. 2242-8, L. 2242-9, L. 2242-17, D. 1142-2-1, D. 1142-4, D. 1142-6",
         ["Les quatre indicateurs, la date de publication et le seuil de soixante-quinze",
-         "points ont été lus à la source le 26 septembre 2026 : D. 1142-2-1, D. 1142-4 et",
+         "points sont reproduits ici le 26 septembre 2026 : D. 1142-2-1, D. 1142-4 et",
          "D. 1142-6. L'annexe II du chapitre, qui donne le barème de points de chaque",
          "indicateur, n'a pas été lue ici : le calcul du niveau de résultat s'y fait, et",
          "il n'est pas reproduit. Les articles L. 1142-8 et L. 1142-9 sont nommés parce",
@@ -4454,7 +4460,7 @@
          "L. 3261-3, L. 3261-3-1, L. 4163-3 et L. 4161-1 du code du travail, ainsi que",
          "les articles L. 241-3-1, L. 911-2 et L. 911-7 du code de la sécurité sociale",
          "et l'article L. 722-1 du code rural et de la pêche maritime, sont NOMMÉS",
-         "parce que les textes lus les nomment. Aucun n'a été lu à la source par ce",
+         "parce que les textes lus les nomment. Aucun n'est reproduit ici par ce",
          "module."])).join("\n");
     },
   });
@@ -4520,7 +4526,7 @@
       L.push("Deux sources la portent :");
       L.push("");
       L.push("  · LE MODULE « BASE DE DONNÉES (BDESE) » lit L. 2312-36 et les");
-      L.push("    articles R. 2312-8 et R. 2312-9 à la source, et il déploie la grille");
+      L.push("    articles R. 2312-8 et R. 2312-9, et il déploie la grille");
       L.push("    rubrique par rubrique. La rubrique « égalité professionnelle entre les");
       L.push("    femmes et les hommes » y figure avec son analyse des données chiffrées");
       L.push("    et sa stratégie d'action. C'est là qu'il faut aller chercher la liste,");

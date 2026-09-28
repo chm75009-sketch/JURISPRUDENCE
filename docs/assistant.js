@@ -682,11 +682,13 @@
           "ANTHROPIC_API_KEY dans les réglages Netlify du site (Site configuration " +
           "→ Environment variables). En attendant, une clé personnelle peut servir de recours.";
         bouton = { libelle: "Saisir une clé personnelle", action: function () { montrerEcranCle(false); } };
+        montrerLienCle();
         break;
       case "CLE_RELAIS_REFUSEE":
         texte = "La clé configurée dans Netlify est refusée par l'API Anthropic (401) : " +
           "la vérifier dans les réglages du site. Une clé personnelle peut servir de recours.";
         bouton = { libelle: "Saisir une clé personnelle", action: function () { montrerEcranCle(false); } };
+        montrerLienCle();
         break;
       case "QUOTA":
         var attente = parseInt(err.detail, 10);
@@ -767,6 +769,11 @@
 
   /* L'écran de clé PERSONNELLE, un repli, jamais un préalable : par défaut,
      c'est le relais de l'application qui porte la connexion. */
+  /* Le lien du pied paraît quand la clé personnelle devient le seul recours. */
+  function montrerLienCle() {
+    var l = document.getElementById("assist-changer-cle");
+    if (l) l.hidden = false;
+  }
   function montrerEcranCle(remplacement) {
     ui.fil.style.display = "none";
     ui.saisie.style.display = "none";
@@ -854,7 +861,12 @@
       "</div>" +
       '<div class="assist-pied">' +
       "<span>La conversation reste en mémoire, rien n'est conservé.</span>" +
-      '<a id="assist-changer-cle" style="margin-left:auto">clé personnelle</a>' +
+      /* LE LIEN « CLÉ PERSONNELLE » NE SE MONTRE PLUS D'OFFICE. Demande du
+         26 septembre 2026 : l'utilisatrice n'a pas de clé à fournir, la
+         connexion est portée par l'application. Le lien reste, parce que la clé
+         personnelle est le seul recours quand le relais ne répond pas, mais il
+         n'apparaît qu'à ce moment-là, ou si une clé a déjà été saisie. */
+      '<a id="assist-changer-cle" style="margin-left:auto" hidden>clé personnelle</a>' +
       "</div>";
     document.body.appendChild(panneau);
 
@@ -881,9 +893,9 @@
       panneau.classList.remove("ouvert");
     });
     document.getElementById("assist-nouvelle").addEventListener("click", nouvelleConversation);
-    document.getElementById("assist-changer-cle").addEventListener("click", function () {
-      montrerEcranCle(!!cle());
-    });
+    var lienCle = document.getElementById("assist-changer-cle");
+    lienCle.hidden = !cle();
+    lienCle.addEventListener("click", function () { montrerEcranCle(!!cle()); });
     ui.envoyer.addEventListener("click", function () { envoyer(); });
     ui.champ.addEventListener("keydown", function (e) {
       if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); envoyer(); }

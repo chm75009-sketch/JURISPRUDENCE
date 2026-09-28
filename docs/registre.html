@@ -906,6 +906,26 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       sel("part", "Temps de travail", [{ v: "", lib: "à établir" },
         { v: "complet", lib: "Temps complet" }, { v: "partiel", lib: "Temps partiel" }],
         "D. 1221-23, 12° : la mention « salarié à temps partiel »");
+    /* L'HORAIRE DU CONTRAT, ET LE REMPLACEMENT D'UN ABSENT : DEUX DONNÉES QUE
+       L'EFFECTIF RÉCLAME ET QUE LE REGISTRE N'AVAIT PAS.
+
+       L. 1111-2, 3° compte les salariés à temps partiel « en divisant la somme
+       totale des horaires inscrits dans leurs contrats de travail par la durée
+       légale ou la durée conventionnelle du travail » : c'est l'horaire DU
+       CONTRAT, pas celui d'un relevé d'heures. L'effectif allait le chercher
+       dans l'écran des heures, qui ne le porte que pour les salariés suivis, et
+       les temps partiels sans relevé sortaient du décompte.
+
+       Et L. 1111-2, 2° exclut le contrat à durée déterminée « lorsqu'il
+       remplace un salarié absent » : l'effectif lisait un champ qui n'existait
+       nulle part, donc aucun remplacement n'était jamais exclu. Les deux se
+       saisissent ici. Relevé le 26 septembre 2026, corrigé le 28. */
+    if (s.part === "partiel")
+      h += e("hcSem", "Horaire hebdomadaire inscrit au contrat (heures)",
+        "L. 1111-2, 3° : les temps partiels comptent au prorata de l'horaire de leur contrat, divisé par la durée légale. Sans cet horaire, le salarié sort du décompte et l'effectif devient une fourchette.");
+    if (s.nature === "cdd" || s.nature === "temporaire")
+      h += sel("remplacement", "Ce contrat remplace-t-il un salarié absent ?", ouiNon,
+        "L. 1111-2, 2° : le contrat à durée déterminée est exclu du décompte des effectifs lorsqu'il remplace un salarié absent ou dont le contrat est suspendu.");
     if (s.nature === "autre") h += e("natAutre", "Préciser la situation", "Hors énumération de D. 1221-23 : rien n'y est présumé.");
     if (s.nature === "temporaire") {
       h += e("ettN", "Entreprise de travail temporaire : nom", "D. 1221-23, 10°");

@@ -197,17 +197,23 @@
 
   /* Le pied commun : d'où vient ce qui est écrit, et ce que le document ne
      dit pas. */
+    /* CE QUI PARLE DE LA MÉTHODE NE SORT PAS DU CABINET. Le pied de chaque
+       document annonçait que « ces textes sont reproduits ici, dans leur
+       version en vigueur » et que « ce document ne vaut pas consultation » :
+       deux phrases qui parlent du module, non au client, et qu'un document remis
+       à un salarié ou déposé à l'inspection n'a pas à porter. Relevé le
+       26 septembre 2026. Le fondement reste, et la mise en garde utile aussi :
+       la convention collective peut ajouter des exigences, et un crochet ne se
+       laisse pas dans une pièce qu'on remet. */
   function pied(articles, notes) {
     var L = ["", TRAIT, ""];
     L.push("Fondement : " + articles + ".");
     /* Le pied nommait le fichier du dépôt où les textes sont conservés :
        c'est une mention interne, elle n'a rien à faire dans un document
        remis au client. Relevé le 26 septembre 2026. */
-    L.push("Ces textes ont été lus à la source, dans leur version en vigueur à la");
-    L.push("date ci-dessus.");
     if (notes && notes.length) { L.push(""); notes.forEach(function (n) { L.push(n); }); }
     L.push("");
-    L.push("Ce document ne vaut pas consultation. Votre convention collective, vos");
+    L.push("Votre convention collective, vos");
     L.push("accords, votre règlement intérieur et la réglementation technique propre");
     L.push("à votre activité peuvent ajouter des exigences qui ne sont pas reprises");
     L.push("ici. Ne laissez aucun crochet dans le texte que vous adoptez, affichez ou");
@@ -993,7 +999,12 @@
           C = C.concat(tableau(contrib[0], [
             ["Comité social et économique" + (estNon(cseDe(ctx).existe) ? " (aucun comité déclaré, sans objet)" : ""), "[réunion, référence du procès-verbal]", "[date]"],
             ["Salarié désigné (L. 4644-1) : [nom, ou « aucun désigné »]", "[ce qu'il a fait]", "[date]"],
-            ["Service de prévention et de santé au travail : [nom du service]", "[visite, échange, fiche d'entreprise]", "[date]"],
+            /* Le service de santé au travail est saisi une fois sur la fiche,
+               sous « Organismes et interlocuteurs » : le document unique le
+               redemandait. Relevé le 26 septembre 2026. */
+            ["Service de prévention et de santé au travail : " +
+              cro((ctx.profil || {}).orgSanteTravail, "nom du service"),
+              "[visite, échange, fiche d'entreprise]", "[date]"],
           ]));
         }
 

@@ -281,6 +281,16 @@ input,select,textarea{width:100%;font:inherit;font-size:var(--t4);line-height:1.
 textarea{min-height:96px;resize:vertical}
 input[type=checkbox],input[type=radio]{width:auto;min-height:0;padding:0;width:20px;height:20px}
 input[type=file]{padding:10px 12px;font-size:var(--t2)}
+/* LES FLÈCHES DES CHAMPS DE NOMBRE, ET LA BARRE QU'ELLES TRAÎNENT.
+
+   Sur téléphone, les deux petites flèches d'un champ « number » posaient une
+   barre verticale parasite à côté du « + » et du « - », et elles sont de toute
+   façon inutilisables au doigt : un effectif, un montant ou un nombre de
+   véhicules se tape. Relevé le 26 septembre 2026. Le clavier numérique reste
+   celui du type « number ». */
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;appearance:none;margin:0}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--accent-clair);outline-offset:0;
   border-color:var(--accent)}
 input:disabled,select:disabled,textarea:disabled{background:var(--creux);color:var(--texte-2);cursor:not-allowed}

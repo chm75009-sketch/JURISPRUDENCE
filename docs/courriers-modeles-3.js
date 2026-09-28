@@ -157,7 +157,7 @@
      ══════════════════════════════════════════════════════════════════════ */
 
   a("transport", "tr-dreal", "Courrier au service qui tient le registre des transporteurs",
-    "Entreprise [DÉNOMINATION], n° d'inscription [NUMÉRO] : [OBJET]",
+    "Entreprise [DÉNOMINATION], n° d'inscription [NUMÉRO D'INSCRIPTION] : [OBJET]",
     ["Madame, Monsieur,",
      "",
      "Notre entreprise est inscrite au registre électronique national des entreprises de transport par route sous le numéro [NUMÉRO D'INSCRIPTION].",
@@ -166,9 +166,9 @@
      "",
      "Elle prend effet le [DATE].",
      "",
-     "[SI CHANGEMENT DE GESTIONNAIRE DE TRANSPORT] La personne physique qui dirige effectivement et en permanence nos activités de transport est, à compter de cette date, [NOM ET PRÉNOM], titulaire de l'attestation de capacité professionnelle n° [NUMÉRO], et liée à l'entreprise en qualité de [EMPLOYÉ / DIRECTEUR / DIRIGEANT / ASSOCIÉ / HABILITÉE PAR CONTRAT]. Les pièces justificatives sont jointes.",
+     "[SI CHANGEMENT DE GESTIONNAIRE DE TRANSPORT] La personne physique qui dirige effectivement et en permanence nos activités de transport est, à compter de cette date, [GESTIONNAIRE DE TRANSPORT], titulaire de l'attestation de capacité professionnelle n° [ATTESTATION DE CAPACITÉ], et liée à l'entreprise en qualité de [LIEN DU GESTIONNAIRE]. Les pièces justificatives sont jointes.",
      "",
-     "[SI VARIATION DU PARC] Notre parc compte désormais [NOMBRE] véhicules à moteur, dont [NOMBRE] de plus de 3,5 tonnes. Nous sollicitons en conséquence la délivrance de [NOMBRE] copie(s) certifiée(s) conforme(s) supplémentaire(s) de notre licence, ou vous restituons [NOMBRE] copie(s) devenue(s) sans objet.",
+     "[SI VARIATION DU PARC] Notre parc compte désormais [NOMBRE DE VÉHICULES] véhicules à moteur, dont [NOMBRE DE POIDS LOURDS] de plus de 3,5 tonnes et [NOMBRE DE VÉHICULES LÉGERS] en deçà. Nous sollicitons en conséquence la délivrance de [NOMBRE] copie(s) certifiée(s) conforme(s) supplémentaire(s) de notre licence, ou vous restituons [NOMBRE] copie(s) devenue(s) sans objet.",
      "",
      "Les pièces suivantes sont jointes : [LISTE DES PIÈCES].",
      "",

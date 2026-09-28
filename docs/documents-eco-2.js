@@ -210,7 +210,6 @@
     L.push(TRAIT);
     L.push("");
     L.push("Fondement - " + articles.join(" · ") + " du code du travail,");
-    L.push("lus à la source, dans leur version en vigueur à la date ci-dessus. Chacun");
     L.push("est cité avec son identifiant LEGIARTI : un article peut être modifié sans");
     L.push("changer de numéro, et seul cet identifiant dit laquelle des versions");
     L.push("successives a été lue.");
@@ -2347,7 +2346,7 @@
 
       L.push("Les deux articles ci-dessous sont le fondement du contrôle. Ils relèvent de");
       L.push("la représentation du personnel et non du licenciement économique ; ils ont");
-      L.push("été lus à la source dans les versions LEGIARTI000035652370 et");
+      L.push("été relus dans les versions LEGIARTI000035652370 et");
       L.push("LEGIARTI000035652360. Le dire ici n'est pas une précaution de style : c'est");
       L.push("ce qui permet de vérifier laquelle des versions successives a été lue.");
       L.push("");
@@ -4027,7 +4026,7 @@
       L.push("     rapports contradictoires dans un même dossier se retournent contre");
       L.push("     celui qui les y a laissés.");
       L.push("  4. Conservez cette fiche de correction : elle établit que les données ont");
-      L.push("     été vérifiées à la source, et quand.");
+      L.push("     été vérifiées, et quand.");
       L.push("");
       L.push("  Fiche arrêtée le [DATE] par " + cro(respo(ctx), "nom et qualité") + ". Audit relancé le [DATE].");
       L.push("");
@@ -5165,7 +5164,7 @@
       L.push("  articles L. 1233-57-9 à L. 1233-57-16 n'ont pas été lus. Le mandat,");
       L.push("  le journal et les motifs d'écartement organisés ci-dessous sont ce qui");
       L.push("  permet d'établir une mise en œuvre effective, quelle qu'en soit la");
-      L.push("  définition précise. Faites vérifier cette définition à la source.]");
+      L.push("  définition précise. Faites vérifier cette définition.]");
       L.push("");
 
       titre(L, "III. Le mandat de recherche");

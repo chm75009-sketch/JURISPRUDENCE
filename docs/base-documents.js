@@ -151,8 +151,45 @@
     });
   }
 
+  /* UNE PIÈCE RETIRÉE REVENAIT À LA RECONNEXION.
+
+     Le dossier du client repose ses pièces à chaque entrée, en sautant celles
+     dont le nom est déjà dans la base : une pièce retirée n'y était plus, donc
+     elle rentrait de nouveau, et le geste de l'utilisatrice était défait sans
+     un mot. Relevé le 26 septembre 2026.
+
+     Les noms retirés sont donc gardés sur le poste, et la repose les saute.
+     « Rendre la pièce » les oublie, un par un : rien n'est définitif. */
+  var CLE_RETIRES = "documents-retires";
+  function retires() {
+    try { return JSON.parse(window.localStorage.getItem(CLE_RETIRES) || "[]") || []; }
+    catch (e) { return []; }
+  }
+  function garderRetires(L) {
+    try { window.localStorage.setItem(CLE_RETIRES, JSON.stringify(L)); } catch (e) {}
+  }
+  function estRetire(nom) {
+    var n = String(nom == null ? "" : nom).trim();
+    return !!n && retires().indexOf(n) >= 0;
+  }
+  function noterRetire(nom) {
+    var n = String(nom == null ? "" : nom).trim();
+    if (!n) return;
+    var L = retires();
+    if (L.indexOf(n) < 0) { L.push(n); garderRetires(L); }
+  }
+  function rendre(nom) {
+    var n = String(nom == null ? "" : nom).trim();
+    garderRetires(retires().filter(function (x) { return x !== n; }));
+  }
+
   function supprimer(id) {
-    return transaction("readwrite").then(function (m) { return promesse(m.delete(Number(id))); });
+    /* Le nom se lit avant la suppression : après, il n'y a plus rien à lire. */
+    return lire(id).then(function (d) {
+      if (d && d.nom) noterRetire(d.nom);
+    }).catch(function () {}).then(function () {
+      return transaction("readwrite").then(function (m) { return promesse(m.delete(Number(id))); });
+    });
   }
 
   function vider(rubrique) {
@@ -249,6 +286,9 @@
   window.Documents = {
     enregistrer: enregistrer, liste: liste, lire: lire, dernier: dernier,
     supprimer: supprimer, vider: vider, rubriques: rubriques,
+    /* Les pièces retirées : le dossier du client les saute à la repose, et
+       « Rendre la pièce » les oublie. */
+    estRetire: estRetire, retires: retires, rendre: rendre,
     enFrancais: enFrancais, poids: poids,
     disponible: function () { return !!window.indexedDB; },
     rubriqueDeLaPage: rubriqueDeLaPage,
