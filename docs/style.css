@@ -170,6 +170,12 @@ header.site .marque span{color:var(--texte-2);font-weight:400;font-size:var(--t2
 header.site h1{margin:0;font:600 17px/1.3 system-ui;color:var(--encre);min-width:0;overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
 header.site h1 span{color:var(--texte-2);font-weight:400;font-size:var(--t2)}
+/* La ligne de l'entreprise, posée par barre.js sous le bandeau : elle dit de
+   qui parle l'écran, et à quel effectif les seuils se calculent. */
+header.site .ent-ligne{margin:2px 0 0;font:400 var(--t1)/1.35 system-ui;color:var(--texte-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+header.site .wrap+.ent-ligne{max-width:var(--colonne);margin:2px auto 0;padding:0 var(--e5)}
+@media (max-width:640px){header.site .wrap+.ent-ligne{padding:0 var(--e4)}}
 .outils{display:flex;flex:none;order:-1;gap:var(--e2);align-items:center;font-size:var(--t2)}
 .outils a:not(.retour),.outils button,.outils #etat-version,#etat-version{display:none}
 .outils a.retour{margin:0}
@@ -436,7 +442,17 @@ section.fiche label{display:flex;flex-direction:column;gap:6px;position:relative
    le décompte des heures, la flotte et le forfait. */
 .haut:has(#barre-bouton-menu) b{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .haut:has(#barre-bouton-menu) span{min-width:0}
-@media (max-width:520px){.haut:has(#barre-bouton-menu)>span{display:none}}
+/* LE RAPPEL DE L'ENTREPRISE NE S'EFFACE PLUS : IL DESCEND D'UNE LIGNE.
+
+   Il était masqué sous cinq cent vingt pixels pour laisser la place au bouton
+   Menu, et la liste du 26 septembre 2026 le relève : « ligne entreprise,
+   effectif, absente sur dix-sept pages sur téléphone ». Celui qui ouvre un
+   écran doit voir de qui il parle. La rangée passe donc à la ligne, et le
+   rappel occupe la sienne, sous le titre. */
+@media (max-width:520px){
+  .haut:has(#barre-bouton-menu){flex-wrap:wrap}
+  .haut:has(#barre-bouton-menu)>span{flex:1 0 100%;order:9;margin:2px 0 0;white-space:normal}
+}
 
 /* Sur un téléphone, le mot « Retour » mangeait le titre, qui sortait en
    « Registre du ... ». La flèche seule suffit et rend la place au titre ;

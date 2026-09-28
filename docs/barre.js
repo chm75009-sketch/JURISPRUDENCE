@@ -353,6 +353,57 @@
     document.title = t ? t + " \u00b7 " + nom : nom;
   })();
 
+  /* LA LIGNE DE L'ENTREPRISE, SUR CHAQUE PAGE.
+
+     « Ligne entreprise, effectif : absente sur dix-sept pages sur téléphone et
+     sur sept sur ordinateur » : liste du 26 septembre 2026. Celui qui ouvre un
+     écran doit voir de qui il parle, et à quel effectif les seuils se
+     calculent. La ligne se pose sous le bandeau, en petit, et elle ne coûte
+     rien aux pages qui portaient déjà leur propre mention : celles qui ont un
+     « #ent » vide le reçoivent, les autres reçoivent la ligne.
+
+     Une fiche sans dénomination ne donne rien : on n'invente pas de nom. */
+  function ligneEntreprise() {
+    var p = null;
+    try {
+      p = (window.Profil && window.Profil.lire) ? window.Profil.lire() : null;
+      if (!p) p = JSON.parse(window.localStorage.getItem("profil-entreprise") || "null");
+    } catch (e) { p = null; }
+    var nom = String((p && (p.denomination || p.entreprise)) || "").trim();
+    if (!nom) return;
+    var eff = parseInt(String((p && p.effectif) || "").replace(/[^0-9]/g, ""), 10);
+    var texte = nom + (isFinite(eff) && eff > 0 ? " · " + eff + " salariés" : "");
+    /* Le rappel de l'entreprise des pages de gestion. Deux écrans de la base
+       de données appellent « ent » leur champ de saisie de la dénomination :
+       ce n'est pas un rappel, et y écrire le nom ne se verrait pas. */
+    var dedans = document.querySelector(".haut #ent, header.site #ent");
+    if (dedans && /^(INPUT|TEXTAREA|SELECT)$/.test(dedans.tagName)) dedans = null;
+    if (dedans) {
+      var deja = String(dedans.textContent || "").trim();
+      /* Vide : on écrit le rappel. Déjà écrit par la page, mais sans
+         l'effectif : on l'ajoute, puisque c'est lui qui commande les seuils.
+         Écrit autrement : on n'y touche pas, la page sait ce qu'elle dit. */
+      if (!deja) dedans.textContent = texte;
+      else if (deja === nom && texte !== nom) dedans.textContent = texte;
+      return;
+    }
+    var tete = document.querySelector("header.site");
+    if (!tete || tete.querySelector(".ent-ligne")) return;
+    var l = document.createElement("p");
+    l.className = "ent-ligne";
+    l.textContent = texte;
+    tete.appendChild(l);
+  }
+  /* barre.js est chargé dans l'en-tête du document : le bandeau n'existe pas
+     encore quand ce fichier s'exécute. La ligne se pose donc quand la page
+     est lue. */
+  /* Deux passages : au moment où la page est lue, et une fois tout chargé,
+     parce que certains écrans écrivent leur rappel après coup. */
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", ligneEntreprise);
+  else ligneEntreprise();
+  window.addEventListener("load", ligneEntreprise);
+
   window.Barre = {
     avant: function (fn) { AVANT = typeof fn === "function" ? fn : null; },
     ecrans: ecrans,

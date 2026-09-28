@@ -36,6 +36,10 @@
   .bloc-titre{font-size:13.5px;font-weight:600;margin-bottom:6px}
 
   .boutons{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+  /* Les raccourcis du transport : des pastilles, deux ou trois par rangée, et
+     non sept boutons pleine largeur empilés sur un téléphone. */
+  #raccourcis button{flex:0 1 auto;width:auto;min-width:0;padding:10px 13px;
+    font:600 14px/1.2 system-ui;min-height:44px}
 
   details.affiner{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
   details.affiner > summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--accent);list-style:none}
@@ -177,6 +181,27 @@
         « faux CV », « salarié qui ment sur ses diplômes ». L'application ira lire les décisions
         pour vous dire quelles formules les juges emploient réellement, et combien il en existe.</span>
     </div>
+    <!-- LES RACCOURCIS DU TRANSPORT ROUTIER.
+
+         « Aucun raccourci sur le droit du transport » : liste du 26 septembre
+         2026. L'entreprise est une entreprise de transport, et ses cinq
+         questions reviennent toujours : le temps de conduite du règlement
+         européen, la durée du travail du décret de 1983, le temps de service,
+         l'amplitude, le chronotachygraphe. Chacun remplit le champ avec
+         l'expression que les juges emploient, en expression exacte, et lance
+         la recherche. Rien n'est affirmé ici : c'est le relevé des décisions
+         qui répond. -->
+    <div class="bloc-titre">Le transport routier, en un geste</div>
+    <div class="boutons" id="raccourcis" style="margin:0 0 14px;flex-wrap:wrap">
+      <button class="second" type="button" data-q="temps de service" data-mode="exact">Temps de service</button>
+      <button class="second" type="button" data-q="amplitude de la journée de travail" data-mode="exact">Amplitude</button>
+      <button class="second" type="button" data-q="chronotachygraphe" data-mode="exact">Chronotachygraphe</button>
+      <button class="second" type="button" data-q="temps de conduite" data-mode="exact">Temps de conduite</button>
+      <button class="second" type="button" data-q="heures d'équivalence" data-mode="exact">Heures d'équivalence</button>
+      <button class="second" type="button" data-q="coupure conducteur routier" data-mode="and">Coupures</button>
+      <button class="second" type="button" data-q="grand déplacement conducteur" data-mode="and">Grand déplacement</button>
+    </div>
+
     <div id="mots-matieres"></div>
     <div id="mots-zone"></div>
 
@@ -1641,6 +1666,15 @@ function afficherElargies(d, c){
 }
 
 $("btn-chercher").onclick = ()=>chercher(0);
+/* Les raccourcis du transport : ils remplissent le champ et cherchent. */
+document.getElementById("raccourcis").addEventListener("click", (e)=>{
+  const b = e.target.closest("button[data-q]");
+  if(!b) return;
+  $("q").value = b.getAttribute("data-q");
+  const m = document.querySelector('input[name="mode"][value="'+b.getAttribute("data-mode")+'"]');
+  if(m) m.checked = true;
+  chercher(0);
+});
 $("q").addEventListener("keydown", e=>{ if(e.key==="Enter") chercher(0); });
 $("exclure").addEventListener("keydown", e=>{ if(e.key==="Enter") chercher(0); });
 $("par-page").onchange = ()=>{ if(etat.criteres) chercher(0); };
