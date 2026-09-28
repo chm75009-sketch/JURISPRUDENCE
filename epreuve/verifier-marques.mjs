@@ -112,6 +112,21 @@ const CROCHETS_DUS = [
   { re: /\[NOM ET QUALITÉ DU SIGNATAIRE\]/, quoi: "le crochet du signataire" },
 ];
 
+/* LES PERSONNES DE L'EXEMPLE, QUI NE DOIVENT PAS SURVIVRE À SON RETRAIT.
+
+   « CSE, Non : des personnes inventées restent dans le Word, sous l'en-tête
+   SARL TEC, Julie ROUX, Marc TISSIER, 01 99 00 12 35 ». Les écrans emportent le
+   document après DocumentsProduits.sansExemple : ce contrôle refait le même
+   geste et cherche ce qui aurait dû partir avec l'exemple. Une entreprise
+   fictive, ses salariés, sa ville et ses numéros de téléphone n'ont rien à
+   faire dans une pièce signée au nom du client. */
+const FICTIONS = [
+  /Marc TISSIER/, /Julie ROUX/, /Aïcha BENALI/, /Sofiane KHELIF/, /Fatou NDIAYE/,
+  /Éric DUVAL/, /Nadia FERRAND/, /Claire BONNET/, /Sylvie MARTEAU/, /Isabelle PONS/,
+  /Lagny-sur-Marne/, /01 99 00 \d\d \d\d/, /TRANSPORTS EXEMPLE/, /INSTITUT EXEMPLE/,
+  /transports-exemple\.example/,
+];
+
 /* Un générateur peut avoir une raison de porter une tournure : elle est écrite
    ici, avec son motif, et nulle part ailleurs. */
 const TOLERE = {
@@ -204,6 +219,18 @@ for (const id of Object.keys(DP.tous)) {
       vus[cle] = true;
       fautes.push(id + " : " + c.quoi + " · « " + trouve[0].trim().slice(0, 70) + " »");
     }
+    /* Le document tel qu'il s'emporte : l'exemple retiré, comme le font les
+       écrans avant le téléchargement. */
+    const emporte = typeof DP.sansExemple === "function" ? DP.sansExemple(t) : t;
+    for (const re of FICTIONS) {
+      const trouve = emporte.match(re);
+      if (!trouve) continue;
+      const cle = id + "|fiction";
+      if (vus[cle]) continue;
+      vus[cle] = true;
+      fautes.push(id + " : une personne ou un lieu de l'exemple survit au retrait de " +
+        "l'exemple · « " + trouve[0] + " »");
+    }
   }
 }
 
@@ -217,4 +244,5 @@ if (fautes.length) {
   console.log("Chaque interdit vient d'une ligne de la contre-vérification du 26 septembre 2026.");
   process.exit(1);
 }
-console.log("marques : " + nDocs + " générateurs, aucune tournure interdite, aucun crochet dû.");
+console.log("marques : " + nDocs + " générateurs, aucune tournure interdite, aucun crochet dû, " +
+  "aucune personne de l'exemple.");

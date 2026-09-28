@@ -143,9 +143,26 @@
   .cal-liste .d .q{display:block;font:600 11.5px/1.3 system-ui;text-transform:uppercase;letter-spacing:.07em;color:var(--texte-3)}
   .cal-liste .d .v{display:block;font:600 17px/1.3 system-ui;margin:3px 0 1px;color:var(--encre)}
   .cal-liste .d .f{display:block;font-size:12.5px;color:var(--texte-3);line-height:1.45}
+  .cal-liste .d .cal-ferie{display:block;margin:5px 0 0;font:600 12.5px/1.45 system-ui;
+    color:var(--rouge,#c0392b)}
 
-  #sortie{white-space:pre-wrap;font:15px/1.6 Georgia,"Times New Roman",serif;color:var(--encre);overflow-wrap:anywhere;
-    background:var(--carte);border:1px solid var(--filet);border-radius:12px;padding:18px 16px}
+  /* LE DOCUMENT NE S'AFFICHE PLUS À PLAT.
+
+     Il sortait en un seul bloc « pre-wrap » : le tableau des collèges y
+     devenait huit valeurs séparées par des barres, recoupées à la largeur du
+     téléphone, et les bandeaux de signes égal se lisaient comme une partie du
+     protocole. Il passe par feuille-doc.js, comme le fichier Word, et le
+     tableau redevient un tableau. Relevé le 28 septembre 2026. */
+  #sortie{color:var(--encre);background:var(--carte);border:1px solid var(--filet);
+    border-radius:12px;padding:18px 16px}
+  #sortie .b-t1{font:700 17px/1.35 system-ui;margin:0 0 8px;text-align:center}
+  #sortie .b-h1{font:700 15.5px/1.35 system-ui;margin:20px 0 8px}
+  #sortie .b-h2{font:600 14.5px/1.35 system-ui;margin:15px 0 6px}
+  #sortie .b-p{margin:0 0 10px;font:15px/1.65 Georgia,"Times New Roman",serif;
+    overflow-wrap:break-word}
+  #sortie .b-puce{margin:0 0 6px 18px;font:15px/1.6 Georgia,"Times New Roman",serif}
+  #sortie .b-sign{margin:18px 0 0;font:15px/1.7 Georgia,"Times New Roman",serif}
+  #sortie .b-trait{border:0;border-top:1px solid var(--filet);margin:20px 0}
   .cache{display:none}
   [hidden]{display:none !important}
   @media print{.onglets,.barre,.haut,#champs,#lecture{display:none !important}.cache{display:block !important}#sortie{border:0;padding:0}}
@@ -250,6 +267,7 @@
 <script src="apercu.js"></script>
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
+<script src="feuille-doc.js"></script>
 <script>
 (function () {
   "use strict";
@@ -260,6 +278,7 @@
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
 
   var CHOIX = {};          /* id de clause -> insérée ou non */
+  var DOCUMENT = "";       /* le document assemblé, tel qu'il s'emporte */
   var CTX = null;          /* les chiffres du dossier, au moment de l'ouverture */
   var PRESENTES = {};       /* id de clause -> repérée dans le texte déposé */
 
@@ -387,6 +406,70 @@
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return "[date]";
     var p = iso.split("-");
     return (p[2] === "01" ? "1er" : String(Number(p[2]))) + " " + MOIS[Number(p[1]) - 1] + " " + p[0];
+  }
+
+  /* ───────────────────────── LES JOURS FÉRIÉS ─────────────────────────
+
+     Le calendrier posait une échéance au 25 décembre sans rien dire. Une date
+     qui tombe un dimanche ou un jour férié ne se tient pas : le scrutin, la
+     réunion de négociation ou l'affichage se déplacent, et mieux vaut le voir
+     avant d'avoir convoqué. Relevé le 26 septembre 2026, écrit ici le
+     28 septembre 2026.
+
+     Les onze fêtes légales sont celles de l'article L. 3133-1
+     (LEGIARTI000033020901, deux lectures concordantes au relais le
+     28 septembre 2026) : le 1er janvier, le lundi de Pâques, le 1er mai, le
+     8 mai, l'Ascension, le lundi de Pentecôte, le 14 juillet, l'Assomption, la
+     Toussaint, le 11 novembre et le jour de Noël. Les six dates fixes se
+     lisent dans le calendrier ; les cinq autres se comptent depuis Pâques,
+     dont le jour se calcule par le comput grégorien. L'Alsace-Moselle a deux
+     jours de plus, le Vendredi saint et le 26 décembre : ils ne sont pas
+     ajoutés ici, l'écran ne demandant pas le département. */
+  function paques(an) {
+    var a = an % 19, b = Math.floor(an / 100), c = an % 100;
+    var d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+    var g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+    var i = Math.floor(c / 4), k = c % 4;
+    var l = (32 + 2 * e + 2 * i - h - k) % 7;
+    var m = Math.floor((a + 11 * h + 22 * l) / 451);
+    var mois0 = Math.floor((h + l - 7 * m + 114) / 31);
+    var jour = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(Date.UTC(an, mois0 - 1, jour));
+  }
+  function feries(an) {
+    var P = paques(an), out = {};
+    function pose(d, nom) { out[d.toISOString().slice(0, 10)] = nom; }
+    pose(new Date(Date.UTC(an, 0, 1)), "le 1er janvier");
+    pose(new Date(Date.UTC(an, 4, 1)), "le 1er mai");
+    pose(new Date(Date.UTC(an, 4, 8)), "le 8 mai");
+    pose(new Date(Date.UTC(an, 6, 14)), "le 14 juillet");
+    pose(new Date(Date.UTC(an, 7, 15)), "l'Assomption");
+    pose(new Date(Date.UTC(an, 10, 1)), "la Toussaint");
+    pose(new Date(Date.UTC(an, 10, 11)), "le 11 novembre");
+    pose(new Date(Date.UTC(an, 11, 25)), "le jour de Noël");
+    function apres(n) { var d = new Date(P.getTime()); d.setUTCDate(d.getUTCDate() + n); return d; }
+    pose(apres(1), "le lundi de Pâques");
+    pose(apres(39), "l'Ascension");
+    pose(apres(50), "le lundi de Pentecôte");
+    return out;
+  }
+  var FERIES = {};
+  function ferieDe(iso) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return "";
+    var an = Number(iso.slice(0, 4));
+    if (!FERIES[an]) FERIES[an] = feries(an);
+    return FERIES[an][iso] || "";
+  }
+  function dimancheDe(iso) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return false;
+    return new Date(iso + "T00:00:00Z").getUTCDay() === 0;
+  }
+  /* Ce qu'il faut dire d'une date, ou rien. */
+  function alerteJour(iso) {
+    var f = ferieDe(iso);
+    if (f) return "Cette date tombe " + f + ", jour férié (L. 3133-1) : déplacez l'échéance.";
+    if (dimancheDe(iso)) return "Cette date tombe un dimanche : déplacez l'échéance.";
+    return "";
   }
 
   /* ---------------------------------------------------------------- */
@@ -1332,22 +1415,34 @@
     var l = lignesCalendrier(c);
     if (!l.length) return "";
     return '<div class="cal-liste">' + l.map(function (x) {
+      var a = x.d ? alerteJour(x.d) : "";
       return '<div class="d"><span class="q">' + ech(x.f) + "</span><span class=\"v\">" + ech(x.d ? fr(x.d) : "date à fixer") + "</span>" +
-        '<span class="f">' + ech(x.t) + " " + ech(x.n) + "</span></div>";
+        '<span class="f">' + ech(x.t) + " " + ech(x.n) + "</span>" +
+        (a ? '<span class="cal-ferie">' + ech(a) + "</span>" : "") + "</div>";
     }).join("") + "</div>";
   }
 
   /* ---------------------------------------------------------------- */
   /* Le document corrigé. */
+  /* CHAQUE ENTRÉE EST UN PARAGRAPHE, ET SE SÉPARE DU SUIVANT.
+
+     Les lignes se suivaient sans ligne blanche : la feuille les recollait en
+     un seul pavé, et l'on y lisait « ... l'écran les reprendra dès qu'il sera
+     tenu.] Le présent article mentionne la proportion ... » d'un seul tenant.
+     Relevé le 28 septembre 2026. La ligne blanche ferme aussi le tableau qui
+     précède. */
   function lignesTexte(lignes) {
     var out = [];
     lignes.forEach(function (l) {
       if (l && l.tab) {
+        out.push("");
         out.push(l.tab.head.join(" | "));
         l.tab.rows.forEach(function (r) { out.push(r.join(" | ")); });
+        out.push("");
         return;
       }
       out.push(l);
+      out.push("");
     });
     return out;
   }
@@ -1361,10 +1456,13 @@
     var out = t ? [t] : [];
     var r = retenues();
     if (r.length) {
+      /* Un bandeau de signes égal n'est pas un titre : il se lisait comme une
+         partie du protocole, et le Word le reprenait tel quel. Le titre en
+         capitales suffit, la feuille le reconnaît. Relevé le 28 septembre
+         2026. */
       out.push("");
-      out.push("======================");
       out.push(CTX.nature === "protocole" ? "CLAUSES INSÉRÉES AU PROTOCOLE" : "MENTIONS INSÉRÉES AU DOCUMENT");
-      out.push("======================");
+      out.push("");
       r.forEach(function (cl) {
         out.push("");
         out.push(cl.titre.toUpperCase() + "  (" + cl.fond.map(article).join(", ") + ")");
@@ -1375,13 +1473,13 @@
     var cal = lignesCalendrier(CTX);
     if (cal.length) {
       out.push("");
-      out.push("======================");
       out.push(electoral(CTX.nature) ? "CALENDRIER" : "DÉLAIS");
-      out.push("======================");
+      out.push("");
       cal.forEach(function (x) {
+        var a = x.d ? alerteJour(x.d) : "";
         out.push("");
         out.push((x.d ? fr(x.d) : "date à fixer") + "  -  " + x.t);
-        out.push("   " + x.f + ". " + x.n);
+        out.push("   " + x.f + ". " + x.n + (a ? " " + a : ""));
       });
     }
     return out.join("\n");
@@ -1392,7 +1490,14 @@
        erreur. Relevé le 27 septembre 2026. */
     if (!CTX) return;
     $("#calendrier").innerHTML = calendrierHtml(CTX);
-    $("#sortie").textContent = texteFinal();
+    DOCUMENT = texteFinal();
+    if (window.FeuilleDoc) {
+      window.FeuilleDoc.style();
+      $("#sortie").innerHTML = window.FeuilleDoc.html(window.FeuilleDoc.blocs(DOCUMENT),
+        { editable: false, classe: "fd-corps" });
+    } else {
+      $("#sortie").textContent = DOCUMENT;
+    }
     onglet("sortie");
   }
   $("#vers-sortie").addEventListener("click", assembler);
@@ -1406,7 +1511,7 @@
   $("#imprimer").addEventListener("click", function () { window.print(); });
 
   $("#dl-txt").addEventListener("click", function () {
-    window.AuditExport.telecharger($("#sortie").textContent, nomFichier("txt"), "text/plain;charset=utf-8");
+    window.AuditExport.telecharger(DOCUMENT, nomFichier("txt"), "text/plain;charset=utf-8");
   });
 
   $("#dl-docx").addEventListener("click", function () {
@@ -1430,7 +1535,10 @@
     if (cal.length) {
       items.push({ k: "trait" }, { k: "h1", t: electoral(CTX.nature) ? "Calendrier" : "Délais" });
       items.push({ k: "table", head: ["Date", "Étape", "Texte"],
-        rows: cal.map(function (x) { return [x.d ? fr(x.d) : "à fixer", x.t + " " + x.n, x.f]; }) });
+        rows: cal.map(function (x) {
+          var a = x.d ? alerteJour(x.d) : "";
+          return [x.d ? fr(x.d) : "à fixer", x.t + " " + x.n + (a ? " " + a : ""), x.f];
+        }) });
     }
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, TITRES[CTX.nature] || "Document"),
@@ -1438,7 +1546,7 @@
   });
 
   $("#copier").addEventListener("click", function () {
-    var t = $("#sortie").textContent;
+    var t = DOCUMENT;
     if (navigator.clipboard) navigator.clipboard.writeText(t);
     else { var a = document.createElement("textarea"); a.value = t; document.body.appendChild(a);
            a.select(); document.execCommand("copy"); a.remove(); }

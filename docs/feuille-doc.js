@@ -62,8 +62,16 @@
        deux parties d'un document, reste un filet et se rend comme tel. */
     return /^[\s┌┬┐├┼┤└┴┘─═|+:]+$/.test(l) && /[┌┬┐├┼┤└┴┘]/.test(l);
   }
+  /* UN FILET DE TABLEAU PEUT PORTER SES CROISEMENTS AU SIGNE PLUS.
+
+     « ----------+---------+------ » sépare trois colonnes aussi bien que
+     « ----|----|---- », et plusieurs générateurs l'écrivent ainsi. Le signe
+     plus manquait ici : le filet devenait une puce, et on lisait une ligne de
+     trente-six tirets au milieu du procès-verbal de désaccord. Relevé le
+     28 septembre 2026. Le tiret, lui, reste exigé : sans lui, une ligne de
+     barres verticales n'est pas un filet. */
   function estSeparateur(l) {
-    return /^[\s|:\-─═_]+$/.test(l) && /[-─═_]/.test(l);
+    return /^[\s|:+\-─═_]+$/.test(l) && /[-─═_]/.test(l);
   }
   function cellules(l) {
     var c = l.split("|").map(function (x) { return x.trim(); });
@@ -71,6 +79,21 @@
     if (c.length && c[c.length - 1] === "") c.pop();
     return c;
   }
+  /* Le rang de la première ligne d'une liste, quand le paragraphe s'ouvre par
+     une ou plusieurs lignes qui ne sont ni en retrait ni marquées d'un tiret et
+     que tout ce qui suit l'est. Zéro quand il n'y a pas de tête à détacher. */
+  function debutDeListe(para) {
+    if (para.length < 2) return 0;
+    var i = 0;
+    while (i < para.length && !/^\s{2,}/.test(para[i]) && !/^\s*[-•·]\s/.test(para[i])) i++;
+    if (i === 0 || i >= para.length) return 0;
+    if (!/^\s*[-•·]\s/.test(para[i])) return 0;
+    var reste = para.slice(i).every(function (l) {
+      return /^\s{2,}/.test(l) || /^\s*[-•·]\s/.test(l);
+    });
+    return reste ? i : 0;
+  }
+
   function estLigneTable(l) {
     if (l.indexOf("|") < 0) return false;
     if (/https?:\/\//.test(l)) return false;
@@ -195,6 +218,21 @@
         b.push({ k: "note", t: texte });
       } else if (/https?:\/\//.test(texte) && para.length === 1) {
         b.push({ k: "lien", t: texte });
+      } else if (debutDeListe(para) > 0) {
+        /* UNE PHRASE D'INTRODUCTION SUIVIE D'UNE LISTE FAIT DEUX BLOCS.
+
+           « Position de chaque organisation syndicale, en son dernier état : »
+           puis deux tirets en retrait : comme la première ligne n'est pas en
+           retrait, la règle ci-dessous ne jouait pas, et tout sortait en un
+           seul paragraphe, tirets compris. Relevé le 28 septembre 2026. La
+           tête part seule, la liste repasse par les mêmes règles. */
+        var coupe = debutDeListe(para);
+        var queue = para.slice(coupe);
+        para = para.slice(0, coupe);
+        vider();
+        para = queue;
+        vider();
+        return;
       } else if (para.every(function (l) { return /^\s{2,}/.test(l) || /^\s*[-•·]\s/.test(l); })) {
         /* UNE CITATION COUPÉE À SOIXANTE-DOUZE SIGNES N'EST PAS UNE LISTE.
 

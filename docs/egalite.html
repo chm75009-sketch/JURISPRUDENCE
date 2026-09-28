@@ -85,6 +85,32 @@
   .feuille .b-trait{border:0;border-top:1px solid var(--filet);margin:20px 0}
   .feuille .b-sign{margin:20px 0 0;font-size:14.5px;white-space:pre-wrap;line-height:1.7}
 
+  /* L'index : une carte par salarié, parce qu'un tableau de quatre colonnes
+     avec deux champs de saisie ne se lit pas sur un téléphone. */
+  #ecran-index{margin:var(--e4) 0 0}
+  .ix-note{font:600 34px/1 system-ui;color:var(--encre)}
+  .ix-note small{display:block;font:600 13px/1.4 system-ui;color:var(--texte-3);margin:6px 0 0}
+  .ix-s{border:1px solid var(--filet);border-left:3px solid var(--filet-2);
+    border-radius:10px;padding:11px 12px;margin:0 0 8px;background:var(--surface)}
+  .ix-s.ix-hors{opacity:.62}
+  .ix-s .n{display:block;font:600 15.5px/1.35 system-ui;color:var(--encre)}
+  .ix-s .e{display:block;font-size:13.5px;color:var(--texte-3);margin:2px 0 0}
+  .ix-s .deux{display:grid;grid-template-columns:1fr;gap:8px;margin:9px 0 0}
+  @media (min-width:460px){.ix-s .deux{grid-template-columns:1fr 1fr}}
+  .ix-s label{font:600 13px/1.3 system-ui;color:var(--texte-3);display:block}
+  .ix-s select,.ix-s input{display:block;margin:5px 0 0;width:100%;box-sizing:border-box;
+    font-size:16px;padding:9px 10px;min-height:44px;border:1px solid var(--filet-2);
+    border-radius:8px;background:var(--surface);color:var(--encre)}
+  .ix-s .case{margin:8px 0 0}
+  .ix-i{border:1px solid var(--filet);border-radius:10px;padding:11px 12px;margin:0 0 8px;
+    background:var(--surface)}
+  .ix-i .t{display:block;font:600 14.5px/1.4 system-ui;color:var(--encre)}
+  .ix-i .r{display:block;font-size:14px;line-height:1.5;color:var(--texte-2);margin:4px 0 0}
+  .ix-i .pts{float:right;font:600 15px/1 system-ui;color:var(--encre);margin:2px 0 0 10px}
+  .ix-i.ix-ko{border-left:3px solid var(--rouge,#c0392b)}
+  .ix-i.ix-ok{border-left:3px solid var(--vert)}
+  .ix-i.ix-att{border-left:3px solid var(--ambre)}
+
   @media print{
     .champs,.barre,details,.b-note{display:none !important}
   }
@@ -121,6 +147,7 @@
     <div class="barre pile">
       <button type="button" id="btn-word">Télécharger en Word</button>
       <button type="button" class="second" id="btn-imprimer">Imprimer</button>
+      <button type="button" class="second" id="vers-index" hidden>Calculer l'index</button>
     </div>
 
     <details>
@@ -129,11 +156,53 @@
     </details>
   </section>
 
+  <!-- ═══════════ L'INDEX, CALCULÉ SUR LE REGISTRE ET LES SALAIRES ═══════════ -->
+  <section id="ecran-index" hidden>
+    <form class="champs" id="ix-champs" autocomplete="off" onsubmit="return false">
+      <label class="ch"><span class="nom">Année de référence</span>
+        <input type="number" id="ix-annee" min="2000" max="2100"></label>
+      <label class="ch"><span class="nom">Postes équivalents comparés par</span>
+        <select id="ix-base">
+          <option value="coef">coefficient ou niveau hiérarchique (seuil de 2 %)</option>
+          <option value="csp">catégorie socioprofessionnelle (seuil de 5 %)</option>
+        </select></label>
+      <label class="ch"><span class="nom">Ce que porte la colonne rémunération</span>
+        <select id="ix-unite">
+          <option value="horaire">taux horaire brut</option>
+          <option value="annuel">rémunération annuelle brute en équivalent temps plein</option>
+        </select></label>
+    </form>
+
+    <div id="ix-resultat"></div>
+    <div id="ix-chiffres"></div>
+
+    <details id="ix-detail">
+      <summary>Les salariés pris en compte, et leur rémunération</summary>
+      <div id="ix-salaries"></div>
+    </details>
+
+    <details>
+      <summary>Les groupes de comparaison</summary>
+      <div id="ix-groupes"></div>
+    </details>
+
+    <div class="barre pile">
+      <button type="button" id="ix-word">Télécharger le relevé en Word</button>
+      <button type="button" class="second" id="ix-retour">Retour au plan d'action</button>
+    </div>
+
+    <details>
+      <summary>Voir le texte de loi</summary>
+      <div id="ix-sources"></div>
+    </details>
+  </section>
+
 </main>
 
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
 <script src="profil.js"></script>
+<script src="index-egalite.js"></script>
 <script>
 (function () {
   "use strict";
@@ -195,8 +264,13 @@
   }
 
   function signataire() { return respFiche() || "[nom et qualité du signataire]"; }
+  /* LA VILLE. La fiche la porte parfois dans son propre champ, sinon elle est
+     dans le code postal de l'adresse. Le crochet ne sert que si les deux
+     manquent. */
   function ville() {
-    var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
+    var v = String(profil.ville || "").trim();
+    if (v) return v;
+    var m = String(profil.adresse || "").match(/\d{5}\s+([^,;]+)\s*$/);
     return m ? m[1].trim() : "[ville]";
   }
   function effectif() {
@@ -440,8 +514,26 @@
       S("Indicateurs relatifs aux écarts de rémunération");
       p("L'entreprise, qui compte " + eff + " salariés, publie chaque année l'ensemble des " +
         "indicateurs relatifs aux écarts de rémunération entre les femmes et les hommes et aux " +
-        "actions mises en œuvre pour les supprimer (" + ref(["L1142-8"]) + "). Résultat au titre de " +
-        "l'année " + (an - 1) + " : [__] points, publié le [date] : [où].");
+        "actions mises en œuvre pour les supprimer (" + ref(["L1142-8"]) + ").");
+      /* LE CHIFFRE, QUAND IL EST CALCULÉ. Cette ligne portait « [__] points » en
+         toute circonstance, alors que le registre et les taux relevés
+         permettent le calcul : il se fait dans l'écran de l'index, et le plan
+         reprend son résultat. Relevé le 28 septembre 2026. */
+      var ix = resultatIndex();
+      if (ix && ix.etat === "calcule")
+        p("Résultat au titre de l'année " + ix.annee + " : " + ix.niveau + " points sur 100, " +
+          "calculé sur les " + ix.pris + " salariés pris en compte selon les indicateurs de " +
+          "l'article " + ix.article + " et le barème de l'annexe " + ix.annexe +
+          ". Publication le [date] : [où].");
+      else if (ix && ix.etat === "indeterminable")
+        p("Le niveau de résultat ne peut pas être déterminé au titre de l'année " + ix.annee +
+          " : le maximum atteignable, " + ix.maxAtteint + " points, est inférieur à " +
+          "soixante-quinze points. Les indicateurs calculables sont mis à la disposition du " +
+          "comité social et économique et transmis à l'administration.");
+      else
+        p("Résultat au titre de l'année " + (an - 1) + " : [__] points, publié le [date] : [où]. " +
+          "Le calcul se fait dans l'écran de l'index, à partir du registre du personnel et des " +
+          "rémunérations.");
     }
 
     S("Dépôt");
@@ -534,6 +626,549 @@
     $("#c-dom4").value = "promotion";
     $("#c-annee").value = new Date().getFullYear();
   })();
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     L'INDEX DE L'ÉGALITÉ PROFESSIONNELLE, CALCULÉ ICI.
+
+     Jusqu'au 28 septembre 2026, la section du plan d'action portait « [__]
+     points » : le chiffre était laissé à l'employeur, alors que l'application
+     tient le registre du personnel et, par l'écran des minima, les taux
+     horaires versés. Le calcul se fait donc ici, et l'écran ne demande que ce
+     que l'application ne peut pas savoir : les augmentations de l'année, les
+     promotions et les retours de congé de maternité.
+
+     Le calcul lui-même est dans index-egalite.js, avec les textes lus à la
+     source et le barème des annexes. Cet écran ne fait que rassembler les
+     données et les montrer.
+     ══════════════════════════════════════════════════════════════════════ */
+  var CLE_IX = "egalite-index";
+  function lireIx() {
+    var o = null;
+    try { o = JSON.parse(localStorage.getItem(CLE_IX) || "null"); } catch (e) {}
+    o = o || {};
+    o.sal = o.sal || {};
+    o.aug = o.aug || {};
+    o.promo = o.promo || {};
+    o.aug2 = o.aug2 || {};
+    o.mat = o.mat || {};
+    return o;
+  }
+  function garderIx(o) {
+    try { localStorage.setItem(CLE_IX, JSON.stringify(o)); } catch (e) {}
+  }
+  var IX = lireIx();
+
+  /* Les salariés du registre présents au cours de l'année de référence. Celui
+     qui est entré après le 31 décembre, ou sorti avant le 1er janvier, n'en
+     fait pas partie. */
+  function salariesIx(annee) {
+    var R = null;
+    try { R = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
+    var L = (R && R.salaries) || [];
+    var debut = annee + "-01-01", fin = annee + "-12-31";
+    return L.filter(function (s) {
+      if (!s || s.ex) return false;
+      if (!String(s.nom || "").trim() && !String(s.pre || "").trim()) return false;
+      var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e) || e > fin) return false;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(o) && o < debut) return false;
+      return true;
+    });
+  }
+  function idIx(s) { return String(s.id || (s.nom + "|" + s.pre)); }
+
+  /* Les taux horaires relevés par l'écran des minima : la seule rémunération
+     que l'application détienne déjà. */
+  function tauxMinima() {
+    try { return JSON.parse(localStorage.getItem("minima-salaires") || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+  function nombre(v) {
+    var n = parseFloat(String(v === undefined || v === null ? "" : v).replace(",", "."));
+    return isFinite(n) ? n : NaN;
+  }
+
+  /* LA CATÉGORIE SOCIOPROFESSIONNELLE, PROPOSÉE D'APRÈS L'EMPLOI. C'est
+     l'employeur qui la fixe, après consultation du comité : la proposition est
+     affichée comme telle, et elle se change dans la liste. Un emploi que ces
+     mots ne reconnaissent pas reste sans catégorie. */
+  function cspProposee(emploi) {
+    var t = String(emploi || "").toLowerCase()
+      .normalize ? String(emploi || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+                 : String(emploi || "").toLowerCase();
+    if (!t) return "";
+    if (/cadre|ingenieur|directeur|directrice|gerant|president/.test(t)) return "cadres";
+    if (/technicien|agent de maitrise|chef d'equipe|chef d equipe|contremaitre/.test(t)) return "tam";
+    if (/conducteur|conductrice|chauffeur|livreur|livreuse|manutention|magasinier|magasiniere|mecanic|cariste|ouvrier|ouvriere|agent de quai|preparateur|preparatrice/.test(t))
+      return "ouvriers";
+    if (/secretaire|assistant|assistante|comptable|employe|employee|standardiste|facturier|facturiere/.test(t))
+      return "employes";
+    return "";
+  }
+  function coefIx(s, SAL) {
+    var m = SAL[idIx(s)] || {};
+    var c = String(m.coef || "").trim();
+    if (c) return c;
+    return String(s.qua || "").trim();
+  }
+
+  /* Ce qui est envoyé au calcul : un salarié par ligne, avec son sexe, sa date
+     de naissance, sa catégorie, son coefficient, sa rémunération et le motif
+     qui l'écarte s'il y en a un. */
+  function entreeIx() {
+    var annee = Number($("#ix-annee").value) || new Date().getFullYear() - 1;
+    var base = $("#ix-base").value === "csp" ? "csp" : "coef";
+    var SAL = tauxMinima();
+    var horaire = $("#ix-unite").value !== "annuel";
+    var L = salariesIx(annee).map(function (s) {
+      var id = idIx(s);
+      var mien = IX.sal[id] || {};
+      var rem = horaire ? nombre((SAL[id] || {}).taux) : NaN;
+      /* Une rémunération portée à la main se range sous l'unité choisie : un
+         taux horaire corrigé ne doit pas être relu comme un salaire annuel le
+         jour où l'on change d'unité. */
+      var mienne = horaire ? mien.rem : mien.remAn;
+      if (String(mienne || "") !== "") rem = nombre(mienne);
+      var nat = String(s.nature || "");
+      var motif = "";
+      if (nat === "apprenti") motif = "apprenti";
+      else if (nat === "pro") motif = "contrat de professionnalisation";
+      else if (mien.ecarte) motif = "écarté par l'employeur";
+      return { id: id, nom: (s.nom || "") + " " + (s.pre || ""), emp: String(s.emp || ""),
+        sexe: s.sexe === "Féminin" ? "F" : (s.sexe === "Masculin" ? "H" : ""),
+        nais: String(s.nais || ""), coef: coefIx(s, SAL),
+        csp: String(mien.csp || cspProposee(s.emp) || ""),
+        proposee: !mien.csp && !!cspProposee(s.emp),
+        rem: rem, motif: motif, ecarte: !!motif };
+    });
+    return { annee: annee, base: base, effectif: effectif(), unite: horaire ? "horaire" : "annuel",
+      salaries: L, aug: IX.aug, promo: IX.promo, aug2: IX.aug2, mat: IX.mat };
+  }
+
+  var DERNIER = null;
+  function euros(x) {
+    return x.toLocaleString("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function nomUnite(e) {
+    return e.unite === "horaire" ? "taux horaire brut" : "rémunération annuelle brute";
+  }
+
+  /* LA SAISIE D'UNE CARTE NE REFAIT PAS LES CARTES.
+
+     Chaque changement réécrivait les quatre-vingt-deux cartes de salariés :
+     le champ qu'on venait de quitter disparaissait avec son voisin, et une
+     saisie enchaînée n'atteignait que la première ligne. Relevé le
+     28 septembre 2026. Quand le changement vient d'une carte, seuls le
+     résultat, les groupes et les chiffres attendus sont réécrits. */
+  function rendreIx(gardeCartes) {
+    var e = entreeIx();
+    var r = window.IndexEgalite.calculer(e);
+    DERNIER = { entree: e, sortie: r };
+
+    /* LE RÉSULTAT, EN PREMIER ET EN GRAND. */
+    var h = "";
+    if (r.etat === "calcule") {
+      h += '<div class="carte"><p class="ix-note">' + r.niveau + " / 100" +
+        "<small>Index au titre de l'année " + r.annee + ", annexe " + r.annexe +
+        " (" + r.article + "), " + r.pris + " salariés pris en compte" +
+        (r.proportionnalite ? ", total de " + r.points + " points sur " + r.maxAtteint +
+          " atteignables, ramené sur cent" : "") + "</small></p>";
+      h += r.niveau < 75
+        ? '<p class="avis non"><b>Sous soixante-quinze points</b>Les mesures de correction et, ' +
+          "le cas échéant, la programmation de mesures financières de rattrapage salarial " +
+          "doivent être mises en œuvre (D. 1142-6, L. 1142-9). Trois ans pour se mettre en " +
+          "conformité, puis une pénalité au maximum de 1 % des rémunérations (L. 1142-10).</p>"
+        : '<p class="avis ok"><b>Au moins soixante-quinze points</b>Aucune mesure de correction ' +
+          "n'est due à ce titre. La publication reste due au plus tard le 1er mars " +
+          (r.annee + 1) + " (D. 1142-4).</p>";
+      h += "</div>";
+    } else if (r.etat === "indeterminable") {
+      h += '<div class="carte"><p class="ix-note">non déterminable' +
+        "<small>Le maximum atteignable, " + r.maxAtteint + " points, est inférieur à " +
+        "soixante-quinze : le niveau de résultat ne peut pas être déterminé pour l'année " +
+        r.annee + " (annexe " + r.annexe + ", 5.1)</small></p>" +
+        '<p class="avis att"><b>Les indicateurs restent dus</b>Ceux qui sont calculables sont ' +
+        "mis à la disposition du comité social et économique et transmis aux services du " +
+        "ministre chargé du travail (D. 1142-5).</p></div>";
+    } else {
+      h += '<div class="carte"><p class="ix-note">' + r.points + " points" +
+        "<small>Somme provisoire : " + r.manquants + (r.manquants > 1 ? " indicateurs" : " indicateur") +
+        " attendent encore un chiffre. Ce n'est pas l'index tant qu'ils manquent.</small></p></div>";
+    }
+
+    /* LES INDICATEURS, UN PAR CARTE. */
+    r.indicateurs.forEach(function (i) {
+      var classe = i.etat === "calcule" ? (i.points === i.max ? "ix-ok" : "ix-att")
+                 : (i.etat === "manque" ? "ix-ko" : "ix-att");
+      h += '<div class="ix-i ' + classe + '"><span class="pts">' +
+        (i.etat === "calcule" ? i.points + " / " + i.max : "- / " + i.max) + "</span>" +
+        '<span class="t">' + ech(i.nom) + "</span>";
+      if (i.etat === "calcule") h += '<span class="r">' + ech(direIx(i, e)) + "</span>";
+      else h += '<span class="r">' + (i.etat === "incalculable" ? "Non calculable : " : "Il manque : ") +
+        ech(i.pourquoi) + (i.etat === "incalculable"
+          ? ". Les autres indicateurs sont calculés, et le total est ramené sur cent." : "") + "</span>";
+      if (i.repli)
+        h += '<span class="r">Le classement par coefficient ne réunissait pas assez de groupes ' +
+          "de trois femmes et trois hommes : les salariés sont regroupés par catégorie " +
+          "socioprofessionnelle, comme le prévoit l'annexe, et le seuil de pertinence passe à " +
+          "5 %.</span>";
+      if (i.correction)
+        h += '<span class="r">Maximum acquis au titre du 5.2 de l\'annexe : les écarts ' +
+          "constatés ici favorisent la population la moins payée (" + i.pointsAvant +
+          " points sans cette règle).</span>";
+      h += "</div>";
+    });
+    $("#ix-resultat").innerHTML = h;
+
+    $("#ix-chiffres").innerHTML = chiffresHtml(e, r);
+    if (!gardeCartes) $("#ix-salaries").innerHTML = salariesHtml(e);
+    $("#ix-groupes").innerHTML = groupesHtml(e, r);
+    sourcesIx();
+  }
+
+  /* Ce que dit un indicateur calculé, en une phrase. */
+  function direIx(i, e) {
+    if (i.cle === "remuneration") {
+      var sens = i.signe > 0 ? "au désavantage des femmes"
+               : (i.signe < 0 ? "au désavantage des hommes" : "nul");
+      var nb = i.groupes.filter(function (g) { return g.pris; }).length;
+      return "Écart global de " + String(i.resultat).replace(".", ",") + " %, " + sens +
+        ", sur " + i.retenu + " salariés réunis dans " + nb + (nb > 1 ? " groupes" : " groupe") +
+        ", seuil de pertinence de " + i.seuil + " %, base " + nomUnite(e) + ".";
+    }
+    if (i.cle === "augmentations" && i.tauxF !== undefined)
+      return "Taux d'augmentation de " + String(i.tauxF).replace(".", ",") + " % chez les femmes " +
+        "et de " + String(i.tauxH).replace(".", ",") + " % chez les hommes, soit un écart de " +
+        String(i.resultat).replace(".", ",") + " points de pourcentage, ou " +
+        String(i.salaries).replace(".", ",") + (i.salaries >= 2 ? " salariés." : " salarié.");
+    if (i.cle === "augmentations" || i.cle === "promotions")
+      return "Écart global de " + String(i.resultat).replace(".", ",") + " points de pourcentage, " +
+        "sur " + i.retenu + " salariés réunis dans les catégories qui comptent au moins dix " +
+        "femmes et dix hommes.";
+    if (i.cle === "maternite")
+      return i.augmentees + " salariée" + (i.augmentees > 1 ? "s" : "") + " augmentée" +
+        (i.augmentees > 1 ? "s" : "") + " sur " + i.retours + " retour" +
+        (i.retours > 1 ? "s" : "") + " de congé de maternité, soit " +
+        String(i.resultat).replace(".", ",") + " %.";
+    if (i.cle === "hautes")
+      return "Parmi les dix plus hautes rémunérations : " + i.femmes + " femme" +
+        (i.femmes > 1 ? "s" : "") + " et " + i.hommes + " homme" + (i.hommes > 1 ? "s" : "") +
+        ", soit " + i.resultat + " pour le sexe sous-représenté.";
+    return "";
+  }
+
+  /* LES CHIFFRES QUE L'APPLICATION NE DÉTIENT PAS. Le registre ne dit pas qui a
+     été augmenté, ni qui est revenu de congé de maternité : ces champs-là sont
+     les seuls à remplir, et ils sont retenus d'une fois sur l'autre. */
+  function chiffresHtml(e, r) {
+    var h = '<h3>Ce que le registre ne dit pas</h3>';
+    var f = e.salaries.filter(function (s) { return !s.ecarte && s.sexe === "F"; }).length;
+    var m = e.salaries.filter(function (s) { return !s.ecarte && s.sexe === "H"; }).length;
+    if (r.annexe === "II") {
+      h += '<div class="ix-s"><span class="n">Augmentations individuelles de l\'année ' +
+        e.annee + '</span><span class="e">Toutes les augmentations individuelles du salaire ' +
+        "de base, qu'elles correspondent ou non à une promotion. Effectif pris en compte : " +
+        f + " femmes, " + m + " hommes.</span>" +
+        '<div class="deux"><label>Femmes augmentées' +
+        '<input type="number" min="0" max="9999" data-ix="aug2.f" value="' +
+        ech(IX.aug2.f === undefined ? "" : IX.aug2.f) + '"></label>' +
+        '<label>Hommes augmentés<input type="number" min="0" max="9999" data-ix="aug2.h" value="' +
+        ech(IX.aug2.h === undefined ? "" : IX.aug2.h) + '"></label></div></div>';
+    } else {
+      h += '<div class="ix-s"><span class="n">Augmentations hors promotion, et promotions</span>' +
+        '<span class="e">Par catégorie socioprofessionnelle. Seules celles qui comptent au ' +
+        "moins dix femmes et dix hommes entrent dans le calcul ; les autres sont laissées " +
+        "vides.</span>";
+      window.IndexEgalite.CSP.forEach(function (c) {
+        var nf = e.salaries.filter(function (s) { return !s.ecarte && s.csp === c.cle && s.sexe === "F"; }).length;
+        var nh = e.salaries.filter(function (s) { return !s.ecarte && s.csp === c.cle && s.sexe === "H"; }).length;
+        var pris = nf >= 10 && nh >= 10;
+        h += '<div class="ix-s' + (pris ? "" : " ix-hors") + '"><span class="n">' + c.nom +
+          '</span><span class="e">' + nf + " femmes, " + nh + " hommes" +
+          (pris ? "" : " : catégorie non retenue, il en faut dix de chaque") + "</span>";
+        if (pris)
+          h += '<div class="deux"><label>Femmes augmentées hors promotion' +
+            '<input type="number" min="0" data-ix="aug.' + c.cle + '.f" value="' +
+            ech(((IX.aug[c.cle] || {}).f) === undefined ? "" : IX.aug[c.cle].f) + '"></label>' +
+            '<label>Hommes augmentés hors promotion<input type="number" min="0" data-ix="aug.' +
+            c.cle + '.h" value="' + ech(((IX.aug[c.cle] || {}).h) === undefined ? "" : IX.aug[c.cle].h) +
+            '"></label><label>Femmes promues<input type="number" min="0" data-ix="promo.' + c.cle +
+            '.f" value="' + ech(((IX.promo[c.cle] || {}).f) === undefined ? "" : IX.promo[c.cle].f) +
+            '"></label><label>Hommes promus<input type="number" min="0" data-ix="promo.' + c.cle +
+            '.h" value="' + ech(((IX.promo[c.cle] || {}).h) === undefined ? "" : IX.promo[c.cle].h) +
+            "\"></label></div>";
+        h += "</div>";
+      });
+      h += "</div>";
+    }
+    h += '<div class="ix-s"><span class="n">Retours de congé de maternité</span>' +
+      '<span class="e">Les salariées revenues de congé de maternité pendant l\'année ' + e.annee +
+      ", et celles qui ont été augmentées à leur retour.</span>" +
+      '<div class="deux"><label>Retours dans l\'année' +
+      '<input type="number" min="0" data-ix="mat.retours" value="' +
+      ech(IX.mat.retours === undefined ? "" : IX.mat.retours) + '"></label>' +
+      '<label>Augmentées à leur retour<input type="number" min="0" data-ix="mat.augmentees" value="' +
+      ech(IX.mat.augmentees === undefined ? "" : IX.mat.augmentees) + '"></label>' +
+      "<label>Des augmentations sont-elles intervenues pendant ces congés ?" +
+      '<select data-ix="mat.pendant"><option value="">à répondre</option>' +
+      '<option value="oui"' + (IX.mat.pendant === "oui" ? " selected" : "") + ">oui</option>" +
+      '<option value="non"' + (IX.mat.pendant === "non" ? " selected" : "") + ">non</option>" +
+      "</select></label></div></div>";
+    return h;
+  }
+
+  /* LES SALARIÉS. Une carte par personne : la catégorie, la rémunération, et la
+     case qui l'écarte du calcul. */
+  function salariesHtml(e) {
+    if (!e.salaries.length)
+      return '<p class="aide">Le registre du personnel ne porte aucun salarié présent en ' +
+        e.annee + ". Inscrivez-les au registre, et le calcul se fera ici, nom par nom.</p>";
+    var sansRem = e.salaries.filter(function (s) {
+      return !s.ecarte && !(isFinite(s.rem) && s.rem > 0); }).length;
+    var h = "";
+    if (sansRem)
+      h += '<p class="aide">' + sansRem + " salarié" + (sansRem > 1 ? "s" : "") +
+        " sans rémunération connue : " + (sansRem > 1 ? "ils ne comptent" : "il ne compte") +
+        " dans aucun groupe. L'écran des minima, dans les contrats, relève les taux horaires ; " +
+        "ils se portent aussi ici.</p>";
+    e.salaries.forEach(function (s) {
+      var mien = IX.sal[s.id] || {};
+      h += '<div class="ix-s' + (s.ecarte ? " ix-hors" : "") + '"><span class="n">' +
+        ech(s.nom.trim()) + "</span>" +
+        '<span class="e">' + ech(s.emp || "emploi non renseigné") +
+        (s.sexe ? "" : " · sexe non renseigné au registre") +
+        (s.coef ? " · " + ech(s.coef) : " · sans coefficient") +
+        (s.motif ? " · écarté : " + ech(s.motif) : "") + "</span>";
+      h += '<div class="deux"><label>Catégorie socioprofessionnelle' +
+        (s.proposee ? " (proposée)" : "") + '<select data-sal="' + ech(s.id) + '" data-ch="csp">' +
+        '<option value="">à choisir</option>' +
+        window.IndexEgalite.CSP.map(function (c) {
+          return '<option value="' + c.cle + '"' + (s.csp === c.cle ? " selected" : "") + ">" +
+            ech(c.nom) + "</option>";
+        }).join("") + "</select></label>" +
+        "<label>" + (e.unite === "horaire" ? "Taux horaire brut" : "Rémunération annuelle brute") +
+        '<input type="text" inputmode="decimal" data-sal="' + ech(s.id) + '" data-ch="' +
+        (e.unite === "horaire" ? "rem" : "remAn") + '" value="' +
+        ech(isFinite(s.rem) && s.rem > 0 ? String(s.rem).replace(".", ",") : "") +
+        '" placeholder="' + (e.unite === "horaire" ? "par exemple 12,45" : "par exemple 26 400") +
+        '"></label></div>';
+      if (!/apprenti|professionnalisation/.test(s.motif))
+        h += '<label class="case"><input type="checkbox" data-sal="' + ech(s.id) +
+          '" data-ch="ecarte"' + (mien.ecarte ? " checked" : "") + "> " +
+          "À écarter : absent plus de la moitié de l'année, mis à disposition ou expatrié</label>";
+      h += "</div>";
+    });
+    return h;
+  }
+
+  /* LES GROUPES DE COMPARAISON, pour que le chiffre soit vérifiable. */
+  function groupesHtml(e, r) {
+    var un = r.indicateurs[0];
+    if (!un.groupes.length)
+      return '<p class="aide">Aucun groupe : il manque la catégorie, la date de naissance ou ' +
+        "la rémunération.</p>";
+    var h = '<div class="tab"><table><caption>Comparaison par ' +
+      (un.base === "coef" ? "coefficient" : "catégorie socioprofessionnelle") +
+      " et par tranche d'âge, seuil de pertinence de " + un.seuil +
+      " %.</caption><thead><tr><th>Groupe</th><th>F</th><th>H</th><th>Moyenne F</th>" +
+      "<th>Moyenne H</th><th>Écart</th><th>Après seuil</th></tr></thead><tbody>";
+    un.groupes.forEach(function (g) {
+      h += "<tr><td>" + ech(g.nom) + (g.pris ? "" : " (non retenu)") + "</td><td>" + g.nbF +
+        "</td><td>" + g.nbH + "</td>";
+      if (!g.pris) { h += '<td colspan="4">il faut trois femmes et trois hommes</td></tr>'; return; }
+      h += "<td>" + euros(g.moyF) + "</td><td>" + euros(g.moyH) + "</td><td>" +
+        String(Math.round(g.ecart * 10) / 10).replace(".", ",") + " %</td><td>" +
+        String(Math.round(g.ajuste * 10) / 10).replace(".", ",") + " %</td></tr>";
+    });
+    return h + "</tbody></table></div>";
+  }
+
+  /* Les textes de l'index, avec leur identifiant de version. */
+  var TEXTES_IX = [
+    ["L. 1142-8", "LEGIARTI000044605453",
+     "publication annuelle de l'ensemble des indicateurs relatifs aux écarts de rémunération"],
+    ["D. 1142-2", "LEGIARTI000038026011",
+     "les cinq indicateurs au-delà de deux cent cinquante salariés, calculés selon l'annexe I"],
+    ["D. 1142-2-1", "LEGIARTI000038026015",
+     "les quatre indicateurs de cinquante à deux cent cinquante salariés, calculés selon l'annexe II"],
+    ["D. 1142-3", "LEGIARTI000038026019",
+     "le niveau de résultat est déterminé selon les modalités fixées aux annexes I et II"],
+    ["D. 1142-4", "LEGIARTI000045250060",
+     "publication au plus tard le 1er mars, sur le site internet de l'entreprise lorsqu'il en existe un, à défaut par tout moyen"],
+    ["D. 1142-5", "LEGIARTI000045250047",
+     "mise à disposition du comité social et économique, résultats présentés par catégorie, niveau ou coefficient"],
+    ["D. 1142-6", "LEGIARTI000045250040",
+     "sous soixante-quinze points, les mesures de correction doivent être mises en œuvre"],
+    ["L. 1142-9", "LEGIARTI000044605442",
+     "les mesures adéquates et pertinentes de correction, et le cas échéant le rattrapage salarial"],
+    ["L. 1142-10", "LEGIARTI000051289090",
+     "trois ans pour se mettre en conformité, puis une pénalité au maximum de 1 % des rémunérations"],
+    ["L. 3221-3", "LEGIARTI000006902819",
+     "la rémunération : le salaire de base et tous les autres avantages et accessoires payés en raison de l'emploi"]
+  ];
+  function sourcesIx() {
+    var h = "<div>Code du travail, lu au relais Légifrance le 28 septembre 2026, deux lectures " +
+      "concordantes par article. Les articles D. 1142-2 à D. 1142-11 portent l'état « abrogé à " +
+      "effet différé » : ils sont applicables à ce jour. Les annexes I et II ne sont pas servies " +
+      "par le relais, qui ne connaît que les articles numérotés : leur texte a été lu dans la " +
+      "copie du code publiée par codes.droit.org, et le barème de l'écart de rémunération a été " +
+      "relu sur la page Légifrance de l'annexe II.</div>";
+    TEXTES_IX.forEach(function (t) {
+      h += "<div><b>" + t[0] + "</b> · " + ech(t[2]) + " · " + t[1] + "</div>";
+    });
+    $("#ix-sources").innerHTML = h;
+  }
+
+  /* LE RELEVÉ EN WORD. Ce qui a été calculé, daté, avec les groupes : un index
+     publié sans son calcul ne se défend pas devant l'inspection. */
+  function motsIx() {
+    var e = DERNIER.entree, r = DERNIER.sortie;
+    var items = [
+      { k: "sur", t: [nomSociete(), profil.siret ? "SIRET " + profil.siret : ""]
+        .filter(Boolean).join(" · ") },
+      { k: "t1", t: "Index de l'égalité professionnelle entre les femmes et les hommes" },
+      { k: "trait" },
+      { k: "p", t: "Année de référence " + r.annee + ". Calcul établi le " + dateFr(new Date()) +
+        " par " + signataire() + "." },
+      { k: "p", t: "Effectif de l'entreprise : " + (r.effectif === null ? "non renseigné"
+        : r.effectif + " salariés") + ". Indicateurs de l'article " + r.article +
+        ", calculés selon l'annexe " + r.annexe + " du chapitre II bis. Salariés pris en compte : " +
+        r.pris + (r.ecartes ? ", " + r.ecartes + " écartés (apprentis, contrats de " +
+        "professionnalisation, absents plus de la moitié de la période, salariés mis à " +
+        "disposition ou expatriés)" : "") + "." },
+      { k: "p", t: "Base de comparaison des rémunérations : " + nomUnite(e) +
+        ". La rémunération se définit par le salaire de base et tous les autres avantages et " +
+        "accessoires payés par l'employeur en raison de l'emploi (L. 3221-3) ; elle est " +
+        "reconstituée en équivalent temps plein." },
+      { k: "h1", t: "Le niveau de résultat" },
+      { k: "p", t: r.etat === "calcule"
+        ? "Niveau de résultat : " + r.niveau + " points sur 100" +
+          (r.proportionnalite ? ", obtenus par proportionnalité à partir de " + r.points +
+            " points sur " + r.maxAtteint + " atteignables" : "") + "."
+        : (r.etat === "indeterminable"
+          ? "Le niveau de résultat ne peut pas être déterminé : le maximum atteignable, " +
+            r.maxAtteint + " points, est inférieur à soixante-quinze points (annexe " +
+            r.annexe + ", 5.1)."
+          : "Le niveau de résultat n'est pas encore déterminé : " + r.manquants +
+            " indicateur(s) attendent un chiffre que l'entreprise seule détient.") },
+      { k: "table", head: ["Indicateur", "Résultat", "Points", "Maximum"],
+        rows: r.indicateurs.map(function (i) {
+          return [i.nom,
+            i.etat === "calcule" ? direIx(i, e)
+              : (i.etat === "incalculable" ? "Non calculable : " + i.pourquoi
+                                          : "Il manque : " + i.pourquoi),
+            i.etat === "calcule" ? String(i.points) : "-", String(i.max)];
+        }) }
+    ];
+    var un = r.indicateurs[0];
+    if (un.groupes.length) {
+      items.push({ k: "h1", t: "Les groupes de comparaison" });
+      items.push({ k: "p", t: "Comparaison par " +
+        (un.base === "coef" ? "coefficient ou niveau hiérarchique" : "catégorie socioprofessionnelle") +
+        " et par tranche d'âge. Seuil de pertinence de " + un.seuil +
+        " %. Seuls les groupes comptant au moins trois femmes et trois hommes sont retenus." });
+      items.push({ k: "table",
+        head: ["Groupe", "Femmes", "Hommes", "Moyenne femmes", "Moyenne hommes", "Écart", "Après seuil"],
+        rows: un.groupes.map(function (g) {
+          if (!g.pris) return [g.nom, String(g.nbF), String(g.nbH), "-", "-", "non retenu", "-"];
+          return [g.nom, String(g.nbF), String(g.nbH), euros(g.moyF), euros(g.moyH),
+            String(Math.round(g.ecart * 10) / 10).replace(".", ",") + " %",
+            String(Math.round(g.ajuste * 10) / 10).replace(".", ",") + " %"];
+        }) });
+    }
+    items.push({ k: "h1", t: "Les formalités" });
+    items.push({ k: "puce", t: "Publication du niveau de résultat et du résultat de chaque " +
+      "indicateur au plus tard le 1er mars " + (r.annee + 1) + ", de manière visible et lisible, " +
+      "sur le site internet de l'entreprise lorsqu'il en existe un, et à défaut par tout moyen " +
+      "(D. 1142-4)." });
+    items.push({ k: "puce", t: "Mise à disposition du comité social et économique, les résultats " +
+      "présentés par catégorie socioprofessionnelle, niveau ou coefficient hiérarchique, avec la " +
+      "méthodologie appliquée et la répartition des salariés (D. 1142-5)." });
+    items.push({ k: "puce", t: "Télédéclaration aux services du ministre chargé du travail " +
+      "(D. 1142-5)." });
+    if (r.etat === "calcule" && r.niveau < 75)
+      items.push({ k: "puce", t: "Niveau inférieur à soixante-quinze points : mesures de " +
+        "correction et, le cas échéant, programmation de mesures financières de rattrapage " +
+        "salarial, par accord ou par décision de l'employeur après consultation du comité, " +
+        "déposée auprès de l'autorité administrative et publiée (D. 1142-6, L. 1142-9)." });
+    items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr(new Date()) });
+    items.push({ k: "p", t: signataire() + "\n" + nomSociete() });
+    return items;
+  }
+
+  /* ═══════════════════════════════════════════════════════════ le câblage */
+  function ouvrirIx(ouvert) {
+    $("#ecran-doc").hidden = !!ouvert;
+    $("#ecran-index").hidden = !ouvert;
+    if (ouvert) { rendreIx(); window.scrollTo(0, 0); }
+    else { rendre(); window.scrollTo(0, 0); }
+  }
+  (function departIx() {
+    var eff = effectif();
+    $("#vers-index").hidden = !(eff !== null && eff >= 50);
+    $("#ix-annee").value = IX.annee || new Date().getFullYear() - 1;
+    $("#ix-base").value = IX.base === "csp" ? "csp" : "coef";
+    $("#ix-unite").value = IX.unite === "annuel" ? "annuel" : "horaire";
+  })();
+  $("#vers-index").addEventListener("click", function () { ouvrirIx(true); });
+  $("#ix-retour").addEventListener("click", function () { ouvrirIx(false); });
+  $("#ix-champs").addEventListener("change", function () {
+    IX.annee = Number($("#ix-annee").value) || IX.annee;
+    IX.base = $("#ix-base").value;
+    IX.unite = $("#ix-unite").value;
+    garderIx(IX);
+    rendreIx();
+  });
+  $("#ix-champs").addEventListener("input", function () {
+    IX.annee = Number($("#ix-annee").value) || IX.annee;
+    garderIx(IX);
+    rendreIx();
+  });
+
+  /* La saisie des chiffres et des salariés. Un seul écouteur, sur la section :
+     les cartes sont réécrites à chaque frappe, un écouteur par champ ne
+     survivrait pas. */
+  function poser(chemin, valeur) {
+    var p = String(chemin).split(".");
+    var o = IX;
+    for (var i = 0; i < p.length - 1; i++) { o[p[i]] = o[p[i]] || {}; o = o[p[i]]; }
+    o[p[p.length - 1]] = valeur;
+  }
+  $("#ecran-index").addEventListener("change", function (ev) {
+    var t = ev.target;
+    if (!t || !t.getAttribute) return;
+    var ch = t.getAttribute("data-ix");
+    if (ch) { poser(ch, t.value); garderIx(IX); rendreIx(); return; }
+    var id = t.getAttribute("data-sal");
+    if (!id) return;
+    var quoi = t.getAttribute("data-ch");
+    IX.sal[id] = IX.sal[id] || {};
+    if (quoi === "ecarte") IX.sal[id].ecarte = !!t.checked;
+    else IX.sal[id][quoi] = t.value;
+    garderIx(IX);
+    /* Une case cochée change la liste des salariés retenus : la carte, elle,
+       reste en place. */
+    rendreIx(true);
+  });
+
+  $("#ix-word").addEventListener("click", function () {
+    if (!DERNIER) return;
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(motsIx(), "Index de l'égalité professionnelle", { sansTitre: true }),
+      "index-egalite-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
+
+  /* Le plan d'action lit le même calcul : la section des indicateurs porte le
+     chiffre au lieu du crochet dès qu'il est déterminé. */
+  function resultatIndex() {
+    if (!window.IndexEgalite) return null;
+    try {
+      var sauve = $("#ix-annee");
+      if (!sauve) return null;
+      return window.IndexEgalite.calculer(entreeIx());
+    } catch (e) { return null; }
+  }
 
   rendre();
 })();

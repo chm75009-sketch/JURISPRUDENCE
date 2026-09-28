@@ -82,7 +82,12 @@
   .panneau h4{margin:0 0 4px;font:600 12px/1.3 system-ui;letter-spacing:.04em;
     text-transform:uppercase;color:var(--encre-3)}
   .panneau p.q{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:var(--encre-2)}
-  @media (max-width:900px){.deux{grid-template-columns:1fr}.panneau{position:static}}
+  /* « 1fr » ne descend pas sous la largeur minimale de son contenu : le
+     tableau du procès-verbal poussait la colonne à 562 points, et la page
+     entière glissait sous le doigt. « minmax(0,1fr) » laisse la colonne se
+     serrer, et c'est le cadre du tableau qui roule. Relevé le
+     28 septembre 2026. */
+  @media (max-width:900px){.deux{grid-template-columns:minmax(0,1fr)}.panneau{position:static}}
   .panneau .champs{grid-template-columns:1fr;gap:12px}
   label.ch input,label.ch select{font:inherit;font-size:14.5px;padding:9px 11px;
     border:1px solid var(--filet-2);border-radius:7px;background:var(--carte);color:var(--encre)}
@@ -110,9 +115,27 @@
   .choix label span.d{color:var(--encre-2);font-size:13px;line-height:1.5}
   details.txt .id{font:400 11.5px/1.3 ui-monospace,Menlo,monospace;color:var(--encre-3)}
 
-  pre.sortie{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--carte);border:1px solid var(--filet);border-radius:10px;padding:16px;
-    max-height:62vh;overflow:auto}
+  /* LE PROCÈS-VERBAL NE S'AFFICHE PLUS EN TEXTE À CHASSE FIXE.
+
+     Il sortait dans un « pre » monospace : sur un téléphone, les lignes du
+     texte, déjà coupées à soixante-douze signes, se recoupaient à la largeur
+     de l'écran, et les tableaux tracés au tiret ne se lisaient pas. Il passe
+     désormais par feuille-doc.js, qui reconnaît les titres, les paragraphes et
+     les tableaux, comme pour le fichier Word. Relevé le 28 septembre 2026. */
+  .sortie{background:var(--carte);border:1px solid var(--filet);border-radius:10px;
+    padding:16px;max-height:62vh;overflow:auto}
+  .sortie pre{white-space:pre-wrap;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+    margin:0}
+  /* La feuille : le document tel qu'il sortira sur le papier. feuille-doc.js
+     pose les styles des tableaux ; les titres et les paragraphes sont ceux de
+     la maison. */
+  .fd-corps .b-t1{font:700 17px/1.35 system-ui;margin:0 0 6px;text-align:center}
+  .fd-corps .b-h1{font:700 15px/1.35 system-ui;margin:18px 0 7px}
+  .fd-corps .b-h2{font:600 14px/1.35 system-ui;margin:14px 0 5px}
+  .fd-corps .b-p{margin:0 0 9px;font-size:14.5px;line-height:1.65}
+  .fd-corps .b-puce{margin:0 0 5px 18px;font-size:14.5px;line-height:1.6}
+  .fd-corps .b-sign{margin:18px 0 0;font-size:14.5px;line-height:1.7}
+  .fd-corps .b-trait{border:0;border-top:1px solid var(--filet);margin:18px 0}
   @media print{.onglets,.barre,header.site,.choix,.panneau{display:none}.deux{display:block}}</style>
 </head>
 <body>
@@ -212,7 +235,7 @@
             <button class="btn second" id="dl-txt">Télécharger en texte</button>
             <button class="btn second" id="copier">Copier</button>
           </div>
-          <pre class="sortie" id="sortie"></pre>
+          <div class="sortie" id="sortie"></div>
         </div>
 
         <div id="s-convoc" class="cache">
@@ -220,7 +243,7 @@
             <button class="btn" id="dl-convoc-docx">Télécharger en Word</button>
             <button class="btn second" id="copier-convoc">Copier</button>
           </div>
-          <pre class="sortie" id="convoc"></pre>
+          <div class="sortie" id="convoc"></div>
         </div>
       </div>
 
@@ -315,6 +338,22 @@
       t: "I.-Les conventions et accords de branche et les accords professionnels ou interprofessionnels, ainsi que leurs avenants et annexes, sont déposés par la partie la plus diligente auprès des services du ministre chargé du travail. Le dépôt est opéré en deux exemplaires, dont une version sur support papier signée des parties et une version sur support électronique. II.-Les accords de groupe, d'entreprise, d'établissement et interentreprises ainsi que les pièces accompagnant le dépôt prévues aux articles D. 2231-6 et D. 2231-7 sont déposés par le représentant légal du groupe, de l'entreprise ou de l'établissement ou, pour un accord interentreprises, par les représentants légaux de celles-ci. III.-Le déposant remet également un exemplaire de chaque convention ou accord au greffe du conseil de prud'hommes du lieu de conclusion." },
     { n: "D. 2231-4", id: "LEGIARTI000036920597", etat: "VIGUEUR", lu: "2026-09-07",
       t: "Les accords de groupe, d'entreprise, d'établissement et interentreprises ainsi que les pièces accompagnant le dépôt prévues aux articles D. 2231-6 et D. 2231-7 sont déposés sur la plateforme de téléprocédure du ministère du travail." },
+    /* LA VALIDITÉ DE L'ACCORD. Lus deux fois au relais Légifrance le
+       28 septembre 2026, filtre par nom du code, lectures concordantes. */
+    { n: "L. 2232-12", id: "LEGIARTI000035652760", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "La validité d'un accord d'entreprise ou d'établissement est subordonnée à sa signature par, d'une part, l'employeur ou son représentant et, d'autre part, une ou plusieurs organisations syndicales de salariés représentatives ayant recueilli plus de 50 % des suffrages exprimés en faveur d'organisations représentatives au premier tour des dernières élections des titulaires au comité social et économique, quel que soit le nombre de votants. Si cette condition n'est pas remplie et si l'accord a été signé à la fois par l'employeur et par des organisations syndicales représentatives ayant recueilli plus de 30 % des suffrages […], une ou plusieurs de ces organisations […] disposent d'un délai d'un mois à compter de la signature de l'accord pour indiquer qu'elles souhaitent une consultation des salariés visant à valider l'accord. […] cette consultation est organisée dans un délai de deux mois. […] L'accord est valide s'il est approuvé par les salariés à la majorité des suffrages exprimés. Faute d'approbation, l'accord est réputé non écrit." },
+    { n: "L. 2232-21", id: "LEGIARTI000036761872", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "Dans les entreprises dépourvues de délégué syndical et dont l'effectif habituel est inférieur à onze salariés, l'employeur peut proposer un projet d'accord ou un avenant de révision aux salariés […]. La consultation du personnel est organisée à l'issue d'un délai minimum de quinze jours courant à compter de la communication à chaque salarié du projet d'accord." },
+    { n: "L. 2232-22", id: "LEGIARTI000036761866", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "Lorsque le projet d'accord ou d'avenant de révision mentionné à l'article L. 2232-21 est approuvé à la majorité des deux tiers du personnel, il est considéré comme un accord d'entreprise valide." },
+    { n: "L. 2232-23-1", id: "LEGIARTI000036761855", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "I. Dans les entreprises dont l'effectif habituel est compris entre onze et moins de cinquante salariés, en l'absence de délégué syndical dans l'entreprise ou l'établissement, les accords d'entreprise ou d'établissement peuvent être négociés, conclus, révisés ou dénoncés : 1° Soit par un ou plusieurs salariés expressément mandatés par une ou plusieurs organisations syndicales représentatives […] ; 2° Soit par un ou plusieurs membres titulaires de la délégation du personnel du comité social et économique." },
+    { n: "L. 2232-24", id: "LEGIARTI000036761844", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "Dans les entreprises dont l'effectif habituel est au moins égal à cinquante salariés, en l'absence de délégués syndicaux […], les membres titulaires de la délégation du personnel du comité social et économique peuvent négocier, conclure, réviser ou dénoncer des accords collectifs de travail s'ils sont expressément mandatés à cet effet par une ou plusieurs organisations syndicales représentatives dans la branche […]. La validité des accords ou des avenants de révision conclus en application du présent article est subordonnée à leur approbation par les salariés à la majorité des suffrages exprimés." },
+    { n: "L. 2232-25", id: "LEGIARTI000036761836", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "[…] en l'absence de membre de la délégation du personnel du comité social et économique mandaté en application de l'article L. 2232-24, les membres titulaires […] qui n'ont pas été expressément mandatés […] peuvent négocier, conclure, réviser ou dénoncer des accords collectifs de travail. Cette négociation ne porte que sur les accords collectifs de travail relatifs à des mesures dont la mise en œuvre est subordonnée par la loi à un accord collectif […]. La validité des accords […] est subordonnée à leur signature par des membres de la délégation du personnel du comité social et économique représentant la majorité des suffrages exprimés en faveur des membres du comité social et économique lors des dernières élections professionnelles." },
+    { n: "L. 2232-26", id: "LEGIARTI000036761849", etat: "VIGUEUR", lu: "2026-09-28",
+      t: "Dans les entreprises […] au moins égal à cinquante salariés dépourvues de délégué syndical lorsque, à l'issue de la procédure définie à l'article L. 2232-25-1, aucun membre de la délégation du personnel du comité social et économique n'a manifesté son souhait de négocier, les accords […] peuvent être négociés, conclus, révisés ou dénoncés par un ou plusieurs salariés expressément mandatés […]. L'accord signé par un salarié mandaté doit avoir été approuvé par les salariés à la majorité des suffrages exprimés […]." },
     { n: "D. 2231-7", id: "LEGIARTI000036920591", etat: "VIGUEUR", lu: "2026-09-07",
       t: "Le dépôt des conventions et accords est accompagné des pièces suivantes : 1° Dans tous les cas, a) De la version signée des parties ; b) D'une copie du courrier, du courrier électronique ou du récépissé ou d'un avis de réception daté de notification du texte à l'ensemble des organisations représentatives à l'issue de la procédure de signature ; 2° Pour les accords de branche, de groupe, d'entreprise, d'établissement et interentreprises, a) D'une version publiable mentionnée à l'article L. 2231-5-1 […] ; b) De l'acte mentionné au I de l'article R. 2231-1-1, s'il y a lieu ; 3° Dans le cas des accords de groupe, d'entreprise, d'établissement et interentreprises : du procès-verbal mentionné au 2° de l'article D. 2232-2, s'il y a lieu ; 4° Dans le cas des accords d'entreprise, c) De la liste mentionnée à l'article D. 2231-6, s'il y a lieu. Un récépissé est délivré au déposant. Le format de ces documents est précisé par arrêté." },
   ];
@@ -399,14 +438,21 @@
     return L;
   }
 
+  /* Quatre mentions, donc quatre paragraphes : sans la ligne blanche, la
+     feuille les recollait en un seul pavé, et l'on y lisait « ... dernier état
+     : - [organisation 1] : ... Réponse motivée ... » d'un trait. Relevé le
+     28 septembre 2026. */
   var CADRE = [
     "Position de l'employeur, en son dernier état : [.....................].",
+    "",
     "Position de chaque organisation syndicale représentative, en son dernier",
     "état :",
     "  - [organisation 1] : [.............................................] ;",
     "  - [organisation 2] : [.............................................].",
+    "",
     "Réponse motivée de l'employeur aux propositions formulées :",
     "[..........................................................................].",
+    "",
     "Suite retenue : [accord sur ce point / désaccord maintenu / renvoi à la",
     "réunion du .........].",
   ];
@@ -1056,7 +1102,9 @@
   }
   function contient(n, m) { return motifDe(m).test(n); }
 
-  var etat = { texte: "", absents: [], nbPresents: 0, retenus: {}, redige: {} };
+  var etat = { texte: "", absents: [], nbPresents: 0, retenus: {}, redige: {},
+    pv: "", convocation: "" };
+  if (window.FeuilleDoc) window.FeuilleDoc.style();
 
   /* Quelle négociation ? La question n'est pas posée avant le document : elle
      est reconnue dans le texte déposé, et la réponse s'affiche à côté des
@@ -1395,6 +1443,104 @@
     L.push("Le présent accord peut être révisé ou dénoncé dans les conditions prévues");
     L.push("par le code du travail. [Préciser les modalités retenues.]");
     L.push("");
+    /* ARTICLE - VALIDITÉ.
+
+       Le document disait le dépôt et se taisait sur la validité : un accord
+       déposé mais signé en deçà du seuil de majorité n'est pas un accord.
+       Relevé le 26 septembre 2026, écrit ici le 28 septembre 2026.
+
+       Les textes, lus deux fois au relais Légifrance le 28 septembre 2026 :
+       L. 2232-12 (LEGIARTI000035652760), L. 2232-23-1 (LEGIARTI000036761855),
+       L. 2232-24 (LEGIARTI000036761844), L. 2232-25 (LEGIARTI000036761836),
+       L. 2232-26 (LEGIARTI000036761849). La fiche dit s'il existe une section
+       syndicale d'organisation représentative, et l'effectif : c'est ce qui
+       décide de la règle applicable, et l'écran ne choisit pas à la place de
+       l'entreprise quand la fiche est muette. */
+    var pf0 = (window.Profil && window.Profil.lire()) || {};
+    var avecDs = /^oui/i.test(String(pf0.delegueSyndical || ""));
+    var sansDs = /^non/i.test(String(pf0.delegueSyndical || ""));
+    var eff0 = f.effectif;
+    L.push("ARTICLE - VALIDITÉ DU PRÉSENT ACCORD");
+    if (avecDs || !sansDs) {
+      L.push("La validité du présent accord est subordonnée à sa signature par");
+      L.push("l'employeur ou son représentant et par une ou plusieurs organisations");
+      L.push("syndicales représentatives ayant recueilli plus de 50 % des suffrages");
+      L.push("exprimés en faveur d'organisations représentatives au premier tour des");
+      L.push("dernières élections des titulaires au comité social et économique, quel");
+      L.push("que soit le nombre de votants (article L. 2232-12).");
+      L.push("");
+      L.push("Suffrages recueillis par les organisations signataires, d'après le");
+      L.push("procès-verbal du premier tour des élections du [DATE] : [__] %.");
+      L.push("");
+      L.push("[Si ce taux est supérieur à 30 % sans atteindre 50 % : une ou plusieurs");
+      L.push("des organisations signataires ayant recueilli plus de 30 % disposent");
+      L.push("d'un mois à compter de la signature pour demander une consultation des");
+      L.push("salariés ; au terme de ce délai, l'employeur peut la demander en");
+      L.push("l'absence d'opposition de l'ensemble de ces organisations. Huit jours");
+      L.push("après cette demande, si les signatures d'autres organisations");
+      L.push("représentatives n'ont pas permis d'atteindre 50 %, la consultation est");
+      L.push("organisée dans un délai de deux mois, selon un protocole spécifique.");
+      L.push("L'accord est valide s'il est approuvé par les salariés à la majorité des");
+      L.push("suffrages exprimés ; faute d'approbation, il est réputé non écrit");
+      L.push("(article L. 2232-12).]");
+      if (!avecDs && !sansDs) {
+        L.push("");
+        L.push("[La fiche d'entreprise ne dit pas s'il existe une section syndicale");
+        L.push("d'organisation représentative. En l'absence de délégué syndical, ce");
+        L.push("n'est pas l'article L. 2232-12 qui s'applique, mais les articles");
+        L.push("L. 2232-23-1 et suivants : complétez la fiche, et cet article sera");
+        L.push("réécrit.]");
+      }
+    } else if (eff0 !== null && eff0 < 11) {
+      L.push("L'entreprise compte moins de onze salariés et n'a pas de délégué");
+      L.push("syndical : l'employeur propose le projet d'accord aux salariés, et la");
+      L.push("consultation du personnel est organisée à l'issue d'un délai minimum de");
+      L.push("quinze jours courant à compter de la communication du projet à chaque");
+      L.push("salarié (article L. 2232-21). Approuvé à la majorité des deux tiers du");
+      L.push("personnel, le projet est un accord d'entreprise valide (article");
+      L.push("L. 2232-22).");
+      L.push("");
+      L.push("Projet communiqué le [DATE], consultation du [DATE], résultat : [__]");
+      L.push("voix pour sur [__] salariés.");
+    } else if (eff0 !== null && eff0 < 50) {
+      L.push("L'entreprise n'a pas de délégué syndical et son effectif habituel est");
+      L.push("compris entre onze et moins de cinquante salariés : l'accord peut être");
+      L.push("négocié et conclu soit par un ou plusieurs salariés mandatés par une");
+      L.push("organisation syndicale représentative, soit par un ou plusieurs membres");
+      L.push("titulaires de la délégation du personnel du comité social et économique");
+      L.push("(article L. 2232-23-1). La voie retenue ici est : [salarié mandaté /");
+      L.push("membre titulaire du comité], et la condition de validité qui s'y");
+      L.push("attache est reprise ci-dessous.");
+      L.push("");
+      L.push("[Accord conclu par un salarié mandaté : il doit être approuvé par les");
+      L.push("salariés à la majorité des suffrages exprimés. Accord conclu par un ou");
+      L.push("des membres titulaires du comité : il doit être signé par des membres");
+      L.push("représentant la majorité des suffrages exprimés lors des dernières");
+      L.push("élections professionnelles.]");
+    } else {
+      L.push("L'entreprise" + (eff0 !== null ? " compte " + eff0 + " salariés et" : "") +
+        " n'a pas de délégué syndical. Selon la voie");
+      L.push("suivie, la validité de l'accord obéit à l'une des trois règles");
+      L.push("suivantes, et la voie retenue ici est : [élu mandaté / élu non mandaté /");
+      L.push("salarié mandaté].");
+      L.push("");
+      L.push("  - accord conclu par un membre titulaire du comité social et");
+      L.push("    économique expressément mandaté par une organisation syndicale");
+      L.push("    représentative : il doit être approuvé par les salariés à la");
+      L.push("    majorité des suffrages exprimés (article L. 2232-24) ;");
+      L.push("  - accord conclu par des membres titulaires du comité non mandatés :");
+      L.push("    il ne peut porter que sur des mesures dont la mise en œuvre est");
+      L.push("    subordonnée par la loi à un accord collectif, et il doit être signé");
+      L.push("    par des membres représentant la majorité des suffrages exprimés en");
+      L.push("    faveur des membres du comité lors des dernières élections");
+      L.push("    professionnelles (article L. 2232-25) ;");
+      L.push("  - accord conclu par un ou plusieurs salariés mandatés, lorsque aucun");
+      L.push("    membre du comité n'a manifesté son souhait de négocier à l'issue de");
+      L.push("    la procédure de l'article L. 2232-25-1 : il doit être approuvé par");
+      L.push("    les salariés à la majorité des suffrages exprimés (article");
+      L.push("    L. 2232-26).");
+    }
+    L.push("");
     L.push("ARTICLE - NOTIFICATION, DÉPÔT ET PUBLICITÉ");
     L.push("Le présent accord est notifié à l'ensemble des organisations syndicales");
     L.push("représentatives à l'issue de la procédure de signature, par [lettre remise");
@@ -1516,10 +1662,26 @@
     return L.join("\n");
   }
 
+  /* LA FEUILLE. Le texte reste la pièce ; l'écran en montre la mise en forme.
+     Les deux textes sont gardés tels quels : ce sont eux qui partent dans le
+     presse-papiers, dans le fichier texte et dans le Word. */
+  function enFeuille(id, texte) {
+    if (window.FeuilleDoc)
+      $(id).innerHTML = window.FeuilleDoc.html(window.FeuilleDoc.blocs(texte),
+        { editable: false, classe: "fd-corps" });
+    else {
+      var pre = document.createElement("pre");
+      pre.textContent = texte;
+      $(id).innerHTML = "";
+      $(id).appendChild(pre);
+    }
+  }
   function assembler() {
     if (!etat.texte) return;
-    $("sortie").textContent = issue === "accord" ? accordSigne() : pvDesaccord();
-    $("convoc").textContent = convocation();
+    etat.pv = issue === "accord" ? accordSigne() : pvDesaccord();
+    etat.convocation = convocation();
+    enFeuille("sortie", etat.pv);
+    enFeuille("convoc", etat.convocation);
   }
 
   function vue(quelle) {
@@ -1558,20 +1720,20 @@
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
 
-  $("copier").addEventListener("click", function () { copier($("sortie").textContent, $("copier")); });
-  $("copier-convoc").addEventListener("click", function () { copier($("convoc").textContent, $("copier-convoc")); });
+  $("copier").addEventListener("click", function () { copier(etat.pv || "", $("copier")); });
+  $("copier-convoc").addEventListener("click", function () { copier(etat.convocation || "", $("copier-convoc")); });
   $("dl-txt").addEventListener("click", function () {
-    window.AuditExport.telecharger($("sortie").textContent,
+    window.AuditExport.telecharger(etat.pv || "",
       nomFichier(issue === "accord" ? "nao-accord" : "nao-pv-desaccord", "txt"),
       "text/plain;charset=utf-8");
   });
   $("dl-docx").addEventListener("click", function () {
-    versWord($("sortie").textContent,
+    versWord(etat.pv || "",
       issue === "accord" ? "Accord d'entreprise" : "Procès-verbal de désaccord",
       nomFichier(issue === "accord" ? "nao-accord" : "nao-pv-desaccord", "docx"));
   });
   $("dl-convoc-docx").addEventListener("click", function () {
-    versWord($("convoc").textContent, "Convocation à la réunion de négociation",
+    versWord(etat.convocation || "", "Convocation à la réunion de négociation",
       nomFichier("nao-convocation", "docx"));
   });
 

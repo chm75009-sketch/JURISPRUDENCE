@@ -183,6 +183,9 @@
           texte = window.DocumentsProduits.sansExemple(texte);
         COURANT = { nom: gen.nom, texte: texte };
         $("annexe-titre").textContent = gen.nom;
+        /* Sans cet appel, la feuille sort sans ses styles : titres, tableaux et
+           encadrés à plat. Relevé le 28 septembre 2026. */
+        if (window.FeuilleDoc) window.FeuilleDoc.style();
         $("annexe-feuille").innerHTML = window.FeuilleDoc
           ? window.FeuilleDoc.html(window.FeuilleDoc.blocs(texte), { editable: false, classe: "fd-corps" })
           : "<pre>" + String(texte).replace(/[&<>]/g, function (c) {

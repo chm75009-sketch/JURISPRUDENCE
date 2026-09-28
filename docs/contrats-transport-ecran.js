@@ -1148,11 +1148,17 @@
         CT.dateFr(S.depuis) + " et doivent lui être confrontés." });
     });
     items.push({ k: "h1", t: "Les minima par coefficient" });
-    items.push({ k: "table", t: [["Grille", "Coefficient", "Groupe", "Taux horaire", "Garantie annuelle"]]
-      .concat(lignesMinima().map(function (l) {
+    /* UN TABLEAU S'ÉCRIT « head » ET « rows ».
+       Ces deux tableaux étaient passés dans « t », comme un paragraphe :
+       audit-export.js appelle alors tableau(undefined, undefined) et le
+       téléchargement entier échouait, sans rien dire. Relevé le
+       28 septembre 2026, en relisant le bouton. */
+    items.push({ k: "table",
+      head: ["Grille", "Coefficient", "Groupe", "Taux horaire", "Garantie annuelle"],
+      rows: lignesMinima().map(function (l) {
         return [l.grille, l.coef, l.groupe || "-", CT.fr(l.taux, 4) + " euros",
           l.gar ? CT.fr(l.gar, 2) + " euros" : "-"];
-      })) });
+      }) });
     var SAL = salaires();
     var smic = parseFloat(String(SAL.smic || "").replace(",", "."));
     items.push({ k: "h1", t: "Les salaires versés, et l'écart" });
@@ -1160,8 +1166,9 @@
       ? "SMIC horaire brut porté au relevé : " + CT.fr(smic, 4) + " euros."
       : "Le SMIC horaire n'a pas été porté : l'écart est calculé sur le seul taux conventionnel." });
     var L = registreSalaries();
-    items.push({ k: "table", t: [["Salarié", "Emploi", "Coefficient", "Taux versé", "Minimum", "Écart"]]
-      .concat(L.map(function (s) {
+    items.push({ k: "table",
+      head: ["Salarié", "Emploi", "Coefficient", "Taux versé", "Minimum", "Écart"],
+      rows: L.map(function (s) {
         var id = String(s.id || (s.nom + "|" + s.pre));
         var m = SAL[id] || {};
         var tc = m.coef ? tauxDuCoef(m.coef) : null;
@@ -1175,11 +1182,13 @@
         return [s.nom + " " + s.pre, String(s.emp || ""), String(m.coef || "-"),
           isFinite(brut) && brut > 0 ? CT.fr(brut, 4) + " euros" : "-",
           mini != null ? CT.fr(mini, 4) + " euros" : "-", ecart];
-      })) });
+      }) });
     items.push({ k: "note", t: "L'action en paiement du salaire se prescrit par trois ans " +
       "(L. 3245-1). Un salaire inférieur au minimum conventionnel ouvre un rappel, avec les " +
       "congés payés et les cotisations qui s'y rattachent." });
-    items.push({ k: "sign", t: (p.responsableNom || "") +
+    /* « sign » n'existe pas dans audit-export.js : la ligne du signataire
+       disparaissait sans bruit. Relevé le 28 septembre 2026. */
+    items.push({ k: "p", t: (p.responsableNom || "") +
       (p.responsableQualite ? ", " + p.responsableQualite : "") });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, "Minima conventionnels et salaires versés"),

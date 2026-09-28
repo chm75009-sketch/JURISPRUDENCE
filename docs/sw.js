@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-13.11";
+const CACHE = "jurisprudence-13.12";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -77,7 +77,7 @@ const ESSENTIELS = [
      page est autonome, les textes qu'elle cite sont dans son code, le plan
      vit dans le stockage local. Elle doit donc s'ouvrir hors connexion comme
      le reste. */
-  "./egalite.html",
+  "./egalite.html", "./index-egalite.js",
   "./audit-sst.html", "./moteur-sst.js",
   /* Le premier module côté relations individuelles : discipline et règlement
      intérieur. Même raison que les autres, un audit installé qui échouerait
