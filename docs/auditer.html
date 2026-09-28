@@ -147,7 +147,12 @@
        décision unilatérale ; à celle des visites, l'échéancier salarié par
        salarié, d'où sortent la demande au service de prévention et de santé
        au travail et la convocation. Relevé le 26 septembre 2026. */
-    { cle: "mutuelle",   nom: "Complémentaire santé obligatoire", seuil: 1,   non: "gerer.html#mutuelle" },
+    /* « Oui » ne se contentait plus de cocher : la décision unilatérale se
+       dépose et se contrôle, article par article, contre le code de la sécurité
+       sociale. Ajouté le 28 septembre 2026 sur la contre-vérification du 26,
+       « le bouton Oui marque seulement vu, sans dépôt ni contrôle ». */
+    { cle: "mutuelle",   nom: "Complémentaire santé obligatoire", seuil: 1,   non: "gerer.html#mutuelle",
+      oui: "controler-mutuelle.html" },
     { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "visites.html",
       oui: "visites.html" },
     /* « Non » veut dire : il n'y a pas de comité. Ce qui s'impose alors est
@@ -162,13 +167,19 @@
        26 septembre 2026) : la négociation n'est engagée que « dans les
        entreprises où sont constituées une ou plusieurs sections syndicales
        d'organisations représentatives ». La fiche demande s'il existe un
-       délégué syndical : quand elle répond non, la ligne ne s'ouvre pas, et
+       section syndicale : quand elle répond non, la ligne ne s'ouvre pas, et
        elle dit pourquoi. */
-    { cle: "nao",        nom: "Négociation annuelle (NAO)", seuil: 50, cond: "si délégué syndical",
+    /* Le nom et la condition suivent L. 2242-1 (LEGIARTI000043893962) : la
+       négociation s'engage « au moins une fois tous les quatre ans », non chaque
+       année, et le fait déclencheur est la section syndicale, non le délégué.
+       Corrigé le 28 septembre 2026. Le sigle NAO est gardé entre parenthèses,
+       parce que c'est sous ce nom que le client la connaît. */
+    { cle: "nao",        nom: "Négociation obligatoire (NAO)", seuil: 50,
+      cond: "si une section syndicale est constituée",
       non: "parcours.html?p=nao&faire=1", oui: "controler-nao.html",
       sans: function (p) {
         return p.delegueSyndical === "non"
-          ? "aucun délégué syndical déclaré à la fiche : la négociation n'est due que là où sont constituées une ou plusieurs sections syndicales d'organisations représentatives (L. 2242-1)"
+          ? "aucune section syndicale d'organisation représentative déclarée à la fiche : la négociation ne s'engage que là où une ou plusieurs de ces sections sont constituées (L. 2242-1), et au moins une fois tous les quatre ans"
           : ""; } },
     /* Le licenciement économique commence par le motif : il n'y a pas de
        document à écrire avant de l'avoir qualifié, et audit.html est l'écran

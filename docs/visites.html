@@ -60,8 +60,12 @@
   .sal .tete b{display:block;font:600 17px/1.3 system-ui;color:var(--encre)}
   .sal .resume{margin:4px 0 0;font-size:14.5px;color:var(--texte-2)}
   .sal .prochaine{margin:8px 0 0;font:600 15px/1.35 system-ui;color:var(--encre)}
-  .jauge{display:inline-block;margin:6px 0 0;padding:2px 8px;border-radius:999px;
-    font:600 13px/1.6 system-ui}
+  /* La pastille porte parfois une phrase, « catégories du permis et validité de
+     l'avis médical inconnues, à renseigner » : elle revient à la ligne au lieu
+     de pousser l'écran de côté. Relevé à 390 px le 28 septembre 2026. */
+  .jauge{display:inline-block;max-width:100%;box-sizing:border-box;margin:6px 0 0;
+    padding:3px 10px;border-radius:14px;font:600 13px/1.45 system-ui;
+    white-space:normal;overflow-wrap:break-word}
   .jauge.ok{background:var(--vert-clair);color:var(--vert)}
   .jauge.att{background:var(--ambre-clair);color:var(--ambre)}
   .jauge.non{background:var(--rouge-clair);color:var(--rouge)}
@@ -350,7 +354,19 @@
     var cat = String(f.permisCat || "").toUpperCase();
     var lourd = /\b(C1E|C1|CE|C|D1E|D1|DE|D)\b/.test(cat);
     var transport = /transport|logistique/.test(String(profil.secteur || "").toLowerCase());
-    if (lourd || (transport && net(f.visitePermisFin))) {
+    /* UN CONDUCTEUR SANS CATÉGORIE SAISIE N'EST PAS UN CONDUCTEUR SANS PERMIS.
+
+       L'échéance du permis n'apparaissait que si la catégorie était saisie sur
+       la fiche du conducteur, ou la date de validité de l'avis médical : chez un
+       transporteur dont les fiches sont vides, aucun conducteur ne recevait
+       d'échéance, et rien ne disait qu'il en manquait une. L'intitulé d'emploi du
+       registre le dit : « Conducteur poids lourd », « Chauffeur PL ». La
+       catégorie n'est pas devinée pour autant, elle est demandée. Ajouté le
+       28 septembre 2026 sur la ligne « aptitude au permis » de la
+       contre-vérification du 26. */
+    var roule = /conduc|chauffeur|routier|poids lourd|\bpl\b|\bspl\b|livreur/i
+      .test(String(s.emp || "") + " " + String(s.qua || ""));
+    if (lourd || (transport && net(f.visitePermisFin)) || (transport && roule)) {
       var moisMax = periodicitePermis(s.nais, cat);
       var ditPeriode = moisMax === null
         ? "la date de naissance n'est pas au registre : la périodicité applicable, de cinq ans, de deux ans ou d'un an selon l'âge et la catégorie, ne peut pas être dite"
@@ -362,10 +378,15 @@
           dit: ditPeriode, permis: true });
       else
         L.push({ quoi: "Visite médicale du permis", date: null,
-          inconnu: "date de validité de l'avis médical inconnue",
+          inconnu: cat ? "date de validité de l'avis médical inconnue"
+                       : "catégories du permis et validité de l'avis médical inconnues",
           fond: "R221-10", pour: "la visite médicale du permis de conduire",
-          dit: "la date jusqu'à laquelle l'avis médical vaut n'est pas renseignée sur la fiche du " +
-            "conducteur, et l'échéance ne peut donc pas être calculée ; " + ditPeriode,
+          dit: (cat
+            ? "la date jusqu'à laquelle l'avis médical vaut n'est pas renseignée sur la fiche du conducteur"
+            : "l'emploi porté au registre est un emploi de conduite, et ni les catégories du permis " +
+              "ni la date jusqu'à laquelle l'avis médical vaut ne sont renseignées : saisissez-les " +
+              "ci-dessus") +
+            ", et l'échéance ne peut donc pas être calculée ; " + ditPeriode,
           permis: true });
     }
     return L.filter(function (x) { return !!x.date || x.inconnu; });
@@ -459,7 +480,12 @@
           net(f.visiteTravail) ? "dernière visite le " + dateFr(f.visiteTravail) : "aucune visite enregistrée"]
           .filter(Boolean).join(" · ")) + "</p>" +
         (pire ? '<p class="prochaine">' + ech(pire.e.quoi) + '</p><span class="jauge ' + pire.etat + '">' +
-                ech(direDelai(pire.jours)) + "</span>"
+                /* Le badge de la carte fermée ne recevait pas « inconnu » et
+                   affichait « date inconnue » là où la ligne dépliée dit
+                   « dernière visite inconnue, à renseigner » : deux phrases
+                   pour le même fait, et la plus vague sur le dessus. Relevé le
+                   28 septembre 2026. */
+                ech(direDelai(pire.jours, pire.e.inconnu)) + "</span>"
               : '<span class="jauge ok">rien à échéance</span>') +
         "</div><div class=\"corps\">" + champsDe(s, f) + lignesHtml(lg) + boutonsDe(s) + "</div></div>";
     }).join("");
@@ -546,14 +572,14 @@
       h += '<div class="avis non"><b>' + retard.length + " salarié" + (retard.length > 1 ? "s" : "") +
         " dont l'échéance est passée</b><ul><li>" +
         retard.slice(0, 8).map(function (d) {
-          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours));
+          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours, d.l.e.inconnu));
         }).join("</li><li>") + "</li></ul>" +
         (retard.length > 8 ? "… et " + (retard.length - 8) + " autre(s)." : "") + "</div>";
     if (proches.length)
       h += '<div class="avis att"><b>' + proches.length + " échéance" + (proches.length > 1 ? "s" : "") +
         " dans les trente jours</b><ul><li>" +
         proches.slice(0, 8).map(function (d) {
-          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours));
+          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours, d.l.e.inconnu));
         }).join("</li><li>") + "</li></ul>" +
         (proches.length > 8 ? "… et " + (proches.length - 8) + " autre(s)." : "") + "</div>";
     if (!retard.length && !proches.length)

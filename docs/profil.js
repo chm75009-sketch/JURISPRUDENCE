@@ -182,8 +182,27 @@
       aide: "À renseigner quand les élections sont en cours. Le premier tour se tient au plus tard le quatre-vingt-dixième jour suivant cette diffusion (L. 2314-4)." },
     { c: "cseReunionNego", nom: "Première réunion de négociation du protocole, le", t: "date",
       aide: "L'invitation des organisations syndicales doit leur parvenir au plus tard quinze jours avant cette date (L. 2314-5)." },
-    { c: "delegueSyndical", nom: "Un délégué syndical est-il désigné ?", t: "oui-non",
-      aide: "La négociation annuelle obligatoire n'est due que si une ou plusieurs sections syndicales représentatives sont constituées (L. 2242-1)." },
+    /* LA QUESTION EST CELLE QUE LE TEXTE POSE.
+
+       L. 2242-1 (LEGIARTI000043893962, deux lectures concordantes le
+       28 septembre 2026) : « Dans les entreprises où sont constituées une ou
+       plusieurs sections syndicales d'organisations représentatives, l'employeur
+       engage AU MOINS UNE FOIS TOUS LES QUATRE ANS : 1° Une négociation sur la
+       rémunération [...] ; 2° Une négociation sur l'égalité professionnelle
+       [...]. » La fiche demandait si un délégué syndical était désigné, et son
+       aide parlait de négociation « annuelle » : ni le fait déclencheur, ni la
+       périodicité n'étaient les bons. Corrigé le 28 septembre 2026 sur la
+       contre-vérification du 26.
+
+       La clé garde son nom, « delegueSyndical » : elle est déjà écrite dans les
+       dossiers des clients, et la renommer effacerait leur réponse. Ce que la
+       fiche demande, en revanche, est bien la section syndicale. */
+    { c: "delegueSyndical",
+      nom: "Une section syndicale d'organisation représentative est-elle constituée ?",
+      t: "oui-non",
+      aide: "C'est elle, et non la désignation d'un délégué, qui ouvre la négociation obligatoire : " +
+        "l'employeur l'engage au moins une fois tous les quatre ans (L. 2242-1). En pratique, la " +
+        "désignation d'un délégué syndical suppose une telle section." },
   ];
 
   var ORGANISMES = [

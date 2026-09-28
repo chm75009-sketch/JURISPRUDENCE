@@ -179,9 +179,9 @@
     L. 2242-2-1 (LEGIARTI000052432470), salariés expérimentés, 300 salariés ; L. 2242-11 (LEGIARTI000052437060), accord de méthode, quatre ans au plus ;
     L. 2242-13 (LEGIARTI000052437044), régime supplétif ; L. 2242-14 (LEGIARTI000035627802), première réunion ;
     L. 1142-8 (LEGIARTI000044605453), index de l'égalité, 50 salariés ; D. 1142-4 (LEGIARTI000045250060), au plus tard le 1er mars ;
-    L. 2314-4 (LEGIARTI000035651165), information du personnel, premier tour ; L. 2314-33 (LEGIARTI000052437191), mandats de quatre ans ;
+    L. 2314-4 (LEGIARTI000035651165), information du personnel, premier tour ; L. 2314-5 (LEGIARTI000035651159), invitation deux mois avant l'expiration du mandat, premier tour dans la quinzaine précédente ; L. 2314-33 (LEGIARTI000052437191), mandats de quatre ans ;
     L. 2312-57 (LEGIARTI000035610702), documentation économique et financière, lu le 22 août 2026.
-    L. 2242-1 n'a pas pu être confirmé au relais (homonymes d'autres codes) : il n'est pas cité.
+    L. 2242-1 (LEGIARTI000043893962), sections syndicales et négociation au moins une fois tous les quatre ans : relu deux fois le 28 septembre 2026, lectures concordantes. La note qui disait qu'il n'avait pas pu être confirmé est retirée.
   </div>
 </details>
 
@@ -315,8 +315,25 @@
   var PROVENANCES = {
     effectif: [["agenda", "effectif"], ["fiche", "effectif"], ["nao", "effectif"], ["cse", "effectif"],
       ["bdese", "effectif"], ["eco", "effectif"], ["pse", "effectif"]],
-    sectionsSyndicales: [["agenda", "sectionsSyndicales"], ["nao", "sectionsSyndicales"]],
-    dateDernieresElections: [["agenda", "dateDernieresElections"], ["cse", "dateDernieresElections"]],
+    /* LA FICHE RÉPOND DÉJÀ, ET L'AGENDA L'IGNORAIT.
+
+       La fiche d'entreprise demande si une section syndicale d'organisation
+       représentative est constituée, sous la clé « delegueSyndical » ; l'agenda
+       ne lisait que sa propre saisie et l'audit NAO, et restait donc muet sur les
+       négociations obligatoires chez une entreprise qui avait répondu oui.
+       Défaut relevé par la contre-vérification du 26 septembre 2026, corrigé le
+       28. La fiche vient après la saisie de cette page et après l'audit, qui sont
+       plus précis, mais avant le silence.
+
+       Même chose pour les dates de la représentation du personnel : la fiche
+       porte la date des dernières élections et celle du procès-verbal de
+       carence, et l'agenda écrivait « date des dernières élections non
+       renseignée » en lisant sa propre clé. */
+    sectionsSyndicales: [["agenda", "sectionsSyndicales"], ["nao", "sectionsSyndicales"],
+      ["fiche", "delegueSyndical"]],
+    dateDernieresElections: [["agenda", "dateDernieresElections"], ["cse", "dateDernieresElections"],
+      ["fiche", "cseElections"]],
+    dateCarence: [["agenda", "dateCarence"], ["fiche", "cseCarence"]],
     bdeseDerniereMaj: [["agenda", "bdeseDerniereMaj"], ["bdese", "base.dateDerniereMiseAJour"]],
   };
   CLES_THEMES.forEach(function (cle) {
@@ -773,6 +790,39 @@
           prov: d.dateDernieresElections.source,
         });
       }
+      /* LE RENOUVELLEMENT A DEUX DATES PROPRES, ET L'AGENDA N'EN PORTAIT AUCUNE.
+
+         L. 2314-5 (LEGIARTI000035651159, deux lectures concordantes au relais le
+         28 septembre 2026) : « Dans le cas d'un renouvellement de l'institution,
+         cette invitation est effectuée deux mois avant l'expiration du mandat des
+         délégués en exercice. Le premier tour des élections a lieu dans la
+         quinzaine précédant l'expiration de ce mandat. » L'agenda ne portait que
+         l'information du personnel de L. 2314-4, quatre-vingt-dix jours avant.
+         Les deux dates du renouvellement sont ajoutées, sur la contre-vérification
+         du 26 septembre 2026 : « Il ne signale ni la fin des mandats (L. 2314-33),
+         ni l'invitation des syndicats due deux mois avant (L. 2314-5). » */
+      var inviter = plusMois(fin, -2);
+      lignes.push({
+        tri: inviter, quand: enFr(inviter),
+        titre: "Inviter les organisations syndicales à négocier le protocole d'accord préélectoral",
+        fondement: "L. 2314-5 (dans le cas d'un renouvellement, l'invitation est effectuée deux mois avant l'expiration du mandat des délégués en exercice)",
+        docs: "invitation par courrier aux organisations représentatives, à celles ayant constitué une section syndicale et aux syndicats affiliés à une organisation représentative au niveau national et interprofessionnel ; information par tout moyen des autres organisations remplissant les critères de l'article",
+        retard: passee(inviter),
+        detail: "Fin des mandats le " + enFr(fin) + ". L'invitation à négocier doit en outre parvenir " +
+          "au plus tard quinze jours avant la première réunion de négociation.",
+        prov: d.dateDernieresElections.source,
+      });
+      var premierTour = plusJours(fin, -15);
+      lignes.push({
+        tri: premierTour, quand: enFr(premierTour),
+        titre: "Premier tour des élections, dans la quinzaine précédant la fin des mandats",
+        fondement: "L. 2314-5 (le premier tour des élections a lieu dans la quinzaine précédant l'expiration de ce mandat)",
+        docs: "protocole d'accord préélectoral signé ; listes de candidats ; bulletins et enveloppes ; liste d'émargement ; procès-verbal du scrutin",
+        retard: passee(premierTour),
+        detail: "Fin des mandats le " + enFr(fin) + " : le scrutin se tient dans les quinze jours qui " +
+          "la précèdent, non après.",
+        prov: d.dateDernieresElections.source,
+      });
       lignes.push({
         tri: fin, quand: enFr(fin),
         titre: "Fin des mandats des élus du CSE, le renouvellement doit être acquis",
