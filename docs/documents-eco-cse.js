@@ -80,7 +80,7 @@
   if (!A || typeof A.ajouter !== "function")
     throw new Error("documents-eco-cse.js : documents-produits.js doit être chargé avant.");
   var O = A.outils;
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   /* ═══════════════════════════════════════════ le moteur du module, s'il est là
 
@@ -292,7 +292,7 @@
     return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
   function ville(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
-  function signataire(ctx) { return cro((ctx.profil || {}).responsable, "Nom et qualité du représentant légal"); }
+  function signataire(ctx) { return cro(resp(ctx.profil || {}), "Nom et qualité du représentant légal"); }
   function effectifDe(ctx) {
     var p = ctx.profil || {}, f = ctx.fiche || {};
     var e = nbf(f.effectif);

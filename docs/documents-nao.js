@@ -71,7 +71,7 @@
   if (!DP || typeof DP.ajouter !== "function") return;
 
   var O = DP.outils;
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
@@ -156,7 +156,7 @@
   }
   function villeDe(ctx) { return cro(P(ctx).ville, "lieu"); }
   function adresseDe(ctx) { return cro(P(ctx).adresse, "adresse du siège"); }
-  function signataire(ctx) { return cro(P(ctx).responsable, "Nom et qualité du signataire"); }
+  function signataire(ctx) { return cro(resp(P(ctx)), "Nom et qualité du signataire"); }
   function conventionDe(ctx) {
     return cro(P(ctx).conventionCollective || F(ctx).conventionCollective,
       "convention collective applicable");
@@ -634,7 +634,7 @@
       adresse: String(p.adresse || "[ADRESSE DU SIÈGE]").trim(),
       ville: villeDe(ctx),
       effectif: e,
-      responsable: String(p.responsable || "[REPRÉSENTANT LÉGAL]").trim(),
+      responsable: String(resp(p) || "[REPRÉSENTANT LÉGAL]").trim(),
       d0: d0
     };
   }

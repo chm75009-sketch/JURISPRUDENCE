@@ -254,7 +254,20 @@
     if (profil.siret) t += ", identifiée sous le numéro SIRET " + profil.siret;
     return t;
   }
-  function signataire() { return profil.responsable || "[nom et qualité du signataire]"; }
+  /* LE SIGNATAIRE, DANS LES DEUX FORMES DE LA FICHE. « responsable » est
+     l'ancien champ unique ; la fiche range depuis le 26 septembre 2026 le nom
+     et la qualité séparément, si bien que les documents sortaient avec le
+     crochet « [nom et qualité du signataire] » sur une fiche complète, jusque
+     sur un certificat de travail. Relevé le 28 septembre 2026. */
+  function respFiche() {
+    var p = profil || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
+
+  function signataire() { return respFiche() || "[nom et qualité du signataire]"; }
   function ville() {
     var m = String(profil.adresse || "").match(/\d{5}\s+(.+)$/);
     return m ? m[1].trim() : "[ville]";

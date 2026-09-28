@@ -80,6 +80,15 @@
     padding:8px 0;border-top:1px solid var(--filet)}
   .ligne-doute span{flex:1 1 220px;font-size:var(--t1);line-height:1.45}
   .ligne-doute button{flex:none;min-height:40px;padding:6px 12px;width:auto;font-size:var(--t1)}
+  /* Le bloc se replie : quarante-huit lignes de doutes chassaient le reste de
+     la synthèse hors de l'écran. Le nombre se lit, la liste s'ouvre. */
+  .pli-doutes>summary{cursor:pointer;list-style:none;display:block}
+  .pli-doutes>summary::-webkit-details-marker{display:none}
+  .pli-doutes>summary::after{content:" ▸";color:var(--texte-3)}
+  .pli-doutes[open]>summary::after{content:" ▾"}
+  .pli-doutes>summary span{display:block;font-size:var(--t1);color:var(--texte-2);
+    font-weight:400;margin:2px 0 0}
+  .pli-doutes>p{font-size:var(--t1);line-height:1.45;margin:8px 0 0}
   .reg-sorties{display:flex;gap:8px;margin:0 0 12px;padding:2px 0 6px;
     overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .reg-sorties::-webkit-scrollbar{display:none}
@@ -1018,11 +1027,44 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      capitales. Et la correction refuse désormais d'écrire un nom ou un prénom
      vide, quelle que soit la règle qui l'a proposée. */
   var MOT_HAPPE = /^(n[eé]e?|le|du|de|d|en|poste|entr[eé]e?)$/i;
+
+  /* UN SEUL BOUTON NE SUFFISAIT PAS, ET QUARANTE-HUIT LIGNES DÉROULÉES NE SE
+     LISENT PAS. Relevé le 28 septembre 2026.
+
+     « ZAKI | KHALID » n'a pas une correction mais deux, et c'est l'employeur
+     qui sait laquelle : soit le prénom est simplement en capitales, comme tout
+     le registre repris du PDF, et il suffit de le remettre en casse normale,
+     soit la colonne a été inversée et c'est KHALID le nom. L'écran propose les
+     deux et n'en choisit aucune.
+
+     Et le bloc s'ouvre replié : quarante-huit lignes de doutes poussaient tout
+     le reste de la synthèse hors de l'écran. Le nombre se lit d'abord, la liste
+     s'ouvre si on la demande. */
+  function casseNormale(t) {
+    return String(t || "").toLowerCase().replace(/(^|[\s'-])([a-zà-ÿ])/g,
+      function (_, avant, lettre) { return avant + lettre.toUpperCase(); });
+  }
+  function toutCapitales(t) {
+    t = String(t || "");
+    return !!t && t === t.toUpperCase() && /[A-ZÀ-Þ]{2}/.test(t);
+  }
   function douteNom(s) {
     var nom = String(s.nom || "").trim(), pre = String(s.pre || "").trim();
     if (!nom && !pre) return null;
     var motsNom = nom.split(/\s+/).filter(Boolean);
     var motsPre = pre.split(/\s+/).filter(Boolean);
+
+    /* 0. Le prénom d'un seul mot, tout en capitales : deux lectures possibles,
+          et aucune n'est une mauvaise coupure. */
+    if (nom && toutCapitales(pre) && motsPre.length === 1 && motsNom.length === 1)
+      return { quoi: "le prénom est tout en capitales : ou c'est la casse du " +
+          "registre repris, ou les deux colonnes sont inversées",
+        choix: [
+          { libelle: "Casse normale : « " + nom + " | " + casseNormale(pre) + " »",
+            nom: nom, pre: casseNormale(pre) },
+          { libelle: "Échanger : « " + pre + " | " + casseNormale(nom) + " »",
+            nom: pre, pre: casseNormale(nom) },
+        ] };
 
     /* 1. Un mot répété dans le nom : « NEKACHE NEKACHE ». */
     for (var i = 1; i < motsNom.length; i++) {
@@ -1031,13 +1073,15 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
           return k === 0 || sansAccent(m) !== sansAccent(motsNom[k - 1]);
         });
         return { quoi: "le nom porte deux fois le même mot",
-          nom: sansDouble.join(" "), pre: pre };
+          choix: [{ libelle: "Écrire « " + sansDouble.join(" ") + (pre ? " | " + pre : "") + " »",
+            nom: sansDouble.join(" "), pre: pre }] };
       }
     }
     /* 2. Un mot de service happé par le prénom : « saadi né ». */
     if (motsPre.length > 1 && MOT_HAPPE.test(motsPre[motsPre.length - 1]))
       return { quoi: "le prénom finit par un mot qui n'en est pas un",
-        nom: nom, pre: motsPre.slice(0, -1).join(" ") };
+        choix: [{ libelle: "Écrire « " + nom + " | " + motsPre.slice(0, -1).join(" ") + " »",
+          nom: nom, pre: motsPre.slice(0, -1).join(" ") }] };
     /* 3. Le prénom tout en capitales : il appartient probablement au nom. Un
           seul mot, il y passe en entier ; deux mots, la coupure est tombée un
           mot trop tôt et c'est le premier qui rejoint le nom, « DALLA | BETTA
@@ -1046,13 +1090,21 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
        Le fusionner au nom viderait le prénom, que L. 1221-13 exige. */
     if (pre && pre === pre.toUpperCase() && /[A-ZÀ-Þ]{2}/.test(pre) && motsPre.length === 2)
       return { quoi: "le prénom est en capitales et compte deux mots : la coupure est tombée trop tôt",
-        nom: (nom + " " + motsPre[0]).trim(), pre: motsPre[1] };
+        choix: [
+          { libelle: "Écrire « " + (nom + " " + motsPre[0]).trim() + " | " + motsPre[1] + " »",
+            nom: (nom + " " + motsPre[0]).trim(), pre: motsPre[1] },
+          { libelle: "Casse normale : « " + nom + " | " + casseNormale(pre) + " »",
+            nom: nom, pre: casseNormale(pre) },
+        ] };
     /* 4. Un prénom de trois mots ou plus : la coupure est probablement tombée
           au milieu d'un nom composé. */
     if (motsPre.length >= 3)
       return { quoi: "le prénom compte " + motsPre.length + " mots",
-        nom: (nom + " " + motsPre.slice(0, motsPre.length - 1).join(" ")).trim(),
-        pre: motsPre[motsPre.length - 1] };
+        choix: [{ libelle: "Écrire « " +
+            (nom + " " + motsPre.slice(0, motsPre.length - 1).join(" ")).trim() + " | " +
+            motsPre[motsPre.length - 1] + " »",
+          nom: (nom + " " + motsPre.slice(0, motsPre.length - 1).join(" ")).trim(),
+          pre: motsPre[motsPre.length - 1] }] };
     return null;
   }
 
@@ -1094,16 +1146,23 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       if (d) doutes.push({ s: x, d: d });
     });
     if (doutes.length)
-      sh += '<div class="avis att"><b>' + doutes.length + " nom" + (doutes.length > 1 ? "s" : "") +
-        " peut-être mal coupé" + (doutes.length > 1 ? "s" : "") + " à la reprise</b>" +
-        "Rien n'est corrigé sans vous : la coupure d'un nom composé n'est pas une règle." +
-        '<div class="corriger-noms">' + doutes.slice(0, 12).map(function (x) {
+      sh += '<div class="avis att"><details class="pli-doutes"><summary><b>' + doutes.length +
+        " nom" + (doutes.length > 1 ? "s" : "") + " peut-être mal coupé" +
+        (doutes.length > 1 ? "s" : "") + " à la reprise</b>" +
+        "<span>Ouvrir pour les voir un par un</span></summary>" +
+        "<p>Rien n'est corrigé sans vous : la coupure d'un nom composé n'est pas une " +
+        "règle, et un prénom en capitales n'en est pas une non plus.</p>" +
+        '<div class="corriger-noms">' + doutes.slice(0, 12).map(function (x, i) {
           return '<div class="ligne-doute"><span>« ' + ech(String(x.s.nom || "")) + " | " +
             ech(String(x.s.pre || "")) + " » : " + ech(x.d.quoi) + "</span>" +
-            '<button type="button" class="second" data-corriger="' + ech(x.s.id) + '">' +
-            "Écrire « " + ech(x.d.nom) + (x.d.pre ? " | " + ech(x.d.pre) : "") + " »</button></div>";
+            (x.d.choix || []).map(function (c, k) {
+              return '<button type="button" class="second" data-corriger="' + ech(x.s.id) +
+                '" data-choix="' + k + '">' + ech(c.libelle) + "</button>";
+            }).join("") + "</div>";
         }).join("") + "</div>" +
-        (doutes.length > 12 ? "<p>… et " + (doutes.length - 12) + " autre(s).</p>" : "") + "</div>";
+        (doutes.length > 12 ? "<p>… et " + (doutes.length - 12) + " autre" +
+          (doutes.length - 12 > 1 ? "s" : "") + ", qui apparaîtront à mesure que " +
+          "celles-ci seront tranchées.</p>" : "") + "</details></div>";
     $("synthese-registre").innerHTML = sh;
     Array.prototype.forEach.call($("synthese-registre").querySelectorAll("[data-corriger]"),
       function (b) {
@@ -1114,16 +1173,18 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
           if (!x) return;
           var d = douteNom(x);
           if (!d) return;
+          var c = (d.choix || [])[parseInt(b.getAttribute("data-choix"), 10) || 0];
+          if (!c) return;
           /* Le garde-fou : L. 1221-13 veut le nom ET les prénoms. Une
              correction qui vide l'un des deux ne s'écrit pas. */
-          if (!String(d.nom || "").trim() || !String(d.pre || "").trim()) {
+          if (!String(c.nom || "").trim() || !String(c.pre || "").trim()) {
             b.disabled = true;
             b.textContent = "Correction refusée : elle viderait " +
-              (String(d.nom || "").trim() ? "le prénom" : "le nom") +
+              (String(c.nom || "").trim() ? "le prénom" : "le nom") +
               ", que L. 1221-13 exige";
             return;
           }
-          x.nom = d.nom; x.pre = d.pre;
+          x.nom = c.nom; x.pre = c.pre;
           garder();
           rendreRegistre();
         });

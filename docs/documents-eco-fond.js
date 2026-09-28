@@ -100,7 +100,7 @@
     return s;
   }
 
-  var cro = O.cro, leJour = O.leJour, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, entete = O.entete;
 
   /* ════════════════════════════════════════════════════════════════════════
      LES OUTILS DE DATE
@@ -178,7 +178,7 @@
   }
   function lieuDe(ctx) { return cro(pro(ctx).ville, "lieu"); }
   function signataire(ctx) {
-    return cro(pro(ctx).responsable, "Nom et qualité du représentant légal");
+    return cro(resp(pro(ctx)), "Nom et qualité du représentant légal");
   }
 
   /* Les pièces de la fiche : tantôt des codes, tantôt des objets datés. La

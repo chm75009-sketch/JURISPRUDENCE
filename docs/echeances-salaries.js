@@ -214,7 +214,21 @@
       var su = suite(id), f = conducteurs[id] || {};
       var ent = net(s.ent);
 
-      function pose(quoi, date, fond, quoiFaire, inconnu) {
+      /* TROIS FAUTES SUR CETTE SEULE LIGNE, RELEVÉES LE 28 SEPTEMBRE 2026.
+
+         « la date de la dernière » + « entretien de parcours professionnel »
+         donnait « la dernière entretien » : le genre se décide avec le nom,
+         donc la phrase entière est passée par l'appelant.
+
+         « date: d0 » posait un objet Date là où toutes les autres échéances
+         posent une chaîne « 2026-09-28 » : l'agenda l'affichait tel quel,
+         « Sun Sep 27 2026 00:00:00 GMT+0000 ». C'est jour(d0) qu'il faut.
+
+         Et l'agenda disait « à saisir sur la fiche du salarié » quand aucun
+         écran n'offrait ce champ : personne ne pouvait donc jamais lever
+         l'alerte. La clé du champ voyage désormais avec l'échéance, et
+         l'agenda ouvre la case sous la carte. */
+      function pose(quoi, date, fond, quoiFaire, inconnu, champ) {
         if (!date) return;
         var n = joursEntre(date, d0);
         /* UNE ÉCHÉANCE CALCULÉE SUR UNE DATE QU'ON N'A PAS N'EST PAS UN RETARD.
@@ -225,8 +239,9 @@
            dans le passé, la ligne demande la date au lieu d'annoncer un
            manquement. */
         if (inconnu && n < 0) {
-          out.push({ quoi: quoi, qui: nom, date: d0, jours: 0, etat: "rouge", inconnu: true,
-            fond: fond, faire: "la date de la dernière " + inconnu + ", à saisir sur la fiche du salarié : " +
+          out.push({ quoi: quoi, qui: nom, date: jour(d0), jours: 0, etat: "rouge",
+            inconnu: true, id: id, champ: champ || "",
+            fond: fond, faire: "la date " + inconnu + ", à saisir sous cette ligne : " +
               "tant qu'elle manque, l'échéance ne peut pas être calculée",
             prov: "salaries" });
           return;
@@ -278,7 +293,7 @@
         pose("Visite d'information et de prévention", plusMois(ent, 3),
           "R. 4624-10 : dans un délai qui n'excède pas trois mois à compter de la prise effective du poste",
           "la convocation du service de prévention et de santé au travail, et l'attestation de suivi",
-          "visite médicale");
+          "de la dernière visite médicale", "visite");
 
       /* L'entretien de parcours professionnel : la première année, puis tous
          les quatre ans. On ne propose que la prochaine échéance. */
@@ -288,7 +303,7 @@
           dernier ? plusMois(dernier, 48) : plusMois(ent, 12),
           "L. 6315-1, I : au cours de la première année suivant l'embauche, puis tous les quatre ans",
           "le compte rendu daté et signé, dont copie est remise au salarié",
-          dernier ? null : "entretien de parcours professionnel");
+          dernier ? null : "du dernier entretien de parcours professionnel", "entretien");
       }
 
       /* La fin de la période d'essai et le terme du contrat à durée
@@ -339,8 +354,11 @@
     }
     var neuf = !ligne;
     if (neuf) { ligne = {}; r.salaries.push(ligne); }
+    /* L'adresse voyage avec l'embauche depuis le 28 septembre 2026 : l'écran
+       des contrats du transport l'écrivait par un second chemin, qui
+       dupliquait la ligne et effaçait les salariés sortis. */
     var champs = { nom: nom, pre: pre, nat: d.nat, nais: d.nais, sexe: d.sexe,
-      emp: d.emp, qua: d.qua, ent: d.ent, nature: d.nature, part: d.part };
+      emp: d.emp, qua: d.qua, ent: d.ent, nature: d.nature, part: d.part, adr: d.adr };
     var complets = [];
     for (var c in champs) {
       if (!Object.prototype.hasOwnProperty.call(champs, c)) continue;

@@ -47,7 +47,7 @@
     return s;
   }
 
-  var cro = O.cro, leJour = O.leJour, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, entete = O.entete;
   /* L'adresse publique : un document emporté en Word ou imprimé quitte le
      navigateur, un lien relatif n'y mène plus nulle part. */
   var SITE_APP = (function () {
@@ -361,7 +361,7 @@
       L.push("");
       L.push("Même structure que l'exemple. Les données de votre fiche sont déjà portées.");
       L.push("");
-      L.push("Je soussigné, " + cro(p.responsable, "nom et qualité du représentant légal") + ",");
+      L.push("Je soussigné, " + cro(resp(p), "nom et qualité du représentant légal") + ",");
       L.push("agissant pour la société " + cro(p.denomination || p.entreprise, "DÉNOMINATION") + ",");
       L.push("dont le siège est " + cro(p.adresse, "adresse du siège") + ",");
       L.push("");
@@ -389,7 +389,7 @@
       L.push("En foi de quoi ce certificat est délivré au salarié pour servir et valoir ce que de droit.");
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(sortieC || d0));
-      L.push(cro(p.responsable, "Nom, qualité et signature"));
+      L.push(cro(resp(p), "Nom, qualité et signature"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");
@@ -504,7 +504,7 @@
       L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(signS) + ", en deux exemplaires.");
       L.push("");
       L.push("Pour la société                          Le salarié");
-      L.push(cro(p.responsable, "Nom et qualité") + "                      " +
+      L.push(cro(resp(p), "Nom et qualité") + "                      " +
              cro(d.salarieSortie, "Nom et prénoms"));
       L.push("");
 
@@ -607,7 +607,7 @@
       L.push("");
       L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE") + ", dont le siège social est situé " +
         cro(p.adresse, "adresse du siège") + ", " + (p.siret ? "immatriculée sous le numéro SIRET " + p.siret : "[SIRET]") + ",");
-      L.push("représentée par " + cro(p.responsable, "nom et qualité du représentant légal") + ",");
+      L.push("représentée par " + cro(resp(p), "nom et qualité du représentant légal") + ",");
       L.push("");
       L.push("Ci-après « l'employeur »,");
       L.push("");
@@ -633,7 +633,7 @@
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur                              Le salarié");
-      L.push(cro(p.responsable, "Nom et qualité") + "                      [NOM ET PRÉNOMS]");
+      L.push(cro(resp(p), "Nom et qualité") + "                      [NOM ET PRÉNOMS]");
       L.push("");
 
       L.push("VOTRE CALENDRIER");
@@ -716,7 +716,7 @@
       L.push("");
       L.push("ENTRE LES SOUSSIGNÉS :");
       L.push(cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE") + ", [...]");
-      L.push("représentée par " + cro(p.responsable, "nom et qualité du représentant légal") + ",");
+      L.push("représentée par " + cro(resp(p), "nom et qualité du représentant légal") + ",");
       L.push("ET");
       L.push("[NOM ET PRÉNOMS DU SALARIÉ], [...]");
       L.push("");
@@ -743,7 +743,7 @@
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur                              Le salarié");
-      L.push(cro(p.responsable, "Nom et qualité") + "                      [NOM ET PRÉNOMS]");
+      L.push(cro(resp(p), "Nom et qualité") + "                      [NOM ET PRÉNOMS]");
       L.push("");
 
       L.push("VOTRE CALENDRIER");
@@ -1248,7 +1248,7 @@
       L.push("L'ordre des départs sera communiqué à chaque salarié un mois au moins avant son départ.");
       L.push("");
       L.push("Affiché le " + leJour(d0) + " à " + cro(p.adresse, "lieu d'affichage") + ".");
-      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");
@@ -1351,7 +1351,7 @@
       L.push("");
       L.push("Communiqué le " + leJour(d0) + " par " +
         cro(d.moyen, "MOYEN - affichage, courriel, remise en main propre") + ".");
-      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
 
       L.push("VOTRE CALENDRIER");
@@ -1636,7 +1636,7 @@
       L.push("");
       L.push("Années couvertes : " + an.join(", ") + " (R. 2312-10).");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
       L.push("");
 
@@ -1713,7 +1713,7 @@
       L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération");
       L.push("distinguée.");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
       L.push("");
 
@@ -1748,7 +1748,7 @@
       L.push("Cette mise à disposition actualisée vaut communication des rapports et");
       L.push("informations au comité (L. 2312-18).");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
       L.push("");
 
@@ -1783,7 +1783,7 @@
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
       L.push("");
 

@@ -502,6 +502,18 @@
         " : " + e.sansHoraire.join(", ") + ". L'effectif est donc entre " +
         nombreFr(calcule) + " et " + nombreFr(Math.round((calcule + e.sansHoraire.length) * 100) / 100) +
         " : saisissez leur horaire de contrat pour le fixer.";
+      /* ET UNE FOURCHETTE QUI ENJAMBE UN SEUIL N'EST PAS UNE FOURCHETTE
+         ANODINE. Elle était affichée sans dire ce qui en dépendait : « entre
+         49,4 et 51,4 » laissait croire à une imprécision de détail quand
+         c'est le franchissement des cinquante salariés qui était en jeu.
+         Relevé le 28 septembre 2026. */
+      var enjambes = seuilsEnjambes(calcule, calcule + e.sansHoraire.length);
+      if (enjambes.length) dit += " Cette fourchette enjambe " +
+        (enjambes.length > 1 ? "les seuils de " : "le seuil de ") +
+        enjambes.map(function (s) { return nombreFr(s.n) + " salariés (" + s.quoi + ")"; })
+          .join(enjambes.length > 2 ? ", " : " et ") +
+        " : tant que ces horaires manquent, l'application ne peut pas dire si " +
+        (enjambes.length > 1 ? "ces obligations sont dues" : "cette obligation est due") + ".";
     }
     if (e.apprentis || e.pro) {
       dit += " " + (e.apprentis ? e.apprentis + " apprenti" + (e.apprentis > 1 ? "s" : "") : "") +
@@ -554,6 +566,43 @@
   function nombreFr(n) {
     var x = Math.round(Number(n) * 100) / 100;
     return String(x % 1 === 0 ? x : x.toFixed(2)).replace(".", ",");
+  }
+
+  /* LES SEUILS QU'UNE FOURCHETTE PEUT ENJAMBER.
+
+     Chacun lu à la source au relais Légifrance le 28 septembre 2026, deux
+     lectures concordantes, aucune réponse élargie :
+       11    L. 2311-2    (LEGIARTI000035609353) « Un comité social et
+             économique est mis en place dans les entreprises d'au moins onze
+             salariés. »
+       20    L. 5212-1    (LEGIARTI000044982351) « Les articles L. 5212-2 à
+             L. 5212-17 s'appliquent à tout employeur occupant au moins vingt
+             salariés. »
+       50    L. 1311-2    (LEGIARTI000038610176) « L'établissement d'un
+             règlement intérieur est obligatoire dans les entreprises ou
+             établissements employant au moins cinquante salariés. »
+       250   L. 1153-5-1  (LEGIARTI000037380160) « Dans toute entreprise
+             employant au moins deux cent cinquante salariés est désigné un
+             référent [harcèlement sexuel]. »
+       300   L. 2315-36   (LEGIARTI000035626455) « Une commission santé,
+             sécurité et conditions de travail est créée (…) dans : 1° Les
+             entreprises d'au moins trois cent salariés. »
+       1 000 L. 1233-71   (LEGIARTI000042683537) « Dans les entreprises ou les
+             établissements d'au moins mille salariés (…) l'employeur propose
+             (…) un congé de reclassement. »
+     Le franchissement suppose en outre la durée de L. 130-1 du code de la
+     sécurité sociale, que cette ligne ne prétend pas trancher : elle dit
+     seulement que le chiffre n'est pas arrêté. */
+  var SEUILS = [
+    { n: 11, quoi: "comité social et économique, L. 2311-2" },
+    { n: 20, quoi: "obligation d'emploi de travailleurs handicapés, L. 5212-1" },
+    { n: 50, quoi: "règlement intérieur, L. 1311-2" },
+    { n: 250, quoi: "référent harcèlement sexuel, L. 1153-5-1" },
+    { n: 300, quoi: "commission santé, sécurité et conditions de travail, L. 2315-36" },
+    { n: 1000, quoi: "congé de reclassement, L. 1233-71" },
+  ];
+  function seuilsEnjambes(bas, haut) {
+    return SEUILS.filter(function (s) { return bas < s.n && haut >= s.n; });
   }
   function jourFr(d) {
     var M = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet",

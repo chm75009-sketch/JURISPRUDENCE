@@ -153,6 +153,17 @@
     } catch (e) { p = null; }
     return p || {};
   }
+  /* Le nom et la qualité du signataire, dans les deux formes de la fiche :
+     « responsable » est l'ancien champ unique, vide sur une fiche récente, qui
+     range le nom et la qualité séparément. Les accords sortaient donc sans
+     signataire. Relevé le 28 septembre 2026. */
+  function resp(p) {
+    p = p || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
 
   /* ─────────────────────────── l'état de l'écran ────────────────────────── */
 
@@ -1044,7 +1055,7 @@
     if (pl.roulant && idcc16) {
       var seuilMois = Math.round(pl.seuil * 52 / 12);
       return {
-        mois: true,
+        mois: true, tm: tm,
         equivalence: Math.max(0, Math.min(tm, seuilMois) - 152),
         h25: Math.max(0, Math.min(tm, 186) - 152),
         h50: Math.max(0, tm - 186),
@@ -1059,7 +1070,7 @@
     /* Sans accord applicable, la règle de la semaine, celle du code : les
        huit premières heures supplémentaires de chaque semaine à 25 %, les
        suivantes à 50 %. Ce sont les chiffres que l'analyse a déjà faits. */
-    return { mois: false, equivalence: 0, h25: a.a25, h50: a.a50,
+    return { mois: false, tm: tm, equivalence: 0, h25: a.a25, h50: a.a50,
       dit: "Les majorations se comptent à la semaine : les huit premières heures supplémentaires " +
         "de chaque semaine sont majorées de 25 %, les suivantes de 50 % (L. 3121-36, à défaut " +
         "d'accord). Votre convention ou votre accord peut fixer d'autres taux." };
@@ -1246,9 +1257,43 @@
       if (t) {
         var m25 = vent.h25 * t * 0.25, m50 = vent.h50 * t * 0.5;
         ligne += ", soit " + euros(m25) + " et " + euros(m50) + " de majoration, " +
-          euros(m25 + m50) + " en tout. Les heures elles-mêmes, payées au taux de " + euros(t) +
-          ", font " + euros((vent.h25 + vent.h50) * t) + " : le total dû pour ces heures est " +
-          euros((vent.h25 + vent.h50) * t + m25 + m50) + ".";
+          euros(m25 + m50) + " en tout.";
+        /* UN TOTAL QUI PAYAIT DEUX FOIS LES MÊMES HEURES. Relevé le
+           28 septembre 2026 : « le total dû pour ces heures est 575,80 € »
+           ajoutait le salaire de base de toutes les heures comptées, dont les
+           dix-sept heures d'équivalence que la durée mensuelle du contrat
+           comprend déjà. Elles sont dans le salaire du mois : seule leur
+           majoration s'ajoute. Ce qui s'ajoute vraiment en base, ce sont les
+           heures au-delà de la durée mensuelle du contrat, et seulement
+           celles-là. */
+        var c = duContrat();
+        var mensuel = c && c.mois > 0 ? c.mois : 0;
+        var comptees = vent.h25 + vent.h50;
+        var horsContrat = mensuel ? Math.max(0, vent.tm - Math.max(mensuel, 152)) : comptees;
+        var dedans = Math.max(0, comptees - horsContrat);
+        ligne += " Au taux de " + euros(t) + ", ";
+        if (mensuel && dedans > 0.005) {
+          ligne += "les " + nbh(dedans) + " comprises dans la durée mensuelle du contrat (" +
+            nbh(mensuel) + ") sont déjà payées dans le salaire du mois : pour elles, seule la " +
+            "majoration s'ajoute.";
+          if (horsContrat > 0.005)
+            ligne += " Les " + nbh(horsContrat) + " au-delà du contrat s'ajoutent en base, " +
+              euros(horsContrat * t) + ", plus leur majoration : à verser en sus du salaire, " +
+              euros(horsContrat * t + m25 + m50) + ".";
+          else
+            ligne += " Rien au-delà du contrat ce mois-ci : à verser en sus du salaire, " +
+              euros(m25 + m50) + ".";
+        } else if (mensuel) {
+          ligne += "les " + nbh(horsContrat) + " dépassent la durée mensuelle du contrat (" +
+            nbh(mensuel) + ") : elles s'ajoutent en base, " + euros(horsContrat * t) +
+            ", plus leur majoration, soit " + euros(horsContrat * t + m25 + m50) +
+            " à verser en sus du salaire.";
+        } else {
+          ligne += "ces " + nbh(comptees) + " font " + euros(comptees * t) + " en base. " +
+            "La durée mensuelle du contrat n'est pas connue ici : si elle comprend tout ou " +
+            "partie de ces heures, elles sont déjà dans le salaire du mois et seule leur " +
+            "majoration s'ajoute. Portez-la dans le contrat pour que le calcul soit fait.";
+        }
       } else {
         ligne += ". Portez le taux horaire au-dessus pour en avoir les montants.";
       }
@@ -1909,6 +1954,19 @@
         (tx ? ", soit " + euros(vent.h25 * tx * 0.25) + " et " + euros(vent.h50 * tx * 0.5) +
               " de majoration, au taux horaire de " + euros(tx) + " porté par l'entreprise."
             : ". Aucun montant n'est calculé : le taux horaire n'a pas été renseigné."));
+      /* Le papier dit ce que l'écran dit, y compris que les heures comprises
+         dans la durée mensuelle du contrat sont déjà dans le salaire du mois :
+         le total les payait deux fois. Relevé le 28 septembre 2026. */
+      var cw = duContrat();
+      if (tx && cw && cw.mois > 0) {
+        var horsW = Math.max(0, vent.tm - Math.max(cw.mois, 152));
+        var dedansW = Math.max(0, vent.h25 + vent.h50 - horsW);
+        L.push("Durée mensuelle du contrat : " + nbh(cw.mois) + "." +
+          (dedansW > 0.005 ? " Les " + nbh(dedansW) + " comprises dans cette durée sont déjà " +
+            "payées dans le salaire du mois : pour elles, seule la majoration s'ajoute." : "") +
+          (horsW > 0.005 ? " Les " + nbh(horsW) + " au-delà s'ajoutent en base, " +
+            euros(horsW * tx) + ", plus leur majoration." : " Aucune heure au-delà ce mois-ci."));
+      }
     }
     var tri = Math.floor(mo / 3), c = cumul(tri * 3, tri * 3 + 2);
     if (a.pl.roulant) {
@@ -2041,7 +2099,7 @@
     });
     h += '<div class="sign">Remis au salarié le ..............................<br>' +
       "Signature du salarié, précédée de la mention « reçu le » :<br><br>" +
-      "Pour l'entreprise, " + ech(p.responsable || "") + "<br>" +
+      "Pour l'entreprise, " + ech(resp(p) || "") + "<br>" +
       "Signature :</div>";
     h += '<p class="pied">Établi en application des articles L. 3171-2 et D. 3171-8 du code du travail. ' +
       "La signature du salarié vaut réception du relevé, non renonciation à le contester : une " +
@@ -2080,7 +2138,7 @@
         "à ce message : votre réclamation sera enregistrée et recevra une réponse écrite.",
       "",
       "Cordialement,",
-      (p.responsable || ""),
+      (resp(p) || ""),
       (p.denomination || ""),
     ].join("\n");
     var w = construireWord();
@@ -2372,7 +2430,7 @@
     items.push({ k: "p", t: " " });
     items.push({ k: "p", t: "Remis au salarié le ........................" });
     items.push({ k: "p", t: "Signature du salarié :" });
-    items.push({ k: "p", t: "Pour l'entreprise, " + (p.responsable || "") });
+    items.push({ k: "p", t: "Pour l'entreprise, " + (resp(p) || "") });
 
     var titre = "Décompte des heures - " + qui.nom + " - " + MOIS[mo] + " " + an;
     var nom = "decompte-heures-" + qui.id + "-" + an + "-" + ("0" + (mo + 1)).slice(-2) + ".docx";
@@ -2449,7 +2507,7 @@
       { k: "p", t: "Fait à ........................, le ........................" },
       { k: "p", t: "Signature du salarié :" },
       { k: "p", t: " " },
-      { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
+      { k: "p", t: "Pour l'entreprise, " + (resp(p) || "") },
     ];
     return items;
   }

@@ -176,6 +176,17 @@
     } catch (e) { p = null; }
     return p || {};
   }
+  /* Le nom et la qualité du signataire, dans les deux formes de la fiche :
+     « responsable » est l'ancien champ unique, vide sur une fiche récente, qui
+     range le nom et la qualité séparément. Les accords sortaient donc sans
+     signataire. Relevé le 28 septembre 2026. */
+  function resp(p) {
+    p = p || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
   function effectif() {
     var p = entreprise();
     var n = parseInt(String(p.effectif == null ? "" : p.effectif).replace(/[^0-9]/g, ""), 10);
@@ -1341,7 +1352,7 @@
       { k: "p", t: faitA() },
       { k: "p", t: "en deux exemplaires originaux." },
       { k: "p", t: " " },
-      { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
+      { k: "p", t: "Pour l'entreprise, " + (resp(p) || "") },
       { k: "p", t: "Le salarié, précédé de la mention « lu et approuvé »" },
     ];
   }
@@ -1426,7 +1437,7 @@
         ? "Convention individuelle de forfait en jours sur l'année"
         : "Avenant au contrat de travail : convention de forfait en jours sur l'année" },
       { k: "p", t: "Entre " + (p.denomination || "........................") +
-        ", représentée par " + (p.responsable || "........................") + ", d'une part," },
+        ", représentée par " + (resp(p) || "........................") + ", d'une part," },
       { k: "p", t: "et " + qui.nom + (qui.emp ? ", " + qui.emp : "") + ", d'autre part," },
       { k: "p", t: "il est convenu ce qui suit." },
       { k: "h2", t: "Article 1. Ce qui fonde ce forfait" },
@@ -1501,7 +1512,7 @@
      Relevé le 26 septembre 2026. */
   function preambuleAccord(v, p, eff) {
     var maison = (p.denomination || "........................") + ", dont l'effectif est de " +
-      (eff || "....") + " salariés, représentée par " + (p.responsable || "........................");
+      (eff || "....") + " salariés, représentée par " + (resp(p) || "........................");
     if (v === "A")
       return [
         { k: "p", t: "Le présent accord est établi par " + maison + "." },
@@ -1553,7 +1564,7 @@
       { k: "p", t: faitA() },
       { k: "p", t: "en autant d'exemplaires originaux que de parties, plus deux." },
       { k: "p", t: " " },
-      { k: "p", t: "Pour l'entreprise, " + (p.responsable || "") },
+      { k: "p", t: "Pour l'entreprise, " + (resp(p) || "") },
     ].concat(lignes);
   }
 
@@ -1763,7 +1774,7 @@
         "connaître votre refus, par écrit également. Un refus ne peut vous être reproché." },
       { k: "p", t: "Nous restons à votre disposition pour en parler." },
       { k: "p", t: politesse(qui) },
-      { k: "p", t: (p.responsable || "") },
+      { k: "p", t: (resp(p) || "") },
       { k: "p", t: " " },
       { k: "p", t: "Reçu le ........................" },
       { k: "p", t: "Signature du salarié, précédée de la mention « reçu le » :" },
@@ -1785,7 +1796,7 @@
       { k: "puce", t: "Avis du comité." },
       { k: "p", t: "Les documents nécessaires ont été transmis aux membres du comité le " +
         "........................" },
-      { k: "p", t: (p.responsable || "") },
+      { k: "p", t: (resp(p) || "") },
       { k: "note", t: "Quand le comité est lui-même partie à la négociation, il n'est pas consulté " +
         "sur le projet qu'il négocie : la consultation se conçoit dans les autres cas, et son " +
         "étendue dépend de la voie de conclusion retenue." },
@@ -1805,7 +1816,7 @@
         "texte de l'accord d'entreprise relatif au forfait annuel en jours, signé le " +
         (enFrancais(a.signeLe) || "........................") + ", dont copie est jointe." },
       { k: "p", t: "Veuillez agréer, Madame, Monsieur, nos salutations distinguées." },
-      { k: "p", t: (p.responsable || "") },
+      { k: "p", t: (resp(p) || "") },
       { k: "note", t: "L'avis de réception ou le récépissé de cette notification est l'une des " +
         "pièces exigées au dépôt (D. 2231-7, 1°, b)." },
     ];
@@ -1828,7 +1839,7 @@
         "ministère du travail le " + (enFrancais(a.depot) || "........................") + "." },
       { k: "p", t: "Nous vous prions d'agréer, Monsieur le Greffier en chef, l'expression de notre " +
         "considération distinguée." },
-      { k: "p", t: (p.responsable || "") },
+      { k: "p", t: (resp(p) || "") },
       { k: "note", t: "Pièce jointe : un exemplaire de l'accord." },
     ];
     sortir(items, "Dépôt au greffe du conseil de prud'hommes", "forfait-depot-greffe.docx");
@@ -1840,7 +1851,7 @@
       { k: "h1", t: "Entretien annuel sur le forfait en jours" },
       { k: "p", t: "Salarié : " + qui.nom + (qui.emp ? ", " + qui.emp : "") },
       { k: "p", t: "Date de l'entretien : ........................" },
-      { k: "p", t: "Conduit par : " + (p.responsable || "........................") },
+      { k: "p", t: "Conduit par : " + (resp(p) || "........................") },
       { k: "h2", t: "1. La charge de travail" },
       { k: "p", t: "Nombre de jours travaillés depuis le début de la période : ............ sur " +
         nb(fiche().conv.jours, 218) + "." },
@@ -1921,7 +1932,7 @@
     var items = [entete(),
       { k: "h1", t: "Avenant de renonciation à des jours de repos" },
       { k: "p", t: "Entre " + (p.denomination || "........................") + ", représentée par " +
-        (p.responsable || "........................") + ", et " + qui.nom + "," },
+        (resp(p) || "........................") + ", et " + qui.nom + "," },
       { k: "p", t: "il est convenu ce qui suit." },
       { k: "h2", t: "Article 1" },
       { k: "p", t: "Le salarié, qui le souhaite et en accord avec son employeur, renonce à " +
@@ -1970,7 +1981,7 @@
         "ne vous permet pas de les respecter, dites-le nous par écrit : nous vous recevrons dans " +
         "les quinze jours." },
       { k: "p", t: politesse(qui) },
-      { k: "p", t: (p.responsable || "") },
+      { k: "p", t: (resp(p) || "") },
     ];
     sortir(items, "Rappel des repos - " + qui.nom, "forfait-rappel-repos-" + qui.id + ".docx");
   }
@@ -1991,7 +2002,7 @@
         "du travail, et de la jurisprudence de la chambre sociale : Soc. 10 janvier 2024, " +
         "n° 22-15.782 ; Soc. 11 mars 2025, n° 23-19.669 ; Soc. 19 décembre 2018, n° 17-18.725 ; " +
         "Soc. 10 janvier 2024, n° 22-13.200 ; Soc. 6 janvier 2021, n° 17-28.234." },
-      { k: "p", t: (p.responsable || "") },
+      { k: "p", t: (resp(p) || "") },
     ];
     sortir(items, "Contrôle du forfait en jours - " + qui.nom,
       "forfait-controle-" + qui.id + ".docx", { paysage: true });
@@ -2034,7 +2045,7 @@
       (x.clos && x.clos.le ? "<br>Mois clos le " + ech(enFrancais(x.clos.le)) + "." : "") + "</p>";
     h += '<div class="sign">Le salarié, qui a renseigné ou vérifié ce document :<br>' +
       "Signature, précédée de la mention « lu et vérifié » :<br><br>" +
-      "Pour l'entreprise, " + ech(p.responsable || "") + "<br>Signature :</div>";
+      "Pour l'entreprise, " + ech(resp(p) || "") + "<br>Signature :</div>";
     h += '<p class="pied">Établi en application de l\'article L. 3121-65, I, 1° du code du travail. ' +
       "Il appartient à l'employeur de rapporter la preuve qu'il a respecté les stipulations " +
       "destinées à assurer la protection de la santé et de la sécurité du salarié.</p>";
@@ -2081,7 +2092,7 @@
       "responsabilité de l'employeur, il peut être renseigné par le salarié." });
     items.push({ k: "p", t: " " });
     items.push({ k: "p", t: "Le salarié, « lu et vérifié » :" });
-    items.push({ k: "p", t: "Pour l'entreprise, " + (p.responsable || "") });
+    items.push({ k: "p", t: "Pour l'entreprise, " + (resp(p) || "") });
     sortir(items, "Document de contrôle - " + qui.nom + " - " + MOIS[mo] + " " + an,
       "forfait-controle-" + qui.id + "-" + cleMois(an, mo) + ".docx");
   }

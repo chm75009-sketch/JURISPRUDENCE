@@ -88,7 +88,7 @@
     throw new Error("documents-eco-procedure.js : documents-produits.js doit être chargé avant.");
 
   var O = DP.outils;
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   /* ════════════════════════════════════════════════════════════════════════
      LES OUTILS DE DATE
@@ -253,7 +253,7 @@
       L.push("Pour chaque ligne, joindre le descriptif du poste et la nature du contrat.");
       L.push("");
       L.push("Signature et certification :");
-      L.push("Signataire : " + cro(p.responsable, "nom et qualité"));
+      L.push("Signataire : " + cro(resp(p), "nom et qualité"));
       L.push("Date de certification : [DATE]");
       L.push("");
 

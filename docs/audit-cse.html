@@ -355,8 +355,13 @@
           ph: "Union départementale CGT du Val-d'Oise, 26 rue Francis Combe, 95100 Argenteuil\nUnion départementale CFDT du Val-d'Oise, 9 rue de l'Égalité, 95100 Argenteuil" }],
       dates: function (v) {
         var a = dateDe(v.dateInformationPersonnel), b = dateDe(v.dateReunionNegociation), out = [];
-        if (a) out.push(carte("Premier tour au plus tard le", jour(a, 90), "quatre-vingt-dixième jour suivant l'information du personnel (L. 2314-4)" + ferie(jour(a, 90))));
         if (b) out.push(carte("Invitation reçue par les syndicats au plus tard le", jour(b, -15), "quinze jours avant la première réunion de négociation (L. 2314-5)" + ferie(jour(b, -15))));
+        /* Les deux bornes du scrutin, dans l'ordre où elles arrivent : le
+           protocole d'abord, le quatre-vingt-dixième jour comme limite. Une
+           seule carte « au plus tard » se lisait comme la date des élections.
+           Relevé le 28 septembre 2026. */
+        if (b) out.push(carte("Premier tour au plus tôt après le", jour(b, 0), "le scrutin suit la négociation du protocole, ouverte ce jour-là (L. 2314-5)" + ferie(jour(b, 0))));
+        if (a) out.push(carte("Premier tour au plus tard le", jour(a, 90), "quatre-vingt-dixième jour suivant l'information du personnel : c'est la limite, pas la date du scrutin (L. 2314-4)" + ferie(jour(a, 90))));
         if (eff >= 11 && eff <= 20 && a) out.push(carte("Candidatures reçues jusqu'au", jour(a, 30), "trente jours à compter de l'information, de onze à vingt salariés (L. 2314-5)" + ferie(jour(a, 30))));
         return out;
       },
@@ -430,9 +435,27 @@
       else
         dits.push("La date de la première réunion de négociation n'est pas renseignée : c'est elle qui " +
           "fixe le jour où les invitations doivent être parvenues, quinze jours plus tôt (L. 2314-5).");
-      if (estIso(DATE_INFO))
-        dits.push("Information du personnel diffusée le " + dateFrJour(new Date(DATE_INFO + "T12:00:00")) +
-          " : premier tour au plus tard le " + dateFrJour(jour(new Date(DATE_INFO + "T12:00:00"), 90)) + " (L. 2314-4).");
+      /* UN PLAFOND N'EST PAS UNE DATE DE SCRUTIN. La page annonçait « premier
+         tour au plus tard le 15 décembre 2026 » et rien d'autre : on la lisait
+         comme la date des élections. Les quatre-vingt-dix jours de L. 2314-4
+         sont la limite haute ; le plancher vient de L. 2314-5, qui fait
+         parvenir l'invitation quinze jours au moins avant la première réunion
+         de négociation, laquelle précède le protocole, qui précède le scrutin.
+         Relevé le 28 septembre 2026. Les deux bornes se disent ensemble. */
+      if (estIso(DATE_INFO)) {
+        var dInfo = new Date(DATE_INFO + "T12:00:00");
+        var plancher = estIso(DATE_NEGO) ? new Date(DATE_NEGO + "T12:00:00") : jour(dInfo, 15);
+        dits.push("Information du personnel diffusée le " + dateFrJour(dInfo) +
+          " : le premier tour se tient au plus tard le " + dateFrJour(jour(dInfo, 90)) +
+          " (L. 2314-4). C'est la limite, pas la date : il ne peut pas non plus se tenir " +
+          "avant que le protocole ait été négocié, et " +
+          (estIso(DATE_NEGO)
+            ? "la première réunion de négociation est au " + dateFrJour(plancher) + "."
+            : "l'invitation doit parvenir aux organisations syndicales quinze jours au moins " +
+              "avant cette négociation (L. 2314-5), soit le " + dateFrJour(plancher) +
+              " au plus tôt pour cette réunion.") +
+          " Fixez le scrutin entre les deux.");
+      }
       else
         dits.push("La date de l'information du personnel n'est pas renseignée : elle ouvre les " +
           "quatre-vingt-dix jours au terme desquels le premier tour doit s'être tenu (L. 2314-4).");
@@ -458,9 +481,22 @@
       if (/^\d{4}-\d{2}-\d{2}$/.test(DATE_ELECTIONS)) {
         var d = new Date(DATE_ELECTIONS + "T12:00:00");
         d.setFullYear(d.getFullYear() + 4);
+        /* LE RENOUVELLEMENT A SON PROPRE CALENDRIER, ET CE N'EST PAS CELUI DES
+           QUATRE-VINGT-DIX JOURS. La page renvoyait au délai de L. 2314-4,
+           qui règle l'information périodique du personnel. Pour un
+           renouvellement, L. 2314-5 (LEGIARTI000035651159, lu à la source le
+           28 septembre 2026, deux lectures concordantes) est précis :
+           « Dans le cas d'un renouvellement de l'institution, cette invitation
+           est effectuée deux mois avant l'expiration du mandat des délégués en
+           exercice. Le premier tour des élections a lieu dans la quinzaine
+           précédant l'expiration de ce mandat. » Relevé le 28 septembre 2026. */
+        var deuxMois = new Date(d.getTime());
+        deuxMois.setMonth(deuxMois.getMonth() - 2);
         fin = " Les mandats, de quatre ans (L. 2314-33), s'achèvent le " + dateFrJour(d) +
-          " : le processus électoral se rouvre au plus tard quatre-vingt-dix jours avant, " +
-          "soit le " + dateFrJour(jour(d, -90)) + " (L. 2314-4).";
+          ". Pour le renouvellement, l'invitation des organisations syndicales à négocier le " +
+          "protocole est faite deux mois avant cette expiration, soit le " + dateFrJour(deuxMois) +
+          ", et le premier tour a lieu dans la quinzaine qui la précède, donc entre le " +
+          dateFrJour(jour(d, -15)) + " et le " + dateFrJour(d) + " (L. 2314-5).";
       } else {
         fin = " La date des dernières élections n'est pas renseignée dans la fiche : sans elle, " +
           "la fin des mandats, quatre ans après le scrutin (L. 2314-33), ne peut pas être calculée.";

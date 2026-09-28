@@ -920,6 +920,19 @@
      personnel du comité, ceux du comité central et les délégués syndicaux,
      tenus à une obligation de discrétion sur ce qui est présenté comme
      confidentiel.                                                            */
+  /* LE SIGNATAIRE, DANS LES DEUX FORMES DE LA FICHE. « responsable » est
+     l'ancien champ unique ; la fiche range depuis le 26 septembre 2026 le nom
+     et la qualité séparément, si bien que les documents sortaient avec le
+     crochet « [nom et qualité du signataire] » sur une fiche complète, jusque
+     sur un certificat de travail. Relevé le 28 septembre 2026. */
+  function respFiche() {
+    var p = profil || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
+
   function direAcces() {
     var z = $("#acces-dit");
     if (!z) return;
@@ -977,7 +990,7 @@
     items.push({ k: "p", t: "Les informations présentées comme confidentielles sont couvertes par " +
       "l'obligation de discrétion du dernier alinéa de l'article L. 2312-36." });
     items.push({ k: "p", t: " " });
-    items.push({ k: "p", t: (profil.responsable || "[nom et qualité du représentant légal]") });
+    items.push({ k: "p", t: (respFiche() || "[nom et qualité du représentant légal]") });
     items.push({ k: "p", t: ent });
     var nom = "avis-actualisation-bdese-" + aujourd.getFullYear() + "-" +
       String(aujourd.getMonth() + 1).padStart(2, "0") + "-" +

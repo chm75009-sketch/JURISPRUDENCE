@@ -107,7 +107,7 @@
     throw new Error("documents-sst-2.js : documents-produits.js doit être chargé avant.");
 
   var O = DP.outils;
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   var GROS = "════════";
   function blocCoordonnees(ctx) { return tableauCoordonnees(ctx, null); }
@@ -180,7 +180,7 @@
   }
   function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
   function signataire(ctx) {
-    return cro(((ctx && ctx.profil) || {}).responsable, "Nom et qualité du représentant légal");
+    return cro(resp((ctx && ctx.profil) || {}), "Nom et qualité du représentant légal");
   }
   function villeDe(ctx) {
     var p = (ctx && ctx.profil) || {};

@@ -87,6 +87,15 @@
   .ech .docs b{color:var(--encre);font-weight:600}
   .ech .prov{display:inline-block;font:600 11px/1.5 system-ui;color:var(--vert);background:var(--vert-clair);
     border-radius:4px;padding:1px 6px;margin-top:6px}
+  /* Les cases de saisie sous une carte : une colonne sur téléphone, le nom
+     au-dessus de la date, rien qui dépasse la largeur de l'écran. */
+  .ech .saisir{margin:8px 0 0;padding:8px 10px;background:var(--fond-2,#f6f7f9);border-radius:var(--r1)}
+  .ech .saisir b{display:block;font-size:var(--t2);color:var(--encre);font-weight:600;margin:0 0 6px}
+  .ech .saisir label{display:block;margin:0 0 7px}
+  .ech .saisir label span{display:block;font-size:var(--t1);color:var(--texte-2);margin:0 0 3px}
+  .ech .saisir input{width:100%;max-width:100%;box-sizing:border-box;font:inherit;font-size:var(--t2);
+    padding:7px 8px;border:1px solid var(--bord,#d5d9e0);border-radius:6px;background:#fff}
+  @media print{.ech .saisir{display:none}}
   .attente{border-left:4px solid var(--ambre);background:var(--ambre-clair);padding:10px 14px;margin:10px 0 0;border-radius:0 var(--r1) var(--r1) 0}
   .attente .t{font-weight:600;color:var(--encre)}
   .attente .w{font-size:var(--t2);color:var(--texte-2);margin:4px 0 0}
@@ -850,8 +859,13 @@
       var manquantes = {};
       window.EcheancesSalaries.echeances().forEach(function (e) {
         if (e.inconnu) {
-          var g = manquantes[e.quoi] || (manquantes[e.quoi] = { date: e.date, fond: e.fond, faire: e.faire, qui: [] });
+          var g = manquantes[e.quoi] || (manquantes[e.quoi] = { date: e.date, fond: e.fond,
+            faire: e.faire, champ: e.champ, qui: [], gens: [] });
           g.qui.push(e.qui);
+          /* Chaque salarié avec sa clé : c'est ce qui permet d'ouvrir la case
+             de saisie sous la carte au lieu de renvoyer à une fiche qui
+             n'existait pas. Relevé le 28 septembre 2026. */
+          if (e.id) g.gens.push({ id: e.id, nom: e.qui });
           return;
         }
         lignes.push({
@@ -872,9 +886,14 @@
           fondement: g.fond,
           docs: g.faire,
           retard: false,
-          detail: "Tant que ces dates manquent, l'échéance ne peut pas être calculée, et rien n'est " +
-            "en retard pour autant. " + g.qui.slice(0, 6).join(", ") +
-            (n > 6 ? " et " + (n - 6) + " autre" + (n - 6 > 1 ? "s" : "") + "." : "."),
+          /* « rien n'est en retard pour autant » se lisait comme un
+             acquittement : ce n'est pas parce que la date manque que
+             l'obligation est tenue, c'est seulement que la prochaine échéance
+             ne peut pas être placée. Relevé le 28 septembre 2026. */
+          detail: "Sans ces dates, l'application ne peut pas placer la prochaine échéance. " +
+            "Cela ne veut pas dire qu'il n'y a rien à faire : l'obligation court, " +
+            "et c'est seulement son terme qui reste à calculer. Saisissez les dates ci-dessous.",
+          saisies: g.champ ? { champ: g.champ, gens: g.gens } : null,
           prov: "salaries",
         });
       });
@@ -949,8 +968,25 @@
       (l.detail ? '<div class="detail">' + ech(l.detail) + "</div>" : "") +
       '<div class="fond">Fondement : ' + ech(l.fondement) + ".</div>" +
       '<div class="docs"><b>À préparer :</b> ' + ech(l.docs) + ".</div>" +
+      saisiesHtml(l.saisies) +
       (l.prov && l.prov !== "agenda" ? '<span class="prov">' + ech(NOMS_SOURCES[l.prov]) + "</span>" : "") +
       "</div>";
+  }
+
+  /* LA DATE SE SAISIT LÀ OÙ ELLE MANQUE.
+
+     L'agenda annonçait « à saisir sur la fiche du salarié » alors qu'aucun
+     écran ne portait ce champ : l'alerte ne pouvait donc jamais être levée.
+     Relevé le 28 septembre 2026. La case est sous la carte, une par salarié,
+     et la carte disparaît dès que la date est écrite. */
+  function saisiesHtml(s) {
+    if (!s || !s.gens || !s.gens.length) return "";
+    return '<div class="saisir"><b>Les dates, à écrire ici :</b>' +
+      s.gens.map(function (g) {
+        return '<label><span>' + ech(g.nom) + "</span>" +
+          '<input type="date" data-sal="' + ech(g.id) + '" data-champ="' + ech(s.champ) +
+          '" max="' + ech(AUJ) + '"></label>';
+      }).join("") + "</div>";
   }
   function rendre() {
     var r = calculer();
@@ -998,6 +1034,21 @@
     h += '<p class="note-pied">Échéancier établi au ' + ech(enFr(AUJ)) + ", sur la fiche d'entreprise et les données présentes sur ce poste.</p>";
     sortie.innerHTML = h;
   }
+
+  /* Une date écrite sous une carte part dans le suivi du salarié, et l'agenda
+     se recalcule : la carte qui réclamait la date s'en va, et l'échéance
+     véritable prend sa place. */
+  $("sortie").addEventListener("change", function (ev) {
+    var e = ev.target;
+    if (!e || !e.getAttribute) return;
+    var id = e.getAttribute("data-sal"), champ = e.getAttribute("data-champ");
+    if (!id || !champ || !/^\d{4}-\d{2}-\d{2}$/.test(String(e.value || ""))) return;
+    if (!window.EcheancesSalaries || !window.EcheancesSalaries.poser) return;
+    var d = {};
+    d[champ] = e.value;
+    window.EcheancesSalaries.poser(id, d);
+    rendre();
+  });
 
   /* ------------------------------------------------------------------ Word */
   function versWord() {

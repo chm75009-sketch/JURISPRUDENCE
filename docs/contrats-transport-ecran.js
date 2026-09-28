@@ -736,8 +736,10 @@
     var parts = window.EcheancesSalaries.couper(nom);
     var r = window.EcheancesSalaries.inscrire({
       nom: parts.nom, pre: parts.pre,
-      nat: V.nationalite, nais: V.naissance, emp: V.emploi,
-      qua: V.coef ? "Coefficient " + V.coef : "", ent: V.entree,
+      nat: V.nationalite, nais: V.naissance, emp: V.emploi, adr: V.adresse,
+      qua: V.coef ? "Coefficient " + V.coef
+        : (/annexe II\b/.test(String((PROFIL && PROFIL.essaiArticle) || "")) ? "Employé" : "Ouvrier"),
+      ent: V.entree,
       nature: NATURE === "cdd" ? "cdd" : "cdi", part: PARTIEL ? "partiel" : "complet",
       essai: finEssai(), terme: NATURE === "cdd" ? V.terme : "",
     });
@@ -802,36 +804,19 @@
      Un bouton l'inscrit au registre, d'où les heures et la flotte le lisent.
      Rien ne s'écrit sans ce geste : un contrat en projet n'est pas encore
      une embauche. */
-  function decouper(nomComplet) {
-    var mots = String(nomComplet || "").trim().split(/\s+/).filter(Boolean);
-    var maj = mots.filter(function (m) { return m.length > 1 && m === m.toUpperCase() && /[A-Z]/i.test(m); });
-    var autres = mots.filter(function (m) { return maj.indexOf(m) < 0; });
-    if (!maj.length) return { nom: mots.slice(-1).join(" "), pre: mots.slice(0, -1).join(" ") };
-    return { nom: maj.join(" "), pre: autres.join(" ") };
-  }
-  $("inscrire").addEventListener("click", function () {
-    var n = decouper(V.nom);
-    if (!n.nom) { $("etat").textContent = "Écrivez d'abord le nom du salarié."; return; }
-    var E = null;
-    try { E = JSON.parse(window.localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
-    E = E || {}; E.salaries = E.salaries || [];
-    var deja = E.salaries.some(function (s) {
-      return String(s.nom || "").trim().toUpperCase() === n.nom.toUpperCase() &&
-        String(s.pre || "").trim().toLowerCase() === n.pre.toLowerCase();
-    });
-    if (deja) { $("etat").textContent = n.pre + " " + n.nom + " est déjà au registre du personnel."; return; }
-    E.salaries = E.salaries.filter(function (s) { return !s.ex; });
-    E.salaries.push({
-      nom: n.nom, pre: n.pre, nat: V.nationalite || "", nais: V.naissance || "",
-      emp: V.emploi || (PROFIL ? PROFIL.nom : ""), ent: V.entree || "", adr: V.adresse || "",
-      qua: /annexe II\b/.test(String((PROFIL && PROFIL.essaiArticle) || "")) ? "Employé" : "Ouvrier",
-      sexe: "",
-    });
-    try { window.localStorage.setItem("registre-personnel", JSON.stringify(E)); }
-    catch (e) { $("etat").textContent = "Impossible d'écrire le registre sur cet appareil."; return; }
-    $("etat").textContent = n.pre + " " + n.nom + " est inscrit au registre du personnel : " +
-      "le décompte des heures et la flotte le reprennent. Le sexe reste à indiquer au registre.";
-  });
+  /* DEUX ÉCOUTEURS SUR LE MÊME BOUTON, ET LE SECOND DÉFAISAIT LE PREMIER.
+
+     Un clic sur « Inscrire au registre » passait dans deux gestionnaires.
+     Le premier appelait EcheancesSalaries.inscrire, qui retire la civilité
+     et coupe le nom du prénom ; le second recoupait le même nom autrement,
+     ne trouvait donc pas la ligne qui venait d'être écrite, et en ajoutait
+     une seconde : « MARTIN | Lucie » d'un côté, « MARTIN | Madame Lucie »
+     de l'autre, pour un seul contrat. Pire, il écrivait
+     « E.salaries.filter(function (s) { return !s.ex; }) » : chaque
+     inscription effaçait du registre tous les salariés sortis, que
+     L. 1221-13 y fait garder cinq ans après le départ. Relevé le
+     28 septembre 2026. Le second gestionnaire est supprimé ; l'adresse
+     qu'il portait passe désormais par le premier. */
 
   $("retour").addEventListener("click", function () {
     if (!$("e-contrat").classList.contains("cache")) {

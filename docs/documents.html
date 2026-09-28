@@ -343,6 +343,16 @@
   /* La fiche client est tenue par docs/profil.js : une seule définition pour
      toute l'application. Si elle n'est pas chargée, la lecture directe de la
      clé reste en place, cette page n'a jamais dépendu d'un autre script. */
+  /* Le nom et la qualité du signataire, dans les deux formes de la fiche :
+     « responsable » est l'ancien champ unique, vide sur une fiche récente.
+     Relevé le 28 septembre 2026. */
+  function resp(p) {
+    p = p || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
   function lireProfil() {
     try {
       var p = window.Profil ? window.Profil.lire()
@@ -352,7 +362,7 @@
         entreprise: p.denomination || p.denominationSociale || p.entreprise || p.nom || "",
         effectif: p.effectif || "",
         adresse: p.adresse || p.siege || "",
-        responsable: p.responsable || "",
+        responsable: resp(p) || "",
         courriel: p.courriel || "",
         telephone: p.telephone || "",
         siret: p.siret || "",

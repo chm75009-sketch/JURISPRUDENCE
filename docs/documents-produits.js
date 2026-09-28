@@ -45,6 +45,23 @@
     return s === "" ? "[" + (quoi || "à compléter") + "]" : s;
   }
 
+  /* LE NOM ET LA QUALITÉ DU SIGNATAIRE, LUS DANS LES DEUX FORMES DE LA FICHE.
+
+     La fiche range depuis le 26 septembre 2026 le nom et la qualité du
+     dirigeant dans deux champs séparés ; « responsable » est l'ancien champ
+     unique, et il est vide sur une fiche récente. Les documents qui le lisaient
+     seul sortaient donc « [nom et qualité du représentant légal] » sur une
+     fiche pourtant complète, jusque sur un certificat de travail. Relevé le
+     28 septembre 2026. Une seule fonction, partagée par tous les générateurs
+     et exposée dans DP.outils. */
+  function resp(p) {
+    p = p || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
+
   /* CE QUI NE CHANGE JAMAIS SE PREND DANS LA FICHE.
 
      L'adresse de l'unité de contrôle de l'inspection du travail et la ville du
@@ -100,7 +117,7 @@
       cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE").toUpperCase(),
       cro(p.adresse, "adresse du siège"),
       p.siret ? "SIRET " + p.siret : "[SIRET]",
-      "Représentée par " + cro(p.responsable, "nom et qualité du représentant légal"),
+      "Représentée par " + cro(resp(p), "nom et qualité du représentant légal"),
       cro(p.courriel, "adresse e-mail"),
       "Effectif : " + (eff === "" ? "[effectif]" : eff + " salarié" + (+eff > 1 ? "s" : "")),
       "Convention collective : " + (cc === "" ? "[convention collective applicable, IDCC]"
@@ -1247,7 +1264,7 @@
          l'onglet du document, et ce qui suit appartient aux formalités. */
       L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
       L.push("");
       /* ═══════════════════════════════════════════════════════════════════
@@ -1289,7 +1306,12 @@
          Les élections en cours sont un troisième état : il n'y a ni avis ni
          carence, et rien ne s'introduit avant que le scrutin ait parlé. */
       var enCours = /^non.*(en cours|organisation)/.test(repCse);
-      var carence = repCse.indexOf("non") === 0 && !enCours;
+      /* « Aucune élection organisée » n'est pas davantage une carence : il n'y a
+         pas de procès-verbal, et c'est la troisième réponse, celle qui arrête.
+         Le module cochait « j'ai un procès-verbal de carence » pour cette
+         réponse aussi. Relevé le 28 septembre 2026. */
+      var aucuneElection = /^non.*aucune/.test(repCse);
+      var carence = repCse.indexOf("non") === 0 && !enCours && !aucuneElection;
       var sansCse = carence;
       var avecCse = repCse.indexOf("oui") === 0;
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
@@ -1360,7 +1382,8 @@
       L.push("      transmis dans les quinze jours à l'inspection du travail");
       L.push("      (L. 2314-9). C'est lui qui accompagnera le règlement à l'étape 4.");
       L.push("");
-      L.push("  [ ] NON, ET JE N'EN AI PAS - arrêtez-vous ici.");
+      L.push("  [" + (aucuneElection ? "x" : " ") + "] NON, ET JE N'EN AI PAS" +
+        (aucuneElection ? " - c'est ce que dit votre fiche. Arrêtez-vous ici." : " - arrêtez-vous ici."));
       L.push("      Le comité est obligatoire dans les entreprises d'au moins onze");
       L.push("      salariés, dès lors que ce seuil est atteint pendant douze mois");
       L.push("      consécutifs (L. 2311-2). Ne pas en avoir n'est régulier que si les");
@@ -1434,7 +1457,7 @@
         L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
         L.push("considération distinguée.");
         L.push("");
-        L.push(cro(p.responsable, "Nom et qualité"));
+        L.push(cro(resp(p), "Nom et qualité"));
         L.push("");
         L.push("Pièce jointe : procès-verbal de carence");
       } else {
@@ -1462,7 +1485,7 @@
         L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma");
         L.push("considération distinguée.");
         L.push("");
-        L.push(cro(p.responsable, "Nom et qualité"));
+        L.push(cro(resp(p), "Nom et qualité"));
         L.push("");
         L.push("Pièce jointe : projet de règlement intérieur");
       }
@@ -1531,7 +1554,7 @@
       L.push("(L. 1321-4 ; R. 1321-3). Aucune sanction ne peut être fondée sur lui");
       L.push("avant cette date.");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
       L.push("");
 
@@ -1575,7 +1598,7 @@
       L.push("Je vous prie d'agréer, Monsieur le Greffier en chef, l'expression de ma");
       L.push("considération distinguée.");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
       L.push("Pièce jointe : règlement intérieur");
       L.push("");
@@ -1606,6 +1629,15 @@
         L.push("c'est lui que L. 2314-9 vous fait de toute façon transmettre à");
         L.push("l'inspection dans les quinze jours. La lettre ci-dessous le joint et");
         L.push("dit elle-même pourquoi l'avis n'y est pas.");
+      } else if (aucuneElection) {
+        L.push("");
+        L.push("Chez vous, cette pièce n'existe pas : aucune élection n'a été organisée,");
+        L.push("donc ni avis ni procès-verbal de carence. N'envoyez pas cette lettre :");
+        L.push("organisez d'abord les élections. Le comité est obligatoire à partir de");
+        L.push("onze salariés dès lors que le seuil est atteint pendant douze mois");
+        L.push("consécutifs (L. 2311-2), et ne pas en avoir n'est régulier que si le");
+        L.push("scrutin n'a donné aucun candidat, ce qu'établit le procès-verbal de");
+        L.push("carence (L. 2314-9).");
       } else if (enCours) {
         L.push("");
         L.push("Chez vous, cette pièce n'existe pas encore : vos élections sont en");
@@ -1667,7 +1699,7 @@
       L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
       L.push("considération distinguée.");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité"));
+      L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
       L.push("Pièces jointes : règlement intérieur (2 exemplaires) · " +
         (sansCse ? "procès-verbal de carence" : "avis du comité social et économique"));
@@ -1715,7 +1747,7 @@
       L.push("");
       L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
-      L.push(cro(p.responsable, "Nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
       L.push("");
       L.push("────────────────────────────────────────────────────────────────────────");
@@ -1890,10 +1922,29 @@
     }
     if (debut < 0) return L.join("\n");
     /* Le bandeau seul, sans exemple derrière : il s'en va, et rien d'autre. */
-    if (fin < 0) return L.slice(0, debut).concat(L.slice(debut + 1)).join("\n");
+    if (fin < 0) return sansRenvoi(L.slice(0, debut).concat(L.slice(debut + 1))).join("\n");
     var avant = L.slice(0, debut);
     while (avant.length && !String(avant[avant.length - 1]).trim()) avant.pop();
-    return avant.concat([""], L.slice(fin + 1)).join("\n");
+    return sansRenvoi(avant.concat([""], L.slice(fin + 1))).join("\n");
+  }
+
+  /* LE RENVOI À L'EXEMPLE PART AVEC L'EXEMPLE. « Même structure que l'exemple »
+     restait en tête du document unique dont l'exemple venait d'être retiré :
+     la phrase ne désignait plus rien. Relevé le 28 septembre 2026. */
+  /* La phrase est parfois seule sur sa ligne, parfois suivie de la suite du
+     paragraphe : on retire la phrase, jamais la suite. Retirer la ligne entière
+     laissait un orphelin, « portées ; chaque crochet est un travail à faire ».
+     Relevé le 28 septembre 2026 en écrivant ce contrôle. */
+  var RENVOI = /^(\s*)Même structure que l'exemple\s*[.:]?\s*/;
+  function sansRenvoi(L) {
+    var out = [];
+    L.forEach(function (l) {
+      var s = String(l);
+      if (!RENVOI.test(s)) { out.push(l); return; }
+      var reste = s.replace(RENVOI, "$1");
+      if (reste.trim()) out.push(reste);
+    });
+    return out;
   }
 
   /* CE QUI SERT À APPRENDRE NE PART PAS AVEC LE DOCUMENT SIGNÉ.
@@ -1926,7 +1977,15 @@
         out.push("");
         continue;
       }
-      if (/^\s*Même structure que l'exemple/.test(t)) { i++; continue; }
+      /* La phrase s'en va, la suite du paragraphe reste : la ligne entière
+         partait, et « portées ; chaque crochet est un travail à faire » se
+         retrouvait orphelin. Relevé le 28 septembre 2026. */
+      if (RENVOI.test(t)) {
+        var reste = t.replace(RENVOI, "$1");
+        if (reste.trim()) out.push(reste);
+        i++;
+        continue;
+      }
       out.push(t);
       i++;
     }
@@ -2075,8 +2134,8 @@
 
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,
-    outils: { cro: cro, leJour: leJour, dans: dans, entete: entete, identite: identite,
-      liens: liens, EXEMPLE: EXEMPLE },
+    outils: { cro: cro, resp: resp, leJour: leJour, dans: dans, entete: entete,
+      identite: identite, liens: liens, EXEMPLE: EXEMPLE },
     liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple,
     sansAnnexes: sansAnnexes, sansCodes: sansCodes,
   };

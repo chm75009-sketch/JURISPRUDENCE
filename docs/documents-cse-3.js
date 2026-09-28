@@ -112,7 +112,7 @@
     return s;
   }
 
-  var cro = O.cro;
+  var cro = O.cro, resp = O.resp;
   var leJour = O.leJour;
   var dans = O.dans;
   var entete = O.entete;
@@ -221,7 +221,7 @@
   function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
 
   function signataire(ctx) {
-    return cro(((ctx && ctx.profil) || {}).responsable, "Nom et qualité du représentant légal");
+    return cro(resp((ctx && ctx.profil) || {}), "Nom et qualité du représentant légal");
   }
 
   function effectifDe(ctx) {
@@ -315,7 +315,7 @@
   function salutation(L, ctx, formule) {
     L.push(formule || "Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
     L.push("");
-    L.push(cro(((ctx && ctx.profil) || {}).responsable, "Nom et qualité"));
+    L.push(cro(resp((ctx && ctx.profil) || {}), "Nom et qualité"));
     L.push("");
   }
 
@@ -631,7 +631,7 @@
       L.push("");
       L.push("Comité social et économique " + deNom(ctx));
       L.push("Réunion du [DATE] · lieu : [ ]");
-      L.push("Président : " + cro(((ctx.profil) || {}).responsable, "l'employeur ou son représentant"));
+      L.push("Président : " + cro(resp((ctx.profil) || {}), "l'employeur ou son représentant"));
       L.push("Secrétaire : [nom du secrétaire du comité]");
       L.push("Membres présents : [liste nominative - c'est elle qui établit la majorité des");
       L.push("membres présents exigée par L. 2315-32]");
@@ -924,7 +924,7 @@
       L.push("");
       L.push("Comité social et économique [central] " + deNom(ctx));
       L.push("Réunion du [DATE]");
-      L.push("Président : " + cro(((ctx.profil) || {}).responsable, "l'employeur ou son représentant"));
+      L.push("Président : " + cro(resp((ctx.profil) || {}), "l'employeur ou son représentant"));
       L.push("Secrétaire : [nom]");
       L.push("Membres présents : [liste nominative]");
       L.push("");
@@ -1031,7 +1031,7 @@
       L.push("Commission économique du comité social et économique [central]");
       L.push(deNom(ctx));
       L.push("");
-      L.push("À l'attention de " + cro(((ctx.profil) || {}).responsable, "l'employeur"));
+      L.push("À l'attention de " + cro(resp((ctx.profil) || {}), "l'employeur"));
       L.push("Président de la commission économique");
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(d0));
@@ -3537,7 +3537,7 @@
       ]);
       L.push("Comité social et économique " + deNom(ctx));
       L.push("");
-      L.push("À l'attention de " + cro(((ctx.profil) || {}).responsable, "l'employeur"));
+      L.push("À l'attention de " + cro(resp((ctx.profil) || {}), "l'employeur"));
       L.push("");
       L.push(lieu(ctx) + ", le " + leJour(d0));
       L.push("");

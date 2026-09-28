@@ -266,8 +266,43 @@
       "-" + ("0" + d.getDate()).slice(-2);
   }
 
-  function sansComite() {
-    return String(profil.cseExiste || "").trim().toLowerCase().indexOf("non") === 0;
+  /* QUATRE RÉPONSES, PAS DEUX. La fiche répond « oui, élu », « non, élections en
+     cours d'organisation », « non, procès-verbal de carence » ou « non, aucune
+     élection organisée ». Seul le premier mot était lu : la note affirmait que
+     « le procès-verbal de carence tient lieu d'avis » à une entreprise qui n'en
+     a pas, et L. 1321-4 ne dit rien de tel. Relevé le 28 septembre 2026. */
+  function repCse() { return String(profil.cseExiste || "").trim().toLowerCase(); }
+  function aCarence() { return /^non.*(proc[eè]s-verbal|carence)/.test(repCse()); }
+  function electionsEnCours() { return /^non.*(en cours|organisation)/.test(repCse()); }
+  function aucuneElection() { return /^non.*aucune/.test(repCse()); }
+
+  /* CE QUI ACCOMPAGNE L'ENVOI À L'INSPECTION DU TRAVAIL, SELON LES QUATRE
+     RÉPONSES. L. 1321-4 (LEGIARTI000054140230, lu à la source le 28 septembre
+     2026, deux lectures concordantes) : « En même temps qu'il fait l'objet des
+     mesures de publicité, le règlement intérieur, accompagné de l'avis du
+     comité social et économique, est communiqué à l'inspecteur du travail. »
+     Il ne parle pas du procès-verbal de carence : quand il n'y a pas de
+     comité, c'est ce procès-verbal qui est joint pour justifier l'absence
+     d'avis, et on l'écrit comme tel, sans le mettre sur le compte du texte. */
+  function complementAvis() {
+    if (aCarence())
+      return ", accompagnée du procès-verbal de carence qui justifie l'absence d'avis";
+    if (electionsEnCours())
+      return ", l'avis du comité restant à recueillir dès qu'il sera élu";
+    if (aucuneElection())
+      return ", sans avis ni procès-verbal de carence, faute d'élection organisée";
+    return ", accompagnée de l'avis du comité social et économique";
+  }
+  /* Le rappel qui suit la ligne de vigueur quand l'avis manque et qu'aucun
+     procès-verbal ne le remplace : L. 1321-4 fait de la consultation une
+     condition de l'introduction, pas une formalité qu'on rattrape après. */
+  function reserveAvis() {
+    if (!electionsEnCours() && !aucuneElection()) return "";
+    return " L. 1321-4 interdit d'introduire une clause du règlement intérieur " +
+      "avant de l'avoir soumise à l'avis du comité social et économique : " +
+      (electionsEnCours()
+        ? "attendez le premier avis du comité en cours d'élection avant cette date d'entrée en vigueur."
+        : "organisez les élections, ou faites établir un procès-verbal de carence, avant cette date d'entrée en vigueur.");
   }
   function ville() {
     var a = String(profil.adresse || "");
@@ -284,9 +319,22 @@
     if (!L.length) L.push("[VOTRE ENTREPRISE]");
     return L;
   }
+  /* LE SIGNATAIRE, DANS LES DEUX FORMES DE LA FICHE. « responsable » est
+     l'ancien champ unique ; la fiche range depuis le 26 septembre 2026 le nom
+     et la qualité séparément, si bien que les documents sortaient avec le
+     crochet « [nom et qualité du signataire] » sur une fiche complète, jusque
+     sur un certificat de travail. Relevé le 28 septembre 2026. */
+  function respFiche() {
+    var p = profil || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
+
   function signature() {
     var L = [];
-    L.push(profil.responsable || "[NOM ET QUALITÉ DU SIGNATAIRE]");
+    L.push(respFiche() || "[NOM ET QUALITÉ DU SIGNATAIRE]");
     if (profil.denomination) L.push(profil.denomination);
     return L;
   }
@@ -440,8 +488,9 @@
       var f = dateAffichage();
       h += '<p class="vigueur">' + ech("Formalités de publicité accomplies le " + leJour(f) +
         " : affichage à la place prévue pour le règlement intérieur, et communication à " +
-        "l'inspection du travail" + (sansComite() ? "" : ", accompagnée de l'avis du comité social et économique") +
-        ". La présente note entre en vigueur le " + leJour(dansUnMois(f)) + " (L. 1321-4).") + "</p>";
+        "l'inspection du travail" + complementAvis() +
+        ". La présente note entre en vigueur le " + leJour(dansUnMois(f)) + " (L. 1321-4)." +
+        reserveAvis()) + "</p>";
     }
     h += signature().map(function (l) { return "<p>" + ech(l) + "</p>"; }).join("");
     return h;
@@ -458,11 +507,25 @@
       "Elle porte des obligations générales et permanentes en matière de santé, de sécurité " +
       "ou de discipline. L'article L. 1321-5 du code du travail en fait une adjonction au " +
       "règlement intérieur, soumise aux mêmes formalités que lui (L. 1321-4) :<ul>" +
-      (sansComite()
-        ? "<li>aucun comité social et économique n'est en place selon votre fiche : le " +
-          "procès-verbal de carence tient lieu d'avis ;</li>" +
+      (aCarence()
+        ? "<li>aucun comité n'est en place selon votre fiche, et les élections n'ont " +
+          "donné aucun élu : c'est le procès-verbal de carence qui établit qu'il n'y " +
+          "avait personne à consulter (L. 2314-9) ;</li>" +
           "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
           "<li>communication à l'inspection du travail, avec le procès-verbal de carence, en même temps ;</li>"
+        : electionsEnCours()
+        ? "<li>vos élections sont en cours : il n'y a aujourd'hui ni avis du comité ni " +
+          "procès-verbal de carence, et cette formalité attend le résultat du scrutin ;</li>" +
+          "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
+          "<li>communication à l'inspection du travail, avec la pièce que le scrutin aura " +
+          "produite, avis des élus ou procès-verbal de carence, en même temps ;</li>"
+        : aucuneElection()
+        ? "<li>aucune élection n'a été organisée selon votre fiche : il n'y a ni avis ni " +
+          "procès-verbal de carence, et rien ne peut accompagner cette note. Le comité est " +
+          "dû à partir de onze salariés dès que le seuil est atteint pendant douze mois " +
+          "consécutifs (L. 2311-2) : organisez les élections d'abord ;</li>" +
+          "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
+          "<li>communication à l'inspection du travail, en même temps ;</li>"
         : "<li>avis du comité social et économique avant l'introduction de la note ;</li>" +
           "<li>mesures de publicité, affichage à la place prévue pour le règlement intérieur ;</li>" +
           "<li>communication à l'inspection du travail, avec l'avis du comité, en même temps ;</li>") +
@@ -531,9 +594,9 @@
       var f = dateAffichage();
       p.textContent = "Formalités de publicité accomplies le " + leJour(f) +
         " : affichage à la place prévue pour le règlement intérieur, et communication à " +
-        "l'inspection du travail" +
-        (sansComite() ? "" : ", accompagnée de l'avis du comité social et économique") +
-        ". La présente note entre en vigueur le " + leJour(dansUnMois(f)) + " (L. 1321-4).";
+        "l'inspection du travail" + complementAvis() +
+        ". La présente note entre en vigueur le " + leJour(dansUnMois(f)) + " (L. 1321-4)." +
+        reserveAvis();
     }
   });
 
@@ -711,9 +774,19 @@
       " », qui porte des obligations générales et permanentes et vaut adjonction au règlement " +
       "intérieur de l'entreprise." });
     items.push({ k: "p", t: " " });
-    items.push({ k: "p", t: sansComite()
-      ? "Aucun comité social et économique n'est en place dans l'entreprise. Le procès-verbal de " +
-        "carence établissant l'absence de représentants élus est joint à la présente."
+    /* La lettre à l'inspection ne joint pas une pièce qui n'existe pas : trois
+       cas sur les quatre réponses de la fiche. Relevé le 28 septembre 2026. */
+    items.push({ k: "p", t: aCarence()
+      ? "Aucun comité social et économique n'est en place dans l'entreprise, les élections " +
+        "n'ayant donné aucun élu. Le procès-verbal de carence qui l'établit est joint à la " +
+        "présente (L. 2314-9)."
+      : electionsEnCours()
+      ? "Les élections des membres de la délégation du personnel du comité social et " +
+        "économique sont en cours d'organisation. La pièce que le scrutin produira, avis du " +
+        "comité élu ou procès-verbal de carence, vous sera adressée dès qu'elle existera."
+      : aucuneElection()
+      ? "Aucun comité social et économique n'est en place dans l'entreprise et aucune " +
+        "élection n'a été organisée à ce jour."
       : "L'avis du comité social et économique, recueilli avant l'introduction de la note, est " +
         "joint à la présente." });
     items.push({ k: "p", t: "Les mesures de publicité ont été accomplies le " + leJour(f) +
@@ -726,12 +799,15 @@
       "l'expression de ma considération distinguée." });
     items.push({ k: "p", t: " " });
     signature().forEach(function (l) { items.push({ k: "p", t: l }); });
-    items.push({ k: "note", t: "Pièces jointes : la note de service en deux exemplaires (R. 1321-4) ; " +
-      (sansComite() ? "le procès-verbal de carence" : "l'avis du comité social et économique") + "." });
+    items.push({ k: "note", t: "Pièces jointes : la note de service en deux exemplaires (R. 1321-4)" +
+      (aCarence() ? " ; le procès-verbal de carence."
+        : electionsEnCours() ? ". La pièce de l'étape de consultation suivra, le scrutin étant en cours."
+        : aucuneElection() ? ". Aucune autre pièce : ni avis du comité, ni procès-verbal de carence."
+        : " ; l'avis du comité social et économique.") });
     var titre = "Communication à l'inspection du travail - " + EMISE.reference;
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, titre, {
-        auteur: String(profil.responsable || profil.denomination || "").trim(),
+        auteur: String(respFiche() || profil.denomination || "").trim(),
         pied: String(profil.denomination || "").trim() + "  ·  " + titre,
       }),
       "inspection-" + EMISE.reference.replace(/[^A-Za-z0-9]+/g, "-") + ".docx",

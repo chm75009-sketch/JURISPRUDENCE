@@ -69,7 +69,10 @@
      "",
      "Cette attestation est établie à la demande de [L'INTÉRESSÉ] pour faire valoir ce que de droit.",
      "",
-     "Fait à [LIEU], le [DATE]."]);
+     /* La date d'une attestation est celle du jour où on la signe : la fiche
+        la connaît. « Fait à Argenteuil, le [DATE] » partait avec son crochet
+        rouge. Relevé le 28 septembre 2026. */
+     "Fait à [LIEU], le [DATE DU JOUR]."]);
 
   a("salarie", "sal-acompte", "Réponse à une demande d'acompte",
     "Votre demande d'acompte",

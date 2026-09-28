@@ -100,6 +100,9 @@
   .lettre p.date{margin:14px 0 4px;text-align:right;font-size:15px}
   .lettre p.reference{margin:0 0 16px;font-size:15px;font-weight:600}
   .lettre .a-remplir{color:var(--rouge);font-weight:600}
+  /* La marque qui dit qu'une valeur vient du destinataire ne se voit pas :
+     elle sert au changement de destinataire, pas à la lecture. */
+  .lettre .du-dest{color:inherit;font:inherit;background:none}
   .garder{margin:12px 0 0;border:1px solid var(--filet);border-radius:10px;
     background:var(--carte);padding:12px 14px}
   .garder p{margin:0 0 10px;font-size:15px;line-height:1.5;color:var(--encre)}
@@ -245,10 +248,18 @@
     if (!L.length) L.push("[VOTRE ENTREPRISE]");
     return L;
   }
+  /* LA SIGNATURE SORTAIT EN CROCHET ROUGE SUR UNE FICHE COMPLÈTE. La fiche
+     range depuis le 26 septembre 2026 le nom et la qualité du dirigeant dans
+     deux champs séparés ; « profil.responsable » est l'ancien champ unique, et
+     il est vide. La lettre finissait donc par « [NOM ET QUALITÉ DU
+     SIGNATAIRE] ». Relevé le 28 septembre 2026. */
   function signature() {
     var L = [];
-    if (profil.responsable) L.push(profil.responsable);
-    else L.push("[NOM ET QUALITÉ DU SIGNATAIRE]");
+    var nom = String(profil.responsableNom || "").trim();
+    var qualite = String(profil.responsableQualite || "").trim();
+    var entier = String(profil.responsable || "").trim();
+    var qui = nom ? (nom + (qualite ? ", " + qualite : "")) : entier;
+    L.push(qui || "[NOM ET QUALITÉ DU SIGNATAIRE]");
     if (profil.denomination) L.push(profil.denomination);
     return L;
   }
@@ -442,10 +453,8 @@
 
   /* ─────────────────────────── 4 · la lettre ────────────────────────── */
   /* Les crochets en rouge : ce que l'application ne peut pas savoir se voit,
-     et ne part pas dans un message sans qu'on l'ait vu. */
-  function rouge(t) {
-    return ech(t).replace(/\[[^\]]+\]/g, function (m) { return '<span class="a-remplir">' + m + "</span>"; });
-  }
+     et ne part pas dans un message sans qu'on l'ait vu. C'est htmlLigne, plus
+     bas, qui les pose désormais : il sait en plus d'où vient chaque valeur. */
 
   /* Ce que le destinataire choisi permet de remplir. Un crochet dont la
      valeur est vide n'est pas remplacé : il reste en rouge, à compléter, ce
@@ -502,6 +511,68 @@
     });
   }
 
+  /* CHANGER DE DESTINATAIRE LAISSAIT LE CORPS PARLER DE L'ANCIEN.
+
+     Relevé le 28 septembre 2026. Une attestation écrite pour KAMARA AWA, puis
+     réadressée à BENALI KARIM, sortait sous l'adresse de BENALI et disait
+     encore, dans son corps : « atteste que KAMARA AWA est employée dans notre
+     entreprise depuis le 6 janvier 2020 (…) à la demande de l'intéressée ».
+     Seul le bloc d'adresse était remplacé, parce qu'on ne voulait pas perdre
+     ce que l'utilisateur avait tapé. Une lettre qui nomme la mauvaise
+     personne est pire qu'un texte à retaper.
+
+     Ce qui vient du destinataire est donc écrit dans une marque qui dit de
+     quel champ il vient : au changement, ces marques-là sont réécrites, et
+     elles seules. Ce que l'utilisateur a tapé, lui, n'est pas touché. */
+  function elide(avant, v) {
+    return (avant && VOYELLE.test(v) ? "d'" : (avant || "")) + v;
+  }
+  function htmlLigne(l) {
+    var fiche = champsFiche();
+    var dest = (DEST && DEST.champs) || {};
+    var out = "", reste = String(l);
+    var re = /(\bde\s+)?\[([^\]]+)\]/g, m, i = 0;
+    while ((m = re.exec(reste))) {
+      out += ech(reste.slice(i, m.index));
+      i = m.index + m[0].length;
+      var nom = m[2], avant = m[1] || "";
+      var vd = dest[nom], vf = fiche[nom];
+      var v = vd || vf;
+      if (!v) { out += ech(avant) + '<span class="a-remplir">' + ech("[" + nom + "]") + "</span>"; continue; }
+      /* LA PRÉPOSITION FAIT PARTIE DE LA MARQUE. « en qualité d'Assistante »
+         devenu « en qualité d'Conducteur » au changement de destinataire :
+         l'élision avait été décidée sur l'ancienne valeur et le « d' » était
+         resté en texte fixe. Relevé le 28 septembre 2026. Elle entre donc dans
+         la marque, et se recalcule avec elle. */
+      out += vd
+        ? '<span class="du-dest" data-ch="' + ech(nom) + '" data-av="' + ech(avant) + '">' +
+          ech(elide(avant, v)) + "</span>"
+        : ech(elide(avant, v));
+    }
+    out += ech(reste.slice(i));
+    return out;
+  }
+
+  /* Les marques du destinataire, réécrites pour celui qui vient d'être choisi.
+     Un champ que le nouveau destinataire ne connaît pas redevient un crochet
+     rouge : mieux vaut une case à remplir qu'une donnée qui n'est plus la
+     bonne. */
+  function reecrireMarques(z) {
+    if (!z) return;
+    var dest = (DEST && DEST.champs) || {};
+    Array.prototype.forEach.call(z.querySelectorAll("span.du-dest"), function (s) {
+      var nom = s.getAttribute("data-ch") || "";
+      var avant = s.getAttribute("data-av") || "";
+      var v = dest[nom];
+      if (v) { s.textContent = elide(avant, v); return; }
+      var r = document.createElement("span");
+      r.className = "a-remplir";
+      r.textContent = "[" + nom + "]";
+      if (avant) s.parentNode.insertBefore(document.createTextNode(avant), s);
+      s.parentNode.replaceChild(r, s);
+    });
+  }
+
   function corpsHtml(m) {
     var h = entete().map(function (l) { return '<p class="tete">' + ech(l) + "</p>"; }).join("");
     /* Le bloc destinataire, à droite sous l'en-tête, comme sur une lettre. */
@@ -520,7 +591,7 @@
     var ref = DEST && DEST.champs && DEST.champs["RÉFÉRENCE"];
     if (ref) h += '<p class="reference">' + ech("Nos réf. : " + ref) + "</p>";
     h += m.corps.map(function (l) {
-      return l === "" ? "" : "<p>" + rouge(remplir(l)) + "</p>";
+      return l === "" ? "" : "<p>" + htmlLigne(l) + "</p>";
     }).join("");
     /* La signature sur deux paragraphes, non sur deux lignes d'un seul : le
        saut de ligne ne survivait pas au texte relu, et le Word sortait
@@ -552,16 +623,24 @@
       if (date) date.insertAdjacentHTML("beforebegin", h);
       else L.insertAdjacentHTML("afterbegin", h);
     }
+    /* D'abord les valeurs de l'ancien destinataire, réécrites pour le
+       nouveau : c'est ce qui manquait, et c'est ce qui faisait sortir une
+       attestation au nom de quelqu'un d'autre. */
+    reecrireMarques(L);
+    reecrireMarques($("objet"));
     var fiche = champsFiche();
     var dest = (DEST && DEST.champs) || {};
     var combler = function (html) {
       return String(html).replace(
         /(\bde\s+)?(?:<span class="a-remplir">\[([^\]<>]+)\]<\/span>|\[([^\]<>]+)\])/g,
         function (tout, avant, a, b) {
-          var v = dest[a || b] || fiche[a || b];
+          var nom = a || b;
+          var vd = dest[nom], v = vd || fiche[nom];
           if (!v) return tout;
-          if (avant && VOYELLE.test(v)) return "d'" + ech(v);
-          return (avant || "") + ech(v);
+          return vd
+            ? '<span class="du-dest" data-ch="' + ech(nom) + '" data-av="' + ech(avant || "") +
+              '">' + ech(elide(avant, v)) + "</span>"
+            : ech(elide(avant, v));
         });
     };
     L.innerHTML = combler(L.innerHTML);
@@ -578,7 +657,7 @@
       $("lettre").innerHTML = garde.lettre;
       majDestinataire();
     } else {
-      $("objet").innerHTML = rouge(remplir(MOD.objet));
+      $("objet").innerHTML = htmlLigne(MOD.objet);
       $("lettre").innerHTML = corpsHtml(MOD);
     }
     $("note").classList.toggle("cache", !MOD.note);
@@ -591,7 +670,7 @@
 
   $("modele").addEventListener("click", function () {
     if (!MOD) return;
-    $("objet").innerHTML = rouge(remplir(MOD.objet));
+    $("objet").innerHTML = htmlLigne(MOD.objet);
     $("lettre").innerHTML = corpsHtml(MOD);
     $("etat").textContent = "Modèle rétabli.";
   });

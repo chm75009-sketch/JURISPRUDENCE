@@ -71,7 +71,7 @@
     throw new Error("documents-discipline-2.js : documents-produits.js doit être chargé avant.");
 
   var O = DP.outils;
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   var TRAIT = "--------------------------------------------------------------------------";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
@@ -227,7 +227,7 @@
       "Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations",
       "distinguées.",
       "",
-      cro(p.responsable, "Nom et qualité du signataire"),
+      cro(resp(p), "Nom et qualité du signataire"),
       "",
     ];
   }

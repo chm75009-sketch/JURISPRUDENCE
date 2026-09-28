@@ -57,7 +57,7 @@
   var DP = global.DocumentsProduits;
   if (!DP || typeof DP.ajouter !== "function") return;
 
-  var cro = DP.outils.cro;
+  var cro = DP.outils.cro, resp = DP.outils.resp;
   var leJour = DP.outils.leJour;
   var dans = DP.outils.dans;
   var entete = DP.outils.entete;
@@ -143,7 +143,7 @@
   }
 
   function lieu(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
-  function signataire(ctx) { return cro((ctx.profil || {}).responsable, "Nom et qualité du représentant légal"); }
+  function signataire(ctx) { return cro(resp(ctx.profil || {}), "Nom et qualité du représentant légal"); }
 
   function effectifDe(ctx) {
     var p = ctx.profil || {}, f = ctx.fiche || {};
@@ -229,7 +229,7 @@
   function salutation(L, ctx, formule) {
     L.push(formule || "Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
     L.push("");
-    L.push(cro((ctx.profil || {}).responsable, "Nom et qualité"));
+    L.push(cro(resp(ctx.profil || {}), "Nom et qualité"));
     L.push("");
   }
 
@@ -679,7 +679,7 @@
       L.push("Je vous prie d'agréer, Monsieur l'Inspecteur, l'expression de ma");
       L.push("considération distinguée.");
       L.push("");
-      L.push(cro((ctx.profil || {}).responsable, "Nom et qualité"));
+      L.push(cro(resp(ctx.profil || {}), "Nom et qualité"));
       L.push("");
       L.push("Pièce jointe : procès-verbal de carence");
       L.push("");

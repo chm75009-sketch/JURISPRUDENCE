@@ -776,14 +776,27 @@
   var ccn = CCN[numeroIdcc()] || null;
   var effectif = parseInt(profil.effectif, 10); if (isNaN(effectif)) effectif = 0;
 
+  /* LE SIGNATAIRE, DANS LES DEUX FORMES DE LA FICHE. « responsable » est
+     l'ancien champ unique ; la fiche range depuis le 26 septembre 2026 le nom
+     et la qualité séparément, si bien que les documents sortaient avec le
+     crochet « [nom et qualité du signataire] » sur une fiche complète, jusque
+     sur un certificat de travail. Relevé le 28 septembre 2026. */
+  function respFiche() {
+    var p = profil || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
+
   function societe() {
     var t = profil.denomination;
     if (profil.adresse) t += ", dont le siège social est situé " + profil.adresse;
     if (profil.siret) t += ", identifiée sous le numéro SIRET " + profil.siret;
-    t += ", représentée par " + (profil.responsable || "[nom et qualité du représentant]");
+    t += ", représentée par " + (respFiche() || "[nom et qualité du représentant]");
     return t;
   }
-  function signataire() { return profil.responsable || "[nom et qualité du signataire]"; }
+  function signataire() { return respFiche() || "[nom et qualité du signataire]"; }
 
   /* L'EN-TÊTE DE L'ENTREPRISE, EN HAUT DE CHAQUE DOCUMENT.
 
@@ -803,7 +816,7 @@
     L.push(profil.denomination || "[dénomination sociale]");
     if (profil.adresse) L.push(profil.adresse);
     if (profil.siret) L.push("SIRET " + profil.siret);
-    L.push("Représentée par " + (profil.responsable || "[nom et qualité du représentant légal]"));
+    L.push("Représentée par " + (respFiche() || "[nom et qualité du représentant légal]"));
     if (profil.courriel) L.push(profil.courriel);
     if (effectif) L.push("Effectif : " + effectif + " salarié" + (effectif > 1 ? "s" : ""));
     L.push("Convention collective : " + (ccn ? ccn.nom + " (IDCC " + ccn.idcc + ")"
@@ -864,10 +877,14 @@
   function assistance(art) {
     var rep = String((profil && profil.cseExiste) || "").trim().toLowerCase();
     var ou = String((profil && profil.orgInspection) || "").trim();
+    /* DEUX PARENTHÈSES CÔTE À CÔTE. La phrase finissait par « (D. 1232-5)
+       (L. 1232-4). » : la liste portait sa référence, et la phrase ajoutait la
+       sienne. Relevé le 28 septembre 2026. Les deux articles tiennent dans une
+       seule parenthèse, à la fin. */
     var liste = "cette liste est tenue à votre disposition à " +
       (ou ? "la section d'inspection du travail dont relève l'établissement, " + ou + "," :
         "la section d'inspection du travail dont relève l'établissement") +
-      " et à la mairie " + de(ville()) + " (" + ref(["D1232-5"]) + ")";
+      " et à la mairie " + de(ville());
     if (rep.indexOf("oui") === 0)
       return "Vous pouvez vous faire assister par une personne de votre choix appartenant au " +
         "personnel de l'entreprise (" + ref([art]) + ").";
@@ -875,11 +892,11 @@
       return "Aucune institution représentative du personnel n'étant en place dans l'entreprise, " +
         "vous pouvez vous faire assister soit par une personne de votre choix appartenant au " +
         "personnel de l'entreprise, soit par un conseiller du salarié choisi sur une liste dressée " +
-        "par l'autorité administrative ; " + liste + " (" + ref([art]) + ").";
+        "par l'autorité administrative ; " + liste + " (" + ref([art, "D1232-5"]) + ").";
     return "Vous pouvez vous faire assister par une personne de votre choix appartenant au " +
       "personnel de l'entreprise. En l'absence d'institution représentative du personnel, vous " +
       "pouvez également vous faire assister par un conseiller du salarié choisi sur une liste " +
-      "dressée par l'autorité administrative ; " + liste + " (" + ref([art]) + ").";
+      "dressée par l'autorité administrative ; " + liste + " (" + ref([art, "D1232-5"]) + ").";
   }
 
   /* LA MÊME RÈGLE, DITE DU SALARIÉ ET NON À LUI.
@@ -894,7 +911,7 @@
       "administrative, tenue à sa disposition à " +
       (ou ? "la section d'inspection du travail dont relève l'établissement, " + ou + "," :
         "la section d'inspection du travail dont relève l'établissement") +
-      " et à la mairie " + de(ville()) + " (" + ref(["D1232-5"]) + ")";
+      " et à la mairie " + de(ville());
     if (rep.indexOf("oui") === 0)
       return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
         "assister par une personne de son choix appartenant au personnel de l'entreprise] (" +
@@ -903,10 +920,11 @@
       return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
         "assister par une personne de son choix appartenant au personnel de l'entreprise, ou, " +
         "aucune institution représentative du personnel n'étant en place, " + conseiller + "] (" +
-        ref([art]) + ")";
+        ref([art, "D1232-5"]) + ")";
     return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
       "assister par une personne de son choix appartenant au personnel de l'entreprise, ou, en " +
-      "l'absence d'institution représentative du personnel, " + conseiller + "] (" + ref([art]) + ")";
+      "l'absence d'institution représentative du personnel, " + conseiller + "] (" +
+      ref([art, "D1232-5"]) + ")";
   }
 
   /* Le conseil de prud'hommes du ressort, tel que la fiche le porte, avec son
@@ -958,6 +976,15 @@
   function estOuvrable(d) { return d.getDay() !== 0 && !estFerie(d); }
   function jour(d, n) { var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
   function prochainOuvrable(d) { var x = new Date(d.getTime()); while (!estOuvrable(x)) x = jour(x, 1); return x; }
+  /* OUVRABLE N'EST PAS OUVRÉ, ET LA REPRISE TOMBAIT UN SAMEDI.
+
+     Le jour ouvrable comprend le samedi : c'est le bon compte pour les délais
+     que la loi fixe en jours ouvrables. La mise à pied, elle, se compte en
+     jours ouvrés, samedi exclu, et sa reprise était placée au prochain jour
+     ouvrable : une mise à pied close un vendredi faisait reprendre le samedi,
+     jour où l'entreprise ne travaille pas. Relevé le 28 septembre 2026. */
+  function estOuvre(d) { return d.getDay() !== 0 && d.getDay() !== 6 && !estFerie(d); }
+  function prochainOuvre(d) { var x = new Date(d.getTime()); while (!estOuvre(x)) x = jour(x, 1); return x; }
   /* Le premier jour où l'acte peut intervenir quand la loi impose n jours
      ouvrables « après » un évènement. */
   function apresJoursOuvrables(depart, n) {
@@ -2059,8 +2086,8 @@
       }
     }
     if (type === "miseapied" && mpJours && mpFin)
-      dates.push({ q: "Reprise du travail", d: dateFrJour(prochainOuvrable(jour(mpFin, 1))),
-        f: "le lendemain du dernier jour de la mise à pied, " + mpJours + " jour" +
+      dates.push({ q: "Reprise du travail", d: dateFrJour(prochainOuvre(jour(mpFin, 1))),
+        f: "le premier jour ouvré après le dernier jour de la mise à pied, " + mpJours + " jour" +
            (mpJours > 1 ? "s" : "") + " ouvré" + (mpJours > 1 ? "s" : "") + " à compter du " +
            dateFr(mpDebut), c: "" });
     var alertes = [];
@@ -3533,7 +3560,14 @@
     var sansPrecarite = v.precarite === "non";
     var carenceJours = jCdd ? (jCdd >= 14 ? Math.ceil(jCdd / 3) : Math.ceil(jCdd / 2)) : null;
     var sansCarence = v.carence === "non";
-    var finCarence = carenceJours && terme ? jour(terme, carenceJours) : null;
+    /* LE LENDEMAIN, ET PAS LE JOUR MÊME. « il ne peut être recouru (…) avant
+       l'expiration d'un délai de carence » (L. 1244-3, LEGIARTI000035644007,
+       lu à la source le 28 septembre 2026, deux lectures concordantes) : le
+       délai court à compter du lendemain du terme, et le nouveau contrat n'est
+       possible qu'au lendemain de son expiration. La carte annonçait le
+       dernier jour du délai comme le premier jour possible, un jour trop tôt.
+       Relevé le 28 septembre 2026. */
+    var finCarence = carenceJours && terme ? jour(terme, carenceJours + 1) : null;
     var b = [];
     b.push({ k: "t1", t: "Fin de votre contrat à durée déterminée" });
     enTete(b, nomS, "terme de votre contrat à durée déterminée", "Lettre remise en main propre contre décharge ou recommandée avec avis de réception");
@@ -3574,9 +3608,12 @@
     var dates = [{ q: "Terme du contrat", d: terme ? dateFrJour(terme) : "[date du terme à saisir]", f: "le contrat cesse de plein droit à l'échéance du terme (" + ref(["L1243-5"]) + ")", c: "" }];
     if (finCarence && !sansCarence)
       dates.push({ q: "Nouveau contrat sur ce poste, au plus tôt", d: dateFrJour(finCarence),
-        f: carenceJours + " jours d'ouverture de l'entreprise après le terme, " +
+        f: "le délai de carence court du lendemain du terme et dure " + carenceJours +
+           " jour" + (carenceJours > 1 ? "s" : "") + " d'ouverture de l'entreprise, " +
            (jCdd >= 14 ? "le tiers" : "la moitié") + " de la durée du contrat (" +
-           ref(["L1244-3-1"]) + ") ; date comptée en jours calendaires, à reporter sur votre calendrier d'ouverture", c: "tot" });
+           ref(["L1244-3", "L1244-3-1"]) + ") : un nouveau contrat n'est possible qu'au " +
+           "lendemain de son expiration ; date comptée ici en jours calendaires, à reporter sur " +
+           "votre calendrier d'ouverture", c: "tot" });
     return { blocs: b, alertes: alCdd.length ? alCdd : [],
       loi: ["L1243-5", "L1243-8", "L1243-10", "L1243-11", "L1244-3", "L1244-3-1", "L1244-4-1", "L1242-8-1", "L1234-19", "L1234-20", "R1234-9"],
       dates: dates };
@@ -3917,7 +3954,7 @@
     enTete(b, nomS, definitif ? "le retrait de votre permis de conduire" : "la suspension de votre permis de conduire",
       "Lettre remise en main propre contre décharge ou recommandée avec avis de réception");
     b.push({ k: "p", t: "Vous nous avez informés " + (debut ? "le " + dateFr(debut) : "[le ...]") + " de " + (definitif ? "l'annulation ou du retrait" : "la suspension") + " de votre permis de conduire" + (fin ? ", jusqu'au " + dateFr(fin) : "") + "." });
-    b.push({ k: "p", t: "Votre emploi " + de(emploi) + " suppose la conduite d'un véhicule pour laquelle ce permis est exigé. Nous ne pouvons donc plus vous confier de conduite : nous y serions tenus de vous en empêcher, la loi punissant de deux ans d'emprisonnement et de 4 500 euros d'amende le fait de conduire malgré la notification d'une suspension (" + ref(["ROUTE-L224-16"]) + ")." });
+    b.push({ k: "p", t: "Votre emploi " + de(emploi) + " suppose la conduite d'un véhicule pour laquelle ce permis est exigé. Nous ne pouvons donc plus vous confier de conduite, et nous devons vous en empêcher : conduire malgré la notification d'une suspension est puni de deux ans d'emprisonnement et de 4 500 euros d'amende (" + ref(["ROUTE-L224-16"]) + ")." });
     if (v.autre === "oui") {
       b.push({ k: "p", t: "Nous vous proposons, pour la durée de cette indisponibilité, le poste suivant, sans conduite : [intitulé, lieu, horaires, rémunération]. Cette affectation est temporaire et prendra fin au retour de votre permis. Nous vous remercions de nous faire connaître votre réponse par écrit." });
     } else if (v.autre === "non") {
@@ -5254,7 +5291,10 @@
          ouvrant le fichier : ils sont comptés et nommés sous les boutons. */
       if (r.bloque) {
         db.hidden = false;
-        db.textContent = "Le téléchargement est fermé tant que " + r.bloque + ".";
+        /* « tant que une information manque encore » : la phrase d'accueil
+           attendait une proposition, les motifs sont des phrases. Relevé le
+           28 septembre 2026. Deux-points, et chaque motif se lit tel quel. */
+        db.textContent = "Le téléchargement est fermé : " + r.bloque + ".";
       } else {
         var cro = crochetsRestants(r.refus ? [] : (r.blocs || []));
         db.hidden = !cro.length;

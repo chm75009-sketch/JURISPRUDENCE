@@ -369,6 +369,19 @@
 
   /* ──────────────────────────────── la lettre ────────────────────────── */
   var DOC = null;
+  /* LE SIGNATAIRE, DANS LES DEUX FORMES DE LA FICHE. « responsable » est
+     l'ancien champ unique ; la fiche range depuis le 26 septembre 2026 le nom
+     et la qualité séparément, si bien que les documents sortaient avec le
+     crochet « [nom et qualité du signataire] » sur une fiche complète, jusque
+     sur un certificat de travail. Relevé le 28 septembre 2026. */
+  function respFiche() {
+    var p = profil || {};
+    var s = String(p.responsable || "").trim();
+    if (s) return s;
+    return [String(p.responsableNom || "").trim(), String(p.responsableQualite || "").trim()]
+      .filter(Boolean).join(", ");
+  }
+
   function lettreDe(a) {
     var L = [];
     var ent = net(profil.denomination) || "[dénomination]";
@@ -401,7 +414,7 @@
     L.push({ k: "p", t: "Nous vous prions d'agréer, Madame, Monsieur, l'expression de nos " +
       "salutations distinguées." });
     L.push({ k: "p", t: " " });
-    L.push({ k: "p", t: net(profil.responsable) || "[nom et qualité du représentant légal]" });
+    L.push({ k: "p", t: net(respFiche()) || "[nom et qualité du représentant légal]" });
     L.push({ k: "p", t: ent });
     return { titre: "Désignation du conducteur", blocs: L,
       fichier: "designation-" + (slug(net(a.immat)) || "vehicule") + "-" + net(a.le) };

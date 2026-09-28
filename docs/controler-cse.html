@@ -1271,6 +1271,12 @@
         f: "L. 2314-5", n: "Renouvellement de l'institution : l'invitation est effectuée deux mois avant l'expiration du mandat des délégués en exercice, fixée au " + fr(c.dfin) + "." });
       out.push({ d: jours(mois(c.dfin, -2), 15), t: "Première réunion de négociation du protocole, au plus tôt.",
         f: "L. 2314-5", n: "L'invitation à négocier doit parvenir au plus tard quinze jours avant la date de la première réunion." });
+      /* LA FENÊTRE DU SCRUTIN, QUI MANQUAIT. La même phrase de L. 2314-5 la
+         donne : « Le premier tour des élections a lieu dans la quinzaine
+         précédant l'expiration de ce mandat. » Le calendrier s'arrêtait à
+         l'invitation. Relevé le 28 septembre 2026. */
+      out.push({ d: jours(c.dfin, -15), t: "Ouverture de la quinzaine dans laquelle le premier tour doit se tenir.",
+        f: "L. 2314-5", n: "Renouvellement de l'institution : « Le premier tour des élections a lieu dans la quinzaine précédant l'expiration de ce mandat », soit entre le " + fr(jours(c.dfin, -15)) + " et le " + fr(c.dfin) + "." });
     } else {
       out.push({ d: null, t: "Invitation des organisations syndicales à négocier le protocole et à établir leurs listes de candidats.",
         f: "L. 2314-5", n: "S'il s'agit d'un renouvellement, l'invitation est effectuée deux mois avant l'expiration du mandat en cours : renseignez cette date de fin de mandat pour qu'elle soit calculée." });

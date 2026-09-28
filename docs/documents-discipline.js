@@ -57,7 +57,7 @@
     return s;
   }
 
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
 
   function jj(d) {
     if (!(d instanceof Date) || isNaN(d.getTime())) return "[date]";
@@ -505,7 +505,7 @@
       L.push("Je me tiens à votre disposition pour tout élément que vous souhaiteriez obtenir");
       L.push("avant la séance.");
       L.push("");
-      L.push(cro(p.responsable, "nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "nom et qualité du représentant légal"));
       L.push("");
 
       L.push("PIÈCE 2 - ORDRE DU JOUR DE LA RÉUNION");
@@ -522,7 +522,7 @@
       L.push("3. Questions diverses.");
       L.push("");
       L.push("Le président du comité");
-      L.push(cro(p.responsable, "nom et qualité du représentant légal"));
+      L.push(cro(resp(p), "nom et qualité du représentant légal"));
       L.push("");
 
       L.push("PIÈCE 3 - EXTRAIT DE PROCÈS-VERBAL RECUEILLANT L'AVIS");
@@ -532,7 +532,7 @@
       L.push("");
       L.push("Présents : " + cro("", "noms et qualités des membres présents") + ".");
       L.push("Absents excusés : " + cro("", "noms") + ".");
-      L.push("Président : " + cro(p.responsable, "nom et qualité") + ".");
+      L.push("Président : " + cro(resp(p), "nom et qualité") + ".");
       L.push("Secrétaire : " + cro("", "nom du secrétaire") + ".");
       L.push("");
       L.push("Point " + cro("2", "numéro du point") + " de l'ordre du jour : consultation sur le " + objet + ".");

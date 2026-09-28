@@ -69,7 +69,7 @@
     return s;
   }
 
-  var cro = O.cro;
+  var cro = O.cro, resp = O.resp;
   var leJour = O.leJour;
   var dans = O.dans;
   var entete = O.entete;
@@ -159,7 +159,7 @@
   function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
 
   function signataire(ctx) {
-    return cro(((ctx && ctx.profil) || {}).responsable, "Nom et qualité du représentant légal");
+    return cro(resp((ctx && ctx.profil) || {}), "Nom et qualité du représentant légal");
   }
 
   function effectifDe(ctx) {
@@ -252,7 +252,7 @@
   function salutation(L, ctx, formule) {
     L.push(formule || "Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma considération distinguée.");
     L.push("");
-    L.push(cro(((ctx && ctx.profil) || {}).responsable, "Nom et qualité"));
+    L.push(cro(resp((ctx && ctx.profil) || {}), "Nom et qualité"));
     L.push("");
   }
 

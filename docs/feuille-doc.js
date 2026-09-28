@@ -451,9 +451,34 @@
     return (d.getDate() === j && d.getMonth() === mo - 1) ? d : c;
   }
 
+  /* UN NOM D'ONGLET NE SE COUPE PAS AU MILIEU D'UN MOT. Le classeur du
+     document unique ouvrait sur un onglet « DOCUMENT UNIQUE D'ÉVALUATION DE »,
+     trente et un signes pile, le mot « DES » tranché en deux. Relevé le
+     28 septembre 2026. On coupe au dernier mot entier qui tient. */
+  /* Et il ne finit pas sur un article ou une préposition : « EX. 2.
+     CONTRIBUTIONS À » se lit aussi mal qu'un mot tranché. */
+  var PETITS = /\s+(à|a|de|des|du|d'|le|la|les|l'|et|en|au|aux|par|pour|sur|un|une)$/i;
+  function couper(t, n) {
+    t = String(t || "");
+    if (t.length <= n) return t;
+    var c = t.slice(0, n), i = c.lastIndexOf(" ");
+    c = (i >= Math.floor(n / 2) ? c.slice(0, i) : c).replace(/[\s,;.]+$/, "");
+    while (PETITS.test(c)) c = c.replace(PETITS, "");
+    return c;
+  }
+
   function tableaux(bs) {
-    var f = [], titre = "", n = 0, vus = {}, doc = "";
+    var f = [], titre = "", n = 0, vus = {}, doc = "", dansEx = false;
     bs.forEach(function (b) {
+      /* L'EXEMPLE SE VOIT SUR L'ONGLET, PAS SEULEMENT DANS LE DOCUMENT.
+         Le classeur du document unique donnait un onglet à la grille de
+         l'entreprise fictive comme aux grilles à remplir, sans rien qui les
+         distingue : on y lisait un procès-verbal n° 4 et un service de santé
+         de Lagny-sur-Marne comme s'ils étaient ceux du client. Relevé le
+         28 septembre 2026. Les onglets de l'exemple portent « EX. ». */
+      if (b.k === "exemple") dansEx = true;
+      else if ((b.k === "t1" || b.k === "h1") && /^(votre|vos)\b|À COMPLÉTER/i.test(String(b.t || "")))
+        dansEx = false;
       /* Le dernier grand titre : il nomme l'onglet quand deux tableaux portent
          le même intitulé, « VOTRE CALENDRIER » et « VOTRE CALENDRIER 2 » ne
          disant pas de quel document chacun relève. Relevé le 27 septembre
@@ -471,13 +496,14 @@
         return String(t || "").replace(/^UNITÉ DE TRAVAIL\s*:\s*/i, "").replace(/\s*\(.*$/, "")
           .replace(/[:\\\/?*\[\]]/g, " ").replace(/\s+/g, " ").trim();
       };
-      var nom = propre(titre).slice(0, 31) || "Tableau " + n;
+      var marque = dansEx ? "EX. " : "", place = 31 - marque.length;
+      var nom = marque + (couper(propre(titre), place) || "Tableau " + n);
       if (vus[nom.toLowerCase()] && propre(doc)) {
-        var autre = (propre(doc) + " - " + propre(titre)).slice(0, 31);
+        var autre = marque + couper(propre(doc) + " - " + propre(titre), place);
         if (!vus[autre.toLowerCase()]) nom = autre;
       }
       var base = nom, k = 2;
-      while (vus[nom.toLowerCase()]) { nom = base.slice(0, 28) + " " + k; k++; }
+      while (vus[nom.toLowerCase()]) { nom = couper(base, 28) + " " + k; k++; }
       vus[nom.toLowerCase()] = true;
       f.push({ titre: nom, lignes: [b.head].concat(b.rows.map(function (l) {
         return (l || []).map(dateCellule);
