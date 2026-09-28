@@ -419,7 +419,7 @@
         L.push("");
       }
 
-      L.push("3. CE QUE PORTE LA VERSION EN VIGUEUR, LUE À LA SOURCE");
+      L.push("3. CE QUE PORTE LA VERSION EN VIGUEUR");
       L.push("");
       L.push("L'article L. 1233-3, dans la version lue ici, définit le");
       L.push("licenciement économique comme celui « effectué par un employeur pour un ou");
@@ -877,7 +877,7 @@
         "article L. 1224-1 du code du travail");
 
       L.push(DP.EXEMPLE);
-      L.push("LA RÈGLE, LUE À LA SOURCE");
+      L.push("LA RÈGLE");
       L.push("");
       L.push("« Lorsque survient une modification dans la situation juridique de");
       L.push("l'employeur, notamment par succession, vente, fusion, transformation du");
@@ -1500,7 +1500,7 @@
       L.push("Ce tableau confronte, matière par matière, ce que dit la loi et ce que");
       L.push("l'accord en fait. Il ne se remplit qu'accord en main. Comme partout ici,");
       L.push("le texte de vos accords n'est pas connu ici : la colonne « ce que");
-      L.push("la loi dit » est écrite, lue à la source ; les deux autres sont à vous.");
+      L.push("la loi dit » est écrite ; les deux autres sont à vous.");
       L.push("");
       L.push(TRAIT);
       L.push("");
@@ -1806,11 +1806,13 @@
       L.push("");
       return L.concat(pied("aucun article ne fonde ce constat",
         ["CE DOCUMENT NE CITE AUCUN ARTICLE, ET C'EST VOLONTAIRE. Le contrôle",
-         "CTL-USA-01 n'a pas de fondement textuel : les usages et engagements",
-         "unilatéraux ne sont définis par aucun article du code du travail lu par ce",
-         "module. Écrire ici une règle sur leur formation, leur dénonciation ou leur",
-         "hiérarchie reviendrait à citer de mémoire - ce que ce fichier ne fait",
-         "jamais.",
+         /* Le document parle des textes, non de l'outil : « lu par ce » suivi de
+            « module » se lisait « ce module » dès que les lignes étaient
+            recollées. Relevé le 28 septembre 2026. */
+         "Ce constat n'a pas de fondement textuel : les usages et engagements",
+         "unilatéraux ne sont définis par aucun article du code du travail.",
+         "Écrire ici une règle sur leur formation, leur dénonciation ou leur",
+         "hiérarchie reviendrait à citer de mémoire, ce qui ne se fait pas.",
          "",
          "Ce qui est su ici est plus modeste, et c'est ce qui est écrit :",
          "ces normes existent, elles ne sont nulle part publiées, elles priment",
@@ -2272,8 +2274,8 @@
          "l'impossibilité du reclassement des CONDITIONS du licenciement - donc des",
          "éléments qui doivent exister au jour où il est prononcé.",
          "",
-         "Aucune peine n'est annoncée : aucun des textes lus ne contient de",
-         "article de sanction pénale."])).join("\n");
+         "Aucune peine n'est annoncée : aucun des textes lus ne contient",
+         "d'article de sanction pénale."])).join("\n");
     },
   });
 
@@ -2779,7 +2781,7 @@
         "article L. 1233-5 du code du travail");
 
       L.push(DP.EXEMPLE);
-      L.push("LA RÈGLE, LUE À LA SOURCE, ET ELLE TIENT EN DEUX PHRASES");
+      L.push("LA RÈGLE, ET ELLE TIENT EN DEUX PHRASES");
       L.push("");
       L.push("« Le périmètre d'application des critères d'ordre des licenciements peut");
       L.push("être fixé par un accord collectif. En l'absence d'un tel accord, ce");
@@ -2937,8 +2939,8 @@
         "il est nommé parce que le texte le nomme, aucune de ses données n'est",
         "reproduite, et la zone où se trouve votre établissement n'est pas dite.",
          "",
-         "Aucune peine n'est annoncée : aucun des textes lus ne contient de",
-         "article de sanction pénale. Ce qui se joue est l'irrégularité de l'ordre",
+         "Aucune peine n'est annoncée : aucun des textes lus ne contient",
+         "d'article de sanction pénale. Ce qui se joue est l'irrégularité de l'ordre",
          "des licenciements, et l'indemnité de L. 1235-3."])).join("\n");
     },
   });
@@ -3136,8 +3138,8 @@
         ["La définition de la catégorie professionnelle - fonctions de même nature",
          "supposant une formation professionnelle commune - ne figure dans aucun",
          "article lu : elle est reprise du contrôle CTL-ORD-02",
-         "lui-même, tel que la base la porte. Ce que L. 1233-5 dit, et qui est lu à",
-         "la source, c'est que les qualités professionnelles s'apprécient « par",
+         "lui-même, tel que la base la porte. Ce que L. 1233-5 dit, c'est que les",
+         "qualités professionnelles s'apprécient « par",
          "catégorie » - d'où l'importance de la manière dont les catégories sont",
          "faites.",
          "",
@@ -3308,7 +3310,7 @@
       L.push("retenus pour fixer l'ordre des licenciements » (L. 1233-43 ; la même règle");
       L.push("figure à L. 1233-17).");
       L.push("");
-      L.push("Le décret précise la mécanique, lue à la source : le salarié « adresse sa");
+      L.push("Le décret précise la mécanique : le salarié « adresse sa");
       L.push("demande à l'employeur […] par lettre recommandée avec avis de réception ou");
       L.push("remise contre récépissé, avant l'expiration d'un délai de dix jours à");
       L.push("compter de la date à laquelle il quitte effectivement son emploi »");

@@ -1,7 +1,7 @@
 /* LES ÉCRANS DE CONTRÔLE, AVEC UNE PIÈCE DÉPOSÉE.
 
-   Les balayages du dépôt ouvrent les pages au repos (epreuve/balayage, hors
-   dépôt) et les documents du quotidien (epreuve/balayer-gerer). Restait ce qui
+   Les balayages du dépôt ouvrent les pages au repos (epreuve/balayer-pages) et
+   les documents du quotidien (epreuve/balayer-gerer). Restait ce qui
    ne se voit qu'après un dépôt : le « Oui » des modules, c'est-à-dire l'écran
    qui lit la pièce de l'entreprise et rend son diagnostic, sa version corrigée
    et ses courriers.

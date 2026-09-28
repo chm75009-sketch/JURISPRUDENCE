@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-13.15";
+const CACHE = "jurisprudence-13.16";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -157,6 +157,31 @@ const ESSENTIELS = [
   "./icons/icon-sst-192.png", "./icons/icon-sst-512.png", "./icons/icon-sst-180.png",
   "./icons/icon-social-192.png", "./icons/icon-social-512.png", "./icons/icon-social-180.png",
   "./icons/icon-discipline-192.png", "./icons/icon-discipline-512.png", "./icons/icon-discipline-180.png",
+
+  /* VINGT-CINQ FICHIERS MANQUAIENT À CETTE LISTE.
+
+     La stratégie est « réseau d'abord, cache en secours », et tout ce qui est
+     visité en ligne entre au cache de lui-même : ces pages s'ouvraient donc
+     hors connexion dès lors qu'on les avait ouvertes une fois. Mais celle
+     qu'on n'avait jamais ouverte ne s'ouvrait pas du tout, et c'est le cas de
+     huit écrans entiers, dont les visites médicales, les notes de service et
+     les contrats du transport. Relevé le 28 septembre 2026 en comparant la
+     liste au contenu de docs/. Deux mégaoctets de plus à l'installation, et
+     l'application est entière hors connexion. */
+  "./visites.html", "./notes-service.html", "./notes-service.js",
+  "./notes-service-transport.js",
+  "./contrats-transport.html", "./contrats-transport.js", "./contrats-transport-ecran.js",
+  "./minima.html", "./mes-documents.html", "./questions.html", "./questions.js",
+  "./questions-ecran.js", "./sanctions.html", "./contraventions.html",
+  /* Les outils communs à toutes les pages : la barre et son menu, la base des
+     pièces déposées, le bouton d'installation, le lecteur de tableaux, le
+     carnet, la convention, le bloc de signature, les modèles de courriers. */
+  "./barre.js", "./base-documents.js", "./installer.js", "./lire-tableau.js",
+  "./carnet.js", "./convention.js", "./signataire-piece.js", "./courriers-modeles-3.js",
+  "./textes-documents.json",
+  /* La lecture des PDF déposés : sans ces deux-là, un dépôt de PDF hors
+     connexion échoue sans dire pourquoi. */
+  "./pdfjs.js", "./pdfjs.worker.js",
 ];
 
 self.addEventListener("install", e => {

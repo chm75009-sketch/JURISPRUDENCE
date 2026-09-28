@@ -6,11 +6,11 @@
    porte la donnée, une élision manquée, un « undefined » dans un document
    produit au nom de l'entreprise.
 
-   Les relever à la main dans cent quatre-vingt-un générateurs ne tient pas : ce
-   contrôle produit chaque document, deux fois, une fois sur une fiche complète
-   et une fois sur une fiche vide, et refuse les tournures qui n'ont rien à y
-   faire. Il ne juge pas le fond : il cherche des chaînes, et chacune vient d'une
-   ligne de la liste.
+   Les relever à la main dans deux cent vingt-quatre générateurs ne tient pas :
+   ce contrôle produit chaque document deux fois, sur une fiche complète puis
+   sur une fiche vide, et refuse les tournures qui n'ont rien à y faire. Il ne
+   juge pas le fond : il cherche des chaînes, et chacune vient d'une ligne de la
+   liste.
 
      node epreuve/verifier-marques.mjs
      node epreuve/verifier-marques.mjs --lister     (les documents concernés)  */
@@ -65,7 +65,10 @@ const INTERDITS = [
     dit: "Marques d'outil : l'avertissement sur la valeur du document." },
   { re: /\bÀ ADAPTER\b/, quoi: "bandeau « À ADAPTER » dans un document",
     dit: "Documents égalité, NAO, CSE : le bandeau « À ADAPTER »." },
-  { re: /lus? à la source/i, quoi: "« lu à la source » dans un document",
+  /* Le participe s'accorde : « lue », « lues », « lus ». La première version
+     ne refusait que « lu » et « lus », et « n'ont pas été lues à la source »
+     passait. Relevé le 28 septembre 2026. */
+  { re: /lue?s? à la source/i, quoi: "« lu à la source » dans un document",
     dit: "Marques d'outil : la mention de la lecture à la source." },
   /* Le « \b » de l'expression régulière ne vaut rien devant une lettre
      accentuée : « procède en » contient « de en », et la première version de ce
@@ -191,15 +194,29 @@ const fautes = [];
 const vus = {};
 let nDocs = 0, nCas = 0;
 
+/* DEUX CAS, ET CE QU'ON REGARDE DANS CHACUN.
+
+   Sur une fiche complète, aucun crochet de donnée connue n'est admis, et
+   aucune tournure interdite. Sur une fiche vide, les crochets sont normaux :
+   c'est ce qu'ils sont faits pour dire. Ce qui ne l'est pas, c'est qu'un
+   document se brise faute de données : « undefined » et « NaN » sont refusés
+   là aussi, et une exception compte comme une faute. Le second cas avait
+   disparu du contrôle ; il revient le 28 septembre 2026, limité à ce qu'il
+   peut dire. */
 const CAS = [
-  ["fiche complète", { profil: FICHE, fiche: {}, donnees: {}, aujourdhui: new Date(2026, 8, 28) }],
+  ["fiche complète", { profil: FICHE, fiche: {}, donnees: {}, aujourdhui: new Date(2026, 8, 28) },
+    { tout: true }],
+  ["fiche vide", { profil: {}, fiche: {}, donnees: {}, aujourdhui: new Date(2026, 8, 28) },
+    { tout: false }],
 ];
+/* Les seules tournures refusées sur une fiche vide. */
+const SUR_FICHE_VIDE = /^(« undefined »|« NaN »)/;
 
 for (const id of Object.keys(DP.tous)) {
   const g = DP.tous[id];
   if (!g || typeof g.produire !== "function") continue;
   nDocs++;
-  for (const [nomCas, ctx] of CAS) {
+  for (const [nomCas, ctx, regle] of CAS) {
     nCas++;
     let t;
     try { t = aplatir(g.produire(ctx)); }
@@ -208,16 +225,26 @@ for (const id of Object.keys(DP.tous)) {
        ne sont pas ceux du client. On ne regarde que le document à compléter. */
     const m = /\n(VOS |VOTRE |VOS PIÈCES)/.exec(t);
     const propre = m ? t.slice(m.index) : t;
+    /* LE TEXTE TEL QU'IL SE LIT, LIGNES RECOLLÉES.
+
+       Les générateurs écrivent en lignes courtes ; la feuille et le fichier
+       Word les recollent en paragraphes. « aucun texte capté par ce » suivi de
+       « module n'attache » se lit donc « ce module », que ce contrôle ne
+       voyait pas, faute de regarder le texte comme il s'affiche. Relevé le
+       28 septembre 2026, en balayant les parcours. */
+    const recolle = propre.replace(/([^\s.!?:;»)\]])\n(?![\n\s])(?=[a-zà-ÿ0-9(«"])/g, "$1 ");
     for (const x of INTERDITS) {
       if ((TOLERE[id] || []).indexOf(x.quoi) >= 0) continue;
-      const trouve = propre.match(x.re);
+      if (!regle.tout && !SUR_FICHE_VIDE.test(x.quoi)) continue;
+      const trouve = propre.match(x.re) || recolle.match(x.re);
       if (!trouve) continue;
       const cle = id + "|" + x.quoi;
       if (vus[cle]) continue;
       vus[cle] = true;
-      const ligne = (propre.split("\n").filter((l) => x.re.test(l))[0] || "").trim();
+      const ligne = (recolle.split("\n").filter((l) => x.re.test(l))[0] || trouve[0] || "").trim();
       fautes.push(id + " : " + x.quoi + " · « " + ligne.slice(0, 110) + " »");
     }
+    if (!regle.tout) continue;
     for (const c of CROCHETS_DUS) {
       const trouve = propre.match(c.re);
       if (!trouve) continue;

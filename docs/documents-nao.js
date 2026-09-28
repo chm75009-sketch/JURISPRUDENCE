@@ -408,8 +408,8 @@
     L.push("vous engagerait sur ce que vous n'avez pas voulu. Remplacez chaque");
     L.push("crochet, ou supprimez la ligne si elle ne vous concerne pas.");
     L.push("");
-    L.push("Chaque partie porte l'article qui la commande, avec la version lue à la");
-    L.push("source. Gardez ces mentions : ce sont elles qui vous permettront de");
+    L.push("Chaque partie porte l'article qui la commande, avec sa version.");
+    L.push("Gardez ces mentions : ce sont elles qui vous permettront de");
     L.push("montrer, devant les organisations syndicales comme devant le juge, d'où");
     L.push("vient ce que vous avez écrit.");
     L.push("");
@@ -581,11 +581,18 @@
     L.push("L. 1142-8, et l'absence de mesures définies dans les conditions prévues à");
     L.push("l'article L. 1142-9.");
     L.push("");
-    L.push("Les articles L. 1142-8 et L. 1142-9 ne sont PAS dans le corpus lu par ce");
-    L.push("module : ils sont nommés parce que L. 2242-8 les nomme, mais ni leur");
-    L.push("contenu, ni le calendrier de publication, ni le seuil de résultat qui");
-    L.push("déclenche les mesures de correction ne sont écrits ici. Vérifiez-les à la");
-    L.push("source avant d'agir.");
+    /* Ces deux articles ont été lus, et leurs suites aussi : le document dit
+       donc ce qu'ils disent, au lieu de dire qu'il ne les a pas lus.
+       L. 1142-8 (LEGIARTI000044605453), L. 1142-9 (LEGIARTI000044605442),
+       D. 1142-4 (LEGIARTI000045250060), D. 1142-6 (LEGIARTI000045250040),
+       lus deux fois chacun au relais le 28 septembre 2026. */
+    L.push("L'article L. 1142-8 fait publier chaque année l'ensemble des indicateurs");
+    L.push("relatifs aux écarts de rémunération entre les femmes et les hommes et aux");
+    L.push("actions mises en œuvre pour les supprimer ; la publication se fait au plus");
+    L.push("tard le 1er mars, sur le site internet de l'entreprise lorsqu'il en existe");
+    L.push("un, et à défaut par tout moyen (D. 1142-4). Sous soixante-quinze points,");
+    L.push("les mesures de correction de L. 1142-9 doivent être mises en œuvre");
+    L.push("(D. 1142-6).");
     L.push("");
     return L;
   }
@@ -882,8 +889,7 @@
       L.push("");
       L.push("ARTICLE 8 - RÉVISION ET DÉNONCIATION");
       L.push("[Rédiger vos clauses. Les règles générales de révision et de dénonciation");
-      L.push("des accords collectifs n'ont pas été lues à la source pour ce document : il");
-      L.push("ne les reproduit pas et ne les résume pas.]");
+      L.push("des accords collectifs ne sont ici ni reproduites ni résumées.]");
       L.push("");
       L.push("ARTICLE 9 - DÉPÔT ET PUBLICITÉ");
       L.push("Le présent accord sera déposé par la partie la plus diligente. Les");
@@ -1236,8 +1242,8 @@
         "L. 2242-14, L. 2242-15, L. 2242-16, L. 2242-7, L. 2243-1 ; " +
         ARRETS.engagerNonConclure.ref,
         ["L'article L. 241-13 du code de la sécurité sociale, auquel L. 2242-7",
-         "renvoie, et l'article L. 2231-6, auquel L. 2242-6 renvoie, n'ont pas été lus",
-         "à la source pour ce document : ils sont nommés, non reproduits."])).join("\n");
+         "renvoie, et l'article L. 2231-6, auquel L. 2242-6 renvoie, ne sont pas",
+         "reproduits ici : ils sont nommés, non cités."])).join("\n");
     },
   });
 
@@ -2468,8 +2474,12 @@
       L.push("");
 
       return L.concat(pied("L. 2242-6, L. 2242-14",
-        ["Aucune peine n'est annoncée dans ce document : aucun texte capté par ce",
-         "module n'attache de sanction pénale ni de pénalité financière au",
+        /* Le document ne parle pas de l'outil qui l'écrit : il parle des textes.
+           « aucun texte capté par ce module » se lisait « ce module » dès que la
+           feuille recollait les deux lignes. Relevé le 28 septembre 2026, en
+           balayant les parcours. */
+        ["Aucune peine n'est annoncée dans ce document : aucun des textes cités",
+         "n'attache de sanction pénale ni de pénalité financière au",
          "manquement à l'article L. 2242-14 pris isolément. Ce qui est encouru est",
          "l'impossibilité d'attester l'engagement sérieux et loyal au sens de",
          "L. 2242-6 - et, s'agissant d'un accord sur les salaires effectifs,",
@@ -3866,10 +3876,20 @@
       L.push("  [ ] non effectuée - le quatrième alinéa de L. 2242-8 permet d'appliquer");
       L.push("      la pénalité à ce seul titre.");
       L.push("");
+      /* Les deux phrases qui parlaient du module sont remplacées par ce que
+         les textes disent : ils ont été lus au relais le 28 septembre 2026,
+         deux lectures concordantes chacun, et l'écran de l'index calcule
+         désormais le niveau de résultat. L. 1142-9 (LEGIARTI000044605442),
+         D. 1142-6 (LEGIARTI000045250040), D. 1142-4 (LEGIARTI000045250060). */
       L.push("Mesures définies dans les conditions prévues à l'article L. 1142-9, si");
       L.push("elles sont dues : [définies le .............. / sans objet / non");
-      L.push("définies]. Ce module n'a pas lu L. 1142-9 : c'est à la source qu'il faut");
-      L.push("vérifier si elles vous sont dues, et lesquelles.");
+      L.push("définies]. Elles sont dues lorsque le niveau de résultat est inférieur");
+      L.push("à soixante-quinze points (D. 1142-6) : la négociation sur l'égalité");
+      L.push("professionnelle porte alors sur les mesures de correction et, le cas");
+      L.push("échéant, sur la programmation de mesures financières de rattrapage");
+      L.push("salarial ; à défaut d'accord, elles sont arrêtées par décision de");
+      L.push("l'employeur, après consultation du comité social et économique, déposée");
+      L.push("auprès de l'autorité administrative et publiée (L. 1142-9).");
       L.push("");
       L.push("Fait à " + villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
       L.push("");
@@ -3894,9 +3914,9 @@
       L.push("  · Support : [adresse exacte de la page du site internet de l'entreprise");
       L.push("    / à défaut de site, modalité retenue pour porter le résultat à la");
       L.push("    connaissance des salariés : ..............................]");
-      L.push("  · Contenu publié : [reprendre exactement ce qui a été mis en ligne. Ce");
-      L.push("    module n'ayant pas lu L. 1142-8, il ne préjuge ni du nombre");
-      L.push("    d'indicateurs, ni de leur intitulé, ni de leur mode de calcul.]");
+      L.push("  · Contenu publié : [reprendre exactement ce qui a été mis en ligne :");
+      L.push("    le niveau de résultat et le résultat obtenu pour chaque indicateur,");
+      L.push("    que D. 1142-4 fait publier l'un et l'autre.]");
       L.push("  · Preuve conservée : [capture d'écran datée / constat / attestation du");
       L.push("    prestataire du site - et son horodatage.]");
       L.push("  · Déclaration à l'administration : [effectuée le .............., par");
@@ -4461,8 +4481,7 @@
          "L. 3261-3, L. 3261-3-1, L. 4163-3 et L. 4161-1 du code du travail, ainsi que",
          "les articles L. 241-3-1, L. 911-2 et L. 911-7 du code de la sécurité sociale",
          "et l'article L. 722-1 du code rural et de la pêche maritime, sont NOMMÉS",
-         "parce que les textes lus les nomment. Aucun n'est reproduit ici par ce",
-         "module."])).join("\n");
+         "parce que les textes cités les nomment. Aucun n'est reproduit ici."])).join("\n");
     },
   });
 

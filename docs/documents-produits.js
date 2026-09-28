@@ -1238,8 +1238,8 @@
       L.push("conserve la faculté de s'adresser directement à l'autorité externe");
       L.push("compétente dans les conditions prévues par la même loi.");
       L.push("");
-      L.push("NOTE - Cette loi n'est pas au code du travail : elle n'a pas été lue à");
-      L.push("la source, et son contenu n'est pas détaillé ici. Si vous n'avez pas");
+      L.push("NOTE - Cette loi n'est pas au code du travail : son contenu n'est pas");
+      L.push("détaillé ici. Si vous n'avez pas");
       L.push("encore de procédure interne de recueil des signalements, supprimez la");
       L.push("dernière phrase du troisième alinéa jusqu'à sa mise en place : l'existence");
       L.push("du dispositif, elle, doit être rappelée dans tous les cas (L. 1321-2, 3°).");
@@ -2064,7 +2064,7 @@
         L.push("Elle peut imposer des mentions que ce texte ne porte pas, encadrer la");
         L.push("procédure disciplinaire plus strictement que la loi, ou prévoir une");
         L.push("commission de discipline. Les clauses conventionnelles ne sont écrites");
-        L.push("ici que pour les conventions lues à la source ; pour la vôtre, cette");
+        L.push("ici que pour les conventions dont le texte est connu ; pour la vôtre, cette");
         L.push("lecture reste à faire.");
       }
       L.push("");

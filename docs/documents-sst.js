@@ -3848,9 +3848,7 @@
         "L. 2315-43, L. 2315-44, L. 2315-32, L. 2314-11, L. 2315-18, L. 4121-3, L. 2317-1",
         ["Décisions citées : Soc., 27 novembre 2019, n° 19-14.224, publié ; Soc.,",
          "13 mai 2026, n° 25-12.560 ; Soc., 18 mars 2026, n° 23-22.270, publié. Elles",
-         "ont été lues à la source dans la base Judilibre de la Cour de cassation le",
-         "21 août 2026, et ne sont citées que pour ce qu'elles",
-         "disent.",
+         "ne sont citées que pour ce qu'elles disent.",
          "",
          "LA COMMISSION ABSENTE LÀ OÙ ELLE EST DUE N'EST PAS UN MANQUEMENT SEULEMENT",
          "CIVIL. « Le fait d'apporter une entrave à leur fonctionnement régulier est",
@@ -4088,8 +4086,7 @@
         "discrétion ; il n'a pas été lu ici, et son régime n'est donc pas écrit"));
 
       return L.concat(pied("L. 2315-39, L. 2315-32, L. 2314-11, L. 2315-38",
-        ["Décisions citées, lues à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026 : Soc., 27 novembre 2019,",
+        ["Décisions citées : Soc., 27 novembre 2019,",
          "n° 19-14.224, publié ; Soc., 26 février 2025, n° 24-12.295, publié ; Soc.,",
          "11 février 2026, n° 24-16.408.",
          "",
@@ -4287,8 +4284,7 @@
 
       return L.concat(pied(
         "L. 2315-41, L. 2315-42, L. 2315-43, L. 2315-44, L. 2315-38, L. 2315-39, L. 2315-18",
-        ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026 : Soc., 13 mai 2026,",
+        ["Décision citée : Soc., 13 mai 2026,",
          "n° 25-12.560.",
          "",
          "Aucune peine n'est annoncée : aucun texte répressif capté ne vise l'absence",
@@ -4505,8 +4501,7 @@
       L.push("refait.");
 
       return L.concat(pied("L. 2315-38, L. 2315-41, L. 2315-42, L. 2315-44",
-        ["Décisions citées, lues à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026 : Soc., 13 mai 2026,",
+        ["Décisions citées : Soc., 13 mai 2026,",
          "n° 25-12.560 ; Soc., 18 mars 2026, n° 23-22.270, publié.",
          "",
          "Aucune peine n'est annoncée : aucun texte répressif capté ne vise le",
@@ -4929,8 +4924,7 @@
       L.push("nouvelle, fondée sur cette cause-là et sur la pièce qui l'établit.");
 
       return L.concat(pied("L. 2315-39, L. 2314-33, L. 2315-32",
-        ["Décision citée, lue à la source dans la base Judilibre de la Cour de",
-         "cassation le 21 août 2026 : Soc., 28 mai 2026,",
+        ["Décision citée : Soc., 28 mai 2026,",
          "n° 24-22.914, publié.",
          "",
          "Aucune peine n'est annoncée. Le remplacement est le fait du COMITÉ, non de",
