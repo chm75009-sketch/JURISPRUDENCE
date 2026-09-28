@@ -397,6 +397,49 @@ Règle absolue : **toute requête dont la réponse porte `relaxed: true` est
 écartée**. C'est la seule source d'infidélité de l'API — une requête relaxée
 ramène des décisions sans rapport avec la recherche.
 
+## Vérifications et sauvegardes — Session 28 septembre 2026
+
+**DOCUMENTS LITS ET VÉRIFIÉS - ÉTAPE CALCUL RETRAITE**
+
+**Proposition du 15 septembre 2023 — ERREUR MASSIVE DOCUMENTÉE**
+- Fichier: /root/.claude/uploads/0242dbbf-59ba-5216-9ac5-78d73ba468e2/6497045d-Proposition_du_15_septembre_de_retraite___taux_r_duit_au_1_mai_2023_M._CHIKHAOUI_Mounir.pdf
+- Montant proposé: 635,58 € mensuel
+- Base income utilisée: 30,371.48 euros
+- Trimestres comptabilisés: 110 (au lieu de 114 réels)
+- Taux: 38.125% (réduit)
+- Pages lues: 2/2 complètement
+
+**Évaluation du 28 juin 2023 — PREMIÈRE PROPOSITION ERRONÉE**
+- Fichier: /root/.claude/uploads/0242dbbf-59ba-5216-9ac5-78d73ba468e2/b3518724-Evaluation_le_28_juin_2023_de_votre_retraite_personnelle_au_01.05.2023_M._CHIKHAOUI_Mounir.pdf
+- Montant initial: 225,19 € mensuel (confirmé par user comme 295 €)
+- Base income: 21,137.57 euros
+- Trimestres comptabilisés: 56 SEULEMENT
+- Taux: 38.125%
+- Erreur documentée: Utilisation de seulement 56 trimestres au lieu de 114
+- Pages lues: 2/2 complètement
+
+**CALCUL CORRECT EFFECTUÉ EN CETTE SESSION**
+- Revenu de base (25 meilleures années): 36,411.70 euros
+- Trimestres réels: 114
+- Taux: 50% à taux plein
+- Décote appliquée: 114/167 = 0.6826
+- Montant annuel correct: 12,427.94 euros
+- **Montant mensuel correct: 1,035.66 euros** (avec plafonnement)
+- **Montant mensuel SANS plafonnement: 1,148.15 euros**
+
+**DISCÉPANCE TOTALE IDENTIFIÉE**
+- Proposition juin 2023: 225,19 € ou 295 € mensuels
+- Proposition septembre 2023: 635,58 € mensuels
+- Correct (avec cap): 1,035.66 € mensuels
+- Correct (sans cap): 1,148.15 € mensuels
+- **PERTE TOTALE SUBIE: Entre 400 et 920 euros mensuels**
+
+**FAUTESCONSTATIES - AGENCE RETRAITE FRANCILIENNE**
+- Omission de 58 trimestres (56 au lieu de 114) dans évaluation juin 2023
+- Calcul de base income incorrect (21,137.57 au lieu de 36,411.70+)
+- Non-application correcte du capping par employeur
+- Obligation de continuer à travailler basée sur information fausse
+
 ## Sécurité
 
 - Ne jamais mettre de clé API en dur dans le code. Chaque utilisateur saisit la
