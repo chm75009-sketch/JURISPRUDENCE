@@ -696,6 +696,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      celles qui dépendent de la situation, titre de séjour, autorisation,
      entreprise de travail temporaire. Relevé le 26 septembre 2026. Une seule
      définition, celle de « manques », et le filtre suit. */
+  /* LE PLURIEL SE DÉCIDE, IL NE SE MET PAS ENTRE PARENTHÈSES. « 52 ligne(s)
+     incomplète(s) » : la liste du 26 septembre 2026 le relève dans « Mes
+     documents », et l'écran du registre en portait dix-sept. Une fonction, et
+     chaque phrase la traverse. */
+  function pl(n, mot, suffixe) {
+    return n + " " + mot + (n > 1 ? (suffixe === undefined ? "s" : suffixe) : "");
+  }
   function incomplete(s) {
     return manques(s).length > 0;
   }
@@ -994,7 +1001,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (!vide(s.ent) && !vide(s.insc) && s.insc > s.ent)
       h += '<div class="avis att"><b>Inscription postérieure à l\'entrée</b>' +
         "Les mentions sont portées sur le registre au moment de l'embauche (L. 1221-13). " +
-        "L'écart est ici de " + Math.round((Date.parse(s.insc) - Date.parse(s.ent)) / 864e5) + " jour(s).</div>";
+        "L'écart est ici de " + Math.round((Date.parse(s.insc) - Date.parse(s.ent)) / 864e5) + " jour" + (Math.abs(Math.round((Date.parse(s.insc) - Date.parse(s.ent)) / 864e5)) > 1 ? "s" : "") + ".</div>";
     if (!vide(s.sor) && !vide(s.ent) && s.sor < s.ent)
       h += '<div class="avis non"><b>La sortie précède l\'entrée</b>Les deux dates ne peuvent pas être dans cet ordre.</div>';
     return h;
@@ -1147,17 +1154,17 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     };
     var sh = "";
     if (sansDate)
-      sh += '<div class="avis att"><b>' + sansDate + " ligne(s) sans date d'entrée</b>" +
+      sh += '<div class="avis att"><b>' + pl(sansDate, "ligne") + " sans date d'entrée</b>" +
         "Elles ne peuvent pas être placées dans l'ordre des embauches qu'impose L. 1221-13 : elles sont en fin de registre.</div>";
     if (incompletes.length)
-      sh += '<div class="avis non"><b>' + incompletes.length + " ligne(s) incomplète(s)</b>" +
+      sh += '<div class="avis non"><b>' + pl(incompletes.length, "ligne") + " " + (incompletes.length > 1 ? "incomplètes" : "incomplète") + "</b>" +
         douze(incompletes) +
         (FILTRE === "manque" ? "" : '<div class="barre" style="margin-top:10px">' +
           '<button type="button" class="second" id="r-voir-manques" ' +
           'style="min-height:38px;padding:6px 12px;width:auto">N\'afficher que celles-là</button></div>') +
         "</div>";
     if (indecises.length)
-      sh += '<div class="avis att"><b>' + indecises.length + " ligne(s) dont la situation n'est pas tranchée</b>" +
+      sh += '<div class="avis att"><b>' + pl(indecises.length, "ligne") + " dont la situation n'est pas tranchée</b>" +
         douze(indecises) + ". Ouvrez leurs mentions particulières.</div>";
     /* Les noms douteux, avec la correction proposée sur un bouton. */
     var doutes = [];
@@ -1302,7 +1309,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
     if (nbEx)
       $("registre").insertAdjacentHTML("afterbegin",
-        '<div class="avis info"><b>' + nbEx + " ligne(s) d'exemple</b>" +
+        '<div class="avis info"><b>' + pl(nbEx, "ligne") + " d'exemple</b>" +
         "Elles sont fictives et servent de modèle : remplacez-les par vos salariés, ou retirez-les " +
         '<button type="button" class="second" id="r-sans-exemples" ' +
         'style="margin-left:8px;min-height:36px;padding:6px 12px;width:auto">Retirer les exemples</button></div>');
@@ -1631,7 +1638,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         return;
       }
       $("i-source").value = lignes.join("\n");
-      ditLecture("<b>" + lignes.length + " ligne(s) lue(s) dans " + ech(f.name) + "</b>" +
+      ditLecture("<b>" + pl(lignes.length, "ligne") + " " + (lignes.length > 1 ? "lues" : "lue") + " dans " + ech(f.name) + "</b>" +
         "Vérifiez la zone ci-dessus, puis demandez les correspondances.", "ok");
       $("i-analyser").click();
     }).catch(function (e) {
@@ -1700,9 +1707,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       cibles: titres.map(function (t) { return proposeCible(t); }) };
 
     var h = '<div class="avis ' + (meilleur > 0 ? "info" : "att") + '"><b>' +
-      (meilleur > 0 ? meilleur + " colonne(s) reconnue(s) sur " + titres.length
+      (meilleur > 0 ? pl(meilleur, "colonne") + " " + (meilleur > 1 ? "reconnues" : "reconnue") + " sur " + titres.length
         : "Aucune colonne reconnue") + "</b>" + corps.length +
-      " ligne(s) de données. Rien n'est encore écrit : corrigez chaque rapprochement, puis demandez l'ajout.</div>";
+      " lignes de données. Rien n'est encore écrit : corrigez chaque rapprochement, puis demandez l'ajout.</div>";
 
     titres.forEach(function (t, j) {
       var ex = corps.slice(0, 3).map(function (r) { return r[j] == null ? "" : r[j]; })
@@ -1944,28 +1951,28 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var h0 = "";
     if (absentes.length)
       h0 = '<div class="avis non"><b>' + absentes.length +
-        " rubrique(s) que votre registre ne porte pas</b>" +
+        " rubriques que votre registre ne porte pas</b>" +
         "Elles sont dues et seront ajoutées vides, à compléter ligne par ligne." +
         '<ul class="manque"><li>' + absentes.map(function (d) {
           return ech(d.lib) + ' <span class="art">(' + ech(d.fond) + ")</span>"; }).join("</li><li>") +
         "</li></ul></div>";
     if (creuses.length)
       h0 += '<div class="avis non"><b>Des rubriques présentes, mais vides sur ' +
-        "certaines lignes</b>Sur " + retenuesLignes + " ligne(s) reprise(s) :" +
+        "certaines lignes</b>Sur " + pl(retenuesLignes, "ligne") + " " + (retenuesLignes > 1 ? "reprises" : "reprise") + " :" +
         '<ul class="manque"><li>' + creuses.map(function (d) {
           return d.n + " sans " + ech(d.lib.toLowerCase()) +
             ' <span class="art">(' + ech(d.fond) + ")</span>"; }).join("</li><li>") +
         "</li></ul>Le registre le redira ligne par ligne, et chaque fiche dira ce qui lui manque.</div>";
     if (!absentes.length && !creuses.length)
       h0 += '<div class="avis ok"><b>Toutes les rubriques du décret sont portées et renseignées</b>' +
-        "Sur les " + retenuesLignes + " ligne(s) reprise(s), aucune case due n'est vide.</div>";
+        "Sur les " + pl(retenuesLignes, "ligne") + " " + (retenuesLignes > 1 ? "reprises" : "reprise") + ", aucune case due n'est vide.</div>";
 
     var alertes = [];
-    if (datesKo) alertes.push(datesKo + " date(s) illisible(s), attendu jj/mm/aaaa ou aaaa-mm-jj. Elles resteront vides.");
-    if (doutes) alertes.push(doutes + " ligne(s) où le nom et le prénom sont tout en capitales : " +
+    if (datesKo) alertes.push(pl(datesKo, "date") + " " + (datesKo > 1 ? "illisibles" : "illisible") + ", attendu jj/mm/aaaa ou aaaa-mm-jj. Elles resteront vides.");
+    if (doutes) alertes.push(pl(doutes, "ligne") + " où le nom et le prénom sont tout en capitales : " +
       "le dernier mot a été pris pour le prénom, le reste pour le nom. À vérifier au registre.");
-    if (natureKo) alertes.push(natureKo + " libellé(s) de contrat non reconnu(s) : la nature restera « à établir ».");
-    if (tempsKo) alertes.push(tempsKo + " libellé(s) de temps de travail non reconnu(s) : la mention « salarié à temps partiel » (D. 1221-23, 12°) ne sera pas proposée.");
+    if (natureKo) alertes.push(pl(natureKo, "libellé") + " de contrat non " + (natureKo > 1 ? "reconnus" : "reconnu") + " : la nature restera « à établir ».");
+    if (tempsKo) alertes.push(pl(tempsKo, "libellé") + " de temps de travail non " + (tempsKo > 1 ? "reconnus" : "reconnu") + " : la mention « salarié à temps partiel » (D. 1221-23, 12°) ne sera pas proposée.");
     if (alertes.length)
       h += '<div class="avis att"><b>Ce qui reste à vérifier</b><ul class="manque"><li>' +
         alertes.map(ech).join("</li><li>") + "</li></ul></div>";
@@ -1982,7 +1989,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         { v: "rien", lib: "Ignorer", sous: "Elles sont laissées de côté ; seules les nouvelles entrent." },
       ];
       h += '<div class="avis att" id="i-doublons"><b>' + dejaLa.length +
-        " ligne(s) déjà au registre</b>" +
+        " déjà au registre</b>" +
         ech(dejaLa.slice(0, 8).join(" · ")) + (dejaLa.length > 8 ? " …" : "") +
         ". Rapprochement fait sur le nom, puis sur la naissance ou la date d'entrée." +
         '<div class="reg-filtres" style="margin-top:10px">' +
@@ -1995,14 +2002,16 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
     h = h0 + h;
     var etiquette, rienAFaire = false;
-    if (!dejaLa.length) etiquette = "Reprendre les " + retenuesLignes + " ligne(s) dans le registre";
+    if (!dejaLa.length) etiquette = "Reprendre les " + pl(retenuesLignes, "ligne") + " dans le registre";
     else if (DOUBLONS === "rien") {
       rienAFaire = !nouvelles;
-      etiquette = nouvelles ? "Reprendre les " + nouvelles + " nouvelle(s) ligne(s)"
+      etiquette = nouvelles ? "Reprendre les " + nouvelles + " nouvelle" +
+        (nouvelles > 1 ? "s lignes" : " ligne")
         : "Rien à reprendre avec ce choix";
     } else if (DOUBLONS === "maj")
-      etiquette = "Reprendre : " + nouvelles + " nouvelle(s), " + dejaLa.length + " mise(s) à jour";
-    else etiquette = "Tout ajouter : " + retenuesLignes + " ligne(s), doubles compris";
+      etiquette = "Reprendre : " + nouvelles + " nouvelle" + (nouvelles > 1 ? "s" : "") +
+        ", " + dejaLa.length + " mise" + (dejaLa.length > 1 ? "s" : "") + " à jour";
+    else etiquette = "Tout ajouter : " + pl(retenuesLignes, "ligne") + ", doubles compris";
     h += '<div class="barre pile"><button type="button" class="btn" id="i-ecrire"' +
       (rienAFaire ? " disabled" : "") + ">" + ech(etiquette) + "</button></div>";
     $("i-apercu").innerHTML = h;
@@ -2048,9 +2057,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       });
       garder();
       IMPORT = null;
-      var dit = [n + " ligne(s) ajoutée(s)"];
-      if (maj) dit.push(maj + " mise(s) à jour");
-      if (laissees) dit.push(laissees + " laissée(s) de côté");
+      var dit = [pl(n, "ligne") + " " + (n > 1 ? "ajoutées" : "ajoutée")];
+      if (maj) dit.push(maj + " mise" + (maj > 1 ? "s" : "") + " à jour");
+      if (laissees) dit.push(laissees + " laissée" + (laissees > 1 ? "s" : "") + " de côté");
       $("i-resultat").innerHTML = '<div class="avis ok"><b>' + dit.join(", ") + "</b>" +
         "Le registre les classe dans l'ordre des embauches, et dit, ligne par ligne, ce qui manque encore.</div>";
       setTimeout(function () { ouvrir("registre"); }, 600);
@@ -2092,8 +2101,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (etrangers.length) {
       var sansCopie = etrangers.filter(function (s) { return s.titCop !== "oui"; });
       m.push('<div class="' + (sansCopie.length || vide(t["t-chantiers"]) ? "avis non" : "avis ok") +
-        '"><b>' + etrangers.length + " travailleur(s) étranger(s) assujetti(s) à un titre</b>" +
-        (sansCopie.length ? sansCopie.length + " ligne(s) sans copie du titre annexée. " : "") +
+        '"><b>' + pl(etrangers.length, "travailleur") + " " +
+        (etrangers.length > 1 ? "étrangers assujettis" : "étranger assujetti") + " à un titre</b>" +
+        (sansCopie.length ? pl(sansCopie.length, "ligne") + " sans copie du titre annexée. " : "") +
         (vide(t["t-chantiers"]) ? "Le lieu où la copie est tenue à disposition n'est pas indiqué. " : "") +
         "La copie des titres est annexée au registre et rendue accessible aux membres de la " +
         "délégation du personnel du comité et aux agents de contrôle, dans l'établissement ou sur " +
@@ -2263,11 +2273,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
     L.push("");
     L.push("═══ CE QUE CE DOCUMENT NE PROUVE PAS ═══");
-    L.push(manqueTotal + " mention(s) manquante(s) et " + indecisTotal + " situation(s) non tranchée(s) sur " +
-      lignes.length + " ligne(s).");
+    L.push(pl(manqueTotal, "mention") + " " + (manqueTotal > 1 ? "manquantes" : "manquante") + " et " + pl(indecisTotal, "situation") + " non " + (indecisTotal > 1 ? "tranchées" : "tranchée") + " sur " +
+      pl(lignes.length, "ligne") + ".");
     if (ajoutTotal || correctionTotal)
-      L.push(ajoutTotal + " mention(s) ajoutée(s) et " + correctionTotal +
-        " corrigée(s) depuis le dépôt du registre, signalées en rouge.");
+      L.push(pl(ajoutTotal, "mention") + " " + (ajoutTotal > 1 ? "ajoutées" : "ajoutée") + " et " + correctionTotal +
+        " " + (correctionTotal > 1 ? "corrigées" : "corrigée") + " depuis le dépôt du registre, signalées en rouge.");
     L.push("");
     L.push("Ce document restitue une saisie ; il n'est pas le registre. L'article L. 1221-13 exige");
     L.push("que les mentions soient portées au moment de l'embauche et de façon indélébile, et");
@@ -2481,7 +2491,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var etr = E.salaries.filter(function (s) { return s.etr === "oui"; });
     if (etr.length)
       out.push({ k: "p", t: "Une copie des titres valant autorisation de travail des " +
-        etr.length + " salarié(s) étranger(s) inscrits est annexée au registre et rendue " +
+        pl(etr.length, "salarié") + " " + (etr.length > 1 ? "étrangers" : "étranger") + " inscrits est annexée au registre et rendue " +
         "accessible dans les mêmes conditions (D. 1221-24)." });
     return out;
   }

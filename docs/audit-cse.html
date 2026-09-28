@@ -513,8 +513,18 @@
     var liste = $("liste");
     liste.textContent = "";
     bandeauComite();
+    /* SANS COMITÉ, LA PAGE N'AFFICHE QUE LES ÉLECTIONS ET LA CARENCE.
+
+       Elle listait quand même la convocation, l'ordre du jour, le procès-verbal
+       et le règlement intérieur du comité, grisés et annotés « aucun comité en
+       place » : quatre lignes mortes à faire défiler avant d'arriver à ce qui
+       est dû. Demande du 26 septembre 2026, « n'afficher que les élections et la
+       carence ». Le motif est dit une fois, dans le bandeau du haut, au lieu de
+       quatre fois dans la liste. */
+    var caches = 0;
     LIGNES.forEach(function (l) {
-      var du = eff >= l.seuil && !(l.comite && COMITE_ABSENT);
+      if (l.comite && COMITE_ABSENT) { caches++; return; }
+      var du = eff >= l.seuil;
       var ligne = document.createElement("div");
       ligne.className = "ligne" + (du ? "" : " pasdu");
       ligne.setAttribute("data-cle", l.cle);
@@ -522,12 +532,7 @@
       nom.className = "nom";
       nom.textContent = l.nom;
       ligne.appendChild(nom);
-      if (l.comite && COMITE_ABSENT && eff >= l.seuil) {
-        var sans = document.createElement("span");
-        sans.className = "du";
-        sans.textContent = "aucun comité en place";
-        ligne.appendChild(sans);
-      } else if (!du) {
+      if (!du) {
         var pas = document.createElement("span");
         pas.className = "du";
         pas.textContent = "pas dû avant " + l.seuil;
@@ -562,6 +567,18 @@
       }
       liste.appendChild(ligne);
     });
+    /* Le motif, une fois : sans lui, l'utilisatrice chercherait des lignes qui
+       ne sont plus là. */
+    if (caches) {
+      var dit = document.createElement("p");
+      dit.className = "aide";
+      dit.textContent = caches + " ligne" + (caches > 1 ? "s" : "") +
+        " ne " + (caches > 1 ? "sont" : "est") + " pas affichée" + (caches > 1 ? "s" : "") +
+        " ici : la convocation des réunions, l'ordre du jour, le procès-verbal et le " +
+        "règlement intérieur du comité supposent une instance élue. Ce qui vient d'abord, " +
+        "c'est l'information du personnel et les élections, ou le procès-verbal de carence.";
+      liste.appendChild(dit);
+    }
   }
 
   /* ───────────────────────────────────────────────── le document, seul
