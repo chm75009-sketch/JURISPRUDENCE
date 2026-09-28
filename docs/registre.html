@@ -2414,7 +2414,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       ["Registre unique du personnel"],
       ["Entreprise", E.cadre.nom || ""],
       ["Établissement", E.cadre.adresse || ""],
-      ["Édité le", new Date().toLocaleDateString("fr-FR")],
+      /* UNE DATE ÉCRITE EN TEXTE NE SE TRIE PAS ET NE SE CALCULE PAS : le
+         tableur la range au format jour/mois/année quand on lui donne une
+         vraie date, et la laisse telle quelle quand on lui donne une chaîne.
+         Relevé le 28 septembre 2026, en rouvrant les classeurs. */
+      ["Édité le", new Date()],
       [],
       ["Les colonnes de la première feuille sont celles des articles L. 1221-13 et D. 1221-23. " +
        "Complétez-la dans Excel, puis redéposez ce fichier dans l'écran du registre : " +

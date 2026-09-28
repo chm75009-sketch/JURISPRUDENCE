@@ -81,6 +81,13 @@ const INTERDITS = [
     dit: "Heures, divers : on lit « le 1 » au lieu de « le 1er »." },
   { re: /\bdocument\(s\)|\bsalarié\(s\)|\bligne\(s\)/, quoi: "pluriel entre parenthèses",
     dit: "Mes documents : on lit « 2 document(s) »." },
+  /* « Des dates au format informatique » : le reproche revient trois fois dans
+     la liste, sur le registre en Word, sur les classeurs et sur l'agenda. Une
+     date se lit « 28 septembre 2026 » ou « 28/09/2026 », jamais « 2026-09-28 ».
+     Ajouté le 28 septembre 2026 ; aucun générateur n'en portait, et c'est
+     précisément ce qu'il faut tenir. */
+  { re: /\b20\d\d-\d\d-\d\d\b/, quoi: "date au format informatique",
+    dit: "Registre, Word : « des dates au format informatique »." },
   { re: /HUISSIER DE JUSTICE|huissier de justice/, quoi: "« huissier de justice »",
     dit: "Courriers : « huissier de justice » au lieu de commissaire de justice." },
 ];

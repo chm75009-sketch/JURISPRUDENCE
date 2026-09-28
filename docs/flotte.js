@@ -986,7 +986,11 @@
       { titre: "Mode d'emploi", lignes: [
         ["Flotte et conducteurs"],
         ["Entreprise", p.denomination || ""],
-        ["Édité le", new Date().toLocaleDateString("fr-FR")],
+        /* UNE DATE ÉCRITE EN TEXTE NE SE TRIE PAS ET NE SE CALCULE PAS : le
+         tableur la range au format jour/mois/année quand on lui donne une
+         vraie date, et la laisse telle quelle quand on lui donne une chaîne.
+         Relevé le 28 septembre 2026, en rouvrant les classeurs. */
+      ["Édité le", new Date()],
         [],
         ["Les périodicités du contrôle technique, du limiteur, du chronotachygraphe et des titres " +
          "de conduite relèvent du code de la route et de la réglementation des transports : " +
