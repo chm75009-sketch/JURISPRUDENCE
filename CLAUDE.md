@@ -420,6 +420,24 @@ d'autres codes. C'est la cause première des homonymes historiques du dépôt.
 Le relais ne sert que le code du travail : ne pas citer d'article d'un autre code
 sans l'avoir vérifié autrement.
 
+**Aucune information non vérifiée ne se donne, même signalée comme telle.** Posé
+le 28 septembre 2026. La source, c'est le texte officiel lui-même : Légifrance, le
+Journal officiel, le BOFiP dans sa version en vigueur. Un article de presse, un
+site d'éditeur, un blog de cabinet ou la mémoire ne sont pas des sources : ils
+servent à trouver le texte, jamais à répondre à sa place. Ce qui n'a pas été lu au
+texte officiel ne s'écrit pas ; on écrit « je ne l'ai pas encore vérifié » et on va
+le lire. Ajouter « d'après tel site » ou « je n'ai pas lu le décret » à une
+affirmation ne la rend pas vérifiée : cela reste une information non vérifiée.
+
+Cas mesuré le 28 septembre 2026 - la TVA de BLU BLU. J'ai d'abord donné le seuil
+de 901 000 € lu à l'article L. 162-5 du code des impositions sur les biens et
+services, sans voir qu'il était actualisé : pour 2026, les montants annoncés sont
+autres, et la conclusion « BLU BLU sortira du régime simplifié en décembre » était
+fausse. J'ai ensuite donné les seuils de 2026 et la façon de sortir du régime
+d'après Weblex, sans avoir lu l'arrêté ni le décret. L'utilisatrice a dû tout
+faire reprendre depuis le début. Un texte qui renvoie à une actualisation ou à un
+décret se lit avec l'actualisation et le décret, avant de répondre.
+
 ### Le relais n'est pas fiable sous charge — mesuré le 15 août 2026
 
 Interrogé 368 fois d'affilée, il rend des 502, et — plus insidieux — il rend
