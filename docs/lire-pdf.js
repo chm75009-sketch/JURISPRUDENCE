@@ -181,7 +181,11 @@
     }
     return prec[long.length] <= max;
   }
-  var NUM_SEUL = /^[---\s]*(?:page\s*)?\d+(?:\s*(?:\/|sur|of|de)\s*\d+)?[---\s.]*$/i;
+  /* Les tirets de cette classe étaient un cadratin, un demi-cadratin et un
+     trait d'union : un nettoyage les a tous ramenés au trait d'union, et une
+     pagination « \u2014 3 \u2014 » n'était plus reconnue. Écrits en échappement Unicode,
+     ils survivent au nettoyage. Relevé le 28 septembre 2026. */
+  var NUM_SEUL = /^[\u2014\u2013-\s]*(?:page\s*)?\d+(?:\s*(?:\/|sur|of|de)\s*\d+)?[\u2014\u2013-\s.]*$/i;
 
   function sansEnTetes(pages) {
     if (!pages || pages.length < 3) return pages || [];

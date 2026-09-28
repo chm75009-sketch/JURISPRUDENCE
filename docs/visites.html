@@ -185,7 +185,10 @@
       dit: "périodicité maximale de cinq ans pour les conducteurs de moins de soixante ans, deux ans à partir de soixante ans et un an à partir de soixante-seize ans ; pour les catégories D1, D, D1E ou DE, un an à partir de soixante ans" }
   };
   function ref(cles) {
-    return cles.map(function (c) { return "art. " + c.replace(/^([A-Z])(\d)/, "$1. $2").replace("-", "-"); }).join(", ");
+    /* Le .replace("-", "-") qui était ici ne faisait rien depuis le premier
+       jour : il est retiré plutôt que laissé à faire croire à un traitement.
+       Relevé le 28 septembre 2026. */
+    return cles.map(function (c) { return "art. " + c.replace(/^([A-Z])(\d)/, "$1. $2"); }).join(", ");
   }
   function art(c) {
     var m = /^([A-Z]+)(\d+)-(.+)$/.exec(c);

@@ -1276,13 +1276,26 @@
          jours à l'inspection. C'est lui qui accompagne alors le règlement.  */
       var repCse = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
         (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
-      /* La fiche répond « oui, élu », « non, procès-verbal de carence » ou
-         « non, aucune élection organisée » ; le parcours, lui, écrit « oui »
-         ou « non ». On lit le premier mot, qui est le même dans les deux. */
-      var sansCse = repCse.indexOf("non") === 0;
+      /* QUATRE RÉPONSES, ET « ÉLECTIONS EN COURS » N'EST PAS UNE CARENCE.
+
+         La fiche répond « oui, élu », « non, élections en cours d'organisation »,
+         « non, procès-verbal de carence » ou « non, aucune élection organisée » ;
+         le parcours, lui, écrit « oui » ou « non ». Le premier mot était seul
+         lu : les élections en cours étaient donc traitées comme une carence, et
+         le dossier faisait joindre à l'inspection un procès-verbal de carence
+         qui n'existe pas, et qui n'existera pas si le scrutin donne des élus.
+         Relevé le 28 septembre 2026 par la vérification.
+
+         Les élections en cours sont un troisième état : il n'y a ni avis ni
+         carence, et rien ne s'introduit avant que le scrutin ait parlé. */
+      var enCours = /^non.*(en cours|organisation)/.test(repCse);
+      var carence = repCse.indexOf("non") === 0 && !enCours;
+      var sansCse = carence;
       var avecCse = repCse.indexOf("oui") === 0;
       var d0 = ctx.aujourdhui instanceof Date ? ctx.aujourdhui : new Date();
-      var pieceAvis = sansCse ? "procès-verbal de carence" : "avis du comité social et économique";
+      var pieceAvis = sansCse ? "procès-verbal de carence"
+        : (enCours ? "pièce de l'étape 1, avis du comité ou procès-verbal de carence selon le résultat du scrutin"
+          : "avis du comité social et économique");
 
       L.push("DANS CET ORDRE");
       L.push("");
@@ -1293,15 +1306,18 @@
          procès-verbal de carence (L. 2314-9) qui établit qu'il n'y avait
          personne à consulter. Attribuer à L. 1321-4 une règle qu'il ne porte
          pas a été relevé le 26 septembre 2026. */
-      L.push(sansCse
-        ? "règlement ne peut être introduit qu'après avoir été soumis à l'avis du"
-        : "règlement ne peut être introduit qu'après avoir été soumis à l'avis du");
+      L.push("règlement ne peut être introduit qu'après avoir été soumis à l'avis du");
       L.push(sansCse
         ? "comité social et économique (L. 1321-4) ; sans comité, cet avis est sans"
-        : "comité social et économique (L. 1321-4).");
+        : "comité social et économique (L. 1321-4)." + (enCours
+            ? " Vos élections étant en cours," : ""));
       if (sansCse) {
         L.push("objet, et c'est le procès-verbal de carence qui établit qu'il n'y avait");
         L.push("personne à consulter (L. 2314-9).");
+      }
+      if (enCours) {
+        L.push("cette formalité attend le résultat du scrutin : ni l'avis ni le");
+        L.push("procès-verbal de carence n'existent encore.");
       }
       L.push("");
       L.push("");
@@ -1360,7 +1376,22 @@
       L.push("      des quatre-vingt-dix jours :");
       L.push("      " + SITE + "audit-cse.html#elections");
       L.push("");
-      if (!avecCse && !sansCse) {
+      if (enCours) {
+        L.push("  [x] NON, LES ÉLECTIONS SONT EN COURS D'ORGANISATION - c'est ce que dit");
+        L.push("      votre fiche, et c'est un cas à part : il n'y a ni avis du comité,");
+        L.push("      ni procès-verbal de carence, et aucun des deux ne peut être joint");
+        L.push("      au règlement aujourd'hui. Attendez le résultat du scrutin.");
+        L.push("      S'il donne des élus, c'est leur avis qui est requis (L. 1321-4) et");
+        L.push("      la lettre ci-dessous est celle de la consultation. S'il ne donne");
+        L.push("      aucun candidat, un procès-verbal de carence est établi (L. 2314-9)");
+        L.push("      et c'est lui qui accompagnera le règlement.");
+        L.push("");
+        L.push("      Vous pouvez préparer le règlement d'ici là : ce sont seulement son");
+        L.push("      introduction, son dépôt et son affichage qui attendent, parce que");
+        L.push("      la formalité de l'avis les précède toutes.");
+        L.push("");
+      }
+      if (!avecCse && !sansCse && !enCours) {
         L.push("NOTE - Votre fiche ne dit pas si un comité est en place. La lettre");
         L.push("ci-dessous est celle de la consultation ; répondez à la question dans");
         L.push("votre fiche et elle deviendra, s'il y a lieu, celle de la transmission");
@@ -1575,6 +1606,14 @@
         L.push("c'est lui que L. 2314-9 vous fait de toute façon transmettre à");
         L.push("l'inspection dans les quinze jours. La lettre ci-dessous le joint et");
         L.push("dit elle-même pourquoi l'avis n'y est pas.");
+      } else if (enCours) {
+        L.push("");
+        L.push("Chez vous, cette pièce n'existe pas encore : vos élections sont en");
+        L.push("cours. Ce sera l'avis du comité si le scrutin donne des élus, le");
+        L.push("procès-verbal de carence s'il n'en donne aucun. N'envoyez pas cette");
+        L.push("lettre avant, et ne joignez pas un procès-verbal de carence qui n'a pas");
+        L.push("été établi : la communication doit accompagner les mesures de publicité");
+        L.push("(L. 1321-4), et celles-ci attendent aussi.");
       } else {
         L.push("Chez vous, c'est l'avis du comité, rendu à l'étape 1.");
       }

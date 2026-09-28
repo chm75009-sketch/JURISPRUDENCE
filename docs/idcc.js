@@ -260,7 +260,11 @@
       if (!v) return false;
       /* L'ancien séparateur, le tiret long, peut encore être dans une fiche
          enregistrée avant le 8 septembre 2026 : on l'accepte à la lecture. */
-      var v2 = v.replace(/\s[--]\s/, " - ");
+      /* Le tiret long ou demi-cadratin qui sépare le numéro du libellé devient
+         un trait d'union. La classe ne portait plus que des traits d'union
+         après un nettoyage : elle ne remplaçait donc plus rien. Écrite en
+         échappement Unicode. Relevé le 28 septembre 2026. */
+      var v2 = v.replace(/\s[\u2014\u2013]\s/, " - ");
       for (var i = 0; i < liste.length; i++) if (valeurDe(liste[i]) === v2) return true;
       return false;
     }

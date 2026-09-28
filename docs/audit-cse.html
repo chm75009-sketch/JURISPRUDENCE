@@ -551,7 +551,10 @@
     return "b" + (h >>> 0).toString(36);
   }
   function blocsDeTexte(t) {
-    t = String(t || "").replace(/[--]/g, "-").replace(/\u00a0/g, " ");
+    /* Même filtre, même perte : la classe ne portait plus que des traits
+       d'union et ne normalisait plus rien. Écrite en échappement Unicode, elle
+       survit au nettoyage des tirets. Relevé le 28 septembre 2026. */
+    t = String(t || "").replace(/[\u2014\u2013]/g, "-").replace(/\u00a0/g, " ");
     var lignes = t.split("\n"), b = [], i = 0;
     /* l'en-tête : dénomination, adresse, SIRET, puis le titre et son fondement */
     while (i < lignes.length && lignes[i].trim() !== "") { b.push({ k: "ent", t: lignes[i].trim() }); i++; }

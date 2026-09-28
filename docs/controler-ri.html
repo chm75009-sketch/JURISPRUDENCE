@@ -559,7 +559,12 @@
   var ARTICLES = [];
   function repererArticles(texte) {
     ARTICLES = [];
-    var re = /(?:^|\n)[ \t]*(?:(ARTICLE|Article|ARTICLE|Art\.?|ART\.?)[ \t]*(\d+(?:[.\-]\d+)*)|(\d+(?:\.\d+)+)[ \t]*[--.)]?)[ \t]*/g;
+    /* Le séparateur qui suit un numéro d'article, « 7.3 - Usage », pouvait
+       être un tiret long, un demi-cadratin, un trait d'union, un point ou une
+       parenthèse. Le nettoyage des tirets a réduit la classe à un seul trait
+       d'union : les articles séparés par un cadratin ne se découpaient plus.
+       Relevé le 28 septembre 2026. */
+    var re = /(?:^|\n)[ \t]*(?:(ARTICLE|Article|ARTICLE|Art\.?|ART\.?)[ \t]*(\d+(?:[.\-]\d+)*)|(\d+(?:\.\d+)+)[ \t]*[\u2014\u2013\-.)]?)[ \t]*/g;
     var m;
     while ((m = re.exec(texte)) !== null) {
       var num = m[2] || m[3];
