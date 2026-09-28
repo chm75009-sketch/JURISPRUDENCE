@@ -268,7 +268,13 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   Array.prototype.forEach.call($("#onglets").children, function (b) {
-    b.addEventListener("click", function () { if (!b.disabled) onglet(b.dataset.o); });
+    b.addEventListener("click", function () {
+      if (b.disabled) return;
+      /* L'onglet 3 se remplit en s'ouvrant : il montrait une page vide quand on
+         y venait sans passer par le bouton. Corrigé le 28 septembre 2026. */
+      if (b.dataset.o === "sortie" && analyse) rendreSortie();
+      onglet(b.dataset.o);
+    });
   });
 
   /* ---------------------------------------------------------------- */
@@ -452,7 +458,16 @@
     return { dit: false, extrait: suite.split("\n")[0] };
   }
   function etatDuTexteHtml(texte) {
-    var crochets = (String(texte || "").match(/\[[^\]\n]{1,120}\]/g) || []).map(function (x) {
+    /* UN CROCHET QUI TIENT SUR DEUX LIGNES EST UN CROCHET.
+
+       L'expression refusait le retour à la ligne, et le plus long crochet du
+       règlement lui échappait : « [ÉCRIRE ICI CE QUI LA JUSTIFIE DANS VOTRE
+       ENTREPRISE, par exemple : …] », celui de la clause de neutralité, tient
+       sur quatre lignes. Il n'était donc pas compté, et c'est précisément celui
+       dont dépend la licéité de la clause. Relevé par la contre-vérification du
+       26 septembre 2026, corrigé le 28. Le crochet est replié sur une ligne
+       pour l'affichage. */
+    var crochets = (String(texte || "").match(/\[[^\][]{1,400}\]/g) || []).map(function (x) {
       return x.replace(/\s+/g, " ").trim();
     });
     var v = dateEntreeVigueur(texte);
@@ -475,7 +490,38 @@
         crochets.slice(0, 12).map(function (x) { return "<blockquote>" + ech(x) + "</blockquote>"; }).join("") +
         (crochets.length > 12 ? "<p>… et " + (crochets.length - 12) + " autre" +
           (crochets.length - 12 > 1 ? "s" : "") + ".</p>" : "") + "</div></div>";
+    h += neutraliteHtml(texte);
     return h;
+  }
+
+  /* LA CLAUSE DE NEUTRALITÉ SANS SON MOTIF.
+
+     L. 1321-2-1 (LEGIARTI000033001625) ne l'admet qu'à deux conditions
+     cumulatives : elle doit être justifiée par l'exercice d'autres libertés et
+     droits fondamentaux ou par les nécessités du bon fonctionnement de
+     l'entreprise, ET proportionnée au but recherché. Un règlement qui pose la
+     neutralité sans écrire ce qui la justifie porte une clause que l'inspecteur
+     peut faire retirer, et l'écran ne le disait pas. Ajouté le 28 septembre
+     2026 sur la contre-vérification du 26. */
+  function neutraliteHtml(texte) {
+    var n = sansAccentBas(texte);
+    var pose = /neutralite|signe religieux|signes religieux|manifestation des convictions|convictions politiques|port du voile|tenue vestimentaire/.test(n);
+    if (!pose) return "";
+    var justifie = /justifi/.test(n) &&
+      (/libertes et droits fondamentaux|bon fonctionnement/.test(n));
+    var proportionne = /proportionn/.test(n);
+    if (justifie && proportionne) return "";
+    var manque = [];
+    if (!justifie) manque.push("ce qui la justifie, autres libertés et droits fondamentaux ou nécessités du bon fonctionnement de l'entreprise");
+    if (!proportionne) manque.push("en quoi elle est proportionnée au but recherché");
+    return '<div class="pt rouge"><div class="tt"><span class="etat ko">à motiver</span>' +
+      '<span><span class="obj">La clause de neutralité, sans son motif</span>' +
+      '<span class="fond">L. 1321-2-1</span></span><span></span></div><div class="c">' +
+      "<p>Votre règlement restreint la manifestation des convictions, et le texte " +
+      "n'énonce pas " + ech(manque.join(", ni ")) + ". Les deux conditions sont " +
+      "cumulatives : la motivation doit figurer dans le règlement lui-même, c'est elle " +
+      "qui défendra la clause devant l'inspecteur du travail et devant le juge. " +
+      "À défaut, l'inspecteur peut exiger son retrait (L. 1322-1).</p></div></div>";
   }
 
   function rendreDiagnostic() {
@@ -694,7 +740,14 @@
     }).join("");
   }
 
-  function assembler() {
+  /* L'ONGLET « LA VERSION CORRIGÉE » S'AFFICHE QUAND ON L'OUVRE.
+
+     Le contenu n'était écrit que par le bouton « Voir la proposition de
+     modification » : qui cliquait directement sur l'onglet 3 tombait sur une
+     page vide, alors que l'analyse était faite. Défaut relevé par la
+     contre-vérification du 26 septembre 2026, corrigé le 28. Le rendu est
+     séparé du changement d'onglet, et l'onglet le demande en s'ouvrant. */
+  function rendreSortie() {
     var c = CR.corriger(analyse, choix());
     var h = corpsEnHtml(c.corps.trim());
 
@@ -721,6 +774,10 @@
     $("#corrige").innerHTML = h;
     $("#compte-rendu").innerHTML = compteRendu(c);
     $("#sortie").textContent = CR.texteCorrige(analyse, choix());
+  }
+
+  function assembler() {
+    rendreSortie();
     onglet("sortie");
     $("#o-sortie").scrollIntoView({ block: "start" });
   }

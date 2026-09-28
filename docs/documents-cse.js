@@ -58,6 +58,7 @@
   if (!DP || typeof DP.ajouter !== "function") return;
 
   var cro = DP.outils.cro, resp = DP.outils.resp;
+  var villeFiche = DP.outils.villeDe;
   var leJour = DP.outils.leJour;
   var dans = DP.outils.dans;
   var entete = DP.outils.entete;
@@ -142,7 +143,7 @@
     return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
 
-  function lieu(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
+  function lieu(ctx) { return cro(villeFiche(ctx.profil || {}), "lieu"); }
   function signataire(ctx) { return cro(resp(ctx.profil || {}), "Nom et qualité du représentant légal"); }
 
   function effectifDe(ctx) {

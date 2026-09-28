@@ -101,6 +101,7 @@
   }
 
   var cro = O.cro, resp = O.resp, leJour = O.leJour, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   /* ════════════════════════════════════════════════════════════════════════
      LES OUTILS DE DATE
@@ -176,7 +177,7 @@
     var p = pro(ctx), f = fic(ctx);
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
-  function lieuDe(ctx) { return cro(pro(ctx).ville, "lieu"); }
+  function lieuDe(ctx) { return cro(villeFiche(pro(ctx)), "lieu"); }
   function signataire(ctx) {
     return cro(resp(pro(ctx)), "Nom et qualité du représentant légal");
   }

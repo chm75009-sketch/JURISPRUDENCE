@@ -72,6 +72,7 @@
 
   var O = DP.outils;
   var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
@@ -154,7 +155,7 @@
     var p = P(ctx), f = F(ctx);
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
-  function villeDe(ctx) { return cro(P(ctx).ville, "lieu"); }
+  function villeDe(ctx) { return cro(villeFiche(P(ctx)), "lieu"); }
   function adresseDe(ctx) { return cro(P(ctx).adresse, "adresse du siège"); }
   function signataire(ctx) { return cro(resp(P(ctx)), "Nom et qualité du signataire"); }
   function conventionDe(ctx) {

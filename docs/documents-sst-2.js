@@ -108,6 +108,7 @@
 
   var O = DP.outils;
   var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   var GROS = "════════";
   function blocCoordonnees(ctx) { return tableauCoordonnees(ctx, null); }
@@ -178,7 +179,7 @@
     var p = (ctx && ctx.profil) || {};
     return cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE");
   }
-  function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
+  function lieu(ctx) { return cro(villeFiche((ctx && ctx.profil) || {}), "lieu"); }
   function signataire(ctx) {
     return cro(resp((ctx && ctx.profil) || {}), "Nom et qualité du représentant légal");
   }

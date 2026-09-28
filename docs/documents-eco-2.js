@@ -76,6 +76,7 @@
     throw new Error("documents-eco-2.js : documents-produits.js doit être chargé avant.");
   var O = A.outils;
   var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   /* ═══════════════════════════════════════════ le moteur du module, s'il est là
 
@@ -240,7 +241,7 @@
     return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
   function adresse(ctx) { return cro(((ctx && ctx.profil) || {}).adresse, "adresse du siège"); }
-  function ville(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
+  function ville(ctx) { return cro(villeFiche((ctx && ctx.profil) || {}), "lieu"); }
   function signataire(ctx) {
     return cro(resp((ctx && ctx.profil) || {}), "Nom et qualité du représentant légal");
   }

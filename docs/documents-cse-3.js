@@ -113,6 +113,7 @@
   }
 
   var cro = O.cro, resp = O.resp;
+  var villeFiche = O.villeDe;
   var leJour = O.leJour;
   var dans = O.dans;
   var entete = O.entete;
@@ -218,7 +219,7 @@
     return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
 
-  function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
+  function lieu(ctx) { return cro(villeFiche((ctx && ctx.profil) || {}), "lieu"); }
 
   function signataire(ctx) {
     return cro(resp((ctx && ctx.profil) || {}), "Nom et qualité du représentant légal");

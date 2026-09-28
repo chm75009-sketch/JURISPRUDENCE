@@ -39,10 +39,14 @@
     });
   }
   function refArt(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
+  /* « 1 septembre 2027 » se lisait partout où cette page date quelque chose :
+     en français, le premier du mois s'écrit « 1er ». Corrigé ici, une fois,
+     le 28 septembre 2026, plutôt qu'à chaque appel. */
   function dateFr(iso) {
     if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
-    return new Date(iso + "T12:00:00").toLocaleDateString("fr-FR",
+    var t = new Date(iso + "T12:00:00").toLocaleDateString("fr-FR",
       { day: "numeric", month: "long", year: "numeric" });
+    return t.replace(/^1 /, "1er ");
   }
   function joursEntre(a, b) {
     if (!a || !b) return null;
@@ -1253,9 +1257,22 @@
       { c: "origineModification", nom: "Origine de la modification", t: "select",
         options: ["initiative de l'employeur", "injonction de l'inspection du travail"],
         si: function (P, D) { return D.operation === "modification" || D.operation === "retrait de clauses" ? true : (D.operation ? false : null); } },
-      { c: "dateFranchissementSeuil", nom: "Date à laquelle le seuil de cinquante salariés a été atteint", t: "date",
+      /* Le champ demandait « la date à laquelle le seuil a été atteint », et
+         l'échéance était calculée douze mois après. Il en manquait douze : la
+         date de référence de L. 1311-2 et de R. 1321-5 est celle où le seuil a
+         été atteint PENDANT DOUZE MOIS CONSÉCUTIFS, c'est-à-dire la fin de
+         cette période, pas son début. Corrigé le 28 septembre 2026. */
+      { c: "dateFranchissementSeuil", nom: "Date à laquelle le seuil de cinquante salariés a été atteint pour le premier mois", t: "date",
         si: function (P) { return seuil(P, 50); },
-        aide: "L'obligation s'applique au terme d'un délai de douze mois à compter de la date à laquelle le seuil a été atteint pendant douze mois consécutifs (art. R. 1321-5)." },
+        aide: "Le premier des douze mois consécutifs. L'obligation s'applique douze mois après la fin de ces douze mois : au total, deux ans après cette date (art. L. 1311-2, renvoyant à L. 2312-2 ; art. R. 1321-5)." },
+      /* Le titre sur la neutralité sortait dans tous les règlements, coiffé de
+         « [FACULTATIF] », avec un crochet à remplir et une note qui disait de
+         le supprimer. Une faculté ne se produit pas par défaut : la question se
+         pose, et le titre ne paraît que sur « oui ». Ajouté le 28 septembre
+         2026. */
+      { c: "neutralite", nom: "Inscrivez-vous un principe de neutralité ?", t: "select",
+        options: ["non", "oui"],
+        aide: "Faculté encadrée par L. 1321-2-1 : la clause n'est licite que justifiée par l'exercice d'autres libertés et droits fondamentaux ou par les nécessités du bon fonctionnement, ET proportionnée au but recherché. Sur « non », le règlement n'en porte pas." },
       { c: "dateAvisCSE", nom: "Date de l'avis du comité social et économique", t: "date",
         si: function (P) { return sansComite(P) ? false : true; } },
       { c: "dateDepotGreffe", nom: "Date de dépôt au greffe du conseil de prud'hommes", t: "date" },
@@ -1288,9 +1305,21 @@
         risque: "Le fait de méconnaître les dispositions des articles L. 1311-2 à L. 1322-4 et R. 1321-1 à R. 1321-5 relatives au règlement intérieur est puni de l'amende prévue pour les contraventions de la quatrième classe (R. 1323-1), L. 1311-2, qui pose l'obligation même, ouvre cette énumération. Et sans règlement, aucune échelle de sanctions n'existe : chez l'employeur tenu d'en établir un, une sanction autre que le licenciement ne peut être prononcée que si le règlement la prévoit.",
         quand: function (D, P) {
           if (!D.dateFranchissementSeuil) return null;
-          var t = moisApres(D.dateFranchissementSeuil, 12);
+          /* Deux fois douze mois, et non un : les douze mois consécutifs
+             pendant lesquels le seuil doit être atteint, puis les douze mois
+             de L. 1311-2 qui courent de la fin de ceux-là. Les premiers
+             manquaient. Corrigé le 28 septembre 2026. */
+          var douze = moisApres(D.dateFranchissementSeuil, 12);
+          var t = moisApres(douze, 12);
+          var note = "Le seuil doit d'abord être atteint pendant douze mois consécutifs, " +
+            "ici jusqu'au " + dateFr(douze) + " ; l'obligation s'applique douze mois " +
+            "après ce terme (art. L. 1311-2, renvoyant à L. 2312-2 ; art. R. 1321-5).";
+          var aujourdhui = new Date().toISOString().slice(0, 10);
+          if (t <= aujourdhui)
+            return { iso: t, libelle: "Règlement intérieur déjà exigible, depuis le " + dateFr(t),
+              note: note + " Ce terme est passé : le règlement est dû aujourd'hui." };
           return { iso: t, libelle: "Règlement intérieur dû à compter du " + dateFr(t),
-            note: "Douze mois à compter de la date à laquelle le seuil de cinquante salariés a été atteint (art. R. 1321-5)." };
+            note: note };
         },
         /* Cette étape était masquée SOUS cinquante salariés, l'inverse de ce
            qu'il fallait. Défaut mesuré le 1er septembre 2026 : l'employeur de
@@ -4182,6 +4211,32 @@
       t = window.DocumentsProduits.sansExemple(t);
     return (t != null && window.FeuilleDoc) ? window.FeuilleDoc.blocs(t) : relireCorps();
   }
+  /* LE CLASSEUR PART DU DOCUMENT ENTIER, PAS DE L'ONGLET OUVERT.
+
+     Le bouton du tableur s'affichait dès que le document portait un tableau,
+     mais il n'exportait que l'onglet ouvert : sur le règlement intérieur, huit
+     vues sur dix n'en portent aucun, et le bouton ne produisait donc rien. Ni
+     fichier, ni message. Défaut relevé par la contre-vérification du
+     26 septembre 2026, corrigé le 28 : le classeur rassemble les tableaux de
+     toutes les parties, quelle que soit la vue où l'on clique, et le bouton
+     n'apparaît que si le document en porte au moins un. */
+  function blocsDuDocument() {
+    if (!COURRIER) return [];
+    if (!COURRIER.parties || !COURRIER.parties.length) return blocsAEmporter();
+    var out = [];
+    for (var i = 0; i < COURRIER.parties.length; i++) {
+      var t = texteEntier(i);
+      if (t == null) {
+        var s = sousDe(COURRIER.parties[i]);
+        t = s ? s.map(function (x) { return x.texte; }).join("\n\n") : null;
+      }
+      if (t == null) continue;
+      if (window.DocumentsProduits && window.DocumentsProduits.sansExemple)
+        t = window.DocumentsProduits.sansExemple(t);
+      if (window.FeuilleDoc) out = out.concat(window.FeuilleDoc.blocs(t));
+    }
+    return out;
+  }
   $("dt-corps").addEventListener("input", function () {
     if (!COURRIER) return;
     var t = lireCorps(), cle = clePartie(COURRIER.id, COURRIER.partie || 0, COURRIER.sous || 0);
@@ -4348,7 +4403,7 @@
   $("dt-tableur").addEventListener("click", function () {
     if (!TABLEUR) return;
     if (TABLEUR.feuille) {
-      var feuilles = window.FeuilleDoc.tableaux(blocsAEmporter());
+      var feuilles = window.FeuilleDoc.tableaux(blocsDuDocument());
       if (TABLEUR.lignes) feuilles.push({ titre: "Modèle vierge", lignes: TABLEUR.lignes });
       if (feuilles.length) window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles), nomFichier(TABLEUR.nom) + ".xlsx");
       return;

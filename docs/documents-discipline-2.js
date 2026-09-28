@@ -72,6 +72,7 @@
 
   var O = DP.outils;
   var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   var TRAIT = "--------------------------------------------------------------------------";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
@@ -174,7 +175,7 @@
     var p = (ctx && ctx.profil) || {};
     return cro(p.denomination || p.entreprise, "DÉNOMINATION SOCIALE");
   }
-  function lieu(ctx) { return cro(((ctx && ctx.profil) || {}).ville, "lieu"); }
+  function lieu(ctx) { return cro(villeFiche((ctx && ctx.profil) || {}), "lieu"); }
 
   function X(ex, valeur, crochet) { return ex ? valeur : "[" + crochet + "]"; }
 

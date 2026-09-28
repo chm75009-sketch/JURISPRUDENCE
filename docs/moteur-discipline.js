@@ -2483,9 +2483,31 @@ function replier(s) {
    « L. 1331-2 », et le passage rendu commençait par « 3, et à eux seuls ».
    Une phrase finit sur un saut de ligne, ou sur un point, un point
    d'exclamation ou d'interrogation suivi d'un blanc et d'une majuscule. */
+/* UN RETOUR À LA LIGNE AU MILIEU D'UNE PHRASE N'EST PAS UNE FIN DE PHRASE.
+
+   Le découpage coupait à chaque retour à la ligne. Un règlement déposé en
+   texte, ou recopié depuis le document que l'application produit elle-même,
+   porte des lignes de soixante-douze caractères : chaque ligne devenait une
+   « phrase », et les passages cités à l'écran s'arrêtaient au milieu, par
+   exemple juste avant « 7.3 ». Défaut relevé par la contre-vérification du
+   26 septembre 2026, corrigé le 28.
+
+   Les retours à la ligne qui séparent vraiment deux paragraphes sont gardés :
+   une ligne vide, ou une ligne suivante qui commence comme un titre, une
+   numérotation, une puce ou une majuscule. Les autres sont recollés par une
+   espace, et les positions restent celles du texte d'origine, puisque la
+   longueur ne change pas. */
+function recollerLignes(brut) {
+  /* Une ligne qui commence par une numérotation - « 7.3 - », « 2) », « - » -
+     ouvre un paragraphe : elle n'est pas recollée à la précédente. */
+  return brut.replace(
+    /([^\s.!?:;»)\]])\n(?![\n\s])(?!\d+(?:\.\d+)*\s*[-)°.])(?![-•*]\s)(?=[a-zà-ÿ0-9(«"])/g,
+    "$1 ");
+}
+
 function phrases(texte) {
   const P = [];
-  const brut = String(texte || "");
+  const brut = recollerLignes(String(texte || ""));
   const fin = /\n+|[.!?]+(?=\s+(?:["«(\[A-ZÀ-ÝŒ]|\d+(?:\.\d+)*\s*-)|\s*$)/g;
   let debut = 0, m;
   const poser = (a, b) => {
@@ -2755,10 +2777,23 @@ function reperer(P, marqueurs) {
    restriction aux libertés. Le rappel de l'interdiction est le contraire de
    sa violation. Une phrase qui porte l'une de ces tournures est donc mise à
    part, et dite pour ce qu'elle est. Relevé le 26 septembre 2026. */
+/* La liste s'est allongée le 28 septembre 2026. L'article 6 du règlement
+   déposé par le client, qui rappelle l'égalité de traitement, ressortait classé
+   parmi les « dispositions discriminatoires » : il énonce la règle « sans
+   distinction de » et « quelles que soient », deux tournures qu'aucun mot de la
+   liste ne couvrait. Une phrase qui pose l'égalité n'est pas une phrase qui
+   discrimine. Les formes ajoutées disent toutes la même chose, que le motif
+   énuméré ne fonde aucune différence. */
 const NIE = ["aucun", "aucune", "interdit", "interdite", "interdits", "interdites",
   "interdiction", "proscrit", "proscrite", "prohibe", "prohibee", "ne peut", "ne peuvent",
   "ne sera", "ne seront", "n est pas", "ne sont pas", "n est autorise", "sans etre",
-  "est exclue", "sont exclues", "reputee non ecrite", "reputees non ecrites"];
+  "est exclue", "sont exclues", "reputee non ecrite", "reputees non ecrites",
+  "nul ne", "personne ne", "sans distinction", "sans consideration",
+  "sans discrimination", "non-discrimination", "non discrimination",
+  "quel que soit", "quelle que soit", "quels que soient", "quelles que soient",
+  "egalite de traitement", "egalite professionnelle", "independamment de",
+  "a capacite professionnelle egale", "en aucun cas", "ne saurait", "ne sauraient",
+  "s abstient de toute", "s abstiennent de toute", "ne donne lieu a aucune"];
 function rappelleLInterdiction(replie) {
   return NIE.some(x => replie.indexOf(x) >= 0);
 }

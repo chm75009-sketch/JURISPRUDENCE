@@ -599,7 +599,15 @@
         CT.dateFr(r[0].date) + ".");
       if (r[1]) lignes.push("Rémunérations : « " + r[1].titre + " », en vigueur depuis le " +
         CT.dateFr(r[1].date) + ".");
-      if (!lignes.length) { d.textContent = "Légifrance n'a rien rendu. Réessayez plus tard."; return; }
+      if (!lignes.length) {
+        d.textContent = REFUS_ORIGINE
+          ? "La vérification n'est pas possible depuis cette adresse : le relais de " +
+            "l'application la refuse encore. Il n'y a rien à corriger de votre côté. " +
+            "Les montants portés au contrat sont ceux des textes cités en pied de page, " +
+            "à leur date."
+          : "Légifrance n'a rien rendu. Réessayez plus tard.";
+        return;
+      }
       var memeFrais = r[0] && r[0].date === CT.CCN.frais.depuis;
       var memeSalaire = r[1] && r[1].date === CT.CCN.salaires.depuis;
       lignes.push(memeFrais && memeSalaire
@@ -611,13 +619,27 @@
     });
   }
 
+  /* LE RELAIS PEUT REFUSER L'ADRESSE, ET CE N'EST PAS UNE PANNE DE LÉGIFRANCE.
+
+     Depuis l'espace client, les trois fonctions répondent « origine refusée » :
+     l'écran disait « Légifrance n'a rien rendu, réessayez plus tard », ce qui
+     envoie attendre quelque chose qui ne viendra pas. Relevé le 26 septembre
+     2026. On distingue le refus d'adresse du silence de Légifrance. */
+  var REFUS_ORIGINE = false;
   function lireTexte(id) {
     return window.fetch(RELAIS, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ action: "ccn-texte", id: id }),
-    }).then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { return j && j.titre ? j : null; })
+    }).then(function (r) {
+      if (r.status === 403) {
+        return r.json().catch(function () { return null; }).then(function (d) {
+          if (d && d.erreur === "ORIGINE_REFUSEE") REFUS_ORIGINE = true;
+          return null;
+        });
+      }
+      return r.ok ? r.json() : null;
+    }).then(function (j) { return j && j.titre ? j : null; })
       .catch(function () { return null; });
   }
 

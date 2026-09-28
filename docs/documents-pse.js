@@ -52,6 +52,7 @@
     throw new Error("documents-pse.js : documents-produits.js doit être chargé avant.");
   var O = A.outils;
   var cro = O.cro, resp = O.resp, leJour = O.leJour, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   /* Le moteur du module, quand la page l'a chargé : c'est LUI qui dit si le
      plan est dû, quel dispositif d'accompagnement l'effectif commande, quel
@@ -269,7 +270,7 @@
     var s = nom(ctx);
     return /^[aeiouyàâäéèêëîïôöùûüh]/i.test(s) ? "d'" + s : "de " + s;
   }
-  function ville(ctx) { return cro((ctx.profil || {}).ville, "lieu"); }
+  function ville(ctx) { return cro(villeFiche(ctx.profil || {}), "lieu"); }
   function signataire(ctx) { return cro(resp(ctx.profil || {}), "Nom et qualité du représentant légal"); }
 
   function mesures(f) {

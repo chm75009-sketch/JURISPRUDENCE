@@ -316,6 +316,15 @@
        connu, restent les dix thèmes de L. 2312-21, alinéa 3. */
     c.grille = AUD ? AUD.grilleDue(c.eff, c.accord) : null;
     c.plancher = (AUD && AUD.plancher) || [];
+    /* L'appartenance à un groupe est sur la fiche d'entreprise. La rubrique 9,
+       « Pour les entreprises appartenant à un groupe, transferts commerciaux et
+       financiers entre les entités du groupe », sortait pleine de lignes à
+       remplir pour une entreprise qui n'appartient à aucun groupe : quarante
+       cases sans objet, que personne ne savait quoi en faire. La rubrique reste,
+       parce que le décret la numérote, mais elle porte « Non applicable » et une
+       ligne. Corrigé le 28 septembre 2026. */
+    c.groupe = /^oui/i.test(String(profil.groupe || "").trim());
+    c.groupeDit = String(profil.groupe || "").trim() !== "";
     return c;
   }
 
@@ -333,6 +342,28 @@
           });
         });
         if (!lignes.length) lignes.push({ section: "", sujet: "", info: r.titre });
+        /* La section « Evolution des effectifs par type de contrat, par âge, par
+           ancienneté » demande trois choses, et le découpage du décret n'en
+           portait qu'une ligne, celle des types de contrat et du mois par mois :
+           l'âge et l'ancienneté n'avaient aucune case. Deux lignes les
+           reçoivent, remplies depuis le registre. Ajouté le 28 septembre 2026. */
+        var iAnc = -1, secAnc = "", sujAnc = "";
+        lignes.forEach(function (l, i) {
+          if (iAnc === -1 && /par âge, par ancienneté/i.test(String(l.sujet || ""))) {
+            iAnc = i; secAnc = l.section; sujAnc = l.sujet;
+          } else if (iAnc !== -1 && l.sujet === sujAnc) { iAnc = i; }
+        });
+        if (iAnc !== -1)
+          lignes.splice(iAnc + 1, 0,
+            { section: secAnc, sujet: sujAnc, info: "répartition de l'effectif par tranche d'âge" },
+            { section: secAnc, sujet: sujAnc, info: "répartition de l'effectif par tranche d'ancienneté" });
+        /* La rubrique du groupe, quand il n'y a pas de groupe : une ligne qui le
+           dit, au lieu de quarante cases sans objet. Le titre du décret est
+           conservé, et la raison est écrite. Le 28 septembre 2026. */
+        if (/appartenant à un groupe/i.test(r.titre) && c.groupeDit && !c.groupe)
+          lignes = [{ section: "Non applicable", sujet: "Non applicable",
+            info: "L'entreprise n'appartient à aucun groupe : cette rubrique est sans objet. " +
+              "Si elle intègre un groupe, elle redevient due et se remplit ici." }];
         return { n: r.n, titre: r.titre, lignes: lignes };
       });
     }
@@ -370,6 +401,161 @@
      Chaque case est donc écrite ici et gardée sur ce poste, sous la clé
      « bdese-contenu » ; le classeur téléchargé les reprend. Relevé le
      26 septembre 2026. */
+  /* ════════════════════════════════════════════════════════════════════════
+     LES SÉRIES QUE LE REGISTRE DU PERSONNEL DONNE DÉJÀ.
+
+     Le classeur sortait avec sept cases remplies sur quatre cent quatre-vingt-
+     dix, et l'entreprise devait recompter à la main ce qu'elle a déjà saisi
+     salarié par salarié : l'effectif mois par mois, les contrats à durée
+     indéterminée et déterminée, les temporaires, les tranches d'âge et
+     d'ancienneté, le temps partiel. Défaut relevé par la contre-vérification du
+     26 septembre 2026, corrigé le 28.
+
+     Rien n'est inventé : chaque série est comptée sur le registre, à la date du
+     31 décembre de l'année de la colonne, ou à aujourd'hui pour l'année en
+     cours. Les colonnes « perspective » restent vides, parce qu'une prévision
+     ne se déduit pas d'un registre. Une case déjà écrite n'est jamais
+     remplacée, et chaque valeur calculée porte la date à laquelle elle a été
+     comptée.
+     ════════════════════════════════════════════════════════════════════════ */
+  var MOIS_COURT = ["janv.", "févr.", "mars", "avril", "mai", "juin", "juil.",
+                    "août", "sept.", "oct.", "nov.", "déc."];
+  function registrePersonnel() {
+    var R = null;
+    try { R = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
+    var L = (R && R.salaries) || [];
+    return L.filter(function (s) { return s && !s.ex && (s.nom || s.pre || s.emp); });
+  }
+  /* Présent à une date : entré au plus tard ce jour-là, pas encore sorti. */
+  function present(s, iso) {
+    var e = String(s.ent || "").trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(e) || e > iso) return false;
+    var o = String(s.sor || "").trim();
+    return !(/^\d{4}-\d{2}-\d{2}$/.test(o) && o <= iso);
+  }
+  function finDe(annee, aujourdhuiIso) {
+    var fin = annee + "-12-31";
+    return fin > aujourdhuiIso ? aujourdhuiIso : fin;
+  }
+  function comptePresents(L, iso, filtre) {
+    var n = 0;
+    L.forEach(function (s) { if (present(s, iso) && (!filtre || filtre(s))) n++; });
+    return n;
+  }
+  function natureEst(s, liste) {
+    return liste.indexOf(String(s.nature || "").trim().toLowerCase()) >= 0;
+  }
+  function ansAu(iso, isoRef) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ""))) return null;
+    var a = +isoRef.slice(0, 4) - +iso.slice(0, 4);
+    if (isoRef.slice(5) < iso.slice(5)) a--;
+    return a;
+  }
+  function tranches(L, iso, valeur, bornes, libelles) {
+    var n = new Array(libelles.length).fill(0), inconnu = 0;
+    L.forEach(function (s) {
+      if (!present(s, iso)) return;
+      var v = valeur(s);
+      if (v === null) { inconnu++; return; }
+      var i = 0;
+      while (i < bornes.length && v >= bornes[i]) i++;
+      n[i]++;
+    });
+    var dit = libelles.map(function (l, i) { return n[i] + " " + l; }).join(", ");
+    return dit + (inconnu ? ", " + inconnu + " sans la donnée au registre" : "");
+  }
+  /* Ce que chaque ligne du décret reçoit, quand le registre sait la compter. */
+  var SERIES = [
+    { re: /effectifs retracée mois par mois/i, calc: function (L, an, auj) {
+        var out = [];
+        for (var m = 1; m <= 12; m++) {
+          var dernier = new Date(Date.UTC(+an, m, 0)).getUTCDate();
+          var iso = an + "-" + String(m).padStart(2, "0") + "-" + String(dernier).padStart(2, "0");
+          if (iso > auj) break;
+          out.push(MOIS_COURT[m - 1] + " " + comptePresents(L, iso));
+        }
+        return out.length ? out.join(", ") : "";
+      } },
+    { re: /contrat de travail à durée indéterminée/i, calc: function (L, an, auj) {
+        return String(comptePresents(L, finDe(an, auj), function (s) {
+          return natureEst(s, ["cdi", ""]) || String(s.nature || "") === "";
+        }));
+      } },
+    { re: /contrat de travail à durée déterminée/i, calc: function (L, an, auj) {
+        return String(comptePresents(L, finDe(an, auj), function (s) { return natureEst(s, ["cdd"]); }));
+      } },
+    { re: /nombre de salariés temporaires/i, calc: function (L, an, auj) {
+        return String(comptePresents(L, finDe(an, auj), function (s) { return natureEst(s, ["temporaire"]); }));
+      } },
+    { re: /contrats d'insertion et de formation en alternance/i, calc: function (L, an, auj) {
+        var iso = finDe(an, auj);
+        return String(comptePresents(L, iso, function (s) {
+          if (!natureEst(s, ["apprenti", "pro"])) return false;
+          var a = ansAu(s.nais, iso);
+          return a === null || a < 26;
+        }));
+      } },
+    { re: /répartition des effectifs par sexe et par qualification/i, calc: function (L, an, auj) {
+        var iso = finDe(an, auj), par = {};
+        L.forEach(function (s) {
+          if (!present(s, iso)) return;
+          var q = String(s.qua || "").trim() || "qualification non portée au registre";
+          var x = String(s.sexe || "").trim().toLowerCase();
+          if (!par[q]) par[q] = { f: 0, h: 0, autre: 0 };
+          if (x.indexOf("f") === 0) par[q].f++; else if (x.indexOf("m") === 0) par[q].h++;
+          else par[q].autre++;
+        });
+        var cles = Object.keys(par).sort(function (a, b) { return a.localeCompare(b, "fr"); });
+        if (!cles.length) return "";
+        return cles.map(function (q) {
+          var v = par[q];
+          return q + " : " + v.f + " femme" + (v.f > 1 ? "s" : "") + ", " + v.h +
+            " homme" + (v.h > 1 ? "s" : "") + (v.autre ? ", " + v.autre + " sans le sexe au registre" : "");
+        }).join(" ; ");
+      } },
+    { re: /travail à temps partiel\s*:\s*-?nombre, sexe et qualification/i, calc: function (L, an, auj) {
+        var iso = finDe(an, auj);
+        var tp = L.filter(function (s) {
+          return present(s, iso) && /partiel/i.test(String(s.part || ""));
+        });
+        if (!tp.length) return "0 salarié à temps partiel au registre à cette date.";
+        return tp.length + " salarié" + (tp.length > 1 ? "s" : "") + " à temps partiel : " +
+          tp.map(function (s) {
+            return (String(s.sexe || "").trim() || "sexe non porté") + ", " +
+              (String(s.qua || "").trim() || "qualification non portée");
+          }).join(" ; ");
+      } },
+    { re: /répartition de l'effectif par tranche d'âge/i, calc: function (L, an, auj) {
+        var iso = finDe(an, auj);
+        return tranches(L, iso, function (s) { return ansAu(s.nais, iso); },
+          [25, 35, 45, 55],
+          ["de moins de 25 ans", "de 25 à 34 ans", "de 35 à 44 ans", "de 45 à 54 ans", "de 55 ans et plus"]);
+      } },
+    { re: /répartition de l'effectif par tranche d'ancienneté/i, calc: function (L, an, auj) {
+        var iso = finDe(an, auj);
+        return tranches(L, iso, function (s) { return ansAu(s.ent, iso); },
+          [1, 5, 10, 20],
+          ["de moins d'un an", "de 1 à 4 ans", "de 5 à 9 ans", "de 10 à 19 ans", "de 20 ans et plus"]);
+      } },
+  ];
+  /* La valeur tirée du registre pour une case, ou une chaîne vide. */
+  function duRegistre(info, colonne) {
+    if (!/^\d{4}$/.test(String(colonne))) return "";
+    var L = registrePersonnel();
+    if (!L.length) return "";
+    var auj = new Date().toISOString().slice(0, 10);
+    if (String(colonne) > auj.slice(0, 4)) return "";
+    for (var i = 0; i < SERIES.length; i++) {
+      if (!SERIES[i].re.test(String(info))) continue;
+      var v = "";
+      try { v = SERIES[i].calc(L, String(colonne), auj) || ""; } catch (e) { v = ""; }
+      if (!v) return "";
+      return v + " (compté au registre du personnel, au " +
+        (finDe(String(colonne), auj) === auj ? "jour de l'édition" : "31 décembre") + ")";
+    }
+    return "";
+  }
+
   var CLE_CONTENU = "bdese-contenu";
   var CONTENU = (function () {
     try { return JSON.parse(localStorage.getItem(CLE_CONTENU) || "{}") || {}; }
@@ -384,9 +570,12 @@
   function cleCase(rubrique, info, colonne) {
     return rubrique + "|" + String(info).slice(0, 120) + "|" + colonne;
   }
+  /* Ce qui est saisi passe avant tout. À défaut, ce que le registre sait
+     compter, et rien d'autre : une case vide reste vide. Le 28 septembre 2026. */
   function valeurCase(rubrique, info, colonne) {
     var v = CONTENU[cleCase(rubrique, info, colonne)];
-    return v == null ? "" : String(v);
+    if (v != null && String(v).trim() !== "") return String(v);
+    return duRegistre(info, colonne);
   }
   function compterRemplies() {
     var n = 0;
@@ -544,17 +733,50 @@
   /* Excel refuse un nom d'onglet de plus de trente et un caractères, et les
      signes : \ / ? * [ ]. On coupe sur un espace pour ne pas laisser un mot
      tranché en deux, et on écarte les doublons. */
+  /* LES NOMS D'ONGLETS SE LISENT, ILS NE SE DEVINENT PAS.
+
+     Excel borne un nom d'onglet à trente et un caractères, et la coupe se
+     faisait sur le dernier espace : le classeur sortait « 5 Activités sociales
+     et », « 6 Rémunération des », « 7 Flux financiers à », « 9 Pour les
+     entreprises ». Trois onglets finissaient sur un mot outil, et deux se
+     lisaient presque pareil. Défaut relevé par la contre-vérification du
+     26 septembre 2026, corrigé le 28.
+
+     Les dix rubriques du décret sont numérotées et connues : chacune porte un
+     nom court écrit à la main, qui dit de quoi elle parle et tient dans la
+     limite. Les autres feuilles gardent la coupe, débarrassée du mot outil
+     final. */
+  var NOMS_COURTS = {
+    1: "Investissements",
+    2: "Égalité femmes-hommes",
+    3: "Fonds propres et impôts",
+    4: "Rémunération des salariés",
+    5: "Activités sociales",
+    6: "Rémunération des financeurs",
+    7: "Flux financiers reçus",
+    8: "Partenariats",
+    9: "Transferts dans le groupe",
+    10: "Environnement",
+  };
+  /* Un nom d'onglet ne finit pas sur un mot qui attend sa suite. */
+  var MOTS_OUTILS = /\s+(?:et|ou|de|des|du|la|le|les|à|au|aux|en|dans|pour|par|sur|entre|sans|avec|d'une?|l'|qui|que)$/i;
   function nomOnglet(t, pris) {
     var s = String(t || "Feuille").replace(/[\\\/\?\*\[\]:]/g, " ").replace(/\s+/g, " ").trim();
-    if (s.length > 28) {
-      s = s.slice(0, 28);
+    var num = /^(\d{1,2})\s/.exec(s);
+    if (num && NOMS_COURTS[+num[1]]) s = num[1] + " " + NOMS_COURTS[+num[1]];
+    /* Excel borne à trente et un caractères, pas à vingt-huit : la marge de
+       trois coupait « 6 Rémunération des financeurs », qui tient. Le
+       28 septembre 2026. */
+    if (s.length > 31) {
+      s = s.slice(0, 31);
       var e = s.lastIndexOf(" ");
       if (e > 12) s = s.slice(0, e);
     }
     s = s.replace(/[\s,;.\-]+$/, "");
+    while (MOTS_OUTILS.test(s)) s = s.replace(MOTS_OUTILS, "");
     if (!s) s = "Feuille";
     var base = s, i = 2;
-    while (pris[s.toLowerCase()]) { s = base.slice(0, 26) + " " + i; i++; }
+    while (pris[s.toLowerCase()]) { s = base.slice(0, 29) + " " + i; i++; }
     pris[s.toLowerCase()] = true;
     return s;
   }

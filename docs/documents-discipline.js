@@ -58,6 +58,7 @@
   }
 
   var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   function jj(d) {
     if (!(d instanceof Date) || isNaN(d.getTime())) return "[date]";
@@ -494,7 +495,7 @@
       L.push("Aux membres de la délégation du personnel");
       L.push("au comité social et économique");
       L.push("");
-      L.push(cro(p.ville, "ville") + ", le " + jj(envoi));
+      L.push(cro(villeFiche(p), "ville") + ", le " + jj(envoi));
       L.push("");
       L.push("Objet : consultation sur le " + objet + ".");
       L.push("Pièce jointe : le " + objet + ", " + cro("", "nombre") + " pages.");

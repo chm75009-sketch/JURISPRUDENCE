@@ -48,6 +48,7 @@
   }
 
   var cro = O.cro, resp = O.resp, leJour = O.leJour, entete = O.entete;
+  var villeFiche = O.villeDe;
   /* L'adresse publique : un document emporté en Word ou imprimé quitte le
      navigateur, un lien relatif n'y mène plus nulle part. */
   var SITE_APP = (function () {
@@ -388,7 +389,7 @@
       L.push("");
       L.push("En foi de quoi ce certificat est délivré au salarié pour servir et valoir ce que de droit.");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(sortieC || d0));
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(sortieC || d0));
       L.push(cro(resp(p), "Nom, qualité et signature"));
       L.push("");
 
@@ -501,7 +502,7 @@
       var sortieS = dateDe(d.dateSortie) || (salS ? dateDe(salS.sor) : null);
       var signS = sortieS || d0;
       L.push("Le présent reçu est établi en DEUX EXEMPLAIRES.");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(signS) + ", en deux exemplaires.");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(signS) + ", en deux exemplaires.");
       L.push("");
       L.push("Pour la société                          Le salarié");
       L.push(cro(resp(p), "Nom et qualité") + "                      " +
@@ -631,7 +632,7 @@
       L.push("Les relations entre les parties sont régies par la convention collective " +
         cro(p.conventionCollective, "INTITULÉ ET IDCC") + ".");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur                              Le salarié");
       L.push(cro(resp(p), "Nom et qualité") + "                      [NOM ET PRÉNOMS]");
       L.push("");
@@ -741,7 +742,7 @@
       L.push("Article 6 - Rémunération");
       L.push("Le salarié perçoit une rémunération mensuelle brute de [MONTANT] euros.");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur                              Le salarié");
       L.push(cro(resp(p), "Nom et qualité") + "                      [NOM ET PRÉNOMS]");
       L.push("");
@@ -996,7 +997,7 @@
       L.push("5. COMPTE PERSONNEL DE FORMATION");
       L.push("Le salarié a été informé de son CPF et de ses possibilités d'abondement.");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Le salarié : " + cro(d.salarie, "Nom et prénoms"));
       L.push("");
@@ -1147,7 +1148,7 @@
       L.push("Certifications : [LISTER]");
       L.push("Progressions : [DÉCRIRE SALARIALES OU PROFESSIONNELLES]");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(d0) + ", en deux exemplaires.");
       L.push("L'employeur : " + cro(respo(ctx), "NOM ET QUALITÉ"));
       L.push("Le salarié : " + cro(d.salarie, "Nom et prénoms"));
       L.push("");
@@ -1629,7 +1630,7 @@
       L.push("");
       L.push("NOTE DE RÉGIME DE LA BASE DE DONNÉES");
       L.push("");
-      L.push(cro(p.ville, "lieu") + ", le [DATE]");
+      L.push(cro(villeFiche(p), "lieu") + ", le [DATE]");
       L.push("");
       L.push("Régime applicable : [ACCORD DU DATE / ACCORD DE BRANCHE DU DATE / AUCUN");
       L.push("ACCORD, CONTENU SUPPLÉTIF].");
@@ -1696,7 +1697,7 @@
       L.push("Aux membres de la délégation du personnel du comité social et économique");
       L.push("et aux délégués syndicaux");
       L.push("");
-      L.push(cro(p.ville, "lieu") + ", le [DATE]");
+      L.push(cro(villeFiche(p), "lieu") + ", le [DATE]");
       L.push("");
       L.push("Objet : accès à la base de données économiques, sociales et environnementales");
       L.push("");
@@ -1783,7 +1784,7 @@
       L.push("le jour d'une consultation, et la mise à disposition ne vaudra pas");
       L.push("communication.");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
       L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");

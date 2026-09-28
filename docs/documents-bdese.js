@@ -63,7 +63,8 @@
   if (!DP || typeof DP.ajouter !== "function") return;
 
   var O = DP.outils;
-  var cro = O.cro, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
+  var villeFiche = O.villeDe;
 
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
@@ -940,9 +941,31 @@
     var p = P(ctx), f = F(ctx);
     return cro(p.denomination || p.entreprise || f.entreprise, "DÉNOMINATION SOCIALE");
   }
-  function villeDe(ctx) { return cro(P(ctx).ville, "lieu"); }
+  function villeDe(ctx) { return cro(villeFiche(P(ctx)), "lieu"); }
   function adresseDe(ctx) { return cro(P(ctx).adresse, "adresse du siège"); }
-  function signataire(ctx) { return cro(P(ctx).responsable, "Nom et qualité du signataire"); }
+  /* Le signataire ne lisait que « responsable », l'ancien champ unique, vide sur
+     une fiche récente qui range le nom et la qualité séparément : la lettre
+     sortait « [Nom et qualité du signataire] » sur une fiche complète. La
+     fonction partagée du dépôt lit les deux. Corrigé le 28 septembre 2026. */
+  function signataire(ctx) { return cro(resp(P(ctx)), "Nom et qualité du signataire"); }
+
+  /* LA RÉPONSE DE LA FICHE SUR LE COMITÉ, DANS SES QUATRE ÉTATS.
+
+     Les courriers de ce module s'adressaient « aux membres de la délégation du
+     personnel du comité social et économique » dans tous les cas, y compris
+     chez une entreprise qui porte un procès-verbal de carence : une lettre
+     envoyée à personne. Défaut relevé par la contre-vérification du
+     26 septembre 2026, corrigé le 28. La fiche répond « oui, élu », « non,
+     procès-verbal de carence », « non, élections en cours d'organisation » ou
+     « non, aucune élection organisée » ; lire le premier mot seul ne suffit
+     pas. */
+  function repCse(ctx) {
+    var p = P(ctx), f = F(ctx);
+    return String(p.cseExiste || f.cseExiste || "").trim().toLowerCase();
+  }
+  function comiteElu(ctx) { return repCse(ctx).indexOf("non") !== 0; }
+  function comiteCarence(ctx) { return /carence/.test(repCse(ctx)); }
+  function comiteEnCours(ctx) { return /en cours|organisation/.test(repCse(ctx)); }
 
   function aujourd(ctx) {
     return ctx && ctx.aujourdhui instanceof Date && !isNaN(ctx.aujourdhui)
@@ -1322,10 +1345,29 @@
     L.push(nomDe(ctx));
     L.push(adresseDe(ctx));
     L.push("");
-    L.push("Aux membres de la délégation du personnel du comité social et économique,");
-    L.push("aux membres de la délégation du personnel du comité social et économique");
-    L.push("central d'entreprise s'il en existe un, et aux délégués syndicaux");
-    L.push("- ce sont les personnes que le dernier alinéa de L. 2312-36 désigne.");
+    /* Le destinataire suit la réponse de la fiche : sans comité, la lettre ne
+       s'adresse plus à une instance qui n'existe pas. Corrigé le 28 septembre
+       2026. */
+    if (comiteElu(ctx)) {
+      L.push("Aux membres de la délégation du personnel du comité social et économique,");
+      L.push("aux membres de la délégation du personnel du comité social et économique");
+      L.push("central d'entreprise s'il en existe un, et aux délégués syndicaux");
+      L.push("- ce sont les personnes que le dernier alinéa de L. 2312-36 désigne.");
+    } else {
+      L.push("Aux délégués syndicaux - seules des personnes désignées par le dernier");
+      L.push("alinéa de L. 2312-36 qui existent dans l'entreprise.");
+      L.push("");
+      L.push(comiteCarence(ctx)
+        ? "Aucun comité social et économique n'est en place : votre fiche porte un procès-verbal de carence."
+        : (comiteEnCours(ctx)
+          ? "Aucun comité social et économique n'est en place : vos élections sont en cours d'organisation."
+          : "Aucun comité social et économique n'est en place : aucune élection n'a été organisée à ce jour."));
+      L.push("La base reste due et se tient à jour ; la mise à disposition aux membres du");
+      L.push("comité prendra effet dès qu'un comité sera élu, sans que la base soit à");
+      L.push("refaire. S'il n'y a pas non plus de délégué syndical, cette lettre n'a pas");
+      L.push("de destinataire : gardez-la au dossier, datée, et envoyez-la le jour où");
+      L.push("l'un ou l'autre existe.");
+    }
     L.push("");
     L.push(villeDe(ctx) + ", le " + leJour(aujourd(ctx)));
     L.push("");
@@ -1335,19 +1377,32 @@
     L.push("");
     (corps || []).forEach(function (x) { L.push(x); });
     L.push("");
-    L.push("Je vous rappelle que la base de données est accessible en permanence aux");
-    L.push("membres de la délégation du personnel du comité social et économique ainsi");
-    L.push("qu'aux membres de la délégation du personnel du comité social et économique");
-    L.push("central d'entreprise, et aux délégués syndicaux (L. 2312-36).");
-    L.push("");
-    L.push("Je vous rappelle également que les membres de la délégation du personnel du");
-    L.push("comité social et économique, du comité social et économique central");
-    L.push("d'entreprise et les délégués syndicaux sont tenus à une obligation de");
-    L.push("discrétion à l'égard des informations contenues dans la base de données");
-    L.push("revêtant un caractère confidentiel et présentées comme telles par");
-    L.push("l'employeur (L. 2312-36, dernier alinéa). Les informations confidentielles");
-    L.push("sont signalées comme telles dans la base, avec la durée de leur");
-    L.push("confidentialité (R. 2312-13).");
+    if (comiteElu(ctx)) {
+      L.push("Je vous rappelle que la base de données est accessible en permanence aux");
+      L.push("membres de la délégation du personnel du comité social et économique ainsi");
+      L.push("qu'aux membres de la délégation du personnel du comité social et économique");
+      L.push("central d'entreprise, et aux délégués syndicaux (L. 2312-36).");
+      L.push("");
+      L.push("Je vous rappelle également que les membres de la délégation du personnel du");
+      L.push("comité social et économique, du comité social et économique central");
+      L.push("d'entreprise et les délégués syndicaux sont tenus à une obligation de");
+      L.push("discrétion à l'égard des informations contenues dans la base de données");
+      L.push("revêtant un caractère confidentiel et présentées comme telles par");
+      L.push("l'employeur (L. 2312-36, dernier alinéa). Les informations confidentielles");
+      L.push("sont signalées comme telles dans la base, avec la durée de leur");
+      L.push("confidentialité (R. 2312-13).");
+    } else {
+      L.push("Je vous rappelle que la base de données est accessible en permanence aux");
+      L.push("délégués syndicaux (L. 2312-36), et qu'elle le sera aux membres de la");
+      L.push("délégation du personnel du comité social et économique dès son élection.");
+      L.push("");
+      L.push("Je vous rappelle également que les délégués syndicaux sont tenus à une");
+      L.push("obligation de discrétion à l'égard des informations contenues dans la base");
+      L.push("de données revêtant un caractère confidentiel et présentées comme telles");
+      L.push("par l'employeur (L. 2312-36, dernier alinéa). Les informations");
+      L.push("confidentielles sont signalées comme telles dans la base, avec la durée de");
+      L.push("leur confidentialité (R. 2312-13).");
+    }
     L.push("");
     L.push("Je vous prie d'agréer, Mesdames, Messieurs, l'expression de ma");
     L.push("considération distinguée.");

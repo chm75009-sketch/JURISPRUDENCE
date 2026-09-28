@@ -71,6 +71,24 @@
      ici. Vides, le crochet reste : rien n'est deviné. Demande du 26 septembre
      2026, « généraliser ce principe à chaque fois où on doit compléter des
      informations constantes ». */
+  /* LA VILLE DU LIEU DE SIGNATURE, DÉDUITE DE L'ADRESSE.
+
+     La fiche d'entreprise ne porte AUCUN champ « ville » : elle a la
+     dénomination, l'adresse, le SIRET, l'effectif. Tous les documents lisaient
+     pourtant « p.ville », toujours vide, et sortaient « Fait à [lieu] » ou
+     « [VILLE], le … » sur une fiche complète. Défaut relevé sur le règlement
+     intérieur et sur ses lettres par la contre-vérification du 26 septembre
+     2026, corrigé le 28. La ville se lit dans l'adresse, après le code postal :
+     « 23 avenue du Château, 95100 Argenteuil » donne « Argenteuil ». Faute
+     d'adresse, le crochet reste, car rien ne se devine. */
+  function villeFiche(p) {
+    p = p || {};
+    var s = String(p.ville || "").trim();
+    if (s) return s;
+    var m = String(p.adresse || "").match(/\d{5}\s+([^,;]+)\s*$/);
+    return m ? m[1].trim() : "";
+  }
+
   /* L'élision devant une voyelle : « prud'hommes d'Argenteuil ». */
   function elide(mot) {
     var s = String(mot == null ? "" : mot).trim();
@@ -290,13 +308,48 @@
      d'emploi et leur nombre, et c'est l'employeur qui rapproche. Un emploi
      qu'il ne reconnaît pas dans la liste est un emploi à ajouter ou à écarter,
      et le document le dit ainsi plutôt que de trancher. */
-  /* Un tableau, au format que feuille-doc.js reconnaît : une ligne
-     d'intitulés, puis une ligne par enregistrement, les colonnes séparées
-     par une barre verticale. */
-  function tableauSimple(entetes, lignes) {
-    var L = [entetes.join(" | ")];
-    lignes.forEach(function (l) { L.push(l.join(" | ")); });
-    return L;
+  /* Le tableau du registre, avec ses effectifs, a été retiré du 7.3 le
+     28 septembre 2026 : voir plus bas pourquoi. La fonction qui le mettait en
+     forme n'a plus d'emploi ici. */
+
+  /* LE REGROUPEMENT DES INTITULÉS.
+
+     « Chauffeur Pl », « chauffeur PL » et « Chauffeur pl » sont un seul emploi,
+     et le registre en garde trois. La clé compare sans la casse, sans les
+     accents et sans les espaces en double ; l'intitulé retenu est celui qui
+     revient le plus souvent. L'orthographe n'est pas corrigée : « assitante
+     administrative » reste telle quelle, c'est ce qui est écrit au registre, et
+     c'est au registre qu'il faut la corriger. */
+  function cleEmploi(s) {
+    var t = String(s == null ? "" : s).toLowerCase();
+    if (t.normalize) t = t.normalize("NFD").replace(/[̀-ͯ]/g, "");
+    return t.replace(/\s+/g, " ").trim();
+  }
+
+  /* LES POSTES DE SÉCURITÉ, ET LES AUTRES.
+
+     L'article 7.3 ne vise que les postes où une vigilance diminuée expose le
+     salarié ou autrui à un danger. Le document reproduisait, en face de cet
+     article, la liste entière du registre avec ses effectifs : les assistantes
+     administratives s'y lisaient donc comme des postes à risque, et le tableau
+     brut tenait lieu de raisonnement. Défaut relevé par la contre-vérification
+     du 26 septembre 2026, corrigé le 28.
+
+     Le partage se fait sur l'intitulé, et il est dit pour ce qu'il est : une
+     proposition de rapprochement, que l'employeur confirme. Rien n'est classé
+     en silence, et les deux listes sont données, pour qu'aucun emploi ne
+     disparaisse. */
+  var MOTS_SECURITE = [
+    "conduc", "chauffeur", "cariste", "grutier", "manutention", "quai",
+    "mecanic", "carross", "atelier", "magasin", "livreur", "livraison",
+    "preparateur", "agent de quai", "ouvrier", "technicien", "monteur",
+    "soudeur", "electric", "maintenance", "nettoyage", "agent de securite",
+  ];
+  function estPosteSecurite(emp) {
+    var k = cleEmploi(emp);
+    for (var i = 0; i < MOTS_SECURITE.length; i++)
+      if (k.indexOf(MOTS_SECURITE[i]) >= 0) return true;
+    return false;
   }
 
   function emploisDuRegistre() {
@@ -306,17 +359,26 @@
         ? window.localStorage.getItem("registre-personnel") : null) || "null");
     } catch (e) { R = null; }
     var L = (R && R.salaries) || [];
-    var compte = {};
+    var groupes = {};
     L.forEach(function (x) {
       if (x && x.ex) return;
       if (String((x && x.sor) || "").trim()) return;
       var e = String((x && x.emp) || "").trim();
       if (!e) return;
-      compte[e] = (compte[e] || 0) + 1;
+      var k = cleEmploi(e);
+      if (!groupes[k]) groupes[k] = { n: 0, formes: {} };
+      groupes[k].n += 1;
+      groupes[k].formes[e] = (groupes[k].formes[e] || 0) + 1;
     });
-    return Object.keys(compte).sort(function (a, b) {
-      return compte[b] - compte[a] || a.localeCompare(b, "fr");
-    }).map(function (e) { return { emp: e, n: compte[e] }; });
+    return Object.keys(groupes).map(function (k) {
+      var f = groupes[k].formes;
+      var libelle = Object.keys(f).sort(function (a, b) {
+        return f[b] - f[a] || a.localeCompare(b, "fr");
+      })[0];
+      return { emp: libelle, n: groupes[k].n, secu: estPosteSecurite(libelle) };
+    }).sort(function (a, b) {
+      return b.n - a.n || a.emp.localeCompare(b.emp, "fr");
+    });
   }
 
   D["DIS-CTL-RI-01"] = {
@@ -340,6 +402,18 @@
       var repCseRi = String(p.cseExiste || (ctx.fiche || {}).cseExiste ||
         (ctx.donnees || {}).cseExiste || "").trim().toLowerCase();
       var sansCseRi = repCseRi.indexOf("non") === 0;
+      /* Les quatre réponses de la fiche, et pas seulement « oui » ou « non » :
+         un procès-verbal de carence, des élections en cours et aucune élection
+         organisée n'appellent pas la même phrase. Et la date du procès-verbal
+         est sur la fiche : elle était réécrite « [DATE] » dans trois courriers.
+         Corrigé le 28 septembre 2026. */
+      var carenceRi = /carence/.test(repCseRi);
+      var enCoursRi = /en cours/.test(repCseRi);
+      var dCarRi = String(p.cseCarence || (ctx.fiche || {}).cseCarence || "").trim();
+      /* « du 20 novembre 2025 », ou le crochet si la fiche ne le porte pas. */
+      var carDit = /^\d{4}-\d{2}-\d{2}$/.test(dCarRi)
+        ? "établi le " + leJour(new Date(dCarRi + "T12:00:00"))
+        : "établi le [DATE DU PROCÈS-VERBAL DE CARENCE]";
       var L = [];
 
       L = L.concat(entete(ctx, "Règlement intérieur",
@@ -621,15 +695,33 @@
       L.push("");
       var empReg = emploisDuRegistre();
       if (empReg.length) {
-        L.push("NOTE - Les emplois réellement écrits à votre registre du personnel, ce jour,");
-        L.push("sont les suivants. Rapprochez-les de la liste du 7.3 : un emploi qui y");
-        L.push("figure et qui manque à la liste est à ajouter, un poste listé qui ne");
-        L.push("correspond à personne est à retirer. Le registre ne décide pas à votre");
-        L.push("place, il dit ce qui est écrit.");
+        /* Ni tableau brut ni effectifs : l'article 7.3 ne parle pas de combien
+           de salariés tiennent un poste, il parle de quels postes sont
+           concernés. Les emplois sont regroupés, et partagés en deux listes,
+           celle des postes où la vigilance est en jeu et celle des autres.
+           Refait le 28 septembre 2026. */
+        var secu = empReg.filter(function (x) { return x.secu; })
+          .map(function (x) { return x.emp; });
+        var autres = empReg.filter(function (x) { return !x.secu; })
+          .map(function (x) { return x.emp; });
+        L.push("NOTE - Rapprochement avec votre registre du personnel, ce jour. Parmi les");
+        L.push("emplois qui y sont écrits, ceux dont l'intitulé met en jeu la conduite, un");
+        L.push("engin, une machine ou une intervention sont les suivants :");
         L.push("");
-        L = L.concat(tableauSimple(["Emploi au registre", "Salariés en poste"],
-          empReg.map(function (x) { return [x.emp, String(x.n)]; })));
+        if (secu.length) secu.forEach(function (e) { L.push("  - " + e + " ;"); });
+        else L.push("  - aucun : aucun intitulé du registre ne met la vigilance en jeu.");
         L.push("");
+        L.push("Ce rapprochement est une proposition, pas un classement : c'est à vous de");
+        L.push("confirmer, poste par poste, qu'une vigilance diminuée y exposerait le");
+        L.push("salarié ou autrui à un danger, et d'écarter ceux pour lesquels ce n'est pas");
+        L.push("le cas. La liste du 7.3 doit être celle de votre document unique.");
+        L.push("");
+        if (autres.length) {
+          L.push("Les autres emplois du registre, qui ne paraissent pas concernés, sont : " +
+            autres.join(", ") + ". Ils n'ont pas à figurer au 7.3, sauf si votre");
+          L.push("document unique y relève un risque de vigilance.");
+          L.push("");
+        }
       } else {
         L.push("NOTE - Le registre du personnel ne porte aucun emploi ce jour : la liste du");
         L.push("7.3 ne peut pas y être rapprochée. Inscrivez vos salariés au registre, et");
@@ -1095,9 +1187,22 @@
       L.push(sansCseRi
         ? "  - [DÈS QU'UN COMITÉ SOCIAL ET ÉCONOMIQUE SERA ÉLU : le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes qu'il désigne parmi ses membres] ;"
         : "  - le référent en matière de lutte contre le harcèlement sexuel et les agissements sexistes désigné par le comité social et économique parmi ses membres : [NOM ET COORDONNÉES] ;");
-      L.push("  - [SI L'ENTREPRISE ATTEINT 250 SALARIÉS : le référent désigné par l'employeur : NOM ET COORDONNÉES] ;");
-      L.push("  - le médecin du travail ou le service de prévention et de santé au travail : [COORDONNÉES] ;");
-      L.push("  - l'inspection du travail : [COORDONNÉES DE LA SECTION COMPÉTENTE].");
+      /* La ligne du référent de l'employeur sortait dans tous les règlements,
+         y compris chez un employeur de 82 salariés, sous la forme d'une
+         condition que l'utilisatrice devait évaluer elle-même : « [SI
+         L'ENTREPRISE ATTEINT 250 SALARIÉS : …] ». L'effectif est sur la fiche.
+         L. 1153-5-1 ne l'impose qu'à partir de deux cent cinquante salariés :
+         en dessous, la ligne n'a rien à faire dans le document. Et les
+         coordonnées du service de santé au travail et de l'inspection sont
+         elles aussi sur la fiche. Corrigé le 28 septembre 2026. */
+      var effRi = parseInt(String(p.effectif || "").replace(/[^\d]/g, ""), 10);
+      if (!isFinite(effRi) || effRi >= 250)
+        L.push("  - le référent en matière de lutte contre le harcèlement sexuel désigné" +
+          " par l'employeur (L. 1153-5-1) : [NOM ET COORDONNÉES] ;");
+      L.push("  - le médecin du travail ou le service de prévention et de santé au");
+      L.push("    travail : " + org(p, "orgSanteTravail", "COORDONNÉES DU SERVICE") + " ;");
+      L.push("  - l'inspection du travail : " +
+        org(p, "orgInspection", "COORDONNÉES DE LA SECTION COMPÉTENTE") + ".");
       L.push("");
       L.push("Tout signalement donne lieu à un accusé de réception écrit et à une enquête");
       L.push("conduite avec impartialité et discrétion, à laquelle la personne mise en");
@@ -1143,11 +1248,23 @@
       L.push("");
 
       /* Le principe de neutralité n'est pas obligatoire : il est une faculté que
-         L. 1321-2-1 encadre. Le proposer comme un modèle tout fait pousserait à
-         l'inscrire sans en mesurer la condition. */
-      L.push("════ TITRE VI - [FACULTATIF] PRINCIPE DE NEUTRALITÉ ════");
-      L.push("(L. 1321-2-1, ce titre est FACULTATIF : supprimez-le si vous n'inscrivez");
-      L.push("pas de principe de neutralité)");
+         L. 1321-2-1 encadre. Le titre paraissait quand même dans tous les
+         règlements, coiffé de « [FACULTATIF] », avec un crochet à remplir et une
+         note qui disait de le supprimer : c'était laisser à l'utilisatrice le
+         travail de retirer ce qu'elle n'avait pas demandé. Depuis le
+         28 septembre 2026, le parcours pose la question et le titre ne sort que
+         sur « oui » ; sur « non », une ligne dit qu'il peut être ajouté. */
+      var neutre = /^oui/i.test(String((ctx.donnees || {}).neutralite || ""));
+      if (!neutre) {
+        L.push("NOTE - Ce règlement ne comporte pas de principe de neutralité. C'est une");
+        L.push("faculté, non une obligation : si vous en voulez un, répondez « oui » à la");
+        L.push("question du parcours et l'article sera écrit ici, avec les deux conditions");
+        L.push("de licéité de L. 1321-2-1.");
+        L.push("");
+      }
+      if (neutre) {
+      L.push("════ TITRE VI - PRINCIPE DE NEUTRALITÉ ════");
+      L.push("(L. 1321-2-1)");
       L.push("");
       L.push("Article 27 - Principe de neutralité");
       L.push("");
@@ -1170,8 +1287,8 @@
       L.push("(L. 1321-2-1) : une clause qui viserait l'ensemble du personnel sans");
       L.push("distinction de poste ne l'est pas. Le motif entre crochets doit être écrit");
       L.push("dans le règlement lui-même : c'est cette motivation qui défendra la clause.");
-      L.push("Supprimez tout ce titre si vous n'inscrivez pas de principe de neutralité.");
       L.push("");
+      }
 
       L.push("════ TITRE VII - ENTRÉE EN VIGUEUR, PUBLICITÉ, MODIFICATIONS ════");
       L.push("");
@@ -1231,10 +1348,35 @@
          prévoit. Écrits ensemble entre les mêmes parenthèses, les deux textes
          se lisaient comme fondant l'un et l'autre le dépôt : la relecture l'a
          relevé deux fois, le 25 septembre 2026. */
+      /* L'article 30 promettait « l'avis du comité social et économique » dans
+         un règlement signé par une entreprise qui n'en a pas : une clause
+         inapplicable le jour où elle sert. Elle est écrite selon la réponse de
+         la fiche. Corrigé le 28 septembre 2026. */
       L.push("Toute modification ou tout retrait de clause suit les mêmes formalités que");
-      L.push("l'établissement du règlement : avis du comité social et économique,");
-      L.push("publicité et communication à l'inspecteur du travail (L. 1321-4, dernier");
-      L.push("alinéa), ainsi que dépôt au greffe du conseil de prud'hommes (R. 1321-2).");
+      if (!sansCseRi) {
+        L.push("l'établissement du règlement : avis du comité social et économique,");
+        L.push("publicité et communication à l'inspecteur du travail (L. 1321-4, dernier");
+        L.push("alinéa), ainsi que dépôt au greffe du conseil de prud'hommes (R. 1321-2).");
+      } else if (carenceRi) {
+        L.push("l'établissement du règlement : publicité, communication à l'inspecteur du");
+        L.push("travail (L. 1321-4, dernier alinéa) et dépôt au greffe du conseil de");
+        L.push("prud'hommes (R. 1321-2). L'avis du comité social et économique ne peut");
+        L.push("être recueilli tant qu'aucune instance n'est en place, le procès-verbal de");
+        L.push("carence " + carDit + " en tenant lieu (L. 2314-9) ; il redeviendra dû dès");
+        L.push("l'élection d'un comité.");
+      } else if (enCoursRi) {
+        L.push("l'établissement du règlement : avis du comité social et économique,");
+        L.push("publicité et communication à l'inspecteur du travail (L. 1321-4, dernier");
+        L.push("alinéa), ainsi que dépôt au greffe du conseil de prud'hommes (R. 1321-2).");
+        L.push("Les élections étant en cours d'organisation, cet avis sera celui du comité");
+        L.push("issu du scrutin.");
+      } else {
+        L.push("l'établissement du règlement : publicité, communication à l'inspecteur du");
+        L.push("travail (L. 1321-4, dernier alinéa) et dépôt au greffe du conseil de");
+        L.push("prud'hommes (R. 1321-2). L'avis du comité social et économique deviendra");
+        L.push("dû dès qu'un comité sera élu : aucune élection n'a été organisée à ce");
+        L.push("jour, et l'organiser est une obligation distincte de celle-ci.");
+      }
       L.push("");
       L.push("Les notes de service et tout autre document comportant des obligations");
       L.push("générales et permanentes dans les matières du règlement en sont des");
@@ -1262,7 +1404,7 @@
       L.push("");
       /* Le règlement se termine par sa signature : c'est la dernière ligne de
          l'onglet du document, et ce qui suit appartient aux formalités. */
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
       L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
@@ -1441,7 +1583,7 @@
         L.push("Monsieur l'Inspecteur du travail");
         L.push(org(p, "orgInspection", "ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE"));
         L.push("");
-        L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
+        L.push(cro(villeFiche(p), "lieu") + ", le [DATE D'ENVOI]");
         L.push("");
         L.push("Lettre recommandée avec demande d'avis de réception");
         L.push("");
@@ -1450,7 +1592,7 @@
         L.push("Monsieur l'Inspecteur,");
         L.push("");
         L.push("En application de l'article L. 2314-9 du code du travail, je vous transmets");
-        L.push("le procès-verbal de carence établi le [DATE], le comité social et");
+        L.push("le procès-verbal de carence " + carDit + ", le comité social et");
         L.push("économique n'ayant pu être mis en place à l'issue des élections organisées");
         L.push("le [DATE DU SCRUTIN].");
         L.push("");
@@ -1467,7 +1609,7 @@
         L.push("Aux membres de la délégation du personnel");
         L.push("du comité social et économique");
         L.push("");
-        L.push(cro(p.ville, "lieu") + ", le " + leJour(d0));
+        L.push(cro(villeFiche(p), "lieu") + ", le " + leJour(d0));
         L.push("");
         L.push("Objet : consultation sur le projet de règlement intérieur");
         L.push("");
@@ -1523,7 +1665,7 @@
       L.push("");
       L.push("NOTE D'INFORMATION AU PERSONNEL");
       L.push("");
-      L.push(cro(p.ville, "lieu") + ", le [DATE D'AFFICHAGE]");
+      L.push(cro(villeFiche(p), "lieu") + ", le [DATE D'AFFICHAGE]");
       L.push("");
       L.push("Objet : règlement intérieur de l'entreprise");
       L.push("");
@@ -1531,7 +1673,7 @@
       L.push("");
       L.push("Un règlement intérieur a été établi pour " + nom + ". Il a été soumis");
       L.push((sansCse
-        ? "au procès-verbal de carence établi le [DATE], le comité social et économique"
+        ? "au procès-verbal de carence " + carDit + ", le comité social et économique"
         : "à l'avis du comité social et économique, qui l'a rendu le [DATE DE L'AVIS],"));
       L.push((sansCse
         ? "n'ayant pu être mis en place, et il est déposé au greffe du conseil de"
@@ -1552,10 +1694,14 @@
       L.push("adresse]. Un exemplaire est remis à toute personne qui en fait la");
       L.push("demande.");
       L.push("");
+      /* Ici aussi, chaque moitié derrière son texte. Le délai d'un mois est à
+         L. 1321-4 ; son point de départ, qui compte le dépôt, est à
+         R. 1321-3. La parenthèse commune a été défaite le 28 septembre 2026. */
       L.push("Il entrera en vigueur le [DATE D'ENTRÉE EN VIGUEUR], soit un mois après");
-      L.push("l'accomplissement de la dernière des formalités de publicité et de dépôt");
-      L.push("(L. 1321-4 ; R. 1321-3). Aucune sanction ne peut être fondée sur lui");
-      L.push("avant cette date.");
+      L.push("l'accomplissement des formalités de publicité (L. 1321-4), le délai");
+      L.push("courant à compter de la dernière en date des formalités de publicité et");
+      L.push("de dépôt (R. 1321-3). Aucune sanction ne peut être fondée sur lui avant");
+      L.push("cette date.");
       L.push("");
       L.push(cro(resp(p), "Nom et qualité"));
       L.push("");
@@ -1584,7 +1730,7 @@
       L.push("Monsieur le Greffier en chef");
       L.push("Conseil de prud'hommes " + elide(org(p, "orgPrudhommes", "VILLE DU RESSORT")));
       L.push("");
-      L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
+      L.push(cro(villeFiche(p), "lieu") + ", le [DATE D'ENVOI]");
       L.push("");
       L.push("Objet : dépôt du règlement intérieur");
       L.push("");
@@ -1667,7 +1813,7 @@
       L.push("Monsieur l'Inspecteur du travail");
       L.push(org(p, "orgInspection", "ADRESSE DE L'UNITÉ DE CONTRÔLE COMPÉTENTE"));
       L.push("");
-      L.push(cro(p.ville, "lieu") + ", le [DATE D'ENVOI]");
+      L.push(cro(villeFiche(p), "lieu") + ", le [DATE D'ENVOI]");
       L.push("");
       L.push("Lettre recommandée avec demande d'avis de réception");
       L.push("");
@@ -1681,7 +1827,7 @@
         /* La lettre dit elle-même pourquoi l'avis n'y est pas : l'inspecteur
            qui reçoit un règlement sans l'avis que L. 1321-4 mentionne doit
            lire dans la lettre ce qui en tient lieu, sans avoir à le demander. */
-        L.push("accompagné du procès-verbal de carence établi le [DATE].");
+        L.push("accompagné du procès-verbal de carence " + carDit + ".");
         L.push("");
         L.push("L'avis mentionné à l'article L. 1321-4 ne peut être joint : aucun comité");
         L.push("social et économique n'est en place, les élections organisées le [DATE DU");
@@ -1720,6 +1866,26 @@
       L.push("aujourd'hui, " + leJour(d0) + ", l'entrée en vigueur ne pourrait pas être");
       L.push("antérieure au " + leJour(dans(d0, 31)) + ".");
       L.push("");
+      /* Le point de départ du mois n'est plus écrit deux fois pareil dans le
+         code du travail. L. 1321-4, dans sa version du 28 mai 2026
+         (LEGIARTI000054140230), ne compte plus que la publicité ; la version
+         antérieure (LEGIARTI000035652969) comptait « les formalités de dépôt
+         et de publicité ». R. 1321-3 (LEGIARTI000018536913), inchangé, part
+         toujours de la dernière des deux. Le document retient la date la plus
+         tardive et le dit, au lieu de trancher entre les deux textes : c'est
+         à l'avocate de le faire. Ajouté le 28 septembre 2026, la liste de
+         contre-vérification l'ayant demandé. */
+      L.push("UN POINT À TRANCHER AVANT D'ARRÊTER LA DATE - Les deux textes ne comptent");
+      L.push("plus la même chose. L. 1321-4, depuis sa version du 28 mai 2026, ne fait");
+      L.push("courir le mois que des formalités de publicité ; la version antérieure");
+      L.push("disait « des formalités de dépôt et de publicité ». R. 1321-3, qui n'a");
+      L.push("pas changé, fait toujours partir le délai de la dernière en date des");
+      L.push("formalités de publicité ET de dépôt, et R. 1321-2 maintient le dépôt au");
+      L.push("greffe. La date calculée ci-dessus est la plus tardive des deux lectures,");
+      L.push("donc la plus sûre. Si votre avocate retient celle de L. 1321-4 seul, elle");
+      L.push("peut être avancée à un mois après la publicité. Le dépôt, lui, reste dû");
+      L.push("dans les deux cas.");
+      L.push("");
       L.push("Avant cette date, aucune sanction ne peut être fondée sur ce règlement.");
       L.push("Reportez la date retenue à l'article 28 du règlement, et dans la note");
       L.push("d'information de l'étape 2.");
@@ -1748,7 +1914,7 @@
       L.push("en date des formalités de publicité et de dépôt qui fait courir le mois,");
       L.push("non la première.");
       L.push("");
-      L.push("Fait à " + cro(p.ville, "lieu") + ", le [DATE DE SIGNATURE]");
+      L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le [DATE DE SIGNATURE]");
       L.push("");
       L.push(cro(resp(p), "Nom et qualité du représentant légal"));
       L.push("");
@@ -2141,8 +2307,8 @@
 
   global.DocumentsProduits = {
     pour: pour, tous: D, ajouter: ajouter,
-    outils: { cro: cro, resp: resp, leJour: leJour, dans: dans, entete: entete,
-      identite: identite, liens: liens, EXEMPLE: EXEMPLE },
+    outils: { cro: cro, resp: resp, villeDe: villeFiche, leJour: leJour, dans: dans,
+      entete: entete, identite: identite, liens: liens, EXEMPLE: EXEMPLE },
     liens: liens, EXEMPLE: EXEMPLE, ADAPTER: ADAPTER, sansExemple: sansExemple,
     sansAnnexes: sansAnnexes, sansCodes: sansCodes,
   };

@@ -72,7 +72,7 @@
     { id: "documents",        nom: "Documents",                         page: "documents.html" },
     { id: "agenda",           nom: "Agenda social",                     page: "agenda.html" },
     { id: "profil",           nom: "Fiche client (profil d'entreprise)", page: null },
-    { id: "assistant",        nom: "Assistant Claude",                  page: null },
+    { id: "assistant",        nom: "Assistant",                        page: null },
     { id: "equipe",           nom: "Équipe, droits et journal",         page: "equipe.html" }
   ];
 

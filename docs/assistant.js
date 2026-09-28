@@ -1,11 +1,11 @@
-/* Assistant Claude, panneau de conversation présent sur toutes les pages.
+/* L'assistant, panneau de conversation présent sur toutes les pages.
 
-   Une passerelle directe entre la juriste et Claude, avec le contexte de son
+   Une passerelle directe entre la juriste et le service de réponse, avec le contexte de son
    travail : la page courante et son brouillon sont transmis au modèle, qui
    dispose en outre de deux outils, lire un article du code du travail via le
    relais Légifrance, chercher dans Judilibre avec la clé déjà enregistrée.
 
-   C'est l'APPLICATION qui porte la connexion à Claude, sur le modèle du
+   C'est l'APPLICATION qui porte la connexion au service, sur le modèle du
    relais Légifrance : la page appelle la fonction Netlify « assistant », qui
    détient la clé API Anthropic (variable d'environnement, jamais dans le code)
    et retransmet le flux SSE tel quel. Aucune clé n'est demandée à
@@ -404,7 +404,7 @@
      Par défaut, l'appel passe par le relais de l'application (la clé vit côté
      serveur, rien n'est demandé à l'utilisateur). Si une clé personnelle a été
      saisie en repli, l'appel va directement à api.anthropic.com avec elle. */
-  function appelClaude(messages, surTexte, signal) {
+  function appelService(messages, surTexte, signal) {
     var clePerso = cle();
     var adresse = clePerso ? API_ANTHROPIC : RELAIS_ASSISTANT;
     var entetes = { "content-type": "application/json" };
@@ -435,6 +435,17 @@
     }).then(function (rep) {
       if (rep.status === 401)
         throw ErreurApi(clePerso ? "CLE_INVALIDE" : "CLE_RELAIS_REFUSEE");
+      /* LE 403 DU RELAIS N'EST PAS UNE ERREUR D'API. Il dit que l'adresse d'où
+         l'application est ouverte n'est pas encore autorisée sur la fonction, et
+         il est le seul 403 que le relais rende. Il tombait dans le cas général,
+         qui affichait « l'API a répondu par une erreur : ORIGINE_REFUSEE ».
+         Relevé le 26 septembre 2026. */
+      if (rep.status === 403 && !clePerso) {
+        return rep.json().catch(function () { return null; }).then(function (d) {
+          throw ErreurApi((d && d.erreur === "ORIGINE_REFUSEE") ? "ORIGINE_REFUSEE" : "API",
+            d && d.erreur || "HTTP 403");
+        });
+      }
       if (rep.status === 429) throw ErreurApi("QUOTA", rep.headers.get("retry-after") || "");
       if (rep.status === 529 || rep.status >= 500 || !rep.ok) {
         return rep.json().catch(function () { return null; }).then(function (d) {
@@ -534,7 +545,7 @@
       if (tours > MAX_TOURS)
         return Promise.reject(ErreurApi("API", "trop d'appels d'outils d'affilée (" + MAX_TOURS + ")"));
       var bulle = null;
-      return appelClaude(historique, function (morceau) {
+      return appelService(historique, function (morceau) {
         if (!bulle) bulle = nouvelleBulle("bot");
         bulle.__texte = (bulle.__texte || "") + morceau;
         bulle.innerHTML = rendreTexte(bulle.__texte);
@@ -543,7 +554,7 @@
         if (r.contenu.length) historique.push({ role: "assistant", content: r.contenu });
 
         if (r.stop_reason === "refusal") {
-          noteSobre("Claude a décliné cette demande. Reformulez, ou changez d'angle.");
+          noteSobre("La demande a été déclinée. Reformulez, ou changez d'angle.");
           return;
         }
         if (r.stop_reason === "max_tokens")
@@ -697,7 +708,7 @@
         bouton = { libelle: "Réessayer", action: reessayer, delai: attente ? attente * 1000 : 0 };
         break;
       case "SURCHARGE":
-        texte = "L'API Anthropic est momentanément surchargée.";
+        texte = "Le service de réponse est momentanément surchargé.";
         bouton = { libelle: "Réessayer", action: reessayer };
         break;
       case "RESEAU":
@@ -705,8 +716,24 @@
           "- le reste de l'application fonctionne hors ligne, pas ce panneau.";
         bouton = { libelle: "Réessayer", action: reessayer };
         break;
+      /* LE RELAIS REFUSE L'ADRESSE : CE N'EST PAS UNE PANNE DE L'UTILISATRICE.
+
+         Mesuré le 26 septembre 2026 depuis l'espace client : les trois
+         fonctions de l'application répondaient « origine refusée », et le
+         panneau affichait « l'API a répondu par une erreur : ORIGINE_REFUSEE »,
+         ce qui ne dit rien à personne. Le code du relais autorise pourtant cette
+         adresse depuis le 26 septembre : c'est le déploiement qui n'a pas suivi.
+         La liste demande « ou masquer le bouton tant qu'il ne répond pas » :
+         c'est ce qui est fait, après l'avoir dit une fois. */
+      case "ORIGINE_REFUSEE":
+        texte = "L'assistant n'est pas accessible depuis cette adresse : le relais " +
+          "de l'application la refuse encore. Il n'y a rien à corriger de votre côté, " +
+          "et rien à saisir. Le bouton se retire jusqu'à la prochaine ouverture de " +
+          "l'application.";
+        masquerBouton();
+        break;
       default:
-        texte = "L'API a répondu par une erreur : " + (err.detail || err.message);
+        texte = "Le service a répondu par une erreur : " + (err.detail || err.message);
         bouton = { libelle: "Réessayer", action: reessayer };
     }
     d.textContent = texte;
@@ -723,6 +750,13 @@
     }
     ui.fil.appendChild(d);
     defiler();
+  }
+
+  /* Le bouton s'efface quand le relais refuse l'adresse : un bouton qui ne peut
+     rien faire n'a pas à rester sur chaque écran, à côté du texte qu'il masque. */
+  function masquerBouton() {
+    var b = document.getElementById("assist-bouton");
+    if (b) b.hidden = true;
   }
 
   function defiler() { ui.fil.scrollTop = ui.fil.scrollHeight; }
@@ -836,14 +870,14 @@
     var bouton = document.createElement("button");
     bouton.id = "assist-bouton";
     bouton.type = "button";
-    bouton.setAttribute("aria-label", "Ouvrir l'assistant Claude");
-    bouton.title = "Assistant Claude";
+    bouton.setAttribute("aria-label", "Ouvrir l'assistant");
+    bouton.title = "Assistant";
     bouton.innerHTML = "&#10022;";              // ✦
     document.body.appendChild(bouton);
 
     var panneau = document.createElement("aside");
     panneau.id = "assist-panneau";
-    panneau.setAttribute("aria-label", "Assistant Claude");
+    panneau.setAttribute("aria-label", "Assistant");
     panneau.innerHTML =
       '<div class="assist-tete">' +
       "<b>Assistant</b>" +

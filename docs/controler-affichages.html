@@ -29,6 +29,11 @@
   onze affiches, les unes sous les autres : les quelques cases à compléter en
   tête de chacune, la feuille dessous, Imprimer et Télécharger en Word.
 
+  Depuis « Oui » (?depart=oui), elle ouvre le relevé : les onze affiches à
+  cocher, chacune avec son emplacement, sa date de pose et sa photographie
+  datée. Le dépôt d'un texte d'affichages reste accessible, mais il n'est plus
+  la porte d'entrée du « oui ».
+
   Une affiche seule à l'écran : ses champs en tête, la feuille, Imprimer,
   Télécharger en Word, et le texte qui l'appelle sous un repli. Le bouton
   Retour du bandeau, posé par droits.js, revient à l'écran précédent.
@@ -111,6 +116,11 @@
   /* Le relevé : une ligne par affichage, sur une carte. */
   .releve-ligne{border-bottom:1px solid var(--filet);padding:10px 0}
   .releve-ligne .n{font:600 15px/1.35 system-ui}
+  /* La case se prend au doigt : la cible fait 44 px de haut, le libellé
+     s'aligne sur la case et revient à la ligne sans passer sous elle. */
+  .releve-ligne .coche{display:flex;align-items:flex-start;gap:10px;min-height:44px;
+    cursor:pointer;padding:2px 0}
+  .releve-ligne .coche input{width:22px;height:22px;min-height:0;flex:0 0 auto;margin:2px 0 0}
   .releve-ligne .e{font-size:var(--t1);color:var(--texte-2);margin:2px 0 6px}
   .releve-ligne .e.fait{color:var(--vert)}
   .releve-ligne .deux{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -125,6 +135,10 @@
   @media print{
     header.site,.barre,.champs,details,.rappel-fiche,.suite,.titre-affiche,.manque,textarea,#lecture,h2{display:none !important}
     .releve-ligne .pj{display:none !important}
+    /* À l'impression, la case n'a plus d'objet : le relevé imprimé porte
+       « en place » ou « à poser », qui se lit. Le 28 septembre 2026. */
+    .releve-ligne .coche input{display:none !important}
+    .releve-ligne .coche{min-height:0;padding:0}
     body{background:#fff}
     .wrap{max-width:none;padding:0}
     .a4{border:0;border-radius:0;margin:0;padding:0;page-break-after:always;font-size:12pt}
@@ -269,7 +283,7 @@
   };
 
   /* ------------------------------------------------------------------ */
-  /* L'état de la page : les dix cases et les coordonnées saisies. */
+  /* L'état de la page : les onze cases et les coordonnées saisies. */
   var CLE = "controler-affichages";
   var E = (function () {
     try { return JSON.parse(localStorage.getItem(CLE) || "null") || {}; } catch (_) { return {}; }
@@ -292,6 +306,29 @@
      documents. Relevé le 26 septembre 2026. */
   depuisProfil("inspUnite", P.orgInspection);
   depuisProfil("spstNom", P.orgSanteTravail);
+  /* LE NUMÉRO IDCC EST DANS L'INTITULÉ DE LA CONVENTION.
+
+     L'affiche de la convention collective sortait « NUMÉRO IDCC [ numéro à
+     indiquer ] » alors que la fiche porte « 0016 - transports routiers » : les
+     quatre chiffres sont devant. Corrigé le 28 septembre 2026 sur la
+     contre-vérification du 26. L'intitulé, lui, garde sa forme complète. */
+  (function () {
+    var m = /(?:^|\D)(\d{4})(?:\D|$)/.exec(String(P.conventionCollective || ""));
+    if (m) depuisProfil("ccnIdcc", m[1]);
+  })();
+  /* LE DÉFENSEUR DES DROITS NE SE RECOPIE PAS À LA MAIN.
+
+     L'affiche du harcèlement demandait de recopier ses coordonnées « depuis le
+     site du Défenseur des droits », alors qu'elles sont publiques et les mêmes
+     pour tout le monde. Elles sont écrites ici, et l'utilisatrice peut les
+     corriger comme n'importe quel autre champ. Ajouté le 28 septembre 2026,
+     après lecture de defenseurdesdroits.fr/nous-contacter le même jour : le
+     courrier est gratuit et sans timbre, et l'appel se fait du lundi au
+     vendredi de 8h30 à 19h30, au coût d'un appel local. */
+  depuisProfil("harDefenseur",
+    "Défenseur des droits, Libre réponse 71120, 75342 Paris CEDEX 07 " +
+    "(courrier gratuit, sans timbre) · 09 69 39 00 00, du lundi au vendredi de " +
+    "8h30 à 19h30 · www.defenseurdesdroits.fr");
   if (!E.v.dateReleve) E.v.dateReleve = new Date().toISOString().slice(0, 10);
 
   var effectif = (function () {
@@ -951,6 +988,16 @@
     else if (t.hasAttribute("data-refaire")) { delete E.faites[t.getAttribute("data-refaire")]; garder(); rendreAffiches(); }
     else if (t.hasAttribute("data-ouvre")) ouvrirAffiche(t.getAttribute("data-ouvre"));
   });
+  /* La case du relevé : elle inscrit ou retire « en place », et redessine la
+     ligne pour que l'état écrit suive la case. Le 28 septembre 2026. */
+  document.addEventListener("change", function (ev) {
+    var c = ev.target.closest ? ev.target.closest("[data-coche]") : null;
+    if (!c) return;
+    var id = c.getAttribute("data-coche");
+    if (c.checked) E.faites[id] = true; else delete E.faites[id];
+    garder();
+    tableauReleve();
+  });
 
   function imprimer(seul) {
     var caches = [];
@@ -1134,7 +1181,15 @@
     var lignes = AFFICHES.map(function (a) {
       var f = !!E.faites[a.id];
       var ph = photoDe(a.id);
-      return '<div class="releve-ligne"><div class="n">' + ech(a.nom) + "</div>" +
+      /* LA LISTE SE COCHE, ELLE NE SE LIT PAS.
+         « en place » ou « à poser » s'affichait sans qu'on puisse rien cocher :
+         l'employeur qui répond « oui, mes affichages sont en place » n'avait
+         d'autre entrée que le dépôt d'un fichier qu'il n'a pas. Une case par
+         affiche, ici, avec son emplacement, sa date et sa photographie. Ajouté
+         le 28 septembre 2026 sur la contre-vérification du 26. */
+      return '<div class="releve-ligne"><div class="n">' +
+        '<label class="coche"><input type="checkbox" data-coche="' + ech(a.id) + '"' +
+        (f ? " checked" : "") + '> ' + ech(a.nom) + "</label></div>" +
         '<div class="e' + (f ? " fait" : "") + '">' + (f ? "en place" : "à poser") + " · " +
         (a.fond.length ? ech(a.fond.join(", ")) : "code de la santé publique") + "</div>" +
         '<div class="deux"><input data-rel="lieu-' + ech(a.id) + '" value="' + ech(v("lieu-" + a.id)) + '" placeholder="emplacement exact">' +
@@ -1247,10 +1302,18 @@
   });
 
   /* ------------------------------------------------------------------ */
-  /* L'entrée. « non » (rien n'est en place) ouvre les onze affiches ;
-     tout le reste ouvre le dépôt. */
+  /* L'ENTRÉE, SELON LA RÉPONSE.
+
+     « non », rien n'est en place : les onze affiches, prêtes à poser.
+     « oui », les affichages sont en place : la liste à cocher du relevé, avec
+     l'emplacement, la date et la photographie de chacune. Le « oui » ouvrait le
+     dépôt d'un fichier, alors qu'un employeur n'a jamais ses onze affichages
+     réunis dans un document : c'est le mur qu'il faut relever, pas un texte à
+     coller. Le dépôt reste accessible depuis le relevé pour qui a ce texte.
+     Corrigé le 28 septembre 2026 sur la contre-vérification du 26. */
   var depart = new URLSearchParams(location.search).get("depart");
   if (depart === "non") { E.faites = {}; garder(); montrer("toutes", true); }
+  else if (depart === "oui") montrer("releve", true);
   else montrer("depot", true);
 
   if ("serviceWorker" in navigator)
