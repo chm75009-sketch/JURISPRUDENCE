@@ -140,6 +140,41 @@
   .cache{display:none}
   @media print{.haut,.barre,.profils,.nature,.champs,.maj,.etat,details{display:none}
     .contrat{border:0;padding:0}}
+  /* ══════ LES MINIMA ET LES SALAIRES ══════
+     Un tableau ne s'affiche pas à chasse fixe, et il ne défile pas de côté :
+     chaque ligne est une grille de quatre colonnes qui tient à 390 px, et le
+     libellé de chaque cellule est porté par la ligne d'en-tête collante. */
+  #e-minima h3{font:600 16px/1.35 system-ui;color:var(--encre);margin:20px 0 8px}
+  .min-t{border:1px solid var(--filet);border-radius:10px;overflow:hidden;margin:0 0 6px}
+  .min-l{display:grid;grid-template-columns:1.1fr .7fr 1fr 1.2fr;gap:6px;
+    padding:9px 10px;font-size:14px;line-height:1.4;border-top:1px solid var(--filet)}
+  .min-l:first-child{border-top:0}
+  .min-l.min-e{font:600 12.5px/1.3 system-ui;text-transform:uppercase;
+    letter-spacing:.03em;color:var(--texte-3);background:var(--surface-2)}
+  .min-l span:nth-child(3),.min-l span:nth-child(4){text-align:right;
+    font-variant-numeric:tabular-nums}
+  .min-smic{display:block;margin:12px 0;font:600 14px/1.4 system-ui;color:var(--texte-2)}
+  .min-smic input{display:block;margin:6px 0 0;font-size:16px;padding:10px 12px;min-height:44px;
+    width:100%;max-width:220px;box-sizing:border-box;border-radius:10px;
+    border:1px solid var(--filet-2);background:var(--surface);color:var(--encre)}
+  .min-s{border:1px solid var(--filet);border-left:3px solid var(--filet-2);
+    border-radius:0 10px 10px 0;padding:11px 12px;margin:10px 0 0}
+  .min-s.min-ko{border-left-color:var(--rouge,#c0392b);background:var(--rouge-clair,#fdf1f0)}
+  .min-s.min-ok{border-left-color:var(--vert)}
+  .min-s .n{display:block;font:600 15.5px/1.35 system-ui;color:var(--encre)}
+  .min-s .e{display:block;font-size:13.5px;color:var(--texte-3);margin:2px 0 0}
+  .min-s .deux{display:grid;grid-template-columns:1fr;gap:8px;margin:9px 0 0}
+  @media (min-width:460px){.min-s .deux{grid-template-columns:1fr 1fr}}
+  .min-s label{font:600 13px/1.3 system-ui;color:var(--texte-3);display:block}
+  .min-s select,.min-s input{display:block;margin:5px 0 0;width:100%;box-sizing:border-box;
+    font-size:16px;padding:9px 11px;min-height:44px;border-radius:9px;
+    border:1px solid var(--filet-2);background:var(--surface);color:var(--encre)}
+  .min-s .v{display:block;margin:9px 0 0;font-size:14px;line-height:1.5;color:var(--texte-2)}
+  .min-s.min-ko .v{color:var(--rouge,#c0392b);font-weight:600}
+  .min-bien{margin:14px 0 0;font-size:14.5px;line-height:1.55;color:var(--encre-2);
+    background:var(--vert-clair,#eef7f0);border-left:3px solid var(--vert);
+    border-radius:0 8px 8px 0;padding:11px 13px}
+  .min-bien b{color:var(--vert)}
 </style>
 </head>
 <body>
@@ -157,9 +192,32 @@
     <p class="aide">Quel emploi ? Le contrat change du tout au tout selon que le salarié conduit
       ou non, et selon qu'il rentre chez lui le soir.</p>
     <div class="profils" id="profils"></div>
+    <!-- LES MINIMA, À CÔTÉ DES CONTRATS.
+         « Aucune comparaison entre les minima et les salaires » : ligne de la
+         contre-vérification du 26 septembre 2026. La table des minima par
+         coefficient était dans le fond du module, jamais montrée, et rien ne
+         confrontait les salaires versés à ces minima. L'écran 4 le fait. -->
+    <div class="barre">
+      <button type="button" class="s" id="vers-minima">Les minima par coefficient, et mes salaires</button>
+    </div>
     <p class="aide" style="color:var(--texte-3)">Transport routier de marchandises, convention
       collective IDCC 16. Pour un autre secteur, les contrats du module « Gérer » restent
       disponibles.</p>
+  </section>
+
+  <!-- ══════ 4 · LES MINIMA ET LES SALAIRES ══════ -->
+  <section id="e-minima" class="cache">
+    <div class="alerte" id="minima-alerte"></div>
+    <div id="minima-table"></div>
+    <div id="minima-compare"></div>
+    <div class="barre">
+      <button type="button" class="s" id="minima-word">Télécharger le relevé</button>
+      <button type="button" class="s" id="minima-retour">Revenir aux emplois</button>
+    </div>
+    <details class="loi">
+      <summary>D'où viennent ces chiffres</summary>
+      <div class="dedans" id="minima-droit"></div>
+    </details>
   </section>
 
   <!-- ══════ 2 · LE SALARIÉ ET LE POSTE ══════ -->

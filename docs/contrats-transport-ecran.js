@@ -37,8 +37,9 @@
   }
 
   function ecran(id) {
-    ["e-profil", "e-champs", "e-contrat"].forEach(function (x) {
-      $(x).classList.toggle("cache", x !== id);
+    ["e-profil", "e-champs", "e-contrat", "e-minima"].forEach(function (x) {
+      var el = $(x);
+      if (el) el.classList.toggle("cache", x !== id);
     });
     window.scrollTo(0, 0);
   }
@@ -862,6 +863,318 @@
     if (p.effectif) bits.push(p.effectif + " salariés");
     $("ent").textContent = bits.join(" · ");
   })();
+
+
+  /* ══════════════════════════════════════════════════════════════════════
+     4 · LES MINIMA PAR COEFFICIENT, ET LES SALAIRES VERSÉS
+
+     « Convention collective, minima : aucune comparaison entre les minima et
+     les salaires. Table des minima par coefficient, et alerte à chaque
+     avenant. » Ligne de la contre-vérification du 26 septembre 2026, faite le
+     28.
+
+     La table des minima existait déjà dans le fond du module, avec ses sources
+     et ses identifiants, mais elle n'était jamais montrée : elle ne servait
+     qu'à écrire un contrat, un salarié à la fois. Cet écran la sort, y range
+     les salaires que l'utilisatrice porte elle-même, et dit l'écart.
+
+     CE QU'IL NE FAIT PAS. Le registre du personnel ne porte pas les salaires,
+     et rien ici ne les devine : ils se saisissent, et ils sont gardés sur le
+     poste sous la clé « minima-salaires ». Un salarié sans salaire porté reste
+     sans verdict, il n'est pas réputé conforme.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  var CLE_SAL = "minima-salaires";
+  function salaires() {
+    try { return JSON.parse(window.localStorage.getItem(CLE_SAL) || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+  function garderSalaires(o) {
+    try { window.localStorage.setItem(CLE_SAL, JSON.stringify(o)); } catch (e) {}
+  }
+  function registreSalaries() {
+    var R = null;
+    try { R = JSON.parse(window.localStorage.getItem("registre-personnel") || "null"); }
+    catch (e) { R = null; }
+    var L = (R && R.salaries) || [];
+    var auj = iso(new Date());
+    return L.filter(function (s) {
+      if (!s || s.ex) return false;
+      var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e) || e > auj) return false;
+      return !(/^\d{4}-\d{2}-\d{2}$/.test(o) && o <= auj);
+    });
+  }
+
+  /* LE TABLEAU DES MINIMA, DANS L'ORDRE DES COEFFICIENTS.
+     Deux grilles, parce que la convention en a deux : les ouvriers de
+     l'annexe I, en coefficients M, et les employés de l'annexe II, sans
+     lettre. Chaque ligne porte son groupe quand la table des groupes le
+     donne, son taux horaire, et la garantie annuelle de la durée retenue. */
+  function lignesMinima() {
+    var S = CT.CCN.salaires, G = CT.CCN.groupes || { parCoefficient: {} };
+    var out = [];
+    Object.keys(S.ouvriers).forEach(function (c) {
+      out.push({ grille: "Ouvriers, annexe I", coef: c,
+        groupe: G.parCoefficient[c] || "",
+        taux: S.ouvriers[c],
+        gar: (S.gar["151.67"] || {})[c] || null });
+    });
+    Object.keys(S.employes).forEach(function (c) {
+      out.push({ grille: "Employés, annexe II", coef: c, groupe: "",
+        taux: S.employes[c],
+        gar: (S.garEmployes || {})[c] || null });
+    });
+    return out;
+  }
+
+  function tableauMinima() {
+    var S = CT.CCN.salaires;
+    var par = {};
+    lignesMinima().forEach(function (l) {
+      if (!par[l.grille]) par[l.grille] = [];
+      par[l.grille].push(l);
+    });
+    var h = "";
+    Object.keys(par).forEach(function (g) {
+      h += "<h3>" + ech(g) + "</h3>";
+      h += '<div class="min-t"><div class="min-l min-e">' +
+        "<span>Coefficient</span><span>Groupe</span><span>Taux horaire</span>" +
+        "<span>Garantie annuelle</span></div>";
+      par[g].forEach(function (l) {
+        h += '<div class="min-l"><span>' + ech(l.coef) + "</span><span>" +
+          (l.groupe ? ech(l.groupe) : "&mdash;").replace("&mdash;", "-") + "</span><span>" +
+          CT.fr(l.taux, 4) + " &euro;</span><span>" +
+          (l.gar ? CT.fr(l.gar, 2) + " &euro;" : "-") + "</span></div>";
+      });
+      h += "</div>";
+    });
+    h += '<p class="aide">Garantie annuelle donnée pour 151,67 heures par mois chez les ' +
+      "ouvriers. Les garanties de 169 et de 200 heures figurent au contrat de chaque " +
+      "salarié concerné, selon son temps de service.</p>";
+    h += '<p class="aide">Source : ' + ech(S.source) + ", " + ech(S.article) +
+      ", en vigueur au " + ech(CT.dateFr(S.depuis)) + ".</p>";
+    return h;
+  }
+
+  /* L'ALERTE DES AVENANTS POSTÉRIEURS.
+     Le fond du module porte la liste des annexes de taux horaires parues
+     depuis la grille recopiée, dont les tableaux n'ont pas été lus. Elle était
+     écrite dans un commentaire et dans la réserve d'un contrat ; elle est ici
+     en tête de l'écran, parce que c'est elle qui décide si les chiffres
+     ci-dessous valent encore. */
+  function alerteAvenants() {
+    var S = CT.CCN.salaires, p = S.posterieures || [];
+    if (!p.length)
+      return "<b>Aucun avenant postérieur connu.</b> La grille ci-dessous est la dernière " +
+        "lue. Revenez la confronter au texte de la convention avant chaque embauche.";
+    return "<b>" + p.length + (p.length > 1 ? " annexes de taux horaires sont parues" :
+      " annexe de taux horaires est parue") + " depuis cette grille, et " +
+      (p.length > 1 ? "leurs tableaux n'ont pas été lus" : "son tableau n'a pas été lu") +
+      " ici : " +
+      p.map(function (x) { return ech(x.quand) + " (" + ech(x.id) + ")"; }).join(", ") +
+      ". Les chiffres ci-dessous sont ceux du " + ech(CT.dateFr(S.depuis)) +
+      " : confrontez-les à " + (p.length > 1 ? "ces annexes" : "cette annexe") +
+      " avant de conclure qu'un salaire est au-dessus du minimum. Un écart calculé sur " +
+      "une grille dépassée ne prouve rien.";
+  }
+
+  /* LA COMPARAISON, SALARIÉ PAR SALARIÉ.
+     Le coefficient et le salaire se portent ici. Le minimum retenu est le plus
+     élevé du taux conventionnel et du SMIC horaire, quand le SMIC est porté :
+     c'est la règle que l'écran du contrat applique déjà. */
+  function tauxDuCoef(coef) {
+    var S = CT.CCN.salaires;
+    if (S.ouvriers[coef] != null) return S.ouvriers[coef];
+    if (S.employes[coef] != null) return S.employes[coef];
+    return null;
+  }
+  function tousCoefs() {
+    var S = CT.CCN.salaires;
+    return Object.keys(S.ouvriers).concat(Object.keys(S.employes));
+  }
+  function comparaison() {
+    var L = registreSalaries(), SAL = salaires();
+    if (!L.length)
+      return '<p class="aide">Le registre du personnel ne porte aucun salarié présent ce jour : ' +
+        "inscrivez-les au registre, et la comparaison se fera ici, nom par nom.</p>";
+    var smic = parseFloat(String(SAL.smic || "").replace(",", ".")); // euros par heure
+    var h = "<h3>Vos salariés, et l'écart au minimum</h3>";
+    h += '<label class="min-smic">SMIC horaire brut en vigueur' +
+      '<input type="text" inputmode="decimal" id="min-smic" value="' +
+      ech(SAL.smic || "") + '" placeholder="par exemple 11,88"></label>';
+    if (!isFinite(smic) || smic <= 0)
+      h += '<p class="aide">Sans le SMIC, l\'écart est calculé sur le seul taux conventionnel. ' +
+        "Or le SMIC l'emporte quand il est plus élevé : portez-le pour que le verdict soit juste.</p>";
+    var enDessous = 0, sans = 0;
+    var corps = "";
+    L.forEach(function (s) {
+      var id = String(s.id || (s.nom + "|" + s.pre));
+      var mien = SAL[id] || {};
+      var coef = String(mien.coef || "");
+      var brut = parseFloat(String(mien.taux || "").replace(",", "."));
+      var tc = coef ? tauxDuCoef(coef) : null;
+      var mini = null;
+      if (tc != null) mini = (isFinite(smic) && smic > tc) ? smic : tc;
+      else if (isFinite(smic) && smic > 0) mini = smic;
+      var verdict, classe = "";
+      if (!coef) { verdict = "coefficient à choisir"; sans++; }
+      else if (!isFinite(brut) || brut <= 0) { verdict = "taux horaire à porter"; sans++; }
+      else if (mini == null) { verdict = "minimum inconnu pour ce coefficient"; sans++; }
+      else if (brut < mini) {
+        verdict = "EN DESSOUS de " + CT.fr(mini - brut, 4) + " euros par heure";
+        classe = " min-ko"; enDessous++;
+      } else {
+        verdict = "au-dessus de " + CT.fr(brut - mini, 4) + " euros par heure";
+        classe = " min-ok";
+      }
+      corps += '<div class="min-s' + classe + '">' +
+        '<span class="n">' + ech(s.nom + " " + s.pre) + "</span>" +
+        '<span class="e">' + ech(String(s.emp || "")) + "</span>" +
+        '<div class="deux">' +
+        '<label>Coefficient<select data-coef="' + ech(id) + '">' +
+        '<option value="">- à choisir -</option>' +
+        tousCoefs().map(function (c) {
+          return '<option value="' + ech(c) + '"' + (c === coef ? " selected" : "") + ">" +
+            ech(c) + "</option>";
+        }).join("") + "</select></label>" +
+        '<label>Taux horaire versé<input type="text" inputmode="decimal" data-taux="' +
+        ech(id) + '" value="' + ech(mien.taux || "") + '" placeholder="euros par heure"></label>' +
+        "</div>" +
+        '<span class="v">' + (mini != null ? "Minimum applicable : " + CT.fr(mini, 4) +
+          " euros. " : "") + ech(verdict) + "</span></div>";
+    });
+    var tete = "";
+    if (enDessous)
+      tete = '<div class="alerte">' + "<b>" + enDessous +
+        (enDessous > 1 ? " salariés sont payés en dessous du minimum." :
+                         " salarié est payé en dessous du minimum.") +
+        "</b> Le minimum conventionnel s'impose au contrat : un salaire inférieur ouvre un " +
+        "rappel de salaire sur trois ans (L. 3245-1), et la différence se paie avec les " +
+        "congés payés et les cotisations qui s'y rattachent. Régularisez, et gardez la trace " +
+        "de la date à laquelle vous l'avez fait.</div>";
+    else if (!sans)
+      tete = '<div class="min-bien"><b>Aucun salarié en dessous du minimum, sur ce qui est ' +
+        "porté ici.</b> Le verdict vaut pour la grille lue, et pour les taux que vous avez " +
+        "saisis.</div>";
+    if (sans)
+      tete += '<p class="aide">' + sans +
+        (sans > 1 ? " salariés restent sans verdict" : " salarié reste sans verdict") +
+        " : ni conforme, ni non conforme. Portez le coefficient et le taux, et le verdict " +
+        "s'écrira.</p>";
+    /* Le titre et le champ du SMIC étaient bâtis dans « h » et jamais rendus :
+       la fonction retournait « tete + corps » seuls. Relevé le 28 septembre 2026
+       en écrivant le contrôle. */
+    return h + tete + corps;
+  }
+
+  function rendreMinima() {
+    $("minima-alerte").innerHTML = alerteAvenants();
+    $("minima-table").innerHTML = tableauMinima();
+    $("minima-compare").innerHTML = comparaison();
+    $("minima-droit").innerHTML = [
+      "Les taux horaires et les garanties annuelles viennent de l'accord du 11 octobre 2023 " +
+      "relatif à la revalorisation des rémunérations (KALIARTI000049067165), en vigueur au " +
+      "1er décembre 2023.",
+      "Les groupes rattachés aux coefficients des ouvriers viennent de l'avenant n° 72 du " +
+      "5 décembre 1990 à l'annexe I (KALIARTI000005850441).",
+      "Le SMIC n'est pas un chiffre de la convention : il change par arrêté, et il se porte " +
+      "à la main. C'est le plus élevé des deux qui s'applique.",
+      "L'action en paiement du salaire se prescrit par trois ans à compter du jour où celui " +
+      "qui l'exerce a connu ou aurait dû connaître les faits (L. 3245-1).",
+    ].map(function (x) { return "<p>" + ech(x) + "</p>"; }).join("");
+  }
+
+  var VM = $("vers-minima");
+  if (VM) VM.addEventListener("click", function () {
+    $("titre-haut").textContent = "Les minima de la convention";
+    rendreMinima();
+    ecran("e-minima");
+  });
+  var RM = $("minima-retour");
+  if (RM) RM.addEventListener("click", function () {
+    $("titre-haut").textContent = "Contrats du transport";
+    ecran("e-profil");
+  });
+
+  /* La saisie : chaque frappe est gardée, et le verdict se réécrit à la
+     sortie du champ, pour ne pas redessiner sous les doigts. */
+  var ZM = $("minima-compare");
+  if (ZM) {
+    ZM.addEventListener("change", function (ev) {
+      var t = ev.target;
+      var o = salaires();
+      if (t.id === "min-smic") { o.smic = t.value; garderSalaires(o); rendreMinima(); return; }
+      var idc = t.getAttribute("data-coef"), idt = t.getAttribute("data-taux");
+      var id = idc || idt;
+      if (!id) return;
+      o[id] = o[id] || {};
+      if (idc) o[id].coef = t.value; else o[id].taux = t.value;
+      garderSalaires(o);
+      rendreMinima();
+    });
+  }
+
+  /* LE RELEVÉ EN WORD. Ce qui a été comparé, daté, pour le dossier : un écart
+     constaté et non écrit est un écart qui se reperd. */
+  var WM = $("minima-word");
+  if (WM) WM.addEventListener("click", function () {
+    if (!window.AuditExport) return;
+    var p = profilEntreprise(), S = CT.CCN.salaires;
+    var items = [
+      { k: "sur", t: [p.denomination || "", p.siret ? "SIRET " + p.siret : ""]
+        .filter(Boolean).join(" · ") },
+      { k: "t1", t: "Minima conventionnels et salaires versés" },
+      { k: "trait" },
+      { k: "p", t: "Relevé établi le " + CT.dateFr(iso(new Date())) +
+        ". Convention collective des transports routiers, IDCC 16." },
+      { k: "p", t: "Grille retenue : " + S.source + " (" + S.article + "), en vigueur au " +
+        CT.dateFr(S.depuis) + "." },
+    ];
+    (S.posterieures || []).forEach(function (x) {
+      items.push({ k: "note", t: "Annexe de taux horaires du " + x.quand + " (" + x.id +
+        ") : son tableau n'a pas été lu ici. Les chiffres du présent relevé sont ceux de " +
+        CT.dateFr(S.depuis) + " et doivent lui être confrontés." });
+    });
+    items.push({ k: "h1", t: "Les minima par coefficient" });
+    items.push({ k: "table", t: [["Grille", "Coefficient", "Groupe", "Taux horaire", "Garantie annuelle"]]
+      .concat(lignesMinima().map(function (l) {
+        return [l.grille, l.coef, l.groupe || "-", CT.fr(l.taux, 4) + " euros",
+          l.gar ? CT.fr(l.gar, 2) + " euros" : "-"];
+      })) });
+    var SAL = salaires();
+    var smic = parseFloat(String(SAL.smic || "").replace(",", "."));
+    items.push({ k: "h1", t: "Les salaires versés, et l'écart" });
+    items.push({ k: "p", t: isFinite(smic) && smic > 0
+      ? "SMIC horaire brut porté au relevé : " + CT.fr(smic, 4) + " euros."
+      : "Le SMIC horaire n'a pas été porté : l'écart est calculé sur le seul taux conventionnel." });
+    var L = registreSalaries();
+    items.push({ k: "table", t: [["Salarié", "Emploi", "Coefficient", "Taux versé", "Minimum", "Écart"]]
+      .concat(L.map(function (s) {
+        var id = String(s.id || (s.nom + "|" + s.pre));
+        var m = SAL[id] || {};
+        var tc = m.coef ? tauxDuCoef(m.coef) : null;
+        var brut = parseFloat(String(m.taux || "").replace(",", "."));
+        var mini = tc != null ? ((isFinite(smic) && smic > tc) ? smic : tc)
+                              : ((isFinite(smic) && smic > 0) ? smic : null);
+        var ecart = (mini != null && isFinite(brut) && brut > 0)
+          ? (brut < mini ? "en dessous de " + CT.fr(mini - brut, 4) + " euros"
+                         : "au-dessus de " + CT.fr(brut - mini, 4) + " euros")
+          : "sans verdict";
+        return [s.nom + " " + s.pre, String(s.emp || ""), String(m.coef || "-"),
+          isFinite(brut) && brut > 0 ? CT.fr(brut, 4) + " euros" : "-",
+          mini != null ? CT.fr(mini, 4) + " euros" : "-", ecart];
+      })) });
+    items.push({ k: "note", t: "L'action en paiement du salaire se prescrit par trois ans " +
+      "(L. 3245-1). Un salaire inférieur au minimum conventionnel ouvre un rappel, avec les " +
+      "congés payés et les cotisations qui s'y rattachent." });
+    items.push({ k: "sign", t: (p.responsableNom || "") +
+      (p.responsableQualite ? ", " + p.responsableQualite : "") });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Minima conventionnels et salaires versés"),
+      "minima-salaires-" + iso(new Date()) + ".docx",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+  });
 
   rendreProfils();
 

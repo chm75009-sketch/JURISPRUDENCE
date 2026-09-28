@@ -51,16 +51,14 @@
   var villeFiche = O.villeDe;
   /* L'adresse publique : un document emporté en Word ou imprimé quitte le
      navigateur, un lien relatif n'y mène plus nulle part. */
-  var SITE_APP = (function () {
-    /* L'adresse où l'application est ouverte, et non une adresse figée :
-       ouverte sur le site d'un client, elle renvoie à ce site-là, où sont
-       sa fiche et ses données. */
-    try {
-      if (window.location && /^https?:$/.test(window.location.protocol))
-        return window.location.origin + window.location.pathname.replace(/[^\/]*$/, "");
-    } catch (e) {}
-    return "https://chm75009-sketch.github.io/JURISPRUDENCE/docs/";
-  })();
+  /* LE DERNIER LIEN VERS LE DÉPÔT EST PARTI.
+
+     Les documents renvoyaient à l'adresse publique de l'application, et le lien
+     github s'écrivait dans le Word. Les renvois nomment désormais l'écran, non
+     l'adresse : « l'écran Mes documents », « le registre du personnel ». La
+     constante n'a plus d'emploi, et son adresse de repli n'a plus à figurer
+     dans le dépôt. Retirée le 28 septembre 2026, sur la ligne « Marques d'outil,
+     il reste le lien github » de la contre-vérification du 26. */
 
   function X(ex, valeur, crochet) { return ex ? valeur : "[" + crochet + "]"; }
   function jj(d) {

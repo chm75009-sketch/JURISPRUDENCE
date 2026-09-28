@@ -158,16 +158,14 @@
   /* L'adresse publique de l'application. Un document emporté en Word ou
      imprimé quitte le navigateur : un lien relatif n'y mène plus nulle part.
      C'est la même base que juris-expert.js emploie pour ses renvois. */
-  var SITE = (function () {
-    /* L'adresse où l'application est ouverte, et non une adresse figée :
-       ouverte sur le site d'un client, elle renvoie à ce site-là, où sont
-       sa fiche et ses données. */
-    try {
-      if (window.location && /^https?:$/.test(window.location.protocol))
-        return window.location.origin + window.location.pathname.replace(/[^\/]*$/, "");
-    } catch (e) {}
-    return "https://chm75009-sketch.github.io/JURISPRUDENCE/docs/";
-  })();
+  /* LE DERNIER LIEN VERS LE DÉPÔT EST PARTI.
+
+     Les documents renvoyaient à l'adresse publique de l'application, et le lien
+     github s'écrivait dans le Word. Les renvois nomment désormais l'écran, non
+     l'adresse : « l'écran Mes documents », « le registre du personnel ». La
+     constante n'a plus d'emploi, et son adresse de repli n'a plus à figurer
+     dans le dépôt. Retirée le 28 septembre 2026, sur la ligne « Marques d'outil,
+     il reste le lien github » de la contre-vérification du 26. */
 
   var D = {};
 
@@ -1566,6 +1564,36 @@
         L.push("du procès-verbal de carence.");
         L.push("");
       }
+      /* LE DÉLAI DE QUINZE JOURS DE L. 2314-9, COMPTÉ.
+
+         L. 2314-9 (LEGIARTI000035651143) : l'employeur porte le procès-verbal de
+         carence à la connaissance des salariés par un moyen donnant date
+         certaine « et le transmet dans les quinze jours, par tout moyen
+         permettant de conférer date certaine à l'agent de contrôle de
+         l'inspection du travail ». La lettre était produite sans jamais dire si
+         ces quinze jours étaient passés, alors que la fiche porte la date du
+         procès-verbal. Ajouté le 28 septembre 2026 sur la contre-vérification
+         du 26 : le retard se dit, et il ne dispense pas d'envoyer. */
+      if (sansCse && /^\d{4}-\d{2}-\d{2}$/.test(dCarRi)) {
+        var jCar = Math.round((d0 - new Date(dCarRi + "T12:00:00")) / 86400000);
+        var limCar = dans(new Date(dCarRi + "T12:00:00"), 15);
+        if (jCar > 15) {
+          L.push("ATTENTION, LE DÉLAI EST DÉPASSÉ - Votre procès-verbal de carence est du " +
+            leJour(new Date(dCarRi + "T12:00:00")) + ", soit il y a " + jCar + " jours.");
+          L.push("L. 2314-9 donne quinze jours pour le transmettre à l'agent de contrôle de");
+          L.push("l'inspection du travail : le terme était le " + leJour(limCar) + ". Envoyez");
+          L.push("la lettre ci-dessous aujourd'hui, par un moyen donnant date certaine : un");
+          L.push("envoi tardif vaut mieux qu'un envoi jamais fait, et la date de réception");
+          L.push("établira au moins que la formalité a été accomplie.");
+          L.push("");
+        } else {
+          L.push("Le délai court : votre procès-verbal de carence est du " +
+            leJour(new Date(dCarRi + "T12:00:00")) + ", et L. 2314-9 donne quinze");
+          L.push("jours pour le transmettre à l'inspection du travail. Le terme est le " +
+            leJour(limCar) + ".");
+          L.push("");
+        }
+      }
       L.push("Fait le [DATE]   -   Référence : " +
         (sansCse ? "[procès-verbal de carence du DATE]" : "[n° du procès-verbal]"));
       L.push("");
@@ -1605,6 +1633,94 @@
         L.push(cro(resp(p), "Nom et qualité"));
         L.push("");
         L.push("Pièce jointe : procès-verbal de carence");
+        L.push("");
+        L.push("");
+        /* LE PROCÈS-VERBAL DE CARENCE LUI-MÊME.
+
+           La lettre annonçait une pièce jointe que ce module ne produisait pas :
+           l'employeur devait aller la chercher ailleurs, ou l'écrire seul.
+           Relevé par la contre-vérification du 26 septembre 2026, ajouté le 28.
+           L. 2314-9 dit qui l'établit, à qui il est porté et dans quel délai il
+           est transmis ; il ne dit pas sa forme, et le modèle ne fait donc que
+           consigner les faits qui l'établissent. */
+        L.push("────────────────────────────────────────────────────────────────────────");
+        L.push("PIÈCE JOINTE - PROCÈS-VERBAL DE CARENCE");
+        L.push("────────────────────────────────────────────────────────────────────────");
+        L.push("");
+        L.push("(L. 2314-9) - la pièce annoncée par la lettre ci-dessus");
+        L.push("");
+        L.push(nom);
+        L.push(cro(p.adresse, "adresse"));
+        L.push(p.siret ? "SIRET " + p.siret : cro("", "SIRET"));
+        L.push("");
+        L.push("PROCÈS-VERBAL DE CARENCE");
+        L.push("Élections des membres de la délégation du personnel du comité social et");
+        L.push("économique");
+        L.push("");
+        L.push("Effectif de l'entreprise : " +
+          (String(p.effectif || "").trim() ? String(p.effectif).trim() + " salariés"
+                                          : "[effectif à la date des élections]"));
+        L.push("");
+        L.push("1. CE QUI A ÉTÉ FAIT");
+        L.push("");
+        L.push("Le personnel a été informé de l'organisation des élections le [DATE], par");
+        L.push("[MOYEN DONNANT DATE CERTAINE], la date envisagée du premier tour étant");
+        L.push("fixée au [DATE], soit au plus tard le quatre-vingt-dixième jour suivant");
+        L.push("cette diffusion (L. 2314-4).");
+        L.push("");
+        L.push("Les organisations syndicales ont été invitées à négocier le protocole");
+        L.push("d'accord préélectoral et à présenter des candidats le [DATE], par");
+        L.push("[MOYEN DONNANT DATE CERTAINE] (L. 2314-5).");
+        L.push("");
+        L.push("2. CE QUI S'EST PASSÉ AUX SCRUTINS");
+        L.push("");
+        L.push("Premier tour, tenu le [DATE] : [AUCUNE CANDIDATURE N'A ÉTÉ PRÉSENTÉE, ou :");
+        L.push("le quorum n'a pas été atteint, le nombre de votants étant de NOMBRE pour");
+        L.push("NOMBRE d'électeurs inscrits].");
+        L.push("");
+        L.push("Second tour, tenu le [DATE] : [AUCUNE CANDIDATURE N'A ÉTÉ PRÉSENTÉE, ou :");
+        L.push("les sièges suivants n'ont pu être pourvus : LESQUELS].");
+        L.push("");
+        L.push("3. CE QUI EST CONSTATÉ");
+        L.push("");
+        L.push("En conséquence, le comité social et économique n'a pu être mis en place.");
+        L.push("Le présent procès-verbal de carence est établi pour en faire foi.");
+        L.push("");
+        L.push("NOTE - Si la carence ne porte que sur une partie des sièges, écrivez");
+        L.push("lesquels au 2 et remplacez cette phrase par : « les sièges de …");
+        L.push("n'ont pu être pourvus ». Une carence partielle n'est pas une absence de");
+        L.push("comité, et le comité réduit exerce ses attributions.");
+        L.push("");
+        L.push("4. CE QUI EN DÉCOULE, ET QUAND");
+        L.push("");
+        L.push("  · Information du personnel, par un moyen donnant date certaine :");
+        L.push("    [DATE], par [MOYEN].");
+        L.push("  · Transmission à l'agent de contrôle de l'inspection du travail, dans");
+        L.push("    les quinze jours et par un moyen conférant date certaine : la lettre");
+        L.push("    ci-dessus." +
+          (/^\d{4}-\d{2}-\d{2}$/.test(dCarRi)
+            ? " Terme : " + leJour(dans(new Date(dCarRi + "T12:00:00"), 15)) + "." : ""));
+        /* L. 2314-8 (LEGIARTI000036262484) borne la DEMANDE d'un salarié ou
+           d'une organisation syndicale, non l'initiative de l'employeur : la
+           phrase le dit, plutôt que de laisser croire que rien ne peut se faire
+           pendant six mois. Écrit ainsi le 28 septembre 2026. */
+        L.push("  · Demande d'élections par un salarié ou une organisation syndicale :");
+        L.push("    une fois le processus électoral engagé et le procès-verbal de carence");
+        L.push("    établi, elle ne peut intervenir qu'à l'issue d'un délai de six mois");
+        L.push("    après cet établissement (L. 2314-8)" +
+          (/^\d{4}-\d{2}-\d{2}$/.test(dCarRi)
+            ? ", soit à compter du " +
+              leJour(new Date(new Date(dCarRi + "T12:00:00").setMonth(
+                new Date(dCarRi + "T12:00:00").getMonth() + 6))) + "." : "."));
+        L.push("    Rien n'empêche l'employeur d'organiser des élections avant ce terme,");
+        L.push("    et l'information quadriennale du personnel reste due (L. 2314-4).");
+        L.push("");
+        L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " +
+          (/^\d{4}-\d{2}-\d{2}$/.test(dCarRi)
+            ? leJour(new Date(dCarRi + "T12:00:00")) : "[DATE DU PROCÈS-VERBAL]"));
+        L.push("");
+        L.push(cro(resp(p), "Nom et qualité du représentant légal"));
+        L.push("");
       } else {
         L.push("Aux membres de la délégation du personnel");
         L.push("du comité social et économique");

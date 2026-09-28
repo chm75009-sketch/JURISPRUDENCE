@@ -287,8 +287,11 @@
     }).catch(function (e) {
       return {
         content: e && e.message === "TROP_LONG"
-          ? "Le relais Légifrance n'a pas répondu en vingt-cinq secondes."
-          : "Relais Légifrance injoignable (réseau).", is_error: true
+          /* Ce que l'utilisatrice lit ne nomme pas les rouages internes : elle
+             veut savoir que le code du travail n'a pas répondu, pas par quel
+             chemin il est interrogé. Le 28 septembre 2026. */
+          ? "La lecture du code du travail n'a pas répondu en vingt-cinq secondes."
+          : "La lecture du code du travail est injoignable (réseau).", is_error: true
       };
     });
   }

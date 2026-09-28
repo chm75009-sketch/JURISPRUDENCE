@@ -23,10 +23,13 @@
 
    CE QU'IL NE FAIT PAS
 
-   Il ne va pas chercher la convention : le relais Légifrance de l'application
-   ne sert que le code du travail. Il ne dit donc jamais qu'une convention est
-   à jour ou ne l'est pas : il dit quand vous l'avez regardée, et vous laisse
-   la regarder.
+   Il ne va pas chercher la convention : la lecture de textes de cette
+   application ne porte que sur le code du travail. Il ne dit donc jamais qu'une
+   convention est à jour ou ne l'est pas : il dit quand vous l'avez regardée,
+   donne le lien vers le texte et ses avenants, et vous laisse la regarder.
+   Depuis le 28 septembre 2026, il n'enregistre plus une vérification vide :
+   ou bien un avenant est nommé, ou bien on déclare qu'il n'y en a pas de
+   nouveau.
 
    USAGE
 
@@ -81,6 +84,10 @@
       secteur: String(p.secteur || ""),
       verifiee: s.verifiee || "",
       avenant: s.avenant || "",
+      /* Déclarer qu'il n'y a pas de nouvel avenant est une réponse, et elle est
+         gardée : c'est ce qui permet au bouton de savoir qu'on a répondu. Le
+         28 septembre 2026. */
+      aucunAvenant: !!s.aucunAvenant,
       /* Jamais vérifiée compte comme vieille : c'est le cas le plus fréquent
          et le plus risqué. */
       vieille: !s.verifiee || (m !== null && m >= MOIS_ALERTE),
@@ -111,6 +118,12 @@
       ".conv button{min-height:44px;border-radius:10px;font:600 15px system-ui;cursor:pointer;",
       "  padding:0 16px;background:var(--accent);color:#fff;border:2px solid var(--accent);white-space:nowrap}",
       ".conv a{color:var(--accent)}",
+      /* La ligne à cocher : cible de 44 px, la case alignée sur la première
+         ligne du libellé, qui revient à la ligne sans passer sous elle. */
+      ".conv .rien{display:flex;align-items:flex-start;gap:10px;min-height:44px;",
+      "  margin:10px 0 0;font:400 14px/1.5 system-ui;color:var(--texte-2);cursor:pointer}",
+      ".conv .rien input{width:22px;height:22px;min-height:0;flex:0 0 auto;margin:2px 0 0;padding:0}",
+      ".conv button[disabled]{opacity:.45;cursor:not-allowed}",
     ].join("");
     doc.head.appendChild(st);
   }
@@ -132,19 +145,53 @@
         (s.mois !== null && s.mois >= 1 ? ", il y a " + s.mois + " mois" : "")
       : "Jamais vérifiée depuis ce poste";
     var av = s.avenant ? " Dernier avenant noté : " + ech(s.avenant) + "." : "";
+    if (!s.avenant && s.aucunAvenant)
+      av = " Noté : aucun nouvel avenant à cette date.";
     var dit = s.vieille
       ? "Une convention se modifie par avenants, et ses minima changent : regardez si un " +
         "avenant est paru depuis, et notez-le ici."
       : "Pensez à revenir ici dès qu'un avenant paraît.";
+    /* LE LIEN VERS LE TEXTE, ET L'INTITULÉ ENTIER.
+
+       Le bloc nommait la convention telle que la fiche l'écrit, souvent
+       « 0016 - transports routiers », et ne donnait aucun moyen d'aller voir le
+       texte : vérifier supposait de chercher soi-même. Le numéro IDCC est extrait
+       de l'intitulé et le lien le porte. Ajouté le 28 septembre 2026 sur la
+       contre-vérification du 26.
+
+       L'adresse est celle de l'outil public des conventions collectives,
+       code.travail.gouv.fr, essayée le 28 septembre 2026. Légifrance ne répond
+       pas aux appels de cette application pour les conventions : ce module ne
+       prétend donc pas lire le texte, il conduit à lui. */
+    var idcc = (/(\d{4})/.exec(s.convention) || [])[1] || "";
+    var lien = "https://code.travail.gouv.fr/outils/convention-collective" +
+      (idcc ? "?q=" + idcc : "");
+    /* LE BOUTON N'ENREGISTRE PLUS UNE VÉRIFICATION VIDE.
+
+       « Je viens de la vérifier » s'enregistrait sur un champ laissé vide : la
+       fiche portait une date de vérification sans qu'on sache ce qui avait été
+       vu. Ou bien un avenant est nommé, ou bien on déclare qu'il n'y en a pas de
+       nouveau, et le bouton attend l'un des deux. Le 28 septembre 2026. */
+    var pret = !!(s.avenant || s.aucunAvenant);
     return '<div class="conv' + (s.vieille ? " alerte" : "") + '">' +
       '<span class="et">Convention collective appliquée</span>' +
       '<span class="v">' + ech(s.convention) + "</span>" +
-      '<span class="q">' + ech(quand) + "." + av + " " + ech(dit) + "</span>" +
+      '<span class="q">' + ech(quand) + "." + ech(av) + " " + ech(dit) + "</span>" +
+      '<span class="q">Le texte et ses avenants : <a href="' + ech(lien) +
+      '" target="_blank" rel="noopener">l\'outil public des conventions collectives</a>' +
+      (idcc ? ", sous le numéro IDCC " + ech(idcc) : "") + ".</span>" +
       '<div class="maj">' +
-      '<input type="text" id="conv-avenant" placeholder="dernier avenant connu : numéro et date" value="' +
+      '<input type="text" id="conv-avenant" placeholder="dernier avenant : numéro et date de signature" value="' +
       ech(s.avenant) + '">' +
-      '<button type="button" id="conv-ok">Je viens de la vérifier</button>' +
-      "</div></div>";
+      '<button type="button" id="conv-ok"' + (pret ? "" : " disabled") +
+      ">Je viens de la vérifier</button>" +
+      "</div>" +
+      '<label class="rien"><input type="checkbox" id="conv-rien"' +
+      (s.aucunAvenant ? " checked" : "") +
+      "> Aucun nouvel avenant depuis ma dernière vérification</label>" +
+      (pret ? "" : '<span class="q">Nommez l\'avenant, ou cochez la ligne ci-dessus : ' +
+        "une vérification sans rien de noté ne dit pas ce qui a été vu.</span>") +
+      "</div>";
   }
 
   function poser(el) {
@@ -156,13 +203,26 @@
       el.innerHTML = html(s);
       var b = doc.getElementById("conv-ok");
       var i = doc.getElementById("conv-avenant");
+      var r = doc.getElementById("conv-rien");
+      /* Le bouton s'ouvre dès que l'une des deux réponses est donnée, sans
+         attendre un nouveau rendu : on n'oblige pas à cliquer ailleurs pour que
+         l'écran suive. Le 28 septembre 2026. */
+      function ajuster() {
+        if (!b) return;
+        b.disabled = !((i && i.value.trim()) || (r && r.checked));
+      }
       if (i) i.addEventListener("input", function () {
-        var o = lire(); o.avenant = i.value; garder(o);
+        var o = lire(); o.avenant = i.value; garder(o); ajuster();
+      });
+      if (r) r.addEventListener("change", function () {
+        var o = lire(); o.aucunAvenant = r.checked; garder(o); ajuster();
       });
       if (b) b.addEventListener("click", function () {
+        if (b.disabled) return;
         var o = lire();
         o.verifiee = aujourdhui();
         if (i) o.avenant = i.value;
+        if (r) o.aucunAvenant = r.checked;
         garder(o);
         rendre();
       });
