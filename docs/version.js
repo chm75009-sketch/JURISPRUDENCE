@@ -7,5 +7,5 @@
    qui regardait la 12.97, et rien ne distinguait une mise à jour reçue d'une
    mise à jour manquée. Relevé le 28 septembre 2026 par la vérification.
    epreuve/verifier-version.mjs compare désormais les trois fichiers. */
-window.VERSION_APP = "13.09";
+window.VERSION_APP = "13.10";
 window.VERSION_DATE = "28 septembre 2026";

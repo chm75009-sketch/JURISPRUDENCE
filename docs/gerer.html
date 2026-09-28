@@ -3675,10 +3675,60 @@
      Trois mois avant, la question écrite ; un mois pour la réponse
      (D. 1237-2-1). Une réponse négative ferme la voie pendant un an, et la
      lettre le dit au lieu de laisser partir une notification irrégulière. */
+  /* L'ÂGE DU 1° DE L'ARTICLE L. 351-8 SE CALCULE, IL NE SE DEMANDE PLUS.
+
+     Le commentaire ci-dessus disait que l'application n'avait pas lu le code de
+     la sécurité sociale : elle le lit. L. 351-8 (LEGIARTI000051289852, deux
+     lectures concordantes le 28 septembre 2026), 1° : bénéficient du taux plein
+     « les assurés qui atteignent l'âge prévu au premier alinéa de l'article
+     L. 161-17-2 augmenté de trois années ». Et L. 161-17-2
+     (LEGIARTI000053280889) donne cet âge, par année de naissance :
+
+       né à compter du 1er janvier 1969 ......... 64 ans, donc 67 ans
+       né du 1er septembre au 31 décembre 1961 .. 62 ans 3 mois, donc 65 ans 3 mois
+       né en 1962 ............................... 62 ans 6 mois, donc 65 ans 6 mois
+       né du 1er janvier 1963 au 31 mars 1965 ... 62 ans 9 mois, donc 65 ans 9 mois
+       né du 1er avril au 31 décembre 1965 ...... 63 ans, donc 66 ans
+       né en 1966 ............................... 63 ans 3 mois, donc 66 ans 3 mois
+       né en 1967 ............................... 63 ans 6 mois, donc 66 ans 6 mois
+       né en 1968 ............................... 63 ans 9 mois, donc 66 ans 9 mois
+
+     Pour les assurés nés avant le 1er septembre 1961, le texte renvoie à sa
+     rédaction antérieure à la loi du 30 décembre 2025, qui n'a pas été lue ici :
+     la date reste alors à saisir, et l'écran le dit. Le calcul se fait en mois,
+     jamais en jours. Ajouté le 28 septembre 2026, sur la ligne « La date d'âge
+     n'est pas calculée » de la contre-vérification du 26.
+
+     La date saisie l'emporte toujours : c'est l'employeur qui répond de l'âge de
+     son salarié, et une carrière longue ou un régime spécial peuvent la
+     déplacer. */
+  function moisTauxPlein(nais) {
+    if (!nais) return null;
+    var a = nais.getFullYear(), m = nais.getMonth() + 1, j = nais.getDate();
+    if (a >= 1969) return 67 * 12;
+    if (a === 1968) return 66 * 12 + 9;
+    if (a === 1967) return 66 * 12 + 6;
+    if (a === 1966) return 66 * 12 + 3;
+    if (a === 1965) return (m >= 4) ? 66 * 12 : 65 * 12 + 9;
+    if (a === 1964 || a === 1963) return 65 * 12 + 9;
+    if (a === 1962) return 65 * 12 + 6;
+    if (a === 1961 && (m > 9 || (m === 9 && j >= 1))) return 65 * 12 + 3;
+    return null;                      /* né avant le 1er septembre 1961 */
+  }
+  function dateTauxPlein(nais) {
+    var n = moisTauxPlein(nais);
+    return n === null ? null : plusMois(nais, n);
+  }
+
   function miseRetraite(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var civ = civiliteDe(nomS);
-    var anniv = dateDe(v.anniversaire);
+    /* La date saisie d'abord ; à défaut, celle que la naissance du registre
+       donne. Le 28 septembre 2026. */
+    var sRet = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var naisRet = sRet ? dateDe(sRet.nais) : null;
+    var annivCalc = dateTauxPlein(naisRet);
+    var anniv = dateDe(v.anniversaire) || annivCalc;
     var interroge = dateDe(v.interrogation);
     var entree = dateDe(v.entree);
     var salaire = Number(v.salaireRef) || 0;
@@ -3686,7 +3736,9 @@
     var b = [], dates = [], alerte = null;
 
     /* Les deux dates de D. 1237-2-1, comptées depuis l'anniversaire porté. */
-    var auPlusTard = anniv ? jour(anniv, -90) : null;
+    /* Trois mois, non quatre-vingt-dix jours : D. 1237-2-1 écrit « trois mois
+       avant l'anniversaire du salarié ». Corrigé le 28 septembre 2026. */
+    var auPlusTard = anniv ? plusMois(anniv, -3) : null;
     var reponseAvant = interroge ? plusMois(interroge, 1) : null;
 
     if (quoi === "question") {
@@ -3694,7 +3746,11 @@
       enTete(b, nomS, "votre intention de quitter l'entreprise pour bénéficier d'une pension de vieillesse",
         "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
       b.push({ k: "p", t: "Vous atteindrez le " + (anniv ? dateFr(anniv) : "[date]") +
-        " l'âge mentionné au 1° de l'article L. 351-8 du code de la sécurité sociale." });
+        " l'âge mentionné au 1° de l'article L. 351-8 du code de la sécurité sociale" +
+        (annivCalc && !dateDe(v.anniversaire) && naisRet
+          ? ", soit l'âge du premier alinéa de l'article L. 161-17-2 augmenté de trois années, " +
+            "compte tenu de votre date de naissance du " + dateFr(naisRet)
+          : "") + "." });
       b.push({ k: "p", t: "Avant cette date, la loi nous impose de vous interroger par écrit sur votre " +
         "intention de quitter volontairement l'entreprise pour bénéficier, ou continuer de bénéficier, " +
         "d'une pension de vieillesse (" + ref(["L1237-5"]) + ")." });
@@ -3724,9 +3780,19 @@
       var alQ = [];
       var quand = interroge || AUJOURDHUI;
       if (!anniv) {
-        alQ.push("La date à laquelle le salarié atteint l'âge du 1° de l'article L. 351-8 du code de " +
-          "la sécurité sociale n'est pas saisie : la fenêtre de trois mois ne peut pas être " +
-          "contrôlée (" + ref(["D1237-2-1"]) + "). Portez-la en tête.");
+        /* La naissance du registre suffit d'ordinaire : on ne demande la date
+           que quand elle ne suffit pas, et on dit pourquoi. Le 28 septembre
+           2026. */
+        alQ.push(naisRet
+          ? "Le salarié est né le " + dateFr(naisRet) + ", avant le 1er septembre 1961 : l'âge " +
+            "applicable est celui de l'article L. 161-17-2 dans sa rédaction antérieure à la loi " +
+            "du 30 décembre 2025, que cette application n'a pas lue. Portez en tête la date à " +
+            "laquelle il atteint l'âge du 1° de l'article L. 351-8, et la fenêtre de trois mois se " +
+            "contrôlera (" + ref(["D1237-2-1"]) + ")."
+          : "La date de naissance du salarié n'est pas au registre, et la date à laquelle il " +
+            "atteint l'âge du 1° de l'article L. 351-8 du code de la sécurité sociale n'est pas " +
+            "saisie : la fenêtre de trois mois ne peut pas être contrôlée (" +
+            ref(["D1237-2-1"]) + "). Portez la naissance au registre, ou la date en tête.");
       } else if (quand < auPlusTard) {
         alQ.push("La question serait posée le " + dateFr(quand) + ", soit plus de trois mois avant " +
           "l'anniversaire du " + dateFr(anniv) + " : la fenêtre s'ouvre le " + dateFr(auPlusTard) +
