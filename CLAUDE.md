@@ -509,6 +509,20 @@ relais Légifrance dans `netlify/functions` ; et GitHub Pages, à l'adresse
 `chm75009-sketch.github.io/JURISPRUDENCE/docs/`. Pousser sur `main` suffit,
 les deux suivent.
 
+**Netlify ne suit plus, et il faut le savoir.** Mesuré le 28 septembre 2026 :
+le dernier déploiement Netlify date du 12 septembre, commit `20e26a2`, et
+chaque tentative depuis est refusée avec le message « Skipped due to account
+credit usage exceeded ». Le crédit du compte est épuisé, exactement le cas que
+`netlify.toml` décrit en tête : les envois sont acceptés et rien n'est publié.
+Conséquences à retenir, plutôt qu'à redécouvrir : l'adresse
+`jurisprudence-recherche.netlify.app` sert une application vieille de deux
+semaines, et surtout les trois fonctions du relais - Légifrance, Judilibre,
+l'assistant - restent dans leur version du 7 septembre. C'est pourquoi le site
+du client reçoit encore « ORIGINE_REFUSEE » alors que le dépôt autorise son
+adresse depuis le 26 septembre : le correctif est écrit, il n'est pas déployé.
+Rien dans le code ne débloque cela ; il faut libérer le crédit du compte
+Netlify. GitHub Pages et le site du client, eux, suivent bien `main`.
+
 **Le site du client** : `https://tec-direction.chm75009.workers.dev/`, publié
 par Cloudflare depuis le dépôt `chm75009-sketch/Tec-direction`, qui lance
 `npx wrangler deploy` à chaque envoi sur `main`. Ce dépôt est une copie de
