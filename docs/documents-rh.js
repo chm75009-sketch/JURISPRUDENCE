@@ -146,10 +146,11 @@
     return r;
   }
   /* LES MOIS ET LES ANNÉES NE SE COMPTENT PAS EN JOURS. « Deux mois avant le
-     1er mai » donnait le 2 mars, parce que soixante jours en arrière tombent
-     en mars et non en mars : l'écran disait le 1er mars, le document le 2. De
-     même, six mois après une signature du 25 septembre, ce n'est pas
-     cent quatre-vingts jours. Relevé le 26 septembre 2026. */
+     1er mai » donnait le 2 mars : soixante jours en arrière tombent le 2 mars,
+     alors que deux mois en arrière tombent le 1er. L'écran disait le 1er mars,
+     le document le 2. De même, six mois après une signature du 25 septembre,
+     ce n'est pas cent quatre-vingts jours. Relevé le 26 septembre 2026 ; la
+     phrase qui disait « en mars et non en mars » corrigée le 28. */
   function moisDans(d, n) {
     var r = new Date(d), j = r.getDate();
     r.setDate(1); r.setMonth(r.getMonth() + n);

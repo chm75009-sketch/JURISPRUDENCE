@@ -2535,7 +2535,12 @@
     b.push({ k: "p", t: "Je reconnais avoir été informé des conséquences de ce choix : je ne bénéficie " +
       "ni des garanties du régime, ni de la participation de l'employeur à son financement." });
     b.push({ k: "vide", t: "" });
-    b.push({ k: "p", t: "Fait à ........................, le ........................" });
+    /* LE LIEU EST CELUI DE L'ENTREPRISE, LA DATE EST CELLE DU SALARIÉ.
+       « Fait à ........................ » partait sur une pièce que le salarié
+       signe dans les locaux : le lieu est connu, la date non. Corrigé le
+       28 septembre 2026 sur la contre-vérification du 26. */
+    b.push({ k: "p", t: "Fait à " + (ville() || "........................") +
+      ", le ........................" });
     b.push({ k: "p", t: "Signature du salarié :" });
     b.push({ k: "vide", t: "" });
     b.push({ k: "p", t: "Reçue par l'employeur le ........................ et conservée au dossier du " +
@@ -3360,7 +3365,10 @@
     var b = [];
     b.push({ k: "t1", t: "Convocation à un entretien préalable au licenciement pour motif économique" });
     enTete(b, nomS, "convocation à un entretien préalable", "Lettre recommandée avec avis de réception ou remise en main propre contre décharge");
-    b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement pour motif économique, la suppression de votre poste de " + poste + " étant envisagée pour les raisons qui vous seront exposées." });
+    /* « votre poste de Assistante administrative » : l'élision manquait devant
+       l'intitulé venu du registre. La fonction « de » est là pour cela. Corrigé
+       le 28 septembre 2026 sur la contre-vérification du 26. */
+    b.push({ k: "p", t: "Nous envisageons de procéder à votre licenciement pour motif économique, la suppression de votre poste " + de(poste) + " étant envisagée pour les raisons qui vous seront exposées." });
     b.push({ k: "p", t: "Nous vous convoquons en conséquence à un entretien préalable qui se tiendra le " + quand + " à " + heure + ", " + lieu + " (" + ref(["L1233-11"]) + ")." });
     b.push({ k: "p", t: assistance("L1233-13") });
     b.push({ k: "p", t: "Au cours de cet entretien, nous vous proposerons le bénéfice du contrat de sécurisation professionnelle et vous remettrons le document d'information correspondant (" + ref(["L1233-66", "L1233-65"]) + ")." });
@@ -3386,7 +3394,7 @@
     b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + "." });
     b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement pour motif économique, pour les raisons suivantes (" + ref(["L1233-3", "L1233-16"]) + ")." });
     griefsBlocs(b, v.motif, "[le motif économique : difficultés économiques caractérisées par l'évolution d'un indicateur (commandes, chiffre d'affaires, pertes, trésorerie), mutations technologiques, réorganisation nécessaire à la sauvegarde de la compétitivité ou cessation d'activité ; puis son effet sur votre emploi : suppression du poste, transformation, ou modification du contrat que vous avez refusée]");
-    b.push({ k: "p", t: "Votre poste de " + poste + " est supprimé. Nous avons recherché les possibilités de vous reclasser sur les emplois disponibles dans l'entreprise [et dans les entreprises du groupe situées sur le territoire national] : [aucun emploi disponible relevant de votre catégorie ou équivalent n'a pu vous être proposé / vous avez refusé l'offre du ... ] (" + ref(["L1233-4"]) + ")." });
+    b.push({ k: "p", t: "Votre poste " + de(poste) + " est supprimé. Nous avons recherché les possibilités de vous reclasser sur les emplois disponibles dans l'entreprise [et dans les entreprises du groupe situées sur le territoire national] : [aucun emploi disponible relevant de votre catégorie ou équivalent n'a pu vous être proposé / vous avez refusé l'offre du ... ] (" + ref(["L1233-4"]) + ")." });
     /* LE PRÉAVIS ET L'INDEMNITÉ SE CALCULENT ICI COMME AILLEURS.
 
        La notification économique sortait avec « [montant] euros » et une durée

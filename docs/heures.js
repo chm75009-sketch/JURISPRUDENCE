@@ -68,6 +68,12 @@
     try { window.localStorage.setItem(c, JSON.stringify(v)); } catch (e) {}
   }
   function net(v) { return String(v == null ? "" : v).trim(); }
+  /* LE PREMIER DU MOIS S'ÉCRIT « 1er ».
+     L'écran disait « la plus longue le 1 avec 8,55 h » : en français, le premier
+     jour du mois prend son ordinal. Corrigé le 28 septembre 2026 sur la ligne
+     « On lit le 1 au lieu de le 1er » de la contre-vérification du 26. */
+  function numJour(n) { return Number(n) === 1 ? "1er" : String(n); }
+
   function nbh(n) { return n.toFixed(2).replace(".", ",") + " h"; }
   function enFrancais(iso) {
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ""));
@@ -1531,7 +1537,7 @@
       '<div class="tuile"><span class="et">Amplitude du mois</span><div class="n">' +
       ech(nbh(s.amplitude)) + "</div><small>" +
       ech(s.jours + " journée" + (s.jours > 1 ? "s" : "") + " comptée" + (s.jours > 1 ? "s" : "") +
-        (s.jourMax ? ", la plus longue le " + s.jourMax + " avec " + nbh(s.amplitudeMax) : "")) +
+        (s.jourMax ? ", la plus longue le " + numJour(s.jourMax) + " avec " + nbh(s.amplitudeMax) : "")) +
       "</small></div>" +
       '<div class="tuile"><span class="et">Heures de nuit</span><div class="n">' +
       ech(nbh(s.nuit)) + "</div><small>" +
@@ -1585,7 +1591,7 @@
     var s = sujetionsDuMois(), C = ccnTransport(), m = moisDe();
     var L = [];
     L.push("Amplitude cumulée des journées travaillées : " + nbh(s.amplitude) +
-      (s.jourMax ? ", la plus longue le " + s.jourMax + " " + MOIS[mo] + " avec " + nbh(s.amplitudeMax) : "") + ".");
+      (s.jourMax ? ", la plus longue le " + numJour(s.jourMax) + " " + MOIS[mo] + " avec " + nbh(s.amplitudeMax) : "") + ".");
     L.push("Heures comprises dans la période de nuit, " + s.periode + " : " + nbh(s.nuit) +
       " sur " + s.nuits + " journée" + (s.nuits > 1 ? "s" : "") + " (" + C.nuit.source + ").");
     var F = lignesFrais(), total = 0, dits = [];

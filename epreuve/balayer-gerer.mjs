@@ -80,6 +80,30 @@ const INTERDITS = [
    "élision manquée après « de »"],
   [/HUISSIER DE JUSTICE|huissier de justice/, "« huissier de justice »"],
   [/\ble 1 [a-zéû]/, "« le 1 » au lieu de « le 1er »"],
+  /* LES TOURNURES QUE LA CONTRE-VÉRIFICATION DU 26 SEPTEMBRE 2026 CITE MOT POUR
+     MOT, section 6, « documents du quotidien ». Chacune vient d'une ligne de la
+     liste, et le balayage les refuse désormais sur les cent trente-deux
+     documents à la fois, au lieu de les chercher un par un. Ajoutées le
+     28 septembre 2026. */
+  [/avec les périodes/, "« avec les périodes » au lieu de « et les périodes » (D. 1234-6)"],
+  [/formalités accomplies par l'employeur/, "citation de L. 1221-10 altérée : le texte dit « déclaration nominative préalable »"],
+  [/présentés et vérifiés/, "le document affirme une vérification qui n'a pas eu lieu"],
+  [/Si vous comptez une année d'ancienneté/, "l'ancienneté est laissée au lecteur alors que le registre la porte"],
+  [/\[M \/ F\]|\[CDI \/ CDD\]/, "crochet d'une donnée que le registre porte"],
+  [/CITATIONS LÉGALES\s*\n\s*(?:\n|$)/, "titre « CITATIONS LÉGALES » sans citation"],
+  [/inrs\.fr|otre\.fr|www\.inrs|fédération professionnelle/i, "renvoi vers un site extérieur dans une pièce signée"],
+  [/Un dimanche n'est pas un jour ouvré/, "motif faux : un dimanche n'est pas un jour OUVRABLE"],
+  [/demande à être dispensé\b(?![e])/, "accord au masculin sur un document nominatif"],
+  /* « Madame, Monsieur » est juste dans une lettre à un service ou à des
+     organisations syndicales : leur destinataire n'a pas de sexe connu. La règle
+     ne vise donc que les documents qui nomment le salarié du registre, et elle
+     est portée par le contrôle de la civilité, non par ce balayage. Retirée
+     d'ici le 28 septembre 2026, après trois faux positifs : la demande de visite
+     au service de santé, le procès-verbal de désaccord, la lettre aux syndicats. */
+  [/\[date du contrat\]|\[DATE DU CONTRAT\]/, "crochet de la date du contrat, que le registre porte"],
+  [/conclu le \[date\]/, "« conclu le [date] » alors que le registre porte l'entrée"],
+  [/0 jours\b/, "« 0 jours » : un calcul qui n'a pas eu lieu"],
+  [/Fait à \.{4,}/, "« Fait à ........ » au lieu de la ville de la fiche"],
 ];
 
 let fautes = 0, vus = 0;
