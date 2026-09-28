@@ -1473,10 +1473,17 @@
       A("Rupture du contrat");
       p("Après la période d'essai, le contrat pourra être rompu par l'une ou l'autre des parties dans les conditions prévues par la loi et par la convention collective.");
       if (ccn && ccn.preavis) {
-        var pr = ccn.preavis.licenciement[statutCcn(d.statut)], de = ccn.preavis.demission[statutCcn(d.statut)];
+        /* CETTE VARIABLE S'APPELAIT « de », ET ELLE MASQUAIT LA FONCTION de().
+
+           L'élision ajoutée le 27 septembre 2026 appelle de() quelques lignes
+           plus haut, dans la même fonction : le contrat levait « de is not a
+           function » et ne sortait plus du tout. Relevé le 28 septembre 2026.
+           La variable porte maintenant le nom de ce qu'elle contient. */
+        var pr = ccn.preavis.licenciement[statutCcn(d.statut)];
+        var dem = ccn.preavis.demission[statutCcn(d.statut)];
         p("Conformément à l'article 30 de la convention collective, le préavis applicable au statut " + statutMot(d.statut) + " est, en cas de licenciement, sauf faute grave ou lourde, " +
           dePreavis(pr[0]) + " pour une ancienneté inférieure à six mois, " + dePreavis(pr[1]) + " de six mois à moins de deux ans et " + dePreavis(pr[2]) + " au-delà ; en cas de démission, " +
-          dePreavis(de[0]) + ", " + preavisMot(de[1]) + " et " + preavisMot(de[2]) + " selon les mêmes tranches.");
+          dePreavis(dem[0]) + ", " + preavisMot(dem[1]) + " et " + preavisMot(dem[2]) + " selon les mêmes tranches.");
       } else {
         p("Le préavis est d'un mois de six mois à moins de deux ans d'ancienneté et de deux mois au-delà, sauf faute grave et sauf disposition conventionnelle plus favorable (" + ref(["L1234-1"]) + ").");
       }
@@ -1989,7 +1996,21 @@
       b.push({ k: "saut", t: "" });
     }
     b.push({ k: "t1", t: "Notification de sanction" });
-    enTete(b, nomS, S.objet, "Lettre recommandée avec avis de réception");
+    /* UNE NOTIFICATION NE SE DATE PAS DU JOUR DE LA CONVOCATION.
+
+       La lettre était datée du jour de l'édition, c'est-à-dire du jour où la
+       convocation part, alors qu'elle relate un entretien à venir : « la
+       sanction ne peut intervenir moins de deux jours ouvrables (...) après le
+       jour fixé pour l'entretien » (L. 1332-2). Relevé le 28 septembre 2026 par
+       la vérification. Elle porte désormais le premier jour où elle peut
+       partir, et le dit. */
+    var envoiSanc = v.eDate && S.entretien ? apresJoursOuvrables(dateDe(v.eDate), 2) : null;
+    enTete(b, nomS, S.objet, "Lettre recommandée avec avis de réception", envoiSanc);
+    if (envoiSanc)
+      b.push({ k: "note", t: "Cette lettre ne peut être notifiée avant le " + dateFr(envoiSanc) +
+        ", soit deux jours ouvrables après le jour fixé pour l'entretien, ni plus d'un mois après ce " +
+        "jour (" + ref(["L1332-2"]) + "). Elle est datée du premier jour possible : si vous " +
+        "l'envoyez plus tard, reportez la date." });
     if (S.entretien) {
       b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre d'un entretien préalable à une sanction disciplinaire. Les explications que vous nous avez données ne nous ont pas permis de modifier notre appréciation des faits." });
     }
@@ -3320,8 +3341,21 @@
     b.push({ k: "note", t: "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la présentation de cette lettre (" + ref(["L1233-11"]) + "). Avant tout licenciement : efforts de formation et d'adaptation, et recherche de reclassement sur les emplois disponibles, avec des offres écrites et précises (" + ref(["L1233-4"]) + ")." });
     b.push({ k: "saut", t: "" });
 
+    /* Le premier jour où la notification peut partir : sept jours ouvrables
+       après la date prévue de l'entretien (L. 1233-15). Déclaré ici, parce que
+       la lettre en porte la date et que le calcul du préavis s'en sert. */
+    var envoiEco = dateDe(v.eDate) ? apresJoursOuvrables(dateDe(v.eDate), 7) : null;
     b.push({ k: "t1", t: "Notification de licenciement pour motif économique" });
-    enTete(b, nomS, "notification de votre licenciement pour motif économique", "Lettre recommandée avec avis de réception");
+    /* MÊME FAUTE ICI, ET LE DÉLAI N'EST PAS LE MÊME : sept jours ouvrables à
+       compter de la date prévue de l'entretien, quinze pour un cadre
+       (L. 1233-15). La lettre était datée du jour de la convocation. Relevé le
+       28 septembre 2026 par la vérification. */
+    enTete(b, nomS, "notification de votre licenciement pour motif économique", "Lettre recommandée avec avis de réception", envoiEco);
+    if (envoiEco)
+      b.push({ k: "note", t: "Cette lettre ne peut être expédiée avant le " + dateFr(envoiEco) +
+        ", soit sept jours ouvrables à compter de la date prévue de l'entretien, quinze jours " +
+        "ouvrables pour un cadre (" + ref(["L1233-15"]) + "). Elle est datée de ce jour : si vous " +
+        "l'envoyez plus tard, reportez la date." });
     b.push({ k: "p", t: "Nous vous avons reçu le " + quand + " dans le cadre de l'entretien préalable auquel nous vous avions convoqué par lettre du " + dateFr(convocation) + "." });
     b.push({ k: "p", t: "Nous vous notifions par la présente votre licenciement pour motif économique, pour les raisons suivantes (" + ref(["L1233-3", "L1233-16"]) + ")." });
     griefsBlocs(b, v.motif, "[le motif économique : difficultés économiques caractérisées par l'évolution d'un indicateur (commandes, chiffre d'affaires, pertes, trésorerie), mutations technologiques, réorganisation nécessaire à la sauvegarde de la compétitivité ou cessation d'activité ; puis son effet sur votre emploi : suppression du poste, transformation, ou modification du contrat que vous avez refusée]");
@@ -3331,7 +3365,6 @@
        La notification économique sortait avec « [montant] euros » et une durée
        de préavis laissée ouverte, quand la lettre pour faute simple les
        calculait depuis les mêmes trois données. Relevé le 27 septembre 2026. */
-    var envoiEco = dateDe(v.eDate) ? apresJoursOuvrables(dateDe(v.eDate), 7) : null;
     var entreeEco = dateDe(v.entree);
     var finTotEco = null;
     if (entreeEco && envoiEco) {
