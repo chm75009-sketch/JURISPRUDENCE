@@ -266,6 +266,8 @@
     "L. 3171-1": "LEGIARTI000033021067",
     "D. 3171-2": "LEGIARTI000018533984",
     "D. 3171-3": "LEGIARTI000018533982",
+    /* Le double préalable à l'inspection, ajouté le 28 septembre 2026. */
+    "D. 3171-4": "LEGIARTI000043128637",
     "L. 3141-16": "LEGIARTI000035652687",
     "D. 3141-5": "LEGIARTI000033515945",
     "D. 3141-6": "LEGIARTI000033515942",
@@ -329,12 +331,45 @@
     "Défenseur des droits, Libre réponse 71120, 75342 Paris CEDEX 07 " +
     "(courrier gratuit, sans timbre) · 09 69 39 00 00, du lundi au vendredi de " +
     "8h30 à 19h30 · www.defenseurdesdroits.fr");
+  /* LE NOMBRE DE CONDUCTEURS SE COMPTE AU REGISTRE.
+
+     Le relevé demandait « Nombre de conducteurs concernés » alors que le
+     registre du personnel porte l'emploi de chacun : il n'y a rien à recompter.
+     Sont comptés les salariés présents dont l'intitulé d'emploi parle de
+     conduite. Ajouté le 28 septembre 2026 sur la contre-vérification du 26. */
+  (function () {
+    var R = null;
+    try { R = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (_) {}
+    var L = (R && R.salaries) || [];
+    var auj = new Date().toISOString().slice(0, 10), n = 0;
+    L.forEach(function (s) {
+      if (!s || s.ex) return;
+      var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e) || e > auj) return;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(o) && o <= auj) return;
+      if (/conduc|chauffeur/i.test(String(s.emp || "") + " " + String(s.qua || ""))) n++;
+    });
+    if (n) depuisProfil("condNb", String(n));
+  })();
   if (!E.v.dateReleve) E.v.dateReleve = new Date().toISOString().slice(0, 10);
 
   var effectif = (function () {
     var n = Number(P.effectif);
     return isFinite(n) && n > 0 ? n : null;
   })();
+  /* LE RÉFÉRENT DU COMITÉ N'EST DÛ QUE S'IL Y A UN COMITÉ.
+
+     D. 1151-1 (LEGIARTI000038025995), 5° : l'information précise l'adresse et le
+     numéro du référent prévu à l'article L. 2314-1 « lorsqu'un comité social et
+     économique existe ». La ligne était maintenue dans tous les cas, et
+     l'affiche promettait un interlocuteur qui n'existe pas. Défaut relevé par la
+     contre-vérification du 26 septembre 2026, corrigé le 28. La fiche répond
+     quatre choses : seul « oui, élu » donne un comité.
+     La réponse est aussi lue pour savoir ce qui est cherché dans le texte
+     déposé : sans comité, ne pas trouver « référent » n'est pas un manque. */
+  var repCse = String(P.cseExiste || "").trim().toLowerCase();
+  var avecComite = repCse !== "" && repCse.indexOf("non") !== 0;
+  var comiteDit = repCse !== "";
 
   function v(cle) { return String(E.v[cle] == null ? "" : E.v[cle]).trim(); }
   function dateFr(iso) {
@@ -519,8 +554,8 @@
     /* ---------------------------------------------------------------- 4 */
     { id: "horaires",
       nom: "Horaires collectifs de travail et repos",
-      fond: ["L. 3171-1", "D. 3171-2", "D. 3171-3"],
-      pourquoi: "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos (L. 3171-1). L'horaire collectif est daté et signé, affiché en caractères lisibles et apposé de façon apparente dans chacun des lieux de travail auxquels il s'applique (D. 3171-2) ; toute modification donne lieu, avant son application, à une rectification affichée dans les mêmes conditions (D. 3171-3).",
+      fond: ["L. 3171-1", "D. 3171-2", "D. 3171-3", "D. 3171-4"],
+      pourquoi: "L'employeur affiche les heures auxquelles commence et finit le travail ainsi que les heures et la durée des repos (L. 3171-1). L'horaire collectif est daté et signé, affiché en caractères lisibles et apposé de façon apparente dans chacun des lieux de travail auxquels il s'applique (D. 3171-2) ; toute modification donne lieu, avant son application, à une rectification affichée dans les mêmes conditions (D. 3171-3). Un double de cet horaire collectif et des rectifications qui y sont apportées est préalablement adressé à l'agent de contrôle de l'inspection du travail (D. 3171-4) : la lettre qui l'accompagne est produite sous l'affiche.",
       champs: [
         { c: "horChamp", n: "Horaire applicable à", large: true, ph: "l'établissement entier, ou tel service, tel atelier" },
         { c: "horJours", n: "Jours travaillés", ph: "du lundi au vendredi" },
@@ -531,6 +566,7 @@
         { c: "horRepartition", n: "Répartition sur la période de référence, s'il y en a une", large: true, ph: "semaines hautes, semaines basses, période retenue" },
         { c: "horDate", n: "Date de l'horaire", t: "date" },
         { c: "horSignataire", n: "Signé par", ph: "nom et qualité" },
+        { c: "horEnvoiInsp", n: "Double adressé à l'inspection du travail le", t: "date" },
       ],
       feuille: function () {
         var l = [
@@ -551,8 +587,44 @@
         l.push({ k: "cle", l: "Par", x: val("horSignataire", "nom et qualité du signataire") });
         l.push({ k: "signature", t: "Signature de l'employeur ou de la personne à laquelle il a délégué ses pouvoirs à cet effet" });
         l.push({ k: "note", t: "Toute modification de cet horaire donne lieu, avant son application, à une rectification affichée dans les mêmes conditions. Un exemplaire daté de chaque version est conservé." });
+        /* L'ENVOI PRÉALABLE, DIT SUR L'AFFICHE MÊME.
+           D. 3171-4 le veut préalable : afficher sans avoir envoyé, c'est
+           appliquer un horaire dont l'inspection n'a pas eu le double. La ligne
+           dit si l'envoi est fait, et la lettre suit. Le 28 septembre 2026. */
+        l.push({ k: "cle", l: "Double adressé à l'inspection du travail",
+          x: v("horEnvoiInsp")
+            ? { k: "ok", t: "le " + dateFr(v("horEnvoiInsp")) }
+            : { k: "vide", t: "[ à faire AVANT l'affichage : D. 3171-4 ]" } });
         return l;
-      } },
+      },
+      annexe: { nom: "Lettre à l'inspection du travail : double de l'horaire collectif",
+        feuille: function () {
+          var l = [
+            { k: "titre", t: "DOUBLE DE L'HORAIRE COLLECTIF" },
+            { k: "sous", t: "Lettre à l'agent de contrôle de l'inspection du travail (D. 3171-4)" },
+            { k: "cle", l: "Destinataire", x: val("inspUnite", "unité de contrôle : adresse à indiquer") },
+            { k: "cle", l: "Date d'envoi", x: v("horEnvoiInsp")
+              ? { k: "ok", t: dateFr(v("horEnvoiInsp")) }
+              : { k: "vide", t: "[ date de l'envoi, antérieure à l'affichage ]" } },
+            { k: "h", t: "Objet" },
+            { k: "p", t: "Double de l'horaire collectif de travail, adressé préalablement à son affichage." },
+            { k: "p", t: "Monsieur l'Inspecteur du travail, Madame l'Inspectrice du travail," },
+            { k: "p", t: "En application de l'article D. 3171-4 du code du travail, je vous adresse le double de l'horaire collectif de travail applicable " +
+              (v("horChamp") ? "à " + v("horChamp") : "dans l'établissement") + ", daté du " +
+              (v("horDate") ? dateFr(v("horDate")) : "[ date de l'horaire ]") + " et signé par " +
+              (v("horSignataire") || "[ nom et qualité du signataire ]") + "." },
+            { k: "p", t: "Cet horaire est apposé de façon apparente, en caractères lisibles, dans chacun des lieux de travail auxquels il s'applique (D. 3171-2). Toute rectification vous sera adressée dans les mêmes conditions, avant son application." },
+            { k: "p", t: "Je vous prie d'agréer l'expression de ma considération distinguée." },
+            { k: "cle", l: "Signataire", x: val("responsable", "nom et qualité du représentant légal") },
+            { k: "signature", t: "Signature de l'employeur ou de la personne à laquelle il a délégué ses pouvoirs à cet effet" },
+            { k: "puces", t: [
+              "Pièce jointe : l'horaire collectif, daté et signé, tel qu'il est affiché.",
+              "Gardez la preuve de l'envoi : accusé de réception, récépissé de dépôt ou courriel avec sa date.",
+            ] },
+            { k: "note", t: "L'envoi est préalable : il précède l'application de l'horaire, non l'inverse. Il en va de même de chaque rectification." },
+          ];
+          return l;
+        } } },
 
     /* ---------------------------------------------------------------- 5 */
     { id: "conges",
@@ -652,11 +724,28 @@
             "Auprès de l'agent de contrôle de l'inspection du travail, dont les coordonnées sont affichées sur la feuille « Inspection du travail ».",
             "Auprès du médecin du travail, dont les coordonnées sont affichées sur la feuille « Santé au travail ».",
             "Auprès du Défenseur des droits, dont les coordonnées figurent ci-dessous.",
-            "Auprès du référent du comité social et économique et, dans les entreprises d'au moins deux cent cinquante salariés, du référent désigné par l'employeur.",
-          ] },
+          ].concat(
+            /* La voie du référent ne s'annonce que si le référent existe :
+               celui du comité suppose un comité (L. 2314-1 ; D. 1151-1, 5°),
+               celui de l'employeur deux cent cinquante salariés (L. 1153-5-1).
+               Le 28 septembre 2026. */
+            (avecComite || !comiteDit)
+              ? ["Auprès du référent du comité social et économique" +
+                 ((effectif === null || effectif >= 250)
+                   ? " et du référent désigné par l'employeur, dans les entreprises d'au moins deux cent cinquante salariés." : ".")]
+              : ((effectif === null || effectif >= 250)
+                  ? ["Auprès du référent désigné par l'employeur, dans les entreprises d'au moins deux cent cinquante salariés."]
+                  : [])) },
           { k: "h", t: "Qui prévenir dans l'entreprise" },
-          { k: "cle", l: "Référent du comité", x: val("harRefCse", "nom et coordonnées à indiquer") },
         ];
+        /* D. 1151-1, 5° : la ligne du référent du comité n'est due que si un
+           comité existe. Le 28 septembre 2026. */
+        if (avecComite || !comiteDit)
+          l.push({ k: "cle", l: "Référent du comité", x: val("harRefCse", "nom et coordonnées à indiquer") });
+        else
+          l.push({ k: "note", t: "Aucun référent désigné par le comité social et économique n'est indiqué ici : " +
+            "aucun comité n'est en place, et D. 1151-1, 5° ne l'exige que lorsqu'un comité existe. " +
+            "La ligne devra être ajoutée dès l'élection d'un comité, le référent étant désigné parmi ses membres (L. 2314-1)." });
         if (effectif === null || effectif >= 250)
           l.push({ k: "cle", l: "Référent de l'employeur", x: val("harRefEmployeur",
             effectif === null ? "nom et coordonnées, si l'effectif atteint deux cent cinquante salariés"
@@ -780,6 +869,37 @@
       mots: ["médecin du travail", "santé au travail"] }],
     secours: [{ objet: "Adresse et numéro d'appel des services de secours d'urgence",
       mots: ["secours", "pompiers", "samu", "112"] }],
+    /* LES HUIT RUBRIQUES DE R. 4227-38, UNE PAR UNE.
+
+       La consigne de sécurité incendie n'avait aucune ligne dans ce tableau :
+       elle était donc déclarée « Trouvé » dans n'importe quel texte, y compris
+       un texte qui ne parlait que d'interdiction de fumer. Défaut relevé par la
+       contre-vérification du 26 septembre 2026, corrigé le 28.
+
+       R. 4227-38 (LEGIARTI000024769384) énumère huit points, et la consigne
+       « indique » les huit : chacun est cherché séparément, parce qu'une
+       consigne qui en oublie un n'est pas une consigne. R. 4227-39 y ajoute les
+       exercices semestriels. */
+    incendie: [
+      { objet: "1° Le matériel d'extinction et de secours qui se trouve dans le local ou à ses abords",
+        mots: ["extincteur", "materiel d'extinction", "matériel d'extinction", "robinet d'incendie", "ria "] },
+      { objet: "2° Les personnes chargées de mettre ce matériel en action",
+        mots: ["chargees de mettre ce materiel", "chargées de mettre ce matériel", "equipier de premiere intervention", "équipier de première intervention", "charge de mettre en action", "chargé de mettre en action"] },
+      { objet: "3° Pour chaque local, les personnes chargées de diriger l'évacuation",
+        mots: ["diriger l'evacuation", "diriger l'évacuation", "guide-file", "serre-file", "charge d'evacuation", "chargé d'évacuation", "responsable de l'evacuation", "responsable de l'évacuation"] },
+      { objet: "4° Les mesures liées à la présence de personnes handicapées, espaces d'attente sécurisés",
+        mots: ["personnes handicapees", "personnes handicapées", "espace d'attente securise", "espace d'attente sécurisé", "espaces d'attente"] },
+      { objet: "5° Les moyens d'alerte",
+        mots: ["moyen d'alerte", "moyens d'alerte", "declencheur manuel", "déclencheur manuel", "alarme incendie", "donner l'alarme"] },
+      { objet: "6° Les personnes chargées d'aviser les sapeurs-pompiers dès le début d'un incendie",
+        mots: ["aviser les sapeurs-pompiers", "aviser les pompiers", "charge d'appeler les pompiers", "chargé d'appeler les pompiers", "prevenir les sapeurs-pompiers", "prévenir les sapeurs-pompiers"] },
+      { objet: "7° L'adresse et le numéro d'appel du service de secours de premier appel, en caractères apparents",
+        mots: ["18", "112", "service de secours de premier appel", "sapeurs-pompiers"] },
+      { objet: "8° Le devoir de donner l'alarme et de mettre en œuvre les moyens de premier secours sans attendre",
+        mots: ["sans attendre", "donner l'alarme", "premier secours", "premiers secours"] },
+      { objet: "Les exercices semestriels (R. 4227-39)",
+        mots: ["exercice", "tous les six mois", "semestriel"] },
+    ],
     horaires: [{ objet: "Heures de début et de fin du travail, heures et durée des repos",
       mots: ["horaire collectif", "horaires de travail", "horaire de travail", "heures de travail", "début et de fin", "commence et finit"] }],
     conges: [{ objet: "Période de prise des congés et ordre des départs",
@@ -794,7 +914,12 @@
       { objet: "Le texte de l'article 222-33-2 du code pénal (harcèlement moral)", mots: ["222-33-2", "harcèlement moral"] },
       { objet: "Les actions ouvertes et les coordonnées des autorités et services compétents",
         mots: ["défenseur des droits", "prud'hommes", "prud’hommes"] },
-      { objet: "Le référent harcèlement", mots: ["référent"] },
+      /* Sans comité, ne pas trouver « référent » n'est pas un manque : le
+         référent du comité n'est dû que s'il y a un comité (D. 1151-1, 5°), et
+         celui de l'employeur qu'à partir de deux cent cinquante salariés
+         (L. 1153-5-1). La ligne ne se contrôle donc que si l'un des deux est
+         dû. Le 28 septembre 2026. */
+      { objet: "Le référent harcèlement", mots: ["référent"], si: "referent" },
     ],
     convention: [
       { objet: "L'intitulé de la convention collective applicable", mots: ["convention collective"] },
@@ -893,8 +1018,23 @@
   }
 
   function feuilleHtml(a) {
-    var h = enTete();
-    a.feuille().forEach(function (b) {
+    return enTete() + blocsHtml(a.feuille()) + pied(a);
+  }
+  /* L'ANNEXE D'UNE AFFICHE : UNE SECONDE FEUILLE, QUAND LE TEXTE EN EXIGE UNE.
+
+     D. 3171-4 (LEGIARTI000043128637) : « Un double de cet horaire collectif et
+     des rectifications qui y sont apportées est préalablement adressé à l'agent
+     de contrôle de l'inspection du travail. » L'affiche de l'horaire était
+     produite sans ce courrier, et l'envoi préalable manquait. Ajouté le
+     28 septembre 2026 sur la contre-vérification du 26 : l'affiche qui porte une
+     annexe la rend juste après elle, imprimée et exportée avec elle. */
+  function feuilleAnnexeHtml(a) {
+    if (!a.annexe) return "";
+    return enTete() + blocsHtml(a.annexe.feuille()) + pied(a);
+  }
+  function blocsHtml(blocs) {
+    var h = "";
+    blocs.forEach(function (b) {
       if (b.k === "titre") h += "<h1>" + ech(b.t) + "</h1>";
       else if (b.k === "sous") h += '<p class="sous">' + ech(b.t) + "</p>";
       else if (b.k === "h") h += "<h2>" + ech(b.t) + "</h2>";
@@ -911,7 +1051,7 @@
         '<span class="ref">Version ' + ech(b.ref) + ", " + LU + ".</span></div>";
       else if (b.k === "signature") h += '<div class="signature">' + ech(b.t) + "</div>";
     });
-    return h + pied(a);
+    return h;
   }
 
   /* Le texte de loi, sous le repli : ce qui appelle l'affiche, et les
@@ -943,7 +1083,8 @@
     $("#affiche-seule").innerHTML =
       '<p class="titre-affiche">' + ech(a.nom) + "</p>" +
       '<div data-aff="' + ech(a.id) + '">' + champsAfficheHtml(a) +
-      '<div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div></div>" +
+      '<div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div>" +
+      annexeHtml(a) + "</div>" +
       '<div class="barre pile"><button type="button" class="btn" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
       '<button type="button" class="btn second" data-word="' + ech(a.id) + '">Télécharger en Word</button>' +
       '<button type="button" class="btn second" data-fait="' + ech(a.id) + '">Elle est posée</button></div>' +
@@ -961,6 +1102,7 @@
         '<p class="titre-affiche">' + ech(a.nom) + (E.faites[a.id] ? ' <span style="color:var(--vert);font-size:var(--t2)">posée</span>' : "") + "</p>" +
         champsAfficheHtml(a) +
         '<div class="a4" data-feuille="' + ech(a.id) + '">' + feuilleHtml(a) + "</div>" +
+        annexeHtml(a) +
         '<div class="barre pile"><button type="button" class="btn second" data-imp="' + ech(a.id) + '">Imprimer cette affiche</button>' +
         (E.faites[a.id]
           ? '<button type="button" class="btn second" data-refaire="' + ech(a.id) + '">À reposer</button>'
@@ -971,11 +1113,22 @@
     brancherChamps($("#affiches"), function () { redessiner(); });
   }
 
+  /* L'annexe, sous l'affiche : son titre, puis sa feuille. */
+  function annexeHtml(a) {
+    if (!a.annexe) return "";
+    return '<p class="titre-affiche">' + ech(a.annexe.nom) + "</p>" +
+      '<div class="a4" data-annexe="' + ech(a.id) + '">' + feuilleAnnexeHtml(a) + "</div>";
+  }
+
   /* Chaque frappe réécrit toutes les feuilles à l'écran. */
   function redessiner() {
     document.querySelectorAll("[data-feuille]").forEach(function (f) {
       var a = parId(f.getAttribute("data-feuille"));
       if (a) f.innerHTML = feuilleHtml(a);
+    });
+    document.querySelectorAll("[data-annexe]").forEach(function (f) {
+      var a = parId(f.getAttribute("data-annexe"));
+      if (a) f.innerHTML = feuilleAnnexeHtml(a);
     });
   }
 
@@ -1012,9 +1165,18 @@
   $("#imprimer-tout").addEventListener("click", function () { imprimer(null); });
 
   /* ---------------------------------------------------------- vers Word */
-  function motsFeuille(a) {
+  function motsFeuille(a) { return motsBlocs(a, a.feuille()); }
+  /* L'annexe part dans le Word avec son affiche, sur une page à elle : la
+     lettre à l'inspection n'est pas un complément facultatif, c'est la
+     formalité que D. 3171-4 impose avant l'affichage. Le 28 septembre 2026. */
+  function motsAnnexe(a) {
+    if (!a.annexe) return [];
+    return [{ k: "saut" }, { k: "sur", t: a.annexe.nom }]
+      .concat(motsBlocs(a, a.annexe.feuille()));
+  }
+  function motsBlocs(a, blocs) {
     var items = [];
-    a.feuille().forEach(function (b) {
+    blocs.forEach(function (b) {
       if (b.k === "titre") items.push({ k: "h1", t: b.t });
       else if (b.k === "sous") items.push({ k: "sur", t: b.t });
       else if (b.k === "h") items.push({ k: "h2", t: b.t });
@@ -1041,7 +1203,7 @@
     var items = [{ k: "sur", t: "Affiches à poser · " + (v("denomination") || "") + " · " + dateFr(v("dateReleve")) }];
     liste.forEach(function (a, i) {
       if (i) items.push({ k: "saut" });
-      items = items.concat(motsFeuille(a));
+      items = items.concat(motsFeuille(a)).concat(motsAnnexe(a));
     });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, "Affichages obligatoires"),
@@ -1119,12 +1281,21 @@
     }
     var plat = sansAccents(txt), manques = 0, h = "";
     AFFICHES.forEach(function (a) {
-      var att = ATTENDUS[a.id] || [], absents = [];
+      /* UNE AFFICHE SANS ÉLÉMENT ATTENDU N'EST PAS UNE AFFICHE TROUVÉE.
+         Sans ligne dans ce tableau, la boucle ne trouvait rien d'absent et
+         concluait « Trouvé » : c'est ainsi que la consigne incendie passait dans
+         un texte qui ne parlait que de fumer. Le 28 septembre 2026. */
+      var att = (ATTENDUS[a.id] || []).filter(function (x) {
+        if (x.si !== "referent") return true;
+        return (avecComite || !comiteDit) || effectif === null || effectif >= 250;
+      });
+      var absents = [];
       att.forEach(function (x) {
         var ok = (x.mots || []).some(function (m) { return plat.indexOf(sansAccents(m)) >= 0; });
         if (!ok) absents.push(x.objet);
       });
-      var trouve = !absents.length;
+      var trouve = att.length > 0 && !absents.length;
+      if (!att.length) absents.push("aucun élément de cette affiche n'est contrôlable sur les mots : lisez-la vous-même");
       if (trouve) E.faites[a.id] = true; else { manques++; delete E.faites[a.id]; }
       h += '<div class="manque' + (trouve ? " trouve" : "") + '"><div class="o">' + ech(a.nom) + "</div>" +
         (trouve
@@ -1135,7 +1306,11 @@
     });
     garder();
     cible.innerHTML = '<div class="avis ' + (manques ? "att" : "ok") + '"><b>' +
-      (manques ? manques + " affichage(s) introuvable(s) dans votre texte" : "Les onze affichages sont trouvés") +
+      /* Le pluriel entre parenthèses est proscrit : on l'accorde. Le
+         28 septembre 2026. */
+      (manques
+        ? manques + (manques > 1 ? " affichages introuvables" : " affichage introuvable") + " dans votre texte"
+        : "Les onze affichages sont trouvés") +
       "</b>La recherche est faite sur les mots : c'est votre lecture qui décide.</div>" + h;
     cible.scrollIntoView({ behavior: "smooth" });
   });
