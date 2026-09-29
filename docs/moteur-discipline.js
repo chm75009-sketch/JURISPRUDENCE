@@ -2704,6 +2704,20 @@ const GRILLE = [
     marqueurs: ["grossesse", "maternite", "nationalite", "origine", "religion",
       "appartenance syndicale", "activite syndicale", "etat de sante", "handicap",
       "apparence physique", "orientation sexuelle"],
+    /* UN ARTICLE SUR LES VISITES MÉDICALES N'EST PAS UNE CLAUSE DISCRIMINATOIRE.
+
+       L'article 6 du règlement déposé par le client, qui organise le suivi
+       médical, ressortait classé « dispositions discriminatoires » : il parle
+       d'« état de santé » et de « handicap », comme le fait nécessairement
+       tout article sur la médecine du travail. Relevé le 29 septembre 2026,
+       après une première correction le 28 sur les tournures d'égalité. Le
+       motif n'y fonde aucune distinction : il y est le sujet même de
+       l'obligation. Un paragraphe qui parle du suivi médical est donc écarté
+       de cette famille, et le reste du règlement continue d'être examiné. */
+    exclure: ["visite medicale", "visites medicales", "medecin du travail",
+      "service de sante au travail", "suivi individuel", "visite d information et de prevention",
+      "examen de reprise", "inaptitude", "aptitude medicale", "amenagement de poste",
+      "r. 4624", "l. 4624"],
     critere: "La clause distingue-t-elle entre les salariés à capacité professionnelle égale, sur l'un des motifs énumérés ? Une clause qui mentionne l'un de ces motifs pour l'interdire comme motif de distinction est licite ; celle qui en tire une conséquence sur l'emploi ou le travail ne l'est pas.",
     remplacement: "Supprimer la distinction. Si le motif est mentionné pour rappeler l'interdiction de discriminer, laisser la clause telle quelle.",
   },
@@ -2913,6 +2927,12 @@ function corriger(analyse, choix) {
      posées de la fin vers le début : une insertion ne déplace jamais une
      place qui reste à servir. Une même famille n'est écrite qu'une fois par
      paragraphe. */
+  /* LE CODE DU CONTRÔLE NE SORT PAS DU CABINET.
+
+     La marque posée dans le règlement corrigé portait l'identifiant interne,
+     « [À CONTRÔLER - RI-CTR-12 : la clause de neutralité] » : il ne dit rien
+     au dirigeant et il dit tout de l'outil. Relevé le 29 septembre 2026. Reste
+     l'objet, qui est ce qu'il faut lire. */
   const places = [];
   for (const m of marques) {
     const fin = finParagraphe(analyse.texte, m.fin);
@@ -2922,7 +2942,7 @@ function corriger(analyse, choix) {
   places.sort((a, b) => b.fin - a.fin);
   for (const m of places) {
     corps = corps.slice(0, m.fin) +
-      `  [À CONTRÔLER - ${m.id} : ${m.objet}]` +
+      `  [À CONTRÔLER : ${m.objet}]` +
       corps.slice(m.fin);
   }
 

@@ -2057,7 +2057,9 @@
        avec la fiche d'entreprise et prêtes à imprimer. */
     controle: { href: "controler-affichages.html?depart=oui", nom: "Contrôler ce qui est au mur",
       question: "Vos affichages obligatoires sont-ils en place ?",
-      oui: "Dix cases à cocher, et rien d'autre : ce qui reste décoché sort aussitôt en affiche A4, rédigée et remplie.",
+      /* Onze affiches, onze cases : le texte en annonçait dix depuis qu'une
+         onzième a été ajoutée. Relevé le 29 septembre 2026. */
+      oui: "Onze cases à cocher, et rien d'autre : ce qui reste décoché sort aussitôt en affiche A4, rédigée et remplie.",
       non: "Alors les onze affiches vous sont ouvertes directement, prêtes à imprimer et à poser ; ce qui manque se complète à côté de l'affiche.",
       hrefNon: "controler-affichages.html?depart=non", nomNon: "Imprimer mes affiches" },
     donnees: [

@@ -595,7 +595,7 @@
 
     var corps = analyse.texte;
     marques.forEach(function (m) {
-      corps = corps.slice(0, m.fin) + "  [À CONTRÔLER - " + m.id + " : " + m.objet + "]" +
+      corps = corps.slice(0, m.fin) + "  [À CONTRÔLER : " + m.objet + "]" +
         corps.slice(m.fin);
     });
 

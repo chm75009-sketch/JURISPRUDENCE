@@ -1813,7 +1813,15 @@
       /* Ici aussi, chaque moitié derrière son texte. Le délai d'un mois est à
          L. 1321-4 ; son point de départ, qui compte le dépôt, est à
          R. 1321-3. La parenthèse commune a été défaite le 28 septembre 2026. */
-      L.push("Il entrera en vigueur le [DATE D'ENTRÉE EN VIGUEUR], soit un mois après");
+      /* LA DATE SAISIE SE REPORTE PARTOUT OÙ ELLE EST DUE.
+
+         Elle entrait à l'article 28 et restait « [DATE D'ENTRÉE EN VIGUEUR] »
+         dans la note au personnel, dans la lettre à l'inspecteur et dans le
+         relevé : le dirigeant devait la recopier trois fois, et le document
+         qu'il envoyait portait un crochet. Relevé le 29 septembre 2026. */
+      var dvNote = String((ctx.donnees || {}).dateEntreeVigueur || "").trim();
+      L.push("Il entrera en vigueur le " +
+        (dvNote ? leJour(new Date(dvNote)) : "[DATE D'ENTRÉE EN VIGUEUR]") + ", soit un mois après");
       L.push("l'accomplissement des formalités de publicité (L. 1321-4), le délai");
       L.push("courant à compter de la dernière en date des formalités de publicité et");
       L.push("de dépôt (R. 1321-3). Aucune sanction ne peut être fondée sur lui avant");
@@ -2006,7 +2014,8 @@
       L.push("Reportez la date retenue à l'article 28 du règlement, et dans la note");
       L.push("d'information de l'étape 2.");
       L.push("");
-      L.push("Fait le [DATE D'ENTRÉE EN VIGUEUR]");
+      var dvFin = String((ctx.donnees || {}).dateEntreeVigueur || "").trim();
+      L.push("Fait le " + (dvFin ? leJour(new Date(dvFin)) : "[DATE D'ENTRÉE EN VIGUEUR]"));
       L.push("");
       L.push("Aucun document à envoyer : cette étape se constate, elle ne s'accomplit");
       L.push("pas.");
@@ -2016,14 +2025,27 @@
       /* ---- le relevé, à la fin, une fois les cinq étapes passées ------- */
       L.push("LE RELEVÉ DES DATES, À GARDER AVEC LE RÈGLEMENT");
       L.push("");
+      /* Ce que la procédure a déjà fait saisir ne se redemande pas dans le
+         relevé : les cinq dates viennent des réponses, et le crochet ne reste
+         que là où rien n'a été saisi. Relevé le 29 septembre 2026. */
+      var D = ctx.donnees || {};
+      var jr = function (v) {
+        var x = String(v || "").trim();
+        return x ? leJour(new Date(x)) : "[DATE]";
+      };
       L.push("Formalité | Date | Référence");
       L.push((sansCse ? "1. Procès-verbal de carence (L. 2314-9)"
                       : "1. Avis du comité social et économique (L. 1321-4)") +
-             " | [DATE] | " + (sansCse ? "[PV du DATE]" : "[n° de PV]"));
-      L.push("2. Information du personnel (R. 1321-1) | [DATE] | [affichage, intranet, remise]");
-      L.push("3. Dépôt au greffe du conseil de prud'hommes (R. 1321-2) | [DATE] | [récépissé n°]");
-      L.push("4. Communication à l'inspecteur, deux exemplaires (R. 1321-4) | [DATE] | [accusé de réception]");
-      L.push("5. Entrée en vigueur, un mois après (R. 1321-3) | [DATE] | ");
+             " | " + jr(sansCse
+               ? (p.cseCarence || (ctx.fiche || {}).cseCarence) : D.dateAvisCSE) +
+             " | " + (sansCse ? "[PV du DATE]" : "[n° de PV]"));
+      L.push("2. Information du personnel (R. 1321-1) | " + jr(D.datePublicite) +
+             " | [affichage, intranet, remise]");
+      L.push("3. Dépôt au greffe du conseil de prud'hommes (R. 1321-2) | " + jr(D.dateDepotGreffe) +
+             " | [récépissé n°]");
+      L.push("4. Communication à l'inspecteur, deux exemplaires (R. 1321-4) | " +
+             jr(D.dateCommunicationInspection) + " | [accusé de réception]");
+      L.push("5. Entrée en vigueur, un mois après (R. 1321-3) | " + jr(D.dateEntreeVigueur) + " | ");
       L.push("");
       L.push("NOTE - Sans ces dates, vous ne pouvez pas prouver que le règlement était");
       L.push("en vigueur le jour où vous avez prononcé une sanction. C'est la dernière");

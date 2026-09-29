@@ -1041,6 +1041,25 @@
         if (phrase.length < 5) phrase = mots[0] || "";
         return phrase.length >= 5 && nAnnTexte.indexOf(phrase) >= 0;
       }).length;
+      /* LES LIGNES SONT LÀ, LES CASES SONT VIDES.
+
+         Le contrôle comptait les facteurs nommés : dix nommés, annexe
+         déclarée présente. Or dans la pièce du client les dix lignes ne
+         portent aucun chiffre. Relevé le 29 septembre 2026. R. 4121-1-1 veut
+         « les données collectives » et « la proportion de salariés exposés » :
+         une colonne vide en face d'un facteur ne consigne rien. On regarde
+         donc ce qui suit chaque facteur, sur cent vingt signes : un chiffre,
+         un pourcentage, ou le mot qui dit qu'il n'y a personne. */
+      var nChiffres = FACTEURS.filter(function (x) {
+        var mots = normaliser(x).replace(/,/g, " ").split(/\s+/).filter(Boolean);
+        var phrase = mots.slice(0, 2).join(" ");
+        if (phrase.length < 5) phrase = mots[0] || "";
+        if (phrase.length < 5) return false;
+        var i = nAnnTexte.indexOf(phrase);
+        if (i < 0) return false;
+        var suite = nAnnTexte.slice(i + phrase.length, i + phrase.length + 120);
+        return /\d/.test(suite) || /\b(aucun|aucune|neant|sans objet|non expose)\b/.test(suite);
+      }).length;
       if (nAnn < 3)
         h += '<div class="avis non"><b>L\'annexe des données collectives d\'exposition est nommée, ' +
           "mais elle est vide</b>Sur les dix facteurs de risques de l'article L. 4161-1, " + nAnn +
@@ -1049,6 +1068,22 @@
           "aucune donnée collective : R. 4121-1-1 veut les données et la proportion de salariés " +
           "exposés au-delà des seuils, facteur par facteur. La version corrigée en porte le " +
           "tableau, à remplir.</div>";
+      else if (nChiffres === 0)
+        h += '<div class="avis non"><b>L\'annexe est là, ses lignes sont vides : à compléter</b>' +
+          "Les " + nAnn + " facteurs de l'article L. 4161-1 sont bien nommés dans votre document, " +
+          "mais aucun ne porte de donnée ni de proportion. R. 4121-1-1 veut « les données " +
+          "collectives utiles à l'évaluation des expositions individuelles » et « la proportion " +
+          "de salariés exposés au-delà des seuils » : un facteur suivi d'une case vide ne " +
+          "consigne rien. Portez, facteur par facteur, le nombre de salariés concernés, ou " +
+          "écrivez « aucun » lorsque personne n'est exposé.</div>";
+      else if (nChiffres < nAnn)
+        h += '<div class="avis att"><b>' + (nAnn - nChiffres) + " facteur" +
+          (nAnn - nChiffres > 1 ? "s" : "") + " de l'annexe sans donnée</b>" +
+          nChiffres + " facteur" + (nChiffres > 1 ? "s portent" : " porte") + " une donnée sur les " +
+          nAnn + " que votre annexe nomme. Les autres sont à compléter, ou à marquer " +
+          "« aucun » si personne n'y est exposé (R. 4121-1-1).</div>";
+      /* Le verdict de la ligne suit ce que l'annexe porte vraiment. */
+      if (nChiffres === 0) annexeVue.aCompleter = true;
     }
     h += '<p class="bloc-t r"><span class="pastille"></span>La tenue du document</p>';
     /* Les échéances, dites à part : elles ne datent pas le document. */
@@ -1081,8 +1116,9 @@
     h += '<p class="bloc-t ' + (absentes.length ? "r" : "v") + '"><span class="pastille"></span>' +
       "Les mentions que le code du travail impose</p>";
     mentions.forEach(function (m) {
-      h += '<div class="ligne' + (m.vu ? " deja" : "") + '"><span class="nom">' +
-        '<b class="etat ' + (m.vu ? "ok" : "ko") + '">' + (m.vu ? "présent" : "introuvable") + "</b> " +
+      h += '<div class="ligne' + (m.vu && !m.aCompleter ? " deja" : "") + '"><span class="nom">' +
+        '<b class="etat ' + (m.vu && !m.aCompleter ? "ok" : "ko") + '">' +
+        (m.aCompleter ? "à compléter" : (m.vu ? "présent" : "introuvable")) + "</b> " +
         ech(m.x.nom) + '<span class="du">' + ech(m.x.quoi) + " (" + ech(m.x.fond) + ")" +
         (m.vu ? '</span><span class="du">Dans votre document : « ' + ech(m.vu) + ' »' : "") +
         "</span></span></div>";

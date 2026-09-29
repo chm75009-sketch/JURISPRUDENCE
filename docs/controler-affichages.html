@@ -326,8 +326,36 @@
      service à indiquer ] » alors que la fiche d'entreprise a le bloc
      « organismes et interlocuteurs », qui promet d'être repris dans les
      documents. Relevé le 26 septembre 2026. */
-  depuisProfil("inspUnite", P.orgInspection);
-  depuisProfil("spstNom", P.orgSanteTravail);
+  /* LE NOM ET L'ADRESSE SONT DEUX CASES, LA FICHE N'EN A QU'UNE.
+
+     La fiche enregistre « Unité de contrôle 95-02, 13 boulevard Gambetta,
+     95100 Argenteuil » d'un seul tenant. L'affiche recopiait le tout dans
+     « Unité de contrôle » et laissait « ADRESSE [ adresse à indiquer ] » juste
+     en dessous, sous l'adresse déjà écrite. Relevé le 29 septembre 2026. On
+     coupe donc au premier morceau qui ressemble à une adresse, c'est-à-dire
+     qui commence par un numéro de voie ou qui porte un code postal ; à défaut,
+     rien n'est coupé et la case garde tout, comme avant. */
+  function couperAdresse(v) {
+    var t = String(v || "").trim();
+    if (!t) return null;
+    var bouts = t.split(",");
+    for (var i = 1; i < bouts.length; i++) {
+      var reste = bouts.slice(i).join(",").trim();
+      if (/^\d+\s*(bis|ter)?\s+\S/i.test(reste) || /\b\d{5}\b/.test(bouts[i])) {
+        var nom = bouts.slice(0, i).join(",").trim();
+        if (nom) return { nom: nom, adresse: reste };
+      }
+    }
+    return null;
+  }
+  (function () {
+    var d = couperAdresse(P.orgInspection);
+    depuisProfil("inspUnite", d ? d.nom : P.orgInspection);
+    if (d) depuisProfil("inspAdresse", d.adresse);
+    var s2 = couperAdresse(P.orgSanteTravail);
+    depuisProfil("spstNom", s2 ? s2.nom : P.orgSanteTravail);
+    if (s2) depuisProfil("spstAdresse", s2.adresse);
+  })();
   /* LE NUMÉRO IDCC EST DANS L'INTITULÉ DE LA CONVENTION.
 
      L'affiche de la convention collective sortait « NUMÉRO IDCC [ numéro à
@@ -883,12 +911,44 @@
      convention, R. 4121-4 pour l'accès au document unique. Un mot trouvé dit
      que le sujet est là, jamais qu'il est bien traité. */
   var ATTENDUS = {
-    inspection: [{ objet: "Adresse, numéro d'appel de l'inspection du travail et nom de l'agent",
-      mots: ["inspection du travail", "inspecteur du travail"] }],
-    spst: [{ objet: "Adresse et numéro d'appel du médecin du travail ou du service de santé au travail",
-      mots: ["médecin du travail", "santé au travail"] }],
-    secours: [{ objet: "Adresse et numéro d'appel des services de secours d'urgence",
-      mots: ["secours", "pompiers", "samu", "112"] }],
+    /* D. 4711-1 DEMANDE TROIS CHOSES, ET LE MOT-CLÉ N'EN CHERCHAIT QU'UNE.
+
+       « L'employeur affiche, dans des locaux normalement accessibles aux
+       travailleurs, l'adresse et le numéro d'appel : 1° Du médecin du travail
+       ou du service de santé au travail compétent pour l'établissement ;
+       2° Des services de secours d'urgence ; 3° De l'inspection du travail
+       compétente ainsi que le nom de l'inspecteur compétent »
+       (D. 4711-1, LEGIARTI000018527636, lu au relais le 29 septembre 2026,
+       deux lectures concordantes).
+
+       Le contrôle se contentait de trouver les mots « inspection du travail »
+       et concluait « Trouvé dans votre texte » sur un texte qui ne portait ni
+       adresse, ni numéro, ni nom d'agent. Relevé le 29 septembre 2026, comme
+       pour la consigne incendie le 26. Chaque élément est cherché à part :
+       l'adresse par un code postal, le numéro par une suite de chiffres
+       groupés, le nom par une civilité. Ce sont des indices, pas des preuves,
+       et la ligne le dit déjà : « la recherche voit que le sujet est traité,
+       elle ne dit jamais qu'il l'est bien ». */
+    inspection: [
+      { objet: "L'inspection du travail compétente est nommée",
+        mots: ["inspection du travail", "inspecteur du travail", "unite de controle",
+               "unité de contrôle", "ddets", "direccte", "dreets"] },
+      { objet: "Son adresse (D. 4711-1, 3°)", ou: "adresse" },
+      { objet: "Son numéro d'appel (D. 4711-1, 3°)", ou: "telephone" },
+      { objet: "Le nom de l'inspecteur compétent (D. 4711-1, 3°)", ou: "personne" },
+    ],
+    spst: [
+      { objet: "Le médecin du travail ou le service de santé au travail est nommé",
+        mots: ["médecin du travail", "santé au travail", "medecin du travail",
+               "sante au travail", "spst"] },
+      { objet: "Son adresse (D. 4711-1, 1°)", ou: "adresse" },
+      { objet: "Son numéro d'appel (D. 4711-1, 1°)", ou: "telephone" },
+    ],
+    secours: [
+      { objet: "Les services de secours d'urgence sont nommés",
+        mots: ["secours", "pompiers", "samu", "112"] },
+      { objet: "Leur numéro d'appel (D. 4711-1, 2°)", ou: "telephone" },
+    ],
     /* LES HUIT RUBRIQUES DE R. 4227-38, UNE PAR UNE.
 
        La consigne de sécurité incendie n'avait aucune ligne dans ce tableau :
@@ -1299,6 +1359,14 @@
         "Déposez le texte de toutes vos affiches : sur un extrait, tout ce qui n'y figure pas serait dit absent.</div>";
       return;
     }
+    /* Les trois indices que D. 4711-1 fait chercher : une adresse se reconnaît
+       à son code postal, un numéro d'appel à ses chiffres groupés, une personne
+       à sa civilité ou à son titre. */
+    var INDICE = {
+      adresse: /\b\d{5}\b\s*[A-Za-zÀ-ÿ]/,
+      telephone: /(?:\+33|0)\s*\d(?:[\s.\-]?\d{2}){4}/,
+      personne: /\b(Madame|Monsieur|Mme|M\.|Docteur|Dr)\s+[A-ZÀ-Þ]/,
+    };
     var plat = sansAccents(txt), manques = 0, h = "";
     AFFICHES.forEach(function (a) {
       /* UNE AFFICHE SANS ÉLÉMENT ATTENDU N'EST PAS UNE AFFICHE TROUVÉE.
@@ -1311,7 +1379,9 @@
       });
       var absents = [];
       att.forEach(function (x) {
-        var ok = (x.mots || []).some(function (m) { return plat.indexOf(sansAccents(m)) >= 0; });
+        var ok;
+        if (x.ou) ok = INDICE[x.ou].test(txt);
+        else ok = (x.mots || []).some(function (m) { return plat.indexOf(sansAccents(m)) >= 0; });
         if (!ok) absents.push(x.objet);
       });
       var trouve = att.length > 0 && !absents.length;
