@@ -113,6 +113,10 @@
   .dates{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
   .d{border:1px solid var(--filet);border-left:3px solid var(--accent);border-radius:8px;padding:9px 12px;background:var(--surface)}
   .d.tard{border-left-color:var(--rouge)}
+  /* L'échéance dépassée : le cadre rouge, et la phrase qui le dit. */
+  .d.depasse{border-color:var(--rouge);border-left-color:var(--rouge)}
+  .d.depasse .r{display:block;margin:4px 0 0;font-weight:700;color:var(--rouge);
+    font-size:var(--t1);line-height:1.35}
   /* PRESCRIT : ON NE PEUT PAS LE MANQUER. Demande du 16 septembre 2026,
      « si prescrit avertissement en rouge clignotant ». Sa propre classe, et
      non celle des échéances « au plus tard » : la première version faisait
@@ -1195,9 +1199,30 @@
     return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase() || "document";
   }
-  function carte(q, d, f, classe) {
-    return '<div class="d ' + (classe || "") + '"><span class="q">' + ech(q) + "</span>" +
+  /* UNE ÉCHÉANCE PASSÉE SE DIT, ELLE NE SE LIT PAS ENTRE LES LIGNES.
+
+     « DÉCLARATION À LA CAISSE AU PLUS TARD lundi 28 septembre 2026 », affiché
+     le 29, dans la même couleur que les échéances à venir : le dirigeant
+     devait comparer la date à son calendrier pour comprendre qu'il était en
+     retard. Relevé le 29 septembre 2026. La carte le dit maintenant elle-même,
+     comme l'écran des visites médicales le fait depuis le 27.
+
+     La date brute est nécessaire pour le savoir : le générateur la passe dans
+     « quand », à côté du texte déjà mis en forme. Sans elle, rien n'est
+     signalé, et c'est voulu : on ne devine pas une date dans une phrase. */
+  function carte(q, d, f, classe, quand) {
+    var retard = null;
+    if (quand instanceof Date && !isNaN(quand.getTime())) {
+      var h = new Date();
+      var n = Math.round((new Date(h.getFullYear(), h.getMonth(), h.getDate()) -
+        new Date(quand.getFullYear(), quand.getMonth(), quand.getDate())) / 864e5);
+      if (n > 0) retard = n;
+    }
+    return '<div class="d ' + (classe || "") + (retard ? " depasse" : "") + '">' +
+      '<span class="q">' + ech(q) + "</span>" +
       '<span class="v">' + ech(typeof d === "string" ? d : dateFrJour(d)) + "</span>" +
+      (retard ? '<span class="r">Échéance dépassée depuis ' + retard + " jour" +
+        (retard > 1 ? "s" : "") + " : à faire aujourd'hui.</span>" : "") +
       '<span class="f">' + ech(f) + "</span></div>";
   }
   var SANS_ANCIENNETE = "[durée : un mois de six mois à moins de deux ans d'ancienneté, deux mois au-delà, sauf durée plus favorable de la convention collective]";
@@ -3240,10 +3265,11 @@
     formule(b, civ);
     var datesAt = [{ q: "Déclaration à la caisse au plus tard",
       d: limite ? dateFrJour(limite) : "[date de l'accident à saisir]",
+      quand: limite || null,
       f: "quarante-huit heures non compris les dimanches et jours fériés, à compter du jour où l'employeur a connu l'accident, le " + dateFr(connu) + " (" + ref(["L441-2", "R441-3"]) + " du code de la sécurité sociale)",
       c: "tard" }];
     if (limite) datesAt.push({ q: "Réserves motivées au plus tard",
-      d: dateFrJour(jour(limite, 10)),
+      d: dateFrJour(jour(limite, 10)), quand: jour(limite, 10),
       f: "dix jours francs à compter de la déclaration (" + ref(["R441-6"]) + " du code de la sécurité sociale) : compté ici depuis le dernier jour utile pour déclarer, à recompter sur la date réelle de la déclaration",
       c: "tard" });
     return { blocs: b, loi: ["L441-2", "R441-3", "L441-5", "R441-6", "L1226-7", "L1226-9", "R4624-31"],
@@ -4927,19 +4953,44 @@
       dates: function (v) {
         var D = [], i = dateDe(v.info), r = dateDe(v.reunion), e = dateDe(v.etabli);
         if (i) D.push({ q: "Premier tour au plus tard", d: dateFrJour(jour(i, 90)),
+          quand: jour(i, 90),
           f: "le quatre-vingt-dixième jour suivant la diffusion de l'information du " +
              dateFr(i) + " (" + ref(["L2314-4"]) + ")", c: "tard" });
         if (r) D.push({ q: "Invitation des syndicats au plus tard", d: dateFrJour(jour(r, -15)),
+          quand: jour(r, -15),
           f: "quinze jours avant la première réunion de négociation du " + dateFr(r) +
              " (" + ref(["L2314-5"]) + ")", c: "tard" });
         if (e) {
-          D.push({ q: "Transmission du procès-verbal au plus tard", d: dateFrJour(jour(e, 15)),
+          var limite = jour(e, 15);
+          D.push({ q: "Transmission du procès-verbal au plus tard", d: dateFrJour(limite),
+            quand: limite,
             f: "quinze jours après l'établissement du procès-verbal de carence (" +
                ref(["L2314-9"]) + ")", c: "tard" });
+          /* LA DATE D'ENVOI SAISIE SE COMPARE À SON TERME.
+
+             Procès-verbal du 16 décembre, transmission portée au 5 janvier :
+             l'écran affichait le terme, le 31 décembre, le courrier sortait
+             daté du 5 janvier, et rien ne disait que les quinze jours étaient
+             passés. Relevé le 29 septembre 2026. Le retard se compte sur la
+             date que le dirigeant a saisie, et non sur le jour où il regarde
+             l'écran. */
+          var env = dateDe(v.envoi);
+          if (env) {
+            var trop = Math.round((env - limite) / 864e5);
+            D.push({ q: "Transmission portée au", d: dateFrJour(env),
+              f: trop > 0
+                ? "soit " + trop + " jour" + (trop > 1 ? "s" : "") + " après le terme des quinze " +
+                  "jours de " + ref(["L2314-9"]) + " : la transmission est tardive. Envoyez-la " +
+                  "sans attendre et gardez la preuve de la date d'envoi."
+                : "dans les quinze jours de " + ref(["L2314-9"]) + " : conservez la preuve de la " +
+                  "date d'envoi.",
+              c: trop > 0 ? "tard depasse" : "tot" });
+          }
           D.push({ q: "Aucune demande d'élections recevable avant", d: dateFrJour(plusMois(e, 6)),
             f: "six mois après l'établissement du procès-verbal de carence (" +
                ref(["L2314-8"]) + ")", c: "" });
           D.push({ q: "Information du personnel à refaire", d: dateFrJour(plusMois(e, 48)),
+            quand: plusMois(e, 48),
             f: "l'information du personnel se refait tous les quatre ans (" +
                ref(["L2314-4"]) + ")", c: "tard" });
         }
@@ -5131,12 +5182,21 @@
             "obligatoire n'est pas due (" + ref(["L2242-1"]) + "). L'accord et le procès-verbal de " +
             "désaccord ci-dessous ne servent que si une section syndicale représentative se constitue."
           : (ds === "en cours"
+            /* LE TEXTE PARLE DE LA SECTION, PAS DE LA DÉSIGNATION.
+
+               « elle naîtra de la désignation, pas avant » : L. 2242-1
+               (LEGIARTI000043893962, lu au relais le 29 septembre 2026, deux
+               lectures concordantes) écrit « Dans les entreprises où sont
+               constituées une ou plusieurs sections syndicales d'organisations
+               représentatives ». C'est la section constituée qui ouvre
+               l'obligation, et la désignation d'un délégué n'en est que le
+               signe le plus visible. Relevé le 29 septembre 2026. */
             ? "Votre fiche indique une désignation de délégué syndical en cours. L'obligation de " +
-              "négocier ne pèse que sur les entreprises où sont constituées une ou plusieurs " +
-              "sections syndicales d'organisations représentatives (" + ref(["L2242-1"]) + ") : " +
-              "elle naîtra de la désignation, pas avant. Préparez l'accord et le procès-verbal de " +
-              "désaccord ci-dessous, et reportez la réponse sur la fiche dès que la désignation " +
-              "vous est notifiée."
+              "négocier pèse sur « les entreprises où sont constituées une ou plusieurs sections " +
+              "syndicales d'organisations représentatives » (" + ref(["L2242-1"]) + ") : c'est la " +
+              "constitution de la section qui l'ouvre. Préparez l'accord et le procès-verbal de " +
+              "désaccord ci-dessous, et reportez la réponse sur la fiche dès que la section vous " +
+              "est connue."
             : "Votre fiche ne dit pas si un délégué syndical est désigné. La négociation annuelle " +
               "obligatoire n'est due que dans les entreprises où sont constituées une ou plusieurs " +
               "sections syndicales d'organisations représentatives (" + ref(["L2242-1"]) + ") : " +
@@ -5309,7 +5369,7 @@
       r = doc.produire(V);
     }
     var h = "";
-    (r.dates || []).forEach(function (s) { h += carte(s.q, s.d, s.f, s.c); });
+    (r.dates || []).forEach(function (s) { h += carte(s.q, s.d, s.f, s.c, s.quand); });
     $("d-dates").innerHTML = h;
     $("d-dates").hidden = !h;
     var a = "";

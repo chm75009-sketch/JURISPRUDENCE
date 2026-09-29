@@ -4205,10 +4205,22 @@
      déjà fait sortir un document unique fictif signé au nom du client.
      Relevé le 26 septembre 2026. La coupe est faite par le générateur, qui
      sait où l'exemple s'arrête. */
+  /* LA COUPE NE SE FAISAIT QUE SUR LES DOCUMENTS À ONGLETS.
+
+     texteEntier ne rend un texte que pour un onglet « d'un seul tenant » ;
+     pour tous les autres documents, il rend null, et l'on retombait sur le
+     texte affiché, exemple compris. Relevé le 29 septembre 2026 : les Word du
+     parcours de la négociation annuelle sortaient avec le bandeau « À
+     ADAPTER » et le procès-verbal d'une réunion fictive, sous l'en-tête du
+     client. La coupe s'applique maintenant dans les deux cas. */
+  function sansEx(t) {
+    return (t != null && window.DocumentsProduits && window.DocumentsProduits.sansExemple)
+      ? window.DocumentsProduits.sansExemple(t) : t;
+  }
   function blocsAEmporter() {
     var t = COURRIER ? texteEntier(COURRIER.partie || 0) : null;
-    if (t != null && window.DocumentsProduits && window.DocumentsProduits.sansExemple)
-      t = window.DocumentsProduits.sansExemple(t);
+    if (t == null) t = lireCorps();
+    t = sansEx(t);
     return (t != null && window.FeuilleDoc) ? window.FeuilleDoc.blocs(t) : relireCorps();
   }
   /* LE CLASSEUR PART DU DOCUMENT ENTIER, PAS DE L'ONGLET OUVERT.
@@ -4231,8 +4243,7 @@
         t = s ? s.map(function (x) { return x.texte; }).join("\n\n") : null;
       }
       if (t == null) continue;
-      if (window.DocumentsProduits && window.DocumentsProduits.sansExemple)
-        t = window.DocumentsProduits.sansExemple(t);
+      t = sansEx(t);
       if (window.FeuilleDoc) out = out.concat(window.FeuilleDoc.blocs(t));
     }
     return out;

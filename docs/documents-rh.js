@@ -384,13 +384,36 @@
       var empC = (salC && String(salC.emp || "").trim()) || "";
       L.push((empC || "[EMPLOI OCCUPÉ]") + ", du " + (entreeC ? jj(entreeC) : "[DATE]") +
              " au " + (sortieC ? jj(sortieC) : "[DATE]"));
-      L.push("(répéter pour chaque emploi successivement tenu)");
+      /* La consigne s'imprimait dans le certificat remis au salarié : « (répéter
+         pour chaque emploi successivement tenu) ». Elle s'adresse au rédacteur,
+         pas au destinataire. Relevé le 29 septembre 2026 : elle ne paraît plus
+         que si le registre ne donne qu'un seul emploi et qu'il reste à en
+         ajouter, et elle le dit alors entre crochets, comme tout ce qui est à
+         compléter. */
+      L.push("[s'il y a eu d'autres emplois, ajoutez ici une ligne par emploi, avec ses dates]");
       L.push("");
       L.push("En foi de quoi ce certificat est délivré au salarié pour servir et valoir ce que de droit.");
       L.push("");
+      /* LE CERTIFICAT SE DATE DE LA SORTIE, ET UN RETARD SE DIT.
+
+         « À l'expiration du contrat de travail, l'employeur délivre au salarié
+         un certificat » (L. 1234-19, LEGIARTI000006901138, lu au relais le
+         29 septembre 2026, deux lectures concordantes). Le certificat d'un
+         salarié sorti le 31 août, édité le 29 septembre, sortait daté du
+         31 août sans un mot : la date est juste, mais la remise, elle, est en
+         retard, et c'est ce retard qui se voit. Relevé le 29 septembre 2026. */
       L.push("Fait à " + cro(villeFiche(p), "lieu") + ", le " + leJour(sortieC || d0));
       L.push(cro(resp(p), "Nom, qualité et signature"));
       L.push("");
+      var retardC = sortieC ? Math.round((d0 - sortieC) / 864e5) : 0;
+      if (retardC > 0) {
+        L.push("À VOUS, ET NON AU SALARIÉ : le contrat a pris fin le " + jj(sortieC) +
+               ", il y a " + retardC + " jour" + (retardC > 1 ? "s" : "") + ". Le certificat est");
+        L.push("délivré à l'expiration du contrat (L. 1234-19) : il porte donc la date de la");
+        L.push("sortie, et sa remise est en retard d'autant. Remettez-le aujourd'hui, gardez la");
+        L.push("trace de la remise, et n'antidatez rien d'autre.");
+        L.push("");
+      }
 
       L.push("VOTRE CALENDRIER");
       L.push("");
@@ -403,9 +426,16 @@
 
       L.push("LES RÈGLES");
       L.push("");
-      L.push("« Le certificat de travail contient EXCLUSIVEMENT : 1° la date d'entrée du salarié et " +
-             "celle de sa sortie ; 2° la nature de l'emploi ou des emplois successivement occupés " +
-             "et les périodes pendant lesquelles ces emplois ont été tenus » (D. 1234-6).");
+      /* LE TEXTE SE CITE MOT POUR MOT, ET IL NE PORTE PAS DE CAPITALES.
+
+         L'application écrivait « contient EXCLUSIVEMENT : » et abrégeait la
+         suite. Le texte dit « contient exclusivement les mentions suivantes ».
+         Relevé le 29 septembre 2026. D. 1234-6, LEGIARTI000029544357, lu au
+         relais le même jour, deux lectures concordantes. */
+      L.push("« Le certificat de travail contient exclusivement les mentions suivantes : " +
+             "1° La date d'entrée du salarié et celle de sa sortie ; 2° La nature de l'emploi " +
+             "ou des emplois successivement occupés et les périodes pendant lesquelles ces " +
+             "emplois ont été tenus » (D. 1234-6).");
       L.push("");
       L.push("LES INTERDICTIONS ABSOLUES :");
       L.push("- Pas de motif de rupture (même pas « licenciement pour cause personnelle »).");
@@ -514,10 +544,23 @@
         ["Établissement du reçu en double exemplaire", jj(signS), "deux exemplaires signés"],
         ["Remise d'un exemplaire au salarié", jj(signS), "signature du salarié ou trace de remise"],
         ["Conservation du second exemplaire", "en permanence", "au dossier du personnel"],
-        ["Dernier jour pour dénoncer le reçu", jj(dans(moisDans(signS, 6), 1)),
-         "six mois qui suivent la signature du " + jj(signS) + ", comptés du lendemain (L. 1234-20)"],
-        ["Le reçu devient libératoire", jj(dans(moisDans(signS, 6), 2)),
-         "pour les seules sommes qui y sont mentionnées (L. 1234-20)"],
+        /* UN JOUR DE TROP, DEUX FOIS.
+
+           « Le reçu pour solde de tout compte peut être dénoncé dans les six
+           mois qui suivent sa signature, délai au-delà duquel il devient
+           libératoire » (L. 1234-20, LEGIARTI000019071122, lu au relais le
+           29 septembre 2026, deux lectures concordantes). Six mois depuis le
+           31 août 2026 s'achèvent donc le 28 février 2027, le mois de février
+           n'ayant pas de trente et unième jour, et le reçu devient libératoire
+           le lendemain. L'application ajoutait un jour à chacune des deux
+           dates et annonçait le 1er puis le 2 mars. Relevé le 29 septembre
+           2026. */
+        ["Dernier jour pour dénoncer le reçu", jj(moisDans(signS, 6)),
+         "six mois qui suivent la signature du " + jj(signS) +
+         " ; le mois d'échéance n'ayant pas toujours le même quantième, le terme " +
+         "tombe au plus tard le dernier jour de ce mois (L. 1234-20)"],
+        ["Le reçu devient libératoire", jj(dans(moisDans(signS, 6), 1)),
+         "le lendemain du terme, pour les seules sommes qui y sont mentionnées (L. 1234-20)"],
       ]));
 
       L = L.concat(DP.liens(ctx, ["emploi", "rh"]));

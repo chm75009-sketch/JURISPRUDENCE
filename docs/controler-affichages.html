@@ -283,7 +283,35 @@
     "R. 2262-3": "LEGIARTI000033292505",
     "R. 2262-5": "LEGIARTI000018535589",
     "R. 4121-4": "LEGIARTI000045386451",
+    /* LA CONSIGNE INCENDIE CITAIT SES DEUX ARTICLES SANS LEUR IDENTIFIANT.
+
+       « Fondement : R. 4227-38 du code du travail (undefined, lu le
+       7 septembre 2026) » : les deux numéros n'étaient pas dans cette table,
+       et le mot « undefined » partait sur l'affiche. Relevé le 29 septembre
+       2026. Les deux identifiants sont lus au relais le même jour, deux
+       lectures concordantes chacun : R. 4227-38 « La consigne de sécurité
+       incendie indique : 1° Le matériel d'extinction et de secours… » et
+       R. 4227-39 « La consigne de sécurité incendie prévoit des essais et
+       visites périodiques du matériel… ». */
+    "R. 4227-38": "LEGIARTI000024769384",
+    "R. 4227-39": "LEGIARTI000024769386",
   };
+  /* La date de lecture n'est pas la même pour tous : celle du bas de page vaut
+     pour les articles lus le 7 septembre, et un article lu plus tard porte sa
+     propre date. Dire « lu le 7 septembre » d'un texte lu le 29 serait une
+     lecture qu'on n'a pas faite. */
+  var LU_PAR = {
+    "R. 4227-38": "lu le 29 septembre 2026",
+    "R. 4227-39": "lu le 29 septembre 2026",
+  };
+  /* Un numéro absent de la table ne s'écrit plus « undefined » : il s'écrit
+     sans identifiant, et verifier-affiches.mjs refuse un fondement sans
+     identifiant de version. */
+  function ident(x) { return FOND[x] || ""; }
+  function citer(x) {
+    var id = ident(x);
+    return x + " du code du travail" + (id ? " (" + id + ", " + (LU_PAR[x] || LU) + ")" : "");
+  }
 
   /* ------------------------------------------------------------------ */
   /* L'état de la page : les onze cases et les coordonnées saisies. */
@@ -1010,7 +1038,7 @@
   }
   function pied(a) {
     var f = a.fond.length
-      ? "Fondement : " + a.fond.map(function (x) { return x + " du code du travail (" + FOND[x] + ", " + LU + ")"; }).join(" ; ") + "."
+      ? "Fondement : " + a.fond.map(citer).join(" ; ") + "."
       : "Cette affiche ne cite aucun article : le texte qui l'impose relève du code de la santé publique, non lu par cette application.";
     return '<div class="pied"><span>' + ech(v("denomination") || "[ dénomination ]") +
       (v("siret") ? " · SIRET " + ech(v("siret")) : "") + "<br>" + ech(v("adresse") || "") +
@@ -1196,7 +1224,7 @@
       " · affiche établie le " + (dateFr(v("dateReleve")) || "[ date ]") +
       " par " + (v("responsable") || "[ signataire ]") });
     if (a.fond.length) items.push({ k: "note", t: "Fondement : " +
-      a.fond.map(function (x) { return x + " du code du travail (" + FOND[x] + ")"; }).join(" ; ") + ", " + LU + "." });
+      a.fond.map(citer).join(" ; ") + "." });
     return items;
   }
 

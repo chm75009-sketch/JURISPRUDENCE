@@ -388,7 +388,34 @@
       return;
     }
     var tete = document.querySelector("header.site");
-    if (!tete || tete.querySelector(".ent-ligne")) return;
+    if (!tete) return;
+    /* LA PAGE QUI SE PRÉSENTE DÉJÀ N'A PAS BESOIN QU'ON LA PRÉSENTE.
+
+       « SARL TEC · 82 salariés » puis, deux lignes plus bas, « SARL TEC ·
+       85 inscrits · 82 en poste » : le rappel était posé par-dessus celui que
+       la page écrit elle-même, sur l'agenda, l'accueil, le registre, les
+       audits, les parcours et les modèles. Relevé le 29 septembre 2026. On
+       cherche donc, en tête de la page, une ligne courte qui commence déjà par
+       la dénomination : si elle est là, celle-ci dit ce qu'il faut, et souvent
+       mieux, puisqu'elle connaît le registre. */
+    var nôtre = tete.querySelector(".ent-ligne");
+    var debut = tete.parentNode || document;
+    var candidats = debut.querySelectorAll("header.site p, header.site div, main > p, main > div, main > section > p");
+    var propre = false;
+    for (var i = 0; i < candidats.length && i < 40; i++) {
+      var c = candidats[i];
+      if (c === nôtre || (nôtre && nôtre.contains(c))) continue;
+      var t = String(c.textContent || "").trim();
+      if (t.length > 200) continue;
+      if (t.indexOf(nom) === 0 && /salari|inscrit|effectif/i.test(t)) { propre = true; break; }
+    }
+    /* Certaines pages écrivent leur rappel après coup : la ligne posée trop
+       tôt se retire dès que le leur paraît. */
+    if (propre) {
+      if (nôtre && nôtre.parentNode) nôtre.parentNode.removeChild(nôtre);
+      return;
+    }
+    if (nôtre) return;
     var l = document.createElement("p");
     l.className = "ent-ligne";
     l.textContent = texte;
@@ -403,6 +430,9 @@
     document.addEventListener("DOMContentLoaded", ligneEntreprise);
   else ligneEntreprise();
   window.addEventListener("load", ligneEntreprise);
+  /* Un troisième passage, court : les écrans qui remplissent leur rappel
+     depuis le registre le font après le chargement. */
+  window.setTimeout(ligneEntreprise, 700);
 
   window.Barre = {
     avant: function (fn) { AVANT = typeof fn === "function" ? fn : null; },

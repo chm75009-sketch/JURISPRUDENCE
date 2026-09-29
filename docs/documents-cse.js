@@ -530,7 +530,15 @@
         L.push("articles L. 2411-7, L. 2412-3 et L. 2413-1 à compter de la date à laquelle");
         L.push("l'employeur a eu connaissance de l'imminence de sa candidature (L. 2314-5).");
         L.push("");
-      } else {
+      } else if (eff == null) {
+        /* LA QUESTION NE SE POSE QUE SI L'ON NE CONNAÎT PAS L'EFFECTIF.
+
+           La note portait « [Si l'effectif de l'entreprise est compris entre
+           onze et vingt salariés, ajoutez la mention suivante…] » à une
+           entreprise de quatre-vingt-deux salariés, dont la fiche donne le
+           chiffre. Relevé le 29 septembre 2026. Au-dessus de vingt, la
+           condition de L. 2314-5 ne joue pas : il n'y a rien à ajouter, et
+           rien à demander. */
         L.push("[Si l'effectif de l'entreprise est compris entre onze et vingt salariés,");
         L.push("ajoutez la mention suivante : les organisations syndicales ne seront invitées");
         L.push("à négocier le protocole qu'à la condition qu'au moins un salarié se soit");

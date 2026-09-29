@@ -99,6 +99,10 @@
   .cas .tete{display:flex;align-items:flex-start;gap:11px}
   .cas input[type=checkbox]{width:24px;height:24px;flex:0 0 auto;margin:2px 0 0;accent-color:var(--accent)}
   .cas .lib{font:600 var(--t3)/1.35 system-ui;flex:1 1 auto}
+  /* La case à laquelle les données répondent : elle est verrouillée, et la
+     ligne dit d'où vient la réponse. */
+  .cas input[type=checkbox]:disabled{opacity:.75;cursor:default}
+  .cas .dit-donnees{margin:6px 0 0 35px;font-size:var(--t1);line-height:1.4;color:var(--texte-2)}
   .cas .suite{margin:9px 0 0 35px;font-size:var(--t2);color:var(--texte-2)}
   /* La conséquence se lit en rouge, pas en gras : du gras sur cinq lignes ne
      signale plus rien. */

@@ -737,10 +737,26 @@
       ko: "La convention est nulle : la forfaitisation exige l'accord du salarié et un écrit " +
           "(L. 3121-55). Une mention au bulletin de paie ne suffit pas.",
       grave: true, faire: "conv" },
+    /* UNE CASE QUE LES DONNÉES SAVENT COCHER NE SE DEMANDE PAS.
+
+       « le nombre de jours n'est pas confirmé conforme, 218 au plus » avec
+       218 saisi deux écrans plus haut : le rapport réclamait une case que la
+       convention remplissait déjà. Relevé le 29 septembre 2026. Quand le
+       nombre est connu, il répond lui-même, et la case se verrouille : ce
+       n'est pas au dirigeant de confirmer ce que l'application a sous les
+       yeux. */
     { c: "nombre", t: "Le nombre de jours est conforme, 218 au plus",
       ko: "Au-delà, il faut une renonciation écrite avec majoration d'au moins 10 %, et le plafond " +
           "de l'accord ou, à défaut, 235 jours (L. 3121-59 et L. 3121-66).",
-      grave: true, faire: "renonce" },
+      grave: true, faire: "renonce",
+      auto: function (f) {
+        var n = parseInt(String((f.conv && f.conv.jours) || ""), 10);
+        if (!isFinite(n) || n <= 0) return null;
+        return { vrai: n <= 218,
+          dit: "la convention porte " + n + " jour" + (n > 1 ? "s" : "") +
+            (n <= 218 ? ", dans le plafond de 218 (L. 3121-64, II, 3°)"
+                      : ", au-delà du plafond de 218 (L. 3121-64, II, 3°)") };
+      } },
     { c: "elig", t: "Le salarié est réellement autonome dans l'organisation de ses journées",
       ko: "La convention est nulle : il n'entre dans aucune des deux catégories de L. 3121-58. " +
           "Le forfait ne se rattrape pas par son montant.",
@@ -760,7 +776,11 @@
   function rendreControle() {
     var f = fiche();
     $("ct-liste").innerHTML = CONTROLES.map(function (c) {
-      var coche = !!f.ctrl[c.c];
+      /* Ce que les données répondent prime sur la case : elle est cochée ou
+         décochée d'après elles, verrouillée, et la ligne dit d'où vient la
+         réponse. */
+      var su = (typeof c.auto === "function") ? c.auto(f) : null;
+      var coche = su ? !!su.vrai : !!f.ctrl[c.c];
       var bouton = "";
       if (!coche) {
         var lib = { non: "Construire l'accord", conv: "Écrire la convention",
@@ -771,7 +791,9 @@
       }
       return '<div class="cas' + (coche ? "" : " ko") + '">' +
         '<div class="tete"><input type="checkbox" id="ct-' + c.c + '"' + (coche ? " checked" : "") +
+        (su ? " disabled" : "") +
         ' aria-label="' + ech(c.t) + '"><label class="lib" for="ct-' + c.c + '">' + ech(c.t) + "</label></div>" +
+        (su ? '<p class="dit-donnees">Répondu d\'après votre saisie : ' + ech(su.dit) + "</p>" : "") +
         (coche ? "" : '<div class="suite"><b>' + ech(c.ko) + "</b>" + bouton + "</div>") + "</div>";
     }).join("");
 
@@ -812,7 +834,7 @@
      enregistré ici, le verdict le dit et cesse d'être vert. Relevé le
      26 septembre 2026. */
   function contradictions() {
-    var f = fiche(), c = f.ctrl, b = bornesPeriode(), t = compterPeriode(), out = [];
+    var f = fiche(), c = reponses(f), b = bornesPeriode(), t = compterPeriode(), out = [];
     var entretiens = (f.entretiens || []).filter(function (e) {
       return String(e.le || "").slice(0, 4) === String(b.a);
     });
@@ -829,8 +851,20 @@
     return out;
   }
 
+  /* Les réponses que les données donnent d'elles-mêmes, par-dessus les cases :
+     le verdict lit la même chose que l'écran. */
+  function reponses(f) {
+    var c = {};
+    Object.keys(f.ctrl || {}).forEach(function (k) { c[k] = f.ctrl[k]; });
+    CONTROLES.forEach(function (x) {
+      if (typeof x.auto !== "function") return;
+      var su = x.auto(f);
+      if (su) c[x.c] = !!su.vrai;
+    });
+    return c;
+  }
   function majVerdictControle() {
-    var f = fiche(), c = f.ctrl;
+    var f = fiche(), c = reponses(f);
     var v = $("ct-verdict");
     /* RIEN DE COCHÉ N'EST PAS UN VERDICT.
 
@@ -851,7 +885,9 @@
     if (!c.accord) nulle.push("aucun accord collectif ne la fonde (L. 3121-63)");
     if (!c.ecrit) nulle.push("il n'y a pas d'écrit signé (L. 3121-55)");
     if (!c.elig) nulle.push("l'autonomie du salarié au sens de L. 3121-58 n'est pas établie");
-    if (!c.nombre) nulle.push("le nombre de jours n'est pas confirmé conforme, 218 au plus (L. 3121-64)");
+    if (!c.nombre) nulle.push((f.conv && f.conv.jours)
+      ? "la convention porte " + f.conv.jours + " jours, au-delà du plafond de 218 (L. 3121-64)"
+      : "le nombre de jours n'est pas confirmé conforme, 218 au plus (L. 3121-64)");
     var suivi = [];
     if (!c.entretien) suivi.push("l'entretien annuel");
     if (!c.doc) suivi.push("le document de contrôle");

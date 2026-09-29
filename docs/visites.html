@@ -466,12 +466,22 @@
   function rendre() {
     var L = salaries();
     var dus = [];
+    /* UN SALARIÉ PEUT AVOIR DEUX ÉCHÉANCES, ET LES DEUX COMPTENT.
+
+       La carte fermée ne montrait que la première de la liste, et l'encadré
+       n'en retenait qu'une par salarié. Relevé le 29 septembre 2026 sur
+       AKKOUCHE idriss, entré le 1er juillet 2026 : sa visite d'information et
+       de prévention, due le 1er octobre, avait disparu de la carte et du
+       compte, parce que la visite du permis, dont les catégories ne sont pas
+       saisies, passe devant les dates connues et prenait seule la place. Deux
+       obligations distinctes, deux médecins, deux textes : on les montre
+       toutes les deux. */
     var cartes = L.map(function (s) {
       var lg = lignesDe(s);
       var pire = lg.length ? lg[0] : null;
-      if (pire && (pire.etat === "non" || pire.etat === "att"))
-        dus.push({ s: s, l: pire });
-      if (FILTRE === "faire" && !(pire && (pire.etat === "non" || pire.etat === "att"))) return "";
+      var dues = lg.filter(function (x) { return x.etat === "non" || x.etat === "att"; });
+      dues.forEach(function (x) { dus.push({ s: s, l: x }); });
+      if (FILTRE === "faire" && !dues.length) return "";
       var f = fiche(s.id);
       var suivi = f.suivi === "sir" ? "sir" : "vip";
       return '<div class="sal' + (ouvert[s.id] ? " ouverte" : "") + '" data-sal="' + ech(s.id) + '">' +
@@ -479,21 +489,21 @@
         '<p class="resume">' + ech([s.emp, suivi === "sir" ? "suivi individuel renforcé" : "visite d'information et de prévention",
           net(f.visiteTravail) ? "dernière visite le " + dateFr(f.visiteTravail) : "aucune visite enregistrée"]
           .filter(Boolean).join(" · ")) + "</p>" +
-        (pire ? '<p class="prochaine">' + ech(pire.e.quoi) + '</p><span class="jauge ' + pire.etat + '">' +
-                /* Le badge de la carte fermée ne recevait pas « inconnu » et
-                   affichait « date inconnue » là où la ligne dépliée dit
-                   « dernière visite inconnue, à renseigner » : deux phrases
-                   pour le même fait, et la plus vague sur le dessus. Relevé le
-                   28 septembre 2026. */
-                ech(direDelai(pire.jours, pire.e.inconnu)) + "</span>"
-              : '<span class="jauge ok">rien à échéance</span>') +
+        /* Le badge ne recevait pas « inconnu » et affichait « date inconnue »
+           là où la ligne dépliée dit « dernière visite inconnue, à
+           renseigner » : deux phrases pour le même fait, et la plus vague sur
+           le dessus. Relevé le 28 septembre 2026. */
+        ((dues.length ? dues : (pire ? [pire] : [])).map(function (x) {
+          return '<p class="prochaine">' + ech(x.e.quoi) + '</p><span class="jauge ' + x.etat + '">' +
+            ech(direDelai(x.jours, x.e.inconnu)) + "</span>";
+        }).join("") || '<span class="jauge ok">rien à échéance</span>') +
         "</div><div class=\"corps\">" + champsDe(s, f) + lignesHtml(lg) + boutonsDe(s) + "</div></div>";
     }).join("");
 
     $("liste").innerHTML = cartes || '<div class="avis info"><b>Rien à faire dans cette vue</b>' +
       "Aucune échéance n'est due dans les soixante jours. Le filtre « Tous » montre l'ensemble des salariés.</div>";
     $("compte").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") + " en poste au registre · " +
-      dus.length + " à traiter dans les soixante jours";
+      dus.length + " échéance" + (dus.length > 1 ? "s" : "") + " à traiter dans les soixante jours";
     rendreAlertes(dus, L.length);
     cabler();
   }
@@ -567,10 +577,19 @@
     }
     var retard = dus.filter(function (d) { return d.l.jours !== null && d.l.jours < 0; });
     var proches = dus.filter(function (d) { return d.l.jours !== null && d.l.jours >= 0 && d.l.jours <= 30; });
+    /* Une échéance sans date n'entrait ni dans l'un ni dans l'autre : elle
+       disparaissait de l'encadré après avoir pris la tête de la carte. Elle a
+       sa propre ligne, parce que ce qu'elle demande n'est pas de tenir un
+       rendez-vous mais de saisir une date. Relevé le 29 septembre 2026. */
+    var adater = dus.filter(function (d) { return d.l.jours === null; });
+    /* Le compte de l'en-tête porte sur soixante jours, l'encadré n'en montrait
+       que trente : entre les deux, des échéances comptées et jamais nommées.
+       Relevé le 29 septembre 2026. */
+    var ensuite = dus.filter(function (d) { return d.l.jours !== null && d.l.jours > 30; });
     var h = "";
     if (retard.length)
-      h += '<div class="avis non"><b>' + retard.length + " salarié" + (retard.length > 1 ? "s" : "") +
-        " dont l'échéance est passée</b><ul><li>" +
+      h += '<div class="avis non"><b>' + retard.length + " échéance" + (retard.length > 1 ? "s" : "") +
+        " passée" + (retard.length > 1 ? "s" : "") + "</b><ul><li>" +
         retard.slice(0, 8).map(function (d) {
           return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours, d.l.e.inconnu));
         }).join("</li><li>") + "</li></ul>" +
@@ -582,7 +601,21 @@
           return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours, d.l.e.inconnu));
         }).join("</li><li>") + "</li></ul>" +
         (proches.length > 8 ? "… et " + (proches.length - 8) + " autre(s)." : "") + "</div>";
-    if (!retard.length && !proches.length)
+    if (adater.length)
+      h += '<div class="avis att"><b>' + adater.length + " échéance" + (adater.length > 1 ? "s" : "") +
+        " dont la date reste à saisir</b><ul><li>" +
+        adater.slice(0, 8).map(function (d) {
+          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours, d.l.e.inconnu));
+        }).join("</li><li>") + "</li></ul>" +
+        (adater.length > 8 ? "… et " + (adater.length - 8) + " autre(s)." : "") + "</div>";
+    if (ensuite.length)
+      h += '<div class="avis info"><b>' + ensuite.length + " échéance" + (ensuite.length > 1 ? "s" : "") +
+        " entre trente et soixante jours</b><ul><li>" +
+        ensuite.slice(0, 8).map(function (d) {
+          return ech(d.s.nom + " : " + d.l.e.quoi + ", " + direDelai(d.l.jours, d.l.e.inconnu));
+        }).join("</li><li>") + "</li></ul>" +
+        (ensuite.length > 8 ? "… et " + (ensuite.length - 8) + " autre(s)." : "") + "</div>";
+    if (!retard.length && !proches.length && !adater.length && !ensuite.length)
       h = '<div class="avis ok"><b>Aucune échéance dans les trente jours</b>' +
         "Les dates saisies sont celles qui commandent : une date qui manque s'affiche en rouge sur la fiche du salarié.</div>";
     $("alertes").innerHTML = h;

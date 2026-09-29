@@ -2201,19 +2201,44 @@
      bandeau en tête, et la ligne « À COMPLÉTER » qui ouvre la partie du
      client. Sans ces deux repères, rien n'est coupé : on ne devine pas où
      commence un exemple. */
+  /* DEUX BANDEAUX, ET ILS NE VEULENT PAS DIRE LA MÊME CHOSE.
+
+     « EXEMPLE : ce qui suit n'est pas votre document » ouvre le document d'une
+     entreprise fictive : tout ce qui le suit, jusqu'à « À COMPLÉTER » ou
+     jusqu'à la fin, est l'exemple, et s'en va avec lui.
+
+     « À ADAPTER : ce document est un modèle rédigé à partir des textes » dit
+     l'inverse : ce qui suit est le document du client, qu'il lui reste à
+     compléter. Seule la ligne du bandeau s'en va.
+
+     La confusion coûtait cher. Relevé le 29 septembre 2026 : dans le document
+     unique, l'exemple est placé APRÈS la partie à compléter, et l'ancienne
+     coupe, qui cherchait « À COMPLÉTER » après le bandeau, ne trouvait rien et
+     ne retirait que la ligne. Le Word du client sortait donc avec le document
+     signé de « SERVICES EXEMPLE SAS », « Fait à Lagny-sur-Marne », et vingt
+     fois le nom d'un dirigeant qui n'existe pas. */
+  /* L'exemple s'ouvre de deux façons : « EXEMPLE : ce qui suit n'est pas votre
+     document », ou un titre qui se termine par « - EXEMPLE ». Les deux comptent. */
+  function ouvreExemple(t) {
+    return t.indexOf("EXEMPLE") === 0 || /\s-\s*EXEMPLE\s*$/.test(t);
+  }
   function sansExemple(texte) {
     var L = String(texte == null ? "" : texte).split("\n");
-    var debut = -1, fin = -1;
-    for (var i = 0; i < L.length; i++) {
-      var t = L[i];
-      if (debut < 0 && (t.indexOf("EXEMPLE") === 0 || t.indexOf("À ADAPTER") === 0)) { debut = i; continue; }
-      if (debut >= 0 && /À COMPLÉTER\s*$/.test(t.trim())) { fin = i; break; }
-    }
-    if (debut < 0) return L.join("\n");
-    /* Le bandeau seul, sans exemple derrière : il s'en va, et rien d'autre. */
-    if (fin < 0) return sansRenvoi(L.slice(0, debut).concat(L.slice(debut + 1))).join("\n");
+    /* 1. Le bandeau du modèle s'en va, où qu'il soit : il annonce le document
+          du client, pas celui d'un autre. */
+    L = L.filter(function (t) { return String(t).indexOf("À ADAPTER") !== 0; });
+    /* 2. L'exemple s'en va en entier. */
+    var debut = -1;
+    for (var i = 0; i < L.length; i++)
+      if (ouvreExemple(String(L[i]))) { debut = i; break; }
+    if (debut < 0) return sansRenvoi(L).join("\n");
+    var fin = -1;
+    for (var j = debut + 1; j < L.length; j++)
+      if (/À COMPLÉTER\s*$/.test(String(L[j]).trim())) { fin = j; break; }
     var avant = L.slice(0, debut);
     while (avant.length && !String(avant[avant.length - 1]).trim()) avant.pop();
+    /* Aucune reprise derrière l'exemple : il court jusqu'à la fin. */
+    if (fin < 0) return sansRenvoi(avant).join("\n");
     return sansRenvoi(avant.concat([""], L.slice(fin + 1))).join("\n");
   }
 

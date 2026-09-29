@@ -78,6 +78,10 @@
   .sem-l.passe .sem-d{color:#b3261e}
   .sem-q{font-size:15px;line-height:1.35}
   .sem-plus{margin:8px 0 0;font-size:13.5px;color:var(--texte-2)}
+  /* La ligne des dates à saisir : elle ne réclame pas un rendez-vous mais une
+     saisie, et elle se tient sous ce qui a une vraie échéance. */
+  .sem-l.adater .sem-d{color:var(--texte-3)}
+  .sem-l.adater .sem-q{color:var(--texte-2)}
   .semaine-tout{display:inline-block;margin-top:10px;font-size:14.5px}
   .fiche .idcc-liste{font-size:16px}
   .fiche .idcc-liste .idcc-o{min-height:44px}
@@ -449,20 +453,49 @@
     limite.setDate(limite.getDate() + 7);
     var bout = limite.toISOString().slice(0, 10);
     L = L.filter(function (e) { return e.date && (e.etat === "passe" || e.date <= bout); });
+
+    /* UNE DATE QU'ON N'A PAS N'EST PAS UNE ÉCHÉANCE DE LA SEMAINE.
+
+       Les modules donnent la date du jour aux échéances dont la référence
+       manque, pour que la ligne demande cette date au lieu d'annoncer un
+       retard. À l'agenda, c'est juste. Ici, elles entraient toutes dans
+       « Cette semaine », une par une, datées d'aujourd'hui : cent vingt-cinq
+       lignes qui poussaient dehors la licence expirant le surlendemain.
+       Relevé le 29 septembre 2026. Elles sont donc sorties du classement et
+       regroupées en une ligne, sous ce qui a une vraie échéance. */
+    var aDater = L.filter(function (e) { return e.inconnu; });
+    L = L.filter(function (e) { return !e.inconnu; });
     L.sort(function (a, b) { return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0); });
     var hote = document.getElementById("semaine");
     if (!hote) return;
-    if (!L.length) { hote.hidden = true; return; }
+    if (!L.length && !aDater.length) { hote.hidden = true; return; }
     hote.hidden = false;
     var MAX = 8;
-    document.getElementById("semaine-liste").innerHTML =
-      L.slice(0, MAX).map(function (e) {
-        return '<div class="sem-l ' + (e.etat === "passe" ? "passe" : "proche") + '">' +
-          '<span class="sem-d">' + (e.etat === "passe" ? "en retard" : enFrCourt(e.date)) + "</span>" +
-          '<span class="sem-q"><b>' + esc(e.quoi) + "</b> " + esc(e.qui) + "</span></div>";
-      }).join("") +
-      (L.length > MAX ? '<p class="sem-plus">et ' + (L.length - MAX) + " autre" +
-        (L.length - MAX > 1 ? "s" : "") + ".</p>" : "");
+    var h = L.slice(0, MAX).map(function (e) {
+      return '<div class="sem-l ' + (e.etat === "passe" ? "passe" : "proche") + '">' +
+        '<span class="sem-d">' + (e.etat === "passe" ? "en retard" : enFrCourt(e.date)) + "</span>" +
+        '<span class="sem-q"><b>' + esc(e.quoi) + "</b> " + esc(e.qui) + "</span></div>";
+    }).join("");
+    if (L.length > MAX)
+      h += '<p class="sem-plus">et ' + (L.length - MAX) + " autre" +
+        (L.length - MAX > 1 ? "s" : "") + ".</p>";
+    if (aDater.length) {
+      /* Le groupement se fait sur l'intitulé : « 72 visites d'information et
+         de prévention », et non « 72 échéances », qui ne dirait pas où aller. */
+      var parQuoi = {}, ordre = [];
+      aDater.forEach(function (e) {
+        var q = String(e.quoi || "à dater");
+        if (!parQuoi[q]) { parQuoi[q] = 0; ordre.push(q); }
+        parQuoi[q]++;
+      });
+      ordre.sort(function (a, b) { return parQuoi[b] - parQuoi[a]; });
+      h += '<div class="sem-l adater"><span class="sem-d">à dater</span>' +
+        '<span class="sem-q"><b>' + aDater.length + " date" + (aDater.length > 1 ? "s" : "") +
+        " à saisir</b> " + esc(ordre.slice(0, 3).map(function (q) {
+          return parQuoi[q] + " " + q.toLowerCase();
+        }).join(", ") + (ordre.length > 3 ? ", et d'autres" : "")) + "</span></div>";
+    }
+    document.getElementById("semaine-liste").innerHTML = h;
   }
   function esc(t) {
     return String(t == null ? "" : t).replace(/&/g, "&amp;").replace(/</g, "&lt;")
