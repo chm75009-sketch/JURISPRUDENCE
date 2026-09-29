@@ -408,5 +408,9 @@
     setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 2000);
   }
 
-  global.TableurExport = { xlsx: xlsx, telecharger: telecharger, nomOnglet: nomOnglet };
+    /* Les propriétés sont exposées : parcours.js écrit son propre classeur, avec
+     son volet figé et ses cadres, et n'avait aucune raison de réécrire
+     l'auteur ni de s'en passer. */
+  global.TableurExport = { xlsx: xlsx, telecharger: telecharger, nomOnglet: nomOnglet,
+    proprietes: proprietes, auteurParDefaut: auteurParDefaut };
 })(typeof window !== "undefined" ? window : this);

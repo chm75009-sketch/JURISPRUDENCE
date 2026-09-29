@@ -481,7 +481,24 @@
       var m = MESURES[rb.id] || { trouvees: 0, chiffrees: 0, aRenseigner: 0, total: rb.lignes.length };
       trouvees += m.trouvees; chiffrees += m.chiffrees; aRens += m.aRenseigner; totalLignes += m.total;
     });
-    $("#etat").textContent = mis + " rubrique" + (mis > 1 ? "s" : "") + " à insérer, " +
+    /* INSÉRER ET REMPLIR NE SONT PAS LE MÊME TRAVAIL.
+
+       « 10 rubriques à insérer » se disait aussi des rubriques que la base
+       porte déjà mais qu'elle ne chiffre pas : le dirigeant croyait avoir dix
+       rubriques à écrire quand il en avait, disons, trois à écrire et sept à
+       remplir. Relevé le 29 septembre 2026. Le compte les sépare, chacune
+       selon ce qu'elle demande. */
+    var aRemplir = liste.filter(function (rb) {
+      var m = MESURES[rb.id] || {};
+      return CHOIX[rb.id] && m.trouvees > 0;
+    }).length;
+    var aInserer = mis - aRemplir;
+    var quoi = [];
+    if (aInserer > 0) quoi.push(aInserer + " rubrique" + (aInserer > 1 ? "s" : "") + " à insérer");
+    if (aRemplir > 0) quoi.push(aRemplir + " rubrique" + (aRemplir > 1 ? "s" : "") +
+      " présente" + (aRemplir > 1 ? "s" : "") + " mais à remplir");
+    if (!quoi.length) quoi.push("aucune rubrique à reprendre");
+    $("#etat").textContent = quoi.join(", ") + ", " +
       lignes + " ligne" + (lignes > 1 ? "s" : "") + " · " + chiffrees + " ligne" +
       (chiffrees > 1 ? "s" : "") + " chiffrée" + (chiffrees > 1 ? "s" : "") + " sur " + totalLignes +
       " dans votre base" + (aRens ? ", " + aRens + " portée" + (aRens > 1 ? "s" : "") + " « à renseigner »" : "");

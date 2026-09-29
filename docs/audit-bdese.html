@@ -1195,8 +1195,30 @@
     items.push({ k: "sur", t: ent });
     if (profil.adresse) items.push({ k: "sur", t: profil.adresse });
     items.push({ k: "t1", t: "Avis d'actualisation de la base de données économiques, sociales et environnementales" });
-    items.push({ k: "p", t: "Destinataires : " + (qui ||
-      "les membres de la délégation du personnel du comité social et économique et les délégués syndicaux") + "." });
+    /* LE DESTINATAIRE SUIT LA FICHE, ET IL N'Y A PAS D'ÉLUS SANS ÉLECTION.
+
+       L'avis s'adressait « aux membres de la délégation du personnel du comité
+       social et économique et aux délégués syndicaux » à une entreprise dont
+       la fiche porte un procès-verbal de carence. Relevé le 29 septembre 2026.
+       R. 2312-12 (LEGIARTI000036411586, lu au relais le 29 septembre 2026,
+       deux lectures concordantes) renvoie aux « personnes mentionnées au
+       dernier alinéa de l'article L. 2312-36 » : ce sont celles qui existent. */
+    var repCseB = String(profil.cseExiste || "").trim().toLowerCase();
+    var sansComiteB = repCseB.indexOf("non") === 0;
+    var quiDefaut = sansComiteB
+      ? "les délégués syndicaux - votre fiche ne porte aucun comité social et économique"
+      : "les membres de la délégation du personnel du comité social et économique et les délégués syndicaux";
+    items.push({ k: "p", t: "Destinataires : " + (qui || quiDefaut) + "." });
+    if (sansComiteB && !qui)
+      items.push({ k: "p", t: "Aucun comité n'est en place à ce jour : " +
+        (repCseB.indexOf("non, procès-verbal") === 0 || repCseB.indexOf("non, proces-verbal") === 0
+          ? "un procès-verbal de carence a été établi."
+          : (repCseB.indexOf("non, élections en cours") === 0 || repCseB.indexOf("non, elections en cours") === 0
+            ? "les élections sont en cours d'organisation."
+            : "aucune élection n'a été organisée.")) +
+        " La base reste due et se tient à jour ; le présent avis sera adressé aux élus dès " +
+        "qu'un comité sera en place. S'il n'y a pas non plus de délégué syndical, gardez-le " +
+        "daté au dossier et envoyez-le le jour où l'un ou l'autre existe." });
     items.push({ k: "p", t: "Madame, Monsieur," });
     items.push({ k: "p", t: "La base de données économiques, sociales et environnementales de " + ent +
       " a été actualisée" + (le ? " le " + jourFr(le) : "") + "." });
@@ -1204,13 +1226,25 @@
       "perspectives des trois années suivantes (L. 2312-36)." });
     items.push({ k: "p", t: "Elle est tenue à votre disposition sur support " + support +
       (ou ? ", " + ou : ", [préciser où et comment elle se consulte]") +
-      ". Vous pouvez la consulter et l'utiliser pour l'exercice de vos attributions, " +
-      "sans limitation de durée pendant votre mandat." });
+      ". Vous pouvez la consulter et l'utiliser pour l'exercice de vos attributions." });
     items.push({ k: "p", t: "Ces modalités sont celles que l'employeur fixe en application de " +
       "l'article R. 2312-12 du code du travail, à défaut d'accord conclu sur le fondement " +
       "de l'article L. 2312-21." });
+    /* LA DURÉE DU CARACTÈRE CONFIDENTIEL EST UNE MENTION DUE.
+
+       « Les informations figurant dans la base de données qui revêtent un
+       caractère confidentiel doivent être présentées comme telles par
+       l'employeur qui indique la durée du caractère confidentiel de ces
+       informations » (R. 2312-13, LEGIARTI000036411588, lu au relais le
+       29 septembre 2026, deux lectures concordantes). L'avis n'en disait rien,
+       et il écrivait à la place « sans limitation de durée pendant votre
+       mandat », qui n'est dans aucun des deux textes. Relevé le 29 septembre
+       2026. */
     items.push({ k: "p", t: "Les informations présentées comme confidentielles sont couvertes par " +
-      "l'obligation de discrétion du dernier alinéa de l'article L. 2312-36." });
+      "l'obligation de discrétion du dernier alinéa de l'article L. 2312-36. Chacune porte, " +
+      "dans la base, la durée de son caractère confidentiel, que l'employeur indique " +
+      "(R. 2312-13) : [durée retenue, par exemple trois ans à compter de la mise à " +
+      "disposition, ou la durée que l'accord prévoit]." });
     items.push({ k: "p", t: " " });
     items.push({ k: "p", t: (respFiche() || "[nom et qualité du représentant légal]") });
     items.push({ k: "p", t: ent });

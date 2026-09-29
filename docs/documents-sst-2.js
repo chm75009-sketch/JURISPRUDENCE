@@ -166,10 +166,21 @@
   function cseDe(ctx) {
     var f = (ctx && ctx.fiche) || {}, c = f.cse || {};
     if (c.existe === undefined || c.existe === null || c.existe === "") {
+      /* QUATRE RÉPONSES, ET L'ÉGALITÉ STRICTE N'EN RECONNAISSAIT PLUS AUCUNE.
+
+         La fiche répond « oui, élu », « non, procès-verbal de carence »,
+         « non, élections en cours d'organisation » ou « non, aucune élection
+         organisée » depuis qu'elle distingue les trois façons de n'avoir pas
+         de comité. Le test « v === "non" » ne reconnaissait plus rien, et
+         l'affiche du harcèlement sortait avec « 5° Référent du comité social
+         et économique (L. 2314-1) [ADRESSE] [NUMÉRO] [NOM, PRÉNOM] » pour une
+         entreprise en carence. Relevé le 29 septembre 2026. Le premier mot
+         suffit, comme partout ailleurs. */
       var v = String(((ctx && ctx.profil) || {}).cseExiste || "").trim().toLowerCase();
-      if (v === "oui" || v === "non") {
+      var m = v.indexOf("oui") === 0 ? "oui" : (v.indexOf("non") === 0 ? "non" : "");
+      if (m) {
         var d = {}; for (var k in c) if (Object.prototype.hasOwnProperty.call(c, k)) d[k] = c[k];
-        d.existe = v; c = d;
+        d.existe = m; c = d;
       }
     }
     return c;
@@ -300,14 +311,35 @@
       "ici : ce texte n'est pas reproduit, et l'exemple ne l'invente pas.",
       "",
     ];
+    /* DEUX GÉNÉRATEURS POUR LE MÊME TEXTE, ET UN SEUL L'AVAIT.
+
+       L'écran de contrôle des affichages reproduisait les deux articles du
+       code pénal, lus et datés ; le parcours, lui, laissait « [TEXTE À
+       REPORTER…] » sur l'affiche que le client allait poser au mur. Or c'est
+       bien LEUR TEXTE que L. 1152-4 et L. 1153-5 obligent à porter à la
+       connaissance des salariés, non leur numéro ni un résumé. Relevé le
+       29 septembre 2026. Les deux puisent désormais au même fichier,
+       textes-penal.js. */
+    var TP = (typeof window !== "undefined" && window.TextesPenal) || null;
+    var num = /222-33-2/.test(lesquels) ? "222-33-2" : (/222-33/.test(lesquels) ? "222-33" : "");
+    var art = (TP && num) ? TP.bloc(num) : null;
+    if (art) return [
+      art.nom + ", reproduit en entier dans sa version en vigueur",
+      "(version " + art.id + ", " + art.lu + ") :",
+      "",
+      art.t,
+      "",
+      "Notez sur le support la date de l'affichage : ces articles ont été modifiés",
+      "plusieurs fois, et c'est la version en vigueur ce jour-là qui est due.",
+      "",
+    ];
     return [
       "[TEXTE À REPORTER, " + lesquels + ".",
-      " SEUL LE CODE DU TRAVAIL est lu ici : ces articles du CODE PÉNAL n'ont",
-      " pas été lus et ne sont donc pas reproduits. Or c'est bien LEUR",
+      " Le texte de cet article n'a pas pu être chargé ici. Or c'est bien LEUR",
       " TEXTE que L. 1152-4 et L. 1153-5 obligent à porter à la connaissance des",
-      " salariés, non leur numéro, ni un résumé. Recopiez-les intégralement,",
-      " dans leur version en vigueur au jour de l'affichage, et notez cette date",
-      " sur le support : ces articles ont été modifiés plusieurs fois.]",
+      " salariés, non leur numéro, ni un résumé. Recopiez-le intégralement,",
+      " dans sa version en vigueur au jour de l'affichage, et notez cette date",
+      " sur le support : cet article a été modifié plusieurs fois.]",
       "",
     ];
   }

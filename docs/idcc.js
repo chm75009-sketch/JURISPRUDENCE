@@ -310,5 +310,25 @@
     if (input) input._idccMots = mots || [];
   }
 
-  window.IDCC = { attacher: attacher, charger: charger, definirMots: definirMots };
+  /* L'INTITULÉ ENTIER, POUR QUI NE VEUT QUE LUI.
+
+     La fiche enregistre ce que l'utilisatrice a choisi, souvent « 0016 -
+     transports routiers ». Les écrans qui veulent le nom complet de la
+     convention n'avaient aucun moyen de l'obtenir : ils réaffichaient la
+     saisie. Relevé le 29 septembre 2026. Cette fonction rend l'intitulé
+     officiel du jeu de données de la DILA, à partir du numéro qu'on lui
+     donne ou qu'elle trouve dans le texte saisi. */
+  function intitule(quoi) {
+    var num = (/(\d{1,4})/.exec(String(quoi || "")) || [])[1];
+    if (!num) return Promise.resolve("");
+    var cible = String(Number(num));
+    return charger().then(function (L) {
+      for (var i = 0; i < L.length; i++)
+        if (String(Number(L[i].idcc)) === cible) return L[i].intitule || "";
+      return "";
+    });
+  }
+
+  window.IDCC = { attacher: attacher, charger: charger, definirMots: definirMots,
+    intitule: intitule };
 })();

@@ -61,6 +61,12 @@ const ECRANS = [
     avant: '[data-courrier], button[data-doc]' },
   { page: "parcours.html?p=duerp&faire=1", bouton: /excel|classeur|tableur/i,
     avant: '[data-courrier], button[data-doc]' },
+  /* LES DEUX CLASSEURS DE LA BASE DE DONNÉES, ET PAS SEULEMENT CELUI DU
+     PARCOURS. La contre-vérification du 29 septembre 2026 en a ouvert un
+     second, produit par l'audit, dont les propriétés étaient vides : openpyxl
+     y lisait alors son propre nom en auteur. */
+  { page: "parcours.html?p=registre&faire=1", bouton: /excel|classeur|tableur/i,
+    avant: '[data-courrier], button[data-doc]' },
 ];
 
 const dossier = fs.mkdtempSync(path.join(os.tmpdir(), "xlsx-"));
@@ -79,7 +85,7 @@ const fichiers = [];
 let fautes = 0;
 for (const e of ECRANS) {
   await page.goto(RACINE + "/" + e.page);
-  await page.waitForTimeout(1300);
+  await page.waitForTimeout(1800);
   await page.evaluate(() => { window.Apercu = null; });
   if (e.avant) {
     /* Le document d'un parcours se charge à la demande : le bouton du classeur
@@ -95,7 +101,7 @@ for (const e of ECRANS) {
         return Array.prototype.some.call(document.querySelectorAll("button"),
           (x) => !x.disabled && !x.hidden && re.test(String(x.textContent || "")));
       }, e.bouton.source, { timeout: 12000 }).catch(() => null);
-    await page.waitForTimeout(400);
+    await page.waitForTimeout(700);
   }
   const trouve = await page.evaluate((src) => {
     const re = new RegExp(src, "i");
@@ -146,6 +152,14 @@ for cle, chemin in json.load(sys.stdin):
             continue
         if "<dc:creator></dc:creator>" in core or "<dc:creator/>" in core:
             sortie.append([cle, "aucun auteur dans les proprietes"]); continue
+        # UN CLASSEUR SANS STYLE PAR DEFAUT N'EST PAS UN CLASSEUR FINI.
+        # openpyxl le dit en toutes lettres a la lecture : « Workbook contains
+        # no default style ». Releve le 29 septembre 2026.
+        if "xl/styles.xml" not in z.namelist():
+            sortie.append([cle, "aucune feuille de styles : Excel applique les siens"]); continue
+        styles = z.read("xl/styles.xml").decode("utf-8", "replace")
+        if "cellStyleXfs" not in styles:
+            sortie.append([cle, "aucun style par defaut dans xl/styles.xml"]); continue
         w = load_workbook(chemin, data_only=True)
         if not w.sheetnames:
             sortie.append([cle, "classeur sans onglet"]); continue

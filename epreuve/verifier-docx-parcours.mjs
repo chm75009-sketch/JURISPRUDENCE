@@ -111,6 +111,17 @@ for (const cle of PARCOURS) {
     } else {
       const nom = path.join(dossier, (cle + "-" + id).replace(/[^A-Za-z0-9-]/g, "_") + ".docx");
       await dl.saveAs(nom);
+      /* LE NOM DU FICHIER EST LA PREMIÈRE CHOSE QUE LE CLIENT LIT.
+
+         « dans-cet-ordre.docx » ne dit pas ce qu'il contient : relevé le
+         29 septembre 2026. Un nom d'un seul mot, ou qui commence par un
+         intitulé de section, est refusé. */
+      const donne = dl.suggestedFilename();
+      if (/^(dans-cet-ordre|document|sans-titre|download|a-completer)\b/i.test(donne) ||
+          donne.replace(/\.docx$/i, "").split("-").length < 2) {
+        console.log("FAUTE " + cle + " · " + id + " : le fichier s'appelle « " + donne + " »");
+        fautes++;
+      }
       fichiers.push([cle + " · " + id, nom]);
     }
     await page.goto(RACINE + "/parcours.html?p=" + cle);
@@ -130,7 +141,8 @@ OUTIL = re.compile(r"claude|anthropic|juris.?expert|openpyxl|python-docx|github"
 # fictive, et rien d'eux ne doit survivre sous l'en-tete du client.
 FICTIONS = re.compile(
     r"TRANSPORTS EXEMPLE|EXEMPLE SARL|Isabelle PONS|Eric DUVAL|\\u00c9ric DUVAL|Marc TISSIER|"
-    r"FERRAND|Lagny-sur-Marne|Seine-et-Marne|transports-exemple", re.I)
+    r"FERRAND|Lagny-sur-Marne|Seine-et-Marne|transports-exemple|Julie ROUX|"
+    r"YYYYY|ZZZZZ|AAAAA SARL|rez-de-chauss\\u00e9e du d\\u00e9p\\u00f4t|referent@", re.I)
 BANDEAU = re.compile(r"^\\s*(\\u00c0 ADAPTER|A ADAPTER|EXEMPLE\\b)", re.M)
 TITRE_EX = re.compile(r"- EXEMPLE\\s*$", re.M)
 

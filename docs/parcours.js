@@ -3865,7 +3865,10 @@
        famille, et il passe avant le transport, qui s'y ajoute. */
     DIS: ["documents-produits.js", "documents-discipline.js", "documents-discipline-2.js",
       "duerp-metiers.js", "duerp-transport.js"],
-    SST: ["documents-produits.js", "documents-sst.js", "documents-sst-2.js"],
+    /* textes-penal.js porte les deux articles du code pénal que l'affichage
+       du harcèlement doit reproduire : sans lui, l'affiche sortait avec un
+       crochet à la place du texte. */
+    SST: ["documents-produits.js", "textes-penal.js", "documents-sst.js", "documents-sst-2.js"],
     CSE: ["documents-produits.js", "documents-cse.js", "documents-cse-2.js", "documents-cse-3.js"],
     /* documents-rh.js porte la base elle-même (BDESE-CTL-CNT-00), écrite le
        2 septembre 2026 : « non » doit donner la base, non une note sur le
@@ -3963,8 +3966,16 @@
       /* Les tableaux de la feuille elle-même partent en Excel, une feuille
          par tableau, l'exemple rempli puis le modèle à compléter ; le
          tableur du générateur, s'il existe, vient en dernier onglet. */
+      /* LE BOUTON SE DÉCIDE SUR LE TEXTE QUI PARTIRA, PAS SUR CELUI QUI
+         S'AFFICHE.
+
+         Il paraissait dès que le modèle portait un tableau, exemple compris.
+         Or le fichier, lui, est écrit sans l'exemple : quand tous les tableaux
+         étaient dans celui-ci, le bouton était là et ne produisait rien. Ni
+         fichier, ni message. Relevé le 29 septembre 2026 sur le parcours de
+         l'index de l'égalité. */
       if (window.FeuilleDoc && window.TableurExport &&
-          window.FeuilleDoc.tableaux(window.FeuilleDoc.blocs(COURRIER.modele)).length)
+          window.FeuilleDoc.tableaux(window.FeuilleDoc.blocs(sansEx(COURRIER.modele))).length)
         TABLEUR = { nom: gen.nom, feuille: true, lignes: TABLEUR ? TABLEUR.lignes : null };
       $("dt-tableur").hidden = !TABLEUR;
       $("dt-titre").textContent = gen.nom;
@@ -4380,7 +4391,18 @@
       '<cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
       '<xf numFmtId="0" fontId="1" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center" wrapText="1"/></xf>' +
       '<xf numFmtId="0" fontId="0" fillId="0" borderId="1" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
-      "</cellXfs></styleSheet>";
+      /* LE STYLE PAR DÉFAUT MANQUAIT, ET AVEC LUI LES PROPRIÉTÉS.
+
+         openpyxl le disait en toutes lettres à la lecture, « Workbook contains
+         no default style », et lisait son propre nom en auteur, faute de
+         docProps. Le classeur de la base de données sortait ainsi sous le nom
+         d'une bibliothèque Python que le client n'a jamais installée. Relevé
+         le 29 septembre 2026. Le style normal est déclaré, et les propriétés
+         viennent de tableur-export.js, qui les écrit déjà pour les siens. */
+      '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+      "</styleSheet>";
+    var props = (window.TableurExport && window.TableurExport.proprietes)
+      ? window.TableurExport.proprietes({ titre: (TABLEUR && TABLEUR.nom) || "" }) : null;
 
     return zip([
       { nom: "[Content_Types].xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
@@ -4389,10 +4411,14 @@
         '<Default Extension="xml" ContentType="application/xml"/>' +
         '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
         '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
-        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>' },
+        '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+        (props ? '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' : "") +
+        "</Types>" },
       { nom: "_rels/.rels", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
-        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>' },
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+        (props ? '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>' : "") +
+        "</Relationships>" },
       { nom: "xl/workbook.xml", contenu: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
         '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' +
         'xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
@@ -4403,7 +4429,7 @@
         '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>' },
       { nom: "xl/styles.xml", contenu: styles },
       { nom: "xl/worksheets/sheet1.xml", contenu: feuille },
-    ]);
+    ].concat(props ? [{ nom: "docProps/core.xml", contenu: props }] : []));
   }
 
   function nomFichier(nom) {
@@ -4416,7 +4442,13 @@
     if (TABLEUR.feuille) {
       var feuilles = window.FeuilleDoc.tableaux(blocsDuDocument());
       if (TABLEUR.lignes) feuilles.push({ titre: "Modèle vierge", lignes: TABLEUR.lignes });
-      if (feuilles.length) window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles), nomFichier(TABLEUR.nom) + ".xlsx");
+      /* Un bouton qui ne produit rien doit au moins le dire. */
+      if (!feuilles.length) {
+        etatCourrier("Ce document ne porte aucun tableau à emporter dans un tableur.");
+        return;
+      }
+      window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles),
+        nomFichier(TABLEUR.nom) + ".xlsx");
       return;
     }
     var a = document.createElement("a");
@@ -4462,9 +4494,20 @@
        celui du gérant, et rien d'autre. Le titre du document se prend donc
        dans le document lui-même, et les propriétés reçoivent l'entreprise et
        la personne qui signe. Relevé le 25 septembre 2026. */
+    /* UN INTITULÉ DE SECTION N'EST PAS LE NOM D'UN DOCUMENT.
+
+       Le premier titre de l'onglet des formalités du règlement est « DANS CET
+       ORDRE », qui annonce les cinq étapes : le fichier s'appelait donc
+       « dans-cet-ordre.docx ». Relevé le 29 septembre 2026. Ces intitulés-là
+       sont sautés, et l'on prend le premier titre qui nomme quelque chose,
+       ici « ÉTAPE 1 - L'AVIS DU COMITÉ SOCIAL ET ÉCONOMIQUE ». */
+    var INTRO = /^(DANS CET ORDRE|AVANT DE DÉPOSER|LE DROIT QUI FONDE|VOS PIÈCES|VOTRE CALENDRIER|LES RÈGLES|LES TEXTES|COMMENT SE SERVIR|À COMPLÉTER)/;
     var propre = titre;
-    for (var iT = 0; iT < items.length && iT < 10; iT++) {
-      if (items[iT].k === "t1" || items[iT].k === "h1") { propre = items[iT].t; break; }
+    for (var iT = 0; iT < items.length && iT < 12; iT++) {
+      if (items[iT].k !== "t1" && items[iT].k !== "h1") continue;
+      if (INTRO.test(String(items[iT].t || "").trim())) continue;
+      propre = items[iT].t;
+      break;
     }
     var maison = String((PROFIL && (PROFIL.denomination || PROFIL.entreprise)) || "").trim();
     AuditExport.telecharger(AuditExport.docx(items, propre, {

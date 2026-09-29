@@ -217,10 +217,16 @@
               "Mention « mis à disposition par un groupement d'employeurs » + groupement",
               "Mention « salarié à temps partiel »",
               "Mention « apprenti » ou « contrat de professionnalisation »"]);
-      L.push(["1", "YYYYY Jean", "française", "12/04/1988", "M", "Conducteur poids lourd",
-              "Ouvrier, coefficient 138 M", "15/09/2026", "", "", "", "", "", "", "", ""]);
-      L.push(["2", "ZZZZZ Sofia", "portugaise", "03/11/1995", "F", "Agent d'exploitation",
-              "Employé, coefficient 120", "01/10/2026", "", "",
+      /* LES DATES DU MODÈLE SONT DES DATES, PAS DU TEXTE.
+
+         Écrites « 12/04/1988 », elles apprenaient au client à taper du texte
+         dans une colonne de dates : son classeur ne se triait plus et ne se
+         calculait plus. Relevé le 29 septembre 2026. Le générateur du tableur
+         les passe en vraies dates, comme le registre le fait déjà. */
+      L.push(["1", "YYYYY Jean", "française", new Date(1988, 3, 12), "M", "Conducteur poids lourd",
+              "Ouvrier, coefficient 138 M", new Date(2026, 8, 15), "", "", "", "", "", "", "", ""]);
+      L.push(["2", "ZZZZZ Sofia", "portugaise", new Date(1995, 10, 3), "F", "Agent d'exploitation",
+              "Employé, coefficient 120", new Date(2026, 9, 1), "", "",
               "Carte de séjour pluriannuelle n° [NUMÉRO]", "contrat à durée déterminée", "", "",
               "salarié à temps partiel", ""]);
       L.push(["3", "[NOM ET PRÉNOMS]", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]);

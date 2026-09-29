@@ -173,9 +173,16 @@
        vu. Ou bien un avenant est nommé, ou bien on déclare qu'il n'y en a pas de
        nouveau, et le bouton attend l'un des deux. Le 28 septembre 2026. */
     var pret = !!(s.avenant || s.aucunAvenant);
-    return '<div class="conv' + (s.vieille ? " alerte" : "") + '">' +
+    return '<div class="conv' + (s.vieille ? " alerte" : "") + '" data-idcc="' + ech(idcc) + '">' +
       '<span class="et">Convention collective appliquée</span>' +
       '<span class="v">' + ech(s.convention) + "</span>" +
+      /* L'INTITULÉ ENTIER, SOUS LA SAISIE.
+
+         Le bloc affichait « 0016 - transports routiers », qui est ce que la
+         fiche porte, et non le nom de la convention. Relevé le 29 septembre
+         2026. idcc.js le connaît, il vient du jeu de données de la DILA : il
+         se pose ici dès qu'il est chargé, sans faire attendre l'écran. */
+      '<span class="q intitule-idcc" hidden></span>' +
       '<span class="q">' + ech(quand) + "." + ech(av) + " " + ech(dit) + "</span>" +
       '<span class="q">Le texte et ses avenants : <a href="' + ech(lien) +
       '" target="_blank" rel="noopener">l\'outil public des conventions collectives</a>' +
@@ -194,6 +201,20 @@
       "</div>";
   }
 
+  /* Le nom complet, cherché après coup : il ne retarde rien s'il n'arrive pas. */
+  function completerIntitule(el) {
+    if (!el || !window.IDCC || !window.IDCC.intitule) return;
+    var bloc = el.querySelector ? el.querySelector(".conv") : null;
+    var cible = bloc ? bloc.querySelector(".intitule-idcc") : null;
+    var num = bloc ? bloc.getAttribute("data-idcc") : "";
+    if (!cible || !num) return;
+    window.IDCC.intitule(num).then(function (t) {
+      if (!t) return;
+      cible.textContent = t + ".";
+      cible.hidden = false;
+    }).catch(function () {});
+  }
+
   function poser(el) {
     if (!el) return;
     var doc = el.ownerDocument || window.document;
@@ -201,6 +222,7 @@
     function rendre() {
       var s = suivi();
       el.innerHTML = html(s);
+      completerIntitule(el);
       var b = doc.getElementById("conv-ok");
       var i = doc.getElementById("conv-avenant");
       var r = doc.getElementById("conv-rien");

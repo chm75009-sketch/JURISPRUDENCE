@@ -111,6 +111,7 @@
 </main>
 
 <script src="profil.js"></script>
+<script src="idcc.js"></script>
 <script src="convention.js"></script>
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
@@ -166,7 +167,7 @@
     function ouvrir(id, bouton) {
       var libelle = bouton.textContent;
       bouton.disabled = true; bouton.textContent = "Un instant…";
-      charger(["documents-produits.js", "documents-sst.js", "documents-sst-2.js"], function (err) {
+      charger(["documents-produits.js", "textes-penal.js", "documents-sst.js", "documents-sst-2.js"], function (err) {
         bouton.disabled = false; bouton.textContent = libelle;
         if (err || !window.DocumentsProduits) {
           $("suite-dit").textContent = "Le générateur n'a pas pu être chargé. Rechargez la page et réessayez.";
