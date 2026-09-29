@@ -69,6 +69,10 @@
     M.push({
       theme: theme, id: id, titre: titre, objet: objet, corps: corps,
       adjonction: !!o.adjonction, urgence: !!o.urgence,
+      /* Une note qui parle des élus, de leur mandat et de leurs heures de
+         délégation suppose un comité. Sans lui, elle n'a rien à dire :
+         l'écran la retire au lieu de la proposer avec ses crochets vides. */
+      comite: !!o.comite,
       secteurs: o.secteurs || null, note: o.note || "",
     });
   }
@@ -806,7 +810,8 @@
      "",
      "Le registre des questions et des réponses de l'employeur est consultable à [LIEU].",
      "",
-     "Les heures de délégation sont du temps de travail : elles se prennent librement et se paient à l'échéance normale."]);
+     "Les heures de délégation sont du temps de travail : elles se prennent librement et se paient à l'échéance normale."],
+    { comite: true });
 
   a("rep", "rep-entretien", "Entretiens professionnels",
     "Campagne d'entretiens professionnels",

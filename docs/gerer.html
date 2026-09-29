@@ -5057,10 +5057,15 @@
 
        La liste offrait convocation, ordre du jour et procès-verbal à une
        entreprise dont la fiche répond « non » : relevé le 26 septembre 2026.
-       Les trois restent accessibles, parce qu'on prépare une première
-       réunion avant de l'avoir, mais ce qui vient d'abord est ce qui est dû,
-       les élections, et le procès-verbal de carence si elles ne donnent
-       aucun candidat. */
+       On les avait laissés accessibles, au motif qu'on prépare une première
+       réunion avant de l'avoir. C'était une commodité de rédacteur, pas une
+       réponse à la fiche : relevé de nouveau le 29 septembre 2026, avec
+       « non, élections en cours d'organisation ». On ne convoque pas un
+       comité qui n'existe pas, on ne lui fait pas d'ordre du jour et on ne
+       rédige pas le procès-verbal d'une réunion qui n'a pas eu lieu. Les
+       trois disparaissent donc tant que la fiche dit « non », et ce qui
+       reste est ce qui est dû : les élections, puis le procès-verbal de
+       carence si le scrutin ne donne aucun candidat. */
     /* La fiche répond « non, procès-verbal de carence » ou « non, aucune
        élection organisée » ; le parcours écrit « non ». Le premier mot
        suffit, et l'égalité stricte ne reconnaissait plus rien. */
@@ -5096,6 +5101,10 @@
         ") : la ligne ci-dessous écrit ce qui l'engage. L'entrave à sa constitution est punie " +
         "d'un an d'emprisonnement et de 7 500 euros d'amende (" + ref(["L2317-1"]) + ").";
     }
+    if (sansCse && noteCse)
+      noteCse += " La convocation du comité, son ordre du jour et son procès-verbal ne sont pas " +
+        "proposés tant que la fiche répond « non » : ils s'ouvriront le jour où elle portera un " +
+        "comité en place.";
     GROUPES.forEach(function (g) {
       h += '<p class="groupe">' + ech(g[0]) + "</p>";
       if (g[0] === "Collectif" && noteCse)
@@ -5135,6 +5144,7 @@
           "</p>";
       }
       g[1].forEach(function (cle) {
+        if (sansCse && DOCS[cle] && DOCS[cle].comite) return;
         if (transport16 && (cle === "cdi" || cle === "cdd" || cle === "partiel")) {
           if (cle === "cdi")
             h += ligne("contrats-transport.html", "Contrat de travail",

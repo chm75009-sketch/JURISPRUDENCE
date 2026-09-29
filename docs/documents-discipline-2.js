@@ -775,10 +775,20 @@
       L.push("Entreprise EXEMPLE SARL - dossier disciplinaire MARTIN");
       L.push("Relevé établi le 15 janvier 2027");
       L.push("");
+      /* L'EXEMPLE NE CITE PLUS LA CONVENTION D'UN AUTRE MÉTIER.
+
+         Il portait « Convention collective nationale du commerce de détail »,
+         et c'est ce qu'un transporteur lisait dans son propre parcours de
+         sanction. Relevé le 29 septembre 2026. Deux façons de le réparer, et
+         une seule est honnête : mettre le nom de la convention de la fiche
+         obligerait à lui prêter un article 42 que personne n'y a lu. La
+         clause reste donc celle d'une entreprise fictive, dite comme telle,
+         et la fiche à remplir juste dessous porte la vraie. */
       L.push("1. CLAUSE CONSULTÉE");
-      L.push("   Convention collective nationale du commerce de détail");
-      L.push("   Article 42 : « Avant toute sanction autre que l'avertissement, le chef");
-      L.push("   d'entreprise doit consulter le comité d'établissement »");
+      L.push("   Convention collective applicable à EXEMPLE SARL");
+      L.push("   Article 42, clause fictive donnée pour montrer ce qu'on relève :");
+      L.push("   « Avant toute sanction autre que l'avertissement, le chef d'entreprise");
+      L.push("   doit consulter le comité d'établissement »");
       L.push("");
       L.push("2. DÉLAIS IMPOSÉS PAR LA CLAUSE");
       L.push("   Saisine : avant la notification de la sanction");
@@ -801,7 +811,10 @@
       L.push("Relevé établi le [DATE]");
       L.push("");
       L.push("1. CLAUSE CONSULTÉE");
-      L.push("   Convention collective : [TITRE ET IDCC]");
+      /* La convention est sur la fiche d'entreprise : la fiche à remplir la
+         redemandait en crochet. Relevé le 29 septembre 2026. */
+      L.push("   Convention collective : " +
+        cro((ctx.profil || {}).conventionCollective, "TITRE ET IDCC"));
       L.push("   Clause : [ARTICLE - recopiez le texte exact]");
       L.push("");
       L.push("2. DÉLAIS IMPOSÉS PAR LA CLAUSE");

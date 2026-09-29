@@ -234,6 +234,22 @@ button.second:disabled:hover,.btn.second:disabled:hover{background:var(--surface
 .btn.petit,button.petit,td button,th button,.compteurs button{font-size:var(--t3);padding:9px 14px;
   min-height:var(--h-touche);border-radius:var(--r1);border-width:1px}
 
+/* LE DÉPÔT D'UN FICHIER : UN BOUTON COMME LES AUTRES, ET LE NOM À CÔTÉ.
+
+   Le champ nu du navigateur rendait « Choose File / No file chosen », en
+   anglais et dans une autre police. Relevé le 29 septembre 2026 sur le
+   contrôle du document unique. champ-fichier.js cache le champ et pose ces
+   deux éléments à la place. Sur téléphone, le nom passe sous le bouton
+   plutôt que de le comprimer. */
+.champ-fichier{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 0;max-width:100%}
+.cf-bouton{font:600 var(--t3)/1.2 system-ui;padding:11px 16px;border-radius:var(--r1);
+  min-height:var(--h-touche);border:1px solid var(--accent);background:var(--surface);
+  color:var(--accent);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  text-align:center;white-space:nowrap}
+.cf-bouton:hover{background:var(--accent-clair);color:var(--accent-fonce)}
+.cf-nom{font-size:var(--t3);color:var(--texte-2);min-width:0;overflow-wrap:anywhere}
+@media (max-width:420px){.champ-fichier{gap:8px}.cf-nom{flex:1 0 100%}}
+
 /* Un bouton qui n'agit pas sur le dossier mais ouvre une explication se lit
    comme un lien, pas comme une commande. */
 .lien-avert{font:inherit;font-size:inherit;border:none;background:none;padding:0;min-height:0;

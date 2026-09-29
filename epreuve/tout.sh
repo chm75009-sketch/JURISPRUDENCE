@@ -1,10 +1,10 @@
 #!/bin/bash
 # TOUTES LES ÉPREUVES, DANS L'ORDRE, D'UNE SEULE COMMANDE.
 #
-# Onze contrôles vivent dans ce dossier, et il fallait se souvenir de chacun
-# avant de publier. Celui-ci les enchaîne : les six qui tournent sans
+# Quatorze contrôles vivent dans ce dossier, et il fallait se souvenir de
+# chacun avant de publier. Celui-ci les enchaîne : les six qui tournent sans
 # navigateur d'abord, parce qu'ils sont instantanés et qu'ils attrapent le
-# plus ; les cinq balayages ensuite, qui ouvrent Chromium et prennent leur
+# plus ; les huit balayages ensuite, qui ouvrent Chromium et prennent leur
 # temps. Écrit le 28 septembre 2026.
 #
 #   bash epreuve/tout.sh            toutes les épreuves
@@ -54,6 +54,7 @@ passe "Les 41 pages, à 390 et à 1280 points" $NODE epreuve/balayer-pages.mjs
 passe "Les écrans du comité, sous les quatre réponses" $NODE epreuve/verifier-comite.mjs
 passe "Les écrans de contrôle, pièce déposée" $NODE epreuve/balayer-controles.mjs
 passe "Les parcours guidés, remplis" $NODE epreuve/balayer-parcours.mjs
+passe "Sans comité, le dépôt et l'exemple de la sanction" $NODE epreuve/verifier-sans-comite.mjs
 passe "Les documents du quotidien" $NODE epreuve/balayer-gerer.mjs
 passe "Les fichiers Word, rouverts avec python-docx" $NODE epreuve/verifier-docx.mjs
 passe "Les classeurs, rouverts avec openpyxl" $NODE epreuve/verifier-xlsx.mjs

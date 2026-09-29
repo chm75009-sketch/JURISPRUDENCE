@@ -275,6 +275,35 @@
   function aCarence() { return /^non.*(proc[eè]s-verbal|carence)/.test(repCse()); }
   function electionsEnCours() { return /^non.*(en cours|organisation)/.test(repCse()); }
   function aucuneElection() { return /^non.*aucune/.test(repCse()); }
+  function sansComite() { return repCse().indexOf("non") === 0; }
+
+  /* UNE NOTE NE PARLE PAS D'UN COMITÉ QUI N'EXISTE PAS.
+
+     Relevé le 29 septembre 2026 : la fiche répondait « non, élections en cours
+     d'organisation » et l'écran proposait quand même la note « Comité social
+     et économique : information », qui nomme les élus, la durée de leur mandat
+     et leurs heures de délégation. Le salarié l'aurait lue sur le panneau. Elle
+     est retirée tant que la fiche dit « non », comme les documents du comité
+     dans l'écran du quotidien. Et la note des affichages, qui renvoyait au
+     panneau des représentants du personnel, dit à la place qu'il n'y en a pas
+     encore. */
+  var SANS_COMITE = [
+    [/^Le panneau réservé aux représentants du personnel/,
+     "Aucun comité social et économique n'est en place à ce jour : le panneau qui lui " +
+     "reviendra sera désigné dès son élection."],
+  ];
+  function corpsDu(m) {
+    if (!sansComite()) return m.corps;
+    var L = [];
+    m.corps.forEach(function (l) {
+      var t = l;
+      SANS_COMITE.forEach(function (r) { if (r[0].test(l)) t = r[1]; });
+      if (t === "" && L.length && L[L.length - 1] === "") return;
+      L.push(t);
+    });
+    while (L.length && L[L.length - 1] === "") L.pop();
+    return L;
+  }
 
   /* CE QUI ACCOMPAGNE L'ENVOI À L'INSPECTION DU TRAVAIL, SELON LES QUATRE
      RÉPONSES. L. 1321-4 (LEGIARTI000054140230, lu à la source le 28 septembre
@@ -391,6 +420,7 @@
       if (m.theme !== cle) return false;
       if (m.secteurs && m.secteurs.indexOf(SECTEUR) < 0) return false;
       if (remplacees[m.id]) return false;
+      if (m.comite && sansComite()) return false;
       return true;
     });
   }
@@ -475,7 +505,7 @@
       : "Note de service (numéro attribué à la validation)") + "</p>";
     h += '<p class="date">' + ech(ville() + ", le " + leJour()) + "</p>";
     h += '<p class="titre">' + rouge(m.titre) + "</p>";
-    h += m.corps.map(function (l) { return l === "" ? "" : "<p>" + rouge(l) + "</p>"; }).join("");
+    h += corpsDu(m).map(function (l) { return l === "" ? "" : "<p>" + rouge(l) + "</p>"; }).join("");
     /* LA NOTE DIT ELLE-MÊME QUAND ELLE ENTRE EN VIGUEUR.
 
        « Le règlement intérieur indique la date de son entrée en vigueur.
@@ -532,10 +562,19 @@
       "<li>entrée en vigueur à une date postérieure d'un mois à ces formalités ;</li>" +
       "<li>la note indique elle-même sa date d'entrée en vigueur.</li></ul>";
     if (m.urgence) {
+      /* Le texte dit « au secrétaire du comité social et économique et à
+         l'inspecteur du travail » (L. 1321-5). Quand il n'y a pas de comité,
+         il n'y a pas de secrétaire : reste l'inspection, et on le dit ainsi
+         plutôt que de recopier une formalité impossible. Relevé le
+         29 septembre 2026. */
       L += "<b>Sauf urgence</b>Lorsque l'urgence le justifie, les obligations relatives à la " +
         "santé et à la sécurité peuvent recevoir application immédiate. Dans ce cas, la note " +
-        "est immédiatement et simultanément communiquée au secrétaire du comité social et " +
-        "économique et à l'inspection du travail. L'urgence se justifie par écrit dans la note.";
+        (sansComite()
+          ? "est immédiatement communiquée à l'inspection du travail ; votre fiche ne porte " +
+            "aucun comité, il n'y a donc pas de secrétaire à qui l'adresser en même temps. "
+          : "est immédiatement et simultanément communiquée au secrétaire du comité social et " +
+            "économique et à l'inspection du travail. ") +
+        "L'urgence se justifie par écrit dans la note.";
     }
     return L;
   }
