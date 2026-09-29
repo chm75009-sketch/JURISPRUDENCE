@@ -716,33 +716,18 @@
      de naissance, sa catégorie, son coefficient, sa rémunération et le motif
      qui l'écarte s'il y en a un. */
   function entreeIx() {
-    var annee = Number($("#ix-annee").value) || new Date().getFullYear() - 1;
-    var base = $("#ix-base").value === "csp" ? "csp" : "coef";
-    var SAL = tauxMinima();
-    var horaire = $("#ix-unite").value !== "annuel";
-    var L = salariesIx(annee).map(function (s) {
-      var id = idIx(s);
-      var mien = IX.sal[id] || {};
-      var rem = horaire ? nombre((SAL[id] || {}).taux) : NaN;
-      /* Une rémunération portée à la main se range sous l'unité choisie : un
-         taux horaire corrigé ne doit pas être relu comme un salaire annuel le
-         jour où l'on change d'unité. */
-      var mienne = horaire ? mien.rem : mien.remAn;
-      if (String(mienne || "") !== "") rem = nombre(mienne);
-      var nat = String(s.nature || "");
-      var motif = "";
-      if (nat === "apprenti") motif = "apprenti";
-      else if (nat === "pro") motif = "contrat de professionnalisation";
-      else if (mien.ecarte) motif = "écarté par l'employeur";
-      return { id: id, nom: (s.nom || "") + " " + (s.pre || ""), emp: String(s.emp || ""),
-        sexe: s.sexe === "Féminin" ? "F" : (s.sexe === "Masculin" ? "H" : ""),
-        nais: String(s.nais || ""), coef: coefIx(s, SAL),
-        csp: String(mien.csp || cspProposee(s.emp) || ""),
-        proposee: !mien.csp && !!cspProposee(s.emp),
-        rem: rem, motif: motif, ecarte: !!motif };
-    });
-    return { annee: annee, base: base, effectif: effectif(), unite: horaire ? "horaire" : "annuel",
-      salaries: L, aug: IX.aug, promo: IX.promo, aug2: IX.aug2, mat: IX.mat };
+    /* Les trois choix de l'écran sont enregistrés : le document du parcours
+       les relit pour calculer le même index, sans qu'on ait à rouvrir cet
+       écran. Le rassemblement des données, lui, vit dans index-egalite.js
+       depuis le 29 septembre 2026, pour que les deux s'en servent. */
+    var choix = {
+      annee: Number($("#ix-annee").value) || new Date().getFullYear() - 1,
+      base: $("#ix-base").value === "csp" ? "csp" : "coef",
+      unite: $("#ix-unite").value !== "annuel" ? "horaire" : "annuel",
+    };
+    IX.annee = choix.annee; IX.base = choix.base; IX.unite = choix.unite;
+    garderIx(IX);
+    return window.IndexEgalite.entree(choix);
   }
 
   var DERNIER = null;

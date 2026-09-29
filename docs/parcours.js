@@ -3876,7 +3876,9 @@
        2 septembre 2026 : « non » doit donner la base, non une note sur le
        texte qui la commande. */
     BDESE: ["documents-produits.js", "documents-bdese.js", "documents-rh.js", "bdese-grille.js"],
-    NAO: ["documents-produits.js", "documents-nao.js"],
+    /* index-egalite.js porte le calcul de l'index de l'égalité : sans lui, le
+       document de la publication des écarts sortait avec un tableau vide. */
+    NAO: ["documents-produits.js", "index-egalite.js", "documents-nao.js"],
     PSE: ["documents-produits.js", "documents-pse.js"],
     /* La gestion du personnel : registre, embauche, fin de contrat. Ces
        parcours ne produisaient aucun document jusqu'au 1er septembre 2026. */

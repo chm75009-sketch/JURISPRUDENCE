@@ -464,9 +464,100 @@
     return sortie;
   }
 
+  /* ══════════════════════════════════════════════════════════════════════
+     CE QUI EST ENVOYÉ AU CALCUL, RASSEMBLÉ DEPUIS LE POSTE
+
+     L'écran de l'égalité bâtissait cette entrée lui-même, à partir de ses
+     champs et du registre. Le document du parcours, lui, sortait avec un
+     tableau d'indicateurs vide, « 1. Écart de rémunération femmes-hommes
+     | [ ] | [ ] », alors que tout était là pour le calculer. Relevé le
+     29 septembre 2026. La construction vit ici, les deux s'en servent.
+
+     Les trois choix qui commandent - l'année de référence, la base de
+     comparaison et l'unité de rémunération - sont ceux que l'écran a
+     enregistrés ; à défaut, l'année précédente, le coefficient et le taux
+     horaire.
+     ══════════════════════════════════════════════════════════════════════ */
+  function lireJson(cle) {
+    try { return JSON.parse(window.localStorage.getItem(cle) || "null") || {}; }
+    catch (e) { return {}; }
+  }
+  function nombreDe(v) {
+    var n = parseFloat(String(v === undefined || v === null ? "" : v).replace(",", "."));
+    return isFinite(n) ? n : NaN;
+  }
+  function idDe(s) { return String(s.id || (s.nom + "|" + s.pre)); }
+  function salariesDe(annee) {
+    var L = (lireJson("registre-personnel").salaries) || [];
+    var debut = annee + "-01-01", fin = annee + "-12-31";
+    return L.filter(function (s) {
+      if (!s || s.ex) return false;
+      if (!String(s.nom || "").trim() && !String(s.pre || "").trim()) return false;
+      var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(e) || e > fin) return false;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(o) && o < debut) return false;
+      return true;
+    });
+  }
+  /* La catégorie socioprofessionnelle, proposée d'après l'emploi. C'est
+     l'employeur qui la fixe, après consultation du comité : la proposition est
+     affichée comme telle, et elle se change dans la liste. */
+  function cspProposee(emploi) {
+    var t = String(emploi || "").toLowerCase();
+    t = t.normalize ? t.normalize("NFD").replace(/[\u0300-\u036f]/g, "") : t;
+    if (!t) return "";
+    if (/cadre|ingenieur|directeur|directrice|gerant|president/.test(t)) return "cadres";
+    if (/technicien|agent de maitrise|chef d'equipe|chef d equipe|contremaitre/.test(t)) return "tam";
+    if (/conducteur|conductrice|chauffeur|livreur|livreuse|manutention|magasinier|magasiniere|mecanic|cariste|ouvrier|ouvriere|agent de quai|preparateur|preparatrice/.test(t))
+      return "ouvriers";
+    if (/secretaire|assistant|assistante|comptable|employe|employee|standardiste|facturier|facturiere/.test(t))
+      return "employes";
+    return "";
+  }
+  function coefDe(s, SAL) {
+    var m = SAL[idDe(s)] || {};
+    var c = String(m.coef || "").trim();
+    if (c) return c;
+    return String(s.qua || "").trim();
+  }
+  function entree(choix) {
+    var IX = lireJson("egalite-index");
+    IX.sal = IX.sal || {}; IX.aug = IX.aug || {}; IX.promo = IX.promo || {};
+    IX.aug2 = IX.aug2 || {}; IX.mat = IX.mat || {};
+    var c = choix || {};
+    var annee = Number(c.annee || IX.annee) || (new Date().getFullYear() - 1);
+    var base = (c.base || IX.base) === "csp" ? "csp" : "coef";
+    var horaire = (c.unite || IX.unite || "horaire") !== "annuel";
+    var SAL = lireJson("minima-salaires");
+    var eff = Number(lireJson("profil-entreprise").effectif);
+    var L = salariesDe(annee).map(function (s) {
+      var id = idDe(s);
+      var mien = IX.sal[id] || {};
+      var rem = horaire ? nombreDe((SAL[id] || {}).taux) : NaN;
+      var mienne = horaire ? mien.rem : mien.remAn;
+      if (String(mienne || "") !== "") rem = nombreDe(mienne);
+      var nat = String(s.nature || "");
+      var motif = "";
+      if (nat === "apprenti") motif = "apprenti";
+      else if (nat === "pro") motif = "contrat de professionnalisation";
+      else if (mien.ecarte) motif = "écarté par l'employeur";
+      return { id: id, nom: (s.nom || "") + " " + (s.pre || ""), emp: String(s.emp || ""),
+        sexe: s.sexe === "Féminin" ? "F" : (s.sexe === "Masculin" ? "H" : ""),
+        nais: String(s.nais || ""), coef: coefDe(s, SAL),
+        csp: String(mien.csp || cspProposee(s.emp) || ""),
+        proposee: !mien.csp && !!cspProposee(s.emp),
+        rem: rem, motif: motif, ecarte: !!motif };
+    });
+    return { annee: annee, base: base,
+      effectif: isFinite(eff) && eff > 0 ? eff : null,
+      unite: horaire ? "horaire" : "annuel",
+      salaries: L, aug: IX.aug, promo: IX.promo, aug2: IX.aug2, mat: IX.mat };
+  }
+
   window.IndexEgalite = {
     BAREME_ECART: BAREME_ECART, pointsEcart: pointsEcart,
     TRANCHES: TRANCHES, tranche: tranche, CSP: CSP, nomCsp: nomCsp,
-    ageAu: ageAu, calculer: calculer
+    ageAu: ageAu, calculer: calculer,
+    entree: entree, cspProposee: cspProposee
   };
 })();

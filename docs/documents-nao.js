@@ -3710,8 +3710,63 @@
       L.push("");
       L.push("À COMPLÉTER");
       L.push("");
-      L.push("Extrayez les données de votre base de données économiques et sociales.");
-      L.push("");
+      /* L'INDEX SE CALCULE ICI, IL NE SE REDEMANDE PAS.
+
+         Le document sortait avec le même tableau vide que l'exemple et la
+         phrase « Extrayez les données de votre base de données économiques et
+         sociales », alors que l'application calcule l'index depuis le registre
+         du personnel et les taux relevés par l'écran des minima. Relevé le
+         29 septembre 2026. Quand le calcul aboutit, ses chiffres sont portés
+         ici ; quand il lui manque quelque chose, le document dit quoi, et le
+         tableau reste à remplir à la main. */
+      var IE = (typeof window !== "undefined") ? window.IndexEgalite : null;
+      var calc = null;
+      if (IE && IE.entree && IE.calculer) {
+        try { calc = IE.calculer(IE.entree()); } catch (e) { calc = null; }
+      }
+      if (calc && calc.etat === "calcule") {
+        L.push("Calculé à partir de votre registre du personnel et des rémunérations");
+        L.push("relevées dans l'écran des minima, pour l'année " + calc.annee + " :");
+        L.push("");
+        L.push("  indicateur                                    | résultat | points");
+        (calc.indicateurs || []).forEach(function (x, i) {
+          var nom = String(x.nom || ("indicateur " + (i + 1)));
+          if (nom.length > 44) nom = nom.slice(0, 43) + "…";
+          while (nom.length < 44) nom += " ";
+          var res = (x.etat === "calcule")
+            ? (x.resultat === undefined || x.resultat === null ? "" : String(x.resultat))
+            : (x.etat === "manque" ? "manque" : "incalc.");
+          if (res.length > 8) res = res.slice(0, 8);
+          while (res.length < 8) res = res + " ";
+          L.push("  " + nom + " | " + res + " | " + String(x.etat === "calcule" ? x.points : "-"));
+        });
+        L.push("  NIVEAU DE RÉSULTAT, sur 100                   |          | " + calc.niveau);
+        L.push("");
+        if (calc.proportionnalite) {
+          L.push("Un indicateur au moins n'a pas pu être calculé : le niveau est ramené à");
+          L.push("cent par proportionnalité, comme l'annexe le prévoit.");
+          L.push("");
+        }
+        L.push("Vérifiez ces chiffres avant de les publier : ils valent ce que valent les");
+        L.push("données du registre et les rémunérations saisies.");
+        L.push("");
+      } else if (calc && calc.etat === "incomplet") {
+        L.push("Le calcul n'a pas abouti : " + (calc.manquants || 0) + " donnée" +
+               ((calc.manquants || 0) > 1 ? "s manquent" : " manque") + " au registre ou aux");
+        L.push("rémunérations. Ouvrez « L'égalité professionnelle », bouton « Calculer");
+        L.push("l'index » : l'écran dit, salarié par salarié, ce qu'il attend. Le tableau");
+        L.push("ci-dessus reste à remplir à la main en attendant.");
+        L.push("");
+      } else if (calc && calc.etat === "indeterminable") {
+        L.push("Le nombre maximal de points atteignables est inférieur à 75 : le niveau");
+        L.push("de résultat n'est pas déterminable, et c'est cela qui se publie.");
+        L.push("");
+      } else {
+        L.push("Extrayez les données de votre base de données économiques et sociales, ou");
+        L.push("ouvrez « L'égalité professionnelle », bouton « Calculer l'index » : il se");
+        L.push("calcule depuis le registre du personnel et les rémunérations saisies.");
+        L.push("");
+      }
       /* L'état des textes, lu au relais le 26 septembre 2026, deux
          interrogations concordantes : toute la partie réglementaire de
          l'index revient « abrogé à effet différé ». Le document le dit,

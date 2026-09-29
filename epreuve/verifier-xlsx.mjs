@@ -116,9 +116,26 @@ for (const e of ECRANS) {
     fautes++;
     continue;
   }
-  const dl = await page.waitForEvent("download", { timeout: 9000 }).catch(() => null);
+  let dl = await page.waitForEvent("download", { timeout: 9000 }).catch(() => null);
+  /* UN CLIC TROP TÔT N'EST PAS UN BOUTON EN PANNE.
+
+     Le registre et le forfait construisent leur liste après le chargement :
+     le premier clic tombait parfois avant, et le contrôle criait au défaut
+     sur une page saine. Relevé le 29 septembre 2026. On laisse la page finir
+     et l'on réessaie une fois ; deux échecs, c'est une panne. */
   if (!dl) {
-    console.log("FAUTE " + e.page + " : « " + trouve + " » ne produit aucun fichier");
+    await page.waitForTimeout(1500);
+    const attente = page.waitForEvent("download", { timeout: 9000 }).catch(() => null);
+    await page.evaluate((src) => {
+      const re = new RegExp(src, "i");
+      const b = Array.prototype.filter.call(document.querySelectorAll("button"),
+        (x) => !x.disabled && !x.hidden && re.test(String(x.textContent || "")))[0];
+      if (b) b.click();
+    }, e.bouton.source);
+    dl = await attente;
+  }
+  if (!dl) {
+    console.log("FAUTE " + e.page + " : « " + trouve + " » ne produit aucun fichier, deux essais");
     fautes++;
     continue;
   }
