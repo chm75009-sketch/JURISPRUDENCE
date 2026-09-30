@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#1F3864">
+<link rel="icon" href="icons/icon-180.png">
+<title>Contrôler un document</title>
+<meta name="description" content="Vous déposez un document que vous avez déjà : l'application le lit, dit ce qui manque au regard du code du travail, et écrit la version corrigée.">
+<!-- LES NEUF CONTRÔLES, RÉUNIS SUR UNE PAGE.
+
+     Chaque module d'audit ouvre son contrôle par son « oui » : « vous l'avez,
+     déposez-le ». Mais celui qui arrive avec un règlement intérieur sous le
+     bras n'a pas de raison de passer par une ligne d'audit pour le faire
+     lire. La contre-vérification du 29 septembre 2026 le dit : « toujours
+     aucune entrée vers les contrôles de documents déposés ».
+
+     Cette page est cette entrée. Elle ne contrôle rien elle-même : elle
+     conduit aux neuf écrans qui le font, en disant pour chacun ce qu'il
+     attend et ce qu'il rend. Le menu y mène, et l'accueil aussi.
+
+     Tout se passe dans le navigateur : le fichier déposé ne sort pas du
+     poste. -->
+<link rel="stylesheet" href="style.css">
+<script src="droits.js"></script>
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  body{font-size:18px;line-height:1.45}
+  main.wrap{max-width:620px;padding:0 16px var(--e7)}
+  .aide{margin:12px 0 0}
+  .ctl-liste{display:grid;gap:12px;margin:18px 0 0}
+  .ctl-liste a{display:block;border:1px solid var(--filet);border-radius:var(--r2);
+    padding:14px 16px;background:var(--surface);color:var(--encre);text-decoration:none}
+  .ctl-liste a:hover{border-color:var(--accent);background:var(--accent-clair)}
+  .ctl-liste .n{font:600 17px/1.3 system-ui;display:block}
+  .ctl-liste .s{font-size:14.5px;color:var(--texte-2);display:block;margin-top:4px;line-height:1.4}
+  .ctl-liste .d{font-size:13.5px;color:var(--texte-3);display:block;margin-top:6px;line-height:1.4}
+  .pied-note{margin:22px 0 0;font-size:13.5px;line-height:1.5;color:var(--texte-3)}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque">Contrôler un document</p>
+    <div class="outils">
+      <a href="index.html">Accueil</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <p class="aide">Vous déposez le document, il vous est rendu corrigé. Le fichier ne quitte pas cet appareil.</p>
+
+  <div class="ctl-liste" id="liste"></div>
+
+  <p class="pied-note">Ces contrôles sont documentaires : ils lisent ce que votre
+    texte dit et le confrontent aux articles lus à la source. Le résultat est
+    indicatif et ne vaut ni avis juridique ni attestation de conformité.</p>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+  /* L'ordre suit celui de l'audit : ce qui fonde l'entreprise d'abord, ce qui
+     se vérifie tous les jours ensuite. */
+  var CONTROLES = [
+    { page: "controler-ri.html", nom: "Règlement intérieur",
+      quoi: "Les trois matières de L. 1321-1, l'échelle des sanctions, la durée de la mise à pied, les clauses que L. 1321-3 prohibe.",
+      rend: "Le diagnostic clause par clause, les formalités qui restent à accomplir, et le règlement corrigé en Word." },
+    { page: "controler-duerp.html", nom: "Document unique d'évaluation des risques",
+      quoi: "Les mentions de R. 4121-1 et R. 4121-1-1, l'inventaire par unité de travail, l'annexe des expositions, la mise à jour et la conservation.",
+      rend: "Ce qui manque, mention par mention, et la version corrigée." },
+    { page: "controler-affichages.html", nom: "Affichages obligatoires",
+      quoi: "Les onze affiches dues, élément par élément : adresses, numéros d'appel, noms, et les huit rubriques de la consigne incendie.",
+      rend: "Ce qui est introuvable dans votre texte, et chaque affiche prête à poser." },
+    { page: "controler-cse.html", nom: "Protocole d'accord préélectoral",
+      quoi: "Les collèges, le nombre de sièges, la répartition du personnel, les modalités du scrutin et les dates.",
+      rend: "Les clauses manquantes, rédigées, et le calendrier daté des élections." },
+    { page: "controler-bdese.html", nom: "Base de données économiques et sociales",
+      quoi: "Les rubriques dues selon l'effectif, et les lignes que votre base laisse sans chiffre.",
+      rend: "Les rubriques à insérer, celles à remplir, et le classeur à compléter." },
+    { page: "controler-nao.html", nom: "Procès-verbal de la négociation annuelle",
+      quoi: "Les deux mentions de L. 2242-5, les thèmes négociés, les propositions des parties en leur dernier état.",
+      rend: "Les articles manquants, rédigés, et le procès-verbal complet." },
+    { page: "controler-egalite.html", nom: "Accord ou plan d'action égalité",
+      quoi: "Les domaines d'action, les objectifs chiffrés, les indicateurs et le dépôt.",
+      rend: "Ce qui manque au regard de R. 2242-2, et le texte corrigé." },
+    { page: "controler-mutuelle.html", nom: "Décision unilatérale ou accord mutuelle",
+      quoi: "Le panier de soins, le financement, les dispenses et les cas de maintien.",
+      rend: "Les points du code de la sécurité sociale introuvables, dont ceux qui font tomber l'exonération." },
+    { page: "controler-discipline.html", nom: "Sanction disciplinaire",
+      quoi: "L'écrit des griefs, la procédure, les délais, et la clause du règlement qui la fonde.",
+      rend: "Ce qui prive la sanction de support, et les écrits de la procédure." },
+  ];
+
+  document.getElementById("liste").innerHTML = CONTROLES.map(function (c) {
+    function ech(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    return '<a href="' + c.page + '"><span class="n">' + ech(c.nom) + "</span>" +
+      '<span class="s">' + ech(c.quoi) + "</span>" +
+      '<span class="d">' + ech(c.rend) + "</span></a>";
+  }).join("");
+})();
+</script>
+<script>
+  if ("serviceWorker" in navigator)
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js"); });
+</script>
+<script src="assistant.js" defer></script>
+</body>
+</html>

@@ -61,6 +61,10 @@
        cherche un parcours guidé n'a pas à passer par une ligne d'audit pour le
        trouver ; et les données du poste ne se géraient que par le pied de
        l'accueil, où personne ne va les chercher. */
+    /* Et une quatrième, le 29 septembre 2026 : celui qui arrive avec un
+       règlement intérieur sous le bras n'a pas à passer par une ligne d'audit
+       pour le faire lire. controler.html réunit les neuf contrôles. */
+    { page: "controler.html", nom: "Contrôler un document" },
     { page: "parcours.html", nom: "Parcours guidés" },
     { page: "documents.html", nom: "Modèles de documents" },
     { page: "index.html#mes-donnees", nom: "Mes données de ce poste" },

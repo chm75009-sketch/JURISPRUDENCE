@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-13.26";
+const CACHE = "jurisprudence-13.27";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -176,6 +176,7 @@ const ESSENTIELS = [
   /* Les outils communs à toutes les pages : la barre et son menu, la base des
      pièces déposées, le bouton d'installation, le lecteur de tableaux, le
      carnet, la convention, le bloc de signature, les modèles de courriers. */
+  "./controler.html",
   "./barre.js", "./champ-fichier.js", "./base-documents.js", "./installer.js", "./lire-tableau.js",
   "./carnet.js", "./convention.js", "./signataire-piece.js", "./courriers-modeles-3.js",
   "./textes-penal.js", "./textes-documents.json",

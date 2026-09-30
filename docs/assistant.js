@@ -878,6 +878,31 @@
     bouton.innerHTML = "&#10022;";              // ✦
     document.body.appendChild(bouton);
 
+    /* LE BOUTON S'EFFACE PENDANT QU'ON REMPLIT UN CHAMP.
+
+       Posé en bas à droite, il recouvrait la fin du champ « Secteur » de la
+       fiche et la date d'entrée d'une carte du registre : la hauteur ajoutée
+       sous la page ne sert qu'au bas du défilement, et le reste du temps il
+       flotte au-dessus de ce qu'on remplit. Relevé les 26 et 29 septembre
+       2026.
+
+       Le poser dans la barre du haut a été essayé : il y prend quarante-quatre
+       points, et douze titres de page se coupaient alors en « Registre du
+       pe… ». Il reste donc où il est, et il disparaît le temps qu'un champ
+       soit en cours de saisie : c'est à ce moment-là, et à ce moment-là
+       seulement, qu'il gêne. */
+    var CHAMPS = /^(INPUT|SELECT|TEXTAREA)$/;
+    document.addEventListener("focusin", function (ev) {
+      var t = ev.target;
+      if (t && (CHAMPS.test(t.tagName) || t.isContentEditable)) bouton.style.display = "none";
+    });
+    document.addEventListener("focusout", function () {
+      window.setTimeout(function () {
+        var a = document.activeElement;
+        if (!a || !(CHAMPS.test(a.tagName) || a.isContentEditable)) bouton.style.display = "";
+      }, 60);
+    });
+
     var panneau = document.createElement("aside");
     panneau.id = "assist-panneau";
     panneau.setAttribute("aria-label", "Assistant");
