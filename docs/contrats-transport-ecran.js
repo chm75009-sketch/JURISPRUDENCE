@@ -96,6 +96,14 @@
       ["nom", "naissance", "lieuNaissance", "nationalite", "nir", "adresse", "entree",
        "groupe", "sexe", "emploi"].forEach(function (c) { V[c] = ""; });
       V.entree = iso(new Date());
+      /* LE VIDAGE N'ÉTAIT PAS ENREGISTRÉ.
+
+         Il changeait l'écran et rien d'autre : au premier passage par un autre
+         onglet, ou d'un CDI à un CDD, l'ancien contenu revenait du poste, et
+         le contrat d'un nouvel embauché portait la date d'entrée du salarié
+         d'avant, « à compter du 1er mars 2004 ». Relevé le 29 septembre
+         2026. */
+      garder();
       rendreChamps();
       return;
     }
@@ -120,6 +128,7 @@
     /* Le sexe ne s'affiche pas dans le contrat, mais il l'accorde : sans lui,
        une conductrice sortait « né le » et « désigné le salarié ». */
     if (s.sexe) V.sexe = s.sexe;
+    garder();
     rendreChamps();
     direSiLeProfilNeVaPas(s);
   });
@@ -255,6 +264,20 @@
   }
 
   function rendreChamps() {
+    /* PAS DE PROFIL, PAS DE CHAMPS.
+
+       Choisir un salarié avant d'avoir choisi le profil du poste jetait
+       « Cannot read properties of null » et laissait l'écran muet : le
+       formulaire se bâtit sur le profil, qui donne les coefficients, la durée
+       d'équivalence et le taux. Relevé le 29 septembre 2026. On le dit au
+       lieu de casser. */
+    if (!PROFIL) {
+      var z = $("champs");
+      if (z) z.innerHTML = '<p class="sous">Choisissez d\'abord le poste : ' +
+        "c'est lui qui donne les coefficients, la durée d'équivalence et le taux " +
+        "conventionnel du contrat.</p>";
+      return;
+    }
     var g = garde(), ent = profilEntreprise();
     var L = champsDuProfil();
     var defauts = {
@@ -355,6 +378,7 @@
     }
   });
   function rendreChampsTaux() {
+    if (!PROFIL) return;
     var t = CT.tauxDe(V.coef, PROFIL.cle);
     var champ = $("champs").querySelector('[data-c="taux"]');
     if (t && champ) { V.taux = String(t); champ.value = V.taux; }

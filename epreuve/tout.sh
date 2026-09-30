@@ -1,10 +1,10 @@
 #!/bin/bash
 # TOUTES LES ÉPREUVES, DANS L'ORDRE, D'UNE SEULE COMMANDE.
 #
-# Dix-sept contrôles vivent dans ce dossier, et il fallait se souvenir de
+# Dix-huit contrôles vivent dans ce dossier, et il fallait se souvenir de
 # chacun avant de publier. Celui-ci les enchaîne : les six qui tournent sans
 # navigateur d'abord, parce qu'ils sont instantanés et qu'ils attrapent le
-# plus ; les onze balayages ensuite, qui ouvrent Chromium et prennent leur
+# plus ; les douze balayages ensuite, qui ouvrent Chromium et prennent leur
 # temps. Écrit le 28 septembre 2026.
 #
 #   bash epreuve/tout.sh            toutes les épreuves
@@ -58,6 +58,7 @@ passe "Sans comité, le dépôt et l'exemple de la sanction" $NODE epreuve/verif
 passe "Le rappel de l'entreprise, une fois par page" $NODE epreuve/verifier-entete.mjs
 passe "Les onze affiches, produites et relues" $NODE epreuve/verifier-affiches.mjs
 passe "Les fichiers Word des parcours" $NODE epreuve/verifier-docx-parcours.mjs
+passe "Les contrats du transport, d'un salarié à l'autre" $NODE epreuve/verifier-contrats-transport.mjs
 passe "Les documents du quotidien" $NODE epreuve/balayer-gerer.mjs
 passe "Les fichiers Word, rouverts avec python-docx" $NODE epreuve/verifier-docx.mjs
 passe "Les classeurs, rouverts avec openpyxl" $NODE epreuve/verifier-xlsx.mjs

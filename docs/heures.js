@@ -1277,18 +1277,32 @@
         var comptees = vent.h25 + vent.h50;
         var horsContrat = mensuel ? Math.max(0, vent.tm - Math.max(mensuel, 152)) : comptees;
         var dedans = Math.max(0, comptees - horsContrat);
+        /* LA MAJORATION DES HEURES DU CONTRAT EST DÉJÀ DANS LE SALAIRE.
+
+           Le total ajoutait la majoration des trente-quatre heures à 25 %,
+           alors que le contrat produit par cette même application paie
+           « 17,00 heures majorées de 25 % » : les dix-sept heures
+           d'équivalence, de la 153e à la 169e, sont payées avec leur
+           majoration dans le salaire mensuel. Seules celles qui dépassent la
+           durée du contrat restent dues, base et majoration. Relevé le
+           29 septembre 2026 : 1 142,98 € annoncés au lieu de 1 090,67 €,
+           52,32 € payés deux fois. Le raisonnement est celui qui avait déjà
+           été tenu le 28 pour le salaire de base. */
+        var dedans25 = Math.min(vent.h25, dedans);
+        var dedans50 = Math.max(0, dedans - vent.h25);
+        var m25du = Math.max(0, vent.h25 - dedans25) * t * 0.25;
+        var m50du = Math.max(0, vent.h50 - dedans50) * t * 0.5;
         ligne += " Au taux de " + euros(t) + ", ";
         if (mensuel && dedans > 0.005) {
           ligne += "les " + nbh(dedans) + " comprises dans la durée mensuelle du contrat (" +
-            nbh(mensuel) + ") sont déjà payées dans le salaire du mois : pour elles, seule la " +
-            "majoration s'ajoute.";
+            nbh(mensuel) + ") sont déjà payées dans le salaire du mois, majoration comprise : " +
+            "le contrat les porte comme telles, et rien ne s'ajoute pour elles.";
           if (horsContrat > 0.005)
             ligne += " Les " + nbh(horsContrat) + " au-delà du contrat s'ajoutent en base, " +
-              euros(horsContrat * t) + ", plus leur majoration : à verser en sus du salaire, " +
-              euros(horsContrat * t + m25 + m50) + ".";
+              euros(horsContrat * t) + ", plus leur majoration, " + euros(m25du + m50du) +
+              " : à verser en sus du salaire, " + euros(horsContrat * t + m25du + m50du) + ".";
           else
-            ligne += " Rien au-delà du contrat ce mois-ci : à verser en sus du salaire, " +
-              euros(m25 + m50) + ".";
+            ligne += " Rien au-delà du contrat ce mois-ci : rien à verser en sus du salaire.";
         } else if (mensuel) {
           ligne += "les " + nbh(horsContrat) + " dépassent la durée mensuelle du contrat (" +
             nbh(mensuel) + ") : elles s'ajoutent en base, " + euros(horsContrat * t) +
