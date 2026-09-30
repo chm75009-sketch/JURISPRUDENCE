@@ -617,3 +617,38 @@ Ce qui reste ouvert : le derby du 16 janvier 1934, où un Boudjemaa sans
 numéro joue pour l'O. Béja contre l'U.S.B. Si c'est lui, il a changé de club
 entre juillet 1932 et janvier 1934, et aucun article ne le raconte. Si c'est
 l'autre, alors il n'a jamais quitté l'U.S.B.
+
+## La fin de l'Olympique de Béja, 14 mars 1936
+
+Trouvé le 30 septembre 2026 dans l'hebdomadaire Football, qui imprime chaque
+semaine le bulletin officiel de la Fédération sous le titre France-Football.
+Numéro du 29 avril 1936, page 10, cinq colonnes lues en entier. Commission
+centrale des statuts et règlements, séance du 16 avril 1936 :
+
+« Joueurs issus de clubs dissous. - La Commission, en application de
+l'article 51 des Règlements fédéraux, accorde licence aux joueurs ci-après :
+Ligue de Tunisie : Ben Allala Mohamed, Bouguerra Chadli, Ben Salah Boudjemaa
+Kaddour Mohamed (Olympique de Béja, dissous pour l'Union Sportive Bejaoise,
+jouissance à dater du 14 mars 1936). »
+
+L'Olympique de Béja est mort. Ses joueurs sont versés à l'Union Sportive
+Béjaoise, et parmi eux Kaddour Mohamed, celui qui jouait à côté d'un
+Boudjemaa en 1929, en 1931 et en 1934. Les deux lignes parallèles se
+rejoignent là, le 14 mars 1936, et une seule survit.
+
+Ce que la pièce ne dit pas. Le Boudjemaa de la liste s'appelle Ben Salah.
+Le nôtre s'appelle Ben Mohamed ben Brahim ben El Djilani. Ben Salah Boudjemaa
+est aussi le nom du joueur d'Oranie, licence 13267, dont Le Petit Matin
+suivait la suspension en 1932. Et à la mi-mars 1936 le nôtre est avant-centre
+de l'O.G.C. Nice : L'Auto du 30 avril le dit parti sous les drapeaux en
+Tunisie, pas transféré. Rien ne permet donc de dire que ce Boudjemaa-là soit
+lui, et la virgule manquante après son nom ne change rien à l'affaire : les
+autres noms de la liste sont donnés patronyme puis prénom, ce qui fait quatre
+joueurs.
+
+Ce qu'elle apporte quand même, et c'est la réponse à la question du passage :
+il n'y a pas eu de transfert d'un club à l'autre, il y a eu une disparition.
+Après le 14 mars 1936 il n'existe plus qu'un club de football à Béja.
+
+Source : Football, 29 avril 1936, page 10, ark bpt6k72148784, vue 9. Page
+complète dans photos/1936, extrait cadré dans le même dossier.
