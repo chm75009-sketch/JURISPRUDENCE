@@ -443,15 +443,15 @@
      : - [organisation 1] : ... Réponse motivée ... » d'un trait. Relevé le
      28 septembre 2026. */
   var CADRE = [
-    "Position de l'employeur, en son dernier état : [.....................].",
+    "Position de l'employeur, en son dernier état : [à compléter].",
     "",
     "Position de chaque organisation syndicale représentative, en son dernier",
     "état :",
-    "  - [organisation 1] : [.............................................] ;",
-    "  - [organisation 2] : [.............................................].",
+    "  - [organisation 1] : [à compléter] ;",
+    "  - [organisation 2] : [à compléter].",
     "",
     "Réponse motivée de l'employeur aux propositions formulées :",
-    "[..........................................................................].",
+    "[à compléter].",
     "",
     "Suite retenue : [accord sur ce point / désaccord maintenu / renvoi à la",
     "réunion du .........].",
@@ -533,7 +533,7 @@
           "Information donnée en séance : [aucune mise à disposition au cours de",
           "l'exercice / mises à disposition : nom de l'organisation, nombre de",
           "salariés, volume horaire].",
-          "Observations des organisations syndicales : [.......................].",
+          "Observations des organisations syndicales : [à compléter].",
         ]) },
     ],
     egalite: [
@@ -581,7 +581,7 @@
           "",
           "Mesures existantes : [procédure de recrutement écrite, formation des",
           "recruteurs, procédure de signalement, référents désignés].",
-          "Mesures discutées : [.....................................................].",
+          "Mesures discutées : [à compléter].",
           "",
         ].concat(CADRE)) },
       { cle: "handicap", nom: "L'insertion et le maintien dans l'emploi des travailleurs handicapés (L. 2242-17, 4°)",
@@ -627,7 +627,7 @@
           "émis.",
           "",
           "Modalités actuellement en vigueur : [accord du ......... / aucune].",
-          "Modalités discutées : [......................................].",
+          "Modalités discutées : [à compléter].",
           "",
         ].concat(CADRE)) },
       { cle: "deconnexion", nom: "Le droit à la déconnexion (L. 2242-17, 7°)",
@@ -706,7 +706,7 @@
           "ainsi que les critères et modalités d'abondement par l'employeur du compte",
           "personnel de formation.",
           "",
-          "Orientations proposées : [.....................................].",
+          "Orientations proposées : [à compléter].",
           "Budget prévisionnel de formation sur la période : [__] euros.",
           "",
         ].concat(CADRE)) },
@@ -761,7 +761,7 @@
           "Modalités retenues : bilan établi au plus tard le [DATE], présenté à",
           "[la commission de suivi / au comité social et économique / aux",
           "organisations syndicales signataires], portant sur chacun des six points",
-          "de l'article et sur les indicateurs suivants : [.....................].",
+          "de l'article et sur les indicateurs suivants : [à compléter].",
         ]) },
     ],
     experimentes: [
@@ -822,7 +822,7 @@
         "  - [DATE] : dernières propositions des parties ;",
         "  - [DATE] : réunion de clôture.",
         "",
-        "Modifications intervenues en cours de négociation, et motif : [.........].",
+        "Modifications intervenues en cours de négociation, et motif : [à compléter].",
       ]) },
     { cle: "informations", nom: "Les informations remises et la date de leur remise (L. 2242-14, 2°)",
       marques: ["informations remises", "remise des informations", "documents remis", "informations communiquees", "informations communiquées"],
@@ -831,10 +831,10 @@
         "effectivement remises le [DATE], contre décharge.",
         "",
         "Liste des informations remises :",
-        "  1. [.......................................................].",
-        "  2. [.......................................................].",
-        "  3. [.......................................................].",
-        "  4. [.......................................................].",
+        "  1. [à compléter].",
+        "  2. [à compléter].",
+        "  3. [à compléter].",
+        "  4. [à compléter].",
         "",
         "Modalité de remise : [remise en main propre contre décharge / mise à",
         "disposition dans la base de données économiques, sociales et",
@@ -853,9 +853,9 @@
         "",
         "  proposition                          | réponse et motifs      | date",
         "  -------------------------------------+------------------------+--------",
-        "  [..................................] | [....................] | [.....]",
-        "  [..................................] | [....................] | [.....]",
-        "  [..................................] | [....................] | [.....]",
+        "  [à compléter] | [à compléter] | [à compléter]",
+        "  [à compléter] | [à compléter] | [à compléter]",
+        "  [à compléter] | [à compléter] | [à compléter]",
         "",
         "Une réponse d'ensemble laisse sans réponse les propositions qu'elle ne",
         "nomme pas : la réponse se donne proposition par proposition, et se date.",
@@ -874,18 +874,25 @@
         "non au début, et non résumées en « les parties n'ont pu se mettre",
         "d'accord ».",
         "",
+        /* DES POINTILLÉS NE DISENT PAS CE QU'ON ATTEND.
+
+           « - [à compléter] ; » sortait dans le Word comme « - [ : ] ; », un
+           crochet vide que le dirigeant ne savait pas remplir. Relevé le
+           29 septembre 2026. Chaque crochet nomme désormais ce qu'il
+           attend : la mesure, son chiffre et sa date d'effet, qui sont les
+           trois choses qu'une proposition porte. */
         "Propositions de l'employeur, à l'issue de la réunion du [DATE] :",
-        "  - [.......................................................] ;",
-        "  - [.......................................................] ;",
-        "  - [.......................................................].",
+        "  - [mesure proposée, son chiffre et sa date d'effet] ;",
+        "  - [mesure proposée, son chiffre et sa date d'effet] ;",
+        "  - [mesure proposée, son chiffre et sa date d'effet].",
         "",
         "Propositions des organisations syndicales, à la même date :",
-        "  [organisation 1]",
-        "    - [.....................................................] ;",
-        "    - [.....................................................].",
-        "  [organisation 2]",
-        "    - [.....................................................] ;",
-        "    - [.....................................................].",
+        "  [nom de la première organisation]",
+        "    - [revendication, son chiffre et sa date d'effet] ;",
+        "    - [revendication, son chiffre et sa date d'effet].",
+        "  [nom de la seconde organisation]",
+        "    - [revendication, son chiffre et sa date d'effet] ;",
+        "    - [revendication, son chiffre et sa date d'effet].",
         "  [Organisation n'ayant pas formulé de proposition : le mentionner",
         "  expressément plutôt que de laisser un blanc.]",
         "",
@@ -903,9 +910,9 @@
         "",
         "  mesure                          | champ d'application | date d'effet",
         "  --------------------------------+---------------------+--------------",
-        "  [.............................] | [.................] | [..........]",
-        "  [.............................] | [.................] | [..........]",
-        "  [.............................] | [.................] | [..........]",
+        "  [à compléter] | [à compléter] | [à compléter]",
+        "  [à compléter] | [à compléter] | [à compléter]",
+        "  [à compléter] | [à compléter] | [à compléter]",
         "",
         "[Si l'employeur n'entend appliquer aucune mesure unilatérale, l'écrire :",
         "« L'employeur n'entend appliquer aucune mesure unilatérale à l'issue de la",
@@ -1437,7 +1444,7 @@
     L.push("");
     L.push("ARTICLE - SUIVI DE L'ACCORD");
     L.push("Une commission de suivi composée de [composition] se réunit [périodicité]");
-    L.push("pour examiner les indicateurs suivants : [.....................].");
+    L.push("pour examiner les indicateurs suivants : [à compléter].");
     L.push("");
     L.push("ARTICLE - RÉVISION ET DÉNONCIATION");
     L.push("Le présent accord peut être révisé ou dénoncé dans les conditions prévues");

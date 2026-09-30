@@ -165,6 +165,14 @@
         qua: net(s.qua),
         ent: net(s.ent),
         sor: net(s.sor),
+        /* LE SEXE ÉTAIT AU REGISTRE ET N'ARRIVAIT PAS JUSQU'ICI.
+
+           Cette copie laissait le sexe et la date de naissance derrière elle :
+           la civilité ne pouvait donc jamais être trouvée, et les courriers du
+           forfait s'adressaient « Madame, Monsieur » à une salariée dont le
+           registre porte « Féminin ». Relevé le 29 septembre 2026. */
+        sexe: net(s.sexe),
+        nais: net(s.nais),
       };
     });
   }
@@ -1812,8 +1820,12 @@
       { k: "p", t: politesse(qui) },
       { k: "p", t: (resp(p) || "") },
       { k: "p", t: " " },
-      { k: "p", t: "Reçu le ........................" },
-      { k: "p", t: "Signature du salarié, précédée de la mention « reçu le » :" },
+      /* La décharge demandait deux fois la même chose, « Reçu le …… » puis
+         « Signature précédée de la mention "reçu le" ». Une seule ligne
+         suffit, et c'est la date manuscrite qui fait la preuve de la remise.
+         Relevé le 29 septembre 2026. */
+      { k: "p", t: "Reçu le ........................, à ........................" },
+      { k: "p", t: "Signature du salarié :" },
     ];
     sortir(items, "Remise de la convention de forfait", "forfait-remise-" + qui.id + ".docx");
   }

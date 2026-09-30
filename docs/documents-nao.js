@@ -836,19 +836,21 @@
       L.push("");
       L.push("ARTICLE 2 - LES THÈMES ET LEUR PÉRIODICITÉ (L. 2242-11, 1°)");
       L.push("");
-      L.push("  thème                                    | périodicité | prochaine");
-      L.push("  ───────────────────────────────────────── |  ──────────── |  ──────────");
-      L.push("  Rémunération, temps de travail et        | [.... ans]  | [........]");
-      L.push("  partage de la valeur ajoutée (L. 2242-1, |             │");
-      L.push("  1°)                                      |             │");
-      L.push("  Égalité professionnelle femmes-hommes et | [.... ans]  | [........]");
-      L.push("  qualité de vie et des conditions de      |             │");
-      L.push("  travail (L. 2242-1, 2°)                  |             │");
+      /* UN INTITULÉ COUPÉ EN TROIS N'EST PLUS UN INTITULÉ.
+
+         Le tableau était dessiné à la main, chaque thème réparti sur trois
+         lignes dont les deux dernières n'avaient pas de première colonne :
+         le procès-verbal de désaccord sortait avec « Rémunération, temps de
+         travail et part » et « Égalité professionnelle et qualité de ».
+         Relevé le 29 septembre 2026. Une cellule tient sur une ligne, et
+         c'est le rendu du tableau qui la fait passer à la ligne, à l'écran
+         comme dans le Word. */
+      L.push("  thème | périodicité | prochaine négociation");
+      L.push("  Rémunération, temps de travail et partage de la valeur ajoutée (L. 2242-1, 1°) | [.... ans] | [date]");
+      L.push("  Égalité professionnelle entre les femmes et les hommes, et qualité de vie et des conditions de travail (L. 2242-1, 2°) | [.... ans] | [date]");
       if (!s.connu || s.atteint) {
-        L.push("  Gestion des emplois et des parcours      | [.... ans]  | [........]");
-        L.push("  professionnels (L. 2242-2)               |             │");
-        L.push("  Emploi et conditions de travail des      | [.... ans]  | [........]");
-        L.push("  salariés expérimentés (L. 2242-2-1)      |             │");
+        L.push("  Gestion des emplois et des parcours professionnels (L. 2242-2) | [.... ans] | [date]");
+        L.push("  Emploi et conditions de travail des salariés expérimentés (L. 2242-2-1) | [.... ans] | [date]");
       }
       L.push("");
       L.push("Aucune de ces périodicités ne peut excéder quatre ans : L. 2242-11, 1°,");

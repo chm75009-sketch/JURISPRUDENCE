@@ -1111,6 +1111,7 @@
     etat[c] = el.value;
     /* La catégorie professionnelle change : la liste des salariés se refait
        depuis le registre, tant qu'elle n'a pas été modifiée à la main. */
+    if (c === "nombre") rappelFiche();
     if (c === "poste" && etat.ordre === ligneOrdreDuRegistre(avant)) {
       etat.ordre = ligneOrdreDuRegistre(el.value);
       var z = $("#champs").querySelector('[data-c="ordre"]');
@@ -1396,13 +1397,31 @@
   /* Sous la question : l'entreprise et son effectif. À partir de cinquante
      salariés, le lien vers le plan de sauvegarde, dû dès dix licenciements
      sur trente jours (L. 1233-61). */
-  (function fiche() {
+  /* LA LIGNE SUIT LE NOMBRE SAISI, ELLE NE L'IGNORE PAS.
+
+     « SARL TEC · 82 salariés · dix licenciements ou plus : plan de
+     sauvegarde » s'affichait alors qu'un seul licenciement était saisi :
+     le dirigeant lisait une obligation qui ne le concernait pas. Relevé le
+     29 septembre 2026. Tant que le nombre n'est pas donné, la ligne rappelle
+     le seuil ; dès qu'il l'est, elle dit ce qui s'applique. */
+  function rappelFiche() {
+    var z = $("#fiche-rappel");
+    if (!z) return;
     var t = ech(profil.denomination) + " · " + effectif + " salarié" + (effectif > 1 ? "s" : "");
+    var n = Number(etat.nombre);
     if (effectif >= 50) {
-      t += ' · dix licenciements ou plus : <a href="audit-pse.html">plan de sauvegarde</a>';
+      if (!isFinite(n) || n <= 0)
+        t += ' · dix licenciements ou plus : <a href="audit-pse.html">plan de sauvegarde</a>';
+      else if (n >= 10)
+        t += " · " + n + ' licenciements envisagés : <a href="audit-pse.html">le plan de ' +
+          "sauvegarde de l'emploi est dû</a>";
+      else
+        t += " · " + n + " licenciement" + (n > 1 ? "s" : "") + " envisagé" + (n > 1 ? "s" : "") +
+          " : pas de plan de sauvegarde, le seuil est de dix sur trente jours";
     }
-    $("#fiche-rappel").innerHTML = t;
-  })();
+    z.innerHTML = t;
+  }
+  rappelFiche();
 
   /* LE NOMBRE SE DEMANDE D'ENTRÉE, PARCE QUE C'EST LUI QUI DÉCIDE.
 
@@ -1427,6 +1446,7 @@
     function dire() {
       var n = parseInt(champ.value, 10);
       etat.nombre = isNaN(n) ? "" : String(n);
+      rappelFiche();
       if (isNaN(n) || n < 1) { zone.innerHTML = ""; return; }
       if (n >= 10 && effectif >= 50) {
         zone.innerHTML = '<div class="avis non"><b>' + n + " licenciements sur trente jours : " +
