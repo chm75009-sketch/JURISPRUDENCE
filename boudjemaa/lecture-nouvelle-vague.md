@@ -652,3 +652,33 @@ Après le 14 mars 1936 il n'existe plus qu'un club de football à Béja.
 
 Source : Football, 29 avril 1936, page 10, ark bpt6k72148784, vue 9. Page
 complète dans photos/1936, extrait cadré dans le même dossier.
+
+### Pourquoi l'Olympique a-t-il été dissous ? Je n'ai pas trouvé
+
+Le bulletin de la Fédération enregistre la conséquence, jamais le motif : il
+dit que le club est dissous et où vont ses joueurs, il ne dit pas pourquoi.
+Les cinquante numéros de Football de septembre 1935 à décembre 1936 ont été
+passés au mot « Béja » et au mot « Béjaoise ». Cinq portent quelque chose,
+et deux seulement touchent à l'affaire :
+
+- 9 avril 1936, page 10. « Appel de l'U.S. Bejaoise contre décision de la
+  Ligue de Tunisie (Composition Division d'honneur du groupe Nord). - La
+  Commission, après audition de M. Hugon, agissant au nom du club appelant,
+  confirme la décision dont appel pour débouter l'U.S. Bejaoise. »
+  ark bpt6k7214875w, vue 10.
+- 15 avril 1936, page 6. Licences des joueurs Hattab André, Hattab Jules et
+  Berdah Victor : « Constatant la carence de l'E.S. Sahel Sousse et de l'U.S.
+  Béjaoise sollicitées de fournir avis », la Commission autorise la délivrance
+  des licences. ark bpt6k72148769, vue 6.
+
+Le motif se trouverait dans la presse de Tunis de mars 1936. Gallica n'a que
+trois numéros du Petit Matin pour toute l'année 1936, le 5 mars, le 24 mai et
+le 4 juin, et aucun ne dit rien de l'Olympique. La Dépêche tunisienne n'est pas
+numérisée : elle est sur microfilm à la Bibliothèque nationale de France, cote
+MFILM JO-5914. Tant qu'on n'aura pas lu ce microfilm, la raison de la
+dissolution reste inconnue.
+
+Une confirmation en passant. L'Annuaire tunisien du commerce, de l'industrie,
+de l'agriculture et des administrations de la Régence, édition 1937, à la
+rubrique des sociétés sportives, ne porte plus qu'un club de football à Béja :
+« Béja : Union Sportive Béjaoise ». ark bd6t53532177.
