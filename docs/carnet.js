@@ -196,6 +196,48 @@
      quelqu'un qui n'y est pas encore : ceux-là se saisissent à la main et
      viennent à la suite. Sans ce rattrapage, on pouvait les saisir et ils
      disparaissaient. Mesuré le 23 septembre 2026. */
+  /* LES ORGANISMES DE LA FICHE SONT DÉJÀ DES DESTINATAIRES.
+
+     « ZURSSAF Ile-de-France » était saisi sur la fiche d'entreprise, et les
+     courriers URSSAF sortaient sans destinataire, avec « compte cotisant
+     n° [NUMÉRO] » à remplir à la main. Relevé le 29 septembre 2026. Ce que la
+     fiche porte, la liste le propose : l'URSSAF pour sa famille, l'assureur de
+     prévoyance et la complémentaire santé pour la leur, la banque quand elle
+     est connue. Le numéro de compte cotisant, lui, n'est pas sur la fiche :
+     il reste un crochet, parce qu'on ne devine pas un numéro. */
+  var DE_LA_FICHE = {
+    urssaf: [["orgUrssaf", "caisse d'affiliation"]],
+    assurance: [["orgPrevoyance", "prévoyance"], ["orgSante", "frais de santé"]],
+  };
+  function organismes(famille) {
+    var L = DE_LA_FICHE[famille];
+    if (!L) return [];
+    var p = null;
+    try { p = JSON.parse(window.localStorage.getItem("profil-entreprise") || "null"); }
+    catch (e) { p = null; }
+    if (!p) return [];
+    var out = [];
+    L.forEach(function (x) {
+      var brut = net(p[x[0]]);
+      if (!brut) return;
+      /* La fiche tient le nom et l'adresse dans un seul champ : la première
+         ligne, ou ce qui précède la première virgule, fait le nom ; le reste
+         fait l'adresse. */
+      var lignes = brut.split("\n").map(net).filter(Boolean);
+      var nom = lignes[0] || brut;
+      var adresse = lignes.slice(1).join("\n");
+      if (!adresse && nom.indexOf(",") > 0) {
+        adresse = nom.slice(nom.indexOf(",") + 1).trim();
+        nom = nom.slice(0, nom.indexOf(",")).trim();
+      }
+      var f = fiche({ id: "fiche:" + x[0], famille: famille, nom: nom, adresse: adresse,
+        contact: "", courriel: "", telephone: "", reference: "" });
+      f.detail = [x[1], f.detail].filter(Boolean).join(" · ");
+      out.push(f);
+    });
+    return out;
+  }
+
   function pour(famille) {
     if (famille === "salarie") {
       var mains = lireTout()
@@ -204,10 +246,10 @@
         .sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); });
       return salaries().concat(mains);
     }
-    return lireTout()
+    return organismes(famille).concat(lireTout()
       .filter(function (o) { return o.famille === famille; })
       .map(fiche)
-      .sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); });
+      .sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); }));
   }
 
   /* UN DESTINATAIRE QUI N'EST PAS ENCORE AU CARNET.

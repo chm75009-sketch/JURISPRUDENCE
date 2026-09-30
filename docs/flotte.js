@@ -962,18 +962,36 @@
     if (C.length === 1) C.push(C[0].map(function () { return ""; }));
 
     var alertes = [["Échéance", "Qui ou quoi", "Date", "Où l'on en est"]];
+    /* « DANS 11 JOURS » NE VAUT QUE LE JOUR OÙ ON L'A ÉCRIT.
+
+       La colonne « Où l'on en est » sortait en texte figé : le classeur rouvert
+       une semaine plus tard annonçait encore onze jours, et la personne qui le
+       lit n'a aucun moyen de le savoir. Relevé le 29 septembre 2026. Quand la
+       ligne porte une date, la colonne devient une formule qui compte depuis le
+       jour où le classeur est ouvert ; les lignes en kilomètres et en points de
+       permis, elles, n'ont pas de date et gardent leur texte. */
+    function ouLonEnEst(rang, jours, texte) {
+      var c = "C" + rang;
+      return { f: 'IF(' + c + '="","",IF(' + c + '<TODAY(),"dépassée de "&TEXT(TODAY()-' + c +
+        ',"0")&" jours",IF(' + c + '=TODAY(),"aujourd\'hui","dans "&TEXT(' + c +
+        '-TODAY(),"0")&" jours")))',
+        v: texte };
+    }
     vehicules().forEach(function (v) {
       echeancesVehicule(v).forEach(function (e) {
         if (e.etat !== "passe" && e.etat !== "rouge" && e.etat !== "ambre") return;
+        var rang = alertes.length + 1;
         alertes.push([e.quoi, v.immat || "", e.km ? "" : dateExcel(e.date),
-          e.km ? (e.reste < 0 ? "dépassée de " + (-e.reste) + " km" : "dans " + e.reste + " km") : dit(e.jours)]);
+          e.km ? (e.reste < 0 ? "dépassée de " + (-e.reste) + " km" : "dans " + e.reste + " km")
+               : ouLonEnEst(rang, e.jours, dit(e.jours))]);
       });
     });
     salaries().forEach(function (s) {
       echeancesConducteur(fiche(s.id)).forEach(function (e) {
         if (e.etat !== "passe" && e.etat !== "rouge" && e.etat !== "ambre") return;
+        var rangC = alertes.length + 1;
         alertes.push([e.quoi, s.nom, e.points ? "" : dateExcel(e.date),
-          e.points ? e.valeur + " points restants" : dit(e.jours)]);
+          e.points ? e.valeur + " points restants" : ouLonEnEst(rangC, e.jours, dit(e.jours))]);
       });
     });
     if (alertes.length === 1) alertes.push(["Aucune échéance dépassée ni proche", "", "", ""]);

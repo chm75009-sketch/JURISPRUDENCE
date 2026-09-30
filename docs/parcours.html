@@ -185,8 +185,25 @@
   #repli-parcours button{min-height:44px;padding:0 14px;cursor:pointer}
   #dlg-courrier{max-width:82ch;width:93vw;border:1px solid var(--filet);border-radius:6px;padding:16px 18px}
   #dlg-courrier::backdrop{background:#0b111a99}
+  /* SIX BOUTONS PRENAIENT DEUX CENT VINGT-SEPT POINTS SUR HUIT CENT
+     QUARANTE-QUATRE : un quart de l'écran avant le premier mot du document.
+     Relevé le 29 septembre 2026. Le téléchargement en Word garde toute la
+     largeur, parce que c'est ce qu'on vient chercher ; les quatre autres
+     tiennent sur une ligne qui défile du doigt ; « Fermer » devient la croix
+     du coin. */
+  #dlg-courrier{position:relative}
   #dlg-courrier .dt-barre{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
-  @media (max-width:700px){#dlg-courrier .dt-barre button{flex:1 1 44%;padding:10px 8px;font-size:14px}
+  #dlg-courrier .dt-secondes{display:flex;gap:8px;margin:0 0 12px;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #dlg-courrier .dt-secondes::-webkit-scrollbar{display:none}
+  #dlg-courrier .dt-secondes button{flex:none;white-space:nowrap;min-height:40px;
+    padding:0 13px;font:600 13.5px/1 system-ui;cursor:pointer}
+  #dlg-courrier .dt-fermer{position:absolute;top:10px;right:10px;width:34px;height:34px;
+    min-height:34px;padding:0;border:1px solid var(--filet);border-radius:17px;
+    background:var(--surface);color:var(--gris);font:600 17px/1 system-ui;cursor:pointer}
+  #dlg-courrier .dt-fermer:hover{color:var(--encre);border-color:var(--accent,#1f3864)}
+  #dlg-courrier h3{padding-right:42px}
+  @media (max-width:700px){#dlg-courrier .dt-barre button{flex:1 1 100%;padding:12px 8px;font-size:15px}
     #dlg-courrier .dt-aide{display:none}}
   #dlg-courrier h3{margin:0 0 10px;font:600 16px/1.3 system-ui;color:var(--encre)}
   /* Les onglets d'un document en trois parties : le texte, les formalités,
@@ -351,7 +368,9 @@
     body.print-courrier #recap{display:none !important}
     body.print-courrier #dlg-courrier{display:block !important;position:static;border:none;
       padding:0;margin:0;max-width:none;width:auto;max-height:none;overflow:visible}
-    body.print-courrier #dlg-courrier .dt-barre{display:none !important}
+    body.print-courrier #dlg-courrier .dt-barre,
+    body.print-courrier #dlg-courrier .dt-secondes,
+    body.print-courrier #dlg-courrier .dt-fermer{display:none !important}
     body.print-courrier #dlg-courrier pre{max-height:none;overflow:visible;font-size:11pt}
   }
 
@@ -492,13 +511,15 @@ réponse nuancée.</p>
      chargé qu'au clic sur le bouton de l'étape : voir produireCourrier dans
      docs/parcours.js. Ce qui manque au dossier sort entre crochets, visible. -->
 <dialog id="dlg-courrier">
+  <button type="button" class="dt-fermer" id="dt-fermer" aria-label="Fermer le document">×</button>
   <div class="dt-barre">
     <button type="button" id="dt-word">Télécharger en Word</button>
+  </div>
+  <div class="dt-secondes">
     <button type="button" class="second" id="dt-copier">Copier</button>
     <button type="button" class="second" id="dt-imprimer">Imprimer / PDF</button>
-    <button type="button" class="second" id="dt-tableur" hidden>Télécharger pour Excel (.xlsx)</button>
+    <button type="button" class="second" id="dt-tableur" hidden>Excel (.xlsx)</button>
     <button type="button" class="second" id="dt-modele">Revenir au modèle</button>
-    <button type="button" class="second" id="dt-fermer">Fermer</button>
   </div>
   <h3 id="dt-titre"></h3>
   <div id="dt-onglets" class="dt-onglets" role="tablist" hidden></div>

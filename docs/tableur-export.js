@@ -239,8 +239,18 @@
            sa valeur en cache pour qu'elle se lise même sans recalcul. */
         if (cel && typeof cel === "object" && typeof cel.f === "string") {
           var sf = style === 5 ? 7 : (style === 3 ? 6 : style);
-          x += '<c r="' + ref + '" s="' + sf + '"><f>' + ech(cel.f) + "</f>" +
-            (typeof cel.v === "number" && isFinite(cel.v) ? "<v>" + cel.v + "</v>" : "") + "</c>";
+          /* UNE FORMULE PEUT RENDRE DU TEXTE. « dans 11 jours » était recopié
+             en dur dans la colonne « Où l'on en est » du classeur de la
+             flotte : rouvert une semaine plus tard, il disait encore onze
+             jours. Relevé le 29 septembre 2026. La formule se calcule sur la
+             date de la ligne et sur le jour où le classeur est ouvert ; sa
+             valeur du moment reste en cache, pour qu'un lecteur qui ne
+             recalcule pas voie quelque chose. */
+          var txt = (typeof cel.v === "string" && cel.v !== "");
+          x += '<c r="' + ref + '" s="' + sf + '"' + (txt ? ' t="str"' : "") + "><f>" +
+            ech(cel.f) + "</f>" +
+            (typeof cel.v === "number" && isFinite(cel.v) ? "<v>" + cel.v + "</v>"
+              : (txt ? "<v>" + ech(cel.v) + "</v>" : "")) + "</c>";
           continue;
         }
         /* Un nombre passé comme nombre s'écrit en nombre : il s'additionne

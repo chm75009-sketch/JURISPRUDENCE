@@ -138,6 +138,168 @@ else {
 }
 if (erreurs.length) faute("erreur JavaScript : " + erreurs[0].slice(0, 110));
 
+/* ---- 3. une entrée passée, hors registre : retard, pas régularisation ----
+
+   Un nouvel embauché saisi à la main, entré la veille, recevait un « contrat de
+   régularisation » et s'entendait dire qu'il n'y avait « ni période d'essai, ni
+   déclaration préalable à l'embauche ». Hors du registre, la date passée est un
+   retard de formalités : l'écran le dit, le contrat ne l'écrit pas.           */
+await page.goto(RACINE + "/contrats-transport.html");
+await page.waitForTimeout(1200);
+erreurs = [];
+const h = await page.evaluate(async () => {
+  const p = document.querySelectorAll("#profils button");
+  if (!p.length) return { sansProfil: true };
+  p[0].click();
+  await new Promise((x) => setTimeout(x, 900));
+  const sel = document.getElementById("salarie");
+  if (sel) { sel.value = ""; sel.dispatchEvent(new Event("change", { bubbles: true })); }
+  await new Promise((x) => setTimeout(x, 700));
+  const pose = (c, v) => {
+    const e = document.querySelector('[data-c="' + c + '"]');
+    if (!e) return false;
+    e.value = v;
+    e.dispatchEvent(new Event("input", { bubbles: true }));
+    e.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  };
+  const hier = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  pose("nom", "MARTIN Lucie");
+  pose("entree", hier);
+  await new Promise((x) => setTimeout(x, 700));
+  const a = document.getElementById("alerte-dpae");
+  const CT = window.ContratsTransport;
+  /* Le titre se lit sur les blocs du contrat, tel que le module l'écrirait :
+     l'écran ne le montre qu'après le bouton, et c'est le titre qui dit si
+     l'acte ouvre la relation ou la régularise. */
+  let v = {};
+  try { v = JSON.parse(localStorage.getItem("contrats-transport") || "{}") || {}; } catch (e) {}
+  v.profil = (document.querySelector("#profils button[data-p]") || {}).dataset
+    ? document.querySelector("#profils button[data-p]").dataset.p : "";
+  v.entreprise = JSON.parse(localStorage.getItem("profil-entreprise") || "{}");
+  const sur = (CT.ecrire(v) || [])
+    .filter((b) => b.k === "sur").map((b) => b.t).join(" ");
+  return {
+    alerte: a && !a.classList.contains("cache") ? (a.textContent || "").trim() : "",
+    titre: sur,
+  };
+});
+if (h.sansProfil) faute("aucun poste à choisir au troisième essai");
+else {
+  if (!/Contrat de travail/i.test(h.titre))
+    faute("le contrat n'a pas de titre au troisième essai : « " + h.titre + " »");
+  if (!/déclaration préalable à l'embauche est en retard/i.test(h.alerte))
+    faute("entrée passée hors registre : aucune alerte sur la déclaration préalable");
+  if (/régularisation d'une relation de travail en cours/i.test(h.titre))
+    faute("entrée passée hors registre : le contrat s'intitule « régularisation » (" +
+      h.titre.slice(0, 90) + ")");
+}
+if (erreurs.length) faute("erreur JavaScript au troisième essai : " + erreurs[0].slice(0, 110));
+
+/* ---- 4. le salarié du registre, entré en 2004, reste une régularisation -- */
+await page.goto(RACINE + "/contrats-transport.html");
+await page.waitForTimeout(1200);
+const q = await page.evaluate(async () => {
+  const p = document.querySelectorAll("#profils button");
+  if (!p.length) return { sansProfil: true };
+  p[0].click();
+  await new Promise((x) => setTimeout(x, 900));
+  const sel = document.getElementById("salarie");
+  if (!sel) return { sansListe: true };
+  sel.value = "0"; sel.dispatchEvent(new Event("change", { bubbles: true }));
+  await new Promise((x) => setTimeout(x, 900));
+  const a = document.getElementById("alerte-dpae");
+  const CT = window.ContratsTransport;
+  /* Le titre se lit sur les blocs du contrat, tel que le module l'écrirait :
+     l'écran ne le montre qu'après le bouton, et c'est le titre qui dit si
+     l'acte ouvre la relation ou la régularise. */
+  let v = {};
+  try { v = JSON.parse(localStorage.getItem("contrats-transport") || "{}") || {}; } catch (e) {}
+  v.profil = (document.querySelector("#profils button[data-p]") || {}).dataset
+    ? document.querySelector("#profils button[data-p]").dataset.p : "";
+  v.entreprise = JSON.parse(localStorage.getItem("profil-entreprise") || "{}");
+  const sur = (CT.ecrire(v) || [])
+    .filter((b) => b.k === "sur").map((b) => b.t).join(" ");
+  return { alerte: a && !a.classList.contains("cache"), titre: sur };
+});
+if (!q.sansProfil && !q.sansListe) {
+  if (q.alerte)
+    faute("un salarié du registre entré en 2004 reçoit l'alerte de déclaration préalable");
+  if (!/régularisation d'une relation de travail en cours/i.test(q.titre))
+    faute("un salarié du registre entré en 2004 ne sort plus en régularisation (" +
+      q.titre.slice(0, 90) + ")");
+}
+
+/* ---- 5. les tournures interdites, dans le contrat lui-même ---------------
+
+   verifier-marques.mjs passe les 224 générateurs de documents-*.js ; le module
+   du transport n'en fait pas partie, et c'est lui qui écrit le contrat le plus
+   souvent produit. « Taux conventionnels appliqués ci-dessus : ceux de Accord
+   du 11 octobre 2023 » a donc traversé tous les contrôles. Relevé le
+   29 septembre 2026. Le contrat, son annexe et la note hors contrat passent
+   désormais les mêmes interdits.                                           */
+const INTERDITS = [
+  [/\bundefined\b/, "« undefined » dans le contrat"],
+  [/\bNaN\b/, "« NaN » dans le contrat"],
+  [/Juris Expert|JURISTE-EXPERT|juris-expert/i, "nom d'un autre outil"],
+  [/github\.(io|com)/i, "lien vers le dépôt"],
+  [/\bce module\b/i, "le contrat parle du module"],
+  [/cette application/i, "le contrat parle de l'application"],
+  [/lue?s? à la source/i, "« lu à la source » dans le contrat"],
+  [/\bÀ ADAPTER\b/, "bandeau « À ADAPTER »"],
+  [/[\u2013\u2014]/, "tiret cadratin ou demi-cadratin"],
+  [/\b20\d\d-\d\d-\d\d\b/, "date au format informatique"],
+  [/(?:^|[^A-Za-zÀ-ÿ'’])de (?!onze\b|onzième|un\b|une\b|huit\b)([AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜaeiouyàâäéèêëîïôöùûü])/,
+    "élision manquée après « de »"],
+  [/\bdocument\(s\)|\bsalarié\(s\)|\bligne\(s\)/, "pluriel entre parenthèses"],
+];
+await page.goto(RACINE + "/contrats-transport.html");
+await page.waitForTimeout(1200);
+const textes = await page.evaluate(async () => {
+  const CT = window.ContratsTransport;
+  const out = [];
+  let v = {};
+  try { v = JSON.parse(localStorage.getItem("contrats-transport") || "{}") || {}; } catch (e) {}
+  v.entreprise = JSON.parse(localStorage.getItem("profil-entreprise") || "{}");
+  /* Chaque profil de poste, en contrat à durée indéterminée puis déterminée :
+     les clauses changent d'un profil à l'autre, et la note hors contrat
+     aussi. */
+  for (const p of CT.PROFILS) {
+    for (const nature of ["cdi", "cdd"]) {
+      const w = Object.assign({}, v, { profil: p.cle, nature: nature,
+        motif: "accroissement temporaire d'activité", terme: "2027-01-15" });
+      const bouts = [];
+      const lis = (B) => (B || []).forEach((b) => {
+        if (b && typeof b.t === "string") bouts.push(b.t);
+        if (b && b.titre) bouts.push(b.titre);
+        if (b && b.head) bouts.push(b.head.join(" "));
+        if (b && b.rows) b.rows.forEach((r) => bouts.push(r.join(" ")));
+      });
+      try { lis(CT.ecrire(w)); } catch (e) { bouts.push("ERREUR ecrire : " + e.message); }
+      try { lis(CT.reserve ? CT.reserve(w) : []); } catch (e) {}
+      try { lis(CT.formalites ? CT.formalites(w) : []); } catch (e) {}
+      out.push([p.cle + "/" + nature, bouts.join("\n")]);
+    }
+  }
+  return out;
+});
+let vus = {};
+for (const [quoi, texte] of textes) {
+  if (/^ERREUR ecrire/m.test(texte)) {
+    faute(quoi + " : " + (texte.match(/^ERREUR ecrire.*/m) || [])[0]);
+    continue;
+  }
+  for (const [re, dit] of INTERDITS) {
+    const m = texte.match(re);
+    if (!m) continue;
+    if (vus[dit]) continue;
+    vus[dit] = true;
+    const ligne = (texte.split("\n").filter((l) => re.test(l))[0] || m[0]).trim();
+    faute(quoi + " : " + dit + " · « " + ligne.slice(0, 110) + " »");
+  }
+}
+console.log("  contrats relus : " + textes.length);
+
 await nav.close();
 console.log("contrats du transport : fautes " + fautes);
 process.exit(fautes ? 1 : 0);

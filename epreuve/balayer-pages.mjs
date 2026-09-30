@@ -87,10 +87,35 @@ for (const large of [390, 1280]) {
       continue;
     }
     await p.waitForTimeout(400);
-    const vu = await p.evaluate(() => ({
-      deborde: document.documentElement.scrollWidth > window.innerWidth + 2,
-      texte: document.body.innerText,
-    }));
+    const vu = await p.evaluate(() => {
+      /* UN BOUTON SANS TEXTE NE SE CLIQUE PAS.
+
+         « BUTTON|button||| », relevé le 29 septembre 2026 dans « Coller la
+         réponse du cabinet » : un bouton visible, sans libellé, sans titre et
+         sans étiquette. Personne ne peut deviner ce qu'il fait, et un lecteur
+         d'écran ne l'annonce pas. Le balayage refuse désormais tout bouton,
+         tout résumé de volet et tout lien visible qui ne dit rien. */
+      const muets = [];
+      document.querySelectorAll("button, summary, a[href]").forEach((e) => {
+        if (!e.offsetParent && getComputedStyle(e).position !== "fixed") return;
+        const dit = (e.textContent || "").trim() ||
+          (e.getAttribute("aria-label") || "").trim() || (e.title || "").trim() ||
+          (e.querySelector("img[alt]") ? e.querySelector("img[alt]").alt.trim() : "");
+        if (!dit) muets.push(e.tagName.toLowerCase() +
+          (e.className ? "." + String(e.className).split(/\s+/)[0] : "") +
+          (e.id ? "#" + e.id : ""));
+      });
+      return {
+        deborde: document.documentElement.scrollWidth > window.innerWidth + 2,
+        texte: document.body.innerText,
+        muets: muets,
+      };
+    });
+    if (vu.muets.length) {
+      console.log("FAUTE " + large + "px " + f + " : " + vu.muets.length +
+        " commande(s) sans texte · " + vu.muets.slice(0, 4).join(", "));
+      fautes++;
+    }
     if (err.length) {
       console.log("FAUTE " + large + "px " + f + " : " + err.slice(0, 2).join(" ~ ").slice(0, 200));
       fautes++;

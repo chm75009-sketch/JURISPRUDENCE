@@ -617,8 +617,12 @@
        ne la portait nulle part, sauf dans les modèles qui écrivent
        [RÉFÉRENCE]. Elle se pose sous la date, à sa place. Relevé le
        27 septembre 2026. */
+    /* « NOS RÉF. » DÉSIGNAIT LA RÉFÉRENCE DU DESTINATAIRE. Le carnet demande
+       le numéro de compte, de contrat ou de dossier tel que le destinataire le
+       porte : c'est sa référence, pas la nôtre, et l'usage l'écrit « V/Réf. ».
+       Relevé le 29 septembre 2026. */
     var ref = DEST && DEST.champs && DEST.champs["RÉFÉRENCE"];
-    if (ref) h += '<p class="reference">' + ech("Nos réf. : " + ref) + "</p>";
+    if (ref) h += '<p class="reference">' + ech("V/Réf. : " + ref) + "</p>";
     h += m.corps.map(function (l) {
       return l === "" ? "" : "<p>" + htmlLigne(l) + "</p>";
     }).join("");
@@ -788,6 +792,12 @@
       window.localStorage.setItem(CLE_BROUILLON, JSON.stringify({
         modele: MOD.id, famille: FAM ? FAM.cle : "",
         dest: DEST ? DEST.id : "", destNom: DEST ? DEST.nom : "",
+        /* UN DESTINATAIRE SAISI À LA MAIN N'A PAS D'IDENTIFIANT.
+           Le brouillon ne gardait que l'identifiant du carnet : « TRANSPORTS
+           DUPONT SAS », ajouté à la main avant le rechargement, revenait sans
+           destinataire, et la lettre repartait anonyme. Relevé le 29 septembre
+           2026. La fiche entière est gardée, et elle se refait telle quelle. */
+        destBrut: (DEST && DEST.brut) ? DEST.brut : null,
         objet: $("objet").innerHTML, lettre: $("lettre").innerHTML,
         le: new Date().toISOString(),
       }));
@@ -818,9 +828,12 @@
     if (h && h.parentNode) h.parentNode.insertBefore(z, h);
     $("repr-oui").addEventListener("click", function () {
       CM.FAMILLES.forEach(function (f) { if (f.cle === b.famille) FAM = f; });
+      DEST = null;
       if (b.dest && window.Carnet && window.Carnet.pour && b.famille) {
         window.Carnet.pour(b.famille).forEach(function (x) { if (x.id === b.dest) DEST = x; });
       }
+      if (!DEST && b.destBrut && window.Carnet && window.Carnet.provisoire)
+        DEST = window.Carnet.provisoire(b.famille, b.destBrut);
       z.remove();
       ouvrirModele(b.modele, { objet: b.objet, lettre: b.lettre });
     });

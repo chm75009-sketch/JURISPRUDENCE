@@ -2299,6 +2299,42 @@
       (cadres.length ? '<optgroup label="Cadres et postes d\'encadrement">' + cadres.join("") + "</optgroup>" : "") +
       (autres.length ? '<optgroup label="Autres salariés : le forfait suppose que leur durée de travail ne puisse pas être prédéterminée (L. 3121-58)">' +
         autres.join("") + "</optgroup>" : "");
+    /* CE QUE LA LISTE NE MONTRE PAS SE DIT.
+
+       Quatre noms sur quatre-vingt-deux, et rien sur les autres : l'écran
+       laissait croire que le registre n'en portait que quatre. Relevé le
+       29 septembre 2026. Le compte des écartés s'affiche, avec le motif de
+       chacun, et la liste de leurs noms se déplie. */
+    (function () {
+      var z = $("qui-ecartes");
+      if (!z) return;
+      var conducteurs = [], ouvriers = [], sortis = [];
+      tous.forEach(function (s) {
+        if (s.sor) { sortis.push(s.nom); return; }
+        if (HORS_FORFAIT.test(s.emp)) { conducteurs.push(s.nom); return; }
+        if (/^ouvrier/i.test(s.qua)) { ouvriers.push(s.nom); }
+      });
+      var n = conducteurs.length + ouvriers.length + sortis.length;
+      if (!n) {
+        z.textContent = "Les " + GENS.length + " salarié" + (GENS.length > 1 ? "s" : "") +
+          " du registre peuvent tous être proposés.";
+        return;
+      }
+      var bouts = [];
+      if (conducteurs.length) bouts.push(conducteurs.length + " au volant, dont le temps de " +
+        "service est enregistré");
+      if (ouvriers.length) bouts.push(ouvriers.length + " ouvrier" + (ouvriers.length > 1 ? "s" : "") +
+        " au poste");
+      if (sortis.length) bouts.push(sortis.length + " sorti" + (sortis.length > 1 ? "s" : ""));
+      var noms = conducteurs.concat(ouvriers).concat(sortis);
+      z.innerHTML = ech(GENS.length + " salarié" + (GENS.length > 1 ? "s" : "") + " sur " +
+        tous.length + " dans cette liste. " + n + " sont écartés : " +
+        bouts.join(", ") + ". Le forfait en jours est réservé aux cadres autonomes et aux " +
+        "salariés dont la durée du travail ne peut pas être prédéterminée (L. 3121-58).") +
+        ' <details><summary>Voir qui est écarté</summary><p>' +
+        ech(noms.join(", ")) + "</p></details>";
+    })();
+
     /* Le premier de la liste est celui que le menu montre : un cadre s'il y
        en a un, jamais un conducteur par défaut. */
     var prem = $("qui").querySelector("option");

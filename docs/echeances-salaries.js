@@ -201,13 +201,42 @@
          encombrer l'agenda, mais elle a été dite. */
       if (net(s.sor)) {
         var depuis = joursEntre(net(s.sor), d0);
-        if (depuis !== null && depuis >= -62 && depuis <= 1)
+        if (depuis !== null && depuis >= -62 && depuis <= 1) {
+          /* LA PORTABILITÉ N'EST PAS DUE À TOUTE SORTIE, ET ELLE N'EST PAS
+             « EN RETARD » TANT QU'ON NE SAIT PAS SI ELLE EST DUE.
+
+             Trois sortis recevaient une carte rouge « Échéance dépassée » sans
+             que rien ne dise à quelle condition. Relevé le 29 septembre 2026.
+             Le texte en pose deux : « Les salariés garantis collectivement
+             (...) bénéficient du maintien à titre gratuit de cette couverture
+             en cas de cessation du contrat de travail, NON CONSÉCUTIVE À UNE
+             FAUTE LOURDE, OUVRANT DROIT À PRISE EN CHARGE PAR LE RÉGIME
+             D'ASSURANCE CHÔMAGE » (L. 911-8 du code de la sécurité sociale,
+             LEGIARTI000027549338, deux lectures concordantes au relais le
+             30 septembre 2026). Tant que le motif de la sortie n'est pas connu,
+             la carte demande le motif au lieu de réclamer une formalité, et
+             elle n'est pas comptée en retard. */
+          /* Le motif se saisit sur la carte du registre, à côté de la date de
+             sortie : c'est là qu'on l'a sous les yeux. La suite d'embauche est
+             lue aussi, pour les fiches qui l'y portaient. */
+          var su0 = suite(idDe(s)) || {};
+          var motif = net(s.motifSortie) || net(su0.motifSortie);
+          var exclu = /faute lourde/i.test(motif);
+          var connu = !!motif;
           out.push({ quoi: "Portabilité des couvertures santé et prévoyance",
             qui: (net(s.nom) + " " + net(s.pre)).trim(), date: net(s.sor),
-            jours: depuis, etat: etatDe(depuis),
-            fond: "L. 911-8 du code de la sécurité sociale, 6° : l'employeur signale le maintien des garanties dans le certificat de travail et informe l'organisme assureur de la cessation du contrat de travail",
-            faire: "la mention du maintien sur le certificat de travail, et le courrier à l'organisme assureur ; le maintien est gratuit, pour une durée égale à celle de l'indemnisation du chômage, dans la limite de celle du dernier contrat et de douze mois",
+            jours: depuis, etat: connu && !exclu ? etatDe(depuis) : "aVoir",
+            aVerifier: !connu
+              ? "À vérifier : la portabilité n'est due que si la sortie ouvre droit au chômage et n'est pas consécutive à une faute lourde (L. 911-8 du code de la sécurité sociale)."
+              : (exclu ? "Non due : la cessation est consécutive à une faute lourde (L. 911-8 du code de la sécurité sociale)." : ""),
+            fond: "L. 911-8 du code de la sécurité sociale : le maintien à titre gratuit joue en cas de cessation du contrat non consécutive à une faute lourde et ouvrant droit à prise en charge par le régime d'assurance chômage ; son 6° ajoute que l'employeur signale ce maintien dans le certificat de travail et informe l'organisme assureur de la cessation du contrat",
+            faire: !connu
+              ? "à vérifier avant toute chose : la sortie ouvre-t-elle droit au chômage, et n'est-elle pas consécutive à une faute lourde ? Portez le motif de la sortie sur la fiche du salarié. Si les deux conditions sont réunies, le maintien est dû, et il se signale sur le certificat de travail avec un courrier à l'organisme assureur"
+              : (exclu
+                ? "rien à faire au titre de la portabilité : la cessation est consécutive à une faute lourde, et le maintien gratuit ne joue pas (L. 911-8). Gardez la trace du motif retenu"
+                : "la mention du maintien sur le certificat de travail, et le courrier à l'organisme assureur ; le maintien est gratuit, pour une durée égale à celle de l'indemnisation du chômage, dans la limite de celle du dernier contrat et de douze mois"),
             prov: "salaries" });
+        }
         return;                               /* parti : rien d'autre à suivre */
       }
       var id = idDe(s), nom = (net(s.nom) + " " + net(s.pre)).trim();

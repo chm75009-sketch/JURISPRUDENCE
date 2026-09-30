@@ -74,7 +74,13 @@
     grid-template-areas:"q q" "s s";padding:9px 10px;border-radius:var(--r1);background:var(--creux)}
   .jsem.hors{background:transparent;border:1px dashed var(--filet)}
   .jsem .quand{grid-area:q;font:600 var(--t2)/1.25 system-ui}
-  .jsem .saisie{grid-area:s;display:grid;grid-template-columns:1fr 68px 68px 56px;gap:2px 6px}
+  /* « TRAVAI », « AUX JOU » : DES MOTS COUPÉS, SUR UN TÉLÉPHONE.
+     La colonne de l'état ne laissait pas la place à « Travail » une fois
+     retirée la flèche du menu déroulant, et les colonnes d'heures prenaient
+     soixante-huit points chacune pour cinq caractères. Relevé le 29 septembre
+     2026. Les heures tiennent en soixante points, la pause en quarante-huit, et
+     l'état récupère le reste. */
+  .jsem .saisie{grid-area:s;display:grid;grid-template-columns:minmax(0,1fr) 60px 60px 48px;gap:2px 6px}
   .jsem .cap{font:600 10px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;
     color:var(--texte-3);text-align:center;align-self:end;padding-bottom:1px}
   .jsem .cap.g{text-align:left;padding-left:2px}
@@ -83,7 +89,7 @@
     min-height:44px;padding:6px 4px;border:1px solid var(--filet-2);border-radius:var(--r1);
     background:var(--surface);color:var(--texte)}
   .jsem input{text-align:center}
-  .jsem select{padding-left:6px;padding-right:0}
+  .jsem select{padding-left:6px;padding-right:2px;font-size:15px}
   /* Ce qui manque pour qu'une plage compte. Muet tant qu'il n'y a rien a
      dire : une ligne d'aide permanente ne se lit plus au bout de deux jours. */
   .jsem .manque{grid-column:1/-1;display:none;margin:4px 0 0;font:600 var(--t1)/1.35 system-ui;
@@ -379,6 +385,17 @@
            seuil, ni ses plafonds. La question se pose ici, une fois, et la
            réponse est gardée avec le salarié. -->
       <div id="q-categorie" hidden></div>
+      <!-- LE MOIS N'EST PAS LA RÈGLE, C'EST UNE OPTION.
+           Le relevé ventilait les majorations au mois pour tout roulant sous la
+           convention 16, sans rien demander. Or D. 3312-41 du code des
+           transports (LEGIARTI000043651182, deux lectures concordantes au
+           relais le 30 septembre 2026) : « La durée hebdomadaire du travail est
+           calculée sur une semaine. La durée hebdomadaire du travail des
+           personnels roulants peut être calculée sur une durée supérieure à la
+           semaine, sans pouvoir dépasser trois mois, après avis du comité
+           social et économique s'il existe. » La semaine est donc le principe,
+           le mois se décide et se prouve. Relevé le 29 septembre 2026. -->
+      <div id="q-decompte" hidden></div>
       <!-- LE TAUX HORAIRE, POUR QUE LES MAJORATIONS FASSENT DES EUROS.
            Le décompte comptait des heures majorées et s'arrêtait là : le
            salarié lisait « 16 h à 25 % » sans savoir ce que cela vaut. Le taux

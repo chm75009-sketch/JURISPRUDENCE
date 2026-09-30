@@ -924,7 +924,10 @@
           fondement: e.fond,
           docs: e.faire || "",
           retard: e.etat === "passe",
-          detail: e.etat === "passe" ? "Échéance dépassée." : "",
+          /* Une échéance qui attend une réponse avant d'être due n'est pas en
+             retard : elle le dit. Voir la portabilité, dans
+             echeances-salaries.js. */
+          detail: e.aVerifier ? e.aVerifier : (e.etat === "passe" ? "Échéance dépassée." : ""),
           prov: "salaries",
         });
       });

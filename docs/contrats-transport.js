@@ -603,12 +603,51 @@
     return { dit: dit, base: base };
   }
 
+  /* UNE DATE PASSÉE N'EST PAS UNE RELATION DE TRAVAIL EN COURS.
+
+     Le seul critère était la date d'entrée : un nouvel embauché saisi à la
+     main, avec une entrée à la veille, sortait un « contrat de
+     régularisation » et se voyait dire qu'il n'y avait ni période d'essai ni
+     déclaration préalable à l'embauche. C'est l'inscription au registre unique
+     du personnel qui atteste la relation existante (L. 1221-13) : hors du
+     registre, la date passée n'est qu'une date, et la déclaration préalable
+     reste due. Relevé le 29 septembre 2026. */
+  /* L'INTITULÉ D'UN TEXTE APRÈS « DE ». « ceux de Accord du 11 octobre 2023 »
+     s'écrit « ceux de l'accord du 11 octobre 2023 » : la majuscule du titre
+     tombe, et l'élision se fait. On ne touche qu'aux premiers mots que la
+     convention emploie. */
+  function duTexte(titre) {
+    var s = String(titre || "").trim();
+    if (!s) return s;
+    var m = /^(Accord|Avenant|Annexe|Convention|Arrêté|Décret|Protocole)\b/.exec(s);
+    if (!m) return s;
+    var mot = m[1].charAt(0).toLowerCase() + m[1].slice(1);
+    var suite = s.slice(m[1].length);
+    return (/^[aeiouyéèêAEIOUYÉÈÊ]/.test(mot) ? "l'" : "la ") + mot + suite;
+  }
+
   function dejaEnPoste(v) {
-    var e = v && v.entree ? new Date(String(v.entree) + "T12:00:00") : null;
+    if (!v || String(v.auRegistre || "") !== "oui") return false;
+    var e = v.entree ? new Date(String(v.entree) + "T12:00:00") : null;
     if (!e || isNaN(e)) return false;
     var aujourd = new Date();
     aujourd.setHours(0, 0, 0, 0);
     return e < aujourd;
+  }
+
+  /* Hors registre, une entrée déjà passée est un retard de formalités. « La
+     déclaration préalable à l'embauche est adressée au plus tôt dans les huit
+     jours précédant la date prévisible de l'embauche » (R. 1221-4,
+     LEGIARTI000024214323, lu au relais le 30 septembre 2026, deux lectures
+     concordantes) : passée cette date, elle est en retard, pas dispensée. */
+  function entreePasseeHorsRegistre(v) {
+    if (!v || String(v.auRegistre || "") === "oui") return null;
+    var e = v.entree ? new Date(String(v.entree) + "T12:00:00") : null;
+    if (!e || isNaN(e)) return null;
+    var aujourd = new Date();
+    aujourd.setHours(0, 0, 0, 0);
+    if (!(e < aujourd)) return null;
+    return Math.round((aujourd - e) / 864e5);
   }
 
   function ecrire(v) {
@@ -649,6 +688,10 @@
        contrat : elle était écrite dans l'acte que le salarié signe. Elle est
        passée à l'écran. Relevé le 27 septembre 2026. */
     }
+    /* Le retard de la déclaration préalable se dit à l'employeur, sur l'écran,
+       et non dans l'acte que le salarié signe : c'est ce qui avait été
+       reproché à la consigne « ne l'antidatez pas ». Voir verifierDpae()
+       dans contrats-transport-ecran.js. */
     B.push({ k: "p", t: "Entre les soussignés :" });
     B.push({ k: "p", t: (ent.denomination || "[DÉNOMINATION]") + ", " +
       (ent.adresse ? "dont le siège est " + ent.adresse : "[ADRESSE DU SIÈGE]") + ", " +
@@ -959,13 +1002,17 @@
       "est versée mensuellement, à terme échu." });
     /* LA DATE DE LA GRILLE SE DIT, ET CE QUI EST PLUS RÉCENT AUSSI. */
     if ((CCN.salaires.posterieures || []).length) {
-      B.push({ k: "note", t: "Taux conventionnels appliqués ci-dessus : ceux de " +
-        CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) +
-        ". Deux annexes de taux horaires des personnels ouvriers leur sont postérieures dans la " +
-        "convention collective, " +
+      /* « CEUX DE ACCORD DU 11 OCTOBRE 2023 ». L'intitulé de l'accord commence
+         par une majuscule, et il était collé à une préposition qui appelle
+         l'élision. Relevé le 29 septembre 2026. La note a été resserrée du même
+         coup : elle disait la même chose en trois phrases. */
+      B.push({ k: "note", t: "Taux appliqués ci-dessus : ceux de " + duTexte(CCN.salaires.source) +
+        ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) + ". " +
+        (CCN.salaires.posterieures.length > 1 ? "Deux annexes de taux horaires" : "Une annexe de taux horaires") +
+        " des personnels ouvriers leur " + (CCN.salaires.posterieures.length > 1 ? "sont" : "est") +
+        " postérieure" + (CCN.salaires.posterieures.length > 1 ? "s" : "") + ", " +
         CCN.salaires.posterieures.map(function (x) { return "celle du " + x.quand; }).join(" et ") +
-        " : leurs tableaux n'ont pas été lus ici. Confrontez le taux et la garantie annuelle à la " +
-        "grille en vigueur à la date de signature avant de signer." });
+        " : confrontez le taux et la garantie annuelle à la grille en vigueur avant de signer." });
     }
 
     /* ── 7 · frais de déplacement ───────────────────────────────────── */
@@ -1431,6 +1478,7 @@
     garantiePartiel: garantiePartiel,
     ecrire: ecrire, reserve: reserve, formalites: formalites,
     annexeDemande: annexeDemande, annexeDue: annexeDue,
+    dejaEnPoste: dejaEnPoste, entreePasseeHorsRegistre: entreePasseeHorsRegistre,
     fr: fr, dateFr: dateFr,
   };
 

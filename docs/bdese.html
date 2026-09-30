@@ -288,7 +288,11 @@
        deux rubriques du décret y sont soumises, et elles sont alors écartées
        plutôt que demandées pour rien. Rien n'est deviné : une fiche muette
        laisse la ligne due. */
-    c.fiche = { formeJuridique: profil.formeJuridique || "", groupe: profil.groupe || "" };
+    c.fiche = { formeJuridique: profil.formeJuridique || "", groupe: profil.groupe || "",
+      denomination: profil.denomination || "",
+      /* Le représentant légal signe le classeur : c'est lui qui en est
+         l'auteur, et non la société ni l'outil qui l'écrit. */
+      responsable: profil.responsable || "", responsableNom: profil.responsableNom || "" };
     c.mil = AUD ? AUD.millesimes(c.an) : [];
     /* L'effectif commande la grille : R. 2312-8 en deçà de trois cents
        salariés, R. 2312-9 à partir de trois cents. La grille du décret n'est
@@ -738,8 +742,16 @@
      Styles (xl/styles.xml) : 1 = titre, 2 = en-tête, 3 = cellule cadrée. */
   function proprietesXlsx() {
     var d = new Date().toISOString().slice(0, 19) + "Z";
+    /* L'AUTEUR EST CELUI QUI SIGNE, PAS LA SOCIÉTÉ NI L'OUTIL.
+       Les classeurs sortaient avec « openpyxl » pour auteur quand la
+       dénomination n'était pas encore saisie. Relevé le 29 septembre 2026 :
+       l'auteur est le représentant légal de la fiche, et la société va dans
+       sa propre propriété. */
     var e = document.getElementById("ent");
-    var qui = (e && e.value.trim()) || "";
+    var fiche = (CTX && CTX.fiche) || {};
+    var qui = String(fiche.responsable || fiche.responsableNom || "").trim() ||
+      ((e && e.value.trim()) || "");
+    var societe = String(fiche.denomination || "").trim() || ((e && e.value.trim()) || "");
     return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"' +
       ' xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"' +
@@ -747,6 +759,7 @@
       "<dc:title>Base de données économiques, sociales et environnementales</dc:title>" +
       "<dc:creator>" + echX(qui) + "</dc:creator>" +
       "<cp:lastModifiedBy>" + echX(qui) + "</cp:lastModifiedBy>" +
+      "<cp:category>" + echX(societe) + "</cp:category>" +
       '<dcterms:created xsi:type="dcterms:W3CDTF">' + d + "</dcterms:created>" +
       '<dcterms:modified xsi:type="dcterms:W3CDTF">' + d + "</dcterms:modified>" +
       "</cp:coreProperties>";
@@ -822,7 +835,13 @@
     '<xf numFmtId="0" fontId="0" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="0" borderId="2" xfId="0" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
     '<xf numFmtId="0" fontId="0" fillId="3" borderId="2" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>' +
-    '</cellXfs></styleSheet>';
+    '</cellXfs>' +
+    /* LE STYLE PAR DÉFAUT MANQUAIT, ET TOUT LECTEUR LE DISAIT.
+       « Workbook contains no default style », relevé le 29 septembre 2026 :
+       sans le style nommé « Normal », un tableur tiers refait la mise en forme
+       à sa façon. Une ligne suffit. */
+    '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+    '</styleSheet>';
   function xlsx(feuilles) {
     var pris = {};
     var noms = feuilles.map(function (f) { return nomOnglet(f.titre, pris); });

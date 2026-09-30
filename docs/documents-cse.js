@@ -156,9 +156,13 @@
   function usage(L) {
     L.push("COMMENT SE SERVIR DE CE DOCUMENT");
     L.push("");
+    /* PAS DE « ICI » : LE DOCUMENT SORT DU CABINET, IL NE PARLE PAS DE
+       L'OUTIL QUI L'A ÉCRIT. « soit la donnée n'est pas connue ici » se lisait
+       dans la convocation, l'ordre du jour et la note des élections. Relevé le
+       29 septembre 2026. */
     L.push("Ce qui est écrit sans crochets est imposé par la loi et fondé sur l'article");
     L.push("cité en regard. Ce qui est ENTRE CROCHETS vous appartient : soit la loi vous");
-    L.push("en laisse le choix, soit la donnée n'est pas connue ici. Remplacez");
+    L.push("en laisse le choix, soit la donnée relève de votre dossier. Remplacez");
     L.push("chaque crochet, ou supprimez la ligne si elle ne vous concerne pas - n'en");
     L.push("laissez aucun dans le document que vous signez, adressez ou déposez.");
     L.push("");

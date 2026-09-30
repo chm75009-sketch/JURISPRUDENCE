@@ -68,8 +68,22 @@
     var E = null;
     try { E = JSON.parse(window.localStorage.getItem("registre-personnel") || "null"); } catch (e) {}
     var L = (E && E.salaries) || [];
+    /* LA LISTE SE LIT DANS L'ORDRE DES NOMS.
+
+       Elle suivait l'ordre des embauches du registre : pour trouver quelqu'un
+       parmi quatre-vingts, il fallait parcourir toute la liste. Relevé le
+       29 septembre 2026. Les sortis en sont déjà écartés ; le classement se
+       fait sur le nom, accents et casse mis de côté. */
     return L.filter(function (s) {
       return !s.ex && String(s.nom || "").trim() && !String(s.sor || "").trim();
+    }).sort(function (a, b) {
+      function cle(s) {
+        var x = (String(s.nom || "").trim() + " " + String(s.pre || "").trim()).trim();
+        try { x = x.normalize("NFD").replace(/[̀-ͯ]/g, ""); } catch (e) {}
+        return x.toUpperCase();
+      }
+      var ka = cle(a), kb = cle(b);
+      return ka < kb ? -1 : (ka > kb ? 1 : 0);
     });
   }
 
@@ -94,7 +108,7 @@
        préalable. Relevé le 26 septembre 2026. */
     if (i === "") {
       ["nom", "naissance", "lieuNaissance", "nationalite", "nir", "adresse", "entree",
-       "groupe", "sexe", "emploi"].forEach(function (c) { V[c] = ""; });
+       "groupe", "sexe", "emploi", "auRegistre"].forEach(function (c) { V[c] = ""; });
       V.entree = iso(new Date());
       /* LE VIDAGE N'ÉTAIT PAS ENREGISTRÉ.
 
@@ -128,6 +142,14 @@
     /* Le sexe ne s'affiche pas dans le contrat, mais il l'accorde : sans lui,
        une conductrice sortait « né le » et « désigné le salarié ». */
     if (s.sexe) V.sexe = s.sexe;
+    /* SEUL LE SALARIÉ DU REGISTRE EST « EN POSTE ».
+
+       Un nouvel embauché saisi à la main, avec une entrée à la veille, recevait
+       « Le salarié est en poste depuis le 28 septembre 2026 ... Ni période
+       d'essai, ni déclaration préalable à l'embauche » : une date passée ne
+       prouve pas une relation de travail existante, l'inscription au registre
+       la prouve (L. 1221-13). Relevé le 29 septembre 2026. */
+    V.auRegistre = "oui";
     garder();
     rendreChamps();
     direSiLeProfilNeVaPas(s);
@@ -318,7 +340,8 @@
        le … ». Relevé le 28 septembre 2026 : l'accord existait, la donnée
        n'arrivait pas. Les valeurs invisibles que le registre remplit sont
        recopiées avant tout le reste. */
-    ["sexe", "titreTravail", "titreNumero", "titreFin", "natureRegistre", "sortieRegistre"]
+    ["sexe", "titreTravail", "titreNumero", "titreFin", "natureRegistre", "sortieRegistre",
+     "auRegistre"]
       .forEach(function (k) { if (avant[k] !== undefined && avant[k] !== "") V[k] = avant[k]; });
     L.forEach(function (c) {
       if (avant[c.id] !== undefined && avant[c.id] !== "") { V[c.id] = avant[c.id]; return; }
@@ -351,6 +374,7 @@
     }).join("");
     verifierSmic();
     verifierPartiel();
+    verifierDpae();
   }
 
   $("champs").addEventListener("input", function (ev) {
@@ -367,6 +391,7 @@
     }
     if (c === "taux" || c === "smic" || c === "coef") verifierSmic();
     if (c === "mensuel" || c === "hebdo") verifierPartiel();
+    if (c === "entree") verifierDpae();
     garder();
   });
   $("champs").addEventListener("change", function (ev) {
@@ -406,6 +431,30 @@
       " heures par mois, alors que la durée de la catégorie est de " + ech(CT.fr(PROFIL.mensuel, 2)) +
       " heures. Un contrat à temps partiel est celui dont la durée est inférieure à la durée " +
       "légale ou conventionnelle : baissez la durée, ou décochez la case.";
+  }
+  /* UNE ENTRÉE DÉJÀ PASSÉE, HORS REGISTRE : LA DÉCLARATION EST EN RETARD.
+
+     Le contrat d'un nouvel embauché saisi à la main, avec une entrée à la
+     veille, s'intitulait « régularisation d'une relation de travail en cours »
+     et lui disait qu'il n'y avait « ni période d'essai, ni déclaration
+     préalable à l'embauche ». Hors du registre unique du personnel, la date
+     passée n'est qu'un retard de formalités, et c'est cela qui se dit, sur
+     l'écran et non dans l'acte que le salarié signe. Relevé le 29 septembre
+     2026. */
+  function verifierDpae() {
+    var b = $("alerte-dpae");
+    if (!b) return;
+    var n = CT.entreePasseeHorsRegistre ? CT.entreePasseeHorsRegistre(valeurs()) : null;
+    if (n === null || n === undefined) { b.classList.add("cache"); return; }
+    b.classList.remove("cache");
+    b.innerHTML = "<b>La déclaration préalable à l'embauche est en retard.</b> La date " +
+      "d'entrée que vous avez portée est passée de " + n + " jour" + (n > 1 ? "s" : "") +
+      ", et ce salarié n'est pas au registre du personnel. La déclaration « est adressée au " +
+      "plus tôt dans les huit jours précédant la date prévisible de l'embauche » " +
+      "(R. 1221-4) : elle reste due. Faites-la aujourd'hui, inscrivez le salarié au registre " +
+      "au moment de l'embauche (L. 1221-13), et demandez la visite d'information et de " +
+      "prévention. S'il est en poste depuis longtemps, choisissez-le dans la liste " +
+      "ci-dessus : le contrat sortira alors comme une régularisation.";
   }
   function verifierSmic() {
     var t = Number(V.taux) || 0, s = Number(V.smic) || 0;
@@ -709,8 +758,20 @@
     return out;
   }
 
+  /* UN NOM DE FICHIER ACCENTUÉ SE PERD EN CHEMIN.
+
+     « ZENNADI Naïma » donnait « CDI-ZENNADI-Naïma.docx », et le navigateur
+     enregistrait le contrat et la note sous le nom « download », sans
+     extension : deux fichiers illisibles dans le dossier des téléchargements.
+     Relevé le 29 septembre 2026. Les accents sont retirés du nom du fichier,
+     pas du document. */
+  function sansAccent(s) {
+    var x = String(s == null ? "" : s);
+    try { x = x.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } catch (e) {}
+    return x.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
   function nomFichier() {
-    var qui = (V.nom || "salarie").replace(/[^A-Za-zÀ-ÿ0-9]+/g, "-").replace(/^-|-$/g, "");
+    var qui = sansAccent(V.nom) || "salarie";
     return (NATURE === "cdd" ? "CDD" : "CDI") + (PARTIEL ? "-temps-partiel" : "") + "-" + qui + ".docx";
   }
 
@@ -724,7 +785,13 @@
        auteur : la case Auteur restait vide, et rien ne disait de qui venait
        le document. Relevé le 26 septembre 2026. */
     var ent = profilEntreprise();
+    /* LE CONTRAT PORTE DÉJÀ SON TITRE. « Contrat à durée indéterminée -
+       MITIC Srdjan » s'écrivait en tête du fichier, au-dessus du vrai titre du
+       contrat : deux titres, dont un qui n'est pas celui de l'acte. Relevé le
+       29 septembre 2026. Le titre reste dans le pied de page et dans les
+       propriétés du fichier, que le salarié ne lit pas. */
     var octets = window.AuditExport.docx(corps, titre, {
+      sansTitre: true,
       auteur: String(ent.responsable || ent.denomination || "").trim(),
       pied: String(ent.denomination || ent.entreprise || "").trim() + "  ·  " + titre,
     });
@@ -747,7 +814,7 @@
         pied: String(entN.denomination || entN.entreprise || "").trim() + "  ·  note hors contrat" });
     /* Le fichier portait le même nom pour tout le monde : deux notes dans le
        même dossier se recouvraient. Relevé le 27 septembre 2026. */
-    var quiN = (V.nom || "salarie").replace(/[^A-Za-zÀ-ÿ0-9]+/g, "-").replace(/^-|-$/g, "");
+    var quiN = sansAccent(V.nom) || "salarie";
     window.AuditExport.telecharger(octets, "Note-hors-contrat-" +
       (NATURE === "cdd" ? "CDD" : "CDI") + "-" + quiN + ".docx");
     $("etat").textContent = "Note téléchargée, séparément du contrat.";
@@ -768,11 +835,12 @@
      une donnée déjà écrite ailleurs. */
   /* Un salarié déjà en poste n'a pas de fin d'essai à poser dans l'agenda :
      le contrat qu'on écrit pour lui est un contrat de régularisation. */
+  /* Même règle que dans le générateur : c'est l'inscription au registre qui
+     atteste la relation existante, pas la date. Un nouvel embauché saisi à la
+     main avec une entrée à la veille n'est pas « en poste » : sa déclaration
+     préalable et sa visite d'embauche restent dues. */
   function dejaEnPoste() {
-    if (!V.entree) return false;
-    var e = new Date(String(V.entree) + "T12:00:00"), a = new Date();
-    a.setHours(0, 0, 0, 0);
-    return !isNaN(e) && e < a;
+    return !!(CT.dejaEnPoste && CT.dejaEnPoste(valeurs()));
   }
   function finEssai() {
     if (!V.entree || !window.EcheancesSalaries || dejaEnPoste()) return "";
@@ -795,6 +863,11 @@
     var r = window.EcheancesSalaries.inscrire({
       nom: parts.nom, pre: parts.pre,
       nat: V.nationalite, nais: V.naissance, emp: V.emploi, adr: V.adresse,
+      /* LE SEXE PART AVEC L'EMBAUCHE. Le contrat accordait « Madame Lucie
+         MARTIN » au féminin, et le registre l'inscrivait sans sexe : l'index
+         de l'égalité et les documents suivants repartaient de rien. Relevé le
+         29 septembre 2026. */
+      sexe: V.sexe,
       qua: V.coef ? "Coefficient " + V.coef
         : (/annexe II\b/.test(String((PROFIL && PROFIL.essaiArticle) || "")) ? "Employé" : "Ouvrier"),
       ent: V.entree,
@@ -831,7 +904,10 @@
       ? "échéances posées dans l'agenda : entretien de parcours professionnel" +
         (NATURE === "cdd" && V.terme ? ", terme du contrat" : "") +
         ". La déclaration préalable et la visite d'embauche ne sont pas reposées : " +
-        "le salarié est en poste depuis le " + CT.dateFr(V.entree)
+        /* Le message sortait « le salarié est en poste » pour une conductrice
+           dont le registre donne le sexe. Relevé le 29 septembre 2026. */
+        (/^f/i.test(String(V.sexe || "")) ? "la salariée est en poste depuis le "
+          : "le salarié est en poste depuis le ") + CT.dateFr(V.entree)
       : "échéances posées dans l'agenda : déclaration préalable, visite d'information et de prévention, entretien de parcours" +
         (finEssai() ? ", fin de période d'essai" : "") +
         (NATURE === "cdd" && V.terme ? ", terme du contrat" : ""));

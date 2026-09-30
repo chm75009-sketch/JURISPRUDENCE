@@ -309,9 +309,40 @@
   (function () {
     var b = $("effacer-poste");
     if (!b) return;
-    b.addEventListener("click", function () {
-      if (!window.confirm("Effacer la fiche de l'entreprise, toutes les réponses " +
-        "et tous les documents gardés sur ce poste ? C'est sans retour.")) return;
+    /* LE MESSAGE DIT CE QU'IL EFFACE, AU CHIFFRE.
+
+       « Effacer la fiche de l'entreprise, toutes les réponses et tous les
+       documents gardés sur ce poste ? C'est sans retour. » ne disait pas ce
+       qu'on allait perdre. Relevé le 29 septembre 2026. Il compte désormais
+       les lignes du registre, les véhicules et les pièces déposées, et il
+       nomme la fiche. */
+    function compterAvant() {
+      function lire(c) {
+        try { return JSON.parse(localStorage.getItem(c) || "null"); } catch (e) { return null; }
+      }
+      var p = lire("profil-entreprise") || {};
+      var r = lire("registre-personnel") || {};
+      var v = lire("flotte-vehicules") || [];
+      var L = [];
+      if (p.denomination) L.push("la fiche de « " + p.denomination + " »");
+      var n = ((r.salaries || []).filter(function (s) { return !s.ex; })).length;
+      if (n) L.push(n + " ligne" + (n > 1 ? "s" : "") + " du registre du personnel");
+      if (v.length) L.push(v.length + " véhicule" + (v.length > 1 ? "s" : "") + " de la flotte");
+      return L;
+    }
+    function demanderPuisEffacer(pieces) {
+      var L = compterAvant();
+      if (pieces) L.push(pieces + " pièce" + (pieces > 1 ? "s" : "") + " déposée" +
+        (pieces > 1 ? "s" : "") + " ou produite" + (pieces > 1 ? "s" : ""));
+      var quoi = L.length
+        ? L.slice(0, -1).join(", ") + (L.length > 1 ? " et " : "") + L[L.length - 1]
+        : "tout ce que cette application garde sur ce poste";
+      if (!window.confirm("Effacer " + quoi + ", ainsi que toutes les réponses des écrans " +
+        "de contrôle ? Rien n'est envoyé ailleurs, rien n'est conservé, et cela ne " +
+        "peut pas être annulé.")) return;
+      effacer();
+    }
+    function effacer() {
       try { localStorage.clear(); } catch (e) {}
       try { sessionStorage.clear(); } catch (e) {}
       var fini = function () { location.reload(); };
@@ -320,6 +351,18 @@
         d.onsuccess = fini; d.onerror = fini; d.onblocked = fini;
         setTimeout(fini, 1500);
       } else fini();
+    }
+    b.addEventListener("click", function () {
+      /* Les pièces vivent dans IndexedDB : on les compte avant de demander,
+         pour que la question porte un chiffre et non une généralité. */
+      if (!window.Documents || !window.Documents.rubriques) { demanderPuisEffacer(0); return; }
+      window.Documents.rubriques().then(function (R) {
+        return Promise.all((R || []).map(function (r) {
+          return window.Documents.liste(r).then(function (L) { return (L || []).length; });
+        }));
+      }).then(function (N) {
+        demanderPuisEffacer(N.reduce(function (a, b) { return a + b; }, 0));
+      }).catch(function () { demanderPuisEffacer(0); });
     });
   })();
 
@@ -596,7 +639,9 @@
       (e.sansHoraire.length
         ? '<a class="er-vers" href="registre.html">Ouvrir le registre du personnel</a>'
         : '<button type="button" id="er-reprendre">Reprendre ' +
-          ech(nombreFr(calcule)) + "</button>") + "</div>" +
+          ech(nombreFr(arrondi(calcule))) +
+          (arrondi(calcule) !== calcule ? " (" + ech(nombreFr(calcule)) + " arrondi)" : "") +
+          "</button>") + "</div>" +
       (ecart ? '<label class="er-motif"><span>Pourquoi ce chiffre plutôt que celui du registre</span>' +
         '<input type="text" id="er-motif" value="' + ech(lireMotif()) +
         '" placeholder="le registre ne porte pas encore les entrées du mois"></label>' : "");
@@ -604,8 +649,16 @@
     var b = $("er-reprendre");
     if (b) b.addEventListener("click", function () {
       if (!champ) return;
-      /* Le champ est de type nombre : il refuse la virgule, et se vide. */
-      champ.value = String(calcule);
+      /* LE CHAMP NE PREND PAS DE DÉCIMALE, ET IL N'AFFICHE PAS LE POINT.
+
+         « Reprendre 82,5 » écrivait « 82.5 » dans un champ de type nombre au
+         pas de un : le navigateur gardait le texte brut, point compris, et
+         c'est ce que l'utilisatrice lisait. Relevé le 29 septembre 2026. Le
+         chiffre est arrondi à l'entier le plus proche, et le bouton dit qu'il
+         l'est ; l'écart au chiffre exact du registre reste affiché au-dessus,
+         et le motif se saisit. L'arrondi se fait vers le haut à la demie,
+         pour ne fermer aucune obligation par le calcul. */
+      champ.value = String(arrondi(calcule));
       champ.dispatchEvent(new Event("input", { bubbles: true }));
       champ.dispatchEvent(new Event("change", { bubbles: true }));
     });
@@ -624,6 +677,7 @@
     var x = Math.round(Number(n) * 100) / 100;
     return String(x % 1 === 0 ? x : x.toFixed(2)).replace(".", ",");
   }
+  function arrondi(n) { return Math.round(Number(n)); }
 
   /* LES SEUILS QU'UNE FOURCHETTE PEUT ENJAMBER.
 

@@ -2971,7 +2971,10 @@ function texteCorrige(analyse, choix) {
   if (r.ajouts.length) {
     L.push("", "- - -", "CLAUSES AJOUTÉES AU TITRE DU CONTRÔLE", "");
     for (const a of r.ajouts) {
-      L.push(`[${a.id} - ${a.fondement.map(article).join(", ")}]`);
+      /* L'IDENTIFIANT INTERNE NE SORT PAS DU CABINET. « [RI-CTR-12 - ... ] »
+         ne dit rien au dirigeant et dit tout de l'outil : reste l'objet de la
+         clause et l'article qui la fonde. Relevé le 29 septembre 2026. */
+      L.push(`[${a.objet} - ${a.fondement.map(article).join(", ")}]`);
       for (const l of a.lignes) L.push(l);
       L.push("");
     }
@@ -2979,7 +2982,7 @@ function texteCorrige(analyse, choix) {
   if (r.notes.length) {
     L.push("", "- - -", "PASSAGES À CONTRÔLER AVANT DIFFUSION", "");
     for (const n of r.notes) {
-      L.push(`[${n.id} - ${n.objet} - ${n.fondement.map(article).join(", ")}]`);
+      L.push(`[${n.objet} - ${n.fondement.map(article).join(", ")}]`);
       L.push("Critère : " + n.critere);
       L.push("Ce qu'il faut faire : " + n.remplacement);
       for (const p of n.passages) L.push("  « " + p + " »");

@@ -649,6 +649,49 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     return m;
   }
 
+  /* L'ALERTE DES TITRES DE TRAVAIL, ÉCRITE UNE FOIS.
+
+     Elle sert deux écrans : la synthèse du registre, où elle se voit tout de
+     suite, et le pli de la tenue, où elle était seule. « Nul ne peut,
+     directement ou indirectement, embaucher, conserver à son service ou
+     employer pour quelque durée que ce soit un étranger non muni du titre
+     l'autorisant à exercer une activité salariée en France » (L. 8251-1,
+     LEGIARTI000024197709, deux lectures concordantes au relais le
+     27 septembre 2026). Les dates s'écrivent en français : elles sortaient au
+     format informatique, « 2026-11-09 ». Relevé le 29 septembre 2026. */
+  function jourFrIso(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ""));
+    return m ? m[3] + "/" + m[2] + "/" + m[1] : String(iso || "");
+  }
+  function alerteTitres(L) {
+    var etrangers = (L || []).filter(function (s) { return s.etr === "oui" && !s.ex; });
+    if (!etrangers.length) return "";
+    function nomDe(s) { return ((s.nom || "") + " " + (s.pre || "")).trim() || "ligne sans nom"; }
+    var ajd = new Date();
+    var ajdIso = ajd.getFullYear() + "-" + ("0" + (ajd.getMonth() + 1)).slice(-2) +
+      "-" + ("0" + ajd.getDate()).slice(-2);
+    var d60 = new Date(ajd.getTime() + 60 * 86400000);
+    var dans60 = d60.getFullYear() + "-" + ("0" + (d60.getMonth() + 1)).slice(-2) +
+      "-" + ("0" + d60.getDate()).slice(-2);
+    var expires = etrangers.filter(function (s) { return !vide(s.titFin) && s.titFin < ajdIso; });
+    var bientot = etrangers.filter(function (s) {
+      return !vide(s.titFin) && s.titFin >= ajdIso && s.titFin <= dans60; });
+    var sansFin = etrangers.filter(function (s) { return vide(s.titFin); });
+    if (!expires.length && !bientot.length && !sansFin.length) return "";
+    return '<div class="avis ' + (expires.length ? "non" : "att") + '"><b>Validité des titres</b>' +
+      (expires.length ? "<b>Titre expiré : " +
+        ech(expires.map(function (s) { return nomDe(s) + " (" + jourFrIso(s.titFin) + ")"; }).join(", ")) +
+        ".</b> Conserver à son service un étranger non muni du titre l'autorisant à travailler " +
+        "est interdit (L. 8251-1) : le renouvellement se justifie avant toute chose. " : "") +
+      (bientot.length ? "Titre qui expire dans les soixante jours : " +
+        ech(bientot.map(function (s) { return nomDe(s) + " (" + jourFrIso(s.titFin) + ")"; }).join(", ")) +
+        ". Demandez le justificatif de renouvellement. " : "") +
+      (sansFin.length ? "Date de fin non renseignée : " + ech(sansFin.map(nomDe).join(", ")) +
+        ". Sans elle, rien ne prévient de l'échéance. " : "") +
+      "Cette date n'est pas une mention du registre : elle est suivie parce que c'est " +
+      "l'employeur qui répond de l'emploi d'un salarié dont le titre a cessé.</div>";
+  }
+
   function aEtablir(s) {
     var q = [];
     if (vide(s.nature)) q.push({ quoi: "Nature du contrat : de quelle situation relève ce salarié ?",
@@ -838,7 +881,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     t += (t ? " · " : "") + inscrits + " inscrit" + (inscrits > 1 ? "s" : "") +
       " · " + p + " en poste au " + jour;
     if (isFinite(n) && String(E.cadre.effectif == null ? "" : E.cadre.effectif).trim() !== "" && n !== p)
-      t += " · fiche d'entreprise : " + n;
+      t += " · effectif retenu à la fiche : " + n;
     if (!vide(E.cadre.etab)) t += " · " + E.cadre.etab;
     $("rappel-registre").textContent = t;
   }
@@ -984,6 +1027,29 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
       h += e("titFin", "Fin de validité du titre", "L. 8251-1 : il est interdit de conserver à son service un étranger non muni du titre l'autorisant à travailler. Hors mentions du registre, suivie pour l'alerte.", "date");
       h += sel("titCop", "Copie annexée au registre et rendue accessible ?", ouiNon, "D. 1221-24");
     }
+    /* LE MOTIF DE LA SORTIE N'EST PAS UNE MENTION DU REGISTRE, ET IL DÉCIDE
+       DE DEUX CHOSES.
+
+       L'agenda affichait « Portabilité des couvertures : échéance dépassée »
+       pour chaque salarié sorti, alors que le maintien gratuit ne joue qu'« en
+       cas de cessation du contrat de travail, non consécutive à une faute
+       lourde, ouvrant droit à prise en charge par le régime d'assurance
+       chômage » (L. 911-8 du code de la sécurité sociale,
+       LEGIARTI000027549338, deux lectures concordantes au relais le
+       30 septembre 2026). Sans le motif, on ne peut rien dire. Il se saisit ici,
+       avec la date de sortie, et il n'entre dans aucun document du registre.
+       Relevé le 29 septembre 2026. */
+    if (!vide(s.sor))
+      h += sel("motifSortie", "Motif de la sortie",
+        [{ v: "", lib: "- à préciser -" },
+         { v: "demission", lib: "Démission" },
+         { v: "licenciement", lib: "Licenciement, hors faute lourde" },
+         { v: "faute lourde", lib: "Licenciement pour faute lourde" },
+         { v: "rupture conventionnelle", lib: "Rupture conventionnelle" },
+         { v: "fin de cdd", lib: "Fin de contrat à durée déterminée" },
+         { v: "retraite", lib: "Départ ou mise à la retraite" },
+         { v: "autre", lib: "Autre" }],
+        "L. 911-8 du code de la sécurité sociale : le maintien gratuit des couvertures ne joue pas après une faute lourde, et suppose un droit à l'assurance chômage. Hors mentions du registre, suivi pour l'agenda.");
     h += e("insc", "Mention portée au registre le", "L. 1221-13 : au moment de l'embauche, de façon indélébile. D. 1221-25 pour les événements postérieurs.", "date");
     h += "</div>";
 
@@ -1220,6 +1286,13 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     if (indecises.length)
       sh += '<div class="avis att"><b>' + pl(indecises.length, "ligne") + " dont la situation n'est pas tranchée</b>" +
         douze(indecises) + ". Ouvrez leurs mentions particulières.</div>";
+    /* LES TITRES QUI EXPIRENT SE VOIENT SUR LE REGISTRE, PAS AU FOND D'UN PLI.
+
+       L'alerte de L. 8251-1 ne vivait que dans « L'établissement et la tenue du
+       registre », un écran qu'on n'ouvre pas tous les jours : celui qui regarde
+       ses salariés ne voyait rien. Relevé le 29 septembre 2026. Elle est ici,
+       en tête du registre, et le détail reste là-bas. */
+    sh += alerteTitres(tous);
     /* Les noms douteux, avec la correction proposée sur un bouton. */
     var doutes = [];
     tous.forEach(function (x) {
@@ -2177,29 +2250,10 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
         "La copie des titres est annexée au registre et rendue accessible aux membres de la " +
         "délégation du personnel du comité et aux agents de contrôle, dans l'établissement ou sur " +
         "chaque chantier ou lieu de travail distinct où ces travailleurs sont employés (D. 1221-24).</div>");
-      /* LA VALIDITÉ DES TITRES, ET NON SEULEMENT LEUR NUMÉRO. Les lignes se
-         classent en trois : titre expiré, titre qui expire dans les soixante
-         jours, date de fin non renseignée. Le fondement est L. 8251-1, qui
-         interdit de conserver à son service un étranger non muni du titre. */
-      var ajd = new Date(), ajdIso = ajd.toISOString().slice(0, 10);
-      var dans60 = new Date(ajd.getTime() + 60 * 86400000).toISOString().slice(0, 10);
-      function nomDe(s) { return ((s.nom || "") + " " + (s.pre || "")).trim() || "ligne sans nom"; }
-      var expires = etrangers.filter(function (s) { return !vide(s.titFin) && s.titFin < ajdIso; });
-      var bientot = etrangers.filter(function (s) {
-        return !vide(s.titFin) && s.titFin >= ajdIso && s.titFin <= dans60; });
-      var sansFin = etrangers.filter(function (s) { return vide(s.titFin); });
-      if (expires.length || bientot.length || sansFin.length)
-        m.push('<div class="avis ' + (expires.length ? "non" : "att") + '"><b>Validité des titres</b>' +
-          (expires.length ? "<b>Titre expiré : " + ech(expires.map(nomDe).join(", ")) +
-            ".</b> Conserver à son service un étranger non muni du titre l'autorisant à travailler " +
-            "est interdit (L. 8251-1) : le renouvellement se justifie avant toute chose. " : "") +
-          (bientot.length ? "Titre qui expire dans les soixante jours : " +
-            ech(bientot.map(function (s) { return nomDe(s) + " (" + s.titFin + ")"; }).join(", ")) +
-            ". Demandez le justificatif de renouvellement. " : "") +
-          (sansFin.length ? "Date de fin non renseignée : " + ech(sansFin.map(nomDe).join(", ")) +
-            ". Sans elle, rien ne prévient de l'échéance. " : "") +
-          "Cette date n'est pas une mention du registre : elle est suivie ici parce que c'est " +
-          "l'employeur qui répond de l'emploi d'un salarié dont le titre a cessé.</div>");
+      /* La validité des titres : même alerte qu'en tête du registre, écrite
+         une seule fois dans alerteTitres(). */
+      var av = alerteTitres(etrangers);
+      if (av) m.push(av);
     }
     if (vide(t["t-depuis"]))
       m.push('<div class="avis att"><b>La date de tenue n\'est pas renseignée</b>' +

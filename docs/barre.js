@@ -275,15 +275,31 @@
       retour.addEventListener("click", retourner);
     }
 
-    if (!document.getElementById("barre-bouton-menu")) {
+    /* LE MENU SUIT L'ÉCRAN, IL NE RESTE PAS SUR LE PREMIER.
+
+       Une page qui avance par écrans a une rangée « .haut » par écran, et le
+       menu n'allait que dans la première : sur Gérer, le protocole de sécurité
+       et l'autorisation de conduite s'ouvraient sans menu, comme les
+       quarante autres documents, parce que la rangée qui le portait était
+       cachée avec la liste. Relevé le 29 septembre 2026. Chaque rangée reçoit
+       le sien. */
+    function poserMenu(ou2, premier) {
+      if (!ou2 || ou2.querySelector(".menu")) return;
       var b = document.createElement("button");
       b.type = "button";
-      b.id = "barre-bouton-menu";
+      if (premier && !document.getElementById("barre-bouton-menu"))
+        b.id = "barre-bouton-menu";
       b.className = "menu";
       b.setAttribute("aria-label", "Menu");
       b.textContent = "Menu";
       b.addEventListener("click", ouvrir);
-      la.appendChild(b);
+      ou2.appendChild(b);
+    }
+    poserMenu(la, true);
+    if (!outils && !bandeau) {
+      Array.prototype.forEach.call(document.querySelectorAll(".haut"), function (x) {
+        poserMenu(x, false);
+      });
     }
   }
 
@@ -390,7 +406,16 @@
     var nom = String((p && (p.denomination || p.entreprise)) || "").trim();
     if (!nom) return;
     var eff = parseInt(String((p && p.effectif) || "").replace(/[^0-9]/g, ""), 10);
-    var texte = nom + (isFinite(eff) && eff > 0 ? " · " + eff + " salariés" : "");
+    /* TROIS CHIFFRES CIRCULAIENT, ET AUCUN NE DISAIT CE QU'IL ÉTAIT.
+
+       La porte annonçait « Effectif inscrit 85 salariés », le registre
+       « 85 inscrits · 82 en poste », cette ligne « 82 salariés », et la fiche
+       « entre 80 et 82 ». Trois grandeurs différentes, toutes appelées
+       « salariés » : les lignes du registre, les salariés en poste, et
+       l'effectif de L. 1111-2 qui commande les seuils. Relevé le 29 septembre
+       2026. Un seul chiffre fait référence, celui que la fiche retient, et il
+       est désormais nommé : « effectif retenu ». */
+    var texte = nom + (isFinite(eff) && eff > 0 ? " · effectif retenu " + eff : "");
     /* Le rappel de l'entreprise des pages de gestion. Deux écrans de la base
        de données appellent « ent » leur champ de saisie de la dénomination :
        ce n'est pas un rappel, et y écrire le nom ne se verrait pas. */

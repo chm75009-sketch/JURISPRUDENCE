@@ -104,7 +104,12 @@
      "",
      "Par la présente, je vous mets en demeure de me régler cette somme dans un délai de [NOMBRE] jours à compter de la réception de ce courrier.",
      "",
-     "Passé ce délai, et sans règlement de votre part, je confierai ce dossier à [AVOCAT, HUISSIER DE JUSTICE, SOCIÉTÉ DE RECOUVREMENT] et saisirai la juridiction compétente, sans nouvel avis.",
+     /* L'huissier de justice n'existe plus depuis le 1er juillet 2022 :
+        l'ordonnance du 2 juin 2016 a fondu les huissiers et les commissaires-
+        priseurs judiciaires dans la profession de commissaire de justice. Une
+        mise en demeure qui annonce un huissier date d'avant. Relevé le
+        29 septembre 2026. */
+     "Passé ce délai, et sans règlement de votre part, je confierai ce dossier à [AVOCAT, COMMISSAIRE DE JUSTICE, SOCIÉTÉ DE RECOUVREMENT] et saisirai la juridiction compétente, sans nouvel avis.",
      "",
      "Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées."],
     "Envoyez-la en recommandé avec accusé de réception : c'est la date de réception qui fait courir le délai et qui se prouve.");
@@ -158,7 +163,8 @@
      "",
      "J'ai bien reçu votre réclamation du [DATE] relative à [OBJET].",
      "",
-     "J'ai fait vérifier ce qui s'est passé : [CE QUE LA VÉRIFICATION A ÉTABLI]. [Votre réclamation est fondée sur ce point / Les éléments dont je dispose ne permettent pas de retenir ce grief, pour la raison suivante : [MOTIF]].",
+     "J'ai fait vérifier ce qui s'est passé : [CE QUE LA VÉRIFICATION A ÉTABLI]. Votre réclamation est fondée sur ce point.",
+     "[Ou, si le grief n'est pas retenu, remplacez la dernière phrase par : les éléments dont je dispose ne permettent pas de retenir ce grief, pour la raison suivante : MOTIF.]",
      "",
      "Je vous propose donc : [GESTE, AVOIR, REPRISE DE LA PRESTATION, RIEN ET POURQUOI].",
      "",
@@ -174,7 +180,8 @@
      "",
      "Il correspond à [MOTIF : prestation non exécutée, geste commercial, erreur de facturation].",
      "",
-     "Il sera [déduit de votre prochaine facture / remboursé par virement le [DATE]].",
+     "Il sera déduit de votre prochaine facture.",
+     "[Ou, en cas de remboursement : il vous sera remboursé par virement le DATE.]",
      "",
      "Bien cordialement,"]);
 

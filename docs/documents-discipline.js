@@ -827,7 +827,9 @@
       L.push("");
       L = L.concat(tableau(["Étape", "Date", "Preuve conservée"], [
         ["Réception du jugement", jj(d0), "copie du jugement"],
-        ["Signification du jugement", jj(dansJours(d0, 5)), "acte d'huissier"],
+        /* Commissaire de justice depuis le 1er juillet 2022 : la profession
+           d'huissier de justice a été fondue dans la nouvelle. */
+        ["Signification du jugement", jj(dansJours(d0, 5)), "acte de commissaire de justice"],
         ["Décision de retrait", jj(dansJours(d0, 10)), "procès-verbal"],
         ["Publication du retrait", jj(dansJours(d0, 15)), "affichage"],
         ["Dépôt à nouveau", jj(dansJours(d0, 15)), "récépissé"],

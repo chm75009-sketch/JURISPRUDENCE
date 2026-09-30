@@ -3103,17 +3103,19 @@
 
       L.push("════ L'ISSUE DE CHACUNE DE VOS NÉGOCIATIONS ════");
       L.push("");
-      L.push("  négociation                              | issue        | dépôt");
-      L.push("  ───────────────────────────────────────── |  ───────────── |  ───────────");
+      /* LE LIBELLÉ D'UNE NÉGOCIATION NE SE COUPE PAS À TRENTE-HUIT SIGNES.
+         Le tableau était bâti à la main, chaque colonne rabotée à une largeur
+         fixe : « Rémunération, temps de travail et part » et « Égalité
+         professionnelle et qualité de » sortaient ainsi dans le procès-verbal
+         remis au client. Relevé le 29 septembre 2026. Les colonnes sont
+         désormais séparées par la barre verticale seule, et le rendu en fait
+         un vrai tableau, à l'écran comme dans le Word. */
+      L.push("Négociation | Issue | Dépôt");
       for (var i = 0; i < negos.length; i++) {
         var n = negoDe(ctx, negos[i][0]);
-        var titre = negos[i][1];
-        var court = titre.length > 38 ? titre.slice(0, 38) : titre;
-        while (court.length < 38) court += " ";
-        var iss = vide(n.issue) ? "[non rens.]" : String(n.issue);
-        while (iss.length < 12) iss += " ";
-        L.push("  " + court + " | " + iss.slice(0, 12) + " | " +
-          (estOui(n.depot) ? "OUI" : estNon(n.depot) ? "NON" : "[non rens.]"));
+        L.push(negos[i][1] + " | " +
+          (vide(n.issue) ? "[non renseignée]" : String(n.issue)) + " | " +
+          (estOui(n.depot) ? "oui" : estNon(n.depot) ? "non" : "[non renseigné]"));
       }
       L.push("");
       L.push("Une négociation « en cours » n'appelle pas de procès-verbal de désaccord :");
@@ -3730,19 +3732,19 @@
         L.push("Calculé à partir de votre registre du personnel et des rémunérations");
         L.push("relevées dans l'écran des minima, pour l'année " + calc.annee + " :");
         L.push("");
-        L.push("  indicateur                                    | résultat | points");
+        /* Même correction que pour le tableau des négociations : le nom de
+           l'indicateur était coupé à quarante-quatre signes pour tenir dans une
+           colonne à chasse fixe. La barre verticale suffit, le rendu fait le
+           tableau. */
+        L.push("Indicateur | Résultat | Points");
         (calc.indicateurs || []).forEach(function (x, i) {
           var nom = String(x.nom || ("indicateur " + (i + 1)));
-          if (nom.length > 44) nom = nom.slice(0, 43) + "…";
-          while (nom.length < 44) nom += " ";
           var res = (x.etat === "calcule")
             ? (x.resultat === undefined || x.resultat === null ? "" : String(x.resultat))
-            : (x.etat === "manque" ? "manque" : "incalc.");
-          if (res.length > 8) res = res.slice(0, 8);
-          while (res.length < 8) res = res + " ";
-          L.push("  " + nom + " | " + res + " | " + String(x.etat === "calcule" ? x.points : "-"));
+            : (x.etat === "manque" ? "donnée manquante" : "incalculable");
+          L.push(nom + " | " + res + " | " + String(x.etat === "calcule" ? x.points : "-"));
         });
-        L.push("  NIVEAU DE RÉSULTAT, sur 100                   |          | " + calc.niveau);
+        L.push("Niveau de résultat, sur 100 |  | " + calc.niveau);
         L.push("");
         if (calc.proportionnalite) {
           L.push("Un indicateur au moins n'a pas pu être calculé : le niveau est ramené à");

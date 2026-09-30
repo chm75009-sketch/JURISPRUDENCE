@@ -1723,18 +1723,25 @@
       L.push("    ci-dessous, et qui exige pour chacun UNE ADRESSE ET UN NUMÉRO D'APPEL.");
       L.push("");
       L = L.concat(blocD1151());
-      L.push("CE QU'IL FAUT ALLER CHERCHER, ET OÙ");
+      /* CE BLOC DISAIT QUE L'OUTIL NE SAIT PAS LIRE LE CODE PÉNAL.
+
+         Il ne le dit plus : les articles 222-33 et 222-33-2 sont reproduits en
+         entier dans textes-penal.js, avec leur identifiant de version et la
+         date de lecture, et c'est ce texte qui part sur l'affiche. Reste ce qui
+         demande vraiment une rédaction, les actions contentieuses. Relevé le
+         29 septembre 2026, où le parcours laissait encore un crochet quand
+         l'écran de contrôle, lui, reproduisait l'article. */
+      L.push("CE QUI RESTE À ÉCRIRE, ET CE QUI EST DÉJÀ LÀ");
       L.push("");
-      L.push("SEUL LE CODE DU TRAVAIL est lu ici. Trois éléments de cet affichage ne");
-      L.push("s'y trouvent pas, et ils ne s'inventent pas :");
-      L.push("  1. le TEXTE de l'article 222-33 du code pénal (harcèlement sexuel) ;");
-      L.push("  2. le TEXTE de l'article 222-33-2 du code pénal (harcèlement moral) ;");
-      L.push("  3. la description des actions contentieuses civiles et pénales");
-      L.push("     ouvertes en matière de harcèlement sexuel.");
-      L.push("Les deux premiers se recopient depuis le code pénal, dans leur version en");
-      L.push("vigueur au jour de l'affichage. Notez cette date sur le support : ces");
-      L.push("articles ont été modifiés, et un affichage périmé se voit. Le troisième");
-      L.push("demande une rédaction : faites-la relire.");
+      L.push("Les deux articles du code pénal sont reproduits ci-dessus en entier, dans");
+      L.push("leur version en vigueur, avec le numéro de cette version. Notez sur le");
+      L.push("support la date de l'affichage : ces articles ont été modifiés plusieurs");
+      L.push("fois, et un affichage périmé se voit.");
+      L.push("");
+      L.push("Un seul élément demande une rédaction de votre part : la description des");
+      L.push("actions contentieuses civiles et pénales ouvertes en matière de harcèlement");
+      L.push("sexuel, que L. 1153-5 impose de porter à la connaissance des salariés sans");
+      L.push("en fixer les termes. Faites-la relire.");
       L.push("");
       L.push("Deux autres articles du code du travail sont NOMMÉS par l'affichage sans");
       L.push("qu'ils aient été lus ici :");

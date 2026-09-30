@@ -559,7 +559,9 @@
       function champ(id, val, aria, poser, max) {
         var e = document.createElement("input");
         e.type = "text"; e.id = id; e.value = val;
-        e.inputMode = "numeric"; e.maxLength = max; e.placeholder = "08:00";
+        /* Même raison qu'à la semaine de référence : l'invite dit la forme
+           attendue, elle ne montre pas un horaire qui ressemble à une valeur. */
+        e.inputMode = "numeric"; e.maxLength = max; e.placeholder = "hh:mm";
         e.setAttribute("aria-label", aria);
         e.disabled = verrou || !!l.hc;
         e.addEventListener("input", function () { poser(e.value); enregistrerJour(l); majLigne(d, l); calculer(); });
@@ -788,6 +790,22 @@
   /* Les jours qui manquent à une semaine, pris dans le mois voisin. La semaine
      va du lundi au dimanche : les jours manquants sont donc soit avant le
      premier jour du mois, soit après le dernier. */
+  /* UN JOUR NON SAISI COMPTE POUR SON HORAIRE DE RÉFÉRENCE, ET IL FAUT LE
+     DIRE.
+
+     Le 31 août entrait dans la première semaine de septembre pour sept heures
+     quarante-huit, prises de la semaine de référence et jamais saisies, sous
+     un écran qui affirmait plus bas que « rien n'est supposé » à la place de
+     l'utilisateur. Relevé le 29 septembre 2026. Ce n'est pas le calcul qui est
+     faux, c'est le silence : la semaine à cheval dit désormais combien de ses
+     jours empruntés n'ont pas été saisis, et d'où vient leur durée. */
+  function sansSaisie(L) {
+    var n = (L || []).filter(function (x) { return !x.saisi && !x.hc && x.n !== "repos"; }).length;
+    if (!n) return "";
+    return ", dont " + n + " non saisi" + (n > 1 ? "s" : "") + " et compté" + (n > 1 ? "s" : "") +
+      " à l'horaire de la semaine de référence";
+  }
+
   function completerSemaine(jours) {
     if (!jours.length) return { jours: jours, dit: "" };
     var premier = jours[0], dernier = jours[jours.length - 1];
@@ -800,7 +818,7 @@
       var pris = L.slice(Math.max(0, L.length - avant));
       out = pris.concat(out);
       dit = "complétée par " + pris.length + " jour" + (pris.length > 1 ? "s" : "") +
-        " du mois précédent";
+        " du mois précédent" + sansSaisie(pris);
     }
     /* Après : on descend jusqu'au dimanche, dans le mois suivant. */
     var apres = dernier.sem === 0 ? 0 : 7 - dernier.sem;
@@ -810,7 +828,7 @@
       var L2 = lignesDuMois(sAn, sMo).slice(0, apres);
       out = out.concat(L2);
       dit = "complétée par " + L2.length + " jour" + (L2.length > 1 ? "s" : "") +
-        " du mois suivant";
+        " du mois suivant" + sansSaisie(L2);
     }
     return { jours: out, dit: dit };
   }
@@ -1032,6 +1050,65 @@
     });
   }
 
+  /* LE MODE DE DÉCOMPTE : LA SEMAINE, OU LE MOIS APRÈS AVIS DU COMITÉ.
+
+     « La durée hebdomadaire du travail est calculée sur une semaine. La durée
+     hebdomadaire du travail des personnels roulants peut être calculée sur une
+     durée supérieure à la semaine, sans pouvoir dépasser trois mois, après avis
+     du comité social et économique s'il existe » (D. 3312-41 du code des
+     transports, LEGIARTI000043651182, deux lectures concordantes au relais le
+     30 septembre 2026).
+
+     Le relevé imposait le mois à tout roulant sous la convention 16, et
+     affichait du même coup deux calculs sur le même écran, l'un à la semaine et
+     l'autre au mois. Relevé le 29 septembre 2026. La question se pose une fois,
+     la réponse est gardée avec le salarié, et tant qu'elle manque c'est la
+     semaine qui s'applique, parce que c'est le principe du texte. */
+  function decompteDe() {
+    if (!qui || !window.EcheancesSalaries) return "";
+    var su = window.EcheancesSalaries.suite(qui.id) || {};
+    return net(su.decompteTransport);
+  }
+  function rendreDecompte() {
+    var z = $("q-decompte");
+    if (!z) return;
+    var p = entreprise();
+    var cc = String(p.conventionCollective || "");
+    var idcc16 = /(^|\D)0*16(\D|$)/.test(cc) || /transports? routiers?/i.test(cc);
+    if (!qui || !estConducteur(qui) || !idcc16) { z.hidden = true; z.innerHTML = ""; return; }
+    var d = decompteDe();
+    z.hidden = false;
+    if (d === "mois" || d === "semaine") {
+      z.innerHTML = '<p class="doux">Temps de service décompté ' +
+        (d === "mois" ? "sur le mois, après avis du comité social et économique"
+                      : "sur la semaine") + " pour " + ech(qui.nom) +
+        " (D. 3312-41).</p><div class=\"barre\">" +
+        '<button type="button" class="second" id="dec-changer">Changer le mode de décompte</button></div>';
+      var b = $("dec-changer");
+      if (b) b.addEventListener("click", function () {
+        window.EcheancesSalaries.poser(qui.id, { decompteTransport: "" });
+        var tt = lireCle("suites-embauche", {});
+        if (tt[qui.id]) { delete tt[qui.id].decompteTransport; garderCle("suites-embauche", tt); }
+        rendreDecompte(); rendreControles();
+      });
+      return;
+    }
+    z.innerHTML = '<p class="al">Sur quelle période le temps de service de ' + ech(qui.nom) +
+      " est-il décompté ? La semaine est le principe ; le mois n'est possible qu'après avis du " +
+      "comité social et économique, s'il en existe un (D. 3312-41). Tant que la réponse manque, " +
+      "ce relevé applique la semaine.</p><div class=\"barre\">" +
+      '<button type="button" class="second" data-dec="semaine">Sur la semaine</button>' +
+      '<button type="button" class="second" data-dec="mois">Sur le mois, avis du comité recueilli</button>' +
+      "</div>";
+    Array.prototype.forEach.call(z.querySelectorAll("[data-dec]"), function (b) {
+      b.addEventListener("click", function () {
+        window.EcheancesSalaries.poser(qui.id, { decompteTransport: b.getAttribute("data-dec") });
+        rendreDecompte();
+        rendreControles();
+      });
+    });
+  }
+
   /* LA RÈGLE QUI VENTILE LES MAJORATIONS, ET LES HEURES D'ÉQUIVALENCE.
 
      À défaut d'accord, L. 3121-36 majore de 25 % les huit premières heures
@@ -1058,7 +1135,7 @@
     var p = entreprise();
     var cc = String(p.conventionCollective || "");
     var idcc16 = /(^|\D)0*16(\D|$)/.test(cc) || /transports? routiers?/i.test(cc);
-    if (pl.roulant && idcc16) {
+    if (pl.roulant && idcc16 && decompteDe() === "mois") {
       var seuilMois = Math.round(pl.seuil * 52 / 12);
       return {
         mois: true, tm: tm,
@@ -1079,7 +1156,12 @@
     return { mois: false, tm: tm, equivalence: 0, h25: a.a25, h50: a.a50,
       dit: "Les majorations se comptent à la semaine : les huit premières heures supplémentaires " +
         "de chaque semaine sont majorées de 25 %, les suivantes de 50 % (L. 3121-36, à défaut " +
-        "d'accord). Votre convention ou votre accord peut fixer d'autres taux." };
+        "d'accord). Votre convention ou votre accord peut fixer d'autres taux." +
+        ((pl.roulant && idcc16)
+          ? " La semaine est le principe pour un personnel roulant : le décompte sur une période " +
+            "plus longue, jusqu'à trois mois, suppose l'avis du comité social et économique s'il " +
+            "en existe un (D. 3312-41 du code des transports)."
+          : "") };
   }
   function tauxHoraire() {
     if (!qui) return 0;
@@ -1145,6 +1227,20 @@
         " d'heures supplémentaires" + (pl.roulant
           ? ", et le repos s'ouvre à la quarante et unième (" + ech(fond) + ")."
           : ", et la contrepartie s'ouvre au-delà du contingent de 220 heures (" + ech(fond) + ")."));
+      /* UN REPOS INSCRIT SANS DROIT OUVERT SE SIGNALE.
+
+         L'écran acceptait « 12 octobre 2026 : 1 journée » sous la phrase
+         « Rien n'est encore acquis », sans un mot : le relevé portait alors un
+         repos compensateur que rien ne fonde, et c'est ce relevé qui fait la
+         preuve. Relevé le 29 septembre 2026. Rien n'est effacé, rien n'est
+         refusé : l'écart est dit. */
+      if (somme > 0.005)
+        L.push('<p class="al rouge">' + String(somme).replace(".", ",") + " " + ech(unite) +
+          " de repos " + (somme > 1 ? "sont inscrites" : "est inscrite") + " sur ce trimestre, " +
+          "alors qu'aucun droit n'y est ouvert. Ou le relevé des heures est incomplet, ou ce repos " +
+          "relève d'un autre trimestre, ou il a une autre cause que la compensation des heures " +
+          "supplémentaires : dites laquelle, ou retirez la ligne. Un repos porté sans droit ouvert " +
+          "ne se justifie pas devant un contrôle.</p>");
     } else {
       L.push('<p class="al">Acquis sur le trimestre : ' + String(du).replace(".", ",") + " " +
         unite + " (" + ech(fond) + "). Pris : " + String(somme).replace(".", ",") +
@@ -1186,6 +1282,7 @@
     var z = $("controles");
     if (!z) return;
     rendreCategorie();
+    rendreDecompte();
     var a = analyse(), L = [];
     /* Les journées franchies sont marquées dans la grille : la phrase n'en
        nomme que quatre au plus, sinon elle fait un mur de texte sur un
@@ -1241,12 +1338,25 @@
         "à L. 3121-13 du code du travail) : ces heures-là sont travaillées, elles ne sont pas des " +
         "heures supplémentaires, et elles sont payées.</p>");
     }
-    if (a.hs > 0.005) {
+    /* DEUX CALCULS SUR LE MÊME ÉCRAN, ET UN SEUIL ÉCRIT EN DUR.
+
+       « Heures supplémentaires au-delà de 39 heures par semaine : 59,30 h »
+       s'affichait à côté des majorations comptées au mois : deux règles pour le
+       même mois. Et la phrase du mois sans dépassement parlait de
+       trente-cinq heures à un roulant dont le temps de service est de
+       trente-neuf. Relevé le 29 septembre 2026. Le compte à la semaine ne
+       s'affiche que si c'est la semaine qui décompte, et le seuil est celui de
+       la catégorie. */
+    if (a.hs > 0.005 && !vent.mois) {
       L.push('<p class="al">Heures supplémentaires au-delà de ' +
         a.pl.seuil + " heures par semaine : " + nbh(a.hs) + ".</p>");
+    } else if (a.hs > 0.005 && vent.mois) {
+      L.push('<p class="doux">Comptées à la semaine, ces heures feraient ' + nbh(a.hs) +
+        " au-delà de " + a.pl.seuil + " heures. Le décompte retenu ici est celui du mois : " +
+        "ce sont les majorations ci-dessous qui font foi.</p>");
     } else if (!a.jours.length && !dep.length) {
       L.push('<p class="doux">Aucun dépassement des plafonds sur ce mois, et aucune semaine ' +
-        "au-delà de trente-cinq heures.</p>");
+        "au-delà de " + a.pl.seuil + " heures de temps de service.</p>");
     }
     /* LES MAJORATIONS, UNE SEULE RÈGLE, CELLE QUI S'APPLIQUE AU SALARIÉ.
 
@@ -1712,7 +1822,10 @@
     var r = refDe(qui.id);
     $("s-courriel").value = r.courriel || "";
     if ($("s-taux")) $("s-taux").value = r.taux || "";
-    $("r-type").innerHTML = '<option value="">- appliquer un horaire type aux jours travaill\u00e9s -</option>' +
+    /* Le libellé de ce menu sortait coupé, « aux jou », parce qu'un menu
+       déroulant ne renvoie pas son texte à la ligne. Il est court. Relevé le
+       29 septembre 2026. */
+    $("r-type").innerHTML = '<option value="">- horaire type -</option>' +
       TYPES.map(function (t, i) { return '<option value="' + i + '">' + ech(t.lib) + "</option>"; }).join("");
 
     var h = "";
@@ -1724,10 +1837,15 @@
         '<span class="cap g">Service</span><span class="cap">D\u00e9but</span><span class="cap">Fin</span><span class="cap">Pause min</span>' +
         '<select data-q="etat"><option value="repos"' + (c ? "" : " selected") + ">Repos</option>" +
         '<option value="travail"' + (c ? " selected" : "") + ">Travail</option></select>" +
-        (c ? champTexte("d1", c.d1, "12:00") + champTexte("f1", c.f1, "15:00") + champTexte("p", c.p, "0") +
+        /* DES INVITES QUI RESSEMBLAIENT À DES VALEURS. « 19:00 » et « 23:00 »
+           en gris dans les cases du second service se lisaient comme un horaire
+           déjà saisi, et il fallait toucher la case pour comprendre que non.
+           Relevé le 29 septembre 2026 : l'invite dit la forme attendue, pas un
+           exemple d'horaire. */
+        (c ? champTexte("d1", c.d1, "hh:mm") + champTexte("f1", c.f1, "hh:mm") + champTexte("p", c.p, "min") +
              '<span class="cap g">2e service</span><span class="cap">D\u00e9but</span><span class="cap">Fin</span><span class="cap"></span>' +
-             '<span class="lib">coupure</span>' + champTexte("d2", c.d2, "19:00") +
-             champTexte("f2", c.f2, "23:00") + "<span></span>" +
+             '<span class="lib">coupure</span>' + champTexte("d2", c.d2, "hh:mm") +
+             champTexte("f2", c.f2, "hh:mm") + "<span></span>" +
              '<span class="manque" data-manque="' + j + '"></span>'
            : "<span></span><span></span><span></span>") +
         "</div></div>";

@@ -103,6 +103,21 @@ for (const cle of cles) {
     fautes++;
     continue;
   }
+  /* LE NOM QUE LE NAVIGATEUR RETIENT.
+
+     « CDI-ZENNADI-Naïma.docx » arrivait dans le dossier des téléchargements
+     sous le nom « download », sans extension : un accent dans le nom du
+     fichier, et la pièce devient illisible. Relevé le 29 septembre 2026. Le
+     balayage refuse tout nom qui n'est pas de l'ASCII, et tout nom qui ne
+     finit pas par son extension. */
+  const propose = dl.suggestedFilename();
+  if (/[^\x20-\x7e]/.test(propose)) {
+    console.log("FAUTE " + cle + " : nom de fichier hors ASCII · « " + propose + " »");
+    fautes++;
+  } else if (!/\.(docx|xlsx|csv|pdf|txt)$/i.test(propose)) {
+    console.log("FAUTE " + cle + " : nom de fichier sans extension · « " + propose + " »");
+    fautes++;
+  }
   const nom = path.join(dossier, cle.replace(/[^A-Za-z0-9-]/g, "_") + ".docx");
   await dl.saveAs(nom);
   fichiers.push([cle, nom]);

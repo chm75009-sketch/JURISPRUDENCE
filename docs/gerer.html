@@ -4457,8 +4457,16 @@
       + "délègue le cas échéant ses attributions : " + (v.responsable || "[nom, qualité, téléphone]") + "." });
 
     b.push({ k: "t1", t: "2. Ce que décrit le transporteur (" + ref(["R4515-7"]) + ")" });
+    /* LE VÉHICULE EST DANS LA FLOTTE, AVEC SON GENRE ET SON CHAUFFEUR.
+
+       Le protocole sortait « Caractéristiques du véhicule, son aménagement et
+       ses équipements : AA-142-NH. » : une immatriculation ne décrit pas un
+       véhicule, et c'est une description que R. 4515-7 demande. La flotte porte
+       le genre, la marque, le poids et le chauffeur attitré. Relevé le
+       29 septembre 2026 : la liste était proposée à la saisie, mais ce qui était
+       tapé à la main restait seul dans le document. */
     b.push({ k: "p", t: "1° Caractéristiques du véhicule, son aménagement et ses équipements : "
-      + (String(v.vehicule || "").trim() || "[type, hayon, bâchage, immatriculation]") + "." });
+      + (decrireVehicule(v.vehicule) || "[type, hayon, bâchage, immatriculation]") + "." });
     b.push({ k: "p", t: "2° Nature et conditionnement de la marchandise : "
       + (v.marchandise || "[nature, palettes, colis, vrac]") + "." });
     b.push({ k: "p", t: "3° Précautions ou sujétions particulières résultant de la nature des "
@@ -5526,6 +5534,39 @@
         return [String(v.immat).trim(), GENRE[v.genre] || String(v.genre || ""),
           String(v.marque || "").trim()].filter(Boolean).join(", ");
       });
+  }
+  /* Ce que la flotte sait d'un véhicule, à partir de ce qui est écrit dans le
+     champ : l'immatriculation suffit à le retrouver. Rien n'est inventé, et ce
+     qui a été tapé à la main est conservé tel quel quand la flotte ne le
+     connaît pas. */
+  function decrireVehicule(ecrit) {
+    var dit = String(ecrit || "").trim();
+    if (!dit) return "";
+    var L = null;
+    try { L = JSON.parse(localStorage.getItem("flotte-vehicules") || "null"); } catch (e) { L = null; }
+    var GENRE2 = { pl: "poids lourd", vl: "véhicule léger", spl: "ensemble articulé",
+      remorque: "remorque", semi: "semi-remorque" };
+    var plaque = (dit.match(/[A-Z]{2}-?\d{3}-?[A-Z]{2}/i) || [dit])[0]
+      .toUpperCase().replace(/-/g, "");
+    var v = null;
+    (L || []).forEach(function (x) {
+      var p = String(x.immat || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      if (p && p === plaque) v = x;
+    });
+    if (!v) return dit;
+    var bouts = [String(v.immat || "").trim()];
+    if (GENRE2[v.genre] || v.genre) bouts.push(GENRE2[v.genre] || String(v.genre));
+    if (String(v.marque || "").trim()) bouts.push(String(v.marque).trim());
+    /* Les observations de la fiche portent, en pratique, le hayon, la bâche,
+       la grue : ce sont les équipements que R. 4515-7 fait décrire. */
+    if (String(v.note || "").trim()) bouts.push(String(v.note).trim());
+    var chauffeur = String(v.conducteur || "").trim();
+    if (chauffeur) bouts.push("chauffeur attitré " + chauffeur);
+    /* Ce que l'utilisateur a écrit en plus de l'immatriculation ne se perd
+       pas : un hayon noté à la main compte autant que la fiche. */
+    var reste = dit.replace(/[A-Z]{2}-?\d{3}-?[A-Z]{2}/i, "").replace(/^[\s,;.]+|[\s,;.]+$/g, "");
+    if (reste && bouts.join(", ").toLowerCase().indexOf(reste.toLowerCase()) < 0) bouts.push(reste);
+    return bouts.join(", ");
   }
   function ficheConducteur(nom) {
     var id = sansAccentSimple(nom);
