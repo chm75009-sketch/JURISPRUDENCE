@@ -2151,9 +2151,20 @@
     if (a.partielles) L.push(a.partielles > 1
       ? a.partielles + " semaines restent incomplètes : leur total ne se compare à aucun plafond."
       : "Une semaine reste incomplète : son total ne se compare à aucun plafond.");
+    /* LE WORD ET LE CLASSEUR DISAIENT LA RÈGLE DES SÉDENTAIRES À UN ROULANT.
+
+       « La moyenne de quarante-quatre heures sur douze semaines (L. 3121-22) ne
+       se calcule pas sur un mois » partait dans le décompte d'un conducteur,
+       alors que l'écran, lui, dit la bonne : celle de R. 3312-50, trois mois.
+       Relevé le 29 septembre 2026. Le fichier reprend la phrase de l'écran. */
     L.push("Plafonds appliqués : " + a.pl.jour + " heures par jour et " + a.pl.sem +
       " heures par semaine (" + a.pl.source + ")" + (a.pl.dit ? ", catégorie « " + a.pl.dit + " »" : "") +
-      ". La moyenne de quarante-quatre heures sur douze semaines (L. 3121-22) ne se calcule pas sur un mois.");
+      (a.pl.roulant
+        ? ". La moyenne applicable est celle de R. 3312-50 du code des transports : " +
+          a.pl.triMoy + " heures par semaine sur le trimestre, ou " + a.pl.triMax +
+          " heures par trimestre. Ce n'est pas la moyenne de quarante-quatre heures sur douze " +
+          "semaines de L. 3121-22, qui vaut pour les sédentaires."
+        : ". La moyenne de quarante-quatre heures sur douze semaines (L. 3121-22) ne se calcule pas sur un mois."));
     return L;
   }
 
@@ -2914,6 +2925,83 @@
             " de côté (autre mois, ou ni début ni fin)" : "") + "."
         : "Aucun jour du mois affiché n'a été trouvé dans ce relevé.";
     }
+    /* LES JOURS DÉCODÉS, MONTRÉS AVANT D'ÊTRE REPRIS.
+
+       Un décompte qu'on ne peut pas vérifier ne vaut rien : c'était le motif du
+       refus, et il reste vrai. Ce qui change, c'est qu'on peut le vérifier à
+       l'oeil, journée par journée, avant qu'il entre dans le relevé. Le tableau
+       porte aussi la conduite et le travail, qui ne sont pas repris mais qui
+       disent si la lecture est plausible : une journée à neuf heures de conduite
+       et deux cents kilomètres se voit. */
+    function proposerDDD(J) {
+      var z = $("imp-ddd");
+      if (!z) return;
+      var m = moisDe();
+      void m;
+      var duMois = J.filter(function (j) {
+        return j.iso.slice(0, 4) === String(an) &&
+          Number(j.iso.slice(5, 7)) === mo + 1;
+      });
+      var hh = function (min) {
+        var x = Math.max(0, Math.round(min));
+        return Math.floor(x / 60) + " h " + ("0" + (x % 60)).slice(-2);
+      };
+      z.hidden = false;
+      z.innerHTML =
+        '<p class="al">' + J.length + " journée" + (J.length > 1 ? "s" : "") +
+        " lue" + (J.length > 1 ? "s" : "") + " sur la carte, du " +
+        ech(jourFrIso(J[0].iso)) + " au " + ech(jourFrIso(J[J.length - 1].iso)) + ". " +
+        (duMois.length
+          ? duMois.length + " dans le mois affiché, " + ech(MOIS[mo]) + " " + an + " :"
+          : "Aucune ne tombe dans le mois affiché, " + ech(MOIS[mo]) + " " + an +
+            " : changez de mois, ou reprenez un autre téléchargement.") + "</p>" +
+        (duMois.length
+          ? '<div class="tab"><table><thead><tr>' +
+            "<th>Jour</th><th>Début</th><th>Fin</th><th>Pause</th>" +
+            "<th>Conduite</th><th>Travail</th><th>km</th></tr></thead><tbody>" +
+            duMois.map(function (j) {
+              return "<tr><td>" + ech(jourFrIso(j.iso)) + "</td><td>" + ech(j.debut || "-") +
+                "</td><td>" + ech(j.fin || "-") + "</td><td>" + j.pause + " min</td><td>" +
+                ech(hh(j.conduite)) + "</td><td>" + ech(hh(j.travail)) + "</td><td>" +
+                j.distance + "</td></tr>";
+            }).join("") + "</tbody></table></div>" +
+            '<div class="barre"><button type="button" id="ddd-oui">Reprendre ces ' +
+            duMois.length + " jour" + (duMois.length > 1 ? "s" : "") + " dans le relevé</button>" +
+            '<button type="button" class="second" id="ddd-non">Laisser</button></div>'
+          : "") +
+        '<p class="doux">Ce fichier est scellé par la carte, et cette signature n\'est PAS ' +
+        "vérifiée ici : l'application n'a pas les certificats de l'autorité européenne. Ce qui " +
+        "est lu vaut donc ce que vaut le fichier qu'on lui donne, comme un tableau tapé à la " +
+        "main. Les heures sont celles de la carte, en temps universel : si votre exploitation " +
+        "compte en heure locale, vérifiez le décalage sur une journée connue avant de reprendre " +
+        "le mois.</p>";
+      var oui = $("ddd-oui"), non = $("ddd-non");
+      if (non) non.addEventListener("click", function () {
+        z.hidden = true; z.innerHTML = "";
+        $("imp-etat").textContent = "Rien n'a été repris.";
+      });
+      if (oui) oui.addEventListener("click", function () {
+        var mm = moisDe(), n = 0;
+        duMois.forEach(function (j) {
+          if (!j.debut || !j.fin) return;
+          mm.jours[String(Number(j.iso.slice(8, 10)))] = {
+            n: "travail", d: j.debut, f: j.fin, p: String(j.pause),
+          };
+          n++;
+        });
+        garderMois(mm); construire(); tout();
+        z.hidden = true; z.innerHTML = "";
+        $("imp-etat").textContent = n + " jour" + (n > 1 ? "s" : "") +
+          " repris de la carte dans le mois affiché" +
+          (n < duMois.length ? ", " + (duMois.length - n) + " entièrement au repos, laissé" +
+            (duMois.length - n > 1 ? "s" : "") + " de côté" : "") + ".";
+      });
+    }
+    function jourFrIso(iso) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ""));
+      return m ? m[3] + "/" + m[2] + "/" + m[1] : String(iso || "");
+    }
+
     $("imp-lire").addEventListener("click", function () {
       var colle = $("imp-colle").value.trim();
       var f = $("imp-fichier").files && $("imp-fichier").files[0];
@@ -2929,12 +3017,40 @@
          vérifier serait pire que de ne rien produire. Plutôt que d'échouer en
          silence sur « ce fichier n'a pas pu être lu », l'écran dit ce que
          c'est et par où passer. */
-      if (/\.(ddd|esm|tgd|v1b|c1b)$/i.test(f.name)) {
-        $("imp-etat").textContent = "Ce fichier est le relevé brut du chronotachygraphe, " +
-          "et l'application ne le décode pas : son format vient des annexes du règlement " +
-          "européen, et un décompte qu'on ne peut pas vérifier ne vaut rien. Votre logiciel de " +
-          "télédéchargement sait l'exporter en tableau : reprenez ce tableau ici, en .xlsx ou " +
-          "en .csv, une ligne par jour avec le début, la fin et la pause.";
+      /* LE .ddd DE LA CARTE SE LIT MAINTENANT.
+
+         Il était refusé avec une explication, et l'explication revenait à
+         chaque contre-vérification : « .ddd expliqué, non lu ». La structure du
+         fichier est publique, et lire-ddd.js en tire les journées. Deux choses
+         restent vraies et sont dites à l'écran : aucune signature n'est
+         vérifiée, et les fichiers de l'unité embarquée ne sont pas lus. Rien
+         n'entre dans le relevé avant que l'utilisateur ait vu les jours et
+         confirmé. Le 30 septembre 2026. */
+      if (/\.(esm|tgd|v1b|c1b)$/i.test(f.name)) {
+        $("imp-etat").textContent = "Ce fichier vient de l'unité embarquée du véhicule, et sa " +
+          "structure n'est pas celle de la carte de conducteur : l'application ne l'a pas " +
+          "essayée, et elle ne devine pas. Le .ddd de la carte, lui, se lit ici. Sinon, votre " +
+          "logiciel de télédéchargement sait exporter un tableau : reprenez-le en .xlsx ou en " +
+          ".csv, une ligne par jour avec le début, la fin et la pause.";
+        return;
+      }
+      if (/\.ddd$/i.test(f.name)) {
+        if (!window.LireDDD) {
+          $("imp-etat").textContent = "Le lecteur de carte de conducteur n'a pas pu être chargé.";
+          return;
+        }
+        $("imp-etat").textContent = "Lecture de la carte…";
+        window.LireDDD.jours(f).then(function (J) { proposerDDD(J); }, function (e) {
+          var q = e && e.message;
+          $("imp-etat").textContent =
+            q === "activites"
+              ? "Ce fichier ne porte pas le bloc des activités journalières" +
+                (e.trouve && e.trouve.length ? ", seulement : " + e.trouve.join(", ") : "") +
+                ". C'est peut-être un téléchargement partiel de la carte : redemandez-le en entier."
+              : (q === "vide"
+                ? "Le bloc des activités de cette carte est vide : aucune journée n'y est enregistrée."
+                : "Ce fichier n'a pas la structure d'un .ddd de carte de conducteur.");
+        });
         return;
       }
       if (/\.(csv|txt|tsv)$/i.test(f.name)) {

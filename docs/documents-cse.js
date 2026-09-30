@@ -146,6 +146,124 @@
   function lieu(ctx) { return cro(villeFiche(ctx.profil || {}), "lieu"); }
   function signataire(ctx) { return cro(resp(ctx.profil || {}), "Nom et qualité du représentant légal"); }
 
+  /* POURQUOI LES ÉLECTIONS SONT OUVERTES AUJOURD'HUI, ET DEPUIS QUELLE DATE.
+
+     Le kit des élections sortait identique à l'entreprise qui renouvelle un
+     comité élu, à celle qui sort d'une carence et à celle qui n'a jamais rien
+     organisé : md5 identiques sur les trois fiches, relevé le 29 septembre
+     2026. Les pièces, elles, sont bien les mêmes, et c'est juste : la procédure
+     électorale ne change pas selon la cause. Ce qui change est la cause et la
+     date d'où courent les délais, et c'est cela qui manquait.
+
+     Trois causes, trois textes, lus à la source :
+       - le renouvellement : « les membres de la délégation du personnel du
+         comité social et économique sont élus pour quatre ans » (L. 2314-33,
+         LEGIARTI000052437191), et le premier tour « doit se tenir, au plus
+         tard, le quatre-vingt-dixième jour suivant la diffusion » de
+         l'information du personnel (L. 2314-4, LEGIARTI000035651165) ;
+       - la carence : passé six mois depuis le procès-verbal, une demande d'un
+         salarié ou d'une organisation syndicale rend les élections dues
+         (L. 2314-8, LEGIARTI000036262484), et l'information du personnel se
+         refait tous les quatre ans (L. 2314-4) ;
+       - aucune élection : le comité est dû dès onze salariés atteints pendant
+         douze mois consécutifs (L. 2311-2, LEGIARTI000035609353), et l'entrave
+         à sa constitution, « notamment par la méconnaissance des dispositions
+         des articles L. 2314-1 à L. 2314-9 », est punie d'un an
+         d'emprisonnement et de 7 500 euros (L. 2317-1, LEGIARTI000035634273).
+     Les cinq articles relus au relais le 30 septembre 2026, deux lectures
+     concordantes chacun, texte entier.
+
+     CE QUI N'EST PAS ÉCRIT ICI, FAUTE DE L'AVOIR TROUVÉ : la règle selon
+     laquelle le premier tour se tient dans la quinzaine qui précède le terme
+     des mandats. Elle figure ailleurs dans l'application, sur l'agenda. Les
+     articles L. 2314-26 à L. 2314-29 et L. 2314-33 ont été lus au relais le
+     30 septembre 2026 : aucun ne la porte. Elle n'est donc pas reprise dans ce
+     bloc, et ce qui y est écrit part de la diffusion de l'information, que
+     L. 2314-4 rattache bien au premier tour. */
+  function causeElections(ctx) {
+    var p = (ctx && ctx.profil) || {};
+    var r = String(p.cseExiste || "").trim().toLowerCase();
+    var jr = function (v) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(v || ""));
+      return m ? leJour(new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))) : "";
+    };
+    if (r.indexOf("oui") === 0) {
+      var d = jr(p.cseElections);
+      return { cle: "renouvellement",
+        dit: d
+          ? "Ce kit ouvre le RENOUVELLEMENT d'un comité élu le " + d + ". Le mandat des élus " +
+            "dure quatre ans (L. 2314-33) : il s'achève donc en " + (Number(String(p.cseElections).slice(0, 4)) + 4) +
+            ". Le premier tour doit se tenir au plus tard le quatre-vingt-dixième jour suivant " +
+            "la diffusion de l'information du personnel (L. 2314-4) : c'est cette diffusion qui " +
+            "ouvre tous les délais ci-dessous, et elle se place assez tôt pour que le scrutin " +
+            "tombe avant le terme des mandats."
+          : "Ce kit ouvre le RENOUVELLEMENT d'un comité élu, mais la date des dernières " +
+            "élections n'est pas renseignée sur la fiche d'entreprise : sans elle, le terme des " +
+            "mandats ne se calcule pas (L. 2314-33), et les délais ci-dessous partent du jour " +
+            "où vous diffusez l'information du personnel." };
+    }
+    if (r.indexOf("non, proc") === 0 || r.indexOf("non, procès") === 0 ||
+        r.indexOf("carence") >= 0) {
+      var c = jr(p.cseCarence);
+      return { cle: "carence",
+        dit: "Ce kit ouvre un NOUVEAU PROCESSUS ÉLECTORAL après une carence" +
+          (c ? ", constatée par le procès-verbal du " + c : "") + ". Aucune demande d'élections " +
+          "n'est recevable dans les six mois qui suivent ce procès-verbal ; passé ce délai, la " +
+          "demande d'un salarié ou d'une organisation syndicale les rend dues, et l'employeur " +
+          "engage le processus dans le mois (L. 2314-8). L'information du personnel se refait en " +
+          "tout état de cause tous les quatre ans (L. 2314-4). Joignez le procès-verbal de " +
+          "carence au dossier : c'est lui qui établit qu'il n'y avait personne à élire." };
+    }
+    if (r.indexOf("non, élections en cours") === 0 || r.indexOf("non, elections en cours") === 0) {
+      var i = jr(p.cseInfoPersonnel);
+      return { cle: "encours",
+        dit: "Ce kit poursuit des ÉLECTIONS DÉJÀ EN COURS" +
+          (i ? ", le personnel ayant été informé le " + i : "") + ". Le premier tour se tient au " +
+          "plus tard le quatre-vingt-dixième jour suivant cette diffusion (L. 2314-4), et " +
+          "l'invitation des organisations syndicales doit leur être parvenue quinze jours au " +
+          "moins avant la première réunion de négociation du protocole (L. 2314-5)." };
+    }
+    if (r.indexOf("non") === 0) {
+      return { cle: "aucune",
+        dit: "Ce kit ouvre un PREMIER PROCESSUS ÉLECTORAL : votre fiche indique qu'aucune " +
+          "élection n'a été organisée. Le comité est dû dès que l'effectif de onze salariés est " +
+          "atteint pendant douze mois consécutifs (L. 2311-2) : à partir de ce terme, l'absence " +
+          "de comité est un manquement. L'entrave à la constitution d'un comité, « notamment par " +
+          "la méconnaissance des dispositions des articles L. 2314-1 à L. 2314-9 », est punie " +
+          "d'un an d'emprisonnement et d'une amende de 7 500 euros (L. 2317-1). Les délais " +
+          "ci-dessous partent du jour où vous diffusez l'information du personnel." };
+    }
+    return { cle: "", dit: "" };
+  }
+  /* Le texte, coupé à la largeur des autres lignes du fichier : les
+     générateurs écrivent en lignes courtes, et la feuille les recolle en
+     paragraphes. Une ligne de trois cents signes ressortait telle quelle dans
+     le Word. */
+  function couper(L, texte, large) {
+    var n = large || 74;
+    var mots = String(texte || "").split(/\s+/).filter(Boolean);
+    var ligne = "";
+    mots.forEach(function (m) {
+      if (!ligne) { ligne = m; return; }
+      if ((ligne + " " + m).length > n) { L.push(ligne); ligne = m; return; }
+      ligne += " " + m;
+    });
+    if (ligne) L.push(ligne);
+  }
+
+  /* La cause, posée en tête d'une pièce du kit. Muette quand la fiche ne répond
+     pas : on ne suppose pas la situation de l'entreprise. */
+  function blocCause(L, ctx) {
+    var c = causeElections(ctx);
+    if (!c.dit) return;
+    L.push("POURQUOI CES ÉLECTIONS, ET DEPUIS QUELLE DATE");
+    L.push("");
+    couper(L, c.dit);
+    L.push("");
+    L.push(TRAIT);
+    L.push("");
+  }
+
   function effectifDe(ctx) {
     var p = ctx.profil || {}, f = ctx.fiche || {};
     return nb(f.effectif != null ? f.effectif : p.effectif);
@@ -1338,6 +1456,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("CE QUE LE TEXTE EXIGE, ET CE QU'ON OUBLIE");
       L.push("");
@@ -1499,6 +1618,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("LE TEXTE, ET LE DÉCOMPTE");
       L.push("");
@@ -1620,6 +1740,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("LA DOUBLE MAJORITÉ - CE QUI REND LE PROTOCOLE VALABLE");
       L.push("");
@@ -1902,6 +2023,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("POURQUOI CETTE MENTION N'EST PAS UNE FORMALITÉ");
       L.push("");
@@ -2034,6 +2156,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("LA RÈGLE, ET SON ARITHMÉTIQUE");
       L.push("");
@@ -2188,6 +2311,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("L'ORDRE DES SOURCES");
       L.push("");
@@ -2364,6 +2488,7 @@
       L.push(DP.EXEMPLE);
       L.push("");
       usage(L);
+      blocCause(L, ctx);
 
       L.push("LE TEST, EN TROIS TEMPS");
       L.push("");

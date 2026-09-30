@@ -101,6 +101,10 @@
 
 <script src="droits.js"></script>
 <script src="base-documents.js"></script>
+<!-- Le lecteur de classeur et le rendu de tableau de l'aperçu : c'est avec eux
+     qu'un .xlsx déposé se regarde ici au lieu de renvoyer au téléchargement. -->
+<script src="lire-classeur.js"></script>
+<script src="apercu.js"></script>
 <script>
 (function () {
   "use strict";
@@ -227,6 +231,40 @@
         }).catch(function () {
           z.innerHTML = '<p class="rien">Ce fichier n\'a pas pu être lu sur cet appareil.</p>';
         });
+      } else if (/\.(xlsx|xlsm)$/i.test(nom) ||
+                 /spreadsheetml|ms-excel/.test(type)) {
+        /* UN CLASSEUR SE REGARDE, IL SUFFIT DE LE LIRE.
+
+           « Ce format ne se regarde pas dans un navigateur » : l'écran renvoyait
+           au téléchargement pour un .xlsx, alors que le dépôt sait déjà lire un
+           classeur, c'est ce que fait l'import du décompte des heures. Relevé le
+           29 septembre 2026. La première feuille se rend en tableau ; les
+           suivantes se lisent après téléchargement, et l'écran le dit. */
+        z.innerHTML = '<p class="rien">Lecture du classeur…</p>';
+        if (!window.LireClasseur || !window.LireClasseur.possible()) {
+          z.innerHTML = '<p class="rien">Ce classeur n\'a pas pu être lu sur cet appareil : ' +
+            "téléchargez-le pour l'ouvrir dans un tableur.</p>";
+        } else {
+          window.LireClasseur.fichier(blob).then(function (lignes) {
+            var L = (lignes || []).filter(function (l) {
+              return l.some(function (c) { return String(c == null ? "" : c).trim(); });
+            });
+            if (!L.length) {
+              z.innerHTML = '<p class="rien">Ce classeur est vide, ou sa première feuille l\'est.</p>';
+              return;
+            }
+            var coupe = L.length > 200;
+            z.innerHTML = '<p class="ap-feuille">Première feuille · ' + L.length + " ligne" +
+              (L.length > 1 ? "s" : "") + "</p>" +
+              (window.Apercu ? window.Apercu.tableHtml(L.slice(0, 200))
+                : "<pre>" + ech(L.slice(0, 200).map(function (l) { return l.join("\t"); }).join("\n")) + "</pre>") +
+              '<p class="rien">' + (coupe ? "Tableau réduit aux deux cents premières lignes à l'écran. " : "") +
+              "Les autres feuilles du classeur se lisent après téléchargement.</p>";
+          }).catch(function () {
+            z.innerHTML = '<p class="rien">Ce classeur n\'a pas pu être lu sur cet appareil : ' +
+              "téléchargez-le pour l'ouvrir dans un tableur.</p>";
+          });
+        }
       } else {
         z.innerHTML = '<p class="rien">Ce format ne se regarde pas dans un navigateur : ' +
           "téléchargez-le pour l'ouvrir dans Word, dans un tableur ou dans le logiciel qui le lit.</p>";

@@ -3433,7 +3433,19 @@
         C.push("");
         C.push("  1. la version est datée et la précédente archivée (L. 4121-3-1, V ;");
         C.push("     R. 4121-4) ;");
-        C.push("  2. le comité social et économique a été consulté (L. 4121-3, 1°) ;");
+        /* LA CONSIGNE NE PEUT PAS EXIGER UNE CONSULTATION QUI N'A PAS D'OBJET.
+
+           « Aucune version n'est réputée close tant que le comité social et
+           économique a été consulté » était écrit à une entreprise dont la
+           fiche porte un procès-verbal de carence : une consigne interne qui
+           impose l'impossible ne se tient pas, et elle fait croire à un
+           manquement permanent. Relevé le 29 septembre 2026. */
+        if (E || String((ctx.profil || {}).cseExiste || "").trim().toLowerCase().indexOf("non") !== 0)
+          C.push("  2. le comité social et économique a été consulté (L. 4121-3, 1°) ;");
+        else {
+          C.push("  2. sans objet tant qu'aucun comité n'est en place ; dès qu'il l'est, sa");
+          C.push("     consultation entre ici comme condition (L. 4121-3, 1°) ;");
+        }
         C.push("  3. le programme annuel ou la liste d'actions a été revu si nécessaire");
         C.push("     (R. 4121-2, dernier alinéa) ;");
         C.push("  4. le document a été transmis au service de prévention et de santé au");

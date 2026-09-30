@@ -47,6 +47,22 @@ for (const f of readdirSync(DOCS)) {
   try { t = readFileSync(new URL(f, DOCS), "utf8"); } catch (e) { continue; }
   const n = t.split(CADRATIN).length - 1 + (t.split(DEMI).length - 1);
   if (n) fautes.push("docs/" + f + " : " + n + " tiret(s) cadratin ou demi-cadratin en clair.");
+  /* UN OCTET DE CONTRÔLE DANS UN FICHIER SOURCE NE SE VOIT PAS, ET IL CASSE.
+
+     Mesuré le 30 septembre 2026 : trois expressions régulières de
+     lire-classeur.js portaient un caractère de retour arrière, 0x08, là où
+     « \b » avait été écrit. Le lecteur de classeur ne reconnaissait donc plus
+     aucun format de date, et rien ne le disait : le fichier s'affiche
+     normalement, l'éditeur ne montre rien, et le contrôle de syntaxe passe. On
+     refuse tout caractère de contrôle autre que la tabulation et le retour à la
+     ligne. */
+  const ctrl = t.match(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g);
+  if (ctrl) {
+    const ou = t.split("\n").reduce((acc, l, i) =>
+      acc || (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(l) ? i + 1 : 0), 0);
+    fautes.push("docs/" + f + " : " + ctrl.length + " caractère(s) de contrôle, " +
+      "premier à la ligne " + ou + " (code " + ctrl[0].charCodeAt(0) + ").");
+  }
 }
 
 /* 2. Les expressions de lecture portent bien les échappements. */

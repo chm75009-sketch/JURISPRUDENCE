@@ -445,7 +445,7 @@
     if (sansComite)
       attentes.push({ t: "Comité social et économique : pas dû avant onze salariés.",
         w: "L. 2311-2 : le comité est mis en place dans les entreprises d'au moins onze salariés. " +
-          "Effectif retenu : " + effectif + ". Ni réunions, ni consultations, ni élections à inscrire." });
+          "Effectif retenu : " + effectif + ". Ni réunions, ni consultations, ni élections à inscrire.", ou: "fiche" });
 
     /* QUAND IL N'Y A PAS DE COMITÉ, ON N'EN PRÉPARE PAS LES RÉUNIONS.
 
@@ -528,7 +528,7 @@
       attentes.push({ t: "Procès-verbal de carence : sa date manque.",
         w: "Votre fiche dit qu'un procès-verbal de carence a été établi, sans dire quand. C'est cette date " +
           "qui ouvre le délai de six mois pendant lequel aucune demande d'élections n'est recevable " +
-          "(L. 2314-8). Renseignez-la dans la fiche d'entreprise." });
+          "(L. 2314-8). Renseignez-la dans la fiche d'entreprise.", ou: "fiche" });
     }
     /* LES ÉLECTIONS EN COURS : DEUX DÉLAIS, ET ILS NE SE DEVINENT PAS.
 
@@ -607,7 +607,7 @@
       });
     } else if (effectif === null) {
       attentes.push({ t: "Réunions du CSE : effectif non renseigné.",
-        w: "La périodicité des réunions dépend du seuil de trois cents salariés (L. 2315-28). Renseignez l'effectif ci-dessus." });
+        w: "La périodicité des réunions dépend du seuil de trois cents salariés (L. 2315-28). Renseignez l'effectif sur la fiche.", ou: "fiche" });
     }
 
     /* --- négociations obligatoires : le moteur NAO fait le calcul --- */
@@ -665,7 +665,7 @@
           if (t.du === false) return;
           if (t.du === null) {
             attentes.push({ t: "« " + t.titre + " » : effectif non renseigné.",
-              w: "Cette négociation n'est due qu'à partir de trois cents salariés, renseignez l'effectif." });
+              w: "Cette négociation n'est due qu'à partir de trois cents salariés, renseignez l'effectif.", ou: "fiche" });
             return;
           }
           if (/jamais engagée/.test(t.etat)) {
@@ -834,7 +834,7 @@
       });
     } else {
       attentes.push({ t: "Élections du CSE : date des dernières élections non renseignée.",
-        w: "Les mandats durent quatre ans (L. 2314-33) : sans la date des dernières élections, l'échéance du renouvellement ne peut pas être calculée." });
+        w: "Les mandats durent quatre ans (L. 2314-33) : sans la date des dernières élections, l'échéance du renouvellement ne peut pas être calculée.", ou: "fiche" });
     }
 
     /* LE DÉCOMPTE DES HEURES, TOUS LES MOIS.
@@ -1079,10 +1079,26 @@
     }
     if (r.attentes.length) {
       h += '<p class="groupe">Ce qui manque pour compléter l\'agenda</p>';
+      /* CE QUI MANQUE SE COMBLE QUELQUE PART, ET LA LISTE LE DIT.
+
+         « Renseignez l'effectif ci-dessus », « votre fiche dit qu'un
+         procès-verbal a été établi, sans dire quand » : la liste nommait le
+         manque et laissait chercher où le combler. Relevé le 29 septembre 2026.
+         Une attente qui dépend de la fiche d'entreprise porte désormais le lien
+         qui l'ouvre, et celle qui dépend du registre le sien. */
+      var OU = {
+        fiche: ["index.html#fiche-accueil", "Ouvrir la fiche d'entreprise"],
+        registre: ["registre.html", "Ouvrir le registre du personnel"],
+      };
       r.attentes.forEach(function (a) {
+        var ou = OU[a.ou] || null;
         h += '<div class="attente"><p class="t" style="margin:0">' + ech(a.t) +
-          '</p><p class="w">' + ech(a.w) + "</p></div>";
+          '</p><p class="w">' + ech(a.w) +
+          (ou ? ' <a href="' + ou[0] + '">' + ech(ou[1]) + "</a>" : "") + "</p></div>";
       });
+      h += '<p class="note-pied">La plupart de ces manques sont des réponses de la ' +
+        'fiche d\'entreprise ou des dates du registre : <a href="index.html#fiche-accueil">la fiche</a>, ' +
+        '<a href="registre.html">le registre</a>.</p>';
     }
     h += '<p class="note-pied">Échéancier établi au ' + ech(enFr(AUJ)) + ", sur la fiche d'entreprise et les données présentes sur ce poste.</p>";
     sortie.innerHTML = h;

@@ -196,6 +196,14 @@
      là où il est demandé. */
   function quitter() {
     try { window.sessionStorage.removeItem("seance-ouverte"); } catch (e) {}
+    /* LE BATTEMENT DE LA SÉANCE PARTAGÉE S'ARRÊTE AUSSI.
+
+       Sur le site du client, la séance se partage entre onglets par une marque
+       horodatée dans localStorage (verrou.js). La laisser derrière soi
+       reviendrait à rouvrir la porte pendant vingt secondes après avoir cliqué
+       sur « Quitter ». Cette clé n'existe pas dans l'application elle-même :
+       la retirer n'y fait rien. */
+    try { window.localStorage.removeItem("seance-battement"); } catch (e) {}
     var u = utilisateurConnecte();
     if (u && window.Droits && window.Droits.deconnecter) {
       window.Droits.deconnecter().then(function () { location.reload(); })

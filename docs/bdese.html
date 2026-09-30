@@ -87,6 +87,36 @@
   .rb>.tt .n{font-size:13px;color:var(--texte-2);white-space:nowrap}
   .rb>.tt .n.pleine{color:var(--vert)}
   .grille-tab{overflow:auto;max-height:70vh;-webkit-overflow-scrolling:touch}
+  /* UN TABLEAU DE NEUF CENT SOIXANTE-SIX POINTS DANS UNE BOÎTE DE TROIS CENT
+     CINQUANTE-SIX. Le tableau des rubriques défilait de côté sur un téléphone :
+     lisible à l'ordinateur, inutilisable dans la main. Relevé le 29 septembre
+     2026. Sous sept cents points, chaque ligne devient une carte : l'intitulé
+     en titre, puis une case par millésime, l'année écrite devant. Ce sont les
+     mêmes cellules, présentées autrement ; à l'ordinateur, le tableau reste un
+     tableau. */
+  @media (max-width:700px){
+    .grille-tab{overflow:visible;max-height:none}
+    table.g,table.g tbody,table.g tr,table.g td{display:block;width:auto}
+    table.g{min-width:0}
+    table.g thead{display:none}
+    table.g tr{border-bottom:1px solid var(--filet);padding:11px 12px}
+    table.g tr:last-child{border-bottom:0}
+    table.g td{border:0;padding:0}
+    table.g td.info{position:static;min-width:0;max-width:none;box-shadow:none;
+      font:600 15px/1.35 system-ui;margin:0 0 9px;background:transparent}
+    table.g td.info small{display:block;font-weight:400;font-size:12.5px;color:var(--texte-3)}
+    table.g td.vide,table.g td.hors{display:grid;grid-template-columns:104px 1fr;
+      align-items:center;gap:10px;margin:0 0 6px;min-width:0;background:transparent}
+    table.g td.vide::before,table.g td.hors::before{content:attr(data-tete);
+      font:600 11.5px/1.25 system-ui;text-transform:uppercase;letter-spacing:.04em;
+      color:var(--texte-3)}
+    table.g td.hors{color:var(--texte-3);font-size:13.5px}
+    table.g td.vide:last-child{min-width:0}
+    table.g td[colspan]{display:none}
+    table.g tr.sec,table.g tr.suj{background:var(--creux)}
+    table.g tr.sec td.info,table.g tr.suj td.info,table.g tr.mere td.info{margin:0}
+    table.g td.vide input{min-width:0;width:100%}
+  }
   table.g{border-collapse:separate;border-spacing:0;font-size:14px;background:var(--surface);min-width:100%}
   table.g th,table.g td{border-bottom:1px solid var(--filet);border-right:1px solid var(--filet);
     padding:7px 9px;text-align:left;vertical-align:top;line-height:1.35}
@@ -589,20 +619,29 @@
           "</td>" +
           CTX.mil.map(function (m) {
             if (l.hors)
-              return '<td class="hors" title="' + ech(l.hors) + '">non applicable</td>';
+              return '<td class="hors" data-tete="' + m.annee + " · " + ech(m.nature) +
+                '" title="' + ech(l.hors) +
+                '">non applicable</td>';
             if (!prend(l, m))
-              return '<td class="hors" title="' + ech(l.bornes === "passe"
+              return '<td class="hors" data-tete="' + m.annee + " · " + ech(m.nature) +
+                '" title="' + ech(l.bornes === "passe"
                 ? "Le détail mois par mois porte sur les années réalisées et l'année en cours ; les trois années à venir se présentent en grandes tendances sur la ligne du décret (R. 2312-10)."
                 : "Le détail de cette année est porté mois par mois sur les douze lignes qui suivent.") +
                 '">sans objet</td>';
             var v = valeur(l.cle, m.annee);
             if (v.trim()) une = true;
-            return '<td class="vide"><input data-ligne="' + ech(l.cle) + '" data-annee="' + m.annee + '"' +
+            /* En cartes, l'étiquette porte l'année ET sa nature : c'est ce que
+               l'en-tête du tableau donne sur deux lignes, et l'année à venir ne
+               se remplit pas comme une année réalisée (R. 2312-10). */
+            return '<td class="vide" data-tete="' + m.annee + " · " + ech(m.nature) +
+              '"><input data-ligne="' + ech(l.cle) +
+              '" data-annee="' + m.annee + '"' +
               (v.trim() ? ' class="rempli"' : "") + ' value="' + ech(v) + '" aria-label="' + ech(l.info + ", " + m.annee) + '"></td>';
           }).join("") +
           (l.hors
             ? '<td class="hors gauche">' + ech(l.hors) + "</td>"
-            : '<td class="vide"><input data-raison="' + ech(l.cle) + '" value="' + ech(raison(l.cle)) + '"' +
+            : '<td class="vide" data-tete="Ne peut être renseigné"><input data-raison="' + ech(l.cle) +
+              '" value="' + ech(raison(l.cle)) + '"' +
               (raison(l.cle).trim() ? ' class="rempli"' : "") + ' aria-label="' + ech(l.info + ", raison") + '"></td>') +
           "</tr>";
         if (l.hors || une || raison(l.cle).trim()) pleines++;

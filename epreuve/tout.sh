@@ -1,8 +1,8 @@
 #!/bin/bash
 # TOUTES LES ÉPREUVES, DANS L'ORDRE, D'UNE SEULE COMMANDE.
 #
-# Dix-huit contrôles vivent dans ce dossier, et il fallait se souvenir de
-# chacun avant de publier. Celui-ci les enchaîne : les six qui tournent sans
+# Dix-neuf contrôles vivent dans ce dossier, et il fallait se souvenir de
+# chacun avant de publier. Celui-ci les enchaîne : les sept qui tournent sans
 # navigateur d'abord, parce qu'ils sont instantanés et qu'ils attrapent le
 # plus ; les douze balayages ensuite, qui ouvrent Chromium et prennent leur
 # temps. Écrit le 28 septembre 2026.
@@ -41,6 +41,7 @@ passe "Les fichiers servis et le cache hors connexion" $NODE epreuve/verifier-ca
 passe "Les tirets cadratins" $NODE epreuve/verifier-tirets.mjs
 passe "Les marques d'outil dans les 224 générateurs" $NODE epreuve/verifier-marques.mjs
 passe "L'arithmétique de l'index de l'égalité" $NODE epreuve/verifier-index-egalite.mjs
+passe "Le lecteur de carte de conducteur" $NODE epreuve/verifier-ddd.mjs
 titre "Les générateurs, mesure de référence"
 $NODE epreuve/tester-generateurs.mjs docs/documents-*.js 2>&1 | tail -1
 

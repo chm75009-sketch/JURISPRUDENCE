@@ -263,7 +263,15 @@
         /* Une date passée comme date s'écrit en date : elle se trie, et la
            différence entre deux dates donne des jours. */
         if (cel instanceof Date && isFinite(cel.getTime())) {
-          var sd = style === 5 ? 9 : (style === 3 ? 8 : style);
+          /* UNE DATE GARDE SON FORMAT, QUELLE QUE SOIT LA LIGNE.
+
+             Le style de date n'était posé que sur les lignes de données
+             reconnues comme telles, styles 3 et 5 : dans une feuille dont
+             l'en-tête n'avait pas été détecté, toutes les lignes passaient en
+             style 4 et les dates sortaient en rangs bruts, « 38047 ». Relevé le
+             30 septembre 2026. Une date s'écrit au format date, et la teinte
+             alternée est le seul choix qui reste. */
+          var sd = style === 5 ? 9 : 8;
           var serie = Math.round((Date.UTC(cel.getFullYear(), cel.getMonth(), cel.getDate()) -
             Date.UTC(1899, 11, 30)) / 864e5);
           x += '<c r="' + ref + '" s="' + sd + '"><v>' + serie + "</v></c>";

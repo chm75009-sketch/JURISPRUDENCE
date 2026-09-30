@@ -121,7 +121,78 @@
     return n - 1;
   }
 
-  function feuille(xml, partagees) {
+  /* UNE DATE DANS UN CLASSEUR N'EST PAS UN NOMBRE, ET ELLE SORTAIT EN NOMBRE.
+
+     Un .xlsx ne stocke pas « 01/03/2004 » : il stocke 38047, et c'est la mise
+     en forme de la cellule qui dit que ce nombre est une date. Le lecteur
+     rendait donc 38047, et trois écrans en souffraient : l'aperçu d'un classeur
+     dans « Mes documents » l'affichait tel quel, l'import du décompte des heures
+     ne reconnaissait aucun jour, et la reprise de la flotte non plus. Relevé le
+     30 septembre 2026.
+
+     On lit donc xl/styles.xml : cellXfs donne, pour chaque index de style, le
+     numFmtId de la cellule. Les formats de date intégrés sont connus (14 à 17,
+     22, 27 à 31, 34 à 36, 45 à 47, 50 à 58) ; les formats personnalisés sont
+     déclarés dans numFmts, et l'on retient ceux dont le code porte un jour, un
+     mois ou une année hors d'un texte entre guillemets.
+
+     Le rang d'un jour se compte depuis le 30 décembre 1899, et non depuis le
+     1er janvier 1900 : le tableur compte un 29 février 1900 qui n'a jamais
+     existé, ce qui décale de un tout ce qui précède le 1er mars 1900. Les rangs
+     inférieurs à 61 ne sont donc pas convertis : une date de 1900 dans un
+     registre du personnel n'existe pas, et deviner vaudrait moins que rendre le
+     nombre. */
+  var DATES_INTEGREES = {};
+  [14, 15, 16, 17, 22, 27, 28, 29, 30, 31, 34, 35, 36, 45, 46, 47,
+   50, 51, 52, 53, 54, 55, 56, 57, 58].forEach(function (n) { DATES_INTEGREES[n] = true; });
+
+  function formatEstDate(code) {
+    /* Le texte littéral d'un format est entre guillemets, et « m » y est une
+       lettre ordinaire : on le retire avant de chercher. */
+    var c = String(code || "").replace(/"[^"]*"/g, "").replace(/\[[^\]]*\]/g, "");
+    if (/[#0]/.test(c) && !/[ymd]/i.test(c)) return false;
+    return /[yd]/i.test(c) || /mm?m/i.test(c);
+  }
+
+  /* Les index de style qui portent une date, lus dans styles.xml. */
+  function stylesDeDate(xml) {
+    var out = {};
+    if (!xml) return out;
+    var perso = {};
+    var reN = /<numFmt\b[^>]*numFmtId="(\d+)"[^>]*formatCode="([^"]*)"[^>]*\/?>/g, mN;
+    while ((mN = reN.exec(xml)))
+      perso[parseInt(mN[1], 10)] = formatEstDate(mN[2].replace(/&quot;/g, '"'));
+    var bloc = /<cellXfs\b[^>]*>([\s\S]*?)<\/cellXfs>/.exec(xml);
+    if (!bloc) return out;
+    var reX = /<xf\b([^>]*?)(?:\/>|>[\s\S]*?<\/xf>)/g, mX, i = 0;
+    while ((mX = reX.exec(bloc[1]))) {
+      var idm = /numFmtId="(\d+)"/.exec(mX[1]);
+      var id = idm ? parseInt(idm[1], 10) : 0;
+      if (DATES_INTEGREES[id] || perso[id]) out[i] = true;
+      i++;
+    }
+    return out;
+  }
+
+  /* Le rang du jour, rendu « jj/mm/aaaa » : c'est la forme que les écrans de
+     l'application lisent. La fraction de journée, quand il y en a une, donne
+     l'heure. */
+  function dateDuRang(rang) {
+    var n = Number(rang);
+    if (!isFinite(n) || n < 61 || n > 401768) return null;   /* 401768 = an 3000 */
+    var jours = Math.floor(n), reste = n - jours;
+    var d = new Date(Date.UTC(1899, 11, 30) + jours * 86400000);
+    if (isNaN(d.getTime())) return null;
+    var deux = function (x) { return (x < 10 ? "0" : "") + x; };
+    var dit = deux(d.getUTCDate()) + "/" + deux(d.getUTCMonth() + 1) + "/" + d.getUTCFullYear();
+    if (reste > 0.00002) {
+      var s = Math.round(reste * 86400);
+      dit += " " + deux(Math.floor(s / 3600)) + ":" + deux(Math.floor((s % 3600) / 60));
+    }
+    return dit;
+  }
+
+  function feuille(xml, partagees, datesParStyle) {
     var lignes = [];
     /* Les attributs se lisent sans gourmandise : sinon « <c r="E88"/> », une
        cellule vide refermée sur elle-même, avale la cellule suivante et sa
@@ -144,6 +215,13 @@
           var vv = /<v>([\s\S]*?)<\/v>/.exec(dedans);
           v = vv ? sansBalises(vv[1]) : "";
           if (type && type[1] === "s") v = partagees[parseInt(v, 10)] || "";
+          else if (v !== "" && (!type || type[1] === "n") && datesParStyle) {
+            var st = /s="(\d+)"/.exec(attrs);
+            if (st && datesParStyle[parseInt(st[1], 10)]) {
+              var jf = dateDuRang(v);
+              if (jf) v = jf;
+            }
+          }
         }
         while (cellules.length < i) cellules.push("");
         cellules[i] = v;
@@ -171,8 +249,11 @@
       if (!nomFeuille) throw new Error("feuille");
       var lireChaines = rep["xl/sharedStrings.xml"]
         ? enTexte(octets, rep["xl/sharedStrings.xml"]) : Promise.resolve("");
-      return Promise.all([enTexte(octets, rep[nomFeuille]), lireChaines])
-        .then(function (r) { return feuille(r[0], chaines(r[1])); });
+      /* Les styles disent lesquelles des cellules numériques sont des dates. */
+      var lireStyles = rep["xl/styles.xml"]
+        ? enTexte(octets, rep["xl/styles.xml"]) : Promise.resolve("");
+      return Promise.all([enTexte(octets, rep[nomFeuille]), lireChaines, lireStyles])
+        .then(function (r) { return feuille(r[0], chaines(r[1]), stylesDeDate(r[2])); });
     });
   }
 
