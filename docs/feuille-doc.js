@@ -506,7 +506,7 @@
   }
 
   function tableaux(bs) {
-    var f = [], titre = "", n = 0, vus = {}, doc = "", dansEx = false;
+    var f = [], titre = "", legende = "", n = 0, vus = {}, doc = "", dansEx = false;
     bs.forEach(function (b) {
       /* L'EXEMPLE SE VOIT SUR L'ONGLET, PAS SEULEMENT DANS LE DOCUMENT.
          Le classeur du document unique donnait un onglet à la grille de
@@ -524,7 +524,23 @@
       if (b.k === "t1") doc = b.t;
       /* Le titre de l'onglet : le dernier titre, ou la courte ligne qui
          précède le tableau (« UNITÉ DE TRAVAIL : Quai de chargement »). */
-      if (b.k === "h1" || b.k === "t1" || b.k === "h2" || ((b.k === "p" || b.k === "puce") && b.t && (b.t.length < 60 || /^unité de travail/i.test(b.t)))) titre = b.t;
+      /* UNE LIGNE COURTE N'EST PAS UN TITRE DE TABLEAU.
+
+         Le nom de l'onglet prenait la dernière ligne courte rencontrée, fût-ce
+         la dénomination de l'entreprise : le classeur du document unique
+         portait un onglet « SARL TEC » pour la liste des actions, et « A.1,
+         D'OÙ VIENNENT LES MESURES » pour le tableau de A.2. Relevé le
+         29 septembre 2026. Le titre fort, celui d'une vraie section, prime ;
+         la ligne courte ne le remplace que lorsqu'elle légende le tableau,
+         « Unité de travail : Quai de chargement », ou qu'aucun titre n'a
+         encore été vu. */
+      if (b.k === "h1" || b.k === "t1" || b.k === "h2") { titre = b.t; legende = ""; }
+      /* Une légende est courte et nomme la chose : « Unité de travail : Quai
+         de chargement ». Une phrase qui contient un deux-points n'en est pas
+         une, et « Les mesures ci-dessous sont celles de… » ne nomme rien. */
+      else if ((b.k === "p" || b.k === "puce") && b.t && b.t.length < 60 &&
+               (/^unité de travail/i.test(b.t) || /^[^.!?]{2,40}:\s*\S/.test(b.t))) legende = b.t;
+      else if ((b.k === "p" || b.k === "puce") && b.t && b.t.length < 60 && !titre) titre = b.t;
       if (b.k !== "table") return;
       n++;
       /* Un nom d'onglet : 31 signes au plus, sans : \ / ? * [ ], unique. Le
@@ -535,7 +551,7 @@
           .replace(/[:\\\/?*\[\]]/g, " ").replace(/\s+/g, " ").trim();
       };
       var marque = dansEx ? "EX. " : "", place = 31 - marque.length;
-      var nom = marque + (couper(propre(titre), place) || "Tableau " + n);
+      var nom = marque + (couper(propre(legende || titre), place) || "Tableau " + n);
       if (vus[nom.toLowerCase()] && propre(doc)) {
         var autre = marque + couper(propre(doc) + " - " + propre(titre), place);
         if (!vus[autre.toLowerCase()]) nom = autre;

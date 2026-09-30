@@ -3870,7 +3870,15 @@
     /* textes-penal.js porte les deux articles du code pénal que l'affichage
        du harcèlement doit reproduire : sans lui, l'affiche sortait avec un
        crochet à la place du texte. */
-    SST: ["documents-produits.js", "textes-penal.js", "documents-sst.js", "documents-sst-2.js"],
+    /* LE DOCUMENT UNIQUE A BESOIN DU MODÈLE DU MÉTIER.
+
+       Sa section 4, « UNITÉS DE TRAVAIL », sortait vide, trois lignes
+       blanches, et son inventaire se rabattait sur les seize familles
+       génériques : duerp-metiers.js et duerp-transport.js n'étaient chargés
+       que par la famille de la discipline et par l'écran duerp.html, jamais
+       par le parcours du document unique. Relevé le 29 septembre 2026. */
+    SST: ["documents-produits.js", "textes-penal.js", "duerp-metiers.js",
+      "duerp-transport.js", "documents-sst.js", "documents-sst-2.js"],
     CSE: ["documents-produits.js", "documents-cse.js", "documents-cse-2.js", "documents-cse-3.js"],
     /* documents-rh.js porte la base elle-même (BDESE-CTL-CNT-00), écrite le
        2 septembre 2026 : « non » doit donner la base, non une note sur le

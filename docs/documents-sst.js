@@ -2546,6 +2546,9 @@
         var sig = E ? E.signataire : signataire(ctx);
         var plus50 = E ? E.effectif >= 50 : s50;
         var actions = E ? E.actions(8) : [];
+        /* La partie A ne s'écrit que si elle s'applique, ou dans l'exemple. */
+        var faireA = E || plus50 !== false;
+        if (faireA) {
         C.push("PARTIE A, PROGRAMME ANNUEL DE PRÉVENTION DES RISQUES PROFESSIONNELS");
         C.push("ET D'AMÉLIORATION DES CONDITIONS DE TRAVAIL");
         C.push("(effectif supérieur ou égal à cinquante salariés, L. 4121-3-1, III, 1°)");
@@ -2565,25 +2568,60 @@
         C.push("Chaque mesure vient d'une ligne « mesures à prendre » du document unique,");
         C.push("avec l'unité de travail et le risque d'origine.");
         C.push("");
-        C.push("A.2, LA LISTE DÉTAILLÉE DES MESURES (pour chaque mesure : conditions");
-        C.push("d'exécution, indicateurs de résultat, estimation du coût)");
+        C.push("A.2, LA LISTE DÉTAILLÉE DES MESURES");
+        C.push("(conditions d'exécution, indicateurs de résultat, estimation du coût)");
         C.push("");
         var enteteA = ["N°", "Unité de travail", "Risque visé", "Mesure", "Conditions d'exécution", "Indicateurs de résultat", "Coût estimé", "Échéance", "Responsable"];
+        /* A.2 SORTAIT VIDE, ALORS QUE LES MESURES SONT DANS LE DOCUMENT UNIQUE.
+
+           « Chaque mesure vient d'une ligne "mesures à prendre" du document
+           unique », dit A.1 juste au-dessus, et le tableau qui suivait était
+           un tableau vide de trois lignes. Relevé le 29 septembre 2026. Les
+           mesures du modèle du métier y sont portées, avec leur unité, leur
+           risque, leurs conditions d'exécution, leurs indicateurs, leur
+           échéance et leur responsable : ce qui manque est le coût, que
+           l'entreprise seule connaît. */
+        var mesuresClient = [];
+        if (!E) {
+          var METp = metierDe(ctx);
+          var nMes = 0;
+          ((METp && METp.unites) || []).forEach(function (u) {
+            (u.risques || []).forEach(function (r) {
+              (r.mes || []).forEach(function (m) {
+                nMes++;
+                mesuresClient.push([String(nMes), u.nom, r.n, m,
+                  r.cond || "[conditions d'exécution]",
+                  r.ind || "[indicateurs de résultat]",
+                  "[coût estimé]",
+                  r.mois ? "dans " + r.mois + " mois" : "[échéance]",
+                  r.r || "[responsable]"]);
+              });
+            });
+          });
+        }
         if (E) {
           C = C.concat(tableau(enteteA, actions.map(function (a, i) {
             return [a[0], a[1], a[2], a[3], CONDITIONS[i % CONDITIONS.length] + a[5].split(",")[0] + ", information des salariés de l'unité",
                     INDIC[i % INDIC.length], COUTS[i % COUTS.length], a[4], a[5]];
           })));
+        } else if (mesuresClient.length) {
+          C.push("Les mesures ci-dessous sont celles de l'inventaire de votre activité. Le");
+          C.push("coût reste à estimer, et l'échéance à confirmer : elle est comptée depuis");
+          C.push("l'établissement du programme.");
+          C.push("");
+          C = C.concat(tableau(enteteA, mesuresClient));
         } else {
           C = C.concat(tableauVide(enteteA, 3));
         }
-        C.push("A.3, LES RESSOURCES MOBILISABLES (L. 4121-3-1, III, 1°, b)");
+        C.push("A.3, LES RESSOURCES MOBILISABLES");
+        C.push("(L. 4121-3-1, III, 1°, b)");
         C.push("");
         C.push(X(E, "Budget prévention de " + (E ? "18 000 €" : "") + " pour l'année ; une demi-journée par semaine de " + (E && E.designe) +
           " (salarié désigné) ; appui du " + (E && E.spst) + " ; guides et outils de la branche.",
           "IDENTIFIER LES RESSOURCES DE L'ENTREPRISE POUVANT ÊTRE MOBILISÉES : budget, temps d'encadrement, compétences internes, salarié désigné, appui du service de prévention et de santé au travail, organismes de la branche"));
         C.push("");
-        C.push("A.4, LE CALENDRIER DE MISE EN ŒUVRE (L. 4121-3-1, III, 1°, c)");
+        C.push("A.4, LE CALENDRIER DE MISE EN ŒUVRE");
+        C.push("(L. 4121-3-1, III, 1°, c)");
         C.push("");
         var enteteCal = ["Trimestre", "Mesures engagées (n°)", "Jalons", "Point d'étape prévu le"];
         C = C.concat(E ? tableau(enteteCal, [
@@ -2592,7 +2630,8 @@
           ["T3", "6, 7", "actions de fond réalisées, indicateurs relevés", leJour(dans(d0, 270))],
           ["T4", "8, bilan", "bilan de l'année, préparation du programme suivant", leJour(dans(d0, 360))],
         ]) : tableauVide(enteteCal, 4));
-        C.push("A.5, CE QUI N'A PAS ÉTÉ FAIT L'AN DERNIER (annexe au rapport annuel, L. 2312-27)");
+        C.push("A.5, CE QUI N'A PAS ÉTÉ FAIT L'AN DERNIER");
+        C.push("(annexe au rapport annuel, L. 2312-27)");
         C.push("");
         var enteteNon = ["Mesure non exécutée", "Prévue par", "Motif de l'inexécution", "Reportée en"];
         C = C.concat(E ? tableau(enteteNon, [
@@ -2604,7 +2643,17 @@
         C.push(sig);
         C.push("");
         C.push("");
+        }
 
+        /* LA PARTIE QUI NE S'APPLIQUE PAS NE S'IMPRIME PAS.
+
+           Le programme d'une entreprise de quatre-vingt-deux salariés portait
+           la partie B, réservée aux moins de cinquante, et le mode d'emploi
+           lui demandait de « supprimer la partie B ». Relevé le 29 septembre
+           2026. Dans l'exemple, les deux parties restent montrées, parce que
+           l'exemple sert à comprendre ; dans le document du client, seule la
+           sienne est écrite. */
+        if (E || !plus50) {
         C.push("PARTIE B, LISTE DES ACTIONS DE PRÉVENTION ET DE PROTECTION");
         C.push("(effectif inférieur à cinquante salariés, L. 4121-3-1, III, 2°)");
         C.push("");
@@ -2625,6 +2674,28 @@
         C.push("instructions appropriées.");
         C.push("");
         C.push("");
+        }
+
+        /* ET LA PIÈCE DU COMITÉ NE S'ÉCRIT PAS SANS COMITÉ.
+
+           L'écran disait, deux blocs plus haut, « Le dossier n'indique aucun
+           comité social et économique : la présentation de L. 2312-27 n'a pas
+           d'objet en l'état », et le document produisait quand même la lettre
+           aux élus et le calendrier de leur consultation. Relevé le
+           29 septembre 2026. */
+        var repCseP = String((ctx.profil || {}).cseExiste || "").trim().toLowerCase();
+        var sansComiteP = !E && repCseP.indexOf("non") === 0;
+        if (sansComiteP) {
+          C.push("PRÉSENTATION AU COMITÉ SOCIAL ET ÉCONOMIQUE : SANS OBJET EN L'ÉTAT");
+          C.push("");
+          C.push("Votre fiche ne porte aucun comité social et économique. La présentation");
+          C.push("du programme annuel au titre de la consultation sur la politique sociale");
+          C.push("(L. 2312-27) n'a donc pas d'objet aujourd'hui : elle se fera à la");
+          C.push("première consultation du comité, dès qu'il sera élu, sans que le");
+          C.push("programme soit à refaire. Le programme, lui, reste dû et s'établit.");
+          C.push("");
+          C.push("");
+        } else {
 
         C.push("PIÈCE COMMUNE, PRÉSENTATION AU COMITÉ SOCIAL ET ÉCONOMIQUE (L. 2312-27)");
         C.push("");
@@ -2667,6 +2738,7 @@
         C.push("");
         C.push("Pièces jointes : rapport annuel, programme annuel de prévention");
         C.push("");
+        }
         return C;
       }
 
@@ -2676,13 +2748,15 @@
       L.push("");
       L.push("VOTRE PROGRAMME OU VOTRE LISTE, À COMPLÉTER");
       L.push("");
+      /* Il n'y a plus rien à supprimer : ce qui suit ne porte que la partie
+         qui s'applique à l'effectif de la fiche. Relevé le 29 septembre 2026. */
       if (s50 === true) {
         L.push("Effectif d'au moins cinquante salariés : c'est le PROGRAMME ANNUEL DE");
-        L.push("PRÉVENTION (partie A) qui vous concerne. Supprimez la partie B.");
+        L.push("PRÉVENTION (partie A) qui vous concerne, et c'est lui seul qui suit.");
       } else if (s50 === false) {
         L.push("Effectif inférieur à cinquante salariés : c'est la LISTE DES ACTIONS");
-        L.push("(partie B), consignée dans le document unique, qui vous concerne.");
-        L.push("Supprimez la partie A.");
+        L.push("(partie B), consignée dans le document unique, qui vous concerne, et");
+        L.push("c'est elle seule qui suit.");
       } else {
         L.push("Régime non tranché, faute d'effectif renseigné : portez votre effectif,");
         L.push("gardez la partie qui vous concerne et supprimez l'autre.");
