@@ -556,3 +556,64 @@ de ces deux matchs de mars et juin 1932. La page 6 du livre dit de la même
 façon que la photographie des juniors est antérieure de deux ou trois ans à
 la première impression de son nom : elle est du même jour que l'article qui
 le nomme.
+
+---
+
+## USB ou Olympique : le dépouillement du 30 septembre 2026
+
+Question posée : dans quel club a-t-il commencé, et comment se fait le
+passage entre l'Union Sportive Béjaoise et l'Olympique de Béja.
+
+Titres interrogés numéro par numéro : Le Petit Matin de Tunis, 1929-1931,
+quarante et un numéros portent le nom ; L'Avenir de Souk-Ahras, seize
+numéros. Méthode des fenêtres de recherche, comme pour Le Mémorial.
+
+### Ce que ça donne
+
+Sur les cinquante-sept numéros, trois seulement relèvent du football. Tous
+les autres sont des homonymes : vols, faillites, correctionnelle, un
+inspecteur de la Sûreté de Constantine nommé Gassabi Boudjemaa qui revient
+cinq fois dans le journal de Souk-Ahras.
+
+**22 octobre 1931, Le Petit Matin, page 5. La pièce qui change tout.**
+« Le Sporting Club de Tabarka bat l'Olympique de Béja par 3 à 2. » Et, à la
+reprise : « Boudjemâa II se fait remarquer par une descente des mieux
+combinée avec Kaddour. »
+
+L'Olympique de Béja a donc un Boudjemâa II dès octobre 1931. Qui dit II dit
+I. Les deux Boudjemaa de l'Olympique ne datent pas de 1934 : ils sont là
+trois ans plus tôt, et Kaddour joue avec eux, comme en 1929 et comme en
+1934.
+
+**7 mai 1929, page 4.** « Des cinq avants, Boudjemaa et [...] Michel firent
+impression. » Aucun lien avec Béja dans la fenêtre : les clubs cités autour
+sont tunisois. Noté, non compté.
+
+**8 septembre 1929, page 5.** Le nom seul, sans phrase autour. Inutilisable.
+
+### Ce que j'en conclus
+
+La chronologie se lit maintenant sur deux lignes parallèles, et non sur une
+seule.
+
+À l'Olympique de Béja : un Boudjemaa en mai et juin 1929, un Boudjemâa II en
+octobre 1931, un Boudjemaa au derby de janvier 1934, Bordjema I et Boudjema
+II en octobre 1934. Kaddour est là en 1929, en 1931 et en 1934.
+
+À l'Union Sportive Béjaoise : Boudjemaâ en juniors le 13 janvier 1931, puis
+en équipe première le 17 mars, le 20 juin et le 23 juillet 1932, puis à
+Souk-Ahras.
+
+Le 13 janvier 1931 et le 22 octobre 1931 sont séparés de neuf mois, et les
+deux hommes jouent dans deux clubs différents. Le second est numéroté II.
+Rien n'oblige à en faire un seul joueur qui change de maillot ; tout invite
+à en faire deux.
+
+L'hypothèse de l'auteur, qu'il a commencé à l'U.S.B., est donc la mieux
+soutenue : c'est le seul club où les articles le nomment sans numéro, et
+c'est le seul que retiennent les fiches de l'OGC Nice et de Saint-Étienne.
+
+Ce qui reste ouvert : le derby du 16 janvier 1934, où un Boudjemaa sans
+numéro joue pour l'O. Béja contre l'U.S.B. Si c'est lui, il a changé de club
+entre juillet 1932 et janvier 1934, et aucun article ne le raconte. Si c'est
+l'autre, alors il n'a jamais quitté l'U.S.B.
