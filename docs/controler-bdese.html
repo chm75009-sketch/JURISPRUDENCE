@@ -185,6 +185,7 @@
         <select id="acc"><option value="non">non</option><option value="oui">oui</option></select></label>
     </form>
     <p class="etat" id="etat"></p>
+    <div id="modalites"></div>
 
     <div id="rubriques"></div>
     <div id="presentes"></div>
@@ -502,6 +503,61 @@
       lignes + " ligne" + (lignes > 1 ? "s" : "") + " · " + chiffrees + " ligne" +
       (chiffrees > 1 ? "s" : "") + " chiffrée" + (chiffrees > 1 ? "s" : "") + " sur " + totalLignes +
       " dans votre base" + (aRens ? ", " + aRens + " portée" + (aRens > 1 ? "s" : "") + " « à renseigner »" : "");
+
+    /* LES MODALITÉS NE SONT PAS UNE RUBRIQUE, ET ELLES SONT DUES.
+
+       Le contrôle comptait les rubriques de contenu et ne disait rien des
+       lignes « Support » et « Personnes ayant accès », laissées vides dans la
+       pièce du client. Relevé le 29 septembre 2026.
+
+       R. 2312-12 (LEGIARTI000036411586, lu au relais le 29 septembre 2026,
+       deux lectures concordantes) : à défaut d'accord, la base est tenue à
+       disposition « sur un support informatique pour les entreprises d'au
+       moins trois cents salariés, et sur un support informatique ou papier
+       pour les entreprises de moins de trois cents salariés », l'employeur
+       informe de l'actualisation « selon des modalités qu'il détermine » et
+       « fixe les modalités d'accès, de consultation et d'utilisation ».
+
+       R. 2312-13 (LEGIARTI000036411588, mêmes lectures) : les informations
+       confidentielles sont présentées comme telles par l'employeur, « qui
+       indique la durée du caractère confidentiel de ces informations ». */
+    var MODALITES = [
+      { quoi: "Le support de la base : informatique, ou papier en deçà de trois cents salariés",
+        fond: "R. 2312-12",
+        mots: ["support informatique", "sur support papier", "support papier", "sur papier",
+               "intranet", "serveur", "classeur", "support de la base"] },
+      { quoi: "L'information des bénéficiaires à chaque actualisation",
+        fond: "R. 2312-12",
+        mots: ["actualisation", "mise a jour de la base", "mise à jour de la base",
+               "informe les", "information des beneficiaires", "information des bénéficiaires"] },
+      { quoi: "Les modalités d'accès, de consultation et d'utilisation",
+        fond: "R. 2312-12",
+        mots: ["modalites d acces", "modalités d'accès", "consultation et d utilisation",
+               "consultation et d'utilisation", "personnes ayant acces", "personnes ayant accès",
+               "droits d acces", "droits d'accès"] },
+      { quoi: "La durée du caractère confidentiel des informations présentées comme telles",
+        fond: "R. 2312-13",
+        mots: ["duree du caractere confidentiel", "durée du caractère confidentiel",
+               "confidentiel pendant", "confidentialite pendant", "confidentialité pendant",
+               "duree de confidentialite", "durée de confidentialité"] },
+    ];
+    var brut = normaliser($("#texte").value);
+    var manquantes = MODALITES.filter(function (m) {
+      return !m.mots.some(function (x) { return brut.indexOf(normaliser(x)) >= 0; });
+    });
+    $("#modalites").innerHTML = manquantes.length
+      ? '<div class="avis non"><b>' + manquantes.length + " modalité" +
+        (manquantes.length > 1 ? "s" : "") + " de tenue introuvable" +
+        (manquantes.length > 1 ? "s" : "") + " dans votre base</b><ul><li>" +
+        manquantes.map(function (m) {
+          return ech(m.quoi) + ' <span class="art">(' + ech(m.fond) + ")</span>";
+        }).join("</li><li>") + "</li></ul>Ce ne sont pas des rubriques de contenu : " +
+        "ce sont les conditions de tenue de la base, et elles s'écrivent dans la base " +
+        "elle-même ou dans l'avis qui l'accompagne.</div>"
+      : '<div class="avis ok"><b>Les modalités de tenue sont présentes</b>' +
+        "Support, information des bénéficiaires, modalités d'accès et durée du caractère " +
+        "confidentiel : les quatre sont nommées dans votre texte. La recherche voit que le " +
+        "sujet est traité, elle ne dit jamais qu'il l'est bien.</div>";
 
     var aPoser = liste.filter(function (rb) { return !PRESENTES[rb.id]; });
     var deja = liste.filter(function (rb) { return PRESENTES[rb.id]; });
