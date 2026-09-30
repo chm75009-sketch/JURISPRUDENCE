@@ -13,13 +13,13 @@ fenêtres de recherche successives, et non lu sur la page.
 ## 1929
 
 **1. 16 mai 1929 - Le Petit Matin (Tunis), page 7**
-« Les arrières béjaois loupent mais le demi-centre Boudjemaa arrive à temps pour sauver et alimente remarquablement sa ligne d'avants. »
+« Les Sports à Tabarka. Le Sporting Club de Tabarka bat l'Olympique de Béja par 4 buts à 1. En l'honneur de la fête de la Sainte Jeanne d'Arc, le Sporting-Club de Tabarka invita en un match amical de football association l'Olympique de Béja, société indigène nouvellement formée. » Le jeu : « Les arrières béjaois loupent mais le demi-centre Boudjemaâ arrive à temps pour sauver et alimente remarquablement sa ligne d'avants. » Les meilleurs : « A Béja : David, Touati, Kaddour, Kenzey et Boudjemâa. » Coup d'envoi à 16 h 30, arbitrage de M. Toubiana. Fac-similé : livre/fac/PetitMatin-1929-05-16-Tabarka-Olympique.jpg, page entière dans photos/1929.
 
 **2. 3 juin 1929 - Le Petit Matin (Tunis), page 5 - HOMONYME, ce n'est pas lui**
 « Sagé, Boudjema et Valenza »
 
 **3. 26 juin 1929 - Le Petit Matin (Tunis), page 3**
-« L'Olympique marque un superbe but par l'intermédiaire de Boudjemaa. »
+Même affiche et même score, mais un autre match : le coup d'envoi est donné à 17 heures, celui du 16 mai à 16 h 30. « Le Sporting-Club de Tabarka bat l'Olympique de Béja par 4 buts à 1. [...] L'Olympique joua mieux qu'au premier half, mais cela n'empêcha pas à Tabarka d'ajouter encore trois buts dont un fut marqué par le demi de Béja. L'Olympique marque un superbe but par l'intermédiaire de Boudjemaa. » Aux considérations : « La jeune équipe de Béja ne fournit pas sa partie habituelle. » Cette fois il n'est pas cité parmi les meilleurs : « à Béja : David, Saïd, Touati, Kaddour et Kenzey. » Fac-similé : livre/fac/PetitMatin-1929-06-26-Tabarka-Olympique.jpg, page entière dans photos/1929.
 
 
 ## 1931
