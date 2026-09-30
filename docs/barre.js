@@ -110,8 +110,20 @@
     if ($("#barre-menu")) { fermer(); return; }
     var p = document.createElement("div");
     p.id = "barre-menu";
+    /* SE DÉCONNECTER SE TROUVE EN HAUT, PAS APRÈS DIX-SEPT ENTRÉES.
+
+       Le bouton était sous la liste des modules et sous celui de
+       l'installation : son sommet tombait à 1073 points sur un écran de 844,
+       c'est-à-dire hors de vue, et il fallait faire défiler tout le menu pour
+       fermer sa séance. Relevé le 29 septembre 2026. Il est dans la tête du
+       menu, à côté de « Fermer », là où on le cherche. */
+    var uT = utilisateurConnecte();
     var h = '<div class="fond" data-fermer="1"></div><nav class="feuille" aria-label="Menu">' +
       '<div class="tete"><b>Menu</b>' +
+      ((uT || seance())
+        ? '<button type="button" class="quitter-tete" id="barre-quitter-tete">' +
+          (uT ? "Se déconnecter" : "Quitter") + "</button>"
+        : "") +
       '<button type="button" class="x" data-fermer="1" aria-label="Fermer">Fermer</button></div><ul>';
     MODULES.forEach(function (m) {
       var ici = m.page === page ? ' class="ici" aria-current="page"' : "";
@@ -156,6 +168,8 @@
     });
     var q = $("#barre-quitter");
     if (q) q.addEventListener("click", quitter);
+    var qt = $("#barre-quitter-tete");
+    if (qt) qt.addEventListener("click", quitter);
     var mc = $("#barre-moncode");
     if (mc) mc.addEventListener("click", changerMonCode);
     if (window.Installer) window.Installer.brancher();

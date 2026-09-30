@@ -542,6 +542,24 @@
      bien rédigée, et il ne conclut donc jamais rien. */
   function tab(head, rows) { return { tab: { head: head, rows: rows } }; }
 
+  /* LA RÉPARTITION DES SIÈGES ENTRE LES COLLÈGES.
+
+     Au prorata des inscrits, et les restes les plus forts emportent ce qui
+     reste : c'est la règle que les protocoles retiennent d'ordinaire, et le
+     texte n'en impose aucune. Elle est donc proposée, et le protocole
+     l'arrête. Un collège sans inscrit ne reçoit rien. */
+  function repartirSieges(inscrits, sieges) {
+    var total = inscrits.reduce(function (a, n) { return a + n; }, 0);
+    if (!total || !sieges) return inscrits.map(function () { return 0; });
+    var exacts = inscrits.map(function (n) { return n * sieges / total; });
+    var pris = exacts.map(function (x) { return Math.floor(x); });
+    var reste = sieges - pris.reduce(function (a, n) { return a + n; }, 0);
+    var ordre = exacts.map(function (x, i) { return { i: i, r: x - Math.floor(x) }; })
+      .sort(function (a, b) { return b.r - a.r; });
+    for (var k = 0; k < reste && k < ordre.length; k++) pris[ordre[k].i]++;
+    return pris;
+  }
+
   var CLAUSES = [
     {
       id: "champ", pour: "protocole", titre: "Champ et objet du protocole",
@@ -614,6 +632,7 @@
            femmes et d'hommes se calcule : c'est cette proportion que L. 2314-30
            impose de respecter sur les listes, et L. 2314-31 de porter à la
            connaissance des salariés. */
+        var vides = [];
         function pc(n, t) { return t > 0 ? String(Math.round(n * 1000 / t) / 10).replace(".", ",") + " %" : "[  ] %"; }
         var rows;
         if (REG && REG.total) {
@@ -625,9 +644,21 @@
           else if (noms.length === 2) paquets = [REG.col[0],
             [REG.col[1][0] + REG.col[2][0], REG.col[1][1] + REG.col[2][1], REG.col[1][2] + REG.col[2][2]]];
           else paquets = [REG.col[0], REG.col[1], REG.col[2]];
+          /* LES SIÈGES SE RÉPARTISSENT, ILS NE SE REDEMANDENT PAS.
+
+             La colonne sortait « [  ] » pour chaque collège alors que le
+             tableau donne les inscrits et que R. 2314-1 donne le nombre de
+             sièges : la répartition se fait au prorata des inscrits, les
+             restes les plus forts emportant les sièges qui restent. Relevé le
+             29 septembre 2026. Elle est proposée, non imposée : c'est le
+             protocole qui l'arrête, et la phrase sous le tableau le dit. */
+          var sieges = repartirSieges(paquets.map(function (q) { return (q || [0])[0] || 0; }),
+            c.tit === null ? 0 : c.tit);
           rows = noms.map(function (n, i) {
             var q = paquets[i] || [0, 0, 0];
-            return [n, String(q[0]), String(q[1]), String(q[2]), pc(q[1], q[0]), pc(q[2], q[0]), "[  ]", "[  ]"];
+            var sg = c.tit === null ? "[  ]" : String(sieges[i]);
+            if (!q[0]) vides.push(n);
+            return [n, String(q[0]), String(q[1]), String(q[2]), pc(q[1], q[0]), pc(q[2], q[0]), sg, sg];
           });
           rows.push(["Total", String(REG.total), String(REG.femmes), String(REG.hommes),
             pc(REG.femmes, REG.total), pc(REG.hommes, REG.total),
@@ -641,12 +672,20 @@
           "Article 4. Répartition du personnel dans les collèges et des sièges entre les catégories.",
           "La répartition du personnel dans les collèges électoraux et la répartition des sièges entre les différentes catégories de personnel sont arrêtées comme suit :",
           tab(["Collège", "Inscrits", "Femmes", "Hommes", "Part de femmes", "Part d'hommes", "Sièges titulaires", "Sièges suppléants"], rows),
+          (vides.length
+            ? "Aucun salarié n'est classé au " + vides.join(" ni au ").toLowerCase() +
+              " selon les qualifications portées au registre. Ce collège reste prévu par " +
+              "l'article L. 2314-11, mais aucun siège ne peut lui être attribué tant que " +
+              "personne n'y figure : vérifiez la classification avant d'arrêter la répartition."
+            : ""),
           (REG && REG.total
             ? "[Les effectifs ci-dessus sont ceux du registre unique du personnel, au jour de la rédaction : " +
               REG.total + " salariés en poste, dont " + REG.femmes + " femmes et " + REG.hommes +
               " hommes. La répartition entre collèges est proposée d'après la qualification portée au " +
-              "registre ; vérifiez-la ligne par ligne, c'est la classification qui décide, et complétez " +
-              "la répartition des sièges.]"
+              "registre ; vérifiez-la ligne par ligne, c'est la classification qui décide. La " +
+              "répartition des sièges est proposée au prorata des inscrits, les restes les plus " +
+              "forts emportant les sièges restants : aucun texte ne l'impose, et c'est le " +
+              "protocole qui l'arrête.]"
             : "[Portez ici les inscrits, les femmes et les hommes de chaque collège : le registre unique " +
               "du personnel les donne, et l'écran les reprendra dès qu'il sera tenu.]"),
           "Le présent article mentionne la proportion de femmes et d'hommes composant chaque collège électoral.",

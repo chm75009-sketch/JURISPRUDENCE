@@ -424,10 +424,17 @@
       });
       if (dans.length) L = dans;
     }
-    if (!L.length) return "[nom du salarié] ; 0 ; n ; 0 ; n ; 0";
+    if (!L.length) return "[nom du salarié] ; 0 ; n ; [ancienneté] ; n ; 0";
     return L.map(function (x) {
       var nom = (String(x.nom || "").trim() + " " + String(x.pre || "").trim()).trim();
-      return nom + " ; 0 ; n ; " + ancienneteAnnees(x.ent) + " ; n ; 0";
+      /* UNE ANCIENNETÉ QU'ON NE CONNAÎT PAS N'EST PAS ZÉRO.
+
+         Sans date d'entrée au registre, la ligne sortait « ; 0 ; » et le
+         document notait le salarié comme s'il venait d'arriver : c'est le
+         critère qui pèse le plus lourd, vingt points sur la grille. Relevé le
+         29 septembre 2026. Le crochet se voit, le zéro non. */
+      var anc = deIso(x.ent) ? String(ancienneteAnnees(x.ent)) : "[ancienneté]";
+      return nom + " ; 0 ; n ; " + anc + " ; n ; 0";
     }).join("\n");
   }
 
@@ -866,10 +873,25 @@
       "appliqués sur la zone d'emplois dans laquelle est situé l'établissement concerné par les " +
       "suppressions d'emplois, soit la zone d'emplois " + de(ville()) + "." });
     b.push({ k: "h1", t: "L'application aux salariés de la catégorie" });
+    /* LA CATÉGORIE N'EST PAS L'ENTREPRISE.
+
+       Quand l'intitulé saisi ne correspond à aucun emploi du registre, la
+       grille reprend tout le personnel, faute de mieux : le document écrivait
+       alors « la catégorie professionnelle concernée en compte 82 », ce qui
+       est faux et ce que personne ne relira. Relevé le 29 septembre 2026. Il
+       le dit désormais quand c'est le cas. */
+    var toutLeMonde = !String(d.poste || "").trim() ||
+      (effectif && tab.length && Number(effectif) === tab.length);
     b.push({ k: "p", t: "L'entreprise compte " + (effectif || "[   ]") + " salariés. La catégorie " +
       "professionnelle concernée en compte " + (tab.length || "[   ]") + ", " +
       (d.nombre > 1 ? d.nombre + " licenciements étant envisagés" : "un licenciement étant envisagé") +
       " sur une même période de trente jours." });
+    if (toutLeMonde)
+      b.push({ k: "p", t: "[La grille ci-dessous reprend l'ensemble du personnel : l'intitulé de " +
+        "la catégorie professionnelle n'a été rapproché d'aucun emploi du registre. Une catégorie " +
+        "professionnelle réunit les salariés qui exercent des fonctions de même nature supposant " +
+        "une formation professionnelle commune : retirez de cette grille ceux qui n'en relèvent " +
+        "pas, c'est elle qui désignera le salarié.]" });
     b.push({ k: "ligne", t: "Salarié ; charges ; ancienneté ; situation ; qualités ; total ; rang" });
     tab.slice().sort(function (x, y) { return x.total - y.total; }).forEach(function (r, i) {
       b.push({ k: "ligne", t: r.nom + " ; " + r.pCharges + " ; " + r.pAnc + " ; " + r.pSocial +

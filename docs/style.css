@@ -496,7 +496,15 @@ body:has(#barre-menu) #assist-bouton{display:none}
   display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain}
 #barre-menu .tete{display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:14px 16px;border-bottom:1px solid var(--filet);position:sticky;top:0;background:var(--surface)}
-#barre-menu .tete b{font:600 17px/1 system-ui;color:var(--encre)}
+#barre-menu .tete b{font:600 17px/1 system-ui;color:var(--encre);flex:1 1 auto;min-width:0}
+/* « Se déconnecter » dans la tête du menu : il était sous dix-sept entrées et
+   le bouton d'installation, hors de l'écran. Relevé le 29 septembre 2026. */
+#barre-menu .tete .quitter-tete{font:600 15px/1 system-ui;padding:10px 14px;
+  min-height:var(--h-touche);border:1px solid var(--rouge);border-radius:var(--r1);
+  background:var(--surface);color:var(--rouge);cursor:pointer;white-space:nowrap;flex:none}
+#barre-menu .tete .quitter-tete:hover{background:var(--rouge-clair);color:var(--rouge)}
+@media (max-width:420px){#barre-menu .tete{flex-wrap:wrap;gap:8px}
+  #barre-menu .tete b{flex:1 1 100%}}
 #barre-menu .tete .x{font:600 15px/1 system-ui;padding:10px 14px;min-height:var(--h-touche);
   border:1px solid var(--filet);border-radius:var(--r1);background:var(--surface);
   color:var(--encre);cursor:pointer}
