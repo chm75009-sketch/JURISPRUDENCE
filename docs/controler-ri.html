@@ -623,12 +623,32 @@
       if (!num) continue;
       ARTICLES.push({ debut: m.index, nom: "article " + num });
     }
+    /* UN TITRE N'APPARTIENT PAS À L'ARTICLE QUI LE PRÉCÈDE.
+
+       « ARTICLE 26 » s'affichait sur « TITRE VI - [FACULTATIF] », parce que la
+       recherche remonte au dernier en-tête d'article rencontré et qu'un titre
+       n'en est pas un : la phrase relevée dans le titre était donc rattachée au
+       dernier article du titre précédent. Relevé le 29 septembre 2026. Les
+       titres sont repérés à part, et une phrase qui tombe dans un titre est
+       nommée par ce titre. */
+    TITRES = [];
+    var rt = /(?:^|\n)[ \t]*(TITRE|Titre|CHAPITRE|Chapitre|SECTION|Section)[ \t]+([IVXLC]+|\d+)\b/g;
+    var q;
+    while ((q = rt.exec(texte)) !== null)
+      TITRES.push({ debut: q.index, nom: q[1].toLowerCase() + " " + q[2] });
   }
+  var TITRES = [];
   function articleDe(debut) {
     var trouve = null;
     for (var i = 0; i < ARTICLES.length; i++) {
       if (ARTICLES[i].debut <= debut) trouve = ARTICLES[i]; else break;
     }
+    /* Un titre postérieur au dernier article rencontré l'emporte : c'est lui
+       que la phrase suit. */
+    var titre = null;
+    for (var k = 0; k < TITRES.length; k++)
+      if (TITRES[k].debut <= debut) titre = TITRES[k]; else break;
+    if (titre && (!trouve || titre.debut > trouve.debut)) return titre.nom;
     return trouve ? trouve.nom : null;
   }
   /* La place d'un article dans le document, pour les remettre dans l'ordre. */
@@ -649,13 +669,35 @@
   }
   /* « articles 7.4, 13 et 26 », non « article 7.4, article 13, article 26 » :
      c'est une phrase, pas une concaténation. */
+  /* LA PHRASE MÊLE DÉSORMAIS DES ARTICLES ET DES TITRES.
+
+     « articles 7.4, 13 et 26 » se disait en retirant le mot « article » de
+     chaque nom. Depuis qu'un passage relevé dans un titre porte le nom de ce
+     titre, il faut les séparer : les articles gardent leur énumération courte,
+     les titres se citent en entier. */
   function phraseArticles(p) {
-    var a = articlesDe(p).map(function (x) { return x.replace(/^article /, ""); });
-    if (!a.length) return null;
-    var liste = a.length === 1 ? a[0] : a.slice(0, -1).join(", ") + " et " + a[a.length - 1];
-    var mot = (a.length === 1 ? "article " : "articles ") + liste;
+    var noms = articlesDe(p);
+    if (!noms.length) return null;
+    var arts = [], titres = [];
+    noms.forEach(function (x) {
+      if (/^article /.test(x)) arts.push(x.replace(/^article /, ""));
+      else titres.push(x);
+    });
+    var bouts = [];
+    if (arts.length) {
+      var liste = arts.length === 1 ? arts[0]
+        : arts.slice(0, -1).join(", ") + " et " + arts[arts.length - 1];
+      bouts.push((arts.length === 1 ? "article " : "articles ") + liste);
+    }
+    if (titres.length) {
+      var lt = titres.length === 1 ? titres[0]
+        : titres.slice(0, -1).join(", ") + " et " + titres[titres.length - 1];
+      bouts.push(lt);
+    }
+    var mot = bouts.join(", ainsi que ");
+    var un = noms.length === 1;
     if (estRouge(p)) return "En cause dans votre règlement : " + mot + ".";
-    return "Traité par " + (a.length === 1 ? "votre " : "vos ") + mot + ".";
+    return "Traité par " + (un ? "votre " : "vos ") + mot + ".";
   }
 
   function carte(p) {

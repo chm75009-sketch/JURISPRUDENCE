@@ -591,8 +591,13 @@ body:has(#barre-menu) #assist-bouton{display:none}
   .barre{flex-direction:column;align-items:stretch}
   .barre button,.barre .btn{width:100%}
   .barre .compteur{margin-left:0}
+  /* TROIS ONGLETS LONGS NE TIENNENT PAS SUR UNE LIGNE DE TÉLÉPHONE.
+     « 1 · Le document », « 2 · Ce qui va, ce qui ne va pas », « 3 · La version
+     corrigée » se partageaient une ligne et sortaient coupés. Relevé le
+     29 septembre 2026 sur le dialogue du règlement intérieur. Chacun prend sa
+     ligne : c'est plus haut, et c'est lisible. */
   .onglets{gap:6px}
-  .onglets button{flex:1 1 auto}
+  .onglets button{flex:1 1 100%;text-align:left}
   .feuille{padding:20px 16px}
   .carte,fieldset{padding:14px 14px 16px}
   dialog{padding:var(--e4)}

@@ -1787,13 +1787,19 @@
       L.push("");
       L.push("Mesdames, Messieurs,");
       L.push("");
-      L.push("Un règlement intérieur a été établi pour " + nom + ". Il a été soumis");
+      /* ON NE SOUMET PAS UN RÈGLEMENT À UN PROCÈS-VERBAL.
+
+         La note écrivait « Il a été soumis au procès-verbal de carence établi le
+         10 mars 2025 ». Un règlement se soumet à l'avis du comité ; quand il n'y
+         a pas de comité, il est accompagné du procès-verbal qui l'établit.
+         Relevé le 29 septembre 2026. */
+      L.push("Un règlement intérieur a été établi pour " + nom + ".");
       L.push((sansCse
-        ? "au procès-verbal de carence " + carDit + ", le comité social et économique"
-        : "à l'avis du comité social et économique, qui l'a rendu le [DATE DE L'AVIS],"));
+        ? "Le comité social et économique n'ayant pu être mis en place, il est"
+        : "Il a été soumis à l'avis du comité social et économique, qui l'a rendu"));
       L.push((sansCse
-        ? "n'ayant pu être mis en place, et il est déposé au greffe du conseil de"
-        : "et il est déposé au greffe du conseil de"));
+        ? "accompagné du procès-verbal de carence " + carDit + ", et il est déposé au greffe du conseil de"
+        : "le [DATE DE L'AVIS], et il est déposé au greffe du conseil de"));
       L.push("prud'hommes " + elide(org(p, "orgPrudhommes", "VILLE DU RESSORT")) +
         " et communiqué à l'inspection du travail.");
       L.push("");

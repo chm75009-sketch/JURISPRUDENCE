@@ -868,6 +868,10 @@
   {
     cle: "commissions",
     nom: "Constituer les commissions du CSE",
+    /* En dessous de trois cents salariés, la commission santé-sécurité n'est
+       due que par l'une de ces deux causes : ni l'une ni l'autre n'est dans la
+       fiche, et aucune ne se devine. Sans elles, « non » n'écrit rien. */
+    avantDeFaire: ["siteClasse", "inspecteurImpose"],
     resume: "L'accord d'abord, le régime supplétif ensuite : seuils de 300 et de 1 000, commission santé-sécurité obligatoire, désignations par résolution, formation des élus, première réunion et compte rendu au comité.",
     audit: { href: "audit-cse.html", nom: "l'audit du comité social et économique" },
     donnees: [
@@ -4580,6 +4584,37 @@
      la précèdent n'en portent pas, elles ne retiennent donc personne. */
   if (vise && new URLSearchParams(location.search).get("faire")) {
     var st0 = etatDe(vise.cle);
+    /* CE QUI DÉCIDE SE DEMANDE AVANT DE PRODUIRE.
+
+       « Non » sur la ligne de la commission santé-sécurité ouvrait
+       directement « L'acte fixant les modalités de la commission » à une
+       entreprise de quatre-vingt-deux salariés, sans avoir demandé la seule
+       chose qui rend la commission due en dessous de trois cents : un
+       établissement classé, ou une décision de l'inspecteur du travail
+       (L. 2315-36, 3° et L. 2315-37). Relevé le 29 septembre 2026. Le parcours
+       peut nommer les réponses qui décident : tant qu'il en manque une, on ne
+       produit rien, on pose les questions, et l'écran dit pourquoi. */
+    var manquantes0 = (vise.avantDeFaire || []).filter(function (c) {
+      var d = donneesVisibles(vise, st0.donnees).filter(function (x) { return x.c === c; })[0];
+      if (!d) return false;                      /* la question ne se pose pas ici */
+      return !String(st0.donnees[c] == null ? "" : st0.donnees[c]).trim();
+    });
+    if (manquantes0.length) {
+      var z0 = document.getElementById("avant-de-faire");
+      if (z0) {
+        var noms0 = manquantes0.map(function (c) {
+          var d = vise.donnees.filter(function (x) { return x.c === c; })[0];
+          return d ? d.nom : c;
+        });
+        z0.innerHTML = "<b>Avant d'écrire le document, une réponse manque.</b> " +
+          (noms0.length > 1 ? "Ces questions décident" : "Cette question décide") +
+          " si ce parcours vous est dû, et " +
+          (noms0.length > 1 ? "elles sont" : "elle est") +
+          " dans la procédure ci-dessous : " + noms0.join(" ; ") + ".";
+        z0.hidden = false;
+      }
+      return;
+    }
     var aFaire = etapesVisibles(vise, st0.donnees).filter(function (s) {
       return s.docProduit && !etatEtape(s, st0.donnees, st0.etapes[s.id]).faite;
     })[0];

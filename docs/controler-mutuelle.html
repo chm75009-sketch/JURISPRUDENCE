@@ -514,6 +514,31 @@
       });
       return { g: g, vu: vu, mot: motVu };
     });
+    /* UNE PART LISIBLE SOUS LE MINIMUM N'EST PAS UNE ABSENCE.
+
+       Une décision portant « prise en charge employeur 40 % » recevait
+       « INTROUVABLE : La moitié du financement à la charge de l'employeur ...
+       Aucune de ces expressions ne figure dans votre texte » : le contrôle
+       cherchait des tournures et ne lisait pas le chiffre. Or 40 % est écrit,
+       il est lisible, et il est sous le minimum. Relevé le 29 septembre 2026.
+       « L'employeur assure au minimum la moitié du financement de la couverture
+       collective à adhésion obligatoire des salariés en matière de
+       remboursement complémentaire des frais occasionnés par une maladie, une
+       maternité ou un accident » (L. 911-7, III, LEGIARTI000031686110, lu en
+       entier au relais le 30 septembre 2026, deux lectures concordantes). Le
+       pourcentage se lit, et s'il est sous cinquante il est déclaré
+       insuffisant : c'est plus grave qu'un silence, et cela se dit autrement. */
+    points.forEach(function (p) {
+      if (p.g.cle !== "financement") return;
+      var part = partEmployeur(t, n);
+      if (!part) return;
+      p.part = part;
+      /* Une part sous le minimum reste un point à reprendre : elle ne devient
+         pas « présente » sous prétexte qu'elle est écrite. L'article rédigé
+         reste donc proposé dans l'onglet suivant. */
+      if (part.valeur < 50) p.insuffisant = true;
+      else if (!p.vu) p.vu = citer(t, n, replier(part.dit)) || part.dit;
+    });
     /* La date d'effet, quand elle est écrite en clair : on la compare à
        aujourd'hui, parce que la remise doit la précéder. */
     var effet = dateEffet(t);
@@ -521,6 +546,23 @@
       return x.replace(/\s+/g, " ").trim();
     });
     return { texte: t, points: points, effet: effet, crochets: crochets };
+  }
+
+  /* La part de l'employeur, quand elle est écrite en pourcentage. On ne retient
+     un chiffre que s'il se rattache à l'employeur dans les cent vingt signes
+     qui l'entourent : « 40 % » tout seul ne dit pas qui paie. */
+  function partEmployeur(brut, replie) {
+    var re = /(\d{1,3})(?:[.,](\d{1,2}))?\s*%/g, m, out = null;
+    while ((m = re.exec(replie)) !== null) {
+      var autour = replie.slice(Math.max(0, m.index - 120), m.index + 120);
+      if (!/employeur|patronal|entreprise prend|prise en charge par l employeur|part employeur/.test(autour)) continue;
+      if (/salarie assure|part salariale|a la charge du salarie/.test(
+        replie.slice(Math.max(0, m.index - 40), m.index))) continue;
+      var v = parseFloat(m[1] + (m[2] ? "." + m[2] : ""));
+      if (!isFinite(v) || v <= 0 || v > 100) continue;
+      if (out === null || v > out.valeur) out = { valeur: v, dit: m[0] };
+    }
+    return out;   /* { valeur, dit } ou null */
   }
 
   var MOIS = ["janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet",
@@ -571,8 +613,10 @@
   }
   $("#controler").addEventListener("click", controler);
 
+  /* Un point dont la part est sous le minimum compte parmi ceux à reprendre,
+     même si le texte en parle : ce qui est écrit y est illicite. */
   function manquants() {
-    return ANALYSE.points.filter(function (p) { return !p.vu; });
+    return ANALYSE.points.filter(function (p) { return !p.vu || p.insuffisant; });
   }
   function bloquants() {
     return manquants().filter(function (p) { return p.g.bloquant; });
@@ -620,15 +664,23 @@
     h += '<p class="bloc-t ' + (abs.length ? "r" : "v") + '"><span class="pastille"></span>' +
       "Ce que le code de la sécurité sociale exige</p>";
     ANALYSE.points.forEach(function (p) {
-      h += '<div class="pt ' + (p.vu ? "verte" : "rouge") + '"><div class="tt">' +
-        '<span class="etat ' + (p.vu ? "ok" : "ko") + '">' + (p.vu ? "présent" : "introuvable") + "</span>" +
+      var mauvais = !!p.insuffisant;
+      h += '<div class="pt ' + (p.vu && !mauvais ? "verte" : "rouge") + '"><div class="tt">' +
+        '<span class="etat ' + (p.vu && !mauvais ? "ok" : "ko") + '">' +
+        (mauvais ? "insuffisant" : (p.vu ? "présent" : "introuvable")) + "</span>" +
         '<span><span class="obj">' + ech(p.g.nom) + "</span>" +
         '<span class="fond">' + ech(p.g.fond) + (p.g.bloquant ? " · exigence de fond" : "") + "</span></span>" +
         "</div><div class=\"c\">" + ech(p.g.exige) + "</div>" +
-        (p.vu
-          ? "<blockquote>" + ech(p.vu) + "</blockquote>"
-          : '<div class="c">Aucune de ces expressions ne figure dans votre texte : ' +
-            ech(p.g.mots.join(", ")) + ". L'article rédigé est dans l'onglet suivant.</div>") +
+        (mauvais
+          ? '<div class="c">Votre texte porte une part employeur de ' + ech(p.part.dit) +
+            ", soit moins de la moitié. Le III de l'article L. 911-7 en fait un minimum : " +
+            "une part inférieure à cinquante pour cent prive la couverture du caractère " +
+            "collectif et obligatoire, et l'exonération tombe avec lui. Portez la part de " +
+            "l'employeur à la moitié au moins, et refaites le calcul de la cotisation.</div>"
+          : (p.vu
+            ? "<blockquote>" + ech(p.vu) + "</blockquote>"
+            : '<div class="c">Aucune de ces expressions ne figure dans votre texte : ' +
+              ech(p.g.mots.join(", ")) + ". L'article rédigé est dans l'onglet suivant.</div>")) +
         "</div>";
     });
     $("#points").innerHTML = h;

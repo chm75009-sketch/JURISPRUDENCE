@@ -502,8 +502,19 @@
 
     $("liste").innerHTML = cartes || '<div class="avis info"><b>Rien à faire dans cette vue</b>' +
       "Aucune échéance n'est due dans les soixante jours. Le filtre « Tous » montre l'ensemble des salariés.</div>";
-    $("compte").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") + " en poste au registre · " +
-      dus.length + " échéance" + (dus.length > 1 ? "s" : "") + " à traiter dans les soixante jours";
+    /* DEUX FOIS LE MÊME CHIFFRE, ET RIEN POUR LES DISTINGUER.
+
+       « 82 salariés en poste au registre · 82 à traiter dans les soixante
+       jours » : les deux nombres coïncidaient, et la ligne se lisait comme une
+       répétition. Relevé le 29 septembre 2026. Ce qui manquait est le nombre de
+       personnes concernées, qui est celui sur lequel on agit : il s'ajoute, et
+       chaque nombre dit ce qu'il compte. */
+    var gens = {};
+    dus.forEach(function (x) { if (x && x.s) gens[x.s.id] = true; });
+    var nGens = Object.keys(gens).length;
+    $("compte").textContent = L.length + " salarié" + (L.length > 1 ? "s" : "") +
+      " en poste au registre · " + nGens + " concerné" + (nGens > 1 ? "s" : "") + " · " +
+      dus.length + " échéance" + (dus.length > 1 ? "s" : "") + " dans les soixante jours";
     rendreAlertes(dus, L.length);
     cabler();
   }

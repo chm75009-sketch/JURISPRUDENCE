@@ -836,8 +836,37 @@
     /* Et les copies, licence par licence : une somme unique comparée au parc
        entier déclarait en règle une entreprise qui tient trente copies pour ses
        poids lourds et rien pour ses cinquante véhicules légers. */
+    /* UNE SEULE LICENCE SAISIE NE COUVRE PAS LE PARC ENTIER.
+
+       Avec la seule licence communautaire saisie et soixante-dix copies, la
+       fiche écrivait « il devrait correspondre aux 80 véhicules du parc » : les
+       copies de cette licence ne répondent que des trente véhicules de plus de
+       3,5 tonnes, et les cinquante autres appellent leur propre licence.
+       R. 3211-12 (LEGIARTI000046177442) rattache les copies à chaque licence.
+       Relevé le 29 septembre 2026. Dès qu'une licence est typée, c'est son
+       périmètre qui compte, même si elle est seule. */
     var typees = (c.licences || []).filter(function (x) { return x.type; });
-    if (typees.length > 1) {
+    if (typees.length === 1 && p.lourds && p.legers) {
+      var seule = typees[0];
+      var quoiS = seule.legere ? "véhicules qui n'excèdent pas 3,5 tonnes"
+        : "véhicules de plus de 3,5 tonnes";
+      var autre = seule.legere ? p.lourds : p.legers;
+      var quoiA = seule.legere ? "de plus de 3,5 tonnes" : "qui n'excèdent pas 3,5 tonnes";
+      if (!isFinite(seule.copies))
+        L.push('<p class="er-ecart">' + ech(seule.type) + " : le nombre de copies conformes " +
+          "n'est pas saisi, il devrait correspondre aux " + seule.du + " " + quoiS +
+          " (R. 3211-12).</p>");
+      else if (seule.copies < seule.du)
+        L.push('<p class="er-ecart">' + ech(seule.type) + " : " + seule.copies + " copie" +
+          (seule.copies > 1 ? "s" : "") + " pour " + seule.du + " " + quoiS +
+          ", il en manque " + (seule.du - seule.copies) + " (R. 3211-12).</p>");
+      else
+        L.push('<p class="er-dit">' + ech(seule.type) + " : " + seule.copies +
+          " copies pour " + seule.du + " " + quoiS + ".</p>");
+      L.push('<p class="er-ecart">Les ' + autre + " véhicules " + quoiA +
+        " ne sont pas couverts par cette licence : ils appellent la leur, avec ses propres " +
+        "copies conformes (R. 3211-12). Saisissez-la sur la fiche.</p>");
+    } else if (typees.length > 1) {
       typees.forEach(function (x) {
         var quoi = x.legere ? "véhicules qui n'excèdent pas 3,5 tonnes"
           : "véhicules de plus de 3,5 tonnes";

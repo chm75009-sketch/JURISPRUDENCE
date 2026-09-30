@@ -392,6 +392,20 @@ D. 3312-36 du code des transports (LEGIARTI000033450305), que le relais sert, et
 pas été interrogé sur ce numéro-là. Ne pas trouver un article après trois essais ne veut
 pas dire qu'il n'existe pas : cela veut dire qu'on a essayé trois numéros.
 
+Cas mesuré le 30 septembre 2026 - les copies conformes de licence. L'application fondait
+sur R. 3211-12 du code des transports la règle d'une copie certifiée conforme par
+véhicule. L'article a été relu au relais, deux fois, et déclaré muet sur ce point : le
+fondement a donc été réécrit, et une phrase disant que la règle venait d'un arrêté « que
+l'application ne lit pas » a été posée à la place. Elle était fausse. Le texte le dit,
+mot pour mot : « Elle est accompagnée de copies certifiées conformes numérotées dont le
+nombre correspond à celui des véhicules mentionnés au e de l'article 5.1 du règlement
+n° 1071/2009 ». La phrase se trouvait au-delà du neuf-centième caractère, et le petit
+script qui affichait la réponse du relais coupait à neuf cents. Deux lectures
+concordantes ne prouvent rien quand les deux sont coupées au même endroit. Un article se
+lit en entier, jusqu'au dernier mot, avant d'écrire qu'il ne contient pas quelque chose,
+et la longueur du texte rendu se vérifie avant de conclure. Correction faite avant tout
+envoi ; les deux fichiers ont été rétablis.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de

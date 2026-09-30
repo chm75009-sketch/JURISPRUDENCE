@@ -410,7 +410,11 @@
       var moteurs = c.parc.lourds + c.parc.legers;
       var typees = (c.licences || []).filter(function (x) { return x.type; });
       var manquantes = 0, dit = [];
-      if (typees.length > 1) {
+      /* Une licence typée compte sur son propre périmètre, seule ou non : avec
+         la seule communautaire saisie, l'agenda comparait ses copies au parc
+         entier et demandait dix copies quand cette licence n'en appelle que
+         trente pour trente véhicules. Relevé le 29 septembre 2026. */
+      if (typees.length >= 1) {
         typees.forEach(function (x) {
           if (!x.du) return;
           var tenues = isFinite(x.copies) ? x.copies : 0;
