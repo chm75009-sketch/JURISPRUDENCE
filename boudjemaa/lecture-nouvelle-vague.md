@@ -682,3 +682,47 @@ Une confirmation en passant. L'Annuaire tunisien du commerce, de l'industrie,
 de l'agriculture et des administrations de la Régence, édition 1937, à la
 rubrique des sociétés sportives, ne porte plus qu'un club de football à Béja :
 « Béja : Union Sportive Béjaoise ». ark bd6t53532177.
+
+## Les annuaires de la Fédération : l'U.S.B. existe dès 1925, l'Olympique arrive après
+
+Lecture du 1er octobre 2026. L'Annuaire de la Fédération française de football
+recense, ligue par ligue et ville par ville, les sociétés affiliées avec leur
+correspondant. Quatre éditions sont numérisées. À Béja :
+
+- **1925**, page 411 : un seul club. « BÉJA. Union Sportive Béajaoise.
+  Couleurs : [rien]. Président : M. Perrier. Correspondant : M. Don,
+  instituteur, Béja. » ark bpt6k1424812w.
+- **1927**, page 445 : un seul club, l'Union Sportive Béjaoise, correspondant
+  M. Delaitre, secrétaire à la Minoterie de Béja. ark bpt6k1424814q.
+- **1928**, page 461 : même chose, même correspondant. Le seul « Olympique »
+  de la page est le Kram Olympique, qui n'a rien à voir. ark bd6t53865696.
+- **1933**, page 625 : deux clubs. « BEJA. Union Sportive Béjaoise.
+  Correspondant : M. Doublan. Banque de Tunisie, Béja. Olympique de Beja.
+  Correspondant : M. Mamoud Mennekbi, à Bejà. » ark bpt6k14248139.
+
+Puis, en 1936, la dissolution. Et l'Annuaire tunisien de 1937 ne porte de
+nouveau qu'un club à Béja, l'Union Sportive Béjaoise.
+
+L'Union Sportive Béjaoise est donc affiliée à la Fédération au plus tard en
+1925, quand l'Olympique n'existe pas encore. Le Petit Matin du 16 mai 1929 le
+dit d'ailleurs en toutes lettres : « société indigène nouvellement formée ».
+Entre les deux clubs, l'aîné est l'U.S.B., et de loin.
+
+## Un match de plus en 1929, et un nom : le président Benmussa
+
+Le Petit Matin du 8 juin 1929, page 3, colonne lue en entier. « Les Sports à
+Béja. LE SPORTING-CLUB DE TABARKA ET L'OLYMPIQUE DE BEJA font match nul 1 à 1. »
+C'est la revanche du 16 mai, jouée à Béja le dimanche 2 juin. Il y est deux
+fois : « Les arrières tabarkois dégagent, mais Boudjemâa est partout et sert
+bien sa ligne d'avants », puis dans la liste des meilleurs, « A Béja, David,
+Said, Touati, Kenzey, Kaddour, Youssef et Boudjemâa ».
+
+Deux noms nouveaux au passage. Le manager de l'Olympique s'appelle Abdallah,
+et c'est tout récent : « L'Olympique joua mieux que d'habitude, grâce aux
+leçons données par leur nouveau manager Abdallah. » Et le club a un président :
+« Après le match, les dirigeants et joueurs des deux clubs se réunirent à la
+Brasserie du Phénix. M. Benmussa, le Président de l'Olympique, fut éloquent. »
+
+Les matchs de l'Olympique contre Tabarka en 1929 sont donc trois, et non deux :
+le 16 mai à Tabarka (défaite 4-1), le 2 juin à Béja (1-1), et celui que raconte
+le numéro du 26 juin (défaite 4-1). ark bpt6k83913309.
