@@ -275,7 +275,11 @@
   function dateFr(iso) {
     if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
     var d = new Date(iso + "T12:00:00");
-    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    /* « 1 octobre 2026 » : en français le premier du mois s'écrit « 1er », et
+       toLocaleDateString ne le sait pas. Relevé le 1er octobre 2026, jour où
+       le défaut se voyait enfin. */
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+      .replace(/(^|\s)1 /, "$1" + "1er ");
   }
   function vide(txt) { return '<span class="champ-vide">[' + e(txt) + "]</span>"; }
   function ch(valeur, blanc) { return valeur ? e(valeur) : vide(blanc); }

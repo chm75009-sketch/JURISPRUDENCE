@@ -612,6 +612,27 @@
      du personnel qui atteste la relation existante (L. 1221-13) : hors du
      registre, la date passée n'est qu'une date, et la déclaration préalable
      reste due. Relevé le 29 septembre 2026. */
+  /* LES MONTANTS QUE L'APPLICATION NE LIT PAS, PORTÉS PAR L'UTILISATEUR.
+
+     Cinq familles de montants conventionnels sont figées dans ce fichier, à la
+     date de leur dernière lecture : les taux horaires, les garanties annuelles,
+     les frais de déplacement, la prime de nuit et la garantie d'amplitude. Un
+     avenant peut les avoir changés, et le relais ne sert pas les tableaux des
+     avenants KALI. Celui qui a la convention sous les yeux les porte sur
+     l'écran des minima, et ce qu'il porte l'emporte. Voir ccn-vigueur.js. */
+  function enVigueur(cle, defaut) {
+    var V = (typeof window !== "undefined") ? window.CcnVigueur : null;
+    return (V && V.valeur) ? V.valeur(cle, defaut) : defaut;
+  }
+  function sourceEnVigueur(cle, defaut) {
+    var V = (typeof window !== "undefined") ? window.CcnVigueur : null;
+    return (V && V.source) ? V.source(cle, defaut) : defaut;
+  }
+  function porteALaMain(cle) {
+    var V = (typeof window !== "undefined") ? window.CcnVigueur : null;
+    return !!(V && V.saisi && V.saisi(cle));
+  }
+
   /* L'INTITULÉ D'UN TEXTE APRÈS « DE ». « ceux de Accord du 11 octobre 2023 »
      s'écrit « ceux de l'accord du 11 octobre 2023 » : la majuscule du titre
      tombe, et l'élision se fait. On ne touche qu'aux premiers mots que la
@@ -660,7 +681,20 @@
     var heures = Number(v.mensuel) || p.mensuel;
     var taux = Number(v.taux) || tauxDe(v.coef, p.cle) || 0;
     var smic = Number(v.smic) || CCN.smic.valeur;
-    var retenu = smic > taux ? smic : taux;
+    /* TROIS CHIFFRES, ET LE PLUS ÉLEVÉ DES TROIS.
+
+       Le contrat retenait le plus élevé de deux : le taux de la grille de
+       décembre 2023 et le SMIC. Deux annexes plus récentes existent, dont les
+       tableaux ne nous sont pas servis ; si l'une d'elles a porté le taux du
+       coefficient au-dessus du SMIC, le contrat payait moins que la
+       convention. Relevé le 1er octobre 2026. Le troisième chiffre est celui
+       que l'utilisateur porte lui-même, la convention sous les yeux, et c'est
+       lui qui l'emporte quand il est le plus haut. */
+    var tauxCcn = Number(String(v.tauxCcn || "").replace(",", ".")) || 0;
+    var retenu = Math.max(taux, smic, tauxCcn);
+    var dOu = retenu === tauxCcn && tauxCcn > 0
+      ? "grille conventionnelle en vigueur" + (net(v.tauxCcnDate) ? ", " + net(v.tauxCcnDate) : "")
+      : (retenu === smic && smic >= taux ? "SMIC" : "grille conventionnelle de décembre 2023");
     var annexe = p.annexe === "II" ? CCN.annexeII : CCN.annexeI;
     var motif = net(v.motif) || "[MOTIF DU RECOURS]";
     var n = 0;
@@ -941,6 +975,16 @@
     var s = salaire(p, heures, retenu);
     var g = partiel ? garantiePartiel(p, net(v.coef)) : garantie(p, net(v.coef), heures);
     var garDue = g ? (partiel ? g.montant * heures / g.base : g.montant) : 0;
+    /* LA GARANTIE ANNUELLE PORTÉE À LA MAIN L'EMPORTE.
+
+       Les barèmes de garantie annuelle sont ceux de l'accord du 11 octobre
+       2023, figés ici, et un avenant postérieur les relève sans que
+       l'application le sache. Celui qui a la grille en vigueur porte le montant
+       de son coefficient sur l'écran des minima. On ne compare pas : un barème
+       se refond, et retenir le plus élevé des deux n'écrirait pas la convention.
+       Le 1er octobre 2026. */
+    var garSaisie = porteALaMain("garantieAnnuelle");
+    if (garSaisie) garDue = enVigueur("garantieAnnuelle", garDue);
     var mensuelGar = garDue / 12;
     var mensuel = Math.max(s.total, mensuelGar);
 
@@ -950,6 +994,11 @@
         " heures majorées de 25 %" +
         (s.m50 > 0 ? " et " + fr(s.m50, 2) + " heures majorées de 50 %" : "")
       : fr(heures, 2) + " heures au taux horaire de " + fr(retenu, 4) + " euros";
+    /* D'OÙ VIENT LE TAUX ÉCRIT : du SMIC, de la grille lue ici, ou de la
+       grille en vigueur portée par l'utilisateur. Le contrat le dit, parce que
+       ce n'est pas la même chose de payer le minimum légal et le minimum
+       conventionnel. */
+    detail += " (" + dOu + ")";
 
     /* DEUX MONTANTS, PAS UN SEUL.
 
@@ -966,36 +1015,76 @@
         ? ", qui est le montant de la garantie annuelle rapporté au mois, supérieur au calcul " +
           "horaire de " + fr(mensuelGar - s.total, 2) + " euros."
         : ".") });
-    if (g && mensuelGar > s.total + 0.005) {
-      B.push({ k: "p", t: "Ce montant est celui de la garantie annuelle de rémunération attachée au " +
-        "coefficient " + net(v.coef) + (partiel ? ", ramenée à la durée du présent contrat" : "") +
+    /* LE MONTANT QUI RELÈVE LE SALAIRE DOIT ÊTRE EXPLIQUÉ, GRILLE LUE OU NON.
+
+       Les deux phrases qui suivent étaient commandées par `g`, c'est-à-dire par
+       la présence du coefficient dans les barèmes figés ici. Sans coefficient
+       renseigné, une garantie portée à la main relevait donc le salaire au
+       douzième du montant saisi en disant « qui est le montant de la garantie
+       annuelle rapporté au mois », sans jamais dire de quelle garantie il
+       s'agissait ni d'où elle venait : un contrat à 3 416,67 euros sans un mot
+       de fondement. Mesuré le 1er octobre 2026. La saisie ouvre maintenant la
+       phrase au même titre que le barème, et le coefficient ne se mentionne
+       que s'il est connu. */
+    var coefDit = net(v.coef) ? " attachée au coefficient " + net(v.coef) : "";
+    if ((g || garSaisie) && mensuelGar > s.total + 0.005) {
+      B.push({ k: "p", t: "Ce montant est celui de la garantie annuelle de rémunération" +
+        coefDit + (partiel && g ? ", ramenée à la durée du présent contrat" : "") +
         ", soit " + fr(garDue, 2) + " euros par an : le calcul horaire y étant inférieur de " +
         fr(mensuelGar - s.total, 2) + " euros par mois, c'est la garantie qui s'applique (" +
-        CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) + ")." });
-    } else if (g) {
+        (garSaisie
+          ? sourceEnVigueur("garantieAnnuelle", "grille en vigueur portée sur ce poste")
+          : CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis)) + ")." });
+    } else if (g || garSaisie) {
       B.push({ k: "p", t: "La rémunération annuelle du salarié ne peut être inférieure à la garantie " +
-        "annuelle de rémunération attachée au coefficient " + net(v.coef) +
-        (partiel ? ", ramenée à la durée du présent contrat" : " pour " + g.pour + " heures") +
+        "annuelle de rémunération" + coefDit +
+        (g ? (partiel ? ", ramenée à la durée du présent contrat" : " pour " + g.pour + " heures") : "") +
         ", soit " + fr(garDue, 2) + " euros" +
-        (!g.exact && !partiel
+        (g && !g.exact && !partiel
           ? ". Aucun barème n'étant publié pour " + fr(heures, 2) + " heures, ce montant est un " +
             "plancher : la durée du contrat étant supérieure à " + g.pour + " heures, la " +
             "rémunération lui est au moins égale"
           : "") +
-        " (" + CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis) + ")." });
+        " (" + (garSaisie
+          ? sourceEnVigueur("garantieAnnuelle", "grille en vigueur portée sur ce poste")
+          : CCN.salaires.source + ", en vigueur depuis le " + dateFr(CCN.salaires.depuis)) + ")." });
     }
     if (p.clauses.indexOf("nuit") >= 0) {
+      /* Le taux de la prime de nuit était écrit « 20 % » en toutes lettres, sans
+         passer par CCN.nuit.taux : une modification de la donnée ne changeait
+         pas le contrat. Il se lit maintenant, et la saisie l'emporte. */
+      var tNuit = enVigueur("nuitTaux", CCN.nuit.taux * 100);
       B.push({ k: "p", t: "Tout travail effectif accompli " + CCN.nuit.periode + " donne lieu à une " +
-        "prime horaire égale à 20 % du taux horaire conventionnel à l'embauche du coefficient " +
-        CCN.nuit.reference + ", qui s'ajoute à la rémunération et entre dans l'assiette des " +
-        "majorations pour heures supplémentaires (" + CCN.nuit.source + ", article 3)." });
+        "prime horaire égale à " + fr(tNuit, tNuit % 1 ? 2 : 0) + " % du taux horaire conventionnel " +
+        "à l'embauche du coefficient " + CCN.nuit.reference + ", qui s'ajoute à la rémunération et " +
+        "entre dans l'assiette des majorations pour heures supplémentaires (" +
+        (porteALaMain("nuitTaux") ? sourceEnVigueur("nuitTaux", "") : CCN.nuit.source + ", article 3") +
+        ")." });
     }
     if (p.clauses.indexOf("amplitude") >= 0) {
-      B.push({ k: "p", t: "La rémunération mensuelle ne peut être inférieure à 75 % des amplitudes " +
-        "journalières cumulées du mois, sans que l'application de ce pourcentage puisse réduire ces " +
-        "amplitudes de plus de 63 heures. Le nombre d'heures d'amplitude et le montant " +
-        "correspondant figurent distinctement sur le bulletin de paie (" + CCN.amplitude.source +
-        ", article 3)." });
+      /* Même chose pour l'amplitude : « 75 % » et « 63 heures » étaient écrits
+         en clair, à côté des données qui les portaient. */
+      var pAmp = enVigueur("amplitudePart", CCN.amplitude.part * 100);
+      var hAmp = enVigueur("amplitudePlafond", CCN.amplitude.plafondHeures);
+      /* DEUX CHIFFRES DANS LA MÊME PHRASE, ET UNE SEULE PARENTHÈSE POUR LES
+         DEUX. Quand un seul des deux est porté à la main, l'autre reste celui
+         du code : les créditer tous deux à l'avenant saisi attribuait à cet
+         avenant un chiffre qui n'y figure pas. Chacun dit donc d'où il vient
+         dès que les deux origines diffèrent. Le 1er octobre 2026. */
+      var srcPart = porteALaMain("amplitudePart")
+        ? sourceEnVigueur("amplitudePart", "") : CCN.amplitude.source + ", article 3";
+      var srcPlaf = porteALaMain("amplitudePlafond")
+        ? sourceEnVigueur("amplitudePlafond", "") : CCN.amplitude.source + ", article 3";
+      var sourceAmplitude = function () {
+        return srcPart === srcPlaf ? srcPart
+          : srcPart + " pour le pourcentage, " + srcPlaf + " pour le plafond";
+      };
+      B.push({ k: "p", t: "La rémunération mensuelle ne peut être inférieure à " +
+        fr(pAmp, pAmp % 1 ? 2 : 0) + " % des amplitudes journalières cumulées du mois, sans que " +
+        "l'application de ce pourcentage puisse réduire ces amplitudes de plus de " +
+        fr(hAmp, hAmp % 1 ? 2 : 0) + " heures. Le nombre d'heures d'amplitude et le montant " +
+        "correspondant figurent distinctement sur le bulletin de paie (" +
+        sourceAmplitude() + ")." });
     }
     B.push({ k: "p", t: "S'ajoutent, le cas échéant, l'indemnisation du travail du dimanche et des " +
       "jours fériés et les autres majorations prévues par la convention collective. La rémunération " +
@@ -1023,19 +1112,37 @@
         "protocole du 30 avril 1974 annexé à la convention collective, aux taux en vigueur. Ces " +
         "indemnités remboursent des frais : elles ne sont pas du salaire et n'entrent pas dans la " +
         "rémunération garantie." });
-      B.push({ k: "p", t: "À la date du présent contrat, ces taux sont les suivants (" + CCN.frais.source +
-        ", en vigueur depuis le " + dateFr(CCN.frais.depuis) + ") :" });
+      /* CHAQUE INDEMNITÉ PEUT VENIR DE LA GRILLE EN VIGUEUR.
+
+         Les sept montants étaient ceux de l'avenant n° 81, figés ici : un
+         avenant postérieur les relève sans que l'application le sache. Ce qui
+         est porté sur l'écran des minima l'emporte, ligne par ligne, et la
+         colonne de droite dit d'où vient chaque chiffre. Le 1er octobre 2026. */
+      var FRAIS = [
+        ["Repas", "repas", CCN.frais.repas],
+        ["Repas unique", "repasUnique", CCN.frais.repasUnique],
+        ["Repas unique « nuit »", "repasUniqueNuit", CCN.frais.repasUniqueNuit],
+        ["Casse-croûte", "casseCroute", CCN.frais.casseCroute],
+        ["Indemnité spéciale", "speciale", CCN.frais.speciale],
+        ["Grand déplacement, 1 repas et 1 découcher", "grandDeplacement1", CCN.frais.grandDeplacement1],
+        ["Grand déplacement, 2 repas et 1 découcher", "grandDeplacement2", CCN.frais.grandDeplacement2],
+      ];
+      var repris = FRAIS.filter(function (x) { return porteALaMain(x[1]); }).length;
+      B.push({ k: "p", t: "À la date du présent contrat, ces taux sont les suivants" +
+        (repris === FRAIS.length
+          ? ", tels qu'ils ont été portés d'après la grille en vigueur"
+          : (repris
+            ? ". " + repris + " d'entre eux ont été portés d'après la grille en vigueur ; les " +
+              "autres sont ceux de " + duTexte(CCN.frais.source) + ", en vigueur depuis le " +
+              dateFr(CCN.frais.depuis)
+            : " (" + CCN.frais.source + ", en vigueur depuis le " + dateFr(CCN.frais.depuis) + ")")) +
+        " :" });
       B.push({ k: "table",
-        head: ["Indemnité", "Montant"],
-        rows: [
-          ["Repas", fr(CCN.frais.repas) + " €"],
-          ["Repas unique", fr(CCN.frais.repasUnique) + " €"],
-          ["Repas unique « nuit »", fr(CCN.frais.repasUniqueNuit) + " €"],
-          ["Casse-croûte", fr(CCN.frais.casseCroute) + " €"],
-          ["Indemnité spéciale", fr(CCN.frais.speciale) + " €"],
-          ["Grand déplacement, 1 repas et 1 découcher", fr(CCN.frais.grandDeplacement1) + " €"],
-          ["Grand déplacement, 2 repas et 1 découcher", fr(CCN.frais.grandDeplacement2) + " €"],
-        ] });
+        head: ["Indemnité", "Montant", "D'où vient ce montant"],
+        rows: FRAIS.map(function (x) {
+          return [x[0], fr(enVigueur(x[1], x[2])) + " €",
+            porteALaMain(x[1]) ? sourceEnVigueur(x[1], "") : CCN.frais.source];
+        }) });
       B.push({ k: "p", t: "À défaut d'accord d'entreprise, les frais de déplacement à l'étranger sont " +
         "réglés sur la base de ces mêmes indemnités, " + CCN.frais.etranger + ". Les frais de change " +
         "sont à la charge de l'entreprise." });
@@ -1276,10 +1383,15 @@
       "à la date de sa production, et il doit être relu et adapté au poste réel avant d'être " +
       "signé. Ce qui reste entre crochets n'est pas une formalité : c'est ce que le modèle ne " +
       "peut pas deviner." });
-    B.push({ k: "puce", t: "Le taux horaire retenu est le plus élevé du SMIC, " +
+    B.push({ k: "puce", t: "Le taux horaire retenu est le plus élevé de trois chiffres : le SMIC, " +
       fr(CCN.smic.valeur, 2) + " euros depuis le " + dateFr(CCN.smic.depuis) + " (" +
-      CCN.smic.source + "), et du minimum conventionnel du coefficient. Le SMIC change par " +
-      "arrêté : il se vérifie au jour de l'embauche." });
+      CCN.smic.source + ") ; le taux du coefficient dans la grille de décembre 2023, reprise " +
+      "ci-dessus ; et le taux de la grille en vigueur, lorsqu'il a été porté sur la fiche du " +
+      "contrat. Deux annexes de taux horaires des personnels ouvriers sont postérieures à celle " +
+      "de décembre 2023, du 1er mai 2025 et du 1er avril 2026, et leurs tableaux ne figurent pas " +
+      "ici : si le troisième chiffre n'a pas été porté, le taux écrit peut être inférieur au " +
+      "minimum conventionnel actuel. Confrontez-le à votre exemplaire de la convention avant de " +
+      "signer." });
     B.push({ k: "puce", t: "Les montants conventionnels, frais de déplacement, taux horaires et " +
       "garanties annuelles, changent par avenant. Vérifier qu'aucun avenant postérieur n'est " +
       "intervenu, et lequel vise le transport de marchandises : un avenant plus récent peut ne " +

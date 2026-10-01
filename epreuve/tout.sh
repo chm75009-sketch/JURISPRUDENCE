@@ -1,10 +1,10 @@
 #!/bin/bash
 # TOUTES LES ÉPREUVES, DANS L'ORDRE, D'UNE SEULE COMMANDE.
 #
-# Dix-neuf contrôles vivent dans ce dossier, et il fallait se souvenir de
-# chacun avant de publier. Celui-ci les enchaîne : les sept qui tournent sans
+# Vingt-et-un contrôles vivent dans ce dossier, et il fallait se souvenir de
+# chacun avant de publier. Celui-ci les enchaîne : les huit qui tournent sans
 # navigateur d'abord, parce qu'ils sont instantanés et qu'ils attrapent le
-# plus ; les douze balayages ensuite, qui ouvrent Chromium et prennent leur
+# plus ; les treize balayages ensuite, qui ouvrent Chromium et prennent leur
 # temps. Écrit le 28 septembre 2026.
 #
 #   bash epreuve/tout.sh            toutes les épreuves
@@ -42,6 +42,7 @@ passe "Les tirets cadratins" $NODE epreuve/verifier-tirets.mjs
 passe "Les marques d'outil dans les 224 générateurs" $NODE epreuve/verifier-marques.mjs
 passe "L'arithmétique de l'index de l'égalité" $NODE epreuve/verifier-index-egalite.mjs
 passe "Le lecteur de carte de conducteur" $NODE epreuve/verifier-ddd.mjs
+passe "Les montants conventionnels portés à la main" $NODE epreuve/verifier-ccn-vigueur.mjs
 titre "Les générateurs, mesure de référence"
 $NODE epreuve/tester-generateurs.mjs docs/documents-*.js 2>&1 | tail -1
 
@@ -60,6 +61,7 @@ passe "Le rappel de l'entreprise, une fois par page" $NODE epreuve/verifier-ente
 passe "Les onze affiches, produites et relues" $NODE epreuve/verifier-affiches.mjs
 passe "Les fichiers Word des parcours" $NODE epreuve/verifier-docx-parcours.mjs
 passe "Les contrats du transport, d'un salarié à l'autre" $NODE epreuve/verifier-contrats-transport.mjs
+passe "Le montant en vigueur, jusqu'au contrat" $NODE epreuve/verifier-contrat-vigueur.mjs
 passe "Les documents du quotidien" $NODE epreuve/balayer-gerer.mjs
 passe "Les fichiers Word, rouverts avec python-docx" $NODE epreuve/verifier-docx.mjs
 passe "Les classeurs, rouverts avec openpyxl" $NODE epreuve/verifier-xlsx.mjs

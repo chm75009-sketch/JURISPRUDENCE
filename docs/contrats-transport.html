@@ -133,6 +133,17 @@
   details.loi .a b{color:var(--encre)}
   details.loi .a span{display:block;font-size:12.5px;color:var(--texte-3);margin-top:2px}
 
+  /* Les familles du panneau des montants en vigueur. La classe était posée
+     par le script et n'existait nulle part sur cette page : « Frais de
+     déplacement » et « Prime de nuit » sortaient en paragraphe ordinaire,
+     collés à l'indication du champ précédent, et rien ne montrait que les
+     onze champs allaient par groupes. Vu à 390 points le 1er octobre 2026. */
+  #vigueur-corps .bloc-t{margin:26px 0 2px;padding-top:12px;font:700 15px/1.3 system-ui;
+    color:var(--encre);border-top:1px solid var(--filet)}
+  #vigueur-corps .bloc-t:first-of-type{border-top:0}
+  #vigueur-corps label.champ{display:block;margin:12px 0 0}
+  #vigueur-corps label.champ input{width:100%;box-sizing:border-box}
+
   .maj{margin:16px 0 0;font-size:13.5px;color:var(--texte-3);line-height:1.5}
   .maj button{margin-top:8px;min-height:44px;padding:0 14px;border-radius:9px;font:600 15px system-ui;
     border:1px solid var(--filet);background:var(--surface);color:var(--encre);cursor:pointer}
@@ -210,6 +221,17 @@
     <div class="alerte" id="minima-alerte"></div>
     <div id="minima-table"></div>
     <div id="minima-compare"></div>
+    <!-- LES MONTANTS QUE L'APPLICATION NE LIT PAS, PORTÉS PAR CELUI QUI LES A.
+         Cinq familles de montants conventionnels sont figées dans le code, à la
+         date de leur dernière lecture, et le relais ne sert pas les tableaux des
+         avenants : taux horaires, garanties annuelles, frais de déplacement,
+         prime de nuit, garantie d'amplitude. Ce qui est porté ici l'emporte, et
+         le contrat dit d'où vient chaque chiffre. Voir ccn-vigueur.js. Posé le
+         1er octobre 2026. -->
+    <details class="repli" id="repli-vigueur">
+      <summary id="vigueur-titre">Les montants de la grille en vigueur</summary>
+      <div class="corps" id="vigueur-corps"></div>
+    </details>
     <div class="barre">
       <button type="button" class="s" id="minima-word">Télécharger le relevé</button>
       <button type="button" class="s" id="minima-retour">Revenir aux emplois</button>
@@ -307,6 +329,7 @@
 <script src="base-documents.js"></script>
 <script src="profil.js"></script>
 <script src="echeances-salaries.js"></script>
+<script src="ccn-vigueur.js"></script>
 <script src="contrats-transport.js"></script>
 <script src="contrats-transport-ecran.js"></script>
 </body>

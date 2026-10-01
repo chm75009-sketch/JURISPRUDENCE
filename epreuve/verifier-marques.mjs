@@ -80,7 +80,7 @@ const INTERDITS = [
   { re: /(?:^|[^A-Za-zÀ-ÿ'’])de (?!onze\b|onzième|un\b|une\b|huit\b|AAAAA)([AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜaeiouyàâäéèêëîïôöùûü])/,
     quoi: "élision manquée après « de »",
     dit: "Lettres : « de Argenteuil », « de Assistante »." },
-  { re: /\ble 1 [a-zéû]/, quoi: "« le 1 » au lieu de « le 1er »",
+  { re: /(?:^|[^\d])1 (?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|janv|févr|avr|juil|sept|oct|nov|déc)\b/, quoi: "le premier du mois écrit « 1 » au lieu de « 1er »",
     dit: "Heures, divers : on lit « le 1 » au lieu de « le 1er »." },
   { re: /\bdocument\(s\)|\bsalarié\(s\)|\bligne\(s\)/, quoi: "pluriel entre parenthèses",
     dit: "Mes documents : on lit « 2 document(s) »." },

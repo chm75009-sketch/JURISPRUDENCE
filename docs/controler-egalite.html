@@ -1151,7 +1151,10 @@
     return m ? m[1].trim() : "[VILLE]";
   }
   function jourFr(d) {
-    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    /* « 1 octobre 2026 » : le premier du mois s'écrit « 1er ». Relevé le
+       1er octobre 2026 par le balayage des écrans de contrôle. */
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+      .replace(/(^|\s)1 /, "$1" + "1er ");
   }
 
   /* LE PLAN CORRIGÉ NE S'AFFICHE PLUS À PLAT.

@@ -64,7 +64,7 @@ const INTERDITS = [
   [/ne vaut pas (consultation|avis) juridique/i, "avertissement d'origine"],
   [/\bÀ ADAPTER\b/, "bandeau « À ADAPTER »"],
   [/={6,}/, "bandeau de signes égal"],
-  [/\ble 1 [a-zéû]/, "« le 1 » au lieu de « le 1er »"],
+  [/(?:^|[^\d])1 (?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|janv|févr|avr|juil|sept|oct|nov|déc)\b/, "le premier du mois écrit « 1 » au lieu de « 1er »"],
 ];
 
 const nav = await chromium.launch({ executablePath: CHROME, args: ["--no-sandbox"] });

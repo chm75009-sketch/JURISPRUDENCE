@@ -126,7 +126,9 @@
     if (!iso) return "";
     var d = new Date(iso + "T12:00:00");
     if (isNaN(d)) return iso;
-    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    /* Le premier du mois s'écrit « 1er ». Relevé le 1er octobre 2026. */
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+      .replace(/(^|\s)1 /, "$1" + "1er ");
   }
   /* L'échéance de chaque action court depuis la date de la version. */
   function plusMois(iso, n) {

@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-13.31";
+const CACHE = "jurisprudence-13.32";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -172,6 +172,7 @@ const ESSENTIELS = [
   "./visites.html", "./notes-service.html", "./notes-service.js",
   "./notes-service-transport.js",
   "./contrats-transport.html", "./contrats-transport.js", "./contrats-transport-ecran.js",
+  "./ccn-vigueur.js",
   "./minima.html", "./mes-documents.html", "./questions.html", "./questions.js",
   "./questions-ecran.js", "./sanctions.html", "./contraventions.html",
   /* Les outils communs à toutes les pages : la barre et son menu, la base des

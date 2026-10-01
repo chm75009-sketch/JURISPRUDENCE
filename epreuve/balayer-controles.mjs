@@ -159,7 +159,7 @@ const INTERDITS = [
   [/\bÀ ADAPTER\b/, "bandeau « À ADAPTER »"],
   [/={6,}/, "bandeau de signes égal"],
   [/-{12,}/, "règle de tirets au milieu d'un document"],
-  [/\ble 1 [a-zéû]/, "« le 1 » au lieu de « le 1er »"],
+  [/(?:^|[^\d])1 (?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|janv|févr|avr|juil|sept|oct|nov|déc)\b/, "le premier du mois écrit « 1 » au lieu de « 1er »"],
   [/(?:^|[^A-Za-zÀ-ÿ'’])de [AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜ]/, "élision manquée après « de »"],
 ];
 

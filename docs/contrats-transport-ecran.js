@@ -273,8 +273,33 @@
     L.push({ id: "taux", nom: "Taux horaire brut (euros)", t: "number",
       sous: "Taux conventionnel du coefficient, à confronter au SMIC" });
     L.push({ id: "smic", nom: "SMIC horaire en vigueur (euros)", t: "number",
-      sous: "À vérifier : les taux conventionnels appliqués ici datent du 1er décembre 2023, et " +
-        "deux grilles leur sont postérieures, du 1er mai 2025 et du 1er avril 2026" });
+      sous: "Celui de l'arrêté en vigueur au jour de la signature" });
+    /* LE TAUX DE LA GRILLE EN VIGUEUR, QUE L'APPLICATION NE PEUT PAS LIRE.
+
+       Le contrat retenait le plus élevé du taux de décembre 2023 et du SMIC.
+       Si une annexe de 2025 ou de 2026 a porté le taux du coefficient
+       au-dessus du SMIC, le contrat payait donc moins que la convention : le
+       défaut est dans le choix du maximum sur deux chiffres quand il en
+       manque un troisième. Relevé le 1er octobre 2026 en relisant la ligne
+       des taux conventionnels.
+
+       Le chiffre manque et l'application ne peut pas le trouver : interrogé
+       cinq fois, le relais rend le titre des deux annexes, leurs
+       identifiants, leurs métadonnées, et un tableau d'articles vide
+       (ccn-texte et ccn-struct sur KALIARTI000051927437 et
+       KALIARTI000054454049, le 1er octobre 2026 ; la recherche en plein texte
+       sur « 150 M » ne rend que les barèmes de 1997 et de 2008). Celui qui a
+       la convention sous les yeux, lui, l'a. Il le porte ici, avec la date de
+       l'annexe, une fois ; le contrat retient alors le plus élevé des trois et
+       dit lequel il a pris. */
+    L.push({ id: "tauxCcn", nom: "Taux conventionnel en vigueur, s'il est plus élevé (euros)",
+      t: "number",
+      sous: "Les taux lus à la source ici datent du 1er décembre 2023 ; deux annexes leur sont " +
+        "postérieures, du 1er mai 2025 et du 1er avril 2026, dont les tableaux ne nous sont pas " +
+        "servis. Portez le taux de votre coefficient dans la grille en vigueur : c'est lui qui " +
+        "sera écrit au contrat." });
+    L.push({ id: "tauxCcnDate", nom: "Annexe dont ce taux est tiré", t: "text",
+      sous: "par exemple : annexe 1, taux applicables au 1er avril 2026" });
     if (PROFIL.roulant) {
       L.push({ id: "zone", nom: "Zone de conduite", t: "text",
         sous: "par exemple : national et européen" });
@@ -1194,6 +1219,65 @@
       "L'action en paiement du salaire se prescrit par trois ans à compter du jour où celui " +
       "qui l'exerce a connu ou aurait dû connaître les faits (L. 3245-1).",
     ].map(function (x) { return "<p>" + ech(x) + "</p>"; }).join("");
+    rendreVigueur();
+  }
+
+  /* LES MONTANTS DE LA GRILLE EN VIGUEUR, SAISIS UNE FOIS.
+
+     L'application ne lit pas les tableaux des avenants de la convention : cinq
+     familles de montants sont figées dans le code, à la date de leur dernière
+     lecture. Celui qui a la convention sous les yeux les porte ici, avec la
+     référence de l'avenant, et ce qu'il porte l'emporte dans tous les contrats
+     écrits ensuite. Posé le 1er octobre 2026. */
+  function rendreVigueur() {
+    var z = $("vigueur-corps");
+    if (!z || !window.CcnVigueur) return;
+    var V = window.CcnVigueur, etat = V.lire();
+    var n = V.combien();
+    var titre = $("vigueur-titre");
+    if (titre) titre.textContent = n
+      ? "Les montants de la grille en vigueur : " + n + " porté" + (n > 1 ? "s" : "") + " à la main"
+      : "Les montants de la grille en vigueur : aucun porté, les chiffres datés s'appliquent";
+    var familles = [];
+    V.CHAMPS.forEach(function (c) {
+      if (familles.indexOf(c.famille) < 0) familles.push(c.famille);
+    });
+    var h = '<p class="doux">Les taux horaires, les garanties annuelles, les frais de ' +
+      "déplacement, la prime de nuit et la garantie d'amplitude changent par avenant, et les " +
+      "tableaux de ces avenants ne sont pas lus ici : les chiffres du relevé ci-dessus portent la " +
+      "date de leur dernière lecture. Si vous avez la grille en vigueur, portez-la. Ce qui est " +
+      "écrit ici s'applique à tous les contrats produits ensuite, et chaque document dit d'où " +
+      "vient le chiffre qu'il porte.</p>" +
+      '<label class="champ"><span>Référence de l\'avenant, pour toutes les lignes</span>' +
+      '<input type="text" id="vig-source" value="' + ech(etat.source || "") +
+      '" placeholder="avenant n° 82 du 3 décembre 2026">' +
+      '<small class="doux">Elle est reprise dans les contrats, à côté du montant.</small></label>';
+    familles.forEach(function (fam) {
+      h += '<p class="bloc-t">' + ech(fam) + "</p>";
+      V.CHAMPS.filter(function (c) { return c.famille === fam; }).forEach(function (c) {
+        h += '<label class="champ"><span>' + ech(c.nom) + "</span>" +
+          '<input type="text" inputmode="decimal" data-vig="' + ech(c.c) + '" value="' +
+          ech(etat.valeurs[c.c] || "") + '" placeholder="vide : chiffre daté">' +
+          (c.sous ? '<small class="doux">' + ech(c.sous) + "</small>" : "") + "</label>";
+      });
+    });
+    h += '<div class="barre"><button type="button" class="second" id="vig-vider">' +
+      "Tout vider et revenir aux chiffres datés</button></div>";
+    z.innerHTML = h;
+    Array.prototype.forEach.call(z.querySelectorAll("[data-vig]"), function (el) {
+      el.addEventListener("change", function () {
+        V.poser(el.getAttribute("data-vig"), el.value);
+        rendreVigueur();
+      });
+    });
+    var s = $("vig-source");
+    if (s) s.addEventListener("change", function () { V.poserSource(s.value); rendreVigueur(); });
+    var vd = $("vig-vider");
+    if (vd) vd.addEventListener("click", function () {
+      V.CHAMPS.forEach(function (c) { V.poser(c.c, ""); });
+      V.poserSource("");
+      rendreVigueur();
+    });
   }
 
   var VM = $("vers-minima");

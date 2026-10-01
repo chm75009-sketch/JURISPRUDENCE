@@ -1269,7 +1269,11 @@
     if (!isoDate) return "[DATE]";
     var d = new Date(isoDate + "T12:00:00");
     if (isNaN(d.getTime())) return "[DATE]";
-    return d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    /* « jeudi 1 octobre 2026 » : le premier du mois s'écrit « 1er », ici après
+       le nom du jour. Relevé le 1er octobre 2026. */
+    return d.toLocaleDateString("fr-FR",
+      { weekday: "long", day: "numeric", month: "long", year: "numeric" })
+      .replace(/(^|\s)1 /, "$1" + "1er ");
   }
   function aujourdhui() { return iso(new Date()); }
 
@@ -1318,7 +1322,8 @@
     return m ? m[1].trim() : "[VILLE]";
   }
   function jourFrDate(d) {
-    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })
+      .replace(/(^|\s)1 /, "$1" + "1er ");
   }
 
   function pvDesaccord() {

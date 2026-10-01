@@ -79,7 +79,7 @@ const INTERDITS = [
   [/(?:^|[^A-Za-zÀ-ÿ'’])de (?!onze\b|onzième|un\b|une\b|huit\b)[AEIOUYÀÂÄÉÈÊËÎÏÔÖÙÛÜaeiouyàâäéèêëîïôöùûü]/,
    "élision manquée après « de »"],
   [/HUISSIER DE JUSTICE|huissier de justice/, "« huissier de justice »"],
-  [/\ble 1 [a-zéû]/, "« le 1 » au lieu de « le 1er »"],
+  [/(?:^|[^\d])1 (?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|janv|févr|avr|juil|sept|oct|nov|déc)\b/, "le premier du mois écrit « 1 » au lieu de « 1er »"],
   /* LES TOURNURES QUE LA CONTRE-VÉRIFICATION DU 26 SEPTEMBRE 2026 CITE MOT POUR
      MOT, section 6, « documents du quotidien ». Chacune vient d'une ligne de la
      liste, et le balayage les refuse désormais sur les cent trente-deux
