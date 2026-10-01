@@ -519,8 +519,13 @@ Trente-huit numéros portent le nom sur cette période. Trois relèvent du
 football et sont bien lui, contre deux annoncés jusqu'ici. Les trente-cinq
 autres sont des homonymes : faillites et liquidations d'un négociant de Béja
 nommé Boudjemâa ben Mabrouk, un abus de confiance, un double suicide, des
-courses de chevaux, des condamnations correctionnelles, et la levée de
-suspension d'un joueur d'Oranie, Ben Salah Boudjemaa, licence 13267.
+courses de chevaux et des condamnations correctionnelles. Correction du
+1er octobre 2026 : la levée de suspension de Ben Salah Boudjemaa, licence
+13267, avait été rangée ici comme un homonyme d'Oranie. C'est faux. Elle
+relève du district de la Medjerdah, en Tunisie, et c'est la pièce centrale
+du passage de l'U.S.B. à l'Olympique de Béja. Voir plus bas, l'affaire de
+novembre et décembre 1932. Le mot « Oranie » venait d'une colonne voisine
+tombée dans la même fenêtre de recherche.
 
 Les trois articles de football :
 
@@ -618,6 +623,17 @@ numéro joue pour l'O. Béja contre l'U.S.B. Si c'est lui, il a changé de club
 entre juillet 1932 et janvier 1934, et aucun article ne le raconte. Si c'est
 l'autre, alors il n'a jamais quitté l'U.S.B.
 
+**Révisé le 1er octobre 2026.** Un article le raconte, et il dit le contraire
+de ce qui précède. Le Petit Matin du 26 novembre 1932 publie la décision du
+district de la Medjerdah suspendant deux joueurs de l'Olympique de Béja,
+Kaddour Mohamed, licence 13266, et Boudjemâa ben Salah, licence 13267, au
+motif qu'ils étaient « qualifiés la saison précédente à l'U.S.B. » et qu'ils
+ont « signé et obtenu une licence à l'Olympique de Béja en déclarant : Club
+quitté : néant ». Le changement de maillot est donc établi, daté, et il se
+fait dans le sens U.S.B. vers Olympique, à l'automne 1932, au moment précis
+où le nôtre disparaît des comptes rendus de l'U.S.B. La thèse des deux hommes
+parallèles ne tient plus.
+
 ## La fin de l'Olympique de Béja, 14 mars 1936
 
 Trouvé le 30 septembre 2026 dans l'hebdomadaire Football, qui imprime chaque
@@ -636,15 +652,22 @@ Béjaoise, et parmi eux Kaddour Mohamed, celui qui jouait à côté d'un
 Boudjemaa en 1929, en 1931 et en 1934. Les deux lignes parallèles se
 rejoignent là, le 14 mars 1936, et une seule survit.
 
-Ce que la pièce ne dit pas. Le Boudjemaa de la liste s'appelle Ben Salah.
-Le nôtre s'appelle Ben Mohamed ben Brahim ben El Djilani. Ben Salah Boudjemaa
-est aussi le nom du joueur d'Oranie, licence 13267, dont Le Petit Matin
-suivait la suspension en 1932. Et à la mi-mars 1936 le nôtre est avant-centre
-de l'O.G.C. Nice : L'Auto du 30 avril le dit parti sous les drapeaux en
-Tunisie, pas transféré. Rien ne permet donc de dire que ce Boudjemaa-là soit
-lui, et la virgule manquante après son nom ne change rien à l'affaire : les
-autres noms de la liste sont donnés patronyme puis prénom, ce qui fait quatre
-joueurs.
+Qui est ce Ben Salah Boudjemaa. Corrigé le 1er octobre 2026. C'est le joueur
+à la licence 13267, celui que le district de la Medjerdah avait suspendu le
+26 novembre 1932 avec Kaddour Mohamed pour être passé de l'U.S.B. à l'Olympique
+de Béja en déclarant « Club quitté : néant », et dont le cas fut « définitivement
+tranché » le 30 décembre 1932, qualifié en A à l'Olympique. Il arrive donc dans
+la liste de 1936 par le chemin exactement inverse de celui qu'il avait pris en
+1932.
+
+Reste la question d'identité, et elle n'est pas close. L'acte de décès de Colmar
+donne le nôtre fils de Mohamed, « Ben Mohamed ben Brahim ben El Djilani », qui
+n'est pas un nom de famille mais une filiation, le nom étant Kmiti, ou Lokmiti.
+La liste de 1936 dit fils de Salah. Et à la mi-mars 1936 le nôtre est avant-centre
+de l'O.G.C. Nice : L'Auto du 30 avril 1936 le dit parti sous les drapeaux en
+Tunisie, pas transféré. La virgule manquante après son nom ne change rien :
+les autres noms de la liste sont donnés patronyme puis prénom, ce qui fait
+quatre joueurs.
 
 Ce qu'elle apporte quand même, et c'est la réponse à la question du passage :
 il n'y a pas eu de transfert d'un club à l'autre, il y a eu une disparition.
@@ -787,3 +810,66 @@ il s'agit. Et c'est la seule pièce de tout le dossier qui le donne sous contrat
 dans un club de Béja. Ce club est l'Union Sportive Béjaoise. L'Olympique
 n'existe plus depuis mars 1936, mais il aurait pu revenir ailleurs : il revient
 là. ark bpt6k8392971m.
+
+
+## L'affaire des licences de novembre et décembre 1932
+
+Trouvée le 1er octobre 2026, après le dépouillement des 3 181 numéros du Petit
+Matin numérisés par Gallica, interrogés un par un sur Boudjemaa et Boujemaa.
+Cent quarante-quatre numéros portent le nom. Trois racontent la même affaire.
+
+**26 novembre 1932, page 7**, rubrique « F.F.F.A. - Ligue de Tunisie »,
+District de la Medjerdah :
+
+« Suspension. - Les joueurs de l'Olympique de Béja dont les noms suivent sont
+suspendus jusqu'à décision à venir : Kaddour Mohamed, licence n. 13266 ;
+Boudjemâa ben Salah, licence n. 13267. Motif de la suspension : Ces deux
+joueurs ont été qualifiés la saison précédente à l'U.S.B. ; ils ne pouvaient
+donc obtenir cette saison qu'une licence B. Ils ont en outre signé et obtenu
+une licence à l'Olympique de Béja en déclarant : « Club quitté : néant ». »
+
+**3 décembre 1932, page 7**, District Medjerdah :
+
+« Convocation. - Les joueurs dont les noms suivent devront se présenter le
+samedi 3 décembre 1932 à Souk-el-Arba par-devant le bureau du district de la
+Medjerdah qui tiendra sa réunion en cette ville au contrôle civil, à 16 heures :
+Martini François ; Leto Carlo, Perrera Jean de l'USK, Kaddour Mohamed, licence
+13266 ; Boudjemaa ben Salah, licence 13267 ; Gharbi Khemais, licence 29817 ;
+Bouzid Allala, licence 29810 de l'OB. »
+
+**30 décembre 1932, page 5**, District de la Medjerdah :
+
+« Levée de suspension. - Le joueur Ben Salah Boudjemaa, licence 13267 étant
+régulièrement qualifié en A à l'Olympique de Béja, le cas de ce joueur se
+trouve définitivement tranché. »
+
+### Ce que cela change
+
+Le passage d'un club à l'autre n'est plus une hypothèse : il est daté, motivé
+et sanctionné. À l'automne 1932, deux joueurs quittent l'Union Sportive
+Béjaoise pour l'Olympique de Béja en déclarant sur leur demande de licence
+qu'ils ne quittaient aucun club. Ils sont suspendus le 26 novembre, convoqués
+le 3 décembre devant le bureau du district à Souk-el-Arba, et le cas de
+Boudjemaa est tranché le 30 décembre : il est qualifié en A à l'Olympique.
+
+L'un des deux est Kaddour Mohamed, celui qui joue à côté d'un Boudjemaa en
+1929, en 1931 et en 1934, et qui sera versé à l'U.S.B. en 1936 à la dissolution
+de l'Olympique. L'autre porte le même nom et la même filiation que le
+Boudjemaa de la liste de 1936 : Ben Salah, licence 13267. Les deux hommes font
+le même chemin, ensemble, à l'aller en 1932 et au retour en 1936.
+
+Et la date tombe juste. Le nôtre joue à l'U.S.B. le 17 mars, le 20 juin, le
+23 juillet 1932, puis plus rien sous ce maillot. L'Olympique l'aligne ensuite.
+
+### Ce qui n'est toujours pas prouvé
+
+Que le licencié 13267 soit lui. L'acte de décès de Colmar le dit fils de
+Mohamed, la Ligue de Tunisie dit fils de Salah. Tant qu'une pièce ne donne pas
+son numéro de licence à côté de son nom complet, ou son nom de famille, Kmiti,
+la coïncidence reste une coïncidence, même très serrée.
+
+Ce que l'auteur a entendu dire, une affaire de double signature en Tunisie
+impliquant le Club Africain, n'est pas cette affaire-ci : ici il n'y a pas
+deux signatures mais une fausse déclaration, et le club est l'Olympique de
+Béja, pas le Club Africain. Le Club Africain apparaît ailleurs, dans la levée
+de suspension du 12 janvier 1934. Les deux pistes restent à joindre.
