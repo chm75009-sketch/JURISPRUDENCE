@@ -873,3 +873,67 @@ impliquant le Club Africain, n'est pas cette affaire-ci : ici il n'y a pas
 deux signatures mais une fausse déclaration, et le club est l'Olympique de
 Béja, pas le Club Africain. Le Club Africain apparaît ailleurs, dans la levée
 de suspension du 12 janvier 1934. Les deux pistes restent à joindre.
+
+## Le Club Africain : ce que les archives donnent, et ce qu'elles ne donnent pas
+
+Vérification du 1er octobre 2026, après deux balayages complets.
+
+Ce qui existe. Une seule ligne, dans Le Petit Matin du 12 janvier 1934, page 5 :
+« LEVEE DE SUSPENSION. Le sursis ayant été appliqué au joueur Boujemaa
+Mohamed, du Club Africain, sa suspension effective est levée à la date de ce
+jour. » Il y a donc bien eu un joueur nommé Boujemaa Mohamed, licencié au Club
+Africain de Tunis, suspendu puis relevé en janvier 1934. La sanction est
+établie ; son motif ne l'est pas.
+
+Ce qui n'existe pas dans les fonds numérisés. La décision que cette ligne
+lève. Les 182 numéros du Petit Matin de la saison 1933-1934 que porte Gallica,
+du 1er août 1933 au 7 mars 1934, ont été interrogés sur suspension, suspendu
+et licences : la seule mention d'un Boujemaa au Club Africain est celle du
+12 janvier 1934. Les 3 181 numéros du journal et les 1 025 numéros de
+l'hebdomadaire Football ont par ailleurs été passés aux mots Boudjemaa et
+Boujemaa, un par un. Rien d'autre.
+
+Ce qui plaide pour que ce soit lui. Les listes de licences de la Fédération
+l'appellent exactement ainsi : « O. G. C. Nice. - Boudjemaa Mohamed »
+(Football, 15 juillet 1936), « Boudjemaa Mohamed, Restaurant Rondier, 16, rue
+du Théâtre, Saint-Étienne » (8 juin 1938), « Boudjemaa Mohamed, 6, rue Morel »
+(7 juin 1939).
+
+Ce qui plaide contre. La Ligue de Tunisie, pour le joueur de Béja, écrit
+« Boudjemâa ben Salah », licence 13267, c'est-à-dire fils de Salah. Les deux
+formes ne se recouvrent pas. Et quatre jours après la levée du 12 janvier
+1934, un Boudjemaa joue le derby de Béja sous le maillot de l'Olympique : s'il
+était licencié au Club Africain de Tunis, ce n'est pas lui.
+
+Conclusion provisoire. L'affaire de double signature que rapporte l'auteur
+n'est pas celle de novembre et décembre 1932, qui est une fausse déclaration
+entre l'U.S.B. et l'Olympique de Béja. Il reste une sanction au Club Africain,
+attestée par sa seule levée. Pour la relier à lui il faut autre chose que
+Gallica : le livre de Khélil Chaïbi, les archives du Club Africain, ou La
+Dépêche tunisienne sur microfilm à la Bibliothèque nationale de France, cote
+MFILM JO-5914.
+
+## Football, l'hebdomadaire : dépouillement complet
+
+Les 1 025 numéros numérisés de 1930 à 1942 ont été interrogés un par un sur
+Boudjemaa et Boujemaa. Quarante-huit portent le nom. La moitié était déjà au
+répertoire. Seize entrées nouvelles y sont versées, du 17 décembre 1931 au
+21 juin 1939.
+
+La plus belle est celle du 25 novembre 1936, page 6, sous le titre « Toujours
+Boudjemaa ! » :
+
+« Par ailleurs, il y a toujours Boudjemaa, le versatile Boudjemaa qui purge sa
+peine sur sa terre d'Afrique et qui, navré et impatient, met en tête de ses
+lettres, quand il écrit à Me Tanzi : « Cher père... » Un mot, un signe de
+Me Tanzi, et Boudjemaa revient à Nice à tire d'aile et se présente soumis et
+repentant. »
+
+Me Tanzi est le président de l'O.G.C. Nice. C'est la seule phrase de tout le
+dossier qui dise comment il s'adressait à quelqu'un.
+
+Trois autres méritent d'être signalées. Le 23 septembre 1936, page 9, l'appel
+de l'A.S. Saint-Étienne contre la décision du 3 septembre sur sa qualification.
+Le 23 décembre 1936, page 8, cette ligne de procès-verbal : « Lettre du joueur
+Boudjemaa. - Classée. » Et le 27 octobre 1937, page 11, une « Affaire
+Boudjemaa contre V[...] » dont l'objet reste à lire.
