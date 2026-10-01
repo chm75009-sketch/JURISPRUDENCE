@@ -726,3 +726,64 @@ Brasserie du Phénix. M. Benmussa, le Président de l'Olympique, fut éloquent. 
 Les matchs de l'Olympique contre Tabarka en 1929 sont donc trois, et non deux :
 le 16 mai à Tabarka (défaite 4-1), le 2 juin à Béja (1-1), et celui que raconte
 le numéro du 26 juin (défaite 4-1). ark bpt6k83913309.
+
+## Le balayage des clubs de Béja dans Gallica, 1er octobre 2026
+
+Toutes les formes du nom des deux clubs ont été cherchées en recherche de
+phrase sur l'ensemble de Gallica, accentuées et non accentuées : « Sportive
+Bejaoise », « U. S. Bejaoise », « US Bejaoise », « Olympique de Beja »,
+« Olympique Bejaois », « O. Beja », « equipe de Beja ». Cela fait 339 numéros
+entre 1925 et 1942, tous interrogés sur Boudjema, Boudjemaa, Boujemaa,
+Boujemaâ, Bordjema et Kmiti. C'est le corpus complet de Gallica sur le
+football béjaois.
+
+Cinquante-sept numéros portent une de ces formes. La plupart sont des
+homonymes des faits divers, et il faut le dire chaque fois : « Amira ben
+Boudjemaa est un disciple de Bacchus, peu commode » n'est pas lui mais un
+ivrogne de Biskra (La Dépêche de Constantine, 31 octobre 1934, page 6) ;
+« Boudjemaa ben Amara », « Salah Boudjemaa ben Ahmed », « Lauadri Atia ben
+Boudjemaa », « Henicha bent Boujemaa Salah » non plus. Restent quatre pièces
+neuves.
+
+### 12 janvier 1934, et le Club Africain
+
+Le Petit Matin du 12 janvier 1934, page 5, imprime coup sur coup deux
+communiqués de la Ligue. D'abord le derby : « CHAMPIONNAT DE LA MEDJERDAH.
+Olympique de Béja-US Béja à 14 h. 30 à Béja. P.M. USB ; arbitre : M. Hassid
+de Tunis. » Puis : « LEVEE DE SUSPENSION. Le sursis ayant été appliqué au
+joueur Boujemaa Mohamed, du Club Africain, sa suspension effective est levée
+à la date de ce jour. »
+
+Un Boujemaa Mohamed joue au Club Africain de Tunis en janvier 1934. C'est le
+club que la seule source tunisienne de son nom, Khélil Chaïbi dans Les Gloires
+du Club Africain, met derrière Boujemaa Kmiti. C'est une piste, rien de plus :
+le même mois, un Boudjemaa joue le derby à Béja, et aucune pièce ne relie les
+deux. Il faudra le livre de Chaïbi pour trancher.
+
+### Septembre 1936, l'été de la rupture avec Nice
+
+Football du 9 septembre 1936, page 4 : « BOUDJEMAA, le fantasque avant-centre
+des « Aiglons » niçois, dont on était sans nouvelles depuis quelques jours, se
+trouve actuellement à Béja où il attend que soit terminée sa suspension. Il a
+déclaré à un de nos amis, M. Ducousso, ne plus vouloir retourner à Nice. »
+
+Football du 16 septembre 1936, page 5 : « Vous préférez savoir que Lauri est
+enfin qualifié pour Sochaux et que Boudjemaa, dont on avait perdu toute trace,
+se trouve dans son charmant petit bled de Béja où il rêve encore aux 120
+billets de 100 francs que lui aligna un beau jour de l'été un « monsieur bien
+mis ». »
+
+Douze mille francs. C'est le seul chiffre que la presse ait donné sur ce qu'il
+a touché dans l'affaire des deux licences.
+
+### 20 novembre 1941 : il signe à l'Union Sportive Béjaoise
+
+Le Petit Matin du 20 novembre 1941, page 2, rubrique « PETITES NOUVELLES
+SPORTIVES » : « Boudjemaâ un des meilleurs footballeurs tunisiens, a signé
+cette saison à l'Union sportive Béjaoise. »
+
+Ni prénom, ni club d'origine, ni explication : à Tunis en 1941, on sait de qui
+il s'agit. Et c'est la seule pièce de tout le dossier qui le donne sous contrat
+dans un club de Béja. Ce club est l'Union Sportive Béjaoise. L'Olympique
+n'existe plus depuis mars 1936, mais il aurait pu revenir ailleurs : il revient
+là. ark bpt6k8392971m.
