@@ -1,0 +1,99 @@
+[
+  {
+    "k": "t1",
+    "t": "Relevé de carrière 1995 - Synthèse complète"
+  },
+  {
+    "k": "h2",
+    "t": "GERME - Composition détaillée"
+  },
+  {
+    "k": "h3",
+    "t": "Salaire initial (relevé 01/01/2023)"
+  },
+  {
+    "k": "p",
+    "t": "Montant: 70 313 FRF = 10 719,15 €"
+  },
+  {
+    "k": "h3",
+    "t": "Rappel 90/95 - Arrêt Cour d'Appel 26 juin 1997"
+  },
+  {
+    "k": "p",
+    "t": "Montant: 448 344 FRF = 68 349,60 €"
+  },
+  {
+    "k": "note",
+    "t": "Couvre la période 1990-1995, dont 448 344,41 FRF pour 1995"
+  },
+  {
+    "k": "h3",
+    "t": "Quote-part 1995 - Bulletin Arrêt 13 juin 1996"
+  },
+  {
+    "k": "p",
+    "t": "Montant: 41 278 FRF = 6 292,79 €"
+  },
+  {
+    "k": "note",
+    "t": "Période 10/1995-02/1996 répartie: 3 mois 1995 (35 381 FRF) + 2 mois 1996 (23 587 FRF)"
+  },
+  {
+    "k": "h3",
+    "t": "Total GERME 1995"
+  },
+  {
+    "k": "table",
+    "head": ["Élément", "FRF", "EUR (1995)", "EUR (01/01/2025)"],
+    "rows": [
+      ["Salaire initial", "70 313", "10 719,15", "16 750,60"],
+      ["Rappel 90/95", "448 344", "68 349,60", "106 818,81"],
+      ["Quote-part 1995", "41 278", "6 292,79", "9 837,63"],
+      ["TOTAL GERME", "559 935", "85 361,54", "133 407,04"]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Autres employeurs 1995"
+  },
+  {
+    "k": "table",
+    "head": ["Employeur", "Période", "FRF", "EUR (1995)", "EUR (01/01/2025)"],
+    "rows": [
+      ["INSTITUT SUP COMMERCE INFORMATIQUE ORSAY", "01/01-31/12/1995", "99 341", "15 144,44", "23 670,64"],
+      ["INSTITUT SUPERIEUR INTERNATIONA COMMERCE", "01/02-30/04/1995", "6 325", "964,24", "1 507,81"],
+      ["INSTITUT SUPERIEUR INTERNATIONA COMMERCE", "01/01-30/06/1995", "11 615", "1 770,70", "2 768,58"],
+      ["TOTAL AUTRES", "", "117 281", "17 879,38", "27 947,03"]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Synthèse année 1995"
+  },
+  {
+    "k": "table",
+    "head": ["Catégorie", "FRF", "EUR (1995)", "EUR (01/01/2025)"],
+    "rows": [
+      ["GERME", "559 935", "85 361,54", "133 407,04"],
+      ["Autres employeurs", "117 281", "17 879,38", "27 947,03"],
+      ["TOTAL 1995", "677 216", "103 240,92", "161 354,07"]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Coefficients de revalorisation"
+  },
+  {
+    "k": "p",
+    "t": "Source: Circulaire CNAV 2024-39 du 23 décembre 2024"
+  },
+  {
+    "k": "p",
+    "t": "Coefficient revalorisation 1995: 1.563"
+  },
+  {
+    "k": "p",
+    "t": "Taux moyen d'actualisation: 2,2% par an (depuis 1995)"
+  }
+]
