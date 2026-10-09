@@ -116,6 +116,54 @@
     return x;
   }
 
+  function moisPlus(d, n) {
+    var x = d instanceof Date ? new Date(d.getTime()) : new Date(d);
+    if (isNaN(x)) return null;
+    x.setMonth(x.getMonth() + n);
+    return x;
+  }
+
+  /* UNE DATE DÉJÀ SAISIE NE SE REDEMANDE PAS. Les lettres des cinq formalités
+     portaient toutes « Fait le [DATE] » alors que la date de chaque formalité
+     est déjà connue (avis du comité, affichage, dépôt, communication). Elle s'y
+     reporte ; le crochet ne reste que là où rien n'a été saisi. Le numéro de
+     récépissé, de procès-verbal ou l'accusé de réception, eux, restent à la
+     main : l'application ne les connaît pas. Demande du 9 octobre 2026. */
+  function jourOuCrochet(v) {
+    var x = String(v == null ? "" : v).trim();
+    if (!x) return "[DATE]";
+    var d = new Date(x);
+    return isNaN(d) ? "[DATE]" : leJour(d);
+  }
+
+  /* LA DATE D'ENTRÉE EN VIGUEUR SE CALCULE, ELLE NE SE DEMANDE PLUS.
+
+     L'article 28 gardait son crochet tant que l'utilisateur n'avait pas tapé
+     une date d'entrée en vigueur à la main, alors que les deux dates qui la
+     commandent, la publicité (affichage) et le dépôt au greffe, sont déjà
+     saisies aux étapes 3 et 4. On la calcule donc : un mois après la dernière
+     en date des deux formalités (L. 1321-4 ; R. 1321-3), plus une marge de
+     sécurité de quelques jours, parce que « postérieure d'un mois » veut dire
+     après le terme, pas le jour même. La date saisie à la main, si elle
+     existe, l'emporte toujours. Demande du 9 octobre 2026. */
+  var MARGE_VIGUEUR = 3;
+  function vigueurCalc(donnees) {
+    var D = donnees || {};
+    var dv = String(D.dateEntreeVigueur || "").trim();
+    if (dv) {
+      var dd = new Date(dv);
+      return isNaN(dd) ? { date: null, saisie: false } : { date: dd, saisie: true };
+    }
+    var f = [String(D.datePublicite || "").trim(), String(D.dateDepotGreffe || "").trim()]
+      .filter(Boolean).sort();
+    if (!f.length) return { date: null, saisie: false };
+    var derniere = new Date(f[f.length - 1]);
+    if (isNaN(derniere)) return { date: null, saisie: false };
+    var mini = moisPlus(derniere, 1);
+    return { date: dans(mini, MARGE_VIGUEUR), saisie: false,
+             derniere: derniere, mini: mini, marge: MARGE_VIGUEUR };
+  }
+
   /* L'en-tête commun : qui écrit, à quelle date, sur quel fondement. */
   /* L'EN-TÊTE DE L'ENTREPRISE, LES SEPT LIGNES DE LA FICHE D'ACCUEIL.
 
@@ -1305,8 +1353,9 @@
       var dPub = String((ctx.donnees || {}).datePublicite || "").trim();
       var dDep = String((ctx.donnees || {}).dateDepotGreffe || "").trim();
       var derniere = [dPub, dDep].filter(Boolean).sort().pop() || "";
+      var vc = vigueurCalc(ctx.donnees);
       L.push("Le présent règlement entre en vigueur le " +
-        (dv ? leJour(new Date(dv)) : "[DATE D'ENTRÉE EN VIGUEUR]") + ".");
+        (vc.date ? leJour(vc.date) : "[DATE D'ENTRÉE EN VIGUEUR]") + ".");
       /* Chaque moitié de la règle porte sa source, et pas l'autre : depuis la
          version du 28 mai 2026 (LEGIARTI000054140230), L. 1321-4 ne dit plus
          rien du dépôt. Le délai d'un mois est à lui ; son point de départ, qui
@@ -1315,10 +1364,17 @@
       L.push("Cette date doit être postérieure d'un mois à l'accomplissement des");
       L.push("formalités de publicité (L. 1321-4). Le délai court à compter de la");
       L.push("dernière en date des formalités de publicité et de dépôt (R. 1321-3).");
-      if (dv && derniere) {
+      if (!vc.saisie && vc.date) {
+        L.push("");
+        L.push("NOTE - Cette date est calculée : un mois après la dernière des deux");
+        L.push("formalités, accomplie le " + leJour(vc.derniere) + ", soit le " +
+          leJour(dans(vc.mini, 1)) + " au plus tôt, plus " + vc.marge +
+          " jours de marge. Vous pouvez la reculer, jamais l'avancer.");
+      }
+      if (vc.saisie && derniere) {
         var mini = new Date(derniere);
         mini.setMonth(mini.getMonth() + 1);
-        if (new Date(dv) <= mini) {
+        if (vc.date <= mini) {
           L.push("");
           L.push("NOTE - La date ci-dessus n'est pas postérieure d'un mois à la dernière");
           L.push("formalité, accomplie le " + leJour(new Date(derniere)) + " : au plus tôt, le");
@@ -1594,8 +1650,13 @@
           L.push("");
         }
       }
-      L.push("Fait le [DATE]   -   Référence : " +
-        (sansCse ? "[procès-verbal de carence du DATE]" : "[n° du procès-verbal]"));
+      L.push("Fait le " + jourOuCrochet(sansCse ? dCarRi : (ctx.donnees || {}).dateAvisCSE) +
+        "   -   Référence : " +
+        (sansCse
+          ? (/^\d{4}-\d{2}-\d{2}$/.test(dCarRi)
+              ? "procès-verbal de carence du " + leJour(new Date(dCarRi + "T12:00:00"))
+              : "[procès-verbal de carence du DATE]")
+          : "[n° du procès-verbal]"));
       L.push("");
       L.push("  Le document de cette étape :");
       L.push("");
@@ -1764,7 +1825,8 @@
       L.push("contre émargement valent aussi, pourvu que vous puissiez en établir la");
       L.push("date. C'est cette date, avec celle du dépôt, qui fait courir le mois.");
       L.push("");
-      L.push("Fait le [DATE]   -   Moyen : [AFFICHAGE, INTRANET, REMISE CONTRE ÉMARGEMENT]");
+      L.push("Fait le " + jourOuCrochet((ctx.donnees || {}).datePublicite) +
+        "   -   Moyen : [AFFICHAGE, INTRANET, REMISE CONTRE ÉMARGEMENT]");
       L.push("");
       L.push("  Le document de cette étape :");
       L.push("");
@@ -1825,9 +1887,9 @@
          dans la note au personnel, dans la lettre à l'inspecteur et dans le
          relevé : le dirigeant devait la recopier trois fois, et le document
          qu'il envoyait portait un crochet. Relevé le 29 septembre 2026. */
-      var dvNote = String((ctx.donnees || {}).dateEntreeVigueur || "").trim();
+      var vcNote = vigueurCalc(ctx.donnees);
       L.push("Il entrera en vigueur le " +
-        (dvNote ? leJour(new Date(dvNote)) : "[DATE D'ENTRÉE EN VIGUEUR]") + ", soit un mois après");
+        (vcNote.date ? leJour(vcNote.date) : "[DATE D'ENTRÉE EN VIGUEUR]") + ", soit un mois après");
       L.push("l'accomplissement des formalités de publicité (L. 1321-4), le délai");
       L.push("courant à compter de la dernière en date des formalités de publicité et");
       L.push("de dépôt (R. 1321-3). Aucune sanction ne peut être fondée sur lui avant");
@@ -1846,7 +1908,8 @@
       L.push("l'entreprise ou de l'établissement. Demandez le récépissé : c'est lui qui");
       L.push("date la formalité.");
       L.push("");
-      L.push("Fait le [DATE]   -   Récépissé : [N° DU RÉCÉPISSÉ]");
+      L.push("Fait le " + jourOuCrochet((ctx.donnees || {}).dateDepotGreffe) +
+        "   -   Récépissé : [N° DU RÉCÉPISSÉ]");
       L.push("");
       L.push("  Le document de cette étape :");
       L.push("");
@@ -1929,7 +1992,8 @@
         L.push("Chez vous, c'est l'avis du comité, rendu à l'étape 1.");
       }
       L.push("");
-      L.push("Fait le [DATE]   -   Accusé de réception : [N° OU DATE]");
+      L.push("Fait le " + jourOuCrochet((ctx.donnees || {}).dateCommunicationInspection) +
+        "   -   Accusé de réception : [N° OU DATE]");
       L.push("");
       L.push("  Le document de cette étape :");
       L.push("");
@@ -2020,8 +2084,8 @@
       L.push("Reportez la date retenue à l'article 28 du règlement, et dans la note");
       L.push("d'information de l'étape 2.");
       L.push("");
-      var dvFin = String((ctx.donnees || {}).dateEntreeVigueur || "").trim();
-      L.push("Fait le " + (dvFin ? leJour(new Date(dvFin)) : "[DATE D'ENTRÉE EN VIGUEUR]"));
+      var vcFin = vigueurCalc(ctx.donnees);
+      L.push("Fait le " + (vcFin.date ? leJour(vcFin.date) : "[DATE D'ENTRÉE EN VIGUEUR]"));
       L.push("");
       L.push("Aucun document à envoyer : cette étape se constate, elle ne s'accomplit");
       L.push("pas.");
@@ -2051,7 +2115,10 @@
              " | [récépissé n°]");
       L.push("4. Communication à l'inspecteur, deux exemplaires (R. 1321-4) | " +
              jr(D.dateCommunicationInspection) + " | [accusé de réception]");
-      L.push("5. Entrée en vigueur, un mois après (R. 1321-3) | " + jr(D.dateEntreeVigueur) + " | ");
+      var vcRel = vigueurCalc(D);
+      L.push("5. Entrée en vigueur, un mois après (R. 1321-3) | " +
+             (vcRel.date ? leJour(vcRel.date) : "[DATE]") +
+             (vcRel.date && !vcRel.saisie ? " (calculée)" : "") + " | ");
       L.push("");
       L.push("NOTE - Sans ces dates, vous ne pouvez pas prouver que le règlement était");
       L.push("en vigueur le jour où vous avez prononcé une sanction. C'est la dernière");
