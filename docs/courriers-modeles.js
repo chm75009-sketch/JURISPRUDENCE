@@ -40,6 +40,7 @@
   /* Les familles, dans l'ordre où elles s'affichent. */
   var FAMILLES = [
     { cle: "client", nom: "Client", sous: "Devis, relances, litiges, tarifs" },
+    { cle: "transport", nom: "Transport", sous: "Avarie, réserves, action en paiement, rétention, licence" },
     { cle: "fournisseur", nom: "Fournisseur", sous: "Commandes, factures, retards, résiliation" },
     { cle: "salarie", nom: "Salarié", sous: "Gestion courante, congés, attestations" },
     { cle: "fisc", nom: "Impôts", sous: "Délais, réclamations, contrôle" },
