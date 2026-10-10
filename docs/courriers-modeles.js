@@ -47,6 +47,7 @@
     { cle: "urssaf", nom: "URSSAF", sous: "Délais, majorations, contestation" },
     { cle: "assurance", nom: "Assurance", sous: "Sinistres, garanties, résiliation" },
     { cle: "banque", nom: "Banque", sous: "Financement, frais, incidents" },
+    { cle: "mairie", nom: "Mairie et préfecture", sous: "Stationnement, livraison, fourrière" },
   ];
 
   var M = [];
