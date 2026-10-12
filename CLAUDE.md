@@ -509,6 +509,38 @@ ramène des décisions sans rapport avec la recherche.
 - Le secret client PISTE ne vit que dans les variables d'environnement Netlify
   (`PISTE_CLIENT_ID`, `PISTE_CLIENT_SECRET`). Ne jamais le demander ni l'afficher.
 
+### Les 160 euros et la clé Anthropic - à reprendre
+
+Noté le 10 octobre 2026, pour le reprendre plus tard. L'utilisatrice a signalé
+que quelqu'un avait consommé 160 euros sur le compte Anthropic, et demandé si on
+était piraté.
+
+Ce qui a été vérifié ce jour-là, au compte Netlify `jurisprudence-recherche`
+(identifiant `25d7eec6-bcc2-4b88-94d3-80ce351eb926`) :
+
+- Il n'y a plus aucune variable `ANTHROPIC_API_KEY` dans Netlify, seulement
+  `PISTE_CLIENT_ID` et `PISTE_CLIENT_SECRET`. Or le relais
+  `netlify/functions/assistant.mjs` rend `503 { erreur: "cle-absente" }` quand
+  cette clé manque (ligne 74 à 76). Le relais ne peut donc rien dépenser en
+  l'état : la fuite est arrêtée, que la clé ait été retirée après coup ou jamais
+  posée.
+- Le compte Netlify, et donc très probablement le compte Anthropic qui porte la
+  clé et la facture des 160 euros, est au nom de **mounirch009@gmail.com** (c'est
+  lui qui a posé les variables PISTE le 10 août 2026), pas de l'adresse Léa
+  `chikhaoui.lea@gmail.com`. Se connecter à Anthropic avec l'adresse Léa ouvre un
+  compte neuf et vide, d'où l'écran « Comment utiliserez-vous la Claude API ? »
+  qui revenait en boucle.
+- Les données de TEC (registre, dossier chiffré) n'ont jamais été exposées : le
+  relais ne touche qu'à l'API Anthropic, le dossier reste dans le navigateur
+  derrière le mot de passe.
+
+Ce qui reste à faire, avec mounirch009@gmail.com : aller sur
+`console.anthropic.com` (par un onglet privé, pour forcer la vraie connexion et
+ne pas retomber sur le compte vide), supprimer l'ancienne clé API, en créer une
+neuve si l'application doit s'en servir, et poser une limite de dépenses. Il faut
+le mot de passe de ce compte ; si l'utilisatrice ne l'a pas, c'est Mounir qui
+fait l'étape.
+
 ## Où le travail est publié - trois adresses, et c'est moi qui les ai faites
 
 Posé le 26 septembre 2026, parce que je l'avais oublié et que j'ai répondu ce
