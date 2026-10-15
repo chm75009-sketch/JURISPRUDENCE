@@ -92,6 +92,10 @@
   <p class="aide">Non = le document rempli s'ouvre. Oui = vous déposez le vôtre et il est
     contrôlé, ou, quand aucun contrôle n'existe encore, votre réponse est seulement notée ici.</p>
 
+  <!-- Recherche rapide : même barre qu'à l'accueil, pour sauter droit au bon
+       écran sans revenir en arrière. Ajoutée le 15 octobre 2026. -->
+  <div id="recherche-rapide"></div>
+
   <div id="liste"></div>
 
   <div id="conv"></div>
@@ -356,5 +360,6 @@
   $("btn-maj").addEventListener("click", function () { location.reload(); });
 })();
 </script>
+<script src="recherche-rapide.js" defer></script>
 </body>
 </html>
