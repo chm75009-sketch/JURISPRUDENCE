@@ -212,6 +212,11 @@
     <div class="rappel">
       <div class="texte"><b id="rail-ent"></b> <span id="rail-ent-txt"></span></div>
     </div>
+    <!-- RECHERCHE RAPIDE : un mot ou une phrase mène droit au bon écran.
+         Tout se calcule dans le navigateur, sans serveur, hors ligne.
+         Demandée par le client le 15 octobre 2026. Le code est dans
+         recherche-rapide.js, l'index des destinations y est tenu à jour. -->
+    <div id="recherche-rapide"></div>
     <!-- CE QUI EST À FAIRE CETTE SEMAINE, AVANT LES BOUTONS.
          L'accueil offrait cinq portes et aucune date : le dirigeant n'avait
          nulle part une liste de ce qui vient. Ce bloc ramasse les échéances
@@ -1017,6 +1022,7 @@
   $("btn-maj").addEventListener("click", function () { location.reload(); });
 })();
 </script>
+<script src="recherche-rapide.js" defer></script>
 <script src="assistant.js" defer></script>
 </body>
 </html>
