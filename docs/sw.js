@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-13.39";
+const CACHE = "jurisprudence-13.40";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -179,7 +179,7 @@ const ESSENTIELS = [
      pièces déposées, le bouton d'installation, le lecteur de tableaux, le
      carnet, la convention, le bloc de signature, les modèles de courriers. */
   "./controler.html",
-  "./barre.js", "./champ-fichier.js", "./base-documents.js", "./installer.js", "./lire-tableau.js",
+  "./barre.js", "./champ-fichier.js", "./base-documents.js", "./exporter-dossier.js", "./installer.js", "./lire-tableau.js",
   "./carnet.js", "./convention.js", "./signataire-piece.js", "./courriers-modeles-3.js",
   "./textes-penal.js", "./textes-documents.json",
   /* La lecture des PDF déposés : sans ces deux-là, un dépôt de PDF hors

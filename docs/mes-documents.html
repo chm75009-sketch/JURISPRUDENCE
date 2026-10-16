@@ -77,6 +77,27 @@
   <p class="rappel-fiche" id="chapeau">Ce que vous avez déposé et ce que l'application a produit,
     gardés sur ce poste, rubrique par rubrique.</p>
 
+  <!-- EXPORTER LE DOSSIER POUR LE SITE DU CLIENT.
+       Les documents vivent sur ce poste ; ils ne passent pas tout seuls sur le
+       téléphone du client. Ce bouton les rassemble tous dans un seul fichier
+       chiffré, dossier-tec.js, à transmettre pour mettre à jour son dossier.
+       Demandé le 16 octobre 2026. Le code est dans exporter-dossier.js. -->
+  <style>
+    .exporter-bloc{margin:14px 0 6px;padding:14px;border:1px solid var(--filet);
+      border-radius:var(--r2,12px);background:var(--surface)}
+    .exporter-bloc #exporter-dossier{min-height:48px}
+    .exporter-bloc .exp-aide{color:var(--texte-2);font-size:14px;margin:8px 0 0}
+    .exporter-bloc .exp-etat{font-size:14px;margin:8px 0 0;color:var(--texte-2)}
+    .exporter-bloc .exp-etat.exp-err{color:var(--rouge,#8E1B1B)}
+  </style>
+  <div class="exporter-bloc">
+    <button type="button" class="second" id="exporter-dossier">Exporter mon dossier pour le client</button>
+    <p class="exp-aide">Tous vos documents dans un seul fichier chiffré à transmettre, pour que
+      le client retrouve les mêmes dans son application. Le mot de passe demandé est celui qu'il
+      utilise pour ouvrir la sienne.</p>
+    <p class="exp-etat" id="exporter-etat" aria-live="polite"></p>
+  </div>
+
   <!-- CHERCHER PAR CE QU'ON CHERCHE : UN NOM, UNE PLAQUE.
        La liste était rangée par rubrique, et rien d'autre : retrouver les
        trois documents d'un conducteur demandait de parcourir douze rubriques.
@@ -101,6 +122,7 @@
 
 <script src="droits.js"></script>
 <script src="base-documents.js"></script>
+<script src="exporter-dossier.js" defer></script>
 <!-- Le lecteur de classeur et le rendu de tableau de l'aperçu : c'est avec eux
      qu'un .xlsx déposé se regarde ici au lieu de renvoyer au téléchargement. -->
 <script src="lire-classeur.js"></script>
