@@ -120,14 +120,23 @@
       });
   }
 
-  function telecharger(obj) {
-    var txt = "/* Le dossier de la SARL TEC, chiffré. Illisible sans le mot de passe. */\n" +
+  /* LE FICHIER SORT EN .txt, JAMAIS EN .js.
+
+     Sur iPhone, un téléchargement « .js » était happé par une application
+     (Pages), qui le réécrivait et cassait le dossier. Un « .txt » reste un
+     texte que le téléphone ne transforme pas ; il est rechargé tel quel côté
+     client, le nom n'a aucune importance pour la lecture. */
+  function texteDe(obj) {
+    return "/* Le dossier de la SARL TEC, chiffré. Illisible sans le mot de passe. */\n" +
       "window.DOSSIER_CHIFFRE = " + JSON.stringify(obj) + ";\n";
-    var blob = new Blob([txt], { type: "application/javascript" });
+  }
+
+  function telechargerFichier(txt) {
+    var blob = new Blob([txt], { type: "text/plain" });
     var url = window.URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download = "dossier-tec.js";
+    a.download = "dossier-tec.txt";
     a.setAttribute("data-sans-base", "1");   /* un fichier qui SORT ne rentre pas dans la base */
     document.body.appendChild(a);
     a.click();
@@ -135,7 +144,28 @@
     window.setTimeout(function () { window.URL.revokeObjectURL(url); }, 2000);
   }
 
-  function exporter(bouton, etat) {
+  /* L'ENVOI SE FAIT SUR UN SECOND GESTE.
+
+     Le partage natif d'iOS (le menu « Envoyer ») exige d'être appelé dans le
+     geste même de l'utilisateur. Or le chiffrement prend une seconde : le
+     geste du premier bouton est déjà « consommé » quand il finit, et iOS
+     refuse alors de partager. On prépare donc le fichier au premier bouton,
+     puis un second bouton, touché à son tour, ouvre le menu d'envoi (ou, à
+     défaut de partage, télécharge le .txt). */
+  function livrer(txt, etat) {
+    var fichier = null;
+    try { fichier = new File([txt], "dossier-tec.txt", { type: "text/plain" }); } catch (e) { fichier = null; }
+    if (fichier && navigator.share && navigator.canShare && navigator.canShare({ files: [fichier] })) {
+      navigator.share({ files: [fichier], title: "Dossier TEC" })
+        .then(function () { etat("Fichier envoyé. Transmettez-le pour mettre à jour le dossier du client."); })
+        .catch(function () { telechargerFichier(txt); etat("Fichier dossier-tec.txt enregistré. Dans Fichiers, envoyez-le sans l'ouvrir dans une autre application."); });
+    } else {
+      telechargerFichier(txt);
+      etat("Fichier dossier-tec.txt enregistré. Dans Fichiers → Téléchargements, envoyez-le sans l'ouvrir dans Pages.");
+    }
+  }
+
+  function exporter(bouton, etat, pret) {
     if (!window.crypto || !window.crypto.subtle) {
       etat("Ce navigateur ne sait pas chiffrer le dossier.", true);
       return;
@@ -158,9 +188,7 @@
         clair.documents = pieces;
         etat("Chiffrement de " + pieces.length + " document" + (pieces.length > 1 ? "s" : "") + "...");
         return chiffrer(JSON.stringify(clair), mot).then(function (obj) {
-          telecharger(obj);
-          etat("Fait : " + pieces.length + " document" + (pieces.length > 1 ? "s" : "") +
-            " dans le fichier dossier-tec.js. Envoyez-le pour mettre à jour le dossier du client.");
+          pret(texteDe(obj), pieces.length);
         });
       })
       .catch(function (e) {
@@ -173,12 +201,26 @@
     var bouton = document.getElementById("exporter-dossier");
     if (!bouton) return;
     var zone = document.getElementById("exporter-etat");
+    var envoyer = document.getElementById("exporter-partager");
     function etat(msg, erreur) {
       if (!zone) return;
       zone.textContent = msg;
       zone.className = "exp-etat" + (erreur ? " exp-err" : "");
     }
-    bouton.addEventListener("click", function () { exporter(bouton, etat); });
+    /* Le fichier préparé, en attente du second geste qui l'envoie. */
+    var txtPret = null;
+    function pret(txt, n) {
+      txtPret = txt;
+      etat("Prêt : " + n + " document" + (n > 1 ? "s" : "") + ". Touchez « Envoyer le fichier ».");
+      if (envoyer) { envoyer.hidden = false; envoyer.disabled = false; }
+    }
+    bouton.addEventListener("click", function () { exporter(bouton, etat, pret); });
+    if (envoyer) {
+      envoyer.addEventListener("click", function () {
+        if (!txtPret) { etat("Préparez d'abord l'export.", true); return; }
+        livrer(txtPret, etat);
+      });
+    }
   }
 
   if (document.readyState === "loading") {
