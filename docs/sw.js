@@ -12,7 +12,7 @@
 
 /* Le nom du cache porte la version : un changement de version écarte
    automatiquement l'ancien contenu. */
-const CACHE = "jurisprudence-13.42";
+const CACHE = "jurisprudence-13.43";
 const ESSENTIELS = [
   "./", "./index.html", "./auditer.html", "./gerer.html", "./recherche.html", "./manifest.json",
   /* La feuille de style de toute l'application : sans elle hors connexion,
@@ -44,7 +44,7 @@ const ESSENTIELS = [
   "./agenda.html",
   /* Le contrôle URSSAF : rétroplanning, pièces à cocher, désignation du
      mandataire et repères de fond, tout calculé et gardé sur le poste. */
-  "./controle-urssaf.html", "./controle-urssaf.js",
+  "./controle-urssaf.html", "./controle-urssaf.js", "./rappel-urssaf.js",
   /* L'agenda lit aussi les échéances de la flotte : son fichier est listé plus bas. */
   /* Le générateur de documents des relations collectives : autonome, tout est dans la page. */
   "./documents.html",
