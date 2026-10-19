@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contrôle URSSAF</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16181d">
+<link rel="stylesheet" href="style.css">
+<script src="version.js"></script>
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+
+<!--
+  Le contrôle URSSAF de TEC, dans Gérer. Un écran qui fait agir :
+  le rétroplanning avec le compte à rebours, les pièces à cocher,
+  la désignation du mandataire à produire, puis les repères de fond
+  et de procédure. Tout se tient sur le poste, rien n'est envoyé.
+  Les cases cochées et le texte du mandat vivent dans le stockage
+  local du navigateur.
+-->
+
+<style>
+  main.wrap{max-width:760px}
+  .bandeau{background:var(--creux);border:1px solid var(--filet);border-radius:12px;padding:14px 16px;margin:12px 0 6px}
+  .bandeau h2{margin:0 0 8px;font:600 16px/1.3 system-ui}
+  .bandeau dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:14px}
+  .bandeau dt{color:var(--texte-2)}
+  .bandeau dd{margin:0;font-weight:600}
+
+  .compte{display:flex;align-items:center;gap:14px;background:var(--ambre-clair);border:1px solid var(--ambre);
+    border-radius:12px;padding:14px 16px;margin:14px 0}
+  .compte .j{font:800 34px/1 system-ui;color:var(--ambre)}
+  .compte .q{font-size:14px;line-height:1.4}
+
+  .etape{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--filet)}
+  .etape:last-child{border-bottom:0}
+  .etape .d{flex:none;width:92px;font:600 13px/1.3 system-ui;color:var(--accent)}
+  .etape .t{font-size:14px;line-height:1.45}
+  .etape.passe .d{color:var(--texte-2)}
+
+  .avance{height:9px;border-radius:6px;background:var(--creux);overflow:hidden;margin:10px 0 4px}
+  .avance i{display:block;height:100%;background:var(--vert);width:0;transition:width .25s}
+  .avance-txt{font-size:13px;color:var(--texte-2);margin:0 0 10px}
+
+  .bloc-p{margin:14px 0 0}
+  .bloc-p > h3{margin:0 0 6px;font:600 15px/1.3 system-ui}
+  .piece{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--filet)}
+  .piece:last-child{border-bottom:0}
+  .piece input{margin-top:3px;flex:none;width:18px;height:18px}
+  .piece label{font-size:14px;line-height:1.45;cursor:pointer}
+  .piece.ok label{color:var(--texte-2);text-decoration:line-through}
+
+  .mandat textarea{width:100%;min-height:220px;box-sizing:border-box;border:1px solid var(--filet);border-radius:10px;
+    padding:12px;font:14px/1.5 system-ui;background:var(--carte);color:var(--texte);resize:vertical}
+  .barre-b{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 0}
+
+  details.rub{border:1px solid var(--filet);border-radius:11px;margin:10px 0;overflow:hidden;background:var(--carte)}
+  details.rub > summary{padding:13px 15px;font:600 15px/1.3 system-ui;background:var(--creux);color:var(--texte)}
+  details.rub .corps{padding:12px 15px}
+  details.rub p{margin:0 0 10px;font-size:14px;line-height:1.55}
+  details.rub ul{margin:0 0 10px;padding-left:20px;font-size:14px;line-height:1.55}
+  details.rub li{margin:0 0 6px}
+  details.rub .ref{color:var(--accent);font-weight:600}
+  .note-bas{font-size:13px;color:var(--texte-2);margin:18px 0 8px;text-align:center}
+  h1.tit{font:700 22px/1.25 system-ui;margin:4px 0 2px}
+  p.sous{color:var(--texte-2);font-size:14px;margin:0 0 6px}
+</style>
+</head>
+<body>
+
+<div class="maj-dispo" id="maj-dispo">
+  <div class="wrap">
+    <span><b>Une nouvelle version est disponible.</b></span>
+    <button type="button" id="btn-maj">Recharger</button>
+  </div>
+</div>
+
+<main class="wrap" id="main">
+
+  <div class="haut">
+    <a class="retour" href="gerer.html">&larr; Retour</a>
+    <b>Gérer</b>
+    <span id="ent"></span>
+  </div>
+
+  <h1 class="tit">Contrôle URSSAF</h1>
+  <p class="sous">Se préparer, répondre, limiter les redressements. Tout reste sur ce poste.</p>
+
+  <section class="bandeau">
+    <h2>Le contrôle</h2>
+    <dl>
+      <dt>Organisme</dt><dd>URSSAF Île-de-France</dd>
+      <dt>Inspectrice</dt><dd>Adeline Godet</dd>
+      <dt>Référence</dt><dd>8326324-AC-110</dd>
+      <dt>Visite</dt><dd>mardi 17 novembre 2026 à 9h30</dd>
+      <dt>Période</dt><dd>depuis le 1er janvier 2023</dd>
+    </dl>
+  </section>
+
+  <div class="compte">
+    <span class="j" id="cpt-jours">--</span>
+    <span class="q" id="cpt-txt">jours avant la visite de l'inspectrice.</span>
+  </div>
+
+  <h3 style="margin:18px 0 2px;font:600 16px/1.3 system-ui">Le rétroplanning</h3>
+  <div id="retro"></div>
+
+  <h3 style="margin:22px 0 2px;font:600 16px/1.3 system-ui">Les pièces à réunir</h3>
+  <p class="sous">Cochez au fur et à mesure. Les trois blocs de l'avis de contrôle.</p>
+  <div class="avance"><i id="avance-barre"></i></div>
+  <p class="avance-txt" id="avance-txt"></p>
+  <div id="pieces"></div>
+
+  <h3 style="margin:24px 0 2px;font:600 16px/1.3 system-ui">La désignation du mandataire</h3>
+  <p class="sous">Le document à remettre, déjà à l'en-tête de TEC. Modifiable, puis à télécharger ou imprimer.</p>
+  <div class="mandat">
+    <textarea id="mandat-txt" spellcheck="false"></textarea>
+    <div class="barre-b">
+      <button type="button" id="btn-mandat-dl">Télécharger</button>
+      <button type="button" class="second" id="btn-mandat-print">Imprimer</button>
+      <button type="button" class="second" id="btn-mandat-reset">Rétablir le modèle</button>
+    </div>
+  </div>
+
+  <h3 style="margin:26px 0 6px;font:600 16px/1.3 system-ui">À savoir</h3>
+  <div id="rubriques"></div>
+
+  <p class="note-bas">Rien de ce que vous saisissez ici ne quitte ce poste.</p>
+
+</main>
+
+<script src="controle-urssaf.js"></script>
+</body>
+</html>

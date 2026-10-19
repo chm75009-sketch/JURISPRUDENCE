@@ -44,6 +44,7 @@
     { page: "index.html", nom: "Accueil" },
     { page: "auditer.html", nom: "Audit et conformité" },
     { page: "gerer.html", nom: "Gestion du quotidien" },
+    { page: "controle-urssaf.html", nom: "Contrôle URSSAF" },
     { page: "registre.html", nom: "Registre du personnel" },
     { page: "courriers.html", nom: "Courriers et e-mails" },
     { page: "notes-service.html", nom: "Notes de service" },

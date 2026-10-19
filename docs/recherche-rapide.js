@@ -20,6 +20,8 @@
       mots: "contrat travail cdi cdd embauche embaucher recruter recrutement rediger ecrire etablir faire salarie employe ouvrier chauffeur conducteur engager engagement promesse essai avenant temps partiel complet nouveau transport" },
     { nom: "Contester une contravention", ou: "Avis de contravention", page: "contraventions.html",
       mots: "contravention amende pv proces verbal stationnement exces vitesse radar feu rouge contester designer denoncer conducteur fps forfait post stationnement infraction prune flash contestation requete" },
+    { nom: "Contrôle URSSAF", ou: "Contrôle URSSAF", page: "controle-urssaf.html",
+      mots: "urssaf controle cotisations redressement inspecteur avis contradictoire charte deduction forfaitaire specifique dfs frais deplacement grand deplacement lettre observations recours commission amiable prescription mandataire exoneration reduction generale cotisation redresser inspection recouvrement" },
     { nom: "Avertissement, sanction, discipline", ou: "Discipline", page: "audit-discipline.html",
       mots: "avertissement sanction sanctionner discipline disciplinaire infliger donner mettre blame mise a pied faute reproche punir rappel ordre recadrer reprimande comportement mauvaise conduite retard insubordination procedure" },
     { nom: "Licenciement", ou: "Discipline", page: "audit-discipline.html",
