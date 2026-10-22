@@ -122,6 +122,11 @@
     '.rr-barre input{flex:1 1 auto;min-width:0;border:0;outline:0;background:transparent;color:var(--texte,#16181d);font:inherit;font-size:var(--t4,18px)}' +
     '.rr-barre input::-webkit-search-cancel-button,.rr-barre input::-webkit-search-decoration{-webkit-appearance:none;appearance:none}' +
     '.rr-x{flex:0 0 auto;border:0;background:transparent;color:var(--texte-2,#5f6874);font-size:22px;line-height:1;padding:4px;cursor:pointer;display:none}' +
+    '.rr-mic{flex:0 0 auto;border:0;background:transparent;color:var(--texte-2,#5f6874);padding:4px;cursor:pointer;display:none;align-items:center}' +
+    '.rr-mic.rr-dispo{display:flex}' +
+    '.rr-mic svg{width:20px;height:20px}' +
+    '.rr-mic.rr-on{color:var(--rouge,#c0392b);animation:rr-pulse 1s ease-in-out infinite}' +
+    '@keyframes rr-pulse{0%,100%{opacity:1}50%{opacity:.35}}' +
     '.rr-res{margin-top:10px;display:flex;flex-direction:column;gap:8px}' +
     '.rr-item{display:flex;align-items:center;gap:12px;background:var(--surface,#fff);border:1px solid var(--filet,#dcdfe4);' +
     'border-radius:var(--r2,12px);padding:12px 14px;text-decoration:none;color:inherit;box-shadow:var(--ombre,0 1px 2px rgba(22,24,29,.05))}' +
@@ -149,6 +154,10 @@
       '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
       '<input type="search" inputmode="search" autocomplete="off" ' +
       'placeholder="rédiger un contrat, avertissement, contravention..." aria-label="Rechercher un écran">' +
+      '<button type="button" class="rr-mic" aria-label="Recherche vocale">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+      '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>' +
+      '</button>' +
       '<button type="button" class="rr-x" aria-label="Effacer">&times;</button>';
     var res = document.createElement("div");
     res.className = "rr-res";
@@ -198,6 +207,34 @@
       else if (e.key === "Escape") { q.value = ""; sel = 0; rendre(); }
     });
     x.addEventListener("click", function () { q.value = ""; sel = 0; rendre(); q.focus(); });
+
+    /* Recherche vocale : dictée en français, comme sur nomos. Le bouton
+       n'apparaît que si le navigateur gère la reconnaissance vocale. Rien
+       n'est envoyé : la dictée remplit le champ et lance la recherche. */
+    var mic = barre.querySelector(".rr-mic");
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SR && mic) {
+      var reco = null, ecoute = false;
+      mic.classList.add("rr-dispo");
+      mic.addEventListener("click", function () {
+        if (ecoute) { try { reco.stop(); } catch (e) {} return; }
+        try {
+          reco = new SR();
+          reco.lang = "fr-FR";
+          reco.interimResults = false;
+          reco.maxAlternatives = 1;
+          reco.onstart = function () { ecoute = true; mic.classList.add("rr-on"); };
+          reco.onresult = function (e) {
+            var t = "";
+            try { t = e.results[0][0].transcript; } catch (err) { t = ""; }
+            if (t) { q.value = t; sel = 0; rendre(); }
+          };
+          reco.onerror = function () { ecoute = false; mic.classList.remove("rr-on"); };
+          reco.onend = function () { ecoute = false; mic.classList.remove("rr-on"); q.focus(); };
+          reco.start();
+        } catch (e) { ecoute = false; mic.classList.remove("rr-on"); }
+      });
+    }
   }
 
   function demarrer() {
