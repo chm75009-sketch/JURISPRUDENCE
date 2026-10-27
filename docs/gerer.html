@@ -535,6 +535,17 @@
       dit: "attestation permettant d'exercer les droits à l'assurance chômage, délivrée au moment de la rupture et transmise sans délai à France Travail" },
     "L1237-1": { id: "LEGIARTI000006901174", lu: 8,
       dit: "en cas de démission, l'existence et la durée du préavis sont fixées par la loi ou par convention ou accord collectif ; à défaut, par les usages de la localité et de la profession" },
+    /* L'abandon de poste et la présomption de démission. Les quatre articles
+       ont été lus au relais Légifrance le 27 octobre 2026, deux fois à quelques
+       minutes d'intervalle, le nom du code en filtre. */
+    "L1237-1-1": { id: "LEGIARTI000046773104",
+      dit: "le salarié qui a abandonné volontairement son poste et ne reprend pas le travail après avoir été mis en demeure de justifier son absence et de reprendre son poste, par lettre recommandée ou remise en main propre contre décharge, dans le délai fixé par l'employeur, est présumé avoir démissionné à l'expiration de ce délai ; s'il conteste la rupture, le conseil de prud'hommes, directement saisi du bureau de jugement, statue au fond dans un délai d'un mois" },
+    "R1237-13": { id: "LEGIARTI000047456645",
+      dit: "l'employeur qui entend faire valoir la présomption de démission met le salarié en demeure, par lettre recommandée ou remise en main propre contre décharge, de justifier son absence et de reprendre son poste ; le salarié indique dans sa réponse le motif légitime qu'il invoque, tel que des raisons médicales, le droit de retrait, le droit de grève, le refus d'exécuter une instruction contraire à une réglementation ou une modification du contrat à l'initiative de l'employeur ; le délai ne peut être inférieur à quinze jours et court à compter de la présentation de la mise en demeure" },
+    "L4131-1": { id: "LEGIARTI000006903155",
+      dit: "le travailleur alerte immédiatement l'employeur de toute situation de travail dont il a un motif raisonnable de penser qu'elle présente un danger grave et imminent pour sa vie ou sa santé, et peut se retirer d'une telle situation" },
+    "L2511-1": { id: "LEGIARTI000006902372",
+      dit: "l'exercice du droit de grève ne peut justifier la rupture du contrat de travail, sauf faute lourde imputable au salarié ; tout licenciement prononcé en l'absence de faute lourde est nul de plein droit" },
     "L1237-9": { id: "LEGIARTI000052437168", lu: 8,
       dit: "tout salarié quittant volontairement l'entreprise pour bénéficier d'une pension de vieillesse a droit à une indemnité de départ à la retraite" },
     "L1237-10": { id: "LEGIARTI000006901184", lu: 8,
@@ -3386,6 +3397,84 @@
       loi: ["L1237-1", "L1234-19", "L1234-20", "R1234-9"] };
   }
 
+  /* ─────── L'ABANDON DE POSTE : LA MISE EN DEMEURE QUI OUVRE LA
+     PRÉSOMPTION DE DÉMISSION ────────────────────────────────────────────
+
+     Depuis la loi du 21 décembre 2022, le salarié qui abandonne son poste et
+     ne reprend pas après mise en demeure, dans le délai fixé, est présumé
+     démissionnaire (L. 1237-1-1). Le décret du 17 avril 2023 (R. 1237-13) fixe
+     les modalités : mise en demeure par recommandé ou remise en main propre
+     contre décharge, de justifier l'absence ET de reprendre le poste, délai
+     d'au moins quinze jours à compter de la présentation.
+
+     Le Conseil d'État, le 18 décembre 2024 (n° 473640), a validé le décret
+     mais exigé que la mise en demeure informe le salarié des conséquences de
+     l'absence de reprise sans motif légitime : l'avertissement est donc écrit
+     dans la lettre. Un délai inférieur à quinze jours interdit de produire. */
+  function abandonPoste(v) {
+    var nomS = v.nom || "[nom et prénom du salarié]";
+    var civ = civiliteDe(nomS);
+    var debut = dateDe(v.debut);
+    var pres = presentationDe(v);
+    var delai = parseInt(v.delai, 10); if (!delai || delai < 0) delai = 15;
+    if (delai < 15)
+      return { refus: ["Le délai laissé au salarié est de " + delai + " jours : il ne peut être " +
+        "inférieur à quinze jours calendaires, comptés à compter de la présentation de la mise en " +
+        "demeure (" + ref(["R1237-13"]) + "). Portez un délai d'au moins quinze jours."],
+        loi: ["L1237-1-1", "R1237-13"] };
+    var fin = jour(pres.d, delai);
+    var recommande = String(v.remise || "recommande") !== "main";
+    var envoi = recommande ? "Lettre recommandée avec avis de réception"
+      : "Remise en main propre contre décharge";
+    var sAb = (window.ListesAuto && window.ListesAuto.salarie) ? window.ListesAuto.salarie(nomS) : null;
+    var poste = (sAb && String(sAb.emp || "").trim()) || "";
+    var b = [];
+    b.push({ k: "t1", t: "Mise en demeure de reprendre votre poste ou de justifier votre absence" });
+    enTete(b, nomS, "mise en demeure de reprendre votre poste ou de justifier votre absence", envoi);
+    b.push({ k: "p", t: "Vous êtes employé(e) par notre société" + (poste ? " en qualité " + de(poste) : "") +
+      ". Nous constatons que vous êtes absent(e) de votre poste depuis le " +
+      (debut ? dateFr(debut) : "[date de début de votre absence]") + ", sans nous avoir informés " +
+      "d'un motif ni avoir obtenu d'autorisation, et sans nous avoir adressé de justificatif." });
+    b.push({ k: "p", t: "Par la présente, nous vous mettons en demeure de reprendre votre poste et de " +
+      "justifier votre absence dans un délai de " + delai + " jours calendaires à compter de la " +
+      "première présentation de ce courrier, soit au plus tard le " + dateFr(fin) + " (" +
+      ref(["R1237-13"]) + ")." });
+    b.push({ k: "p", t: "Si votre absence repose sur un motif légitime, nous vous invitons à nous " +
+      "l'indiquer et à nous en adresser les justificatifs dans ce même délai. Peuvent notamment " +
+      "constituer un tel motif des raisons médicales, l'exercice du droit de retrait (" +
+      ref(["L4131-1"]) + "), l'exercice du droit de grève (" + ref(["L2511-1"]) + "), le refus " +
+      "d'exécuter une instruction contraire à une réglementation, ou une modification de votre " +
+      "contrat de travail intervenue à notre initiative (" + ref(["R1237-13"]) + ")." });
+    b.push({ k: "p", t: "Nous appelons votre attention sur les conséquences de cette mise en demeure : " +
+      "à défaut, dans le délai imparti, de reprise de votre poste ou de justification d'un motif " +
+      "légitime, vous serez présumé(e) avoir démissionné (" + ref(["L1237-1-1"]) + "). Cette rupture " +
+      "produira les effets d'une démission : préavis à votre charge, absence d'indemnité de " +
+      "licenciement, et en principe absence de droit aux allocations d'assurance chômage." });
+    b.push({ k: "p", t: "Nous restons à votre disposition et espérons votre reprise." });
+    formule(b, civ);
+    var dates = [{ q: "Fin du délai : présomption de démission faute de reprise ou de motif légitime",
+      d: dateFrJour(fin),
+      f: delai + " jours calendaires à compter de " + pres.dit + " (" + ref(["R1237-13"]) + ")",
+      c: "" }];
+    var al = [];
+    if (!String(v.nom || "").trim())
+      al.push("Portez le nom et le prénom du salarié : son adresse et sa civilité se reprennent alors du registre du personnel.");
+    if (!debut)
+      al.push("Portez la date de début de l'absence : c'est elle qui situe le point de départ de la procédure.");
+    al.push("La présomption de démission ne joue qu'en l'absence de motif légitime. Avant d'envoyer, " +
+      "vérifiez qu'aucun arrêt de travail, droit de retrait ou grève ne justifie l'absence : dans ce " +
+      "cas, cette procédure ne s'applique pas, et acter une démission d'office expose à une " +
+      "requalification en licenciement sans cause réelle et sérieuse.");
+    if (pres.estimee)
+      al.push("La date réelle de présentation figure sur l'avis de réception du recommandé : le délai " +
+        "de " + delai + " jours court à compter d'elle, et la date de fin recule d'autant si la " +
+        "présentation est plus tardive que l'estimation.");
+    var rAb = alerteRegistre(nomS, "cdi");
+    if (rAb) al = al.concat(rAb);
+    return { blocs: b, dates: dates, alertes: al,
+      loi: ["L1237-1-1", "R1237-13", "L4131-1", "L2511-1", "L1237-1"] };
+  }
+
   function licenciementEco(v) {
     var nomS = v.nom || "[nom et prénom du salarié]";
     var civ = civiliteDe(nomS);
@@ -4865,6 +4954,15 @@
         { id: "salaire", nom: "Salaire mensuel brut (euros)", t: "number", ph: "2 000" }, { id: "signature", nom: "Date de signature", t: "date", defaut: iso(AUJOURDHUI) }], produire: ruptureConventionnelle },
     demission: { titre: "Démission", champs: [NOM, { id: "reception", nom: "Démission reçue le", t: "date", defaut: iso(AUJOURDHUI) },
         { id: "entree", nom: "Date d'entrée dans l'entreprise", t: "date" }, { id: "statut", nom: "Statut", t: "select", opts: STATUTS, defaut: "employe" }], produire: demission },
+    abandon: { titre: "Abandon de poste : mise en demeure (présomption de démission)",
+      champs: [NOM,
+        { id: "debut", nom: "Date de début de l'absence", t: "date" },
+        { id: "remise", nom: "Mode de remise", t: "select", defaut: "recommande", opts: [
+          ["recommande", "Lettre recommandée avec avis de réception"],
+          ["main", "Remise en main propre contre décharge"]] },
+        { id: "delai", nom: "Délai laissé au salarié (jours calendaires)", t: "number", defaut: "15",
+          sous: "au moins quinze jours, comptés à partir de la présentation de la mise en demeure (R. 1237-13)" }],
+      produire: abandonPoste },
     eco: { titre: "Licenciement économique",
       champs: [NOM, { id: "poste", nom: "Emploi supprimé", t: "text", ph: "conducteur poids lourd" },
         { id: "motif", nom: "Le motif économique, dans vos mots", t: "textarea", pleine: true, ph: "Le chiffre d'affaires du secteur messagerie a baissé de 32 % sur les quatre derniers trimestres par rapport aux mêmes trimestres de l'année précédente, et deux tournées ont été supprimées ; le poste de conducteur poids lourd affecté à ces tournées est supprimé." },
@@ -5029,7 +5127,7 @@
     ["Embaucher", ["promesse", "cdi", "cdd", "partiel", "pro", "titres", "dpae", "vip"]],
     ["Pendant le contrat", ["avenant", "mutuelle", "dispense", "conges", "maladie", "at", "permis", "inaptitude", "entretien"]],
     ["Sanctionner", ["avert", "miseapied", "conservatoire", "faute"]],
-    ["Rompre", ["rc", "demission", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
+    ["Rompre", ["rc", "demission", "abandon", "eco", "fincdd", "retraite", "miseretraite", "fin"]],
     ["Collectif", ["elections", "convoc", "odj", "pv", "nao", "desaccord"]]
   ];
 
