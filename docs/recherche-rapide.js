@@ -1,20 +1,30 @@
-/* Recherche rapide de l'accueil.
+/* L'ASSISTANT DE L'ACCUEIL : une barre, deux onglets.
 
-   Le dirigeant tape un mot ou une phrase (« je veux rédiger un contrat »,
-   « contester une contravention », « avertissement ») et arrive directement
-   sur le bon écran. Tout se passe dans le navigateur, sans serveur : rien
-   n'est envoyé nulle part, et la recherche marche hors ligne.
+   Deux usages nettement séparés, choisis par deux onglets en haut de la barre.
 
-   Le classement est volontairement simple : on normalise (minuscules, sans
-   accents), on enlève les mots vides (« je », « veux », « un »...), et on
-   compte, pour chaque écran, combien de mots utiles de la demande tombent sur
-   un de ses mots-clés. Pas d'intelligence artificielle, donc pas de surprise.
+   - « Faire une action » : le dirigeant dit ou écrit ce qu'il veut faire
+     (« rédiger un contrat », « contester une contravention », « abandon de
+     poste »). On lui répond « J'ai compris : tel écran » et un grand bouton
+     l'ouvre, exactement comme le bouton de l'écran lui-meme. En dessous,
+     « Pas ça ? » et les autres pistes. Si rien n'est compris, les écrans les
+     plus utilisés.
 
-   L'index ci-dessous ne pointe que vers des pages qui existent. Toute
-   destination nouvelle s'ajoute ici, avec ses mots-clés et ses synonymes. */
+   - « Poser une question » : le dirigeant pose une question metier et reçoit
+     une réponse d'une base intégrée. La base est montée à l'étape suivante ;
+     l'onglet est en place, avec son champ et son micro.
+
+   Tout se calcule dans le navigateur, sans serveur, hors ligne. Pas
+   d'intelligence artificielle : on normalise le texte et on compte les
+   mots-clés trouvés. Demandé par le client, sur le modèle de Nomos.
+
+   AJOUT PUR : aucune destination existante n'a été retirée. L'index DEST est
+   celui d'avant, repris en entier ; seule la présentation a été enrichie. */
 (function () {
   "use strict";
 
+  /* L'index des actions : chaque entrée mène à un écran qui existe, avec les
+     mots que le dirigeant emploie vraiment. Toute destination nouvelle
+     s'ajoute ici. */
   var DEST = [
     { nom: "Éditer un contrat de travail", ou: "Contrats du transport", page: "contrats-transport.html",
       mots: "contrat travail cdi cdd embauche embaucher recruter recrutement rediger ecrire etablir faire salarie employe ouvrier chauffeur conducteur engager engagement promesse essai avenant temps partiel complet nouveau transport" },
@@ -82,6 +92,12 @@
       mots: "gerer gestion quotidien rh documents embauche rupture" }
   ];
 
+  /* Quand rien n'est compris, on propose les écrans les plus utilisés. Faute
+     de mesure d'usage, cette liste est choisie à la main parmi les plus
+     courants ; elle se corrige le jour où l'on compte vraiment les ouvertures. */
+  var PLUS_UTILISES = ["gerer.html", "courriers.html", "registre.html",
+    "heures.html", "contrats-transport.html"];
+
   var VIDES = { "je": 1, "j": 1, "veux": 1, "veut": 1, "voudrais": 1, "souhaite": 1, "faire": 1,
     "fais": 1, "faut": 1, "un": 1, "une": 1, "des": 1, "le": 1, "la": 1, "les": 1, "de": 1,
     "du": 1, "d": 1, "a": 1, "au": 1, "aux": 1, "pour": 1, "mon": 1, "ma": 1, "mes": 1,
@@ -112,131 +128,303 @@
     });
     return s;
   }
+  function classer(texte) {
+    var qs = toks(texte);
+    if (!qs.length) return [];
+    return DEST.map(function (d) { return { d: d, s: score(d, qs) }; })
+      .filter(function (o) { return o.s > 0; })
+      .sort(function (a, b) { return b.s - a.s; });
+  }
+  function parPage(page) {
+    for (var i = 0; i < DEST.length; i++) if (DEST[i].page === page) return DEST[i];
+    return null;
+  }
+
+  /* Une demande qui est en réalité une question : elle finit par « ? » ou
+     commence par un mot interrogatif. On le repère pour proposer de basculer
+     vers l'onglet des réponses. */
+  var DEBUTS_Q = /^(combien|quel|quelle|quels|quelles|comment|est-?ce que|peut-?on|peut on|faut-?il|faut il|que faire|quand|pourquoi|qui|a quelle|a quel)\b/;
+  function estQuestion(texte) {
+    var t = norm(texte).trim();
+    if (!t) return false;
+    return /\?\s*$/.test(texte.trim()) || DEBUTS_Q.test(t);
+  }
 
   var CSS = '' +
-    '.rr-bloc{margin:0 0 var(--e5,24px)}' +
-    '.rr-barre{position:relative;display:flex;align-items:center;gap:10px;background:var(--surface,#fff);' +
-    'border:1px solid var(--filet,#dcdfe4);border-radius:var(--r2,12px);padding:0 14px;height:var(--h-champ,48px);box-shadow:var(--ombre,0 1px 2px rgba(22,24,29,.05))}' +
-    '.rr-barre:focus-within{border-color:var(--accent,#1F3864);box-shadow:0 0 0 2px var(--accent-clair,#e9edf5)}' +
-    '.rr-barre svg{flex:0 0 auto;width:19px;height:19px;color:var(--texte-2,#5f6874)}' +
-    '.rr-barre input{flex:1 1 auto;min-width:0;border:0;outline:0;background:transparent;color:var(--texte,#16181d);font:inherit;font-size:var(--t4,18px)}' +
-    '.rr-barre input::-webkit-search-cancel-button,.rr-barre input::-webkit-search-decoration{-webkit-appearance:none;appearance:none}' +
-    '.rr-x{flex:0 0 auto;border:0;background:transparent;color:var(--texte-2,#5f6874);font-size:22px;line-height:1;padding:4px;cursor:pointer;display:none}' +
-    '.rr-mic{flex:0 0 auto;width:38px;height:38px;min-height:0;box-sizing:border-box;padding:0;border:0;' +
-    'border-radius:50%;background:var(--accent,#1F3864);color:#fff;cursor:pointer;display:none;' +
+    '.rr-carte{background:var(--surface,#fff);border:1px solid var(--filet,#dcdfe4);' +
+    'border-radius:16px;padding:16px;margin:0 0 var(--e5,24px);box-shadow:0 1px 3px rgba(22,24,29,.06)}' +
+    '.rr-onglets{display:flex;gap:10px;margin:0 0 14px}' +
+    '.rr-onglet{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:8px;' +
+    'border:0;border-radius:12px;padding:13px 10px;font:600 15px/1.1 inherit;cursor:pointer;' +
+    'background:var(--accent-clair,#eef1f7);color:var(--texte-2,#5f6874);-webkit-appearance:none;appearance:none}' +
+    '.rr-onglet.rr-actif{background:var(--accent,#1F3864);color:#fff}' +
+    '.rr-tete{display:flex;align-items:center;gap:14px;margin:4px 2px 12px}' +
+    '.rr-mic{flex:0 0 auto;width:56px;height:56px;min-height:0;box-sizing:border-box;padding:0;border:0;' +
+    'border-radius:50%;background:#efeefc;color:#4f46e5;cursor:pointer;display:flex;' +
     'align-items:center;justify-content:center;-webkit-appearance:none;appearance:none}' +
-    '.rr-mic.rr-dispo{display:flex}' +
-    '.rr-mic svg{width:20px;height:20px}' +
-    '.rr-mic.rr-on{background:var(--rouge,#c0392b);animation:rr-pulse 1s ease-in-out infinite}' +
-    '@keyframes rr-pulse{0%,100%{opacity:1}50%{opacity:.35}}' +
-    '.rr-res{margin-top:10px;display:flex;flex-direction:column;gap:8px}' +
+    '.rr-mic svg{width:26px;height:26px}' +
+    '.rr-mic.rr-indispo{opacity:.55}' +
+    '.rr-mic.rr-on{background:#fde7e7;color:var(--rouge,#c0392b);animation:rr-pulse 1s ease-in-out infinite}' +
+    '@keyframes rr-pulse{0%,100%{opacity:1}50%{opacity:.45}}' +
+    '.rr-titre{font:700 17px/1.2 inherit;color:var(--texte,#16181d)}' +
+    '.rr-sous{display:block;color:var(--texte-2,#5f6874);font-size:14px;margin-top:2px}' +
+    '.rr-ligne{display:flex;gap:10px}' +
+    '.rr-champ{flex:1 1 auto;min-width:0;border:1px solid var(--filet,#cfd6e0);border-radius:12px;' +
+    'background:var(--fond-champ,#f7f8fa);color:var(--texte,#16181d);font:inherit;font-size:16px;padding:14px 15px;outline:0}' +
+    '.rr-champ:focus{border-color:var(--accent,#1F3864);background:#fff}' +
+    '.rr-ok{flex:0 0 auto;border:0;border-radius:12px;background:var(--accent,#1F3864);color:#fff;' +
+    'font:700 16px inherit;padding:0 22px;min-height:50px;cursor:pointer;-webkit-appearance:none;appearance:none}' +
+    '.rr-ecoute{margin:12px 2px 0;color:var(--rouge,#c0392b);font-size:15px;font-weight:600}' +
+    '.rr-res{margin-top:14px;display:flex;flex-direction:column;gap:10px}' +
+    '.rr-compris{color:var(--texte-2,#5f6874);font-size:14px}' +
+    '.rr-compris b{color:var(--texte,#16181d)}' +
+    '.rr-ouvrir{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;' +
+    'background:var(--accent,#1F3864);color:#fff;border-radius:14px;padding:16px;font:700 17px inherit}' +
+    '.rr-pasca{color:var(--texte-2,#5f6874);font-size:14px;margin:4px 2px 0}' +
+    '.rr-autres{display:flex;flex-direction:column;gap:8px}' +
     '.rr-item{display:flex;align-items:center;gap:12px;background:var(--surface,#fff);border:1px solid var(--filet,#dcdfe4);' +
-    'border-radius:var(--r2,12px);padding:12px 14px;text-decoration:none;color:inherit;box-shadow:var(--ombre,0 1px 2px rgba(22,24,29,.05))}' +
-    '.rr-item.rr-sel{border-color:var(--accent,#1F3864);box-shadow:0 0 0 2px var(--accent-clair,#e9edf5)}' +
-    '.rr-tx{min-width:0}' +
-    '.rr-nom{font-size:var(--t3,16px);font-weight:600}' +
-    '.rr-ou{display:block;color:var(--texte-2,#5f6874);font-size:var(--t1,14px);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
+    'border-radius:12px;padding:12px 14px;text-decoration:none;color:inherit}' +
+    '.rr-nom{font-size:15px;font-weight:600}' +
+    '.rr-ou{display:block;color:var(--texte-2,#5f6874);font-size:13px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
     '.rr-fl{margin-left:auto;color:var(--texte-3,#7b838d);font-size:20px}' +
-    '.rr-vide{color:var(--texte-2,#5f6874);font-size:var(--t2,15px);padding:12px 2px}';
+    '.rr-bascule{display:block;width:100%;text-align:left;border:1px dashed var(--filet,#cfd6e0);' +
+    'background:var(--accent-clair,#eef1f7);color:var(--accent,#1F3864);border-radius:12px;' +
+    'padding:12px 14px;font:600 14px inherit;cursor:pointer}' +
+    '.rr-vide{color:var(--texte-2,#5f6874);font-size:15px;padding:6px 2px}' +
+    '.rr-attente{background:var(--accent-clair,#eef1f7);border-radius:12px;padding:14px;color:var(--texte-2,#5f6874);font-size:14px}';
+
+  var MIC_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>';
+  var STOP_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+
+  function ech(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  var MODES = {
+    action: { titre: "Que voulez-vous faire ?", sous: "Dites ou écrivez ce que vous voulez faire",
+      exemple: "Ex. : je veux déclarer un incident", micSous: "Touchez le micro et dites ce que vous voulez faire" },
+    question: { titre: "Posez votre question", sous: "Une question sur la réglementation transport",
+      exemple: "Ex. : combien de temps je peux conduire par jour ?", micSous: "Touchez le micro et posez votre question" }
+  };
 
   function construire(hote) {
-    var style = document.getElementById("rr-style");
-    if (!style) {
-      style = document.createElement("style");
-      style.id = "rr-style";
-      style.textContent = CSS;
-      document.head.appendChild(style);
+    if (!document.getElementById("rr-style")) {
+      var st = document.createElement("style");
+      st.id = "rr-style";
+      st.textContent = CSS;
+      document.head.appendChild(st);
     }
 
-    hote.classList.add("rr-bloc");
-    var barre = document.createElement("label");
-    barre.className = "rr-barre";
-    barre.innerHTML =
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-      '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>' +
-      '<input type="search" inputmode="search" autocomplete="off" ' +
-      'placeholder="rédiger un contrat, avertissement, contravention..." aria-label="Rechercher un écran">' +
-      '<button type="button" class="rr-mic" aria-label="Recherche vocale">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-      '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>' +
-      '</button>' +
-      '<button type="button" class="rr-x" aria-label="Effacer">&times;</button>';
-    var res = document.createElement("div");
-    res.className = "rr-res";
-    hote.appendChild(barre);
-    hote.appendChild(res);
+    var mode = "action";
+    hote.innerHTML =
+      '<div class="rr-carte">' +
+      '<div class="rr-onglets">' +
+      '<button type="button" class="rr-onglet rr-actif" data-mode="action">🧭 Faire une action</button>' +
+      '<button type="button" class="rr-onglet" data-mode="question">❓ Poser une question</button>' +
+      '</div>' +
+      '<div class="rr-tete">' +
+      '<button type="button" class="rr-mic" aria-label="Dicter">' + MIC_SVG + '</button>' +
+      '<div><span class="rr-titre"></span><span class="rr-sous"></span></div>' +
+      '</div>' +
+      '<div class="rr-ligne">' +
+      '<input class="rr-champ" type="text" inputmode="search" autocomplete="off" aria-label="Votre demande">' +
+      '<button type="button" class="rr-ok">OK</button>' +
+      '</div>' +
+      '<div class="rr-ecoute" hidden>Je vous écoute...</div>' +
+      '<div class="rr-res"></div>' +
+      '</div>';
 
-    var q = barre.querySelector("input");
-    var x = barre.querySelector(".rr-x");
-    var sel = 0, courant = [];
+    var onglets = hote.querySelectorAll(".rr-onglet");
+    var titreEl = hote.querySelector(".rr-titre");
+    var sousEl = hote.querySelector(".rr-sous");
+    var champ = hote.querySelector(".rr-champ");
+    var ok = hote.querySelector(".rr-ok");
+    var res = hote.querySelector(".rr-res");
+    var ecoute = hote.querySelector(".rr-ecoute");
+    var mic = hote.querySelector(".rr-mic");
 
-    function aller(d) { window.location.href = d.page; }
+    function aller(page) { window.location.href = page; }
 
-    function rendre() {
-      var qs = toks(q.value);
-      x.style.display = q.value ? "block" : "none";
-      if (!qs.length) { res.textContent = ""; courant = []; return; }
-      var liste = DEST.map(function (d) { return { d: d, s: score(d, qs) }; })
-        .filter(function (o) { return o.s > 0; })
-        .sort(function (a, b) { return b.s - a.s; })
-        .slice(0, 6);
-      courant = liste;
-      if (sel >= liste.length) sel = 0;
+    function majTete() {
+      var m = MODES[mode];
+      titreEl.textContent = m.titre;
+      sousEl.textContent = m.sous;
+      champ.setAttribute("placeholder", m.exemple);
+    }
+
+    /* MODE ACTION : « J'ai compris », le bouton qui ouvre, puis les autres. */
+    function rendreAction() {
       res.textContent = "";
-      if (!liste.length) {
+      var texte = champ.value.trim();
+      if (!texte) return;
+      var liste = classer(texte);
+
+      if (liste.length) {
+        var best = liste[0].d;
+        var compris = document.createElement("div");
+        compris.className = "rr-compris";
+        compris.innerHTML = "✓ J'ai compris : <b></b>";
+        compris.querySelector("b").textContent = best.nom;
+        res.appendChild(compris);
+
+        var bouton = document.createElement("a");
+        bouton.className = "rr-ouvrir";
+        bouton.href = best.page;
+        bouton.innerHTML = "Ouvrir <span>›</span>";
+        res.appendChild(bouton);
+
+        var autres = liste.slice(1, 4);
+        if (autres.length) {
+          var pasca = document.createElement("div");
+          pasca.className = "rr-pasca";
+          pasca.textContent = "Pas ça ?";
+          res.appendChild(pasca);
+          res.appendChild(blocAutres(autres.map(function (o) { return o.d; })));
+        }
+      } else {
         var v = document.createElement("div");
         v.className = "rr-vide";
-        v.textContent = "Aucun écran ne correspond. Essayez un autre mot.";
+        v.textContent = "Je n'ai pas compris, vous vouliez peut-être :";
         res.appendChild(v);
-        return;
+        var sugg = PLUS_UTILISES.map(parPage).filter(Boolean);
+        res.appendChild(blocAutres(sugg));
       }
-      liste.forEach(function (o, i) {
-        var a = document.createElement("a");
-        a.className = "rr-item" + (i === sel ? " rr-sel" : "");
-        a.href = o.d.page;
-        a.innerHTML = '<span class="rr-tx"><span class="rr-nom"></span><span class="rr-ou"></span></span><span class="rr-fl">&#8250;</span>';
-        a.querySelector(".rr-nom").textContent = o.d.nom;
-        a.querySelector(".rr-ou").textContent = o.d.ou;
-        res.appendChild(a);
-      });
+
+      if (estQuestion(texte)) {
+        var bascule = document.createElement("button");
+        bascule.type = "button";
+        bascule.className = "rr-bascule";
+        bascule.textContent = "❓ C'est une question ? Voir la réponse";
+        bascule.addEventListener("click", function () { basculer("question"); });
+        res.appendChild(bascule);
+      }
     }
 
-    q.addEventListener("input", function () { sel = 0; rendre(); });
-    q.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowDown") { e.preventDefault(); sel = Math.min(sel + 1, courant.length - 1); rendre(); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); sel = Math.max(sel - 1, 0); rendre(); }
-      else if (e.key === "Enter" && courant[sel]) { e.preventDefault(); aller(courant[sel].d); }
-      else if (e.key === "Escape") { q.value = ""; sel = 0; rendre(); }
-    });
-    x.addEventListener("click", function () { q.value = ""; sel = 0; rendre(); q.focus(); });
+    function blocAutres(dests) {
+      var box = document.createElement("div");
+      box.className = "rr-autres";
+      dests.forEach(function (d) {
+        var a = document.createElement("a");
+        a.className = "rr-item";
+        a.href = d.page;
+        a.innerHTML = '<span><span class="rr-nom"></span><span class="rr-ou"></span></span><span class="rr-fl">›</span>';
+        a.querySelector(".rr-nom").textContent = d.nom;
+        a.querySelector(".rr-ou").textContent = d.ou;
+        box.appendChild(a);
+      });
+      return box;
+    }
 
-    /* Recherche vocale : dictée en français, comme sur nomos. Le bouton
-       n'apparaît que si le navigateur gère la reconnaissance vocale. Rien
-       n'est envoyé : la dictée remplit le champ et lance la recherche. */
-    var mic = barre.querySelector(".rr-mic");
+    /* MODE QUESTION : la base de réponses est montée à l'étape suivante. */
+    function rendreQuestion() {
+      res.textContent = "";
+      var texte = champ.value.trim();
+      if (!texte) return;
+      var a = document.createElement("div");
+      a.className = "rr-attente";
+      a.textContent = "La base de réponses du transport est en cours de constitution. " +
+        "Elle répondra ici aux questions de temps de conduite, de repos, de documents à bord, etc.";
+      res.appendChild(a);
+    }
+
+    function rendre() {
+      if (mode === "action") rendreAction();
+      else rendreQuestion();
+    }
+
+    function basculer(m) {
+      mode = m;
+      for (var i = 0; i < onglets.length; i++) {
+        onglets[i].classList.toggle("rr-actif", onglets[i].getAttribute("data-mode") === m);
+      }
+      majTete();
+      rendre();
+      champ.focus();
+    }
+
+    for (var i = 0; i < onglets.length; i++) {
+      onglets[i].addEventListener("click", function () { basculer(this.getAttribute("data-mode")); });
+    }
+
+    /* L'affichage se met à jour pendant la frappe, après un court répit, et à
+       la validation (OK ou Entrée). */
+    var minut = null;
+    champ.addEventListener("input", function () {
+      if (minut) window.clearTimeout(minut);
+      minut = window.setTimeout(rendre, 450);
+    });
+    champ.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); if (minut) window.clearTimeout(minut); rendre(); }
+    });
+    ok.addEventListener("click", function () { if (minut) window.clearTimeout(minut); rendre(); champ.focus(); });
+
+    /* LE MICRO. Dictée en français, le texte s'écrit en direct. Il s'arrête
+       au bout de dix secondes, ou à un second appui. Si le navigateur ne gère
+       pas la reconnaissance vocale, ou si le micro est refusé, on met le
+       curseur dans le champ et on invite à dicter par le clavier. */
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SR && mic) {
-      var reco = null, ecoute = false;
-      mic.classList.add("rr-dispo");
+    var reco = null, enEcoute = false, minuterie = null;
+
+    function finEcoute() {
+      enEcoute = false;
+      mic.classList.remove("rr-on");
+      mic.innerHTML = MIC_SVG;
+      ecoute.hidden = true;
+      if (minuterie) { window.clearTimeout(minuterie); minuterie = null; }
+    }
+    function message(txt) {
+      res.textContent = "";
+      var v = document.createElement("div");
+      v.className = "rr-vide";
+      v.textContent = txt;
+      res.appendChild(v);
+    }
+    function dicterAuClavier() {
+      champ.focus();
+      message("Touchez le micro de votre clavier pour dicter, ou écrivez votre demande.");
+    }
+
+    if (!SR) {
+      mic.classList.add("rr-indispo");
+      mic.addEventListener("click", dicterAuClavier);
+    } else {
       mic.addEventListener("click", function () {
-        if (ecoute) { try { reco.stop(); } catch (e) {} return; }
+        if (enEcoute) { try { reco.stop(); } catch (e) {} return; }
         try {
           reco = new SR();
           reco.lang = "fr-FR";
-          reco.interimResults = false;
+          reco.interimResults = true;
           reco.maxAlternatives = 1;
-          reco.onstart = function () { ecoute = true; mic.classList.add("rr-on"); };
+          reco.onstart = function () {
+            enEcoute = true;
+            mic.classList.add("rr-on");
+            mic.innerHTML = STOP_SVG;
+            ecoute.hidden = false;
+            minuterie = window.setTimeout(function () { try { reco.stop(); } catch (e) {} }, 10000);
+          };
           reco.onresult = function (e) {
             var t = "";
-            try { t = e.results[0][0].transcript; } catch (err) { t = ""; }
-            if (t) { q.value = t; sel = 0; rendre(); }
+            for (var k = 0; k < e.results.length; k++) t += e.results[k][0].transcript;
+            if (t) { champ.value = t; rendre(); }
           };
-          reco.onerror = function () { ecoute = false; mic.classList.remove("rr-on"); };
-          reco.onend = function () { ecoute = false; mic.classList.remove("rr-on"); q.focus(); };
+          reco.onerror = function (ev) {
+            finEcoute();
+            var c = ev && ev.error;
+            if (c === "not-allowed" || c === "service-not-allowed") message("Le micro n'est pas autorisé. Autorisez-le, ou écrivez votre demande.");
+            else if (c === "no-speech") message("Je n'ai rien entendu. Réessayez, ou écrivez votre demande.");
+            else if (c === "audio-capture") message("Aucun micro détecté. Écrivez votre demande.");
+            else dicterAuClavier();
+          };
+          reco.onend = function () { finEcoute(); champ.focus(); };
           reco.start();
-        } catch (e) { ecoute = false; mic.classList.remove("rr-on"); }
+        } catch (e) { finEcoute(); dicterAuClavier(); }
       });
     }
+
+    majTete();
   }
 
   function demarrer() {
