@@ -593,3 +593,11 @@ en quelques minutes.
 **Une mise à jour de l'application n'est donc pas finie quand `main` est
 poussé.** Tant que la synchronisation n'a pas été lancée et poussée, le client
 regarde l'ancienne version, et c'est la sienne qu'il regarde.
+
+**Mettre en ligne fait partie du travail, et ne se demande pas.** Posé le
+2 novembre 2026 : « ne me demande pas à chaque fois pour mettre tout ça en
+ligne ». Quand une modification de l'application est faite, elle se déploie en
+entier, sans confirmation : commit et poussée sur `main`, puis synchronisation
+du site du client (`synchroniser.py`), commit et poussée sur le `main` du dépôt
+Tec-direction. Les trois adresses suivent alors seules. Une modification livrée
+mais non déployée est une modification inachevée.
