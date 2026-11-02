@@ -17,6 +17,11 @@
 <!-- La flotte : chargée pour son API de lecture seule, window.Flotte.echeances().
      Le fichier ne touche à rien tant que les écrans de sa page sont absents. -->
 <script src="flotte.js"></script>
+<!-- La conformité transport : chargée pour son API de lecture seule,
+     window.ConformiteTransport.echeances(), afin que les téléchargements et le
+     certificat ADR se préparent au même endroit que le reste. -->
+<script src="documents-transport.js"></script>
+<script src="conformite-transport.js"></script>
 <!-- Les échéances propres à chaque salarié : registre, contrat, entretiens. -->
 <script src="echeances-salaries.js"></script>
 <!-- L'ÉCHÉANCIER, CONSTRUIT TOUT SEUL DEPUIS LA FICHE D'ENTREPRISE. Rien avant
@@ -889,6 +894,34 @@
           detail: e.inconnu ? "La dernière date n'est pas connue : l'échéance ne peut pas être calculée."
             : (e.etat === "passe" ? "Échéance dépassée." : ""),
           prov: "flotte",
+        });
+      });
+    }
+
+    /* LES TÉLÉCHARGEMENTS ET LE CERTIFICAT ADR. Mêmes échéances, même place :
+       elles viennent de la flotte et du registre, calculées par le module de
+       conformité transport. On ne porte ici que celles qui ont une date ;
+       celles qui restent à renseigner se portent dans l'écran du module. */
+    if (window.ConformiteTransport && window.ConformiteTransport.echeances
+        && window.ConformiteTransport.estTransport
+        && window.ConformiteTransport.estTransport()) {
+      var echT = window.ConformiteTransport.echeances();
+      var adr = window.ConformiteTransport.echeanceADR && window.ConformiteTransport.echeanceADR();
+      if (adr) echT.push({ quoi: adr.quoi, qui: "", date: adr.date, etat: adr.etat });
+      echT.forEach(function (e) {
+        if (!e.date) return;
+        var tele = e.quoi.indexOf("Téléchargement") >= 0;
+        lignes.push({
+          tri: e.date, quand: enFr(e.date),
+          titre: e.quoi + (e.qui ? " : " + e.qui : ""),
+          fondement: tele
+            ? "R. 3313-7 du code des transports : téléchargement régulier des données du tachygraphe (carte tous les 28 jours, véhicule tous les 90 jours)"
+            : "arrêté TMD du 29 mai 2009 modifié : le conseiller à la sécurité est titulaire d'un certificat en cours de validité, renouvelé avant son terme",
+          docs: tele ? "le journal de téléchargement, et la date reportée dans Conformité transport"
+            : "le certificat renouvelé, et la date reportée dans Conformité transport",
+          retard: e.etat === "dépassé",
+          detail: e.etat === "dépassé" ? "Échéance dépassée." : "",
+          prov: "transport",
         });
       });
     }

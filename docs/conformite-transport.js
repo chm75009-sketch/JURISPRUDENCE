@@ -384,6 +384,36 @@
     return { retroplanning: retroplanning, note: noteMethode(), checklist: checklistMoyens() };
   }
 
+  /* LE TABLEAU DES INFRACTIONS, EN CLASSEUR. Une ligne par infraction, avec la
+     colonne des mesures prises pour éviter la réitération (et non « preuve de
+     sanction » : c'est la réaction aux manquements répétés qui compte). Les
+     feuilles de référence reprennent les véhicules de la flotte et les
+     conducteurs du registre, pour renseigner sans se tromper d'orthographe. */
+  function exportInfractions() {
+    if (!window.TableurExport) return false;
+    var cols = ["N°", "Section", "Origine / PV", "Date", "Heure début", "Heure fin",
+      "Durée / écart", "Distance (km)", "Code NATINF", "Infraction", "Classe / délit",
+      "Conducteur", "N° carte", "Véhicule", "Détail / observation",
+      "Mesures prises pour éviter la réitération"];
+    var veh = vehiculesFlotte().map(function (v) { return [v.immat || "sans immatriculation"]; });
+    var cond = salariesRegistre().map(function (s) { return [s.nom]; });
+    var feuilles = [
+      { titre: "Infractions", lignes: [cols],
+        largeurs: [5, 22, 20, 12, 10, 10, 15, 11, 12, 28, 14, 20, 20, 40, 34] },
+      { titre: "Véhicules (flotte)", lignes: [["Immatriculation"]].concat(veh.length ? veh : [[""]]) },
+      { titre: "Conducteurs (registre)", lignes: [["Conducteur"]].concat(cond.length ? cond : [[""]]) },
+      { titre: "Mode d'emploi", lignes: [
+        ["Tableau des infractions"],
+        ["Une ligne par infraction, non groupée, avec sa date et son auteur."],
+        ["La colonne des mesures se remplit après coup, en cas de manquements répétés."],
+        ["Les véhicules et les conducteurs sont repris de la flotte et du registre."],
+      ], largeurs: [90] },
+    ];
+    window.TableurExport.telecharger(window.TableurExport.xlsx(feuilles),
+      "tableau-infractions-" + iso(new Date()) + ".xlsx");
+    return true;
+  }
+
   /* ─────────────────────────────── export ───────────────────────────────── */
 
   window.ConformiteTransport = {
@@ -391,6 +421,7 @@
     estTransport: estTransport,
     documents: documents,
     defense: defense,
+    exportInfractions: exportInfractions,
     retroplanning: retroplanning,
     echeances: echeances,
     porterTelechargementVehicule: porterTelechargementVehicule,
