@@ -115,7 +115,10 @@
     '<p class="sous3">Carte tous les ' + CT.DELAI_CARTE + ' jours (registre), véhicule tous les ' +
     CT.DELAI_VEHICULE + ' jours (flotte). Portez la dernière date, l\'échéance se calcule.</p>' +
     '<table class="ech"><thead><tr><th>À télécharger</th><th>Qui</th><th>Dernier</th>' +
-    '<th>Prochaine échéance</th><th>État</th></tr></thead><tbody id="ech-corps"></tbody></table></div>';
+    '<th>Prochaine échéance</th><th>État</th></tr></thead><tbody id="ech-corps"></tbody></table>' +
+    '<div class="carte" style="margin-top:12px"><h3>Certificat du conseiller ADR</h3>' +
+    '<p class="sous3">Fin de validité : <input type="date" id="date-adr"> ' +
+    '<span id="adr-etat"></span></p></div></div>';
 
   /* ───────────────── ESPACE B : DÉFENSE ───────────────── */
   var def = CT.defense();
@@ -164,6 +167,20 @@
       CT.porterTelechargementVehicule(qui, inp.value);
     }
     peindreEch();
+  });
+
+  /* certificat ADR */
+  function peindreADR() {
+    var e = CT.echeanceADR(), s = document.getElementById("adr-etat");
+    var inp = document.getElementById("date-adr");
+    if (e) { inp.value = e.date;
+      s.innerHTML = '<span class="pastille f-' + e.fond + '">' + ech(e.etat) +
+        (e.jours != null ? " (" + e.jours + " j)" : "") + '</span>'; }
+    else s.textContent = "";
+  }
+  peindreADR();
+  document.getElementById("date-adr").addEventListener("change", function (e) {
+    if (e.target.value) { CT.porterCertificatADR(e.target.value); peindreADR(); }
   });
 
   /* rétroplanning */

@@ -68,12 +68,16 @@
      règle de documents-transport.js quand elle est chargée, sinon la nôtre. */
   function estTransport(p) {
     p = p || profil();
-    if (window.Transport && window.Transport.estTransport) return window.Transport.estTransport(p);
+    if (window.Transport && window.Transport.estTransport && window.Transport.estTransport(p)) return true;
     var s = String(p.secteur || "").toLowerCase();
     if (s.indexOf("transport") >= 0 || s.indexOf("logistique") >= 0) return true;
     var c = String(p.conventionCollective || p.convention || p.idcc || "");
-    var m = c.match(/\d{3,4}/);
-    return (m && Number(m[0]) === 16) || /transports routiers/i.test(c);
+    if (/transports routiers/i.test(c)) return true;
+    /* L'IDCC du transport est 16 : deux chiffres, que le filtre à trois ou
+       quatre chiffres manquait. On lit chaque groupe de chiffres et on
+       normalise (16, 0016, « IDCC 16 » valent 16 ; 1601 ne vaut pas 16). */
+    var nums = (c.match(/\d+/g) || []).map(Number);
+    return nums.indexOf(16) >= 0;
   }
 
   /* ───────────────────────────── les dates ──────────────────────────────── */
@@ -148,6 +152,16 @@
   }
   function porterTelechargementCarte(salarieId, dateStr) {
     var e = etat(); e.cartes[salarieId] = { dernier: dateStr }; garderEtat(e);
+  }
+
+  /* L'ÉCHÉANCE DU CERTIFICAT DU CONSEILLER ADR : on porte sa date de fin de
+     validité, on qualifie. Il se renouvelle avant cette date. */
+  function porterCertificatADR(dateFin) { var e = etat(); e.adr = { fin: dateFin }; garderEtat(e); }
+  function echeanceADR() {
+    var e = etat(); if (!e.adr || !e.adr.fin) return null;
+    var q = qualifier(e.adr.fin);
+    return { quoi: "Certificat du conseiller à la sécurité ADR", date: e.adr.fin,
+      etat: q.etat, jours: q.jours, fond: q.fond };
   }
 
   /* LE DÉLAI DISCIPLINAIRE (L. 1332-4). Deux mois à compter de la connaissance
@@ -268,8 +282,58 @@
     };
   }
 
+  function docConseiller() {
+    return {
+      cle: "conseiller-adr", nom: "Conseiller à la sécurité ADR",
+      sous: "Désignation, attestation de mission, suivi du certificat",
+      blocs: [
+        b("h1", "DÉSIGNATION DU CONSEILLER À LA SÉCURITÉ POUR LE TRANSPORT DE MARCHANDISES DANGEREUSES"),
+        b("p", "L'entreprise désigne comme conseiller à la sécurité : [NOM], titulaire du certificat n° [NUMÉRO], valable jusqu'au [DATE]."),
+        b("p", "Le conseiller accepte la mission à compter du [DATE]. La déclaration dans la base nationale (téléservice CSTMD) est effectuée sans délai."),
+        b("note", "La désignation et la télédéclaration sont deux formalités distinctes : le conseiller peut être missionné par un acte interne daté, la déclaration nationale pouvant être postérieure. Les deux pièces se produisent ensemble."),
+        b("h2", "Mission"),
+        b("p", "Le conseiller examine les pratiques et procédures de l'entreprise, établit le rapport annuel, et conseille sur les opérations d'expédition, d'emballage, de chargement et de déchargement liées au transport de marchandises dangereuses."),
+        b("sign", "Fait à [LIEU], le [DATE]."),
+      ],
+      formalites: [
+        "Conserver l'attestation d'acceptation de mission datée et signée, et la facture ou le contrat du conseiller.",
+        "Déclarer le conseiller dans la base nationale et conserver l'attestation de déclaration.",
+        "Suivre l'échéance du certificat : il se renouvelle avant sa date de fin de validité.",
+      ],
+      droit: [
+        "Obligation de désigner un conseiller à la sécurité : arrêté TMD du 29 mai 2009 modifié, pris pour l'application de l'ADR (section 1.8.3).",
+      ],
+    };
+  }
+
+  function docLettreVoiture() {
+    return {
+      cle: "documents-bord", nom: "Documents de bord",
+      sous: "Lettre de voiture, justificatif de location, livret de contrôle",
+      blocs: [
+        b("h1", "DOCUMENTS DEVANT SE TROUVER À BORD"),
+        b("p", "À chaque départ, le conducteur vérifie la présence et la validité des documents suivants."),
+        b("h2", "Lettre de voiture"),
+        b("p", "La lettre de voiture accompagne la marchandise : expéditeur, destinataire, nature et poids, lieux de prise en charge et de livraison. Une réserve se porte sur le document au déchargement, en présence de celui qui reçoit."),
+        b("h2", "Justificatif de location"),
+        b("p", "Pour un véhicule loué, le contrat de location, ou son justificatif, se trouve à bord. [Référence du contrat et durée.]"),
+        b("h2", "Livret individuel de contrôle (véhicules de moins de 3,5 tonnes)"),
+        b("p", "Pour les véhicules de moins de 3,5 tonnes non équipés de chronotachygraphe, le livret individuel de contrôle enregistre les temps de conduite et de repos. Il est tenu à jour et présenté au contrôle."),
+      ],
+      formalites: [
+        "Doter chaque véhicule de moins de 3,5 tonnes d'un livret individuel de contrôle et en vérifier la tenue.",
+        "Conserver à bord le justificatif de location des véhicules loués.",
+        "Rapporter les lettres de voiture signées au retour de tournée.",
+      ],
+      droit: [
+        "Documents de transport et livret individuel de contrôle : code des transports et réglementation routière ; à produire au contrôle.",
+      ],
+    };
+  }
+
   function documents() {
-    return [docConsigne(), docJournal(), docRegistre(), docControle()];
+    return [docConsigne(), docJournal(), docRegistre(), docControle(),
+      docConseiller(), docLettreVoiture()];
   }
 
   /* ─────────────────────────── le kit de défense ────────────────────────── */
@@ -331,6 +395,8 @@
     echeances: echeances,
     porterTelechargementVehicule: porterTelechargementVehicule,
     porterTelechargementCarte: porterTelechargementCarte,
+    porterCertificatADR: porterCertificatADR,
+    echeanceADR: echeanceADR,
     delaiDisciplinaire: delaiDisciplinaire,
     vehicules: vehiculesFlotte,
     salaries: salariesRegistre,

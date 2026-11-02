@@ -161,9 +161,9 @@
       sans: function (p) {
         var s = String(p.secteur || "").toLowerCase();
         var c = String(p.conventionCollective || p.convention || p.idcc || "");
-        var m = c.match(/\d{3,4}/);
+        var nums = (c.match(/\d+/g) || []).map(Number);
         var tr = s.indexOf("transport") >= 0 || s.indexOf("logistique") >= 0
-          || (m && Number(m[0]) === 16) || /transports routiers/i.test(c);
+          || nums.indexOf(16) >= 0 || /transports routiers/i.test(c);
         return tr ? ""
           : "la fiche n'indique pas le transport routier (secteur ou convention IDCC 16) : ce module ne concerne que ce secteur"; } },
     /* Le forfait en jours ne tient à aucun effectif : il tient à un accord
