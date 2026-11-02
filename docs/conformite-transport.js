@@ -352,6 +352,44 @@
     return items;
   }
 
+  /* RELIER UNE CARTE LUE À UN CONDUCTEUR DU REGISTRE. On rapproche le nom du
+     titulaire de la carte des conducteurs du registre : d'abord le nom complet
+     normalisé, sinon le seul nom de famille. Rien n'est forcé : si rien ne
+     correspond, on rend une liste vide et l'utilisateur choisit. */
+  function normal(s) { return sansAccent(s); }
+  function matchConducteur(analyse) {
+    var ident = (analyse && analyse.identification) || {};
+    var cible = normal(ident.titulaire || "");
+    var nomSeul = normal(ident.nom || "");
+    var L = salariesRegistre();
+    var exact = L.filter(function (s) { return normal(s.nom) === cible && cible; })[0];
+    if (exact) return exact.id;
+    if (nomSeul) {
+      var parNom = L.filter(function (s) { return normal(s.nom).indexOf(nomSeul) >= 0; })[0];
+      if (parNom) return parNom.id;
+    }
+    return "";
+  }
+
+  /* Porter au suivi les anomalies tirées de la carte, sans doublon : une même
+     date et un même type ne se réinscrivent pas. Rend le nombre ajouté. */
+  function importerAnomalies(id, anomalies) {
+    if (!id || !anomalies || !anomalies.length) return 0;
+    var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
+    s.anomalies = s.anomalies || [];
+    var n = 0;
+    anomalies.forEach(function (a) {
+      var existe = s.anomalies.some(function (x) {
+        return (x.date || "") === (a.date || "") && (x.type || "") === (a.type || "");
+      });
+      if (existe) return;
+      s.anomalies.push({ date: a.date || iso(new Date()), type: net(a.type), detail: net(a.detail) });
+      n++;
+    });
+    e.suivi[id] = s; garderEtat(e);
+    return n;
+  }
+
   function enWordSuivi(id) {
     if (!window.AuditExport) return false;
     var sal = salariesRegistre().filter(function (x) { return x.id === id; })[0] || { nom: id };
@@ -682,6 +720,8 @@
     ajouterMesure: ajouterMesure,
     supprimerAnomalie: supprimerAnomalie,
     supprimerMesure: supprimerMesure,
+    matchConducteur: matchConducteur,
+    importerAnomalies: importerAnomalies,
     enWordSuivi: enWordSuivi,
     DELAI_CARTE: DELAI_CARTE, DELAI_VEHICULE: DELAI_VEHICULE,
   };

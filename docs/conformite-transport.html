@@ -77,6 +77,7 @@
 <script src="apercu.js"></script>
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
+<script src="lecture-carte.js"></script>
 <script src="conformite-transport.js"></script>
 <script>
 "use strict";
@@ -140,6 +141,12 @@
     '<p class="sous3">Chaque conducteur du registre, poids lourd et autre. On relève les anomalies, ' +
     'on porte la réaction, en correction, ajustement ou sanction. Un même manquement relevé deux fois ' +
     'sans réaction passe au rouge : la troisième condition de l\'exonération n\'est plus tenue.</p>' +
+    '<div class="carte"><h3>Lire une carte de conducteur</h3>' +
+    '<p class="sous3">Fichier téléchargé de la carte (.ddd ou .C1B). On en tire le temps de conduite ' +
+    'et les événements enregistrés par l\'appareil, prêts à porter dans la fiche du conducteur. Le fichier ' +
+    'reste sur votre appareil, rien n\'est envoyé.</p>' +
+    '<input type="file" id="carte-fichier" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,application/octet-stream">' +
+    '<div id="carte-resultat"></div></div>' +
     '<div id="cond-liste"></div></div>';
 
   /* ───────────────── ESPACE B : DÉFENSE ───────────────── */
@@ -328,6 +335,94 @@
       CT.supprimerMesure(idsm, +sm.getAttribute("data-i")); peindreConducteurs(); reouvrir(idsm); return; }
   });
   function reouvrir(id) { var d = document.getElementById("cond-" + id); if (d) d.classList.add("ouvert"); }
+
+  /* ─── lecture d'une carte conducteur ─── */
+  function optionsConducteurs(sel) {
+    return '<option value="">choisir le conducteur</option>' +
+      CT.salaries().map(function (s) {
+        return '<option value="' + s.id + '"' + (s.id === sel ? " selected" : "") + '>' + ech(s.nom) + '</option>';
+      }).join("");
+  }
+  var carteAnalyse = null;
+  var inpCarte = document.getElementById("carte-fichier");
+  if (inpCarte) inpCarte.addEventListener("change", function (e) {
+    var f = e.target.files && e.target.files[0];
+    var cible = document.getElementById("carte-resultat");
+    if (!f) { cible.innerHTML = ""; return; }
+    if (!window.LectureCarte) { cible.innerHTML = '<p class="vide">Le lecteur de carte n\'est pas disponible sur cette page.</p>'; return; }
+    var fr = new FileReader();
+    fr.onload = function () {
+      try {
+        var carte = window.LectureCarte.lire(fr.result);
+        carteAnalyse = window.LectureCarte.analyser(carte);
+      } catch (err) {
+        cible.innerHTML = '<p class="vide">Fichier illisible : ' + ech(err.message) + '</p>'; return;
+      }
+      peindreCarte();
+    };
+    fr.onerror = function () { cible.innerHTML = '<p class="vide">Le fichier n\'a pas pu être ouvert.</p>'; };
+    fr.readAsArrayBuffer(f);
+  });
+  function peindreCarte() {
+    var a = carteAnalyse, cible = document.getElementById("carte-resultat");
+    if (!a) { cible.innerHTML = ""; return; }
+    var id = a.identification || {};
+    if (!id.titulaire && !a.nbJours && !a.evenements.length) {
+      cible.innerHTML = '<p class="vide">Ce fichier ne ressemble pas à une carte de conducteur lisible (aucune identification ni activité).</p>'; return;
+    }
+    var match = CT.matchConducteur(a);
+    var h = '<div class="doc ouvert">';
+    h += '<div class="bloc-h2">Carte lue</div>';
+    h += '<p>' + ech(id.titulaire || "titulaire non lu") +
+      (id.numero ? '  ·  n° ' + ech(id.numero) : '') +
+      (id.expiration ? '  ·  valable jusqu\'au ' + ech(id.expiration) : '') + '</p>';
+    if (a.periode) h += '<p class="sous3">Activités du ' + ech(a.periode.du) + ' au ' + ech(a.periode.au) +
+      ', ' + a.nbJours + ' jour' + (a.nbJours > 1 ? 's' : '') + '. Véhicules : ' + a.vehicules.length + '.</p>';
+
+    h += '<div class="mini"><label>Rattacher au conducteur<select id="carte-cible">' +
+      optionsConducteurs(match) + '</select></label>' +
+      '<button id="carte-date">Porter la date de téléchargement</button></div>';
+    h += '<span id="carte-msg" class="sous3"></span>';
+
+    h += '<div class="bloc-h2">Anomalies tirées de la carte</div>';
+    if (a.anomalies.length) {
+      h += '<table class="ech"><thead><tr><th></th><th>Date</th><th>Type</th><th>Détail</th></tr></thead><tbody>';
+      a.anomalies.forEach(function (x, i) {
+        h += '<tr><td><input type="checkbox" class="ia" data-i="' + i + '" checked></td><td>' +
+          ech(x.date) + '</td><td>' + ech(x.type) + '</td><td>' + ech(x.detail) + '</td></tr>';
+      });
+      h += '</tbody></table><div class="mini"><button id="carte-ajouter">Ajouter les anomalies cochées au suivi</button></div>';
+    } else {
+      h += '<p class="vide">Aucune anomalie tirée de la carte : ni dépassement calculé, ni événement enregistré par l\'appareil.</p>';
+    }
+    h += '</div>';
+    cible.innerHTML = h;
+
+    var bd = document.getElementById("carte-date");
+    if (bd) bd.addEventListener("click", function () {
+      var cid = document.getElementById("carte-cible").value;
+      if (!cid) { msgCarte("Choisissez d'abord le conducteur."); return; }
+      var d = a.periode ? a.periode.au : null;
+      d = d || new Date().toISOString().slice(0, 10);
+      CT.porterTelechargementCarte(cid, d);
+      peindreEch();
+      msgCarte("Date du téléchargement portée à l'échéancier (" + d + ").");
+    });
+    var ba = document.getElementById("carte-ajouter");
+    if (ba) ba.addEventListener("click", function () {
+      var cid = document.getElementById("carte-cible").value;
+      if (!cid) { msgCarte("Choisissez d'abord le conducteur."); return; }
+      var choisies = [];
+      Array.prototype.forEach.call(document.querySelectorAll("#carte-resultat .ia:checked"), function (c) {
+        choisies.push(a.anomalies[+c.getAttribute("data-i")]);
+      });
+      var n = CT.importerAnomalies(cid, choisies);
+      peindreConducteurs(); reouvrir(cid);
+      msgCarte(n + " anomalie" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " au suivi" +
+        (n < choisies.length ? " (" + (choisies.length - n) + " déjà présente(s))" : "") + ".");
+    });
+  }
+  function msgCarte(t) { var m = document.getElementById("carte-msg"); if (m) m.textContent = t; }
 
   /* rétroplanning */
   function peindreRetro() {
