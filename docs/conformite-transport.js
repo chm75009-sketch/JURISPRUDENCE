@@ -417,8 +417,30 @@
     ];
   }
 
+  /* LA PROPORTIONNALITÉ. Devant la commission, la mesure se pèse au regard du
+     comportement et de la situation de l'entreprise : le parc, l'effectif, le
+     nombre de copies conformes. Le parc vient de la flotte ; l'effectif et les
+     copies conformes de la fiche quand elle les porte, sinon ils restent à
+     compléter. Rien ne s'invente. */
+  function proportionnalite() {
+    var p = profil();
+    var parc = vehiculesFlotte().length;
+    var eff = p.effectif || p.effectifTotal || null;
+    var copies = p.copiesConformes || null;
+    var phrases = [];
+    phrases.push(parc
+      ? "Parc enregistré dans la flotte : " + parc + " véhicule" + (parc > 1 ? "s" : "") + "."
+      : "Parc : à renseigner dans la flotte.");
+    phrases.push(eff ? "Effectif : " + eff + " salariés." : "Effectif : à reprendre de la fiche.");
+    phrases.push(copies ? "Copies conformes détenues : " + copies + "."
+      : "Copies conformes détenues : à renseigner (c'est sur ce total que se mesure un retrait).");
+    phrases.push("Un retrait de copies conformes ou une immobilisation prive des conducteurs de travail et met en cause les contrats de sous-traitance : la mesure se rapporte au parc et à la période, non à un volume brut d'infractions.");
+    return { parc: parc, effectif: eff, copies: copies, phrases: phrases };
+  }
+
   function defense() {
-    return { retroplanning: retroplanning, note: noteMethode(), checklist: checklistMoyens() };
+    return { retroplanning: retroplanning, note: noteMethode(),
+      checklist: checklistMoyens(), proportionnalite: proportionnalite() };
   }
 
   /* LE TABLEAU DES INFRACTIONS, EN CLASSEUR. Une ligne par infraction, avec la

@@ -138,6 +138,9 @@
   html += '<div class="carte"><h3>Liste des moyens à vérifier</h3><div class="doc ouvert"><ul>';
   def.checklist.forEach(function (m) { html += '<li>' + ech(m) + '</li>'; });
   html += '</ul></div></div>';
+  html += '<div class="carte"><h3>Proportionnalité : conséquences d\'une sanction</h3><div class="doc ouvert"><ul>';
+  def.proportionnalite.phrases.forEach(function (m) { html += '<li>' + ech(m) + '</li>'; });
+  html += '</ul></div></div>';
   html += '<div class="carte"><h3>Tableau des infractions</h3>' +
     '<p class="sous3">Une ligne par infraction, avec les véhicules et conducteurs repris de la flotte et du registre.</p>' +
     '<button id="export-infractions">Télécharger le classeur</button></div>';
