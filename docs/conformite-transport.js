@@ -1,0 +1,339 @@
+/* LA CONFORMITÉ TRANSPORT ET LE CONTRÔLE DRIEAT.
+
+   POURQUOI CE FICHIER EXISTE
+
+   Le contrôle de la DRIEAT sur T.E.C., novembre 2025, et la saisine de la
+   commission territoriale des sanctions administratives qui a suivi. On en a
+   tiré un dossier de défense complet : des observations, un tableau des
+   infractions ligne par ligne, une note d'exonération. Ce fichier range ce
+   travail dans l'application pour qu'il serve au prochain contrôle, et il
+   ajoute ce qui le précède : le dispositif de conformité qui, tenu au jour le
+   jour, permet à l'employeur d'établir qu'il a veillé au respect de la
+   réglementation par ses conducteurs.
+
+   DEUX ESPACES
+
+   La prévention : les documents que l'entreprise doit tenir (consigne signée,
+   journal de téléchargement, registre des anomalies, compte rendu de contrôle
+   hebdomadaire), et l'échéancier des téléchargements (carte et véhicule).
+   La défense : le rétroplanning des délais de la commission, la note de
+   méthode et la liste des moyens, prêts le jour du contrôle.
+
+   LE LIEN AVEC LA FLOTTE ET LE REGISTRE
+
+   Rien ne se saisit deux fois. Les véhicules viennent de la flotte
+   (flotte-vehicules), les conducteurs du registre du personnel
+   (registre-personnel). L'échéancier des téléchargements se calcule par
+   véhicule et par conducteur à partir des dates portées ici, et se range avec
+   les autres échéances de l'agenda.
+
+   CE QUI EST FONDÉ, ET COMMENT
+
+   Les articles cités ont été lus à la source par le relais Légifrance de
+   l'application le 2 novembre 2026, le code des transports comme le code du
+   travail. L'identifiant de version est consigné avec le numéro : un article
+   se modifie sans changer de numéro. Les périodicités de vingt-huit et
+   quatre-vingt-dix jours viennent du règlement (UE) n° 165/2014, auquel
+   R. 3313-7 renvoie ; le rapport de la DRIEAT retient quatre-vingt-quinze
+   jours pour le véhicule, repris ici comme la borne de l'administration.      */
+
+(function (window) {
+  "use strict";
+
+  /* Les articles, avec l'identifiant de la version lue le 2 novembre 2026. */
+  var T = {
+    "R3313-7":  { id: "LEGIARTI000033450393", code: "transports",
+      objet: "obligation de télécharger les données du tachygraphe et des cartes" },
+    "R3452-20": { id: "LEGIARTI000033450703", code: "transports",
+      objet: "procédure contradictoire devant la commission des sanctions" },
+    "R3452-21": { id: "LEGIARTI000033450705", code: "transports",
+      objet: "convocation trois semaines avant la séance, accès au dossier" },
+    "L1332-4":  { id: "LEGIARTI000006901450", code: "travail",
+      objet: "délai de deux mois pour engager les poursuites disciplinaires" },
+  };
+  function art(n) { return n.replace(/^([LRD])(\d)/, "$1. $2"); }
+
+  function lire(c, d) {
+    try { return JSON.parse(window.localStorage.getItem(c) || "null") || d; }
+    catch (e) { return d; }
+  }
+  function garder(c, v) { try { window.localStorage.setItem(c, JSON.stringify(v)); } catch (e) {} }
+
+  function profil() {
+    if (window.Profil && window.Profil.lire) return window.Profil.lire() || {};
+    return lire("profil-entreprise", {}) || {};
+  }
+
+  /* Transport ? Le secteur de la fiche ou l'IDCC 16 le dit. On réutilise la
+     règle de documents-transport.js quand elle est chargée, sinon la nôtre. */
+  function estTransport(p) {
+    p = p || profil();
+    if (window.Transport && window.Transport.estTransport) return window.Transport.estTransport(p);
+    var s = String(p.secteur || "").toLowerCase();
+    if (s.indexOf("transport") >= 0 || s.indexOf("logistique") >= 0) return true;
+    var c = String(p.conventionCollective || p.convention || p.idcc || "");
+    var m = c.match(/\d{3,4}/);
+    return (m && Number(m[0]) === 16) || /transports routiers/i.test(c);
+  }
+
+  /* ───────────────────────────── les dates ──────────────────────────────── */
+
+  var STORE = "conformite-transport";
+  function etat() {
+    return lire(STORE, { vehicules: {}, cartes: {}, anomalies: [], controles: [] });
+  }
+  function garderEtat(e) { garder(STORE, e); }
+
+  function iso(d) { return new Date(d).toISOString().slice(0, 10); }
+  function ajouterJours(dateStr, n) {
+    var d = new Date(dateStr + "T00:00:00");
+    d.setDate(d.getDate() + n);
+    return iso(d);
+  }
+  function joursEntre(a, b) {
+    return Math.round((new Date(b + "T00:00:00") - new Date(a + "T00:00:00")) / 86400000);
+  }
+  function qualifier(echeanceStr) {
+    var j = joursEntre(iso(new Date()), echeanceStr);
+    if (j < 0) return { etat: "dépassé", jours: j, fond: "rouge" };
+    if (j <= 7) return { etat: "proche", jours: j, fond: "orange" };
+    return { etat: "à jour", jours: j, fond: "vert" };
+  }
+
+  /* L'ÉCHÉANCIER DES TÉLÉCHARGEMENTS.
+
+     La carte de chaque conducteur se télécharge tous les vingt-huit jours, le
+     tachygraphe de chaque véhicule tous les quatre-vingt-dix jours (borne du
+     rapport : quatre-vingt-quinze). On lit la dernière date portée ici, on
+     ajoute le délai, on qualifie. Pas de date : l'échéance est « à renseigner ». */
+  var DELAI_CARTE = 28, DELAI_VEHICULE = 90;
+
+  function vehiculesFlotte() { return lire("flotte-vehicules", []) || []; }
+  function salariesRegistre() {
+    var r = lire("registre-personnel", {}) || {};
+    var out = [];
+    Object.keys(r).forEach(function (id) {
+      var s = r[id] || {};
+      var sorti = s.sortie || s.dateSortie;
+      if (sorti) return; /* seuls les présents */
+      out.push({ id: id, nom: s.nom || s.nomPrenom || ("salarié " + id), poste: s.poste || "" });
+    });
+    return out;
+  }
+
+  function echeances() {
+    var e = etat(), out = [];
+    vehiculesFlotte().forEach(function (v) {
+      var immat = v.immat || "véhicule sans immatriculation";
+      var der = (e.vehicules[immat] || {}).dernier;
+      if (!der) { out.push({ quoi: "Téléchargement du véhicule", qui: immat, date: null,
+        etat: "à renseigner", jours: null, fond: "gris" }); return; }
+      var ech = ajouterJours(der, DELAI_VEHICULE), q = qualifier(ech);
+      out.push({ quoi: "Téléchargement du véhicule", qui: immat, date: ech,
+        etat: q.etat, jours: q.jours, fond: q.fond, dernier: der });
+    });
+    salariesRegistre().forEach(function (s) {
+      var der = (e.cartes[s.id] || {}).dernier;
+      if (!der) { out.push({ quoi: "Téléchargement de la carte", qui: s.nom, date: null,
+        etat: "à renseigner", jours: null, fond: "gris" }); return; }
+      var ech = ajouterJours(der, DELAI_CARTE), q = qualifier(ech);
+      out.push({ quoi: "Téléchargement de la carte", qui: s.nom, date: ech,
+        etat: q.etat, jours: q.jours, fond: q.fond, dernier: der });
+    });
+    return out;
+  }
+
+  function porterTelechargementVehicule(immat, dateStr) {
+    var e = etat(); e.vehicules[immat] = { dernier: dateStr }; garderEtat(e);
+  }
+  function porterTelechargementCarte(salarieId, dateStr) {
+    var e = etat(); e.cartes[salarieId] = { dernier: dateStr }; garderEtat(e);
+  }
+
+  /* LE DÉLAI DISCIPLINAIRE (L. 1332-4). Deux mois à compter de la connaissance
+     des faits, sauf poursuites pénales exercées dans ce délai. */
+  function delaiDisciplinaire(dateConnaissance) {
+    if (!dateConnaissance) return null;
+    var d = new Date(dateConnaissance + "T00:00:00");
+    d.setMonth(d.getMonth() + 2);
+    var ech = iso(d), q = qualifier(ech);
+    return { echeance: ech, etat: q.etat, jours: q.jours,
+      reserve: "Sauf si ces faits ont donné lieu, dans ce même délai, à l'exercice de " +
+        "poursuites pénales : la seule transmission du procès-verbal au procureur ne suffit pas " +
+        "(critère de la mise en mouvement de l'action publique, Cass. soc. 13 octobre 2016, " +
+        "n° 15-14.006)." };
+  }
+
+  /* ─────────────────────── les documents de prévention ──────────────────── */
+
+  function b(k, t) { return { k: k, t: t }; }
+
+  function docConsigne() {
+    return {
+      cle: "consigne-carte", nom: "Consigne de conduite avec carte",
+      sous: "Signée par chaque conducteur, versée à son dossier",
+      blocs: [
+        b("h1", "CONSIGNE DE CONDUITE AVEC CARTE DE CONDUCTEUR"),
+        b("p", "La présente consigne rappelle les règles dont le respect est une obligation professionnelle de chaque conducteur. Elle est signée et versée au dossier individuel."),
+        b("h2", "La carte de conducteur"),
+        b("p", "La carte est insérée avant tout déplacement du véhicule, y compris une simple manœuvre sur un site ou au dépôt, et retirée à la fin du service. Elle est personnelle et ne se prête pas."),
+        b("p", "Aucun déplacement ne se fait carte retirée. Une carte perdue, volée ou défectueuse se déclare immédiatement, et les feuillets manuels sont renseignés en attendant son remplacement."),
+        b("h2", "Le sélecteur d'activités"),
+        b("p", "Les changements d'activité, conduite, autre travail, disponibilité, repos, sont saisis au moment où ils interviennent. Aucune manipulation destinée à minimiser le temps de travail ou de conduite n'est tolérée."),
+        b("h2", "Les temps de conduite et de repos"),
+        b("p", "Les durées du règlement (CE) n° 561/2006 se respectent sans exception. Un planning qui paraît impossible à tenir se signale à l'exploitation avant le départ, jamais après. Un retard ne se rattrape ni sur une pause ni sur un repos."),
+        b("h2", "Le repos hebdomadaire"),
+        b("p", "Le repos hebdomadaire normal ne se prend pas à bord du véhicule : l'hébergement est organisé et pris en charge par l'entreprise."),
+        b("sign", "Le conducteur reconnaît avoir reçu et compris la présente consigne."),
+      ],
+      formalites: [
+        "Remettre un exemplaire signé à chaque conducteur et en conserver un au dossier individuel.",
+        "La faire signer à l'embauche, puis à chaque rappel.",
+        "La tenir à disposition en cas de contrôle : c'est l'instruction écrite que la jurisprudence exige.",
+      ],
+      droit: [
+        "Obligation d'enregistrement par le chronotachygraphe : " + art("R3313-7") + " du code des transports, renvoyant au règlement (UE) n° 165/2014.",
+        "Exonération de l'employeur subordonnée à la preuve d'instructions données et de contrôles effectifs : Cass. crim. 16 janvier 1990, n° 89-82.880.",
+      ],
+    };
+  }
+
+  function docJournal() {
+    return {
+      cle: "journal-telechargement", nom: "Journal de téléchargement",
+      sous: "Carte tous les 28 jours, véhicule tous les 90 jours, daté",
+      blocs: [
+        b("h1", "JOURNAL DE TÉLÉCHARGEMENT DES DONNÉES"),
+        b("p", "Ce journal prouve la régularité des téléchargements. Chaque opération y est portée, datée et signée par le responsable désigné."),
+        b("p", "Responsable des téléchargements : [NOM OU FONCTION]."),
+        b("h2", "Cartes des conducteurs, tous les 28 jours"),
+        b("table", "Conducteur | Numéro de carte | Date du téléchargement | Prochaine échéance | Visa"),
+        b("h2", "Véhicules, tous les 90 jours"),
+        b("table", "Véhicule | Immatriculation | Date du téléchargement | Prochaine échéance | Visa"),
+        b("note", "Les données sont conservées de façon à en garantir la sécurité et l'exactitude, et au moins douze mois."),
+      ],
+      formalites: [
+        "Tenir le journal au fil des téléchargements, sans le reconstituer après coup.",
+        "Conserver les fichiers téléchargés au moins douze mois.",
+        "Les échéances se suivent dans l'application, calculées par conducteur et par véhicule.",
+      ],
+      droit: [
+        art("R3313-7") + " du code des transports : téléchargement des données du tachygraphe de chaque véhicule et de la carte de chaque conducteur, dans les conditions du règlement (UE) n° 165/2014.",
+      ],
+    };
+  }
+
+  function docRegistre() {
+    return {
+      cle: "registre-anomalies", nom: "Registre des anomalies",
+      sous: "Chaque écart détecté, suivi jusqu'à sa clôture",
+      blocs: [
+        b("h1", "REGISTRE DES ANOMALIES"),
+        b("p", "Toute anomalie détectée lors d'un contrôle ou d'un téléchargement y est inscrite, avec la mesure prise et sa date de clôture. C'est la trace du contrôle effectif, et de la réaction aux manquements."),
+        b("table", "Date | Conducteur ou véhicule | Anomalie constatée | Mesure prise | Date de clôture"),
+        b("note", "Une anomalie qui se répète appelle une mesure propre à éviter qu'elle ne se reproduise : rappel formalisé, formation, changement d'affectation, et le cas échéant sanction disciplinaire dans le délai de deux mois."),
+      ],
+      formalites: [
+        "Inscrire chaque anomalie le jour où elle est constatée.",
+        "Suivre chaque ligne jusqu'à sa clôture.",
+        "Conserver le registre : il établit la réaction aux manquements répétés.",
+      ],
+      droit: [
+        "Troisième condition de l'exonération : en cas de manquements répétés, prendre les mesures nécessaires pour éviter qu'ils ne se reproduisent (Cass. crim. 16 janvier 1990, n° 89-82.880).",
+        "Délai de la sanction disciplinaire : " + art("L1332-4") + " du code du travail, deux mois à compter de la connaissance des faits.",
+      ],
+    };
+  }
+
+  function docControle() {
+    return {
+      cle: "controle-hebdomadaire", nom: "Compte rendu de contrôle hebdomadaire",
+      sous: "Le référent conformité vérifie les temps, daté et signé",
+      blocs: [
+        b("h1", "CONTRÔLE HEBDOMADAIRE DES TEMPS DE CONDUITE ET DE REPOS"),
+        b("p", "Chaque semaine, le référent conformité vérifie les temps de conduite et de repos à partir des données téléchargées, et consigne le résultat."),
+        b("p", "Semaine du [DATE] au [DATE]. Référent : [NOM OU FONCTION]."),
+        b("table", "Conducteur | Dépassement relevé | Repos insuffisant | Observation | Suite donnée"),
+        b("p", "Anomalies reportées au registre des anomalies : [OUI / NON]."),
+        b("sign", "Fait le [DATE], [NOM], référent conformité."),
+      ],
+      formalites: [
+        "Établir le compte rendu chaque semaine, daté et signé.",
+        "Reporter les anomalies au registre des anomalies.",
+        "Conserver les comptes rendus : ils établissent le contrôle à intervalles réguliers.",
+      ],
+      droit: [
+        "Deuxième condition de l'exonération : s'assurer à intervalles réguliers du respect effectif de la réglementation (Cass. crim. 16 janvier 1990, n° 89-82.880).",
+      ],
+    };
+  }
+
+  function documents() {
+    return [docConsigne(), docJournal(), docRegistre(), docControle()];
+  }
+
+  /* ─────────────────────────── le kit de défense ────────────────────────── */
+
+  /* Le rétroplanning des délais de la commission, à partir de la date de la
+     séance. Les délais viennent de R. 3452-21, lu à la source. */
+  function retroplanning(dateSeance) {
+    var etapes = [
+      { quoi: "Convocation reçue au plus tard", regle: "trois semaines avant la séance", jours: -21 },
+      { quoi: "Communication du rapport de présentation au plus tard", regle: "cinq jours avant la séance", jours: -5 },
+      { quoi: "Demander la consultation du dossier et l'audition orale", regle: "dès réception de la convocation", jours: -20 },
+      { quoi: "Déposer les observations écrites", regle: "avant la séance", jours: -2 },
+      { quoi: "Séance de la commission", regle: "", jours: 0 },
+    ];
+    return etapes.map(function (e) {
+      var o = { quoi: e.quoi, regle: e.regle };
+      if (dateSeance) o.date = ajouterJours(dateSeance, e.jours);
+      return o;
+    });
+  }
+
+  function noteMethode() {
+    return {
+      titre: "Note de méthode : l'exonération de l'employeur",
+      blocs: [
+        b("p", "Devant le juge pénal, l'employeur peut s'exonérer de sa responsabilité. Devant la commission, la sanction est administrative : les mesures de conformité n'exonèrent pas, elles pèsent sur la proportionnalité de la mesure."),
+        b("h2", "Les trois conditions de l'exonération pénale"),
+        b("p", "Le chef d'entreprise ne s'exonère que s'il a informé ses salariés du contenu de la réglementation et leur a donné instruction de la respecter, s'il s'est assuré à intervalles réguliers du respect effectif, et si, en cas de manquements répétés, il a pris les mesures nécessaires pour éviter qu'ils ne se reproduisent (Cass. crim. 16 janvier 1990, n° 89-82.880, publié)."),
+        b("p", "Dire « c'est le chauffeur » ne suffit jamais : il faut produire les instructions et les contrôles (Cass. crim. 31 mars 2026, n° 25-82.051, pour la méthode)."),
+        b("h2", "Devant la commission"),
+        b("p", "Le juge se prononce comme juge de l'excès de pouvoir : il ne module pas, il confirme ou annule après contrôle de proportionnalité. Il faut faire de la disproportion un moyen de légalité."),
+      ],
+    };
+  }
+
+  function checklistMoyens() {
+    return [
+      "Prescription disciplinaire : le délai de deux mois de " + art("L1332-4") + " court-il encore ? Les conducteurs ont-ils été poursuivis, et TEC est-elle partie ?",
+      "Proportionnalité : la mesure est-elle adaptée au parc et à la période ? Chiffrer les conséquences d'un retrait ou d'une immobilisation.",
+      "Qualification : un même défaut de carte ne peut être qualifié tantôt simple, tantôt aggravé, sans élément matériel distinct.",
+      "Décompte : vérifier les doublons et les périodes non qualifiées, pièce par pièce.",
+      "Maîtrise des opérations et délégation : le gérant est-il lui-même gestionnaire de transport ? Un acte de délégation existe-t-il ?",
+      "Procédure : convocation reçue au moins trois semaines avant la séance (" + art("R3452-21") + ") ; demande de communication du dossier et d'audition.",
+    ];
+  }
+
+  function defense() {
+    return { retroplanning: retroplanning, note: noteMethode(), checklist: checklistMoyens() };
+  }
+
+  /* ─────────────────────────────── export ───────────────────────────────── */
+
+  window.ConformiteTransport = {
+    TEXTES: T, art: art,
+    estTransport: estTransport,
+    documents: documents,
+    defense: defense,
+    retroplanning: retroplanning,
+    echeances: echeances,
+    porterTelechargementVehicule: porterTelechargementVehicule,
+    porterTelechargementCarte: porterTelechargementCarte,
+    delaiDisciplinaire: delaiDisciplinaire,
+    vehicules: vehiculesFlotte,
+    salaries: salariesRegistre,
+    DELAI_CARTE: DELAI_CARTE, DELAI_VEHICULE: DELAI_VEHICULE,
+  };
+})(window);
