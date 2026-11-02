@@ -62,6 +62,13 @@
   .mini button{font-size:14px;padding:8px 12px}
   .sup{background:none;border:none;color:var(--texte-2);cursor:pointer;font-size:16px;padding:0 4px}
   .vide{color:var(--texte-2);font-style:italic;font-size:var(--t2);margin:6px 0 0}
+  .echeance{border:1px solid var(--trait);border-left:4px solid var(--trait);border-radius:10px;padding:12px 14px;margin:0 0 10px;background:var(--fond-2)}
+  .echeance.b-vert{border-left-color:#1f6f43}.echeance.b-orange{border-left-color:#9a5b16}
+  .echeance.b-rouge{border-left-color:#8a2020}.echeance.b-gris{border-left-color:#777}
+  .echeance .et-titre{font-weight:600;margin:0 0 8px}
+  .echeance .et-ligne{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between;margin:6px 0}
+  .echeance .et-ligne>span.lab{color:var(--texte-2);font-size:var(--t2)}
+  .echeance input[type=date]{font-size:15px;padding:7px 8px}
 </style>
 </head>
 <body>
@@ -86,6 +93,12 @@
   var CT = window.ConformiteTransport;
   var corps = document.getElementById("corps");
   function ech(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;}
+  /* Une date ISO rendue en français : 2027-01-31 devient 31 janv. 2027. */
+  function joliDate(iso){
+    if(!iso) return "";
+    try{ return new Intl.DateTimeFormat("fr-FR",{day:"numeric",month:"short",year:"numeric"})
+      .format(new Date(iso+"T00:00:00")); }catch(e){ return iso; }
+  }
 
   if (!CT || !CT.estTransport()) {
     corps.innerHTML = '<div class="nontransport">Ce module s\'adresse aux entreprises de transport routier ' +
@@ -131,8 +144,7 @@
   html += '<div class="espace"><h2>Échéancier des téléchargements</h2>' +
     '<p class="sous3">Carte tous les ' + CT.DELAI_CARTE + ' jours (registre), véhicule tous les ' +
     CT.DELAI_VEHICULE + ' jours (flotte). Portez la dernière date, l\'échéance se calcule.</p>' +
-    '<table class="ech"><thead><tr><th>À télécharger</th><th>Qui</th><th>Dernier</th>' +
-    '<th>Prochaine échéance</th><th>État</th></tr></thead><tbody id="ech-corps"></tbody></table>' +
+    '<div id="ech-corps"></div>' +
     '<div class="carte" style="margin-top:12px"><h3>Certificat du conseiller ADR</h3>' +
     '<p class="sous3">Fin de validité : <input type="date" id="date-adr"> ' +
     '<span id="adr-etat"></span></p></div></div>';
@@ -198,17 +210,27 @@
       '<p class="bloc-note">' + ech(d.reserve) + '</p>';
   });
 
-  /* échéancier */
+  /* échéancier : une fiche par véhicule et par conducteur, lisible de haut en
+     bas sur un téléphone, plutôt qu'un tableau à cinq colonnes qui déborde. */
   function peindreEch() {
     var tb = document.getElementById("ech-corps"), L = CT.echeances(), h = '';
-    if (!L.length) h = '<tr><td colspan="5">La flotte et le registre ne portent encore ni véhicule ni conducteur.</td></tr>';
-    L.forEach(function (x, i) {
-      h += '<tr><td>' + ech(x.quoi) + '</td><td>' + ech(x.qui) + '</td>' +
-        '<td><input type="date" data-k="' + (x.quoi.indexOf("carte") >= 0 ? "c" : "v") + '" ' +
-        'data-qui="' + ech(x.qui) + '" value="' + (x.dernier || "") + '"></td>' +
-        '<td>' + ech(x.date || "à renseigner") + '</td>' +
-        '<td><span class="pastille f-' + (x.fond || "gris") + '">' + ech(x.etat) +
-        (x.jours != null ? " (" + x.jours + " j)" : "") + '</span></td></tr>';
+    if (!L.length) {
+      tb.innerHTML = '<p class="vide">La flotte et le registre ne portent encore ni véhicule ni conducteur.</p>';
+      return;
+    }
+    L.forEach(function (x) {
+      var carte = x.quoi.indexOf("carte") >= 0;
+      var titre = carte ? "Carte conducteur" : "Véhicule";
+      var fond = x.fond || "gris";
+      h += '<div class="echeance b-' + fond + '">' +
+        '<div class="et-titre">' + titre + ' : ' + ech(x.qui) + '</div>' +
+        '<div class="et-ligne"><span class="lab">Dernier téléchargement</span>' +
+        '<input type="date" data-k="' + (carte ? "c" : "v") + '" data-qui="' + ech(x.qui) +
+        '" value="' + (x.dernier || "") + '"></div>' +
+        '<div class="et-ligne"><span class="lab">Prochaine limite</span>' +
+        '<span><b>' + (x.date ? ech(joliDate(x.date)) : "à renseigner") + '</b> ' +
+        '<span class="pastille f-' + fond + '">' + ech(x.etat) +
+        (x.jours != null ? " (" + x.jours + " j)" : "") + '</span></span></div></div>';
     });
     tb.innerHTML = h;
   }
