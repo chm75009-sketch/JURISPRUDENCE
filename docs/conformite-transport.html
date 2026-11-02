@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#16181d">
 <link rel="icon" href="icons/icon-discipline-180.png">
-<title>Conformité transport</title>
+<title>Tachygraphe, cartes conducteurs et temps de conduite</title>
 <link rel="stylesheet" href="style.css">
 <script src="barre.js"></script>
 
@@ -53,16 +53,26 @@
   table.ech input{width:140px}
   .nontransport{border:1px solid var(--trait);border-radius:10px;padding:16px;color:var(--texte-2)}
   .retro td input{width:160px}
+  .cond h3{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .cond .pl{font-size:11px;background:var(--fond);border:1px solid var(--trait);border-radius:10px;padding:1px 8px;color:var(--texte-2)}
+  .mini{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
+  .mini label{display:flex;flex-direction:column;font-size:12px;color:var(--texte-2);gap:2px}
+  .mini input,.mini select{font-size:14px;padding:7px 8px}
+  .mini input[type=text]{min-width:120px}
+  .mini button{font-size:14px;padding:8px 12px}
+  .sup{background:none;border:none;color:var(--texte-2);cursor:pointer;font-size:16px;padding:0 4px}
+  .vide{color:var(--texte-2);font-style:italic;font-size:var(--t2);margin:6px 0 0}
 </style>
 </head>
 <body>
 <div class="enveloppe">
-  <h1 class="titre">Conformité transport et contrôle DRIEAT</h1>
-  <p class="sous">Le dispositif à tenir au quotidien, et le dossier prêt en cas de contrôle.</p>
+  <h1 class="titre">Tachygraphe, cartes conducteurs et temps de conduite</h1>
+  <p class="sous">Le dispositif à tenir au quotidien, conducteur par conducteur, et le dossier prêt en cas de contrôle.</p>
   <div id="corps"></div>
 </div>
 
 <script src="documents-transport.js"></script>
+<script src="flotte.js"></script>
 <script src="tableur-export.js"></script>
 <script src="apercu.js"></script>
 <script src="audit-export.js"></script>
@@ -124,6 +134,13 @@
     '<div class="carte" style="margin-top:12px"><h3>Certificat du conseiller ADR</h3>' +
     '<p class="sous3">Fin de validité : <input type="date" id="date-adr"> ' +
     '<span id="adr-etat"></span></p></div></div>';
+
+  /* ───────────────── SUIVI PAR CONDUCTEUR ───────────────── */
+  html += '<div class="espace"><h2>Suivi par conducteur : contrôle, encadrement, réaction</h2>' +
+    '<p class="sous3">Chaque conducteur du registre, poids lourd et autre. On relève les anomalies, ' +
+    'on porte la réaction, en correction, ajustement ou sanction. Un même manquement relevé deux fois ' +
+    'sans réaction passe au rouge : la troisième condition de l\'exonération n\'est plus tenue.</p>' +
+    '<div id="cond-liste"></div></div>';
 
   /* ───────────────── ESPACE B : DÉFENSE ───────────────── */
   var def = CT.defense();
@@ -213,6 +230,104 @@
   document.getElementById("date-adr").addEventListener("change", function (e) {
     if (e.target.value) { CT.porterCertificatADR(e.target.value); peindreADR(); }
   });
+
+  /* ─── suivi par conducteur ─── */
+  function optionsCat(sel) {
+    return CT.CATEGORIES.map(function (c) {
+      return '<option value="' + c.cle + '"' + (c.cle === sel ? " selected" : "") +
+        '>' + ech(c.nom) + '</option>';
+    }).join("");
+  }
+  function peindreConducteurs() {
+    var cont = document.getElementById("cond-liste");
+    var L = CT.conducteurs(), h = '';
+    if (!L.length) { cont.innerHTML = '<p class="vide">Le registre du personnel ne porte encore aucun conducteur.</p>'; return; }
+    L.forEach(function (c) {
+      var s = CT.suiviConducteur(c.id);
+      h += '<div class="carte cond"><h3>' + ech(c.nom) +
+        (c.poidsLourd ? ' <span class="pl">poids lourd</span>' : '') +
+        ' <span class="pastille f-' + c.fond + '">' + ech(c.etat) + '</span></h3>' +
+        '<p class="sous3">' + ech(c.poste || "poste non précisé") + '  ·  ' +
+        c.anomalies + ' anomalie' + (c.anomalies > 1 ? 's' : '') + ', ' +
+        c.mesures + ' mesure' + (c.mesures > 1 ? 's' : '') + '</p>' +
+        '<button data-cond="' + c.id + '">Ouvrir le suivi</button> ' +
+        '<button data-fiche="' + c.id + '">Télécharger la fiche en Word</button>' +
+        '<div class="doc" id="cond-' + c.id + '">';
+
+      /* anomalies */
+      h += '<div class="bloc-h2">Anomalies relevées</div>';
+      if (s.anomalies.length) {
+        h += '<table class="ech"><thead><tr><th>Date</th><th>Type</th><th>Détail</th><th></th></tr></thead><tbody>';
+        s.anomalies.forEach(function (a, i) {
+          h += '<tr><td>' + ech(a.date) + '</td><td>' + ech(a.type) + '</td><td>' + ech(a.detail) +
+            '</td><td><button class="sup" data-sup-ano="' + c.id + '" data-i="' + i + '" title="Supprimer">×</button></td></tr>';
+        });
+        h += '</tbody></table>';
+      } else { h += '<p class="vide">Aucune anomalie relevée.</p>'; }
+      h += '<div class="mini">' +
+        '<label>Date<input type="date" data-f="ano-date" data-c="' + c.id + '"></label>' +
+        '<label>Type<input type="text" data-f="ano-type" data-c="' + c.id + '" placeholder="ex. dépassement du temps de conduite"></label>' +
+        '<label>Détail<input type="text" data-f="ano-detail" data-c="' + c.id + '" placeholder="ce qui a été constaté"></label>' +
+        '<button data-add-ano="' + c.id + '">Ajouter l\'anomalie</button></div>';
+
+      /* réactions */
+      h += '<div class="bloc-h2">Réactions : correction, ajustement, sanction</div>';
+      if (s.mesures.length) {
+        h += '<table class="ech"><thead><tr><th>Date</th><th>Catégorie</th><th>Mesure</th><th>Pour</th><th></th></tr></thead><tbody>';
+        s.mesures.forEach(function (m, i) {
+          var cat = (CT.CATEGORIES.filter(function (x) { return x.cle === (m.categorie || "").toLowerCase(); })[0] || {}).nom || m.categorie;
+          h += '<tr><td>' + ech(m.date) + '</td><td>' + ech(cat) + '</td><td>' + ech(m.objet) +
+            '</td><td>' + ech(m.pour) + '</td><td><button class="sup" data-sup-mes="' + c.id + '" data-i="' + i + '" title="Supprimer">×</button></td></tr>';
+        });
+        h += '</tbody></table>';
+      } else { h += '<p class="vide">Aucune mesure prise.</p>'; }
+      h += '<div class="mini">' +
+        '<label>Date<input type="date" data-f="mes-date" data-c="' + c.id + '"></label>' +
+        '<label>Catégorie<select data-f="mes-cat" data-c="' + c.id + '">' + optionsCat("correction") + '</select></label>' +
+        '<label>Mesure<input type="text" data-f="mes-objet" data-c="' + c.id + '" placeholder="ce qui est fait"></label>' +
+        '<label>Pour<input type="text" data-f="mes-pour" data-c="' + c.id + '" placeholder="le type de manquement visé"></label>' +
+        '<button data-add-mes="' + c.id + '">Ajouter la mesure</button></div>';
+
+      if (c.fond === "rouge") h += '<p class="bloc-note">' + ech(c.message) + '</p>';
+      h += '</div></div>';
+    });
+    cont.innerHTML = h;
+  }
+  function valeur(sel, id) {
+    var el = document.querySelector('[data-f="' + sel + '"][data-c="' + id + '"]');
+    return el ? el.value : "";
+  }
+  peindreConducteurs();
+  document.getElementById("cond-liste").addEventListener("click", function (e) {
+    var o = e.target.closest("button[data-cond]");
+    if (o) { document.getElementById("cond-" + o.getAttribute("data-cond")).classList.toggle("ouvert"); return; }
+    var f = e.target.closest("button[data-fiche]");
+    if (f) { if (!CT.enWordSuivi(f.getAttribute("data-fiche"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
+    var aa = e.target.closest("button[data-add-ano]");
+    if (aa) {
+      var id = aa.getAttribute("data-add-ano");
+      var type = valeur("ano-type", id);
+      if (!type) { alert("Indiquez au moins le type d'anomalie."); return; }
+      CT.ajouterAnomalie(id, { date: valeur("ano-date", id), type: type, detail: valeur("ano-detail", id) });
+      peindreConducteurs(); reouvrir(id); return;
+    }
+    var am = e.target.closest("button[data-add-mes]");
+    if (am) {
+      var idm = am.getAttribute("data-add-mes");
+      var objet = valeur("mes-objet", idm);
+      if (!objet) { alert("Indiquez la mesure prise."); return; }
+      CT.ajouterMesure(idm, { date: valeur("mes-date", idm), categorie: valeur("mes-cat", idm),
+        objet: objet, pour: valeur("mes-pour", idm) });
+      peindreConducteurs(); reouvrir(idm); return;
+    }
+    var sa = e.target.closest("button[data-sup-ano]");
+    if (sa) { var ida = sa.getAttribute("data-sup-ano");
+      CT.supprimerAnomalie(ida, +sa.getAttribute("data-i")); peindreConducteurs(); reouvrir(ida); return; }
+    var sm = e.target.closest("button[data-sup-mes]");
+    if (sm) { var idsm = sm.getAttribute("data-sup-mes");
+      CT.supprimerMesure(idsm, +sm.getAttribute("data-i")); peindreConducteurs(); reouvrir(idsm); return; }
+  });
+  function reouvrir(id) { var d = document.getElementById("cond-" + id); if (d) d.classList.add("ouvert"); }
 
   /* rétroplanning */
   function peindreRetro() {

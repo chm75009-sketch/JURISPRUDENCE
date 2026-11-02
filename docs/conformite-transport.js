@@ -112,17 +112,47 @@
      ajoute le délai, on qualifie. Pas de date : l'échéance est « à renseigner ». */
   var DELAI_CARTE = 28, DELAI_VEHICULE = 90;
 
-  function vehiculesFlotte() { return lire("flotte-vehicules", []) || []; }
-  function salariesRegistre() {
+  function vehiculesFlotte() {
+    if (window.Flotte && window.Flotte.vehicules) return window.Flotte.vehicules() || [];
+    return lire("flotte-vehicules", []) || [];
+  }
+
+  /* LES CONDUCTEURS DU REGISTRE. On réutilise la lecture de la flotte quand
+     elle est chargée : le registre est un objet { salaries: [...] } où le poste
+     (champ emp) dit qui conduit, et où l'on ne garde que les présents. À défaut,
+     on relit nous-mêmes la même structure. */
+  function net(s) { return String(s == null ? "" : s).trim(); }
+  function sansAccent(s) {
+    try {
+      return String(s == null ? "" : s).normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    } catch (e) { return String(s == null ? "" : s).toLowerCase(); }
+  }
+  var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|grutier|ambulancier|convoyeur/i;
+  var POIDS_LOURD = /poids\s*lourd|p\.?\s*l\b|routier|grand\s*routier|super\s*lourd|spl|pl\b|semi|tracteur|porteur|40\s*t|19\s*t|26\s*t/i;
+
+  function salariesTous() {
+    if (window.Flotte && window.Flotte.salaries) return window.Flotte.salaries(true) || [];
     var r = lire("registre-personnel", {}) || {};
-    var out = [];
-    Object.keys(r).forEach(function (id) {
-      var s = r[id] || {};
-      var sorti = s.sortie || s.dateSortie;
-      if (sorti) return; /* seuls les présents */
-      out.push({ id: id, nom: s.nom || s.nomPrenom || ("salarié " + id), poste: s.poste || "" });
+    var L = ((r && r.salaries) || []).filter(function (s) { return net(s.nom) || net(s.pre); })
+      .map(function (s) {
+        var nom = (net(s.nom) + " " + net(s.pre)).trim();
+        return { id: sansAccent(nom) || "salarie", nom: nom, emp: net(s.emp),
+          ent: net(s.ent), sor: net(s.sor), conduit: CONDUIT.test(net(s.emp)) };
+      });
+    return L;
+  }
+  /* Les conducteurs présents, poids lourd et autres : c'est la liste du suivi.
+     Si aucun poste ne porte un intitulé de conduite, on rend tous les présents
+     plutôt qu'un écran vide, et c'est à l'utilisateur de voir. */
+  function salariesRegistre() {
+    var L = salariesTous();
+    var C = L.filter(function (s) { return s.conduit && !net(s.sor); });
+    var base = C.length ? C : L.filter(function (s) { return !net(s.sor); });
+    return base.map(function (s) {
+      return { id: s.id, nom: s.nom, poste: s.emp || s.poste || "",
+        conduit: s.conduit !== false, poidsLourd: POIDS_LOURD.test(net(s.emp || s.poste)) };
     });
-    return out;
   }
 
   function echeances() {
@@ -176,6 +206,159 @@
         "poursuites pénales : la seule transmission du procès-verbal au procureur ne suffit pas " +
         "(critère de la mise en mouvement de l'action publique, Cass. soc. 13 octobre 2016, " +
         "n° 15-14.006)." };
+  }
+
+  /* ───────────────── le suivi par conducteur, poids lourd et autres ─────────
+
+     Chaque conducteur du registre a sa fiche de suivi : les instructions qu'il
+     a reçues (encadrement), les anomalies relevées sur lui (contrôle et suivi),
+     et les mesures prises en réaction, rangées en trois catégories, correction,
+     ajustement, sanction. C'est le lien direct avec la troisième condition de
+     l'exonération : quand un manquement se répète, il faut une réaction, et la
+     fiche le dit tout de suite quand elle manque. Rien ne s'invente : le nom et
+     le poste viennent du registre, les dates sont celles qu'on porte ici.     */
+
+  var CATEGORIES = [
+    { cle: "correction", nom: "Correction", sens: "rappeler la règle et corriger l'écart (rappel écrit, consigne resignée)" },
+    { cle: "ajustement", nom: "Ajustement", sens: "adapter l'organisation pour que l'écart ne se reproduise pas (planning, formation, changement d'affectation)" },
+    { cle: "sanction", nom: "Sanction", sens: "sanction disciplinaire, dans le délai de deux mois de " + art("L1332-4") },
+  ];
+
+  function suiviConducteur(id) {
+    var e = etat();
+    var s = (e.suivi && e.suivi[id]) || {};
+    return { anomalies: (s.anomalies || []).slice(), mesures: (s.mesures || []).slice() };
+  }
+  function garderSuivi(id, s) {
+    var e = etat(); e.suivi = e.suivi || {}; e.suivi[id] = s; garderEtat(e);
+  }
+  function ajouterAnomalie(id, a) {
+    var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
+    s.anomalies = s.anomalies || [];
+    s.anomalies.push({ date: a.date || iso(new Date()), type: net(a.type), detail: net(a.detail) });
+    e.suivi[id] = s; garderEtat(e);
+  }
+  function ajouterMesure(id, m) {
+    var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
+    s.mesures = s.mesures || [];
+    s.mesures.push({ date: m.date || iso(new Date()), categorie: net(m.categorie),
+      objet: net(m.objet), pour: net(m.pour) });
+    e.suivi[id] = s; garderEtat(e);
+  }
+  function supprimerAnomalie(id, i) {
+    var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
+    if (s.anomalies && s.anomalies[i]) { s.anomalies.splice(i, 1); garderSuivi(id, s); }
+  }
+  function supprimerMesure(id, i) {
+    var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
+    if (s.mesures && s.mesures[i]) { s.mesures.splice(i, 1); garderSuivi(id, s); }
+  }
+
+  /* L'ÉTAT D'UN CONDUCTEUR. Le point qui décide : un même type d'anomalie
+     relevé deux fois ou plus est un manquement répété ; s'il n'a pas appelé de
+     mesure postérieure à la deuxième occurrence, la réaction manque, et c'est
+     précisément ce qui fait tomber l'exonération. On le signale en rouge. */
+  function etatConducteur(id) {
+    var s = suiviConducteur(id);
+    var anos = s.anomalies, mes = s.mesures;
+    if (!anos.length) {
+      return { fond: "vert", etat: "aucune anomalie", anomalies: 0, mesures: mes.length,
+        repetes: [], message: "Aucune anomalie relevée." };
+    }
+    /* Regrouper par type, trier les dates. */
+    var par = {};
+    anos.forEach(function (a) {
+      var t = (a.type || "non précisé").toLowerCase();
+      (par[t] = par[t] || []).push(a.date || "");
+    });
+    var repetes = [], sansReaction = [];
+    Object.keys(par).forEach(function (t) {
+      var dates = par[t].filter(Boolean).sort();
+      if (par[t].length < 2) return;
+      repetes.push({ type: t, nombre: par[t].length });
+      /* La deuxième occurrence (ou la dernière connue) appelle une réaction
+         datée au moins de ce jour-là. */
+      var seuil = dates[1] || dates[0] || "";
+      var reaction = mes.some(function (m) {
+        var surLePoint = !net(m.pour) || m.pour.toLowerCase().indexOf(t) >= 0;
+        return surLePoint && (!seuil || (m.date || "") >= seuil);
+      });
+      if (!reaction) sansReaction.push({ type: t, depuis: seuil });
+    });
+    if (sansReaction.length) {
+      return { fond: "rouge", etat: "manquement répété sans réaction", anomalies: anos.length,
+        mesures: mes.length, repetes: repetes, sansReaction: sansReaction,
+        message: "Manquement répété sans mesure en réaction : " +
+          sansReaction.map(function (x) { return x.type; }).join(", ") +
+          ". La troisième condition de l'exonération n'est pas tenue tant qu'une mesure n'est pas prise." };
+    }
+    if (repetes.length) {
+      return { fond: "orange", etat: "manquements répétés, réaction prise", anomalies: anos.length,
+        mesures: mes.length, repetes: repetes,
+        message: "Manquements répétés, mais une mesure a été prise en réaction." };
+    }
+    return { fond: "orange", etat: "anomalies suivies", anomalies: anos.length, mesures: mes.length,
+      repetes: [], message: "Anomalies relevées, sans répétition d'un même type." };
+  }
+
+  /* La liste complète pour l'écran : chaque conducteur présent, avec son état. */
+  function conducteurs() {
+    return salariesRegistre().map(function (s) {
+      var et = etatConducteur(s.id);
+      return { id: s.id, nom: s.nom, poste: s.poste, poidsLourd: s.poidsLourd,
+        etat: et.etat, fond: et.fond, anomalies: et.anomalies, mesures: et.mesures,
+        message: et.message };
+    });
+  }
+
+  /* LA FICHE DE SUIVI EN WORD, à l'en-tête de l'entreprise. */
+  function ficheSuiviItems(id) {
+    var p = profil();
+    var sal = salariesRegistre().filter(function (x) { return x.id === id; })[0]
+      || { nom: id, poste: "" };
+    var s = suiviConducteur(id), et = etatConducteur(id);
+    var sous = [p.adresse || p.siege, p.siret ? "SIRET : " + p.siret : ""].filter(Boolean).join("  ·  ");
+    var items = [{ k: "bandeau", t: p.denomination || p.raisonSociale || "[Entreprise]", sous: sous }];
+    items.push({ k: "h1", t: "FICHE DE SUIVI DU CONDUCTEUR" });
+    items.push({ k: "p", t: sal.nom + (sal.poste ? "  ·  " + sal.poste : "") +
+      (sal.poidsLourd ? "  ·  poids lourd" : "") });
+    items.push({ k: "p", t: "État au " + iso(new Date()) + " : " + et.message });
+
+    items.push({ k: "h2", t: "Encadrement" });
+    items.push({ k: "p", t: "Consigne de conduite avec carte remise et signée le [DATE]. Rappels de la réglementation : [DATES]." });
+
+    items.push({ k: "h2", t: "Contrôle et anomalies relevées" });
+    if (s.anomalies.length) {
+      items.push({ k: "table", head: ["Date", "Type", "Détail"],
+        rows: s.anomalies.map(function (a) { return [a.date || "", a.type || "", a.detail || ""]; }) });
+    } else {
+      items.push({ k: "p", t: "Aucune anomalie relevée à ce jour." });
+    }
+
+    items.push({ k: "h2", t: "Réactions : correction, ajustement, sanction" });
+    if (s.mesures.length) {
+      items.push({ k: "table", head: ["Date", "Catégorie", "Mesure", "Pour le manquement"],
+        rows: s.mesures.map(function (m) {
+          var cat = (CATEGORIES.filter(function (c) { return c.cle === (m.categorie || "").toLowerCase(); })[0] || {}).nom || m.categorie || "";
+          return [m.date || "", cat, m.objet || "", m.pour || ""]; }) });
+    } else {
+      items.push({ k: "p", t: "Aucune mesure prise à ce jour." });
+    }
+    items.push({ k: "note", t: "Une sanction disciplinaire se prend dans les deux mois de la connaissance des faits (" + art("L1332-4") + " du code du travail), sauf poursuites pénales exercées dans ce délai." });
+
+    items.push({ k: "h2", t: "Le droit" });
+    items.push({ k: "puce", t: "Exonération de l'employeur : instruire, s'assurer du respect effectif à intervalles réguliers, et réagir en cas de manquements répétés (Cass. crim. 16 janvier 1990, n° 89-82.880)." });
+    items.push({ k: "puce", t: "Enregistrement par le chronotachygraphe : " + art("R3313-7") + " du code des transports." });
+    return items;
+  }
+
+  function enWordSuivi(id) {
+    if (!window.AuditExport) return false;
+    var sal = salariesRegistre().filter(function (x) { return x.id === id; })[0] || { nom: id };
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(ficheSuiviItems(id), "Fiche de suivi - " + sal.nom, { sansTitre: false }),
+      "suivi-" + id + "-" + iso(new Date()) + ".docx");
+    return true;
   }
 
   /* ─────────────────────── les documents de prévention ──────────────────── */
@@ -491,6 +674,15 @@
     delaiDisciplinaire: delaiDisciplinaire,
     vehicules: vehiculesFlotte,
     salaries: salariesRegistre,
+    CATEGORIES: CATEGORIES,
+    conducteurs: conducteurs,
+    suiviConducteur: suiviConducteur,
+    etatConducteur: etatConducteur,
+    ajouterAnomalie: ajouterAnomalie,
+    ajouterMesure: ajouterMesure,
+    supprimerAnomalie: supprimerAnomalie,
+    supprimerMesure: supprimerMesure,
+    enWordSuivi: enWordSuivi,
     DELAI_CARTE: DELAI_CARTE, DELAI_VEHICULE: DELAI_VEHICULE,
   };
 })(window);

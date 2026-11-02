@@ -149,23 +149,11 @@
        accessible par le parcours, sans « faire ». */
     { cle: "affichages", nom: "Affichages obligatoires",        seuil: 1,   non: "controler-affichages.html?depart=non",   oui: "controler-affichages.html?depart=oui" },
     { cle: "registre",   nom: "Registre du personnel",          seuil: 1,   non: "registre.html?rep=non",                oui: "registre.html?rep=oui" },
-    /* La conformité transport ne tient pas à l'effectif mais au secteur : le
-       tachygraphe, les temps de conduite, le dispositif que l'employeur doit
-       tenir pour établir qu'il a veillé au respect de la réglementation, et le
-       dossier de défense prêt en cas de contrôle de la DRIEAT. La ligne ne
-       s'ouvre que pour le transport routier (secteur de la fiche ou IDCC 16).
-       Ajouté après le contrôle T.E.C. de novembre 2025. */
-    { cle: "transport",  nom: "Conformité transport (tachygraphe, contrôle DRIEAT)", seuil: 1,
-      cond: "si l'entreprise relève du transport routier",
-      non: "conformite-transport.html", oui: "conformite-transport.html",
-      sans: function (p) {
-        var s = String(p.secteur || "").toLowerCase();
-        var c = String(p.conventionCollective || p.convention || p.idcc || "");
-        var nums = (c.match(/\d+/g) || []).map(Number);
-        var tr = s.indexOf("transport") >= 0 || s.indexOf("logistique") >= 0
-          || nums.indexOf(16) >= 0 || /transports routiers/i.test(c);
-        return tr ? ""
-          : "la fiche n'indique pas le transport routier (secteur ou convention IDCC 16) : ce module ne concerne que ce secteur"; } },
+    /* La conformité transport (tachygraphe, cartes conducteurs, temps de
+       conduite, suivi par conducteur et dossier de défense DRIEAT) est passée
+       dans la gestion du quotidien le 2 novembre 2026 : elle se tient au jour
+       le jour, elle n'est pas un audit ponctuel. On ne la laisse donc plus dans
+       le catalogue d'audit. */
     /* Le forfait en jours ne tient à aucun effectif : il tient à un accord
        collectif (L. 3121-63) et à un suivi. La ligne s'ouvre donc dès le
        premier salarié, avec la réserve qui dit quand elle concerne. */

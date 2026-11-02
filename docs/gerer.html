@@ -216,6 +216,13 @@
       <b>Contrôle URSSAF</b>
       <span>Se préparer, répondre, limiter les redressements. Visite le 17 novembre 2026.</span>
     </a>
+    <!-- La conformité transport se tient au jour le jour : cartes conducteurs,
+         temps de conduite, suivi de chaque conducteur, dossier prêt en cas de
+         contrôle. La carte ne s'affiche que pour le transport routier. -->
+    <a class="carte-urssaf" href="conformite-transport.html" id="carte-transport" hidden>
+      <b>Tachygraphe, cartes conducteurs et temps de conduite</b>
+      <span>Le dispositif à tenir conducteur par conducteur, et le dossier de défense en cas de contrôle DRIEAT.</span>
+    </a>
     <div id="liste"></div>
   </section>
 
@@ -793,6 +800,18 @@
   if ((!profil || !profil.denomination) && window.Profil) profil = window.Profil.lire();
   if (!profil || !profil.denomination) { location.replace("index.html"); return; }
   $("ent").textContent = profil.denomination;
+
+  /* La carte « tachygraphe, cartes conducteurs et temps de conduite » ne
+     s'affiche que pour le transport routier : secteur de la fiche, mention
+     « transports routiers » ou convention IDCC 16. */
+  (function () {
+    var s = String(profil.secteur || "").toLowerCase();
+    var c = String(profil.conventionCollective || profil.convention || profil.idcc || "");
+    var nums = (c.match(/\d+/g) || []).map(Number);
+    var tr = s.indexOf("transport") >= 0 || s.indexOf("logistique") >= 0
+      || nums.indexOf(16) >= 0 || /transports routiers/i.test(c);
+    if (tr) { var el = $("carte-transport"); if (el) el.hidden = false; }
+  })();
 
   function numeroIdcc() {
     var s = String(profil.conventionCollective || profil.convention || profil.idcc || "");
