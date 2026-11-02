@@ -64,6 +64,9 @@
 
 <script src="documents-transport.js"></script>
 <script src="tableur-export.js"></script>
+<script src="apercu.js"></script>
+<script src="audit-export.js"></script>
+<script src="base-documents.js"></script>
 <script src="conformite-transport.js"></script>
 <script>
 "use strict";
@@ -106,7 +109,8 @@
   CT.documents().forEach(function (d) {
     html += '<div class="carte"><h3>' + ech(d.nom) + '</h3>' +
       '<p class="sous3">' + ech(d.sous) + '</p>' +
-      '<button data-doc="' + d.cle + '">Voir le modèle</button>' +
+      '<button data-doc="' + d.cle + '">Voir le modèle</button> ' +
+      '<button data-word="' + d.cle + '">Télécharger en Word</button>' +
       '<div class="doc" id="doc-' + d.cle + '">' + rendreDoc(d) + '</div></div>';
   });
   html += '</div>';
@@ -148,6 +152,8 @@
   corps.addEventListener("click", function (e) {
     var b = e.target.closest("button[data-doc]");
     if (b) document.getElementById("doc-" + b.getAttribute("data-doc")).classList.toggle("ouvert");
+    var w = e.target.closest("button[data-word]");
+    if (w) { if (!CT.enWord(w.getAttribute("data-word"))) alert("Le générateur Word n'est pas disponible sur cette page."); }
     if (e.target.id === "export-infractions") {
       if (!CT.exportInfractions()) alert("Le moteur d'export n'est pas disponible sur cette page.");
     }

@@ -336,6 +336,43 @@
       docConseiller(), docLettreVoiture()];
   }
 
+  /* LE TÉLÉCHARGEMENT EN WORD, À L'EN-TÊTE DE L'ENTREPRISE. On réutilise le
+     générateur de l'application (AuditExport.docx), en convertissant les blocs
+     du document en éléments qu'il connaît, et en plaçant en tête le nom et les
+     coordonnées de la fiche d'entreprise. */
+  function docItems(d) {
+    var p = profil();
+    var sous = [p.adresse || p.siege, p.siret ? "SIRET : " + p.siret : ""]
+      .filter(Boolean).join("  ·  ");
+    var items = [{ k: "bandeau", t: p.denomination || p.raisonSociale || "[Entreprise]", sous: sous }];
+    d.blocs.forEach(function (bl) {
+      if (bl.k === "table") {
+        var cols = bl.t.split(" | ");
+        items.push({ k: "table", head: cols, rows: [cols.map(function () { return " "; })] });
+      } else if (bl.k === "sign") {
+        items.push({ k: "p", t: bl.t });
+        items.push({ k: "p", t: "Date et signature :" });
+      } else {
+        items.push({ k: bl.k, t: bl.t }); /* h1, h2, p, note sont reconnus */
+      }
+    });
+    items.push({ k: "h2", t: "Formalités" });
+    d.formalites.forEach(function (f) { items.push({ k: "puce", t: f }); });
+    items.push({ k: "h2", t: "Le droit" });
+    d.droit.forEach(function (f) { items.push({ k: "puce", t: f }); });
+    return items;
+  }
+
+  function enWord(cle) {
+    if (!window.AuditExport) return false;
+    var d = documents().filter(function (x) { return x.cle === cle; })[0];
+    if (!d) return false;
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(docItems(d), d.nom, { sansTitre: false }),
+      cle + "-" + iso(new Date()) + ".docx");
+    return true;
+  }
+
   /* ─────────────────────────── le kit de défense ────────────────────────── */
 
   /* Le rétroplanning des délais de la commission, à partir de la date de la
@@ -420,6 +457,7 @@
     TEXTES: T, art: art,
     estTransport: estTransport,
     documents: documents,
+    enWord: enWord,
     defense: defense,
     exportInfractions: exportInfractions,
     retroplanning: retroplanning,
