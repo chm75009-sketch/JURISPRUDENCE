@@ -76,6 +76,9 @@
   .chip-cond::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle;background:#777}
   .chip-cond.f-rouge::before{background:#8a2020}.chip-cond.f-orange::before{background:#9a5b16}.chip-cond.f-vert::before{background:#1f6f43}
   .chip-cond.on::before{background:#fff}
+  .choixcond{margin:0 0 14px}
+  .choixcond label{font-weight:600;font-size:14px;display:flex;flex-direction:column;gap:5px}
+  .choixcond select{font-size:16px;padding:10px;border:1px solid var(--trait);border-radius:9px;background:var(--fond-2);color:var(--texte)}
   .cond h3{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .cond .pl{font-size:11px;background:var(--fond);border:1px solid var(--trait);border-radius:10px;padding:1px 8px;color:var(--texte-2)}
   .mini{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
@@ -303,9 +306,11 @@
     var L = CT.conducteurs(), h = '';
     if (!L.length) { cont.innerHTML = '<p class="vide">Le registre du personnel ne porte encore aucun conducteur.</p>'; return; }
     if (!selId || !L.some(function (x) { return x.id === selId; })) selId = L[0].id;
-    h += '<div class="pick">' + L.map(function (x) {
-      return '<button class="chip-cond f-' + x.fond + (x.id === selId ? ' on' : '') + '" data-sel="' + x.id + '">' + ech(x.nom) + '</button>';
-    }).join("") + '</div>';
+    h += '<div class="choixcond"><label>Salarié (fichier du personnel)<select id="sel-cond">' +
+      L.map(function (x) {
+        return '<option value="' + x.id + '"' + (x.id === selId ? ' selected' : '') + '>' + ech(x.nom) +
+          (x.fond === "rouge" ? " (à traiter)" : "") + '</option>';
+      }).join("") + '</select></label></div>';
     var c = L.filter(function (x) { return x.id === selId; })[0];
     var s = CT.suiviConducteur(c.id);
     h += '<div class="carte cond"><h3>' + ech(c.nom) +
@@ -400,8 +405,6 @@
   }
   peindreConducteurs();
   document.getElementById("cond-liste").addEventListener("click", function (e) {
-    var o = e.target.closest("button[data-sel]");
-    if (o) { selId = o.getAttribute("data-sel"); peindreConducteurs(); return; }
     var f = e.target.closest("button[data-fiche]");
     if (f) { if (!CT.enWordSuivi(f.getAttribute("data-fiche"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
     var pcb = e.target.closest("button[data-prof-c]");
@@ -470,6 +473,8 @@
     fr.readAsArrayBuffer(f);
   }
   document.getElementById("cond-liste").addEventListener("change", function (e) {
+    var sc = e.target.closest("#sel-cond");
+    if (sc) { selId = sc.value; peindreConducteurs(); return; }
     var lc = e.target.closest("[data-lire-c]");
     if (lc) { var idl = lc.getAttribute("data-lire-c"); var f = lc.files && lc.files[0];
       if (f) { lc.value = ""; lireCartePour(idl, f); } return; }
