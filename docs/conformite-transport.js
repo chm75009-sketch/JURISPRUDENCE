@@ -808,11 +808,109 @@
     return "rappel";
   }
 
+  /* ───────── la fiche du conducteur : profil, documents à détenir et à remettre
+
+     Le profil (poids lourd ou léger, marchandises dangereuses) commande les
+     listes : ce que le conducteur doit détenir lui-même, avec la date de
+     validité et l'alerte, et ce qu'on lui remet à signer. Le profil par défaut
+     suit le poste du registre ; il reste modifiable. */
+  function profilConducteur(id) {
+    var e = etat(), s = (e.suivi && e.suivi[id]) || {}, pr = s.profil || {};
+    var sal = salDe(id);
+    return { pl: (pr.pl != null) ? pr.pl : !!sal.poidsLourd, adr: !!pr.adr };
+  }
+  function setProfilConducteur(id, champ, val) {
+    var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
+    s.profil = s.profil || {};
+    if (s.profil.pl == null) s.profil.pl = !!salDe(id).poidsLourd;
+    s.profil[champ] = val; e.suivi[id] = s; garderEtat(e);
+  }
+  function echeancesDoc(id) {
+    var e = etat(), s = (e.suivi && e.suivi[id]) || {}; return s.docsEch || {};
+  }
+  function porterEcheanceDoc(id, cle, date) {
+    var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
+    s.docsEch = s.docsEch || {}; s.docsEch[cle] = date; e.suivi[id] = s; garderEtat(e);
+  }
+  function statutDoc(dateStr) {
+    if (!dateStr) return { fond: "gris", txt: "à renseigner" };
+    var q = qualifier(dateStr);
+    var txt = q.etat === "dépassé" ? "expiré"
+      : q.etat === "proche" ? "échoit dans " + q.jours + " j" : "valable (" + q.jours + " j)";
+    return { fond: q.fond, txt: txt };
+  }
+  function docsADetenir(pr) {
+    var L = [["permis", "Permis de conduire valide", pr.pl ? "catégorie C ou CE" : "catégorie B ou C"],
+      ["qualif", "Carte de qualification (FIMO/FCO)", "à renouveler tous les 5 ans"]];
+    if (pr.pl) L.push(["carte", "Carte de conducteur (tachygraphe)", "personnelle, valable 5 ans"]);
+    if (pr.adr) L.push(["adrcert", "Certificat de formation ADR", "en cours de validité"]);
+    L.push(["medical", "Visite médicale d'aptitude", "à jour"]);
+    return L;
+  }
+  function docsARemettre(pr) {
+    var L = [["consigne", "Consigne de conduite" + (pr.pl ? " avec carte" : "")],
+      ["note", "Note de service, rappel de la réglementation"],
+      ["formation", "Attestation de formation"]];
+    if (pr.adr) L.push(["adrform", "Attestation de formation ADR (1.3)"]);
+    L.push(["memo", "Mémo des documents à bord"]);
+    if (!pr.pl) L.push(["livret", "Livret individuel de contrôle"]);
+    return L;
+  }
+
+  /* LE DOCUMENT NOMINATIF À REMETTRE, à l'en-tête de l'entreprise. */
+  function enWordDocConducteur(id, kind) {
+    if (!window.AuditExport) return false;
+    var sal = salDe(id), nom = sal.nom, d = jour();
+    var items = [bandeauEntreprise()];
+    if (kind === "consigne") {
+      items.push({ k: "h1", t: "CONSIGNE DE CONDUITE AVEC CARTE" });
+      items.push({ k: "p", t: "Remise à " + nom + ", à signer et à verser au dossier individuel." });
+      items.push({ k: "h2", t: "La carte de conducteur" });
+      items.push({ k: "p", t: "Insérée avant tout déplacement, y compris une manœuvre au dépôt, retirée en fin de service. Personnelle, elle ne se prête pas. Aucun déplacement carte retirée." });
+      items.push({ k: "h2", t: "Les temps de conduite et de repos" });
+      items.push({ k: "p", t: "Conduite continue 4 h 30 au plus, puis 45 minutes de pause. Par jour 9 heures, 10 heures deux fois par semaine. Repos 11 heures par jour, repos de fin de semaine 45 heures, hors cabine." });
+      items.push({ k: "h2", t: "Le sélecteur d'activités" });
+      items.push({ k: "p", t: "Activités saisies au moment où elles changent. Aucune manipulation du dispositif." });
+      items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu et compris la présente consigne." });
+    } else if (kind === "note") {
+      items.push({ k: "h1", t: "NOTE DE SERVICE" });
+      items.push({ k: "p", t: "À l'attention de " + nom + "." });
+      items.push({ k: "p", t: "Rappel de la réglementation : carte et sélecteur d'activité, temps de conduite et de repos, repos de fin de semaine hors cabine, et pour le transport de marchandises dangereuses les consignes et équipements ADR." });
+    } else if (kind === "formation") {
+      items.push({ k: "h1", t: "ATTESTATION DE FORMATION" });
+      items.push({ k: "p", t: "Atteste que " + nom + " a reçu la formation à la réglementation sociale et aux temps de conduite, avec émargement daté, à l'embauche puis en rappel." });
+    } else if (kind === "adrform") {
+      items.push({ k: "h1", t: "ATTESTATION DE FORMATION ADR" });
+      items.push({ k: "p", t: "Atteste que " + nom + " a suivi la formation de sensibilisation ADR (chapitre 1.3) pour le transport de marchandises dangereuses." });
+    } else if (kind === "memo") {
+      items.push({ k: "h1", t: "DOCUMENTS À BORD" });
+      items.push({ k: "p", t: "À vérifier à chaque départ par " + nom + " : permis, carte de conducteur ou livret, carte de qualification (FIMO/FCO), certificat d'immatriculation et contrôle technique, assurance, lettre de voiture, justificatif de location. Pour l'ADR : consignes écrites, certificat de formation, document de transport." });
+    } else if (kind === "livret") {
+      items.push({ k: "h1", t: "LIVRET INDIVIDUEL DE CONTRÔLE" });
+      items.push({ k: "p", t: "Ouvert au nom de " + nom + ". Véhicule léger non équipé de chronotachygraphe : le livret enregistre les temps de conduite et de repos, tenu à jour et présenté au contrôle." });
+    } else { return false; }
+    items.push({ k: "p", t: "Fait à [LIEU], le " + d + "." });
+    items.push({ k: "p", t: "Signature du conducteur :" });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, kind + " - " + nom, { sansTitre: false }),
+      "doc-" + kind + "-" + id + "-" + d + ".docx");
+    return true;
+  }
+  function jour() { return iso(new Date()); }
+
   window.ConformiteTransport = {
     SANCTIONS: SANCTIONS,
     enWordRapport: enWordRapport,
     enWordSanction: enWordSanction,
     sanctionProposee: sanctionProposee,
+    profilConducteur: profilConducteur,
+    setProfilConducteur: setProfilConducteur,
+    echeancesDoc: echeancesDoc,
+    porterEcheanceDoc: porterEcheanceDoc,
+    statutDoc: statutDoc,
+    docsADetenir: docsADetenir,
+    docsARemettre: docsARemettre,
+    enWordDocConducteur: enWordDocConducteur,
     TEXTES: T, art: art,
     estTransport: estTransport,
     documents: documents,
