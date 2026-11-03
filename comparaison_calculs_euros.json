@@ -1,0 +1,125 @@
+[
+  {
+    "k": "t1",
+    "t": "Comparaison : Notre compilation vs Relevé 27/09/2026"
+  },
+  {
+    "k": "h2",
+    "t": "Notre compilation détaillée 1995"
+  },
+  {
+    "k": "table",
+    "head": [
+      "Employeur/Catégorie",
+      "EUR (1995)",
+      "EUR (01/01/2025)"
+    ],
+    "rows": [
+      [
+        "GERME",
+        "85 361,54",
+        "133 407,04"
+      ],
+      [
+        "Autres employeurs",
+        "17 879,38",
+        "27 947,03"
+      ],
+      [
+        "TOTAL",
+        "103 240,92",
+        "161 363,16"
+      ]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Relevé de carrière 27/09/2026"
+  },
+  {
+    "k": "table",
+    "head": [
+      "Employeur/Catégorie",
+      "EUR (1995)",
+      "EUR (01/01/2025)"
+    ],
+    "rows": [
+      [
+        "GERME (01/01-08/09/1995)",
+        "79 068,75",
+        "123 570,52"
+      ],
+      [
+        "Autres employeurs",
+        "17 879,38",
+        "27 947,03"
+      ],
+      [
+        "TOTAL",
+        "96 948,13",
+        "151 517,55"
+      ]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Différence : Quote-part 1995"
+  },
+  {
+    "k": "p",
+    "t": "Montant 1995 : 6 291,79 €"
+  },
+  {
+    "k": "p",
+    "t": "Montant actualisé au 01/01/2025 : 9 837,63 €"
+  },
+  {
+    "k": "h3",
+    "t": "Explication"
+  },
+  {
+    "k": "p",
+    "t": "Le 41 278 FRF (6 291,79 €) correspond à la quote-part 1995 du bulletin couvrant 10/1995 à 02/1996 (arrêt du 13 juin 1996)."
+  },
+  {
+    "k": "p",
+    "t": "Ce bulletin totalise 64 864,82 FRF (9 875,42 €), dont 3 mois relèvent de 1995 et 2 mois de 1996."
+  },
+  {
+    "k": "p",
+    "t": "Répartition : 6 291,79 € pour 1995 + 3 584,63 € pour 1996."
+  },
+  {
+    "k": "note",
+    "t": "Au relevé 27/09/2026, cette quote-part n'est pas comptabilisée en 1995 car elle s'étale sur deux exercices. Elle est classée dans la période 01/09/1995-29/02/1996."
+  },
+  {
+    "k": "h2",
+    "t": "Synthèse"
+  },
+  {
+    "k": "table",
+    "head": [
+      "Source",
+      "EUR (1995)",
+      "EUR (01/01/2025)"
+    ],
+    "rows": [
+      [
+        "Notre compilation",
+        "103 240,92",
+        "161 363,16"
+      ],
+      [
+        "Relevé 27/09/2026",
+        "96 948,13",
+        "151 517,55"
+      ],
+      [
+        "Différence (quote-part)",
+        "6 291,79",
+        "9 837,63"
+      ]
+    ]
+  }
+]

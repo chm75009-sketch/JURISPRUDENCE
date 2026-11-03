@@ -1,0 +1,137 @@
+[
+  {
+    "k": "t1",
+    "t": "Comparaison : Notre compilation vs Relevé 27/09/2026"
+  },
+  {
+    "k": "h2",
+    "t": "Notre compilation détaillée 1995"
+  },
+  {
+    "k": "table",
+    "head": [
+      "Employeur/Catégorie",
+      "FRF",
+      "EUR (1995)",
+      "EUR (01/01/2025)"
+    ],
+    "rows": [
+      [
+        "GERME",
+        "559 935",
+        "85 361,54",
+        "133 407,04"
+      ],
+      [
+        "Autres employeurs",
+        "117 281",
+        "17 879,38",
+        "27 947,03"
+      ],
+      [
+        "TOTAL",
+        "677 216",
+        "103 240,92",
+        "161 363,16"
+      ]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Relevé de carrière 27/09/2026"
+  },
+  {
+    "k": "table",
+    "head": [
+      "Employeur/Catégorie",
+      "FRF",
+      "EUR (1995)",
+      "EUR (01/01/2025)"
+    ],
+    "rows": [
+      [
+        "GERME (01/01-08/09/1995)",
+        "518 657",
+        "79 068,75",
+        "123 570,52"
+      ],
+      [
+        "Autres employeurs",
+        "117 281",
+        "17 879,38",
+        "27 947,03"
+      ],
+      [
+        "TOTAL",
+        "635 938",
+        "96 948,13",
+        "151 517,55"
+      ]
+    ]
+  },
+  {
+    "k": "h2",
+    "t": "Différence : 41 278 FRF"
+  },
+  {
+    "k": "p",
+    "t": "Montant en euros : 41 278 ÷ 6,55957 = 6 291,79 € (1995)"
+  },
+  {
+    "k": "p",
+    "t": "Montant actualisé au 01/01/2025 : 6 291,79 × 1,563 = 9 837,63 €"
+  },
+  {
+    "k": "h3",
+    "t": "Explication"
+  },
+  {
+    "k": "p",
+    "t": "Le 41 278 FRF correspond à la quote-part 1995 du bulletin de salaire couvrant la période 10/1995 à 02/1996 (arrêt du 13 juin 1996)."
+  },
+  {
+    "k": "p",
+    "t": "Ce bulletin porte un montant brut total de 64 864,82 FRF, dont 3 mois (10/1995-12/1995) relèvent de 1995 et 2 mois (01/1996-02/1996) relèvent de 1996."
+  },
+  {
+    "k": "p",
+    "t": "Répartition : 41 278 FRF pour 1995 + 23 587 FRF pour 1996 = 64 865 FRF (arrondi)."
+  },
+  {
+    "k": "note",
+    "t": "Au relevé 27/09/2026, cette quote-part de 1995 n'est pas comptabilisée dans l'année 1995 car elle s'étale sur deux exercices. Elle est classée comme faisant partie de la période 01/09/1995-29/02/1996 dans la composition du relevé."
+  },
+  {
+    "k": "h2",
+    "t": "Synthèse"
+  },
+  {
+    "k": "table",
+    "head": [
+      "Source",
+      "Montant FRF",
+      "EUR (1995)",
+      "EUR (01/01/2025)"
+    ],
+    "rows": [
+      [
+        "Notre compilation",
+        "677 216",
+        "103 240,92",
+        "161 363,16"
+      ],
+      [
+        "Relevé 27/09/2026",
+        "635 938",
+        "96 948,13",
+        "151 517,55"
+      ],
+      [
+        "Différence (quote-part)",
+        "41 278",
+        "6 291,79",
+        "9 837,63"
+      ]
+    ]
+  }
+]
