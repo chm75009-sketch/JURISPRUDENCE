@@ -30,6 +30,10 @@
   .sous{color:var(--texte-2);margin:0 0 var(--e5)}
   .espace{margin:var(--e6) 0}
   .espace>h2{font-size:var(--t5);border-bottom:1.5px solid var(--trait);padding-bottom:6px;margin:0 0 var(--e3)}
+  details.repli>summary{font:600 var(--t5)/1.3 system-ui;border-bottom:1.5px solid var(--trait);padding-bottom:6px;margin:0 0 var(--e3);cursor:pointer;list-style:none;color:var(--texte-2)}
+  details.repli>summary::-webkit-details-marker{display:none}
+  details.repli>summary::after{content:" +";color:var(--texte-2);font-weight:400}
+  details.repli[open]>summary::after{content:" -"}
   .carte{border:1px solid var(--trait);border-radius:10px;padding:14px 16px;margin:0 0 var(--e3);background:var(--fond-2)}
   .carte h3{margin:0 0 2px;font-size:var(--t4)}
   .carte .sous3{color:var(--texte-2);font-size:var(--t2);margin:0 0 8px}
@@ -131,16 +135,18 @@
 
   var html = '';
 
-  /* ───────────────── ESPACE A : PRÉVENTION ───────────────── */
-  html += '<div class="espace"><h2>Prévention : le dispositif de conformité</h2>';
-  CT.documents().forEach(function (d) {
-    html += '<div class="carte"><h3>' + ech(d.nom) + '</h3>' +
-      '<p class="sous3">' + ech(d.sous) + '</p>' +
-      '<button data-doc="' + d.cle + '">Voir le modèle</button> ' +
-      '<button data-word="' + d.cle + '">Télécharger en Word</button>' +
-      '<div class="doc" id="doc-' + d.cle + '">' + rendreDoc(d) + '</div></div>';
-  });
-  html += '</div>';
+  /* ───────── L'OPÉRATIONNEL D'ABORD : LE SUIVI PAR CONDUCTEUR ───────── */
+  html += '<div class="espace"><h2>Suivi par conducteur : contrôle, encadrement, réaction</h2>' +
+    '<p class="sous3">Chaque conducteur du registre, poids lourd et autre. On lit la carte, les infractions ' +
+    'tombent dans sa fiche, on réagit (mise en garde ou sanction), et on garde la preuve. Un même manquement ' +
+    'relevé deux fois sans réaction passe au rouge : la troisième condition de l\'exonération n\'est plus tenue.</p>' +
+    '<div class="carte"><h3>Lire une carte de conducteur</h3>' +
+    '<p class="sous3">Le fichier téléchargé de la carte (.ddd ou .C1B), ou le rapport d\'analyse en PDF. ' +
+    'On en tire le temps de conduite et les infractions, prêts à porter dans la fiche du conducteur. Le fichier ' +
+    'reste sur votre appareil, rien n\'est envoyé.</p>' +
+    '<input type="file" id="carte-fichier" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,.pdf,application/pdf,application/octet-stream">' +
+    '<div id="carte-resultat"></div></div>' +
+    '<div id="cond-liste"></div></div>';
 
   /* ───────────────── ÉCHÉANCIER DES TÉLÉCHARGEMENTS ───────────────── */
   html += '<div class="espace"><h2>Échéancier des téléchargements</h2>' +
@@ -151,18 +157,16 @@
     '<p class="sous3">Fin de validité : <input type="date" id="date-adr"> ' +
     '<span id="adr-etat"></span></p></div></div>';
 
-  /* ───────────────── SUIVI PAR CONDUCTEUR ───────────────── */
-  html += '<div class="espace"><h2>Suivi par conducteur : contrôle, encadrement, réaction</h2>' +
-    '<p class="sous3">Chaque conducteur du registre, poids lourd et autre. On relève les anomalies, ' +
-    'on porte la réaction, en correction, ajustement ou sanction. Un même manquement relevé deux fois ' +
-    'sans réaction passe au rouge : la troisième condition de l\'exonération n\'est plus tenue.</p>' +
-    '<div class="carte"><h3>Lire une carte de conducteur</h3>' +
-    '<p class="sous3">Le fichier téléchargé de la carte (.ddd ou .C1B), ou le rapport d\'analyse en PDF. ' +
-    'On en tire le temps de conduite et les infractions, prêts à porter dans la fiche du conducteur. Le fichier ' +
-    'reste sur votre appareil, rien n\'est envoyé.</p>' +
-    '<input type="file" id="carte-fichier" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,.pdf,application/pdf,application/octet-stream">' +
-    '<div id="carte-resultat"></div></div>' +
-    '<div id="cond-liste"></div></div>';
+  /* ─── les modèles du dispositif, repliés : utiles, mais pas en premier ─── */
+  html += '<details class="espace repli"><summary>Les documents du dispositif (consigne, journal, registre, compte rendu)</summary>';
+  CT.documents().forEach(function (d) {
+    html += '<div class="carte"><h3>' + ech(d.nom) + '</h3>' +
+      '<p class="sous3">' + ech(d.sous) + '</p>' +
+      '<button data-doc="' + d.cle + '">Voir le modèle</button> ' +
+      '<button data-word="' + d.cle + '">Télécharger en Word</button>' +
+      '<div class="doc" id="doc-' + d.cle + '">' + rendreDoc(d) + '</div></div>';
+  });
+  html += '</details>';
 
   /* ───────────────── ESPACE B : DÉFENSE ───────────────── */
   var def = CT.defense();
