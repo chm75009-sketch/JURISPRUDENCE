@@ -763,7 +763,7 @@
       { k: "p", t: "Les relevés de votre carte de conducteur font apparaître les infractions suivantes :" }];
     if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
     else items.push({ k: "p", t: "Aucune infraction relevée à ce jour." });
-    items.push({ k: "p", t: "La réglementation sur les temps de conduite et de repos et l'usage de la carte de conducteur vous est rappelée. Il vous est demandé de ne pas réitérer ces manquements." });
+    items.push({ k: "p", t: "Il vous est demandé de ne pas réitérer ces manquements. Pour mémoire, les règles à respecter : conduite continue de 4 h 30 au plus, suivie de 45 minutes de pause ; conduite journalière de 9 heures, 10 heures deux fois par semaine au plus ; repos journalier de 11 heures et repos de fin de semaine de 45 heures, hors cabine ; carte de conducteur insérée à tout déplacement." });
     items.push({ k: "p", t: "En cas de nouvelle infraction, une sanction disciplinaire pourra être prononcée." });
     items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu la présente mise en garde." });
     items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
@@ -911,13 +911,15 @@
       items.push({ k: "p", t: "La formation a porté sur : l'usage de la carte de conducteur et du sélecteur d'activités ; les temps de conduite (4 h 30 en continu avec pause de 45 minutes, 9 heures par jour, 10 heures deux fois par semaine, 56 heures par semaine) ; les temps de repos (11 heures par jour, 45 heures en fin de semaine, hors cabine) ; et les téléchargements périodiques de la carte et du véhicule." });
     } else if (kind === "adrform") {
       items.push({ k: "h1", t: "ATTESTATION DE FORMATION ADR" });
-      items.push({ k: "p", t: "Atteste que " + nom + " a suivi la formation de sensibilisation ADR (chapitre 1.3) pour le transport de marchandises dangereuses." });
+      items.push({ k: "p", t: "Atteste que " + nom + " a suivi la formation de sensibilisation générale au transport de marchandises dangereuses (chapitre 1.3 de l'ADR), émargée et datée." });
+      items.push({ k: "p", t: "La formation a porté sur : les dispositions générales de l'ADR, les principaux types de dangers, la prévention et la sécurité, les mesures à prendre en cas d'accident (premiers secours, sécurité routière, usage des équipements de protection), le marquage, l'étiquetage et la signalisation, et les documents de transport à détenir à bord." });
     } else if (kind === "memo") {
       items.push({ k: "h1", t: "DOCUMENTS À BORD" });
       items.push({ k: "p", t: "À vérifier à chaque départ par " + nom + " : permis, carte de conducteur ou livret, carte de qualification (FIMO/FCO), certificat d'immatriculation et contrôle technique, assurance, lettre de voiture, justificatif de location. Pour l'ADR : consignes écrites, certificat de formation, document de transport." });
     } else if (kind === "livret") {
       items.push({ k: "h1", t: "LIVRET INDIVIDUEL DE CONTRÔLE" });
-      items.push({ k: "p", t: "Ouvert au nom de " + nom + ". Véhicule léger non équipé de chronotachygraphe : le livret enregistre les temps de conduite et de repos, tenu à jour et présenté au contrôle." });
+      items.push({ k: "p", t: "Ouvert au nom de " + nom + ". Pour un véhicule léger non équipé de chronotachygraphe, le conducteur y inscrit, jour par jour : l'heure de début et de fin de service, les temps de conduite, les autres travaux, les pauses et les repos, et le total de la semaine." });
+      items.push({ k: "p", t: "Les mêmes limites s'appliquent : conduite journalière, pauses après 4 h 30 de conduite continue, et repos. Le livret est tenu à jour chaque jour et présenté à tout contrôle." });
     } else { return false; }
     items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
     items.push({ k: "p", t: "Signature du conducteur :" });
