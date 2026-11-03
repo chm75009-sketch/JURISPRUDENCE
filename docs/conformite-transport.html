@@ -57,6 +57,19 @@
   table.ech input{width:140px}
   .nontransport{border:1px solid var(--trait);border-radius:10px;padding:16px;color:var(--texte-2)}
   .retro td input{width:160px}
+  /* le look de la fiche : bascules segmentées et lignes de documents */
+  .ctl{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--trait)}
+  .ctl .lb{font-weight:600;font-size:14px}
+  .seg{display:inline-flex;border:1px solid var(--trait);border-radius:9px;overflow:hidden;background:var(--fond)}
+  .seg button{font:600 13px system-ui;border:0;background:transparent;color:var(--texte-2);padding:7px 14px;cursor:pointer;margin:0}
+  .seg button.on{background:var(--accent);color:#fff}
+  .fitem{padding:11px 0;border-top:1px solid var(--trait)}
+  .fitem .ti b{font-size:15px;display:block}
+  .fitem .ti span{color:var(--texte-2);font-size:13px}
+  .fitem .co{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+  .fitem .co .lab{font-size:12px;color:var(--texte-2)}
+  .fitem .co input[type=date]{font-size:14px;padding:7px 9px}
+  .fitem .co button{margin:0;font-size:14px;padding:8px 14px}
   .cond h3{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .cond .pl{font-size:11px;background:var(--fond);border:1px solid var(--trait);border-radius:10px;padding:1px 8px;color:var(--texte-2)}
   .mini{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
@@ -269,6 +282,12 @@
         '>' + ech(c.nom) + '</option>';
     }).join("");
   }
+  function seg(id, champ, opts, val) {
+    return '<div class="seg">' + opts.map(function (o) {
+      return '<button data-prof-c="' + champ + '" data-c="' + id + '" data-val="' + o[0] + '"' +
+        (o[0] === val ? ' class="on"' : '') + '>' + ech(o[1]) + '</button>';
+    }).join("") + '</div>';
+  }
   function optionsSanctions(sel) {
     return CT.SANCTIONS.map(function (s) {
       return '<option value="' + s.cle + '"' + (s.cle === sel ? " selected" : "") + '>' + ech(s.nom) + '</option>';
@@ -292,31 +311,28 @@
 
       /* profil, documents à détenir (avec échéances), documents à remettre */
       var pr = CT.profilConducteur(c.id), eds = CT.echeancesDoc(c.id);
-      h += '<div class="bloc-h2">Profil et documents</div>';
-      h += '<div class="mini">' +
-        '<label>Type de véhicule<select data-prof-c="pl" data-c="' + c.id + '">' +
-        '<option value="1"' + (pr.pl ? ' selected' : '') + '>Poids lourd</option>' +
-        '<option value="0"' + (!pr.pl ? ' selected' : '') + '>Léger</option></select></label>' +
-        '<label>Matière dangereuse<select data-prof-c="adr" data-c="' + c.id + '">' +
-        '<option value="0"' + (!pr.adr ? ' selected' : '') + '>Non</option>' +
-        '<option value="1"' + (pr.adr ? ' selected' : '') + '>Oui</option></select></label></div>';
+      h += '<div class="bloc-h2">Profil</div>';
+      h += '<div class="ctl"><span class="lb">Type de véhicule</span>' +
+        seg(c.id, "pl", [["1", "Poids lourd"], ["0", "Léger"]], pr.pl ? "1" : "0") + '</div>';
+      h += '<div class="ctl"><span class="lb">Matière dangereuse (ADR)</span>' +
+        seg(c.id, "adr", [["1", "Oui"], ["0", "Non"]], pr.adr ? "1" : "0") + '</div>';
 
-      h += '<p class="sous3" style="margin-top:8px">Ce qu\'il doit détenir, avec la date de validité :</p>';
-      h += '<table class="ech"><thead><tr><th>Document</th><th>Valable jusqu\'au</th><th>État</th></tr></thead><tbody>';
+      h += '<div class="bloc-h2">Ce qu\'il doit détenir</div>';
+      h += '<p class="sous3">Ses documents. Saisissez la date de validité, la fiche alerte avant l\'échéance.</p>';
       CT.docsADetenir(pr).forEach(function (it) {
         var val = eds[it[0]] || '', st = CT.statutDoc(val);
-        h += '<tr><td>' + ech(it[1]) + '<br><span class="sous3">' + ech(it[2]) + '</span></td>' +
-          '<td><input type="date" data-ech-c="' + it[0] + '" data-c="' + c.id + '" value="' + val + '"></td>' +
-          '<td><span class="pastille f-' + st.fond + '">' + ech(st.txt) + '</span></td></tr>';
+        h += '<div class="fitem"><div class="ti"><b>' + ech(it[1]) + '</b><span>' + ech(it[2]) + '</span></div>' +
+          '<div class="co"><span class="lab">valable jusqu\'au</span>' +
+          '<input type="date" data-ech-c="' + it[0] + '" data-c="' + c.id + '" value="' + val + '">' +
+          '<span class="pastille f-' + st.fond + '">' + ech(st.txt) + '</span></div></div>';
       });
-      h += '</tbody></table>';
 
-      h += '<p class="sous3" style="margin-top:8px">Ce qu\'on lui remet et fait signer (à son nom) :</p>';
-      h += '<div class="mini">';
+      h += '<div class="bloc-h2">Ce qu\'on lui remet et fait signer</div>';
+      h += '<p class="sous3">Produits à son nom, signés, versés à son dossier.</p>';
       CT.docsARemettre(pr).forEach(function (it) {
-        h += '<button data-remettre="' + it[0] + '" data-c="' + c.id + '">' + ech(it[1]) + '</button>';
+        h += '<div class="fitem"><div class="ti"><b>' + ech(it[1]) + '</b></div>' +
+          '<div class="co"><button data-remettre="' + it[0] + '" data-c="' + c.id + '">Produire</button></div></div>';
       });
-      h += '</div>';
 
       /* lire sa carte : le point de départ de la fiche */
       h += '<div class="carte" style="margin:0 0 10px"><h3>Lire sa carte</h3>' +
@@ -381,6 +397,10 @@
     if (o) { document.getElementById("cond-" + o.getAttribute("data-cond")).classList.toggle("ouvert"); return; }
     var f = e.target.closest("button[data-fiche]");
     if (f) { if (!CT.enWordSuivi(f.getAttribute("data-fiche"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
+    var pcb = e.target.closest("button[data-prof-c]");
+    if (pcb) { var idp = pcb.getAttribute("data-c");
+      CT.setProfilConducteur(idp, pcb.getAttribute("data-prof-c"), pcb.getAttribute("data-val") === "1");
+      peindreConducteurs(); reouvrir(idp); return; }
     var rm = e.target.closest("button[data-remettre]");
     if (rm) { if (!CT.enWordDocConducteur(rm.getAttribute("data-c"), rm.getAttribute("data-remettre"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
     var rp = e.target.closest("button[data-rapport]");
@@ -446,10 +466,6 @@
     var lc = e.target.closest("[data-lire-c]");
     if (lc) { var idl = lc.getAttribute("data-lire-c"); var f = lc.files && lc.files[0];
       if (f) { lc.value = ""; lireCartePour(idl, f); } return; }
-    var pc = e.target.closest("[data-prof-c]");
-    if (pc) { var idp = pc.getAttribute("data-c");
-      CT.setProfilConducteur(idp, pc.getAttribute("data-prof-c"), pc.value === "1");
-      peindreConducteurs(); reouvrir(idp); return; }
     var ed = e.target.closest("[data-ech-c]");
     if (ed) { var ide = ed.getAttribute("data-c");
       CT.porterEcheanceDoc(ide, ed.getAttribute("data-ech-c"), ed.value);
