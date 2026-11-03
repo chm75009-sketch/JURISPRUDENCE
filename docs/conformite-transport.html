@@ -70,6 +70,12 @@
   .fitem .co .lab{font-size:12px;color:var(--texte-2)}
   .fitem .co input[type=date]{font-size:14px;padding:7px 9px}
   .fitem .co button{margin:0;font-size:14px;padding:8px 14px}
+  .pick{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+  .chip-cond{font:600 14px system-ui;border:1px solid var(--trait);background:var(--fond-2);color:var(--texte);border-radius:20px;padding:8px 14px;cursor:pointer;margin:0}
+  .chip-cond.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .chip-cond::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:middle;background:#777}
+  .chip-cond.f-rouge::before{background:#8a2020}.chip-cond.f-orange::before{background:#9a5b16}.chip-cond.f-vert::before{background:#1f6f43}
+  .chip-cond.on::before{background:#fff}
   .cond h3{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .cond .pl{font-size:11px;background:var(--fond);border:1px solid var(--trait);border-radius:10px;padding:1px 8px;color:var(--texte-2)}
   .mini{margin:10px 0 0;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
@@ -150,10 +156,8 @@
 
   /* ───────── LE POINT D'ENTRÉE : LA FICHE DE CHAQUE CONDUCTEUR ───────── */
   html += '<div class="espace"><h2>Les conducteurs</h2>' +
-    '<p class="sous3">Le point d\'entrée du module. Ouvrez un conducteur : sa fiche porte son profil, ses ' +
-    'documents à détenir et à remettre, la lecture de sa carte, ses infractions, sa réaction et sa preuve. ' +
-    'Tout part d\'ici. Un même manquement relevé deux fois sans réaction passe au rouge : la troisième ' +
-    'condition de l\'exonération n\'est plus tenue.</p>' +
+    '<p class="sous3">Choisissez un conducteur : sa fiche porte tout, son profil, ses documents à détenir et ' +
+    'à remettre, la lecture de sa carte, ses infractions et sa réaction.</p>' +
     '<div id="cond-liste"></div></div>';
 
   /* ───────────────── ÉCHÉANCIER DES TÉLÉCHARGEMENTS ───────────────── */
@@ -293,21 +297,25 @@
       return '<option value="' + s.cle + '"' + (s.cle === sel ? " selected" : "") + '>' + ech(s.nom) + '</option>';
     }).join("");
   }
+  var selId = null;
   function peindreConducteurs() {
     var cont = document.getElementById("cond-liste");
     var L = CT.conducteurs(), h = '';
     if (!L.length) { cont.innerHTML = '<p class="vide">Le registre du personnel ne porte encore aucun conducteur.</p>'; return; }
-    L.forEach(function (c) {
-      var s = CT.suiviConducteur(c.id);
-      h += '<div class="carte cond"><h3>' + ech(c.nom) +
-        (c.poidsLourd ? ' <span class="pl">poids lourd</span>' : '') +
-        ' <span class="pastille f-' + c.fond + '">' + ech(c.etat) + '</span></h3>' +
-        '<p class="sous3">' + ech(c.poste || "poste non précisé") + '  ·  ' +
-        c.anomalies + ' anomalie' + (c.anomalies > 1 ? 's' : '') + ', ' +
-        c.mesures + ' mesure' + (c.mesures > 1 ? 's' : '') + '</p>' +
-        '<button data-cond="' + c.id + '">Ouvrir le suivi</button> ' +
-        '<button data-fiche="' + c.id + '">Télécharger la fiche en Word</button>' +
-        '<div class="doc" id="cond-' + c.id + '">';
+    if (!selId || !L.some(function (x) { return x.id === selId; })) selId = L[0].id;
+    h += '<div class="pick">' + L.map(function (x) {
+      return '<button class="chip-cond f-' + x.fond + (x.id === selId ? ' on' : '') + '" data-sel="' + x.id + '">' + ech(x.nom) + '</button>';
+    }).join("") + '</div>';
+    var c = L.filter(function (x) { return x.id === selId; })[0];
+    var s = CT.suiviConducteur(c.id);
+    h += '<div class="carte cond"><h3>' + ech(c.nom) +
+      (c.poidsLourd ? ' <span class="pl">poids lourd</span>' : '') +
+      ' <span class="pastille f-' + c.fond + '">' + ech(c.etat) + '</span></h3>' +
+      '<p class="sous3">' + ech(c.poste || "poste non précisé") + '  ·  ' +
+      c.anomalies + ' anomalie' + (c.anomalies > 1 ? 's' : '') + ', ' +
+      c.mesures + ' mesure' + (c.mesures > 1 ? 's' : '') + '</p>' +
+      '<button data-fiche="' + c.id + '">Télécharger la fiche en Word</button>' +
+      '<div class="doc ouvert" id="cond-' + c.id + '">';
 
       /* profil, documents à détenir (avec échéances), documents à remettre */
       var pr = CT.profilConducteur(c.id), eds = CT.echeancesDoc(c.id);
@@ -384,7 +392,6 @@
 
       if (c.fond === "rouge") h += '<p class="bloc-note">' + ech(c.message) + '</p>';
       h += '</div></div>';
-    });
     cont.innerHTML = h;
   }
   function valeur(sel, id) {
@@ -393,8 +400,8 @@
   }
   peindreConducteurs();
   document.getElementById("cond-liste").addEventListener("click", function (e) {
-    var o = e.target.closest("button[data-cond]");
-    if (o) { document.getElementById("cond-" + o.getAttribute("data-cond")).classList.toggle("ouvert"); return; }
+    var o = e.target.closest("button[data-sel]");
+    if (o) { selId = o.getAttribute("data-sel"); peindreConducteurs(); return; }
     var f = e.target.closest("button[data-fiche]");
     if (f) { if (!CT.enWordSuivi(f.getAttribute("data-fiche"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
     var pcb = e.target.closest("button[data-prof-c]");
@@ -471,7 +478,7 @@
       CT.porterEcheanceDoc(ide, ed.getAttribute("data-ech-c"), ed.value);
       peindreConducteurs(); reouvrir(ide); return; }
   });
-  function reouvrir(id) { var d = document.getElementById("cond-" + id); if (d) d.classList.add("ouvert"); }
+  function reouvrir(id) { selId = id; }
 
   /* ─── lecture d'une carte conducteur ─── */
   function optionsConducteurs(sel) {
