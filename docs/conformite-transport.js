@@ -702,7 +702,117 @@
 
   /* ─────────────────────────────── export ───────────────────────────────── */
 
+  /* ───────────── les documents disciplinaires, à partir des infractions ─────
+
+     De la fiche d'un conducteur, on sort le rapport qui lui est remis à signer,
+     qui liste ses infractions et vaut mise en garde ; puis, si la répétition ou
+     la gravité l'exige, une sanction choisie dans une échelle, du plus léger au
+     plus lourd. Les sanctions qui touchent au contrat (mise à pied, licenciement)
+     ne se notifient pas sans entretien préalable : pour celles-là, le document
+     produit est la convocation, pas la sanction. */
+  var SANCTIONS = [
+    { cle: "rappel", nom: "Rappel à l'ordre (mise en garde)", entretien: false, disciplinaire: false,
+      note: "Mesure non disciplinaire, rappel écrit sans incidence sur le contrat. Peut être remise sans délai." },
+    { cle: "avertissement", nom: "Avertissement", entretien: false, disciplinaire: true,
+      note: "Sanction notifiée par écrit, dans les deux mois de la connaissance des faits (" + art("L1332-4") + ")." },
+    { cle: "blame", nom: "Blâme", entretien: false, disciplinaire: true,
+      note: "Sanction notifiée par écrit, dans les deux mois de la connaissance des faits (" + art("L1332-4") + ")." },
+    { cle: "miseapied", nom: "Mise à pied disciplinaire", entretien: true, disciplinaire: true,
+      note: "Sanction précédée d'une convocation à entretien préalable. Le document produit est cette convocation ; la sanction se notifie après l'entretien, dans les deux mois des faits (" + art("L1332-4") + ")." },
+    { cle: "licenciement", nom: "Licenciement pour faute", entretien: true, disciplinaire: true,
+      note: "Rupture précédée d'une convocation à entretien préalable, puis d'une notification. Le document produit est la convocation." },
+  ];
+
+  function lignesInfractions(id) {
+    return suiviConducteur(id).anomalies.map(function (a) {
+      return [a.date || "", a.type || "", a.detail || ""];
+    });
+  }
+  function bandeauEntreprise() {
+    var p = profil();
+    var sous = [p.adresse || p.siege, p.siret ? "SIRET : " + p.siret : ""].filter(Boolean).join("  ·  ");
+    return { k: "bandeau", t: p.denomination || p.raisonSociale || "[Entreprise]", sous: sous };
+  }
+  function salDe(id) {
+    return salariesRegistre().filter(function (x) { return x.id === id; })[0] || { nom: id, poste: "" };
+  }
+
+  /* LE RAPPORT AU CONDUCTEUR, VALANT MISE EN GARDE. */
+  function enWordRapport(id) {
+    if (!window.AuditExport) return false;
+    var sal = salDe(id), ls = lignesInfractions(id);
+    var items = [bandeauEntreprise(),
+      { k: "h1", t: "MISE EN GARDE" },
+      { k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") },
+      { k: "p", t: "Les relevés de votre carte de conducteur font apparaître les infractions suivantes :" }];
+    if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
+    else items.push({ k: "p", t: "Aucune infraction relevée à ce jour." });
+    items.push({ k: "p", t: "La réglementation sur les temps de conduite et de repos et l'usage de la carte de conducteur vous est rappelée. Il vous est demandé de ne pas réitérer ces manquements." });
+    items.push({ k: "p", t: "En cas de nouvelle infraction, une sanction disciplinaire pourra être prononcée." });
+    items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu la présente mise en garde." });
+    items.push({ k: "p", t: "Fait à [LIEU], le " + iso(new Date()) + "." });
+    items.push({ k: "p", t: "Signature du conducteur :" });
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, "Mise en garde - " + sal.nom, { sansTitre: false }),
+      "mise-en-garde-" + id + "-" + iso(new Date()) + ".docx");
+    return true;
+  }
+
+  /* LA SANCTION CHOISIE, OU LA CONVOCATION QUAND L'ENTRETIEN EST REQUIS. */
+  function enWordSanction(id, cle) {
+    if (!window.AuditExport) return false;
+    var s = SANCTIONS.filter(function (x) { return x.cle === cle; })[0];
+    if (!s) return false;
+    var sal = salDe(id), ls = lignesInfractions(id);
+    var items = [bandeauEntreprise()];
+    if (s.entretien) {
+      items.push({ k: "h1", t: "CONVOCATION À ENTRETIEN PRÉALABLE" });
+      items.push({ k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") });
+      items.push({ k: "p", t: "Nous envisageons de prendre à votre encontre une sanction disciplinaire pouvant aller jusqu'à " + s.nom.toLowerCase() + ", en raison des faits suivants, relevés sur votre carte de conducteur :" });
+      if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
+      items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le [DATE] à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
+      items.push({ k: "note", t: s.note });
+      items.push({ k: "p", t: "Fait à [LIEU], le " + iso(new Date()) + "." });
+      items.push({ k: "p", t: "Pour l'entreprise :" });
+    } else {
+      items.push({ k: "h1", t: s.nom.toUpperCase() });
+      items.push({ k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") });
+      items.push({ k: "p", t: "Les faits suivants, relevés sur votre carte de conducteur, vous sont reprochés :" });
+      if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
+      else items.push({ k: "p", t: "Aucune infraction relevée." });
+      items.push({ k: "p", t: "En conséquence, nous vous notifions " +
+        (s.cle === "rappel" ? "un rappel à l'ordre" : "un " + s.nom.toLowerCase()) + "." });
+      items.push({ k: "note", t: s.note });
+      items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu la présente notification." });
+      items.push({ k: "p", t: "Fait à [LIEU], le " + iso(new Date()) + "." });
+      items.push({ k: "p", t: "Signature du conducteur :" });
+    }
+    var prefixe = s.entretien ? "convocation-" : "sanction-";
+    window.AuditExport.telecharger(
+      window.AuditExport.docx(items, (s.entretien ? "Convocation - " : s.nom + " - ") + sal.nom, { sansTitre: false }),
+      prefixe + cle + "-" + id + "-" + iso(new Date()) + ".docx");
+    return true;
+  }
+
+  /* La sanction proposée d'office, d'après les infractions du conducteur : un
+     rappel s'il n'y a rien de grave ni de répété, sinon une sanction. */
+  function sanctionProposee(id) {
+    var anos = suiviConducteur(id).anomalies;
+    if (!anos.length) return "rappel";
+    var grave = anos.some(function (a) { return /grave|plus grave|excès de vitesse|sans carte|alcool/i.test(a.type + " " + a.detail); });
+    var par = {};
+    anos.forEach(function (a) { var t = (a.type || "").toLowerCase(); par[t] = (par[t] || 0) + 1; });
+    var recidive = Object.keys(par).some(function (t) { return par[t] >= 2; });
+    if (grave) return "miseapied";
+    if (recidive) return "avertissement";
+    return "rappel";
+  }
+
   window.ConformiteTransport = {
+    SANCTIONS: SANCTIONS,
+    enWordRapport: enWordRapport,
+    enWordSanction: enWordSanction,
+    sanctionProposee: sanctionProposee,
     TEXTES: T, art: art,
     estTransport: estTransport,
     documents: documents,

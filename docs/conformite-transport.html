@@ -270,6 +270,11 @@
         '>' + ech(c.nom) + '</option>';
     }).join("");
   }
+  function optionsSanctions(sel) {
+    return CT.SANCTIONS.map(function (s) {
+      return '<option value="' + s.cle + '"' + (s.cle === sel ? " selected" : "") + '>' + ech(s.nom) + '</option>';
+    }).join("");
+  }
   function peindreConducteurs() {
     var cont = document.getElementById("cond-liste");
     var L = CT.conducteurs(), h = '';
@@ -320,6 +325,14 @@
         '<label>Pour<input type="text" data-f="mes-pour" data-c="' + c.id + '" placeholder="le type de manquement visé"></label>' +
         '<button data-add-mes="' + c.id + '">Ajouter la mesure</button></div>';
 
+      /* rapport et sanction, à partir des infractions */
+      h += '<div class="bloc-h2">Rapport au conducteur et sanction</div>';
+      h += '<div class="mini">' +
+        '<button data-rapport="' + c.id + '">Mise en garde à signer</button>' +
+        '<label>Sanction proposée<select data-f="sanc" data-c="' + c.id + '">' +
+        optionsSanctions(CT.sanctionProposee(c.id)) + '</select></label>' +
+        '<button data-sanction="' + c.id + '">Éditer le document à signer</button></div>';
+
       if (c.fond === "rouge") h += '<p class="bloc-note">' + ech(c.message) + '</p>';
       h += '</div></div>';
     });
@@ -335,6 +348,13 @@
     if (o) { document.getElementById("cond-" + o.getAttribute("data-cond")).classList.toggle("ouvert"); return; }
     var f = e.target.closest("button[data-fiche]");
     if (f) { if (!CT.enWordSuivi(f.getAttribute("data-fiche"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
+    var rp = e.target.closest("button[data-rapport]");
+    if (rp) { if (!CT.enWordRapport(rp.getAttribute("data-rapport"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
+    var sc = e.target.closest("button[data-sanction]");
+    if (sc) { var sid = sc.getAttribute("data-sanction");
+      var sel = document.querySelector('[data-f="sanc"][data-c="' + sid + '"]');
+      if (!CT.enWordSanction(sid, sel ? sel.value : "rappel")) alert("Le générateur Word n'est pas disponible sur cette page.");
+      return; }
     var aa = e.target.closest("button[data-add-ano]");
     if (aa) {
       var id = aa.getAttribute("data-add-ano");
