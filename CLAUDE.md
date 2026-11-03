@@ -406,6 +406,23 @@ lit en entier, jusqu'au dernier mot, avant d'écrire qu'il ne contient pas quelq
 et la longueur du texte rendu se vérifie avant de conclure. Correction faite avant tout
 envoi ; les deux fichiers ont été rétablis.
 
+Cas mesuré le 3 novembre 2026 - dossier TEC, contrôle DRIEAT. J'ai écrit, dans un
+graphique et un paragraphe destinés à la commission, qu'aucune des dix-sept infractions
+de temps de conduite et de repos ne tombait un jour de conduite sans carte du même
+conducteur, « zéro sur dix-sept », et j'en ai tiré que « rien n'a pu être dissimulé » et
+« sans aucun gain de temps de conduite ». Le croisement était fait sur les infractions
+retenues par la clôture, et je me suis arrêté à cette première confirmation. Le rapport
+de présentation, page 4, dit l'inverse pour M. LADHARI : « L'affectation de ces temps de
+conduite sans carte le 04/11 génère une infraction NATINF 27805 », puis de même les 18 et
+19 novembre, une conduite continue de 7h54, 7h44 et 7h14 au lieu de 4h30, c'est-à-dire une
+pause qui n'a pas eu lieu. Le rapport page 9 écrit, pour un autre véhicule, que la conduite
+sans carte permettait « de masquer une infraction au temps de conduite continue maximal ».
+Trois cartes n'ayant pas été transmises, on ne peut rien affirmer non plus sur ce qui
+était ou non masqué pour ces véhicules. Le « zéro sur dix-sept » reste exact pour les
+infractions retenues, mais il fallait ouvrir la page 4 avant d'écrire « rien dissimulé »,
+et chercher ce qui, dans le rapport lui-même, contredisait la thèse. Une lecture qui
+confirme ce qu'on cherche n'est pas une lecture.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
