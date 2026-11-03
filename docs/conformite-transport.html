@@ -85,7 +85,9 @@
 <script src="apercu.js"></script>
 <script src="audit-export.js"></script>
 <script src="base-documents.js"></script>
+<script src="lire-pdf.js"></script>
 <script src="lecture-carte.js"></script>
+<script src="lecture-rapport.js"></script>
 <script src="conformite-transport.js"></script>
 <script>
 "use strict";
@@ -155,10 +157,10 @@
     'on porte la réaction, en correction, ajustement ou sanction. Un même manquement relevé deux fois ' +
     'sans réaction passe au rouge : la troisième condition de l\'exonération n\'est plus tenue.</p>' +
     '<div class="carte"><h3>Lire une carte de conducteur</h3>' +
-    '<p class="sous3">Fichier téléchargé de la carte (.ddd ou .C1B). On en tire le temps de conduite ' +
-    'et les événements enregistrés par l\'appareil, prêts à porter dans la fiche du conducteur. Le fichier ' +
+    '<p class="sous3">Le fichier téléchargé de la carte (.ddd ou .C1B), ou le rapport d\'analyse en PDF. ' +
+    'On en tire le temps de conduite et les infractions, prêts à porter dans la fiche du conducteur. Le fichier ' +
     'reste sur votre appareil, rien n\'est envoyé.</p>' +
-    '<input type="file" id="carte-fichier" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,application/octet-stream">' +
+    '<input type="file" id="carte-fichier" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,.pdf,application/pdf,application/octet-stream">' +
     '<div id="carte-resultat"></div></div>' +
     '<div id="cond-liste"></div></div>';
 
@@ -372,11 +374,27 @@
     var f = e.target.files && e.target.files[0];
     var cible = document.getElementById("carte-resultat");
     if (!f) { cible.innerHTML = ""; return; }
-    if (!window.LectureCarte) { cible.innerHTML = '<p class="vide">Le lecteur de carte n\'est pas disponible sur cette page.</p>'; return; }
     var fr = new FileReader();
     fr.onload = function () {
+      var buf = fr.result, tete = new Uint8Array(buf.slice(0, 5));
+      var estPdf = /\.pdf$/i.test(f.name) ||
+        (tete[0] === 0x25 && tete[1] === 0x50 && tete[2] === 0x44 && tete[3] === 0x46);
+      if (estPdf) {
+        if (!window.LectureRapport) { cible.innerHTML = '<p class="vide">Le lecteur de rapport PDF n\'est pas disponible sur cette page.</p>'; return; }
+        cible.innerHTML = '<p class="sous3">Lecture du rapport…</p>';
+        window.LectureRapport.lire(buf).then(function (rap) {
+          var nomRap = rap.conducteur.nom || "";
+          carteAnalyse = { identification: { titulaire: nomRap, nom: nomRap.split(/\s+/).pop() || "" },
+            periode: null, nbJours: 0, vehicules: [], evenements: [],
+            anomalies: window.LectureRapport.anomalies(rap) };
+          peindreCarte();
+        }).catch(function (err) {
+          cible.innerHTML = '<p class="vide">PDF illisible : ' + ech(err && err.message || err) + '</p>'; });
+        return;
+      }
+      if (!window.LectureCarte) { cible.innerHTML = '<p class="vide">Le lecteur de carte n\'est pas disponible sur cette page.</p>'; return; }
       try {
-        var carte = window.LectureCarte.lire(fr.result);
+        var carte = window.LectureCarte.lire(buf);
         carteAnalyse = window.LectureCarte.analyser(carte);
       } catch (err) {
         cible.innerHTML = '<p class="vide">Fichier illisible : ' + ech(err.message) + '</p>'; return;
