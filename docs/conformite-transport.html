@@ -135,17 +135,12 @@
 
   var html = '';
 
-  /* ───────── L'OPÉRATIONNEL D'ABORD : LE SUIVI PAR CONDUCTEUR ───────── */
-  html += '<div class="espace"><h2>Suivi par conducteur : contrôle, encadrement, réaction</h2>' +
-    '<p class="sous3">Chaque conducteur du registre, poids lourd et autre. On lit la carte, les infractions ' +
-    'tombent dans sa fiche, on réagit (mise en garde ou sanction), et on garde la preuve. Un même manquement ' +
-    'relevé deux fois sans réaction passe au rouge : la troisième condition de l\'exonération n\'est plus tenue.</p>' +
-    '<div class="carte"><h3>Lire une carte de conducteur</h3>' +
-    '<p class="sous3">Le fichier téléchargé de la carte (.ddd ou .C1B), ou le rapport d\'analyse en PDF. ' +
-    'On en tire le temps de conduite et les infractions, prêts à porter dans la fiche du conducteur. Le fichier ' +
-    'reste sur votre appareil, rien n\'est envoyé.</p>' +
-    '<input type="file" id="carte-fichier" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,.pdf,application/pdf,application/octet-stream">' +
-    '<div id="carte-resultat"></div></div>' +
+  /* ───────── LE POINT D'ENTRÉE : LA FICHE DE CHAQUE CONDUCTEUR ───────── */
+  html += '<div class="espace"><h2>Les conducteurs</h2>' +
+    '<p class="sous3">Le point d\'entrée du module. Ouvrez un conducteur : sa fiche porte son profil, ses ' +
+    'documents à détenir et à remettre, la lecture de sa carte, ses infractions, sa réaction et sa preuve. ' +
+    'Tout part d\'ici. Un même manquement relevé deux fois sans réaction passe au rouge : la troisième ' +
+    'condition de l\'exonération n\'est plus tenue.</p>' +
     '<div id="cond-liste"></div></div>';
 
   /* ───────────────── ÉCHÉANCIER DES TÉLÉCHARGEMENTS ───────────────── */
@@ -295,6 +290,12 @@
         '<button data-fiche="' + c.id + '">Télécharger la fiche en Word</button>' +
         '<div class="doc" id="cond-' + c.id + '">';
 
+      /* lire sa carte : le point de départ de la fiche */
+      h += '<div class="carte" style="margin:0 0 10px"><h3>Lire sa carte</h3>' +
+        '<p class="sous3">Le fichier .ddd ou .C1B, ou le rapport d\'analyse en PDF. Les infractions tombent ' +
+        'directement dans sa fiche. Rien n\'est envoyé.</p>' +
+        '<input type="file" data-lire-c="' + c.id + '" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,.pdf,application/pdf,application/octet-stream"></div>';
+
       /* anomalies */
       h += '<div class="bloc-h2">Anomalies relevées</div>';
       if (s.anomalies.length) {
@@ -413,7 +414,38 @@
     if (sm) { var idsm = sm.getAttribute("data-sup-mes");
       CT.supprimerMesure(idsm, +sm.getAttribute("data-i")); peindreConducteurs(); reouvrir(idsm); return; }
   });
+  function lireCartePour(id, f) {
+    var cible = document.getElementById("cond-" + id);
+    var fr = new FileReader();
+    fr.onload = function () {
+      var buf = fr.result, tete = new Uint8Array(buf.slice(0, 5));
+      var estPdf = /\.pdf$/i.test(f.name) ||
+        (tete[0] === 0x25 && tete[1] === 0x50 && tete[2] === 0x44 && tete[3] === 0x46);
+      function importe(anoms) {
+        var n = CT.importerAnomalies(id, anoms || []);
+        peindreConducteurs(); reouvrir(id);
+        alert(n + " infraction" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " à sa fiche" +
+          (anoms && n < anoms.length ? " (" + (anoms.length - n) + " déjà présente(s))" : "") + ".");
+      }
+      if (estPdf) {
+        if (!window.LectureRapport) { alert("Le lecteur de rapport PDF n'est pas disponible."); return; }
+        window.LectureRapport.lire(buf).then(function (rap) { importe(window.LectureRapport.anomalies(rap)); })
+          .catch(function (err) { alert("PDF illisible : " + (err && err.message || err)); });
+        return;
+      }
+      if (!window.LectureCarte) { alert("Le lecteur de carte n'est pas disponible."); return; }
+      try {
+        var carte = window.LectureCarte.lire(buf);
+        importe(window.LectureCarte.analyser(carte).anomalies);
+      } catch (err) { alert("Fichier illisible : " + err.message); }
+    };
+    fr.onerror = function () { alert("Le fichier n'a pas pu être ouvert."); };
+    fr.readAsArrayBuffer(f);
+  }
   document.getElementById("cond-liste").addEventListener("change", function (e) {
+    var lc = e.target.closest("[data-lire-c]");
+    if (lc) { var idl = lc.getAttribute("data-lire-c"); var f = lc.files && lc.files[0];
+      if (f) { lc.value = ""; lireCartePour(idl, f); } return; }
     var pc = e.target.closest("[data-prof-c]");
     if (pc) { var idp = pc.getAttribute("data-c");
       CT.setProfilConducteur(idp, pc.getAttribute("data-prof-c"), pc.value === "1");
