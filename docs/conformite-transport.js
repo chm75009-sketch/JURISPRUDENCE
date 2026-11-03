@@ -736,6 +736,22 @@
   function salDe(id) {
     return salariesRegistre().filter(function (x) { return x.id === id; })[0] || { nom: id, poste: "" };
   }
+  /* La ville, tirée de la fiche d'entreprise : après le code postal de
+     l'adresse, sinon le dernier segment. */
+  function ville() {
+    var p = profil();
+    if (p.ville) return p.ville;
+    var a = String(p.adresse || p.siege || "");
+    var m = a.match(/\d{5}\s+(.+?)\s*$/);
+    if (m) return m[1].trim();
+    var parts = a.split(",");
+    var der = parts.length ? parts[parts.length - 1].replace(/\d{5}/, "").trim() : "";
+    return der || "[LIEU]";
+  }
+  function dateFr() {
+    try { return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" }).format(new Date()); }
+    catch (e) { return iso(new Date()); }
+  }
 
   /* LE RAPPORT AU CONDUCTEUR, VALANT MISE EN GARDE. */
   function enWordRapport(id) {
@@ -750,7 +766,7 @@
     items.push({ k: "p", t: "La réglementation sur les temps de conduite et de repos et l'usage de la carte de conducteur vous est rappelée. Il vous est demandé de ne pas réitérer ces manquements." });
     items.push({ k: "p", t: "En cas de nouvelle infraction, une sanction disciplinaire pourra être prononcée." });
     items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu la présente mise en garde." });
-    items.push({ k: "p", t: "Fait à [LIEU], le " + iso(new Date()) + "." });
+    items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
     items.push({ k: "p", t: "Signature du conducteur :" });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, "Mise en garde - " + sal.nom, { sansTitre: false }),
@@ -772,7 +788,7 @@
       if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
       items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le [DATE] à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
       items.push({ k: "note", t: s.note });
-      items.push({ k: "p", t: "Fait à [LIEU], le " + iso(new Date()) + "." });
+      items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
       items.push({ k: "p", t: "Pour l'entreprise :" });
     } else {
       items.push({ k: "h1", t: s.nom.toUpperCase() });
@@ -784,7 +800,7 @@
         (s.cle === "rappel" ? "un rappel à l'ordre" : "un " + s.nom.toLowerCase()) + "." });
       items.push({ k: "note", t: s.note });
       items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu la présente notification." });
-      items.push({ k: "p", t: "Fait à [LIEU], le " + iso(new Date()) + "." });
+      items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
       items.push({ k: "p", t: "Signature du conducteur :" });
     }
     var prefixe = s.entretien ? "convocation-" : "sanction-";
@@ -889,7 +905,7 @@
       items.push({ k: "h1", t: "LIVRET INDIVIDUEL DE CONTRÔLE" });
       items.push({ k: "p", t: "Ouvert au nom de " + nom + ". Véhicule léger non équipé de chronotachygraphe : le livret enregistre les temps de conduite et de repos, tenu à jour et présenté au contrôle." });
     } else { return false; }
-    items.push({ k: "p", t: "Fait à [LIEU], le " + d + "." });
+    items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
     items.push({ k: "p", t: "Signature du conducteur :" });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, kind + " - " + nom, { sansTitre: false }),
