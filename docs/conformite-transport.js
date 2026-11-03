@@ -890,11 +890,25 @@
       items.push({ k: "p", t: "Le conducteur reconnaît avoir reçu et compris la présente consigne." });
     } else if (kind === "note") {
       items.push({ k: "h1", t: "NOTE DE SERVICE" });
-      items.push({ k: "p", t: "À l'attention de " + nom + "." });
-      items.push({ k: "p", t: "Rappel de la réglementation : carte et sélecteur d'activité, temps de conduite et de repos, repos de fin de semaine hors cabine, et pour le transport de marchandises dangereuses les consignes et équipements ADR." });
+      items.push({ k: "p", t: "À l'attention de " + nom + ". Rappel des règles à respecter, dont le respect est une obligation professionnelle." });
+      items.push({ k: "h2", t: "Carte de conducteur" });
+      items.push({ k: "p", t: "Insérée avant tout déplacement, y compris une manœuvre au dépôt, retirée en fin de service. Personnelle, elle ne se prête pas. Aucun déplacement carte retirée." });
+      items.push({ k: "h2", t: "Temps de conduite" });
+      items.push({ k: "p", t: "Conduite continue : 4 h 30 au maximum, puis une pause de 45 minutes (ou 15 puis 30 minutes). Par jour : 9 heures, portées à 10 heures deux fois par semaine au plus. Par semaine : 56 heures, et 90 heures sur deux semaines consécutives." });
+      items.push({ k: "h2", t: "Temps de repos" });
+      items.push({ k: "p", t: "Repos journalier : 11 heures d'affilée, réductible à 9 heures trois fois au plus entre deux repos de fin de semaine. Repos de fin de semaine : 45 heures, réductible à 24 heures une semaine sur deux avec compensation, et pris hors du véhicule." });
+      items.push({ k: "h2", t: "Téléchargements" });
+      items.push({ k: "p", t: "La carte de conducteur est relevée tous les 28 jours, le tachygraphe du véhicule tous les 90 jours." });
+      items.push({ k: "h2", t: "Sélecteur d'activités" });
+      items.push({ k: "p", t: "Les changements d'activité sont saisis au moment où ils interviennent. Aucune manipulation du dispositif n'est tolérée." });
+      if (profilConducteur(id).adr) {
+        items.push({ k: "h2", t: "Marchandises dangereuses (ADR)" });
+        items.push({ k: "p", t: "Consignes écrites à bord, équipements de sécurité conformes (dont extincteur), colis correctement marqués et étiquetés, chargement arrimé et calé, et certificat de formation ADR (sensibilisation 1.3) à jour." });
+      }
     } else if (kind === "formation") {
       items.push({ k: "h1", t: "ATTESTATION DE FORMATION" });
-      items.push({ k: "p", t: "Atteste que " + nom + " a reçu la formation à la réglementation sociale et aux temps de conduite, avec émargement daté, à l'embauche puis en rappel." });
+      items.push({ k: "p", t: "Atteste que " + nom + " a reçu la formation à la réglementation sociale, émargée et datée, à l'embauche puis en rappel." });
+      items.push({ k: "p", t: "La formation a porté sur : l'usage de la carte de conducteur et du sélecteur d'activités ; les temps de conduite (4 h 30 en continu avec pause de 45 minutes, 9 heures par jour, 10 heures deux fois par semaine, 56 heures par semaine) ; les temps de repos (11 heures par jour, 45 heures en fin de semaine, hors cabine) ; et les téléchargements périodiques de la carte et du véhicule." });
     } else if (kind === "adrform") {
       items.push({ k: "h1", t: "ATTESTATION DE FORMATION ADR" });
       items.push({ k: "p", t: "Atteste que " + nom + " a suivi la formation de sensibilisation ADR (chapitre 1.3) pour le transport de marchandises dangereuses." });
