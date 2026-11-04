@@ -406,6 +406,16 @@ lit en entier, jusqu'au dernier mot, avant d'écrire qu'il ne contient pas quelq
 et la longueur du texte rendu se vérifie avant de conclure. Correction faite avant tout
 envoi ; les deux fichiers ont été rétablis.
 
+Cas mesuré le 3 novembre 2026 - dossier TEC, rapport de présentation DRIEAT, 17 pages.
+J'ai écrit deux fois que le rapport n'était pas « du 20 octobre 2026 » mais du « 26
+novembre 2026 », sur la foi de la page 1. Le 26 novembre est la date de la séance ; la
+dernière page, que je n'avais pas rouverte, dit « Établi à Paris, le 20/10/2026 », sous
+la signature de la rapporteure Erika VOLLARD. La date d'un acte se lit à sa signature,
+pas à son en-tête. J'ai aussi déclaré non sourcé le départ de M. BOUAOU au 31/12/2025
+alors que je n'avais pas toutes les pièces du dossier : on écrit « absent des pièces que
+j'ai », pas « non sourcé ». Le même jour, j'ai nié l'existence d'une liste de dix-sept
+infractions de temps qui figure aux pages 4 à 6 de la clôture, pièce que j'avais déjà lue.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
