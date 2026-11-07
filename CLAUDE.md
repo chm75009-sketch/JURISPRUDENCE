@@ -220,6 +220,12 @@ jour sans qu'aucun écran ait été regardé sur un écran de téléphone.
 
 ## Réponses — règle générale
 
+**Répondre à la question avant de faire quoi que ce soit. Règle absolue.**
+Posée le 7 novembre 2026. Quand l'utilisatrice pose une question, j'y réponds
+d'abord, directement ; je n'édite rien, ne construis rien, n'envoie rien tant
+que la réponse n'est pas donnée. Une question n'est pas un feu vert pour agir :
+c'est une question, elle attend une réponse.
+
 **Exécuter ce qui est demandé, tel quel.** Pas ce que je pense pouvoir faire,
 pas ce que je juge mieux : ce qui est écrit, au chiffre près. Je ne suis pas là
 pour penser mais pour exécuter, au service de l'utilisatrice.
