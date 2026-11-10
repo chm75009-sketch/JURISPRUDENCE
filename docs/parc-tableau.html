@@ -29,8 +29,14 @@
   .db-tete .rond{flex:0 0 auto;width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.12);
     display:flex;align-items:center;justify-content:center;color:#cfe0ff}
   .db-tete .rond svg{width:24px;height:24px}
+  .db-tete .ttw{flex:1;min-width:0}
   .db-tete .t{font:700 21px/1.2 Georgia,'Times New Roman',serif;letter-spacing:.01em}
   .db-tete .s{margin-top:3px;font:500 13px system-ui;color:#aebdd6}
+  .db-quitter{flex:0 0 auto;display:none;align-items:center;gap:7px;background:rgba(255,255,255,.14);
+    color:#fff;border:0;border-radius:11px;padding:10px 14px;font:600 14px system-ui;cursor:pointer}
+  .db-quitter:hover{background:rgba(255,255,255,.24)}
+  .db-quitter svg{width:17px;height:17px}
+  :root[data-role="parc"] .db-quitter{display:inline-flex}
 
   .banniere{margin:14px 0 0;display:flex;align-items:center;gap:13px;padding:16px 18px;border-radius:16px;
     font:600 var(--t3)/1.35 system-ui;box-shadow:var(--db-ombre)}
@@ -120,13 +126,20 @@
   .liens a.sec{background:var(--db-carte);color:var(--db-encre);border:1px solid var(--db-filet)}
   [hidden]{display:none !important}
 </style>
+<script>
+  try {
+    if ((sessionStorage.getItem("seance-role") || localStorage.getItem("seance-role")) === "parc")
+      document.documentElement.setAttribute("data-role", "parc");
+  } catch (e) {}
+</script>
 </head>
 <body>
 <main class="wrap">
 
   <div class="db-tete">
     <span class="rond"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h13v12H1z"/><path d="M14 8h4l4 4v3h-8V8z"/><circle cx="5.5" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg></span>
-    <div><div class="t">Tableau de bord du parc</div><div class="s" id="ent"></div></div>
+    <div class="ttw"><div class="t">Tableau de bord du parc</div><div class="s" id="ent"></div></div>
+    <button type="button" id="db-quitter" class="db-quitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Quitter</button>
   </div>
 
   <div id="banniere"></div>
@@ -159,5 +172,19 @@
 <script src="parc-parametres.js"></script>
 <script src="flotte.js"></script>
 <script src="parc-tableau.js"></script>
+<script>
+(function () {
+  var q = document.getElementById("db-quitter");
+  if (!q) return;
+  q.addEventListener("click", function () {
+    if (!window.confirm("Quitter la session ? Le code sera redemandé à la prochaine ouverture.")) return;
+    try {
+      sessionStorage.removeItem("seance-ouverte"); sessionStorage.removeItem("seance-role");
+      localStorage.removeItem("seance-role"); localStorage.removeItem("seance-battement");
+    } catch (e) {}
+    location.replace("entrer.html");
+  });
+})();
+</script>
 </body>
 </html>
