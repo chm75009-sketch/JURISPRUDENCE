@@ -208,6 +208,13 @@
      n'a pas lieu d'être. Ce role n'existe pas sur l'application ouverte, où la
      règle ne s'applique donc jamais. */
   :root[data-role="parc"] .haut .retour{display:none}
+  /* LE CHEF DE PARC NE VOIT PAS LES CONDUCTEURS. L'onglet « Conducteurs »
+     porte le permis, les points, la carte de conducteur et les visites
+     médicales : ce sont des données du personnel, étrangères à la seule
+     gestion du parc. Pour une séance de role « parc », l'onglet disparaît et
+     la flotte occupe toute la largeur. */
+  :root[data-role="parc"] #o-con{display:none}
+  :root[data-role="parc"] .onglets{grid-template-columns:1fr}
 </style>
 <script>
   try {
