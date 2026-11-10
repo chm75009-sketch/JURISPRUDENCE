@@ -923,6 +923,29 @@
     return M;
   }
 
+  /* LA JAUGE D'AVANCEMENT. Sur quatre-vingt-sept véhicules, le chef de parc a
+     besoin de voir d'un coup où il en est : combien sont complets, combien
+     restent, et de pouvoir attaquer les suivants sans les chercher. */
+  function rendreJauge() {
+    var hote = $("jauge");
+    if (!hote) return;
+    var tous = vehicules();
+    if (!tous.length) { hote.innerHTML = ""; return; }
+    var reste = tous.filter(function (v) { return manque(v).length; }).length;
+    var complets = tous.length - reste;
+    var pct = Math.round(complets / tous.length * 100);
+    var cls = pct >= 100 ? "pleine" : (pct < 50 ? "basse" : "");
+    hote.innerHTML = '<div class="jauge-c">' +
+      '<div class="jr"><span class="jt"><b>' + complets + "</b> sur " + tous.length +
+      " véhicule" + (tous.length > 1 ? "s" : "") + " complet" + (complets > 1 ? "s" : "") + "</span>" +
+      '<span class="jp">' + pct + " %</span></div>" +
+      '<div class="jb"><i class="' + cls + '" style="width:' + pct + '%"></i></div>' +
+      (reste
+        ? '<button type="button" class="jcompleter" data-completer="1">Compléter les ' + reste +
+          " véhicule" + (reste > 1 ? "s" : "") + " restant" + (reste > 1 ? "s" : "") + "</button>"
+        : "") + "</div>";
+  }
+
   function rendreACompleter() {
     var hote = $("acompleter");
     if (!hote) return;
@@ -1002,6 +1025,7 @@
 
   function rendre() {
     rendreCompte();
+    rendreJauge();
     rendreACompleter();
     rendreVehicules();
     rendreConducteurs();
@@ -1459,6 +1483,24 @@
     /* Un seul écouteur pour tout l'écran : les fiches se redessinent sans
        cesse, des écouteurs posés sur chaque titre disparaîtraient avec elles. */
     document.addEventListener("click", function (ev) {
+      /* COMPLÉTER : on passe la liste en mode « à compléter », et on ouvre le
+         plus incomplet, celui par qui commencer. */
+      var comp = ev.target.closest ? ev.target.closest("[data-completer]") : null;
+      if (comp) {
+        fEtat = "incomplet"; if ($("f-etat")) $("f-etat").value = "incomplet";
+        fRecherche = ""; if ($("f-rech")) $("f-rech").value = "";
+        var manq = vehicules().map(function (v) { return { v: v, m: manque(v) }; })
+          .filter(function (x) { return x.m.length; });
+        manq.sort(function (a, b) { return b.m.length - a.m.length; });
+        if (manq.length) ouvert["v" + manq[0].v.id] = true;
+        rendre();
+        if (manq.length) {
+          var k = document.querySelector('[data-v="' + manq[0].v.id + '"]');
+          if (k && k.scrollIntoView)
+            window.setTimeout(function () { k.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+        }
+        return;
+      }
       var o = ev.target.closest ? ev.target.closest("[data-ouvrir]") : null;
       if (o) {
         var vid = o.getAttribute("data-ouvrir");

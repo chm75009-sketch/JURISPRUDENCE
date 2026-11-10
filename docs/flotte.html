@@ -172,6 +172,22 @@
     background:var(--vert-clair);color:var(--vert);font:600 var(--t2)/1.45 system-ui}
   .danger{border-color:var(--rouge) !important;color:var(--rouge) !important}
 
+  /* LA JAUGE D'AVANCEMENT. Combien de véhicules portent tout ce qu'il faut,
+     sur l'ensemble du parc, et un bouton pour aller compléter les autres. */
+  .jauge-c{margin:var(--e4) 0 0;padding:15px 16px;background:var(--surface);
+    border:1px solid var(--filet);border-radius:var(--r2)}
+  .jauge-c .jr{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .jauge-c .jt{font:500 var(--t2) system-ui;color:var(--texte-2)}
+  .jauge-c .jt b{color:var(--texte);font-weight:700}
+  .jauge-c .jp{font:700 var(--t2) system-ui;color:var(--texte)}
+  .jauge-c .jb{margin:10px 0 0;height:9px;border-radius:999px;background:var(--filet);overflow:hidden}
+  .jauge-c .jb i{display:block;height:100%;border-radius:999px;background:var(--vert);transition:width .4s}
+  .jauge-c .jb i.basse{background:var(--ambre,#b5781a)}
+  .jauge-c .jb i.pleine{background:var(--vert)}
+  .jauge-c .jcompleter{margin:13px 0 0;width:100%;min-height:46px;border:0;border-radius:var(--r1);
+    background:var(--accent);color:#fff;font:600 var(--t2) system-ui;cursor:pointer}
+  .jauge-c .jcompleter:hover{filter:brightness(1.06)}
+
   /* LES PIÈCES DU VÉHICULE. Un dépôt par pièce, son état écrit à côté. */
   .pieces{margin:var(--e3) 0 0;padding-top:12px;border-top:1px solid var(--filet)}
   .pieces .pt{margin:0 0 10px;font:600 11px/1.2 system-ui;letter-spacing:.06em;
@@ -286,6 +302,8 @@
         </div>
       </div>
     </details>
+
+    <div id="jauge"></div>
 
     <div id="acompleter"></div>
 
