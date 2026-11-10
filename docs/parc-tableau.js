@@ -229,17 +229,27 @@
         : '<p class="ok">Aucune échéance dépassée ni proche.</p>');
 
     /* Coûts */
-    var total = 0, nbInt = 0, avecCout = 0;
+    var total = 0, nbInt = 0, recentes = [];
     V.forEach(function (v) {
-      var L = v.interventions || [];
-      if (L.length) { avecCout++; }
-      L.forEach(function (it) { total += coutInter(it); nbInt++; });
+      (v.interventions || []).forEach(function (it) {
+        total += coutInter(it); nbInt++;
+        recentes.push({ immat: v.immat, date: it.date, objet: it.objet, cout: coutInter(it) });
+      });
     });
+    recentes.sort(function (a, b) { return net(b.date).localeCompare(net(a.date)); });
+    var listeInt = recentes.slice(0, 6).map(function (r) {
+      return '<div class="surv-l"><span class="q"><b>' + ech(r.objet || "Intervention") + "</b> " +
+        ech(r.immat || "") + "</span>" +
+        '<span class="rt"><span class="d">' + ech(r.date ? enFrancais(r.date) : "") + "</span>" +
+        '<span class="j">' + ech(euros(r.cout)) + "</span></span></div>";
+    }).join("");
     var moyen = V.length ? total / V.length : 0;
     $("couts").innerHTML = '<div class="tiles">' +
       tile(euros(total), "Total entretien", null, "euro") + tile(euros(moyen), "Moyenne par véhicule", null, "euro") +
       tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : ""), null, "wrench") + "</div>" +
-      (nbInt ? barres(coutsParMois(V)) : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
+      (nbInt ? barres(coutsParMois(V)) + '<div class="surv">' + listeInt + "</div>" +
+        '<a class="voir" href="flotte.html">Gérer les interventions sur les fiches véhicules</a>'
+        : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
 
     /* Sinistres */
     var S = lire("parc-sinistres", []);
