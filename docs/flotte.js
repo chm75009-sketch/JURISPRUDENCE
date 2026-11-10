@@ -36,6 +36,21 @@
   }
   function garder(c, v) { try { window.localStorage.setItem(c, JSON.stringify(v)); } catch (e) {} }
   function net(v) { return String(v == null ? "" : v).trim(); }
+
+  /* RIEN NE S'EFFACE SUR UN SEUL GESTE. Demande du 10 novembre 2026, « colle
+     pour tout le reste » : toute action qui efface demande d'abord confirmation.
+     Les plus lourdes, qui effacent plusieurs choses ou un véhicule entier,
+     demandent en plus de taper un mot. */
+  function confirmerDur(message, mot) {
+    if (!window.confirm(message)) return false;
+    var r = window.prompt("Dernière confirmation. Pour confirmer, tapez " + mot + " en majuscules.");
+    if (r === null) return false;
+    if (net(r).toUpperCase() !== mot) {
+      window.alert("Action annulée : la confirmation ne correspond pas.");
+      return false;
+    }
+    return true;
+  }
   function enFrancais(isoDate) {
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(net(isoDate));
     if (!m) return "";
@@ -1287,16 +1302,9 @@
     $("v-vider").addEventListener("click", function () {
       var n = vehicules().length;
       if (!n) return;
-      if (!window.confirm("Vider la flotte : retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
+      if (!confirmerDur("Vider la flotte : retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
         " de cet appareil ? Les fiches des conducteurs et les pièces déposées sont gardées. " +
-        "Cette action ne se rattrape pas.")) return;
-      var mot = window.prompt("Dernière confirmation. Pour vider définitivement la flotte, " +
-        "tapez VIDER en majuscules.");
-      if (mot === null) return;
-      if (net(mot).toUpperCase() !== "VIDER") {
-        window.alert("Flotte non vidée : la confirmation ne correspond pas.");
-        return;
-      }
+        "Cette action ne se rattrape pas.", "VIDER")) return;
       garderVehicules([]);
       garder(CLE_IMP, null);
       ouvert = {};
@@ -1312,8 +1320,9 @@
       var reste = vehicules().filter(function (v) { return !dedans[v.id]; });
       var n = vehicules().length - reste.length;
       if (!n) return;
-      if (!window.confirm("Retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
-        " ajouté" + (n > 1 ? "s" : "") + " par l'importation du " + enFrancais(der.le) + " ?")) return;
+      if (!confirmerDur("Retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
+        " ajouté" + (n > 1 ? "s" : "") + " par l'importation du " + enFrancais(der.le) +
+        " ? Cette action ne se rattrape pas.", "ANNULER")) return;
       garderVehicules(reste);
       garder(CLE_IMP, null);
       rendre();
@@ -1334,6 +1343,7 @@
       }
       var ps = ev.target.closest ? ev.target.closest("[data-piece-sup]") : null;
       if (ps) {
+        if (!window.confirm("Retirer cette pièce du véhicule ?")) return;
         var duo = ps.getAttribute("data-piece-sup").split("|");
         var T = vehicules();
         T.forEach(function (x) { if (x.id === duo[0] && x.pieces) delete x.pieces[duo[1]]; });
@@ -1378,7 +1388,8 @@
         var id = s.getAttribute("data-sup");
         var L = vehicules(), v = null;
         L.forEach(function (x) { if (x.id === id) v = x; });
-        if (!window.confirm("Retirer " + ((v && v.immat) || "ce véhicule") + " du fichier ?")) return;
+        if (!confirmerDur("Retirer " + ((v && v.immat) || "ce véhicule") + " du fichier ? Son suivi, " +
+          "ses échéances et ses interventions seront perdus. Cette action ne se rattrape pas.", "SUPPRIMER")) return;
         if (v && v.conducteur) lierVehiculeConducteur(id, "", v.conducteur);
         garderVehicules(L.filter(function (x) { return x.id !== id; }));
         delete ouvert["v" + id];
