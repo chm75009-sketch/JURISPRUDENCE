@@ -244,9 +244,21 @@
     /* Sinistres */
     var S = lire("parc-sinistres", []);
     var sCours = S.filter(function (s) { return (s.statut || "En cours") === "En cours"; }).length;
+    /* La liste, pour savoir lesquels : les plus récents d'abord. */
+    var sListe = S.slice().sort(function (a, b) { return net(b.date).localeCompare(net(a.date)); }).slice(0, 6)
+      .map(function (s) {
+        var st = s.statut || "En cours";
+        var montant = fnum(s.montant) ? euros(s.montant) : "";
+        return '<div class="surv-l ' + (st === "Clos" ? "" : "rouge") + '"><span class="q"><b>' +
+          ech(s.type || "Sinistre") + "</b> " + ech(s.vehicule || "") + (montant ? " · " + ech(montant) : "") + "</span>" +
+          '<span class="rt"><span class="d">' + ech(s.date ? enFrancais(s.date) : "") + "</span>" +
+          '<span class="j">' + ech(st) + "</span></span></div>";
+      }).join("");
     $("sinistres").innerHTML = '<div class="tiles">' +
       tile(sCours, "En cours", sCours ? "rouge" : "") + tile(S.length - sCours, "Clos") + tile(S.length, "Total") + "</div>" +
-      (S.length ? "" : '<p class="rien">Aucun sinistre déclaré. Déclarez-les depuis le bouton « Sinistres ».</p>');
+      (S.length ? '<div class="surv">' + sListe + "</div>" +
+        '<a class="voir" href="parc-sinistres.html">Voir et gérer les sinistres</a>'
+        : '<p class="rien">Aucun sinistre déclaré. Déclarez-les depuis le bouton « Sinistres ».</p>');
   }
 
   function demarrer() {
