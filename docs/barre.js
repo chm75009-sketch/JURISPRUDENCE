@@ -140,6 +140,7 @@
     var liste = parc ? [
       { page: "parc-tableau.html", nom: "Tableau de bord du parc" },
       { page: "flotte.html", nom: "Liste des véhicules" },
+      { page: "parc-sinistres.html", nom: "Sinistres" },
       { page: "parc-parametres.html", nom: "Paramètres du parc" },
     ] : MODULES;
     liste.forEach(function (m) {

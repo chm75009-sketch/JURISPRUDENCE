@@ -179,6 +179,13 @@
       tile(euros(total), "Total entretien") + tile(euros(moyen), "Moyenne par véhicule") +
       tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : "")) + "</div>" +
       (nbInt ? "" : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
+
+    /* Sinistres */
+    var S = lire("parc-sinistres", []);
+    var sCours = S.filter(function (s) { return (s.statut || "En cours") === "En cours"; }).length;
+    $("sinistres").innerHTML = '<div class="tiles">' +
+      tile(sCours, "En cours", sCours ? "rouge" : "") + tile(S.length - sCours, "Clos") + tile(S.length, "Total") + "</div>" +
+      (S.length ? "" : '<p class="rien">Aucun sinistre déclaré. Déclarez-les depuis le bouton « Sinistres ».</p>');
   }
 
   function demarrer() {

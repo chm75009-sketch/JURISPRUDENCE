@@ -75,8 +75,8 @@
     color:var(--db-vert);font:600 var(--t2) system-ui}
   .rien{margin:14px 0 0;font:400 var(--t2)/1.5 system-ui;color:var(--db-encre-3)}
 
-  .liens{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 0}
-  @media (max-width:520px){.liens{grid-template-columns:1fr}}
+  .liens{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 0}
+  @media (max-width:420px){.liens{grid-template-columns:1fr}}
   .liens a{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
     min-height:54px;border-radius:14px;font:600 var(--t3) system-ui;padding:0 16px}
   .liens a.pri{background:var(--db-encre);color:#fff}
@@ -102,8 +102,11 @@
 
   <section class="carte"><h2>Coûts d'entretien</h2><div id="couts"></div></section>
 
+  <section class="carte"><h2>Sinistres</h2><div id="sinistres"></div></section>
+
   <div class="liens">
     <a class="pri" href="flotte.html">Liste des véhicules</a>
+    <a class="sec" href="parc-sinistres.html">Sinistres</a>
     <a class="sec" href="parc-parametres.html">Paramètres du parc</a>
   </div>
 

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sinistres du parc</title>
+<meta name="description" content="Les sinistres du parc : déclaration par véhicule, type, conducteur, coût et statut.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16233a">
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  :root{--db-fond:#eef1f5;--db-carte:#fff;--db-encre:#16233a;--db-encre-2:#5b6676;--db-encre-3:#8893a3;
+    --db-filet:#e6eaf0;--db-accent:#2f6df0;--db-rouge:#d23f3f;--db-rouge-bg:#fdecec;--db-vert:#2f8a56;--db-vert-bg:#e7f5ec;}
+  body{background:var(--db-fond);color:var(--db-encre)}
+  main.wrap{max-width:760px;padding:0 16px 48px}
+  .haut{padding:18px 0 4px}
+  .haut .retour{color:var(--db-encre-2);text-decoration:none;font:600 var(--t2) system-ui}
+  .haut b{display:block;font:700 20px/1.2 Georgia,'Times New Roman',serif;margin:8px 0 2px}
+  .haut .ent{font:500 13px system-ui;color:var(--db-encre-3)}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:16px 0 0}
+  .tile{background:var(--db-carte);border:1px solid var(--db-filet);border-radius:14px;padding:15px 16px}
+  .tile .v{font:700 24px/1.1 system-ui;letter-spacing:-.01em}
+  .tile .l{margin-top:4px;font:500 12px system-ui;color:var(--db-encre-2)}
+  .tile.rouge .v{color:var(--db-rouge)}
+
+  .barre{margin:16px 0 0}
+  .barre button{width:100%;min-height:52px;border-radius:14px;border:0;cursor:pointer;
+    background:var(--db-encre);color:#fff;font:600 var(--t3) system-ui}
+
+  .carte-s{background:var(--db-carte);border:1px solid var(--db-filet);border-radius:16px;margin:12px 0 0;overflow:hidden}
+  .carte-s .tt{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:14px 16px;cursor:pointer}
+  .carte-s .nom{font:700 var(--t4)/1.25 system-ui}
+  .carte-s .sous{display:block;font:400 var(--t2)/1.4 system-ui;color:var(--db-encre-3);margin-top:3px}
+  .carte-s .st{font:600 11px/1 system-ui;padding:6px 11px;border-radius:999px;white-space:nowrap}
+  .carte-s .st.cours{background:var(--db-rouge-bg);color:var(--db-rouge)}
+  .carte-s .st.clos{background:var(--db-vert-bg);color:var(--db-vert)}
+  .carte-s .corps{border-top:1px solid var(--db-filet);padding:16px;background:var(--db-fond)}
+  .gr{display:grid;grid-template-columns:1fr;gap:12px}
+  @media (min-width:560px){.gr{grid-template-columns:1fr 1fr}}
+  .gr label{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .gr label.large{grid-column:1/-1}
+  .gr label > span{font:600 11px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;color:var(--db-encre-3)}
+  .gr input,.gr select,.gr textarea{font-size:16px;min-height:46px;padding:9px 11px;width:100%;box-sizing:border-box;
+    border:1px solid var(--db-filet);border-radius:10px;background:var(--db-carte);color:var(--db-encre)}
+  .gr textarea{min-height:78px;line-height:1.45;resize:vertical;font-family:inherit}
+  .actions{margin:14px 0 0}
+  .lien{background:none;border:0;color:var(--db-rouge);font:600 var(--t2) system-ui;padding:0;cursor:pointer;text-decoration:underline}
+  .rien{margin:16px 0 0;font:400 var(--t2)/1.5 system-ui;color:var(--db-encre-3)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="parc-tableau.html">&larr; Retour</a>
+    <b>Sinistres du parc</b>
+    <span class="ent" id="ent"></span>
+  </div>
+
+  <div id="compte"></div>
+
+  <div class="barre"><button type="button" id="ajouter">+ Déclarer un sinistre</button></div>
+
+  <div id="liste"></div>
+
+</main>
+
+<script>window.RUBRIQUE_DOCS = "flotte";</script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="parc-parametres.js"></script>
+<script src="parc-sinistres.js"></script>
+</body>
+</html>
