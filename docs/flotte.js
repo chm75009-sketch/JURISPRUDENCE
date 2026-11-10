@@ -563,7 +563,7 @@
   var GR_ECH = { ct: 1, ctMois: 1, lim: 1, limMois: 1, chrono: 1, chronoMois: 1,
     telecUnite: 1, telecUniteJours: 1, assur: 1, assurContrat: 1, licence: 1, licenceFin: 1,
     revision: 1, revisionKm: 1, extincteur: 1 };
-  var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["entretien", "Entretien"], ["pieces", "Pièces"]];
+  var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["entretien", "Entretien"], ["pieces", "Documents"]];
 
   function corpsVehicule(v) {
     var tab = vtabActif[v.id] || "infos";
@@ -688,7 +688,7 @@
 
   function piecesHtml(v) {
     var p = v.pieces || {};
-    return '<div class="pieces"><p class="pt">Pièces du véhicule</p>' +
+    return '<div class="pieces"><p class="pt">Documents du véhicule</p>' +
       PIECES.map(function (x) {
         var d = p[x.c];
         return '<div class="piece"><span class="pl">' + ech(x.lib) + "</span>" +
@@ -698,7 +698,7 @@
           '<input type="file" data-sans-base="1" data-piece="' + ech(v.id) + "|" + x.c + '" ' +
           'accept="image/*,.pdf,.jpg,.jpeg,.png,.heic" aria-label="' + ech(x.lib) + '"></div>';
       }).join("") +
-      '<p class="doux">Les pièces déposées se retrouvent dans <a href="mes-documents.html">Mes documents</a>, ' +
+      '<p class="doux">Les documents déposés se retrouvent dans <a href="mes-documents.html">Mes documents</a>, ' +
       "rubrique Flotte.</p></div>";
   }
 
