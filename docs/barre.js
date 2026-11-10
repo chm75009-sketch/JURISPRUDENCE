@@ -137,7 +137,11 @@
     var parc = false;
     try { parc = (window.sessionStorage.getItem("seance-role") ||
       window.localStorage.getItem("seance-role")) === "parc"; } catch (e) { parc = false; }
-    var liste = parc ? MODULES.filter(function (m) { return m.page === "flotte.html"; }) : MODULES;
+    var liste = parc ? [
+      { page: "parc-tableau.html", nom: "Tableau de bord du parc" },
+      { page: "flotte.html", nom: "Liste des véhicules" },
+      { page: "parc-parametres.html", nom: "Paramètres du parc" },
+    ] : MODULES;
     liste.forEach(function (m) {
       var ici = m.page === page ? ' class="ici" aria-current="page"' : "";
       h += '<li><a href="' + m.page + '"' + ici + '>' + m.nom + "</a></li>";

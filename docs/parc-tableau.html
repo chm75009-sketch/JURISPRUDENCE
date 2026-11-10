@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau de bord du parc</title>
+<meta name="description" content="La synthèse du parc : structure de la flotte, surveillance des échéances et coûts d'entretien.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16233a">
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  :root{
+    --db-fond:#eef1f5; --db-carte:#ffffff; --db-encre:#16233a; --db-encre-2:#5b6676;
+    --db-encre-3:#8893a3; --db-filet:#e6eaf0; --db-accent:#2f6df0; --db-accent-bg:#eaf1fe;
+    --db-rouge:#d23f3f; --db-rouge-bg:#fdecec; --db-ambre:#b7791f; --db-ambre-bg:#fdf3e2;
+    --db-vert:#2f8a56; --db-vert-bg:#e7f5ec; --db-ombre:0 1px 2px rgba(22,35,58,.06),0 6px 18px rgba(22,35,58,.05);
+  }
+  body{background:var(--db-fond);color:var(--db-encre)}
+  main.wrap{max-width:900px;padding:0 16px 48px}
+
+  .db-haut{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:20px 0 6px}
+  .db-haut .retour{color:var(--db-encre-2);text-decoration:none;font:600 var(--t2) system-ui}
+  .db-haut .tt{font:700 20px/1.2 Georgia,'Times New Roman',serif;color:var(--db-encre)}
+  .db-haut .ent{font:500 13px system-ui;color:var(--db-encre-3)}
+
+  .carte{background:var(--db-carte);border:1px solid var(--db-filet);border-radius:18px;
+    box-shadow:var(--db-ombre);padding:20px;margin:16px 0 0}
+  .carte > h2{display:flex;align-items:center;gap:9px;margin:0 0 16px;
+    font:600 11px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--db-encre-3)}
+  .carte > h2::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--db-accent)}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+  .tile{background:var(--db-fond);border-radius:14px;padding:16px 16px}
+  .tile .v{font:700 26px/1.1 system-ui;color:var(--db-encre);letter-spacing:-.01em}
+  .tile .l{margin-top:5px;font:500 12px/1.3 system-ui;color:var(--db-encre-2)}
+  .tile.rouge{background:var(--db-rouge-bg)} .tile.rouge .v{color:var(--db-rouge)}
+  .tile.ambre{background:var(--db-ambre-bg)} .tile.ambre .v{color:var(--db-ambre)}
+  .tile.vert{background:var(--db-vert-bg)} .tile.vert .v{color:var(--db-vert)}
+
+  .donut{display:flex;flex-wrap:wrap;align-items:center;gap:18px 26px;margin:18px 0 0}
+  .donut svg{flex:0 0 auto}
+  .donut .d-n{font:700 26px system-ui;fill:var(--db-encre)}
+  .donut .d-l{font:500 11px system-ui;fill:var(--db-encre-3)}
+  .legende{display:flex;flex-direction:column;gap:9px;min-width:160px;flex:1}
+  .legende .lg{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
+  .legende .pt{width:11px;height:11px;border-radius:3px}
+  .legende .nm{font:500 var(--t2) system-ui;color:var(--db-encre-2)}
+  .legende .nb{font:700 var(--t2) system-ui;color:var(--db-encre)}
+
+  .surv{margin:16px 0 0;display:flex;flex-direction:column}
+  .surv-l{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px 12px;
+    padding:12px 2px;border-top:1px solid var(--db-filet)}
+  .surv-l:first-child{border-top:0}
+  .surv-l::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--db-encre-3)}
+  .surv-l.passe::before,.surv-l.rouge::before{background:var(--db-rouge)}
+  .surv-l.ambre::before{background:var(--db-ambre)}
+  .surv-l .q{font:500 var(--t2)/1.35 system-ui;color:var(--db-encre-2);min-width:0}
+  .surv-l .q b{color:var(--db-encre);font-weight:600}
+  .surv-l .rt{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .surv-l .d{font:500 12px system-ui;color:var(--db-encre-3);white-space:nowrap}
+  .surv-l .j{font:600 11px/1 system-ui;padding:5px 9px;border-radius:999px;white-space:nowrap;
+    background:var(--db-fond);color:var(--db-encre-2)}
+  .surv-l.passe .j,.surv-l.rouge .j{background:var(--db-rouge-bg);color:var(--db-rouge)}
+  .surv-l.ambre .j{background:var(--db-ambre-bg);color:var(--db-ambre)}
+
+  .ok{margin:14px 0 0;padding:14px 16px;border-radius:12px;background:var(--db-vert-bg);
+    color:var(--db-vert);font:600 var(--t2) system-ui}
+  .rien{margin:14px 0 0;font:400 var(--t2)/1.5 system-ui;color:var(--db-encre-3)}
+
+  .liens{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0 0}
+  @media (max-width:520px){.liens{grid-template-columns:1fr}}
+  .liens a{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+    min-height:54px;border-radius:14px;font:600 var(--t3) system-ui;padding:0 16px}
+  .liens a.pri{background:var(--db-encre);color:#fff}
+  .liens a.sec{background:var(--db-carte);color:var(--db-encre);border:1px solid var(--db-filet)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div class="db-haut">
+    <div>
+      <div class="tt">Tableau de bord du parc</div>
+      <div class="ent" id="ent"></div>
+    </div>
+  </div>
+
+  <section class="carte"><h2>Structure de la flotte</h2><div id="structure"></div></section>
+
+  <section class="carte"><h2>Surveillance des échéances</h2><div id="surveillance"></div></section>
+
+  <section class="carte"><h2>Coûts d'entretien</h2><div id="couts"></div></section>
+
+  <div class="liens">
+    <a class="pri" href="flotte.html">Liste des véhicules</a>
+    <a class="sec" href="parc-parametres.html">Paramètres du parc</a>
+  </div>
+
+</main>
+
+<script>window.RUBRIQUE_DOCS = "flotte";</script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="parc-parametres.js"></script>
+<script src="flotte.js"></script>
+<script src="parc-tableau.js"></script>
+</body>
+</html>
