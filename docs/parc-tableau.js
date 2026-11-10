@@ -237,7 +237,7 @@
       });
     });
     recentes.sort(function (a, b) { return net(b.date).localeCompare(net(a.date)); });
-    var listeInt = recentes.slice(0, 6).map(function (r) {
+    var listeInt = recentes.slice(0, 3).map(function (r) {
       return '<div class="surv-l"><span class="q"><b>' + ech(r.objet || "Intervention") + "</b> " +
         ech(r.immat || "") + "</span>" +
         '<span class="rt"><span class="d">' + ech(r.date ? enFrancais(r.date) : "") + "</span>" +
@@ -247,15 +247,16 @@
     $("couts").innerHTML = '<div class="tiles">' +
       tile(euros(total), "Total entretien", null, "euro") + tile(euros(moyen), "Moyenne par véhicule", null, "euro") +
       tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : ""), null, "wrench") + "</div>" +
-      (nbInt ? barres(coutsParMois(V)) + '<div class="surv">' + listeInt + "</div>" +
-        '<a class="voir" href="flotte.html">Gérer les interventions sur les fiches véhicules</a>'
+      (nbInt ? barres(coutsParMois(V)) +
+        (recentes.length ? '<div class="sstitre">' + (recentes.length > 3 ? "Dernières interventions" : "Interventions") + "</div><div class=\"surv\">" + listeInt + "</div>" : "") +
+        '<a class="voir" href="parc-depenses.html">Voir toutes les dépenses' + (recentes.length > 3 ? " (" + recentes.length + ")" : "") + "</a>"
         : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
 
     /* Sinistres */
     var S = lire("parc-sinistres", []);
     var sCours = S.filter(function (s) { return (s.statut || "En cours") === "En cours"; }).length;
     /* La liste, pour savoir lesquels : les plus récents d'abord. */
-    var sListe = S.slice().sort(function (a, b) { return net(b.date).localeCompare(net(a.date)); }).slice(0, 6)
+    var sListe = S.slice().sort(function (a, b) { return net(b.date).localeCompare(net(a.date)); }).slice(0, 3)
       .map(function (s) {
         var st = s.statut || "En cours";
         var montant = fnum(s.montant) ? euros(s.montant) : "";
@@ -266,8 +267,8 @@
       }).join("");
     $("sinistres").innerHTML = '<div class="tiles">' +
       tile(sCours, "En cours", sCours ? "rouge" : "") + tile(S.length - sCours, "Clos") + tile(S.length, "Total") + "</div>" +
-      (S.length ? '<div class="surv">' + sListe + "</div>" +
-        '<a class="voir" href="parc-sinistres.html">Voir et gérer les sinistres</a>'
+      (S.length ? '<div class="sstitre">' + (S.length > 3 ? "Derniers sinistres" : "Sinistres") + '</div><div class="surv">' + sListe + "</div>" +
+        '<a class="voir" href="parc-sinistres.html">Voir et gérer les sinistres' + (S.length > 3 ? " (" + S.length + ")" : "") + "</a>"
         : '<p class="rien">Aucun sinistre déclaré. Déclarez-les depuis le bouton « Sinistres ».</p>');
   }
 

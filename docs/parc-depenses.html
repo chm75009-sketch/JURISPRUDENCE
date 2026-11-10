@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dépenses du parc</title>
+<meta name="description" content="Le détail des dépenses d'entretien du parc, filtrable par véhicule.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16233a">
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  :root{--db-fond:#eef1f5;--db-carte:#fff;--db-encre:#16233a;--db-encre-2:#5b6676;--db-encre-3:#8893a3;
+    --db-filet:#e6eaf0;--db-accent:#2f6df0;}
+  body{background:var(--db-fond);color:var(--db-encre)}
+  main.wrap{max-width:760px;padding:0 16px 48px}
+  .haut{padding:18px 0 4px}
+  .haut .retour{color:var(--db-encre-2);text-decoration:none;font:600 var(--t2) system-ui}
+  .haut b{display:block;font:700 20px/1.2 Georgia,'Times New Roman',serif;margin:8px 0 2px}
+  .haut .ent{font:500 13px system-ui;color:var(--db-encre-3)}
+
+  #filtre{margin:16px 0 0}
+  #filtre label{display:flex;flex-direction:column;gap:5px}
+  #filtre label > span{font:600 11px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;color:var(--db-encre-3)}
+  #filtre select{font-size:16px;min-height:48px;padding:9px 12px;border:1px solid var(--db-filet);
+    border-radius:12px;background:var(--db-carte);color:var(--db-encre)}
+
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:14px 0 0}
+  .tile{background:var(--db-carte);border:1px solid var(--db-filet);border-radius:14px;padding:15px 16px}
+  .tile .v{font:700 23px/1.1 system-ui}
+  .tile .l{margin-top:4px;font:500 12px system-ui;color:var(--db-encre-2)}
+
+  .dl{margin:16px 0 0;background:var(--db-carte);border:1px solid var(--db-filet);border-radius:16px;overflow:hidden}
+  .dl-l{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:14px 16px;border-top:1px solid var(--db-filet)}
+  .dl-l:first-child{border-top:0}
+  .dl-l .q{font:500 var(--t3)/1.3 system-ui;color:var(--db-encre-2);min-width:0}
+  .dl-l .q b{display:block;color:var(--db-encre);font-weight:700;font-size:var(--t3)}
+  .dl-l .sb{display:block;font:400 var(--t1)/1.35 system-ui;color:var(--db-encre-3);margin-top:3px}
+  .dl-l .rt{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+  .dl-l .d{font:500 12px system-ui;color:var(--db-encre-3);white-space:nowrap}
+  .dl-l .m{font:700 var(--t3) system-ui;color:var(--db-encre);white-space:nowrap}
+
+  .rien{margin:16px 0 0;font:400 var(--t2)/1.5 system-ui;color:var(--db-encre-3)}
+  .note{margin:16px 0 0;font:400 var(--t1)/1.5 system-ui;color:var(--db-encre-3)}
+  .note a{color:var(--db-accent)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="parc-tableau.html">&larr; Retour</a>
+    <b>Dépenses du parc</b>
+    <span class="ent" id="ent"></span>
+  </div>
+
+  <div id="filtre"></div>
+  <div id="compte"></div>
+  <div id="liste"></div>
+
+  <p class="note">Les interventions se créent et se modifient sur la fiche de chaque véhicule,
+    dans <a href="flotte.html">la liste des véhicules</a>.</p>
+
+</main>
+
+<script>window.RUBRIQUE_DOCS = "flotte";</script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="parc-depenses.js"></script>
+</body>
+</html>
