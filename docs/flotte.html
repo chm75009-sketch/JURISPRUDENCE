@@ -101,6 +101,13 @@
   @media (prefers-reduced-motion:reduce){.ech .p.passe{animation:none}}
 
   .corps{border-top:1px solid var(--filet);padding:14px 15px;background:var(--creux)}
+  /* LA FICHE EN ONGLETS : simple, on ne voit que ce qu'on cherche. */
+  .vtabs{display:flex;gap:2px;margin:0 0 var(--e3);border-bottom:1px solid var(--filet);overflow-x:auto}
+  .vtabs button{flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;
+    color:var(--texte-2);font:600 var(--t2) system-ui;padding:11px 13px;min-height:0;width:auto;
+    cursor:pointer;white-space:nowrap}
+  .vtabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+  .vpan{margin:0}
   .gr{display:grid;grid-template-columns:1fr;gap:12px}
   @media (min-width:560px){.gr{grid-template-columns:1fr 1fr}}
   .gr label{display:flex;flex-direction:column;gap:5px;min-width:0}

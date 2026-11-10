@@ -550,10 +550,48 @@
   /* ─────────────────────────────── les écrans ───────────────────────────── */
 
   var ouvert = {};           /* les fiches dépliées, par identifiant         */
+  var vtabActif = {};        /* l'onglet actif d'une fiche ouverte           */
 
   /* RECHERCHE, FILTRES, TRI. Demande du 10 novembre 2026, pour quatre-vingt-sept
      véhicules. */
   var fRecherche = "", fGenre = "", fEtat = "", fTri = "immat";
+
+  /* LA FICHE D'UN CAMION EN ONGLETS, pour qu'elle soit simple et non une page
+     interminable. Demande du 10 novembre 2026 : « une application simple et
+     ergonomique ». Les dates d'échéance vont dans l'onglet Échéances, le reste
+     dans Infos ; l'entretien et les pièces ont chacun le leur. */
+  var GR_ECH = { ct: 1, ctMois: 1, lim: 1, limMois: 1, chrono: 1, chronoMois: 1,
+    telecUnite: 1, telecUniteJours: 1, assur: 1, assurContrat: 1, licence: 1, licenceFin: 1,
+    revision: 1, revisionKm: 1, extincteur: 1 };
+  var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["entretien", "Entretien"], ["pieces", "Pièces"]];
+
+  function corpsVehicule(v) {
+    var tab = vtabActif[v.id] || "infos";
+    function champsDe(groupe) {
+      return '<div class="gr">' + CHAMPS_V.filter(function (ch) {
+        return (GR_ECH[ch.c] ? "ech" : "infos") === groupe;
+      }).map(function (ch) {
+        var val = v[ch.c];
+        if (val == null || val === "") {
+          if (ch.c === "ctMois") val = CT_DEFAUT[v.genre] || 12;
+          if (ch.c === "limMois") val = 24;
+          if (ch.c === "chronoMois") val = 24;
+        }
+        return champHtml(ch, val, "v" + v.id);
+      }).join("") + "</div>";
+    }
+    var onglets = '<div class="vtabs" role="tablist">' + VTABS.map(function (t) {
+      return '<button type="button" data-vtab="' + ech(v.id) + "|" + t[0] + '"' +
+        (t[0] === tab ? ' aria-selected="true"' : "") + ">" + ech(t[1]) + "</button>";
+    }).join("") + "</div>";
+    var pan = "";
+    if (tab === "infos") pan = champsDe("infos");
+    else if (tab === "ech") pan = champsDe("ech");
+    else if (tab === "entretien") pan = interventionsHtml(v);
+    else pan = piecesHtml(v) + '<div class="actions"><button type="button" class="second" data-sup="' +
+      ech(v.id) + '">Retirer ce véhicule</button></div>';
+    return '<div class="corps">' + onglets + '<div class="vpan">' + pan + "</div></div>";
+  }
 
   function prochaineEch(v) {
     var J = echeancesVehicule(v).map(function (e) { return e.jours; })
@@ -619,19 +657,7 @@
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
         '<div class="ech">' + pastilles(E) + "</div>" +
-        (est ? '<div class="corps"><div class="gr">' +
-          CHAMPS_V.map(function (ch) {
-            var val = v[ch.c];
-            if (val == null || val === "") {
-              if (ch.c === "ctMois") val = CT_DEFAUT[v.genre] || 12;
-              if (ch.c === "limMois") val = 24;
-              if (ch.c === "chronoMois") val = 24;
-            }
-            return champHtml(ch, val, "v" + v.id);
-          }).join("") +
-          "</div>" + piecesHtml(v) + interventionsHtml(v) + '<div class="actions">' +
-          '<button type="button" class="second" data-sup="' + ech(v.id) + '">Retirer ce véhicule</button>' +
-          "</div></div>" : "") +
+        (est ? corpsVehicule(v) : "") +
         "</div>";
     }).join("");
 
@@ -1473,6 +1499,15 @@
         });
         garderVehicules(Ti);
         rendre();
+        return;
+      }
+      var vt = ev.target.closest ? ev.target.closest("[data-vtab]") : null;
+      if (vt) {
+        var d = vt.getAttribute("data-vtab").split("|");
+        vtabActif[d[0]] = d[1];
+        rendre();
+        var c = document.querySelector('[data-v="' + d[0] + '"]');
+        if (c && c.scrollIntoView) c.scrollIntoView({ behavior: "smooth", block: "nearest" });
         return;
       }
       var t = ev.target.closest ? ev.target.closest("[data-plier]") : null;
