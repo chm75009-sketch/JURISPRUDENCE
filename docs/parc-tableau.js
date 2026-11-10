@@ -213,6 +213,15 @@
         '<span class="rt"><span class="d">' + ech(enFrancais(e.date)) + "</span>" +
         '<span class="j">' + ech(dit) + "</span></span></div>";
     }).join("");
+    /* LE BANDEAU D'ALERTE, EN HAUT, IMPOSSIBLE À MANQUER. */
+    var BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.5 21a1.8 1.8 0 0 0 3 0"/></svg>';
+    var bcls = "vert", btxt = "Aucune échéance à traiter, tout est à jour.";
+    if (nPasse) { bcls = "rouge"; btxt = nPasse + " échéance" + (nPasse > 1 ? "s" : "") + " dépassée" + (nPasse > 1 ? "s" : "") +
+      (nRouge ? ", et " + nRouge + " à traiter d'urgence" : "") + " : à régulariser."; }
+    else if (nRouge) { bcls = "rouge"; btxt = nRouge + " échéance" + (nRouge > 1 ? "s" : "") + " à traiter dans les délais d'alerte."; }
+    else if (nAmbre) { bcls = "ambre"; btxt = nAmbre + " échéance" + (nAmbre > 1 ? "s" : "") + " à surveiller bientôt."; }
+    if ($("banniere")) $("banniere").innerHTML = '<div class="banniere ' + bcls + '">' + BELL + "<span>" + ech(btxt) + "</span></div>";
+
     $("surveillance").innerHTML =
       '<div class="tiles">' + tile(nPasse, "Dépassées", "rouge") + tile(nRouge, "Sous 30 jours", "rouge") +
       tile(nAmbre, "Sous 60 jours", "ambre") + "</div>" + alertesHtml +

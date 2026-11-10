@@ -32,6 +32,13 @@
   .db-tete .t{font:700 21px/1.2 Georgia,'Times New Roman',serif;letter-spacing:.01em}
   .db-tete .s{margin-top:3px;font:500 13px system-ui;color:#aebdd6}
 
+  .banniere{margin:14px 0 0;display:flex;align-items:center;gap:13px;padding:16px 18px;border-radius:16px;
+    font:600 var(--t3)/1.35 system-ui;box-shadow:var(--db-ombre)}
+  .banniere svg{width:22px;height:22px;flex:0 0 auto}
+  .banniere.rouge{background:var(--db-rouge-bg);color:var(--db-rouge)}
+  .banniere.ambre{background:var(--db-ambre-bg);color:var(--db-ambre)}
+  .banniere.vert{background:var(--db-vert-bg);color:var(--db-vert)}
+
   .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0 0}
   @media (max-width:760px){.grid{grid-template-columns:1fr}}
   .span2{grid-column:1/-1}
@@ -117,6 +124,8 @@
     <span class="rond"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h13v12H1z"/><path d="M14 8h4l4 4v3h-8V8z"/><circle cx="5.5" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg></span>
     <div><div class="t">Tableau de bord du parc</div><div class="s" id="ent"></div></div>
   </div>
+
+  <div id="banniere"></div>
 
   <div class="grid">
     <section class="carte span2"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Vue d'ensemble</h2><div id="vue"></div></section>

@@ -91,14 +91,41 @@
     var n = new Date(); n.setHours(0, 0, 0, 0);
     return Math.round((d - n) / 86400000);
   }
-  /* La couleur d'une échéance, une fois pour toutes. */
-  function etat(isoDate) {
+  /* La couleur d'une échéance. Le délai d'alerte, en jours, vient des
+     paramètres du parc quand il y est réglé (assurance, contrôle technique,
+     etc.) ; sinon trente jours par défaut, comme avant. Rouge dès qu'on entre
+     dans ce délai, ambre dans les trente jours qui le précèdent. */
+  function etat(isoDate, delai) {
     var j = joursAvant(isoDate);
     if (j === null) return "";
     if (j < 0) return "passe";
-    if (j <= 30) return "rouge";
-    if (j <= 60) return "ambre";
+    var d = delai || 30;
+    if (j <= d) return "rouge";
+    if (j <= d + 30) return "ambre";
     return "vert";
+  }
+  /* LE DÉLAI D'ALERTE PAR TYPE D'ÉCHÉANCE. Demande du 10 novembre 2026 :
+     « n'oublie surtout pas les alertes ». Les délais réglés dans les
+     paramètres du parc commandent enfin les couleurs. Le rapprochement se fait
+     sur le mot-clé du type d'échéance. */
+  var ALERTE_MOT = {
+    "Contrôle technique": "controle technique", "Assurance": "assurance",
+    "Copie conforme": "copie conforme", "Chronotachygraphe": "chronotachygraphe",
+    "Extincteur": "extincteur",
+  };
+  function delaiAlerte(quoi) {
+    var mot = ALERTE_MOT[quoi];
+    if (!mot) return 30;
+    var params = null;
+    try { params = JSON.parse(window.localStorage.getItem("parc-parametres") || "null"); } catch (e) { params = null; }
+    var A = (params && params.alertes) || [];
+    for (var i = 0; i < A.length; i++) {
+      if (sansAccent(A[i].nom).replace(/-/g, " ").indexOf(mot) >= 0) {
+        var n = parseInt(A[i].jours, 10);
+        if (isFinite(n) && n > 0) return n;
+      }
+    }
+    return 30;
   }
   function dit(j) {
     if (j === null) return "";
@@ -322,7 +349,7 @@
        affiche sous la carte, et il dit d'où vient la date. */
     function pose(quoi, date, fond) {
       if (!net(date)) return;
-      L.push({ quoi: quoi, date: date, etat: etat(date), jours: joursAvant(date), fond: fond || DU_FICHIER });
+      L.push({ quoi: quoi, date: date, etat: etat(date, delaiAlerte(quoi)), jours: joursAvant(date), fond: fond || DU_FICHIER });
     }
     pose("Contrôle technique", v.ct ? plusMois(v.ct, v.ctMois || CT_DEFAUT[v.genre] || 12) : "",
       "R. 323-22 à R. 323-25 du code de la route, selon le genre du véhicule, à compter du dernier contrôle");
@@ -352,7 +379,7 @@
     var L = [];
     function pose(quoi, date, fond) {
       if (!net(date)) return;
-      L.push({ quoi: quoi, date: date, etat: etat(date), jours: joursAvant(date), fond: fond || DU_FICHIER });
+      L.push({ quoi: quoi, date: date, etat: etat(date, delaiAlerte(quoi)), jours: joursAvant(date), fond: fond || DU_FICHIER });
     }
     pose("Permis", f.permisFin);
     pose("Fin de suspension", f.retraitFin);
