@@ -101,9 +101,18 @@
 
   /* ─────────────────────────── la structure ─────────────────────────────── */
 
-  function tile(valeur, libelle, classe) {
-    return '<div class="tile ' + (classe || "") + '"><div class="v">' + ech(valeur) + "</div>" +
-      '<div class="l">' + ech(libelle) + "</div></div>";
+  var ICONS = {
+    truck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h12v10H1z"/><path d="M13 8h4l4 4v2h-8V8z"/><circle cx="5" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/></svg>',
+    user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/></svg>',
+    gauge: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15a9 9 0 1 1 18 0"/><path d="M12 15l4-3"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>',
+    euro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5a7 7 0 1 0 0 14M4 10h8M4 14h7"/></svg>',
+    wrench: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-2.5 2.5 2 2L17 7a4 4 0 0 1-5 5l-6 6 3 3 6-6a4 4 0 0 1 5-5z"/></svg>',
+  };
+  function tile(valeur, libelle, classe, icone) {
+    var ic = (icone && ICONS[icone]) ? '<span class="ic">' + ICONS[icone] + "</span>" : "";
+    return '<div class="tile ' + (classe || "") + '">' + ic +
+      '<div class="tx"><div class="v">' + ech(valeur) + '</div><div class="l">' + ech(libelle) + "</div></div></div>";
   }
 
   function anneau(parGenre) {
@@ -157,10 +166,10 @@
     var ages = V.map(function (v) { return moisDepuis(v.mec || v.dateAchat); }).filter(function (m) { return m != null; });
     var ageMoyen = ages.length ? ages.reduce(function (s, m) { return s + m; }, 0) / ages.length : null;
     $("vue").innerHTML = '<div class="tiles">' +
-      tile(V.length, "Véhicules") +
-      tile(C.length, "Conducteurs") +
-      tile(kms.length ? entier(kmMoyen) + " km" : "-", "Kilométrage moyen") +
-      tile(ages.length ? ageTexte(Math.round(ageMoyen)) : "-", "Âge moyen du parc") + "</div>";
+      tile(V.length, "Véhicules", null, "truck") +
+      tile(C.length, "Conducteurs", null, "user") +
+      tile(kms.length ? entier(kmMoyen) + " km" : "-", "Kilométrage moyen", null, "gauge") +
+      tile(ages.length ? ageTexte(Math.round(ageMoyen)) : "-", "Âge moyen du parc", null, "calendar") + "</div>";
 
     /* Structure */
     var parG = {};
@@ -219,8 +228,8 @@
     });
     var moyen = V.length ? total / V.length : 0;
     $("couts").innerHTML = '<div class="tiles">' +
-      tile(euros(total), "Total entretien") + tile(euros(moyen), "Moyenne par véhicule") +
-      tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : "")) + "</div>" +
+      tile(euros(total), "Total entretien", null, "euro") + tile(euros(moyen), "Moyenne par véhicule", null, "euro") +
+      tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : ""), null, "wrench") + "</div>" +
       (nbInt ? barres(coutsParMois(V)) : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
 
     /* Sinistres */

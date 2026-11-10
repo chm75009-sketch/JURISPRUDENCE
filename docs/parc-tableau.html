@@ -12,45 +12,67 @@
 <script src="installer.js"></script>
 <style>
   :root{
-    --db-fond:#eef1f5; --db-carte:#ffffff; --db-encre:#16233a; --db-encre-2:#5b6676;
-    --db-encre-3:#8893a3; --db-filet:#e6eaf0; --db-accent:#2f6df0; --db-accent-bg:#eaf1fe;
-    --db-rouge:#d23f3f; --db-rouge-bg:#fdecec; --db-ambre:#b7791f; --db-ambre-bg:#fdf3e2;
-    --db-vert:#2f8a56; --db-vert-bg:#e7f5ec; --db-ombre:0 1px 2px rgba(22,35,58,.06),0 6px 18px rgba(22,35,58,.05);
+    --db-fond:#eef1f6; --db-carte:#ffffff; --db-encre:#14233b; --db-encre-2:#596679;
+    --db-encre-3:#8a95a6; --db-filet:#e8ecf2; --db-accent:#2f6df0; --db-accent-bg:#e9f1fe;
+    --db-rouge:#d53f3f; --db-rouge-bg:#fdecec; --db-ambre:#b5781a; --db-ambre-bg:#fcf3e1;
+    --db-vert:#2f8a56; --db-vert-bg:#e6f5ec;
+    --db-ombre:0 1px 2px rgba(20,35,59,.05),0 8px 24px rgba(20,35,59,.06);
   }
   body{background:var(--db-fond);color:var(--db-encre)}
-  main.wrap{max-width:900px;padding:0 16px 48px}
+  main.wrap{max-width:1120px;padding:0 16px 56px}
 
-  .db-haut{display:flex;align-items:center;justify-content:space-between;gap:12px;
-    padding:20px 0 6px}
-  .db-haut .retour{color:var(--db-encre-2);text-decoration:none;font:600 var(--t2) system-ui}
-  .db-haut .tt{font:700 20px/1.2 Georgia,'Times New Roman',serif;color:var(--db-encre)}
-  .db-haut .ent{font:500 13px system-ui;color:var(--db-encre-3)}
+  /* L'EN-TÊTE. Un bandeau d'encre, le nom du parc et de l'entreprise, comme la
+     barre de titre d'un logiciel de gestion. */
+  .db-tete{background:linear-gradient(135deg,#16233a,#243a5e);border-radius:20px;
+    padding:22px 24px;margin:18px 0 0;color:#fff;box-shadow:var(--db-ombre);
+    display:flex;align-items:center;gap:16px}
+  .db-tete .rond{flex:0 0 auto;width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.12);
+    display:flex;align-items:center;justify-content:center;color:#cfe0ff}
+  .db-tete .rond svg{width:24px;height:24px}
+  .db-tete .t{font:700 21px/1.2 Georgia,'Times New Roman',serif;letter-spacing:.01em}
+  .db-tete .s{margin-top:3px;font:500 13px system-ui;color:#aebdd6}
+
+  .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0 0}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}}
+  .span2{grid-column:1/-1}
 
   .carte{background:var(--db-carte);border:1px solid var(--db-filet);border-radius:18px;
-    box-shadow:var(--db-ombre);padding:20px;margin:16px 0 0}
-  .carte > h2{display:flex;align-items:center;gap:9px;margin:0 0 16px;
-    font:600 11px/1 system-ui;letter-spacing:.14em;text-transform:uppercase;color:var(--db-encre-3)}
-  .carte > h2::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--db-accent)}
+    box-shadow:var(--db-ombre);padding:20px}
+  .carte > h2{display:flex;align-items:center;gap:10px;margin:0 0 16px;
+    font:700 13px/1 system-ui;letter-spacing:.02em;color:var(--db-encre)}
+  .carte > h2 .hi{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--db-accent-bg);
+    color:var(--db-accent);display:flex;align-items:center;justify-content:center}
+  .carte > h2 .hi svg{width:17px;height:17px}
 
-  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
-  .tile{background:var(--db-fond);border-radius:14px;padding:16px 16px}
-  .tile .v{font:700 26px/1.1 system-ui;color:var(--db-encre);letter-spacing:-.01em}
-  .tile .l{margin-top:5px;font:500 12px/1.3 system-ui;color:var(--db-encre-2)}
-  .tile.rouge{background:var(--db-rouge-bg)} .tile.rouge .v{color:var(--db-rouge)}
-  .tile.ambre{background:var(--db-ambre-bg)} .tile.ambre .v{color:var(--db-ambre)}
-  .tile.vert{background:var(--db-vert-bg)} .tile.vert .v{color:var(--db-vert)}
+  .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+  .tile{background:var(--db-fond);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px}
+  .tile .ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;background:#fff;
+    color:var(--db-accent);display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(20,35,59,.06)}
+  .tile .ic svg{width:19px;height:19px}
+  .tile .tx{min-width:0}
+  .tile .v{font:700 22px/1.1 system-ui;letter-spacing:-.01em}
+  .tile .l{margin-top:3px;font:500 12px/1.3 system-ui;color:var(--db-encre-2)}
+  .tile.rouge{background:var(--db-rouge-bg)} .tile.rouge .v{color:var(--db-rouge)} .tile.rouge .ic{color:var(--db-rouge)}
+  .tile.ambre{background:var(--db-ambre-bg)} .tile.ambre .v{color:var(--db-ambre)} .tile.ambre .ic{color:var(--db-ambre)}
+  .tile.vert{background:var(--db-vert-bg)} .tile.vert .v{color:var(--db-vert)} .tile.vert .ic{color:var(--db-vert)}
 
-  .donut{display:flex;flex-wrap:wrap;align-items:center;gap:18px 26px;margin:18px 0 0}
-  .donut svg{flex:0 0 auto}
-  .donut .d-n{font:700 26px system-ui;fill:var(--db-encre)}
+  .donut{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;margin:4px 0 0}
+  .donut svg.anneau{flex:0 0 auto}
+  .donut .d-n{font:700 25px system-ui;fill:var(--db-encre)}
   .donut .d-l{font:500 11px system-ui;fill:var(--db-encre-3)}
-  .legende{display:flex;flex-direction:column;gap:9px;min-width:160px;flex:1}
+  .legende{display:flex;flex-direction:column;gap:9px;min-width:150px;flex:1}
   .legende .lg{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px}
   .legende .pt{width:11px;height:11px;border-radius:3px}
   .legende .nm{font:500 var(--t2) system-ui;color:var(--db-encre-2)}
   .legende .nb{font:700 var(--t2) system-ui;color:var(--db-encre)}
 
-  .surv{margin:16px 0 0;display:flex;flex-direction:column}
+  .alertes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 2px}
+  .al-l{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;background:var(--db-fond)}
+  .al-l .n{font:700 18px/1 system-ui;min-width:24px}
+  .al-l.chaud .n{color:var(--db-rouge)}
+  .al-l .t{font:500 var(--t1)/1.3 system-ui;color:var(--db-encre-2)}
+
+  .surv{margin:14px 0 0;display:flex;flex-direction:column}
   .surv-l{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px 12px;
     padding:12px 2px;border-top:1px solid var(--db-filet)}
   .surv-l:first-child{border-top:0}
@@ -66,27 +88,23 @@
   .surv-l.passe .j,.surv-l.rouge .j{background:var(--db-rouge-bg);color:var(--db-rouge)}
   .surv-l.ambre .j{background:var(--db-ambre-bg);color:var(--db-ambre)}
 
-  .alertes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:16px 0 4px}
-  .al-l{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;background:var(--db-fond)}
-  .al-l .n{font:700 19px/1 system-ui;color:var(--db-encre);min-width:26px}
-  .al-l.chaud .n{color:var(--db-rouge)}
-  .al-l .t{font:500 var(--t1)/1.3 system-ui;color:var(--db-encre-2)}
   .graph{margin:18px 0 2px}
   .graph .gt{font:600 12px system-ui;color:var(--db-encre-2);margin:0 0 12px}
-  .bars{display:flex;align-items:flex-end;gap:5px;height:140px}
+  .bars{display:flex;align-items:flex-end;gap:5px;height:150px}
   .bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
-  .bwrap{width:100%;height:118px;display:flex;align-items:flex-end}
-  .bar{width:100%;background:var(--db-accent);border-radius:6px 6px 0 0;min-height:2px;transition:none}
+  .bwrap{width:100%;height:128px;display:flex;align-items:flex-end}
+  .bar{width:100%;background:linear-gradient(180deg,#4b82f3,#2f6df0);border-radius:6px 6px 0 0;min-height:3px}
   .bl{font:500 9px/1 system-ui;color:var(--db-encre-3);white-space:nowrap}
   .gmax{margin:12px 0 0;font:400 11px system-ui;color:var(--db-encre-3)}
+
   .ok{margin:14px 0 0;padding:14px 16px;border-radius:12px;background:var(--db-vert-bg);
     color:var(--db-vert);font:600 var(--t2) system-ui}
-  .rien{margin:14px 0 0;font:400 var(--t2)/1.5 system-ui;color:var(--db-encre-3)}
+  .rien{margin:12px 0 0;font:400 var(--t2)/1.5 system-ui;color:var(--db-encre-3)}
 
-  .liens{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 0}
-  @media (max-width:420px){.liens{grid-template-columns:1fr}}
-  .liens a{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;
+  .liens{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:16px 0 0}
+  .liens a{display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;
     min-height:54px;border-radius:14px;font:600 var(--t3) system-ui;padding:0 16px}
+  .liens a svg{width:18px;height:18px}
   .liens a.pri{background:var(--db-encre);color:#fff}
   .liens a.sec{background:var(--db-carte);color:var(--db-encre);border:1px solid var(--db-filet)}
   [hidden]{display:none !important}
@@ -95,27 +113,27 @@
 <body>
 <main class="wrap">
 
-  <div class="db-haut">
-    <div>
-      <div class="tt">Tableau de bord du parc</div>
-      <div class="ent" id="ent"></div>
-    </div>
+  <div class="db-tete">
+    <span class="rond"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h13v12H1z"/><path d="M14 8h4l4 4v3h-8V8z"/><circle cx="5.5" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg></span>
+    <div><div class="t">Tableau de bord du parc</div><div class="s" id="ent"></div></div>
   </div>
 
-  <section class="carte"><h2>Vue d'ensemble</h2><div id="vue"></div></section>
+  <div class="grid">
+    <section class="carte span2"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Vue d'ensemble</h2><div id="vue"></div></section>
 
-  <section class="carte"><h2>Structure de la flotte</h2><div id="structure"></div></section>
+    <section class="carte"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg></span>Structure de la flotte</h2><div id="structure"></div></section>
 
-  <section class="carte"><h2>Affectation des véhicules</h2><div id="affectation"></div></section>
+    <section class="carte"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7a4 4 0 1 1 6 0M4 21v-1a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v1"/></svg></span>Affectation des véhicules</h2><div id="affectation"></div></section>
 
-  <section class="carte"><h2>Surveillance des échéances</h2><div id="surveillance"></div></section>
+    <section class="carte span2"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.5 21a1.8 1.8 0 0 0 3 0"/></svg></span>Surveillance des échéances</h2><div id="surveillance"></div></section>
 
-  <section class="carte"><h2>Coûts d'entretien</h2><div id="couts"></div></section>
+    <section class="carte span2"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-7"/></svg></span>Coûts d'entretien</h2><div id="couts"></div></section>
 
-  <section class="carte"><h2>Sinistres</h2><div id="sinistres"></div></section>
+    <section class="carte span2"><h2><span class="hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.3 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span>Sinistres</h2><div id="sinistres"></div></section>
+  </div>
 
   <div class="liens">
-    <a class="pri" href="flotte.html">Liste des véhicules</a>
+    <a class="pri" href="flotte.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Liste des véhicules</a>
     <a class="sec" href="parc-sinistres.html">Sinistres</a>
     <a class="sec" href="parc-parametres.html">Paramètres du parc</a>
   </div>
