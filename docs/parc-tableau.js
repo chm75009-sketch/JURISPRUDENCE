@@ -109,10 +109,12 @@
     euro: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 5a7 7 0 1 0 0 14M4 10h8M4 14h7"/></svg>',
     wrench: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-2.5 2.5 2 2L17 7a4 4 0 0 1-5 5l-6 6 3 3 6-6a4 4 0 0 1 5-5z"/></svg>',
   };
-  function tile(valeur, libelle, classe, icone) {
+  function tile(valeur, libelle, classe, icone, href) {
     var ic = (icone && ICONS[icone]) ? '<span class="ic">' + ICONS[icone] + "</span>" : "";
-    return '<div class="tile ' + (classe || "") + '">' + ic +
-      '<div class="tx"><div class="v">' + ech(valeur) + '</div><div class="l">' + ech(libelle) + "</div></div></div>";
+    var corps = '<div class="tile ' + (classe || "") + (href ? " clic" : "") + '">' + ic +
+      '<div class="tx"><div class="v">' + ech(valeur) + '</div><div class="l">' + ech(libelle) + "</div></div>" +
+      (href ? '<span class="fle">&#8250;</span>' : "") + "</div>";
+    return href ? '<a class="tlink" href="' + ech(href) + '">' + corps + "</a>" : corps;
   }
 
   function anneau(parGenre) {
@@ -165,9 +167,11 @@
     var kmMoyen = kms.length ? kms.reduce(function (s, k) { return s + k; }, 0) / kms.length : 0;
     var ages = V.map(function (v) { return moisDepuis(v.mec || v.dateAchat); }).filter(function (m) { return m != null; });
     var ageMoyen = ages.length ? ages.reduce(function (s, m) { return s + m; }, 0) / ages.length : null;
+    var sansKm = V.filter(function (v) { return !net(v.km) && v.genre !== "remorque"; }).length;
     $("vue").innerHTML = '<div class="tiles">' +
-      tile(V.length, "Véhicules", null, "truck") +
+      tile(V.length, "Véhicules", null, "truck", "flotte.html") +
       tile(C.length, "Conducteurs", null, "user") +
+      tile(sansKm, "Sans relevé km", sansKm ? "ambre" : "", "gauge", "flotte.html?etat=sanskm") +
       tile(kms.length ? entier(kmMoyen) + " km" : "-", "Kilométrage moyen", null, "gauge") +
       tile(ages.length ? ageTexte(Math.round(ageMoyen)) : "-", "Âge moyen du parc", null, "calendar") + "</div>";
 
@@ -185,7 +189,7 @@
     var libres = roulants.length - affectes;
     $("affectation").innerHTML = '<div class="tiles">' +
       tile(affectes, "Affectés", affectes ? "vert" : "") +
-      tile(libres, "Libres", libres ? "ambre" : "") + "</div>" +
+      tile(libres, "Libres", libres ? "ambre" : "", null, "flotte.html?etat=libre") + "</div>" +
       (V.length > roulants.length ? '<p class="rien">' + (V.length - roulants.length) +
         " remorque" + (V.length - roulants.length > 1 ? "s" : "") + ", comptée" +
         (V.length - roulants.length > 1 ? "s" : "") + " à part.</p>" : "");
@@ -233,8 +237,9 @@
     }
 
     $("surveillance").innerHTML =
-      '<div class="tiles">' + tile(nPasse, "Dépassées", "rouge") + tile(nRouge, "Sous 30 jours", "rouge") +
-      tile(nAmbre, "Sous 60 jours", "ambre") + "</div>" + alertesHtml +
+      '<div class="tiles">' + tile(nPasse, "Dépassées", "rouge", null, "flotte.html?etat=depasse") +
+      tile(nRouge, "Sous 30 jours", "rouge", null, "flotte.html?etat=proche") +
+      tile(nAmbre, "Sous 60 jours", "ambre", null, "flotte.html?etat=proche") + "</div>" + alertesHtml +
       (prochaines.length ? '<div class="surv">' + ligne + "</div>"
         : (sansDate ? '<p class="rien">Aucune échéance calculable : ' + sansDate + " véhicule" + (sansDate > 1 ? "s" : "") +
           " doivent encore être complétés (dates de contrôle technique, d'assurance...).</p>"
@@ -258,7 +263,7 @@
     var moyen = V.length ? total / V.length : 0;
     $("couts").innerHTML = '<div class="tiles">' +
       tile(euros(total), "Total entretien", null, "euro") + tile(euros(moyen), "Moyenne par véhicule", null, "euro") +
-      tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : ""), null, "wrench") + "</div>" +
+      tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : ""), null, "wrench", "parc-depenses.html") + "</div>" +
       (nbInt ? barres(coutsParMois(V)) +
         (recentes.length ? '<div class="sstitre">' + (recentes.length > 3 ? "Dernières interventions" : "Interventions") + "</div><div class=\"surv\">" + listeInt + "</div>" : "") +
         '<a class="voir" href="parc-depenses.html">Voir toutes les dépenses' + (recentes.length > 3 ? " (" + recentes.length + ")" : "") + "</a>"
@@ -278,7 +283,7 @@
           '<span class="j">' + ech(st) + "</span></span></div>";
       }).join("");
     $("sinistres").innerHTML = '<div class="tiles">' +
-      tile(sCours, "En cours", sCours ? "rouge" : "") + tile(S.length - sCours, "Clos") + tile(S.length, "Total") + "</div>" +
+      tile(sCours, "En cours", sCours ? "rouge" : "", null, "parc-sinistres.html") + tile(S.length - sCours, "Clos") + tile(S.length, "Total") + "</div>" +
       (S.length ? '<div class="sstitre">' + (S.length > 3 ? "Derniers sinistres" : "Sinistres") + '</div><div class="surv">' + sListe + "</div>" +
         '<a class="voir" href="parc-sinistres.html">Voir et gérer les sinistres' + (S.length > 3 ? " (" + S.length + ")" : "") + "</a>"
         : '<p class="rien">Aucun sinistre déclaré. Déclarez-les depuis le bouton « Sinistres ».</p>');

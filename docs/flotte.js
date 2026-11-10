@@ -609,6 +609,8 @@
         if (fEtat === "incomplet" && !m) return false;
         if (fEtat === "proche" && !(p === "rouge" || p === "ambre")) return false;
         if (fEtat === "depasse" && p !== "passe") return false;
+        if (fEtat === "sanskm" && net(v.km)) return false;
+        if (fEtat === "libre" && (v.genre === "remorque" || net(v.conducteur))) return false;
       }
       if (q) {
         var hay = (net(v.immat) + " " + net(v.marque) + " " + net(nomDe[v.conducteur] || "")).toLowerCase();
@@ -1565,6 +1567,14 @@
       $("f-genre").innerHTML = '<option value="">Tous les types</option>' +
         GENRES.map(function (g) { return '<option value="' + ech(g[0]) + '">' + ech(g[1]) + "</option>"; }).join("");
     }
+    /* UN FILTRE VENU DU TABLEAU DE BORD. Un clic sur un chiffre du tableau de
+       bord ouvre la liste déjà filtrée, par l'adresse (?etat=, ?genre=, ?q=). */
+    try {
+      var pr = new URLSearchParams(location.search);
+      if (pr.get("etat")) { fEtat = pr.get("etat"); if ($("f-etat")) $("f-etat").value = fEtat; }
+      if (pr.get("genre")) { fGenre = pr.get("genre"); if ($("f-genre")) $("f-genre").value = fGenre; }
+      if (pr.get("q")) { fRecherche = pr.get("q"); if ($("f-rech")) $("f-rech").value = fRecherche; }
+    } catch (e) {}
     var brech = $("f-rech"); if (brech) brech.addEventListener("input", function () { fRecherche = this.value; rendreVehicules(); });
     var bg = $("f-genre"); if (bg) bg.addEventListener("change", function () { fGenre = this.value; rendreVehicules(); });
     var be = $("f-etat"); if (be) be.addEventListener("change", function () { fEtat = this.value; rendreVehicules(); });
