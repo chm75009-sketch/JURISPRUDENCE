@@ -192,6 +192,11 @@
 
     /* Surveillance */
     var E = echeances().filter(function (e) { return e.date; });
+    /* VÉHICULES SANS DATE : « tout est à jour » serait trompeur. Un véhicule
+       sans aucune échéance datée n'est pas en règle, il est à compléter.
+       Demande du 10 novembre 2026. */
+    var avecEch = {}; E.forEach(function (e) { avecEch[e.qui] = true; });
+    var sansDate = V.filter(function (v) { return !avecEch[v.immat || "x"]; }).length;
     var nPasse = E.filter(function (e) { return e.etat === "passe"; }).length;
     var nRouge = E.filter(function (e) { return e.etat === "rouge"; }).length;
     var nAmbre = E.filter(function (e) { return e.etat === "ambre"; }).length;
@@ -215,18 +220,25 @@
     }).join("");
     /* LE BANDEAU D'ALERTE, EN HAUT, IMPOSSIBLE À MANQUER. */
     var BELL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.5 21a1.8 1.8 0 0 0 3 0"/></svg>';
-    var bcls = "vert", btxt = "Aucune échéance à traiter, tout est à jour.";
+    var bcls = "vert", btxt = "Aucune échéance à traiter, tout est à jour.", blien = "";
     if (nPasse) { bcls = "rouge"; btxt = nPasse + " échéance" + (nPasse > 1 ? "s" : "") + " dépassée" + (nPasse > 1 ? "s" : "") +
-      (nRouge ? ", et " + nRouge + " à traiter d'urgence" : "") + " : à régulariser."; }
-    else if (nRouge) { bcls = "rouge"; btxt = nRouge + " échéance" + (nRouge > 1 ? "s" : "") + " à traiter dans les délais d'alerte."; }
-    else if (nAmbre) { bcls = "ambre"; btxt = nAmbre + " échéance" + (nAmbre > 1 ? "s" : "") + " à surveiller bientôt."; }
-    if ($("banniere")) $("banniere").innerHTML = '<div class="banniere ' + bcls + '">' + BELL + "<span>" + ech(btxt) + "</span></div>";
+      (nRouge ? ", et " + nRouge + " à traiter d'urgence" : "") + " : à régulariser."; blien = "flotte.html"; }
+    else if (nRouge) { bcls = "rouge"; btxt = nRouge + " échéance" + (nRouge > 1 ? "s" : "") + " à traiter dans les délais d'alerte."; blien = "flotte.html"; }
+    else if (nAmbre) { bcls = "ambre"; btxt = nAmbre + " échéance" + (nAmbre > 1 ? "s" : "") + " à surveiller bientôt."; blien = "flotte.html"; }
+    else if (sansDate) { bcls = "ambre"; btxt = sansDate + " véhicule" + (sansDate > 1 ? "s" : "") +
+      " à compléter : aucune échéance n'est encore calculable."; blien = "flotte.html"; }
+    if ($("banniere")) {
+      var bin = '<div class="banniere ' + bcls + '">' + BELL + "<span>" + ech(btxt) + "</span></div>";
+      $("banniere").innerHTML = blien ? '<a href="' + blien + '" class="bl">' + bin + "</a>" : bin;
+    }
 
     $("surveillance").innerHTML =
       '<div class="tiles">' + tile(nPasse, "Dépassées", "rouge") + tile(nRouge, "Sous 30 jours", "rouge") +
       tile(nAmbre, "Sous 60 jours", "ambre") + "</div>" + alertesHtml +
       (prochaines.length ? '<div class="surv">' + ligne + "</div>"
-        : '<p class="ok">Aucune échéance dépassée ni proche.</p>');
+        : (sansDate ? '<p class="rien">Aucune échéance calculable : ' + sansDate + " véhicule" + (sansDate > 1 ? "s" : "") +
+          " doivent encore être complétés (dates de contrôle technique, d'assurance...).</p>"
+          : '<p class="ok">Aucune échéance dépassée ni proche.</p>'));
 
     /* Coûts */
     var total = 0, nbInt = 0, recentes = [];
