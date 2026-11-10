@@ -68,6 +68,37 @@
     return fnum(it.heures) * fnum(it.taux) + fnum(it.pieces) + fnum(it.sous);
   }
 
+  var MOIS_AB = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  /* Les coûts d'entretien des douze derniers mois, un seau par mois. */
+  function coutsParMois(V) {
+    var base = new Date(); base = new Date(base.getFullYear(), base.getMonth(), 1);
+    var map = {}, order = [];
+    for (var i = 11; i >= 0; i--) {
+      var d = new Date(base.getFullYear(), base.getMonth() - i, 1);
+      var key = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2);
+      map[key] = 0; order.push({ key: key, label: MOIS_AB[d.getMonth()] });
+    }
+    V.forEach(function (v) {
+      (v.interventions || []).forEach(function (it) {
+        var m = /^(\d{4})-(\d{2})/.exec(net(it.date)); if (!m) return;
+        var key = m[1] + "-" + m[2]; if (key in map) map[key] += coutInter(it);
+      });
+    });
+    return order.map(function (o) { return { label: o.label, v: map[o.key] }; });
+  }
+  function barres(data) {
+    var max = Math.max.apply(null, data.map(function (d) { return d.v; }).concat([1]));
+    var bars = data.map(function (d) {
+      var h = max > 0 ? Math.round(d.v / max * 100) : 0;
+      return '<div class="bc"><div class="bwrap"><div class="bar" style="height:' + h + '%"' +
+        (d.v > 0 ? ' title="' + ech(euros(d.v)) + '"' : "") + "></div></div>" +
+        '<div class="bl">' + ech(d.label) + "</div></div>";
+    }).join("");
+    return '<div class="graph"><div class="gt">Coûts de maintenance par mois</div>' +
+      '<div class="bars">' + bars + "</div>" +
+      '<div class="gmax">Échelle : ' + ech(euros(max)) + " au plus haut, sur les 12 derniers mois</div></div>";
+  }
+
   /* ─────────────────────────── la structure ─────────────────────────────── */
 
   function tile(valeur, libelle, classe) {
@@ -178,7 +209,7 @@
     $("couts").innerHTML = '<div class="tiles">' +
       tile(euros(total), "Total entretien") + tile(euros(moyen), "Moyenne par véhicule") +
       tile(nbInt, "Intervention" + (nbInt > 1 ? "s" : "")) + "</div>" +
-      (nbInt ? "" : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
+      (nbInt ? barres(coutsParMois(V)) : '<p class="rien">Aucune intervention enregistrée. Ajoutez-les sur la fiche de chaque véhicule.</p>');
 
     /* Sinistres */
     var S = lire("parc-sinistres", []);
