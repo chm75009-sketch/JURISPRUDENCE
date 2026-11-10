@@ -130,7 +130,15 @@
           (uT ? "Se déconnecter" : "Quitter") + "</button>"
         : "") +
       '<button type="button" class="x" data-fermer="1" aria-label="Fermer">Fermer</button></div><ul>';
-    MODULES.forEach(function (m) {
+    /* LE CHEF DE PARC NE VOIT QUE SON MODULE. Sur l'espace du client, une
+       séance de role « parc » ne donne accès qu'à la flotte : le menu ne lui
+       propose rien d'autre. Ailleurs, où ce role n'existe pas, le menu reste
+       entier. */
+    var parc = false;
+    try { parc = (window.sessionStorage.getItem("seance-role") ||
+      window.localStorage.getItem("seance-role")) === "parc"; } catch (e) { parc = false; }
+    var liste = parc ? MODULES.filter(function (m) { return m.page === "flotte.html"; }) : MODULES;
+    liste.forEach(function (m) {
       var ici = m.page === page ? ' class="ici" aria-current="page"' : "";
       h += '<li><a href="' + m.page + '"' + ici + '>' + m.nom + "</a></li>";
     });

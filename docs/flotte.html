@@ -203,7 +203,18 @@
   .note-page{margin:var(--e5) 0 0;padding-top:12px;border-top:1px solid var(--filet);
     font-size:var(--t1);line-height:1.55;color:var(--texte-3)}
   [hidden]{display:none !important}
+  /* LE CHEF DE PARC N'A PAS DE RETOUR AILLEURS. Sur l'espace du client, une
+     séance de role « parc » ne mène qu'ici : le lien de retour vers la gestion
+     n'a pas lieu d'être. Ce role n'existe pas sur l'application ouverte, où la
+     règle ne s'applique donc jamais. */
+  :root[data-role="parc"] .haut .retour{display:none}
 </style>
+<script>
+  try {
+    if ((sessionStorage.getItem("seance-role") || localStorage.getItem("seance-role")) === "parc")
+      document.documentElement.setAttribute("data-role", "parc");
+  } catch (e) {}
+</script>
 </head>
 <body>
 
