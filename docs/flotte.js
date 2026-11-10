@@ -1569,11 +1569,28 @@
     }
     /* UN FILTRE VENU DU TABLEAU DE BORD. Un clic sur un chiffre du tableau de
        bord ouvre la liste déjà filtrée, par l'adresse (?etat=, ?genre=, ?q=). */
+    var viserImmat = "", viserTab = "";
     try {
       var pr = new URLSearchParams(location.search);
       if (pr.get("etat")) { fEtat = pr.get("etat"); if ($("f-etat")) $("f-etat").value = fEtat; }
       if (pr.get("genre")) { fGenre = pr.get("genre"); if ($("f-genre")) $("f-genre").value = fGenre; }
       if (pr.get("q")) { fRecherche = pr.get("q"); if ($("f-rech")) $("f-rech").value = fRecherche; }
+      /* VENU DES DÉPENSES : OUVRIR UNE FICHE PRÉCISE. Un clic sur une dépense
+         mène ici avec l'immatriculation, et l'onglet à montrer. On filtre sur
+         cette immatriculation, on déplie sa fiche sur l'onglet voulu, et on y
+         amène l'écran. */
+      if (pr.get("immat")) {
+        viserImmat = net(pr.get("immat"));
+        viserTab = net(pr.get("tab")) || "infos";
+        fRecherche = viserImmat;
+        if ($("f-rech")) $("f-rech").value = fRecherche;
+        vehicules().forEach(function (v) {
+          if (net(v.immat).toUpperCase() === viserImmat.toUpperCase()) {
+            ouvert["v" + v.id] = true;
+            vtabActif[v.id] = viserTab;
+          }
+        });
+      }
     } catch (e) {}
     var brech = $("f-rech"); if (brech) brech.addEventListener("input", function () { fRecherche = this.value; rendreVehicules(); });
     var bg = $("f-genre"); if (bg) bg.addEventListener("change", function () { fGenre = this.value; rendreVehicules(); });
@@ -1585,6 +1602,19 @@
     });
 
     rendre();
+
+    /* On amène l'écran sur la fiche ouverte depuis les dépenses. */
+    if (viserImmat) {
+      var cible = null;
+      vehicules().forEach(function (v) {
+        if (net(v.immat).toUpperCase() === viserImmat.toUpperCase()) cible = v;
+      });
+      if (cible) {
+        var carte = document.querySelector('[data-v="' + cible.id + '"]');
+        if (carte && carte.scrollIntoView)
+          window.setTimeout(function () { carte.scrollIntoView({ behavior: "smooth", block: "start" }); }, 60);
+      }
+    }
   }
 
   if (document.readyState === "loading")

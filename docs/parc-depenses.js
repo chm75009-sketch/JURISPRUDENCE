@@ -73,10 +73,19 @@
     }
     $("liste").innerHTML = '<div class="dl">' + vis.map(function (x) {
       var bas = [x.objet || "Intervention", x.par].filter(Boolean).join(" · ");
-      return '<div class="dl-l"><span class="q"><b>' + ech(x.immat) + "</b>" +
+      /* UN CLIC OUVRE LA FICHE DU VÉHICULE, SUR SON ENTRETIEN. La ligne mène à
+         la liste des véhicules, filtrée sur l'immatriculation, fiche dépliée sur
+         l'onglet Entretien. Un véhicule sans immatriculation n'a pas de fiche à
+         ouvrir : il reste une ligne simple. */
+      var ouvrable = x.immat && x.immat !== "sans immatriculation";
+      var dedans = '<span class="q"><b>' + ech(x.immat) + "</b>" +
         '<span class="sb">' + ech(bas) + "</span></span>" +
         '<span class="rt"><span class="d">' + ech(x.date ? enFrancais(x.date) : "") + "</span>" +
-        '<span class="m">' + ech(euros(x.cout)) + "</span></span></div>";
+        '<span class="m">' + ech(euros(x.cout)) + "</span></span>";
+      if (!ouvrable) return '<div class="dl-l">' + dedans + "</div>";
+      return '<a class="dl-l lien-fiche" href="flotte.html?immat=' +
+        encodeURIComponent(x.immat) + '&tab=entretien">' + dedans +
+        '<span class="chev" aria-hidden="true">&#8250;</span></a>';
     }).join("") + "</div>";
   }
 
