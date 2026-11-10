@@ -138,9 +138,22 @@
     { c: "revision", lib: "Prochaine révision, au plus tard le", t: "date" },
     { c: "revisionKm", lib: "ou au kilométrage", t: "num" },
     { c: "extincteur", lib: "Échéance de l'extincteur", t: "date" },
+    /* LES CHAMPS DU SUIVI DE PARC. Demande du 10 novembre 2026, d'après le
+       modèle Avrios : le carburant, le nombre de places, la date d'achat, le
+       numéro de contrat d'assurance et le mode de financement. Le financement
+       reprend la liste des paramètres du parc. */
+    { c: "carburant", lib: "Carburant", t: "select", vals: null, carbs: true },
+    { c: "places", lib: "Nombre de places", t: "num" },
+    { c: "dateAchat", lib: "Date d'achat", t: "date" },
+    { c: "assurContrat", lib: "Numéro de contrat d'assurance", t: "text" },
+    { c: "financementType", lib: "Mode de financement", t: "select", parc: "financement" },
     { c: "financement", lib: "Financement, soldé ou échéance", t: "text" },
     { c: "note", lib: "Observations", t: "textarea", large: true },
   ];
+
+  /* Le carburant est une liste figée, courte et stable. Les autres listes, plus
+     mouvantes, viennent des paramètres du parc. */
+  var CARBURANTS = ["Gazole", "Essence", "Électrique", "GPL", "GNV, bioGNV", "Hybride", "Hydrogène"];
 
   var SUIVIS = [
     ["", "- à préciser -"],
@@ -396,11 +409,29 @@
 
   /* ──────────────────────────────── les formes ──────────────────────────── */
 
+  /* Une liste de paramètres du parc, lue là où elle est gardée. Les fiches des
+     véhicules s'en servent pour le financement, et plus tard pour d'autres
+     champs ; si elle n'existe pas encore, la liste est simplement vide. */
+  function parcListe(key) {
+    try {
+      if (window.ParcParametres && window.ParcParametres.lire) {
+        var e = window.ParcParametres.lire(); return (e && e[key]) || [];
+      }
+      var j = JSON.parse(window.localStorage.getItem("parc-parametres") || "null");
+      return (j && j[key]) || [];
+    } catch (e) { return []; }
+  }
+  function optsDe(ch) {
+    if (ch.opts) return ch.opts;
+    var L = ch.carbs ? CARBURANTS : (ch.parc ? parcListe(ch.parc) : (ch.vals || []));
+    return [["", "- à préciser -"]].concat((L || []).map(function (s) { return [String(s), String(s)]; }));
+  }
+
   function champHtml(ch, valeur, prefixe) {
     var id = prefixe + "-" + ch.c;
     var h = '<label' + (ch.large ? ' class="large"' : "") + '><span>' + ech(ch.lib) + "</span>";
     if (ch.t === "select") {
-      h += '<select id="' + id + '" data-ch="' + ch.c + '">' + ch.opts.map(function (o) {
+      h += '<select id="' + id + '" data-ch="' + ch.c + '">' + optsDe(ch).map(function (o) {
         return '<option value="' + ech(o[0]) + '"' + (o[0] === net(valeur) ? " selected" : "") +
           ">" + ech(o[1]) + "</option>";
       }).join("") + "</select>";
