@@ -39,6 +39,20 @@
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(net(iso)); if (!m) return "";
     var j = parseInt(m[3], 10); return (j === 1 ? "1er" : j) + " " + MOIS[parseInt(m[2], 10) - 1] + " " + m[1];
   }
+  function moisDepuis(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(net(iso)); if (!m) return null;
+    var d = new Date(+m[1], +m[2] - 1, +m[3]), n = new Date();
+    var mo = (n.getFullYear() - d.getFullYear()) * 12 + (n.getMonth() - d.getMonth());
+    return mo >= 0 ? mo : null;
+  }
+  function entier(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+  function ageTexte(mois) {
+    if (mois == null) return "-";
+    var a = Math.floor(mois / 12), m = mois % 12;
+    if (a <= 0) return m + " mois";
+    if (m === 0) return a + " an" + (a > 1 ? "s" : "");
+    return a + " an" + (a > 1 ? "s" : "") + " " + m + " mois";
+  }
 
   var GENRES = { vl: "Voiture", vul: "Utilitaire léger", pl: "Poids lourd", tracteur: "Tracteur",
     remorque: "Remorque", public10: "Transport de personnes", commun: "Transport en commun", autre: "Autre" };
@@ -105,23 +119,42 @@
   function rendre() {
     var V = vehicules(), C = conducteursNoms();
 
+    /* Vue d'ensemble : les grandeurs moyennes du parc, celles que l'on peut
+       calculer sans boîtier télématique. */
+    var kms = V.map(function (v) { return fnum(v.km); }).filter(function (k) { return k > 0; });
+    var kmMoyen = kms.length ? kms.reduce(function (s, k) { return s + k; }, 0) / kms.length : 0;
+    var ages = V.map(function (v) { return moisDepuis(v.mec || v.dateAchat); }).filter(function (m) { return m != null; });
+    var ageMoyen = ages.length ? ages.reduce(function (s, m) { return s + m; }, 0) / ages.length : null;
+    $("vue").innerHTML = '<div class="tiles">' +
+      tile(V.length, "Véhicules") +
+      tile(C.length, "Conducteurs") +
+      tile(kms.length ? entier(kmMoyen) + " km" : "-", "Kilométrage moyen") +
+      tile(ages.length ? ageTexte(Math.round(ageMoyen)) : "-", "Âge moyen du parc") + "</div>";
+
     /* Structure */
     var parG = {};
     V.forEach(function (v) { var g = net(v.genre) || "autre"; parG[g] = (parG[g] || 0) + 1; });
     var liste = Object.keys(parG).map(function (g) { return { lib: GENRES[g] || "Autre", n: parG[g] }; })
       .sort(function (a, b) { return b.n - a.n; });
-    $("structure").innerHTML =
-      '<div class="tiles">' + tile(V.length, "Véhicules") + tile(C.length, "Conducteurs") + "</div>" +
-      anneau(liste);
+    $("structure").innerHTML = anneau(liste);
 
     /* Surveillance */
     var E = echeances().filter(function (e) { return e.date; });
     var nPasse = E.filter(function (e) { return e.etat === "passe"; }).length;
     var nRouge = E.filter(function (e) { return e.etat === "rouge"; }).length;
     var nAmbre = E.filter(function (e) { return e.etat === "ambre"; }).length;
-    var prochaines = E.filter(function (e) { return e.etat === "passe" || e.etat === "rouge" || e.etat === "ambre"; })
-      .sort(function (a, b) { return (a.jours == null ? 1e9 : a.jours) - (b.jours == null ? 1e9 : b.jours); })
-      .slice(0, 8);
+    var aSurveiller = E.filter(function (e) { return e.etat === "passe" || e.etat === "rouge" || e.etat === "ambre"; });
+    var prochaines = aSurveiller.slice().sort(function (a, b) {
+      return (a.jours == null ? 1e9 : a.jours) - (b.jours == null ? 1e9 : b.jours);
+    }).slice(0, 8);
+    /* Les alertes par type, comme le « Alertes du parc » du modèle : combien de
+       contrôles techniques, d'assurances, de licences à traiter. */
+    var parType = {};
+    aSurveiller.forEach(function (e) { parType[e.quoi] = (parType[e.quoi] || 0) + 1; });
+    var typeList = Object.keys(parType).sort(function (a, b) { return parType[b] - parType[a]; });
+    var alertesHtml = typeList.length ? '<div class="alertes">' + typeList.map(function (q) {
+      return '<div class="al-l chaud"><span class="n">' + parType[q] + '</span><span class="t">' + ech(q) + "</span></div>";
+    }).join("") + "</div>" : "";
     var ligne = prochaines.map(function (e) {
       var dit = e.jours < 0 ? "dépassée de " + (-e.jours) + " j" : (e.jours === 0 ? "aujourd'hui" : "dans " + e.jours + " j");
       return '<div class="surv-l ' + e.etat + '"><span class="q"><b>' + ech(e.quoi) + "</b> " + ech(e.qui) + "</span>" +
@@ -130,7 +163,7 @@
     }).join("");
     $("surveillance").innerHTML =
       '<div class="tiles">' + tile(nPasse, "Dépassées", "rouge") + tile(nRouge, "Sous 30 jours", "rouge") +
-      tile(nAmbre, "Sous 60 jours", "ambre") + "</div>" +
+      tile(nAmbre, "Sous 60 jours", "ambre") + "</div>" + alertesHtml +
       (prochaines.length ? '<div class="surv">' + ligne + "</div>"
         : '<p class="ok">Aucune échéance dépassée ni proche.</p>');
 
