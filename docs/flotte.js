@@ -1280,11 +1280,23 @@
        place les véhicules saisis avant elle.
        Demande du 16 septembre 2026 : « quand on importe une flotte on peut la
        supprimer aussi, je n'ai pas cette faculté sur l'application ». */
+    /* VIDER LA FLOTTE DEMANDE DEUX CONFIRMATIONS. Relevé le 10 novembre 2026 :
+       un seul « oui » suffisait à effacer quatre-vingts véhicules, sans retour.
+       La première confirmation prévient ; la seconde fait écrire le mot, pour
+       qu'un geste malheureux ne vide pas le parc. */
     $("v-vider").addEventListener("click", function () {
       var n = vehicules().length;
       if (!n) return;
-      if (!window.confirm("Retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
-        " du fichier ? Les fiches des conducteurs et les pièces déposées, elles, sont gardées.")) return;
+      if (!window.confirm("Vider la flotte : retirer les " + n + " véhicule" + (n > 1 ? "s" : "") +
+        " de cet appareil ? Les fiches des conducteurs et les pièces déposées sont gardées. " +
+        "Cette action ne se rattrape pas.")) return;
+      var mot = window.prompt("Dernière confirmation. Pour vider définitivement la flotte, " +
+        "tapez VIDER en majuscules.");
+      if (mot === null) return;
+      if (net(mot).toUpperCase() !== "VIDER") {
+        window.alert("Flotte non vidée : la confirmation ne correspond pas.");
+        return;
+      }
       garderVehicules([]);
       garder(CLE_IMP, null);
       ouvert = {};
