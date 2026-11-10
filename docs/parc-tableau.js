@@ -169,6 +169,18 @@
       .sort(function (a, b) { return b.n - a.n; });
     $("structure").innerHTML = anneau(liste);
 
+    /* Affectation : un véhicule porte un chauffeur attitré, ou il est libre.
+       Les remorques, qui ne se conduisent pas seules, sont mises à part. */
+    var roulants = V.filter(function (v) { return v.genre !== "remorque"; });
+    var affectes = roulants.filter(function (v) { return net(v.conducteur); }).length;
+    var libres = roulants.length - affectes;
+    $("affectation").innerHTML = '<div class="tiles">' +
+      tile(affectes, "Affectés", affectes ? "vert" : "") +
+      tile(libres, "Libres", libres ? "ambre" : "") + "</div>" +
+      (V.length > roulants.length ? '<p class="rien">' + (V.length - roulants.length) +
+        " remorque" + (V.length - roulants.length > 1 ? "s" : "") + ", comptée" +
+        (V.length - roulants.length > 1 ? "s" : "") + " à part.</p>" : "");
+
     /* Surveillance */
     var E = echeances().filter(function (e) { return e.date; });
     var nPasse = E.filter(function (e) { return e.etat === "passe"; }).length;
