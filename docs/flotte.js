@@ -266,8 +266,8 @@
   var CHAMPS_I = [
     { c: "date", lib: "Date de l'intervention", t: "date" },
     { c: "km", lib: "Kilométrage", t: "num" },
-    { c: "objet", lib: "Nature des travaux", t: "textarea", large: true },
-    { c: "par", lib: "Fait par (atelier interne ou prestataire)", t: "text", large: true },
+    { c: "objet", lib: "Nature des travaux", t: "liste", parc: "typeDepense", large: true },
+    { c: "par", lib: "Fait par (atelier interne ou prestataire)", t: "liste", parc: "entreprises", avant: ["Atelier interne"], large: true },
     { c: "heures", lib: "Main d'oeuvre interne, nombre d'heures", t: "dec" },
     { c: "taux", lib: "Taux horaire, en euros", t: "dec" },
     { c: "pieces", lib: "Coût des pièces, en euros", t: "dec" },
@@ -659,9 +659,20 @@
   /* ────────────────── L'ENTRETIEN ET LES COÛTS DU VÉHICULE ───────────────── */
 
   function champIHtml(ch, valeur, pref) {
-    var id = pref + "-" + ch.c;
+    var id = pref + "-" + ch.c, v = net(valeur);
     var h = '<label' + (ch.large ? ' class="large"' : "") + '><span>' + ech(ch.lib) + "</span>";
-    if (ch.t === "textarea") {
+    if (ch.t === "liste") {
+      /* Une liste déroulante tirée des paramètres du parc, plus « Autres » qui
+         ouvre un champ libre. Demande du 10 novembre 2026. */
+      var opts = (ch.avant || []).concat(parcListe(ch.parc) || []);
+      var dans = v && opts.indexOf(v) >= 0, autre = v && !dans;
+      h += '<select data-chi-sel="' + ch.c + '" id="' + id + '-sel">' +
+        '<option value="">- à préciser -</option>' +
+        opts.map(function (o) { return '<option value="' + ech(o) + '"' + (o === v ? " selected" : "") + ">" + ech(o) + "</option>"; }).join("") +
+        '<option value="__autre"' + (autre ? " selected" : "") + ">Autres</option></select>" +
+        '<input type="text" data-chi-txt="' + ch.c + '" id="' + id + '" placeholder="Préciser" value="' +
+        ech(autre ? v : "") + '"' + (autre ? "" : " hidden") + ' style="margin-top:8px">';
+    } else if (ch.t === "textarea") {
       h += '<textarea id="' + id + '" data-chi="' + ch.c + '">' + ech(valeur) + "</textarea>";
     } else {
       var type = ch.t === "date" ? "date" : "text";
@@ -730,21 +741,35 @@
      frappe : on garde le curseur, et seuls le total et le cumul se recalculent
      en direct. */
   function brancherInterventions(cadre, idV) {
-    Array.prototype.forEach.call(cadre.querySelectorAll(".it-carte [data-chi]"), function (el) {
-      var carte = el.closest("[data-itc]");
+    function setVal(idx, key, value) {
+      var T = vehicules();
+      T.forEach(function (x) {
+        if (x.id !== idV) return;
+        x.interventions = x.interventions || [];
+        if (!x.interventions[idx]) return;
+        x.interventions[idx][key] = value;
+        if (key === "taux" && net(value)) garder(CLE_TAUX, value);
+      });
+      garderVehicules(T);
+    }
+    Array.prototype.forEach.call(cadre.querySelectorAll(".it-carte"), function (carte) {
       var idx = parseInt(carte.getAttribute("data-itc").split("|")[1], 10);
-      var quand = (el.type === "date") ? "change" : "input";
-      el.addEventListener(quand, function () {
-        var T = vehicules();
-        T.forEach(function (x) {
-          if (x.id !== idV) return;
-          x.interventions = x.interventions || [];
-          if (!x.interventions[idx]) return;
-          x.interventions[idx][el.getAttribute("data-chi")] = el.value;
-          if (el.getAttribute("data-chi") === "taux" && net(el.value)) garder(CLE_TAUX, el.value);
+      /* Les champs simples : date, kilométrage, heures, montants. */
+      Array.prototype.forEach.call(carte.querySelectorAll("[data-chi]"), function (el) {
+        var quand = (el.type === "date") ? "change" : "input";
+        el.addEventListener(quand, function () { setVal(idx, el.getAttribute("data-chi"), el.value); majCout(cadre, idV); });
+      });
+      /* Les listes déroulantes, et leur « Autres » qui ouvre le champ libre. */
+      Array.prototype.forEach.call(carte.querySelectorAll("[data-chi-sel]"), function (sel) {
+        var key = sel.getAttribute("data-chi-sel");
+        var txt = carte.querySelector('[data-chi-txt="' + key + '"]');
+        sel.addEventListener("change", function () {
+          if (sel.value === "__autre") { if (txt) { txt.hidden = false; txt.focus(); } setVal(idx, key, txt ? net(txt.value) : ""); }
+          else { if (txt) { txt.hidden = true; txt.value = ""; } setVal(idx, key, sel.value); }
         });
-        garderVehicules(T);
-        majCout(cadre, idV);
+      });
+      Array.prototype.forEach.call(carte.querySelectorAll("[data-chi-txt]"), function (txt) {
+        txt.addEventListener("input", function () { setVal(idx, txt.getAttribute("data-chi-txt"), txt.value); });
       });
     });
   }
