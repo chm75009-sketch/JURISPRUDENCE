@@ -551,11 +551,58 @@
 
   var ouvert = {};           /* les fiches dépliées, par identifiant         */
 
+  /* RECHERCHE, FILTRES, TRI. Demande du 10 novembre 2026, pour quatre-vingt-sept
+     véhicules. */
+  var fRecherche = "", fGenre = "", fEtat = "", fTri = "immat";
+
+  function prochaineEch(v) {
+    var J = echeancesVehicule(v).map(function (e) { return e.jours; })
+      .filter(function (j) { return j != null; });
+    return J.length ? Math.min.apply(null, J) : 1e9;
+  }
+  function filtrer(L) {
+    var q = net(fRecherche).toLowerCase();
+    var nomDe = {}; salaries(true).forEach(function (s) { nomDe[s.id] = s.nom; });
+    var out = L.filter(function (v) {
+      if (fGenre && (v.genre || "autre") !== fGenre) return false;
+      if (fEtat) {
+        var m = manque(v).length, p = pire(echeancesVehicule(v));
+        if (fEtat === "complet" && m) return false;
+        if (fEtat === "incomplet" && !m) return false;
+        if (fEtat === "proche" && !(p === "rouge" || p === "ambre")) return false;
+        if (fEtat === "depasse" && p !== "passe") return false;
+      }
+      if (q) {
+        var hay = (net(v.immat) + " " + net(v.marque) + " " + net(nomDe[v.conducteur] || "")).toLowerCase();
+        if (hay.indexOf(q) < 0) return false;
+      }
+      return true;
+    });
+    if (fTri === "immat") out.sort(function (a, b) { return net(a.immat).localeCompare(net(b.immat)); });
+    else if (fTri === "km") out.sort(function (a, b) { return (parseInt(b.km, 10) || 0) - (parseInt(a.km, 10) || 0); });
+    else if (fTri === "echeance") out.sort(function (a, b) { return prochaineEch(a) - prochaineEch(b); });
+    return out;
+  }
+  function majCount(montres, total) {
+    var c = $("f-count"); if (!c) return;
+    c.textContent = (montres === total)
+      ? total + " véhicule" + (total > 1 ? "s" : "")
+      : montres + " sur " + total + " véhicule" + (total > 1 ? "s" : "");
+  }
+
   function rendreVehicules() {
-    var L = vehicules(), hote = $("vehicules");
-    if (!L.length) {
+    var tous = vehicules(), hote = $("vehicules");
+    var fb = $("fbar"); if (fb) fb.hidden = tous.length < 2;
+    if (!tous.length) {
       hote.innerHTML = '<p class="rien">Aucun véhicule. Le bouton ci-dessus en ajoute un : ' +
         "il suffit de l'immatriculation pour commencer.</p>";
+      majCount(0, 0);
+      return;
+    }
+    var L = filtrer(tous);
+    majCount(L.length, tous.length);
+    if (!L.length) {
+      hote.innerHTML = '<p class="rien">Aucun véhicule ne correspond. Changez la recherche ou les filtres.</p>';
       return;
     }
     hote.innerHTML = L.map(function (v) {
@@ -1477,6 +1524,20 @@
     });
 
     $("b-excel").addEventListener("click", classeur);
+
+    /* RECHERCHE, FILTRES, TRI. */
+    if ($("f-genre")) {
+      $("f-genre").innerHTML = '<option value="">Tous les types</option>' +
+        GENRES.map(function (g) { return '<option value="' + ech(g[0]) + '">' + ech(g[1]) + "</option>"; }).join("");
+    }
+    var brech = $("f-rech"); if (brech) brech.addEventListener("input", function () { fRecherche = this.value; rendreVehicules(); });
+    var bg = $("f-genre"); if (bg) bg.addEventListener("change", function () { fGenre = this.value; rendreVehicules(); });
+    var be = $("f-etat"); if (be) be.addEventListener("change", function () { fEtat = this.value; rendreVehicules(); });
+    var bt = $("f-tri"); if (bt) bt.addEventListener("change", function () { fTri = this.value; rendreVehicules(); });
+    var br = $("f-reduire"); if (br) br.addEventListener("click", function () {
+      Object.keys(ouvert).forEach(function (k) { if (k.charAt(0) === "v") delete ouvert[k]; });
+      rendreVehicules();
+    });
 
     rendre();
   }

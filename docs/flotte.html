@@ -196,6 +196,18 @@
   .barre2{margin:var(--e3) 0 0}
   .barre2 button{width:100%;min-height:46px;border-radius:var(--r1);font:600 var(--t3) system-ui;padding:0 16px}
   .inter .doux{margin:10px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
+  /* RECHERCHE, FILTRES, TRI. */
+  .fbar{margin:var(--e4) 0 0;display:flex;flex-direction:column;gap:10px}
+  .fbar #f-rech{font-size:16px;min-height:48px;padding:11px 14px;width:100%;box-sizing:border-box;
+    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte)}
+  .fbar .frow{display:grid;grid-template-columns:1fr;gap:8px}
+  @media (min-width:560px){.fbar .frow{grid-template-columns:1fr 1fr 1fr}}
+  .fbar select{font-size:15px;min-height:46px;padding:9px 11px;width:100%;box-sizing:border-box;
+    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte)}
+  .fbar .fbas{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .fbar .fcount{font:600 var(--t1) system-ui;color:var(--texte-2)}
+  .fbar .freduire{background:none;border:0;color:var(--accent);font:600 var(--t1) system-ui;
+    padding:6px 4px;width:auto;min-height:0;text-decoration:underline;cursor:pointer}
   .dit{margin:var(--e3) 0 0;font-size:var(--t2);color:var(--texte-2)}
   .dit.mal{color:var(--rouge)}
   .rien{padding:var(--e5) 0;color:var(--texte-2);font-size:var(--t3)}
@@ -288,6 +300,31 @@
         <div id="i-apercu"></div>
       </div>
     </details>
+
+    <!-- RECHERCHE, FILTRES ET TRI. Pour quatre-vingt-sept véhicules, on ne
+         déroule pas : on cherche, on filtre, on trie. Demande du 10 novembre
+         2026. -->
+    <div class="fbar" id="fbar">
+      <input type="search" id="f-rech" placeholder="Rechercher une immatriculation, une marque, un conducteur" autocomplete="off">
+      <div class="frow">
+        <select id="f-genre" aria-label="Type de véhicule"></select>
+        <select id="f-etat" aria-label="État">
+          <option value="">Tous les états</option>
+          <option value="depasse">Échéance dépassée</option>
+          <option value="proche">Échéance proche</option>
+          <option value="incomplet">À compléter</option>
+          <option value="complet">Complets</option>
+        </select>
+        <select id="f-tri" aria-label="Tri">
+          <option value="immat">Tri : immatriculation</option>
+          <option value="echeance">Tri : échéance la plus proche</option>
+          <option value="km">Tri : kilométrage</option>
+        </select>
+      </div>
+      <div class="fbas"><span class="fcount" id="f-count"></span>
+        <button type="button" class="freduire" id="f-reduire">Tout réduire</button></div>
+    </div>
+
     <div id="vehicules"></div>
   </section>
 

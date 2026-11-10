@@ -52,6 +52,7 @@
     { page: "heures.html", nom: "Décompte des heures" },
     { page: "forfait.html", nom: "Forfait en jours" },
     { page: "flotte.html", nom: "Flotte et conducteurs" },
+    { page: "parc-parametres.html", nom: "Paramètres du parc" },
     { page: "agenda.html", nom: "Agenda social" },
     { page: "mes-documents.html", nom: "Mes documents" },
     { page: "questions.html", nom: "Mes questions" },
@@ -142,7 +143,6 @@
       { page: "flotte.html", nom: "Liste des véhicules" },
       { page: "parc-depenses.html", nom: "Dépenses" },
       { page: "parc-sinistres.html", nom: "Sinistres" },
-      { page: "parc-parametres.html", nom: "Paramètres du parc" },
     ] : MODULES;
     liste.forEach(function (m) {
       var ici = m.page === page ? ' class="ici" aria-current="page"' : "";
