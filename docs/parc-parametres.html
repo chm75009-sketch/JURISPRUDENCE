@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paramètres du parc</title>
+<meta name="description" content="Les listes de référence du parc : financement, genres, marques, dépenses, sinistres, alertes, paliers de maintenance et entreprises.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c2126">
+<link rel="stylesheet" href="style.css">
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  .intro{margin:var(--e4) 0 0;font-size:var(--t2);line-height:1.55;color:var(--texte-2)}
+  .bloc{border:1px solid var(--filet);border-radius:var(--r2);background:var(--surface);
+    padding:16px 15px;margin:var(--e3) 0 0}
+  .bloc h2{font:700 var(--t4)/1.2 system-ui;margin:0;color:var(--texte)}
+  .bloc .aide{margin:6px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
+  .lignes{margin:12px 0 0;display:flex;flex-direction:column;gap:8px}
+  .ligne{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+  .ligne.al{grid-template-columns:1fr 92px auto}
+  .entete-al{display:grid;grid-template-columns:1fr 92px auto;gap:8px;margin:12px 0 0}
+  .entete-al span{font:600 10px/1.2 system-ui;letter-spacing:.05em;text-transform:uppercase;color:var(--texte-3)}
+  .ligne input{font-size:16px;min-height:44px;padding:8px 11px;width:100%;box-sizing:border-box;
+    border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte)}
+  .retirer{flex:0 0 auto;width:44px;height:44px;border-radius:var(--r1);border:1px solid var(--filet-2);
+    background:var(--creux);color:var(--texte-2);font-size:22px;line-height:1;padding:0;cursor:pointer}
+  .retirer:hover{border-color:var(--rouge);color:var(--rouge)}
+  .ajouter{margin:12px 0 0;min-height:44px;border-radius:var(--r1);border:1px dashed var(--accent);
+    background:var(--accent-clair);color:var(--accent);font:600 var(--t2) system-ui;padding:0 16px;
+    width:auto;cursor:pointer}
+  .note-page{margin:var(--e5) 0 0;padding-top:12px;border-top:1px solid var(--filet);
+    font-size:var(--t1);line-height:1.55;color:var(--texte-3)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div class="haut">
+    <a class="retour" href="flotte.html">&larr; Retour</a>
+    <b>Paramètres du parc</b>
+    <span id="ent"></span>
+  </div>
+
+  <p class="intro">Les listes qui commandent le reste du parc : elles alimentent les fiches des
+    véhicules, les dépenses, les sinistres et les alertes. Tout est modifiable. Chaque changement
+    est gardé sur cet appareil, au fur et à mesure.</p>
+
+  <div id="corps"></div>
+
+  <p class="note-page">Ces paramètres restent sur votre appareil. Les délais d'alerte fixent le
+    nombre de jours avant une échéance où elle passe au rouge. Les paliers de maintenance sont les
+    kilométrages où une révision est attendue.</p>
+
+</main>
+
+<script>window.RUBRIQUE_DOCS = "flotte";</script>
+<script src="profil.js"></script>
+<script src="version.js"></script>
+<script src="parc-parametres.js"></script>
+</body>
+</html>
