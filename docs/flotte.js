@@ -198,6 +198,49 @@
 
   var DU_FICHIER = "date portée au fichier de la flotte, à vérifier sur le justificatif";
 
+  /* L'ENTRETIEN ET CE QU'IL COÛTE.
+
+     Demande du 10 novembre 2026, pour le chef de parc : noter, camion par
+     camion, ce qui a été fait, par qui, et le coût. La main d'oeuvre, quand
+     elle est faite en interne par les salariés de l'entreprise, se compte en
+     heures passées, multipliées par un taux horaire que le chef de parc fixe ;
+     s'y ajoutent le coût des pièces et celui de la sous-traitance. Chaque
+     intervention porte son total, et chaque véhicule son cumul, pour qu'on
+     voie d'un coup d'oeil ce que coûte un camion. Les interventions voyagent
+     avec le véhicule, dans son propre enregistrement. */
+  var CHAMPS_I = [
+    { c: "date", lib: "Date de l'intervention", t: "date" },
+    { c: "km", lib: "Kilométrage", t: "num" },
+    { c: "objet", lib: "Nature des travaux", t: "textarea", large: true },
+    { c: "par", lib: "Fait par (atelier interne ou prestataire)", t: "text", large: true },
+    { c: "heures", lib: "Main d'oeuvre interne, nombre d'heures", t: "dec" },
+    { c: "taux", lib: "Taux horaire, en euros", t: "dec" },
+    { c: "pieces", lib: "Coût des pièces, en euros", t: "dec" },
+    { c: "sous", lib: "Sous-traitance, en euros", t: "dec" },
+  ];
+  var CLE_TAUX = "flotte-taux-defaut";
+
+  /* Un nombre saisi à la française (virgule, espaces) devient un nombre. */
+  function fnum(x) {
+    var n = parseFloat(String(x == null ? "" : x).replace(/\s/g, "").replace(",", "."));
+    return isFinite(n) ? n : 0;
+  }
+  /* Un montant en euros, à la française : « 1 234,50 € ». */
+  function euros(n) {
+    var s = (Math.round(n * 100) / 100).toFixed(2).replace(".", ",");
+    var p = s.split(",");
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return p.join(",") + " €";
+  }
+  function coutInter(it) {
+    var mo = fnum(it.heures) * fnum(it.taux);
+    return { h: fnum(it.heures), mo: mo, pieces: fnum(it.pieces), sous: fnum(it.sous),
+      total: mo + fnum(it.pieces) + fnum(it.sous) };
+  }
+  function cumulVehicule(v) {
+    return (v.interventions || []).reduce(function (s, it) { return s + coutInter(it).total; }, 0);
+  }
+
   function vehicules() { return lire(CLE_V, []); }
   function garderVehicules(L) { garder(CLE_V, L); }
 
@@ -384,6 +427,7 @@
       var type = ch.t === "date" ? "date" : "text";
       h += '<input type="' + type + '" id="' + id + '" data-ch="' + ch.c + '" value="' + ech(valeur) + '"' +
         (ch.t === "num" ? ' inputmode="numeric"' : "") +
+        (ch.t === "dec" ? ' inputmode="decimal"' : "") +
         (ch.maj ? ' style="text-transform:uppercase"' : "") + ">";
     }
     return h + "</label>";
@@ -445,7 +489,9 @@
       var E = echeancesVehicule(v), p = pire(E);
       var genre = "";
       GENRES.forEach(function (g) { if (g[0] === v.genre) genre = g[1]; });
-      var sous = [genre, v.marque, v.km ? v.km + " km" : ""].filter(Boolean).join(" · ");
+      var cum = cumulVehicule(v);
+      var sous = [genre, v.marque, v.km ? v.km + " km" : "", cum ? "entretien " + euros(cum) : ""]
+        .filter(Boolean).join(" · ");
       var est = !!ouvert["v" + v.id];
       return '<div class="carte-v' + (p === "passe" ? " urgent" : "") + '" data-v="' + ech(v.id) + '">' +
         '<div class="tt" data-plier="v' + ech(v.id) + '">' +
@@ -463,7 +509,7 @@
             }
             return champHtml(ch, val, "v" + v.id);
           }).join("") +
-          "</div>" + piecesHtml(v) + '<div class="actions">' +
+          "</div>" + piecesHtml(v) + interventionsHtml(v) + '<div class="actions">' +
           '<button type="button" class="second" data-sup="' + ech(v.id) + '">Retirer ce véhicule</button>' +
           "</div></div>" : "") +
         "</div>";
@@ -486,6 +532,7 @@
           if (c === "conducteur") lierVehiculeConducteur(v.id, val, avant);
         });
       brancherPieces(cadre, v.id);
+      brancherInterventions(cadre, v.id);
     });
   }
 
@@ -532,6 +579,99 @@
             contenu: f, note: lib + " - " + (v.immat || "véhicule sans immatriculation") })
             .then(function (l) { poser(l.id); }, function () { poser(0); });
         } else poser(0);
+      });
+    });
+  }
+
+  /* ────────────────── L'ENTRETIEN ET LES COÛTS DU VÉHICULE ───────────────── */
+
+  function champIHtml(ch, valeur, pref) {
+    var id = pref + "-" + ch.c;
+    var h = '<label' + (ch.large ? ' class="large"' : "") + '><span>' + ech(ch.lib) + "</span>";
+    if (ch.t === "textarea") {
+      h += '<textarea id="' + id + '" data-chi="' + ch.c + '">' + ech(valeur) + "</textarea>";
+    } else {
+      var type = ch.t === "date" ? "date" : "text";
+      h += '<input type="' + type + '" id="' + id + '" data-chi="' + ch.c + '" value="' + ech(valeur) + '"' +
+        (ch.t === "num" ? ' inputmode="numeric"' : "") +
+        (ch.t === "dec" ? ' inputmode="decimal"' : "") + ">";
+    }
+    return h + "</label>";
+  }
+
+  function detailCout(c) {
+    var p = [];
+    if (c.h) p.push("main d'oeuvre " + euros(c.mo) + " (" + String(c.h).replace(".", ",") + " h)");
+    if (c.pieces) p.push("pièces " + euros(c.pieces));
+    if (c.sous) p.push("sous-traitance " + euros(c.sous));
+    return p.length ? " (" + p.join(", ") + ")" : "";
+  }
+
+  function interventionsHtml(v) {
+    var L = v.interventions || [];
+    var rows = L.map(function (it, idx) {
+      var c = coutInter(it);
+      var pref = "i-" + v.id + "-" + idx;
+      return '<div class="it-carte" data-itc="' + ech(v.id) + "|" + idx + '">' +
+        '<div class="gr">' + CHAMPS_I.map(function (ch) { return champIHtml(ch, it[ch.c], pref); }).join("") + "</div>" +
+        '<div class="it-total">Coût de l\'intervention : <b>' + euros(c.total) + "</b>" + ech(detailCout(c)) + "</div>" +
+        '<div class="actions"><button type="button" class="lien" data-it-sup="' + ech(v.id) + "|" + idx + '">Retirer cette intervention</button></div>' +
+        "</div>";
+    }).join("");
+    var cum = cumulVehicule(v);
+    return '<div class="inter"><p class="pt">Entretien et interventions</p>' +
+      (L.length ? rows : '<p class="pnon2">Aucune intervention enregistrée pour ce véhicule.</p>') +
+      '<div class="barre2"><button type="button" class="second" data-it-add="' + ech(v.id) + '">+ Ajouter une intervention</button></div>' +
+      (L.length ? '<div class="it-cumul">Total dépensé sur ce véhicule : <b>' + euros(cum) + "</b>, sur " +
+        L.length + " intervention" + (L.length > 1 ? "s" : "") + "</div>" : "") +
+      '<p class="doux">La main d\'oeuvre interne est comptée en heures passées par vos équipes, ' +
+      "multipliées par le taux horaire que vous indiquez. Le taux de la dernière intervention est repris par défaut.</p></div>";
+  }
+
+  function majCout(cadre, idV) {
+    var L = vehicules(), v = null;
+    L.forEach(function (x) { if (x.id === idV) v = x; });
+    if (!v) return;
+    Array.prototype.forEach.call(cadre.querySelectorAll(".it-carte"), function (el) {
+      var idx = parseInt(el.getAttribute("data-itc").split("|")[1], 10);
+      var it = (v.interventions || [])[idx];
+      if (!it) return;
+      var c = coutInter(it);
+      var t = el.querySelector(".it-total");
+      if (t) t.innerHTML = "Coût de l'intervention : <b>" + euros(c.total) + "</b>" + ech(detailCout(c));
+    });
+    var cu = cadre.querySelector(".it-cumul");
+    if (cu) cu.innerHTML = "Total dépensé sur ce véhicule : <b>" + euros(cumulVehicule(v)) + "</b>, sur " +
+      (v.interventions || []).length + " intervention" + ((v.interventions || []).length > 1 ? "s" : "");
+    var sousTitre = cadre.querySelector(".tt .sous");
+    if (sousTitre) {
+      var genre = "";
+      GENRES.forEach(function (g) { if (g[0] === v.genre) genre = g[1]; });
+      var cum = cumulVehicule(v);
+      sousTitre.textContent = [genre, v.marque, v.km ? v.km + " km" : "", cum ? "entretien " + euros(cum) : ""]
+        .filter(Boolean).join(" · ") || "à compléter";
+    }
+  }
+
+  /* Les champs d'intervention ne redessinent pas toute la liste à chaque
+     frappe : on garde le curseur, et seuls le total et le cumul se recalculent
+     en direct. */
+  function brancherInterventions(cadre, idV) {
+    Array.prototype.forEach.call(cadre.querySelectorAll(".it-carte [data-chi]"), function (el) {
+      var carte = el.closest("[data-itc]");
+      var idx = parseInt(carte.getAttribute("data-itc").split("|")[1], 10);
+      var quand = (el.type === "date") ? "change" : "input";
+      el.addEventListener(quand, function () {
+        var T = vehicules();
+        T.forEach(function (x) {
+          if (x.id !== idV) return;
+          x.interventions = x.interventions || [];
+          if (!x.interventions[idx]) return;
+          x.interventions[idx][el.getAttribute("data-chi")] = el.value;
+          if (el.getAttribute("data-chi") === "taux" && net(el.value)) garder(CLE_TAUX, el.value);
+        });
+        garderVehicules(T);
+        majCout(cadre, idV);
       });
     });
   }
@@ -996,11 +1136,33 @@
     });
     if (alertes.length === 1) alertes.push(["Aucune échéance dépassée ni proche", "", "", ""]);
 
+    /* L'entretien, intervention par intervention, avec le coût et le cumul par
+       véhicule. Les montants sortent en nombres, qui s'additionnent et se
+       trient dans le tableur. */
+    var INT = [["Immatriculation", "Date", "Kilométrage", "Nature des travaux", "Fait par",
+      "Heures", "Taux horaire", "Main d'oeuvre", "Pièces", "Sous-traitance", "Total"]];
+    var totalParc = 0;
+    vehicules().forEach(function (v) {
+      var L = v.interventions || [];
+      if (!L.length) return;
+      var cumV = 0;
+      L.forEach(function (it) {
+        var c = coutInter(it);
+        cumV += c.total; totalParc += c.total;
+        INT.push([v.immat || "", dateExcel(it.date), it.km ? fnum(it.km) : "", it.objet || "", it.par || "",
+          c.h || "", fnum(it.taux) || "", c.mo, c.pieces, c.sous, c.total]);
+      });
+      INT.push(["", "", "", "Total " + (v.immat || "véhicule"), "", "", "", "", "", "", cumV]);
+    });
+    if (INT.length === 1) INT.push(["", "", "", "Aucune intervention enregistrée", "", "", "", "", "", "", ""]);
+    else INT.push(["", "", "", "TOTAL DU PARC", "", "", "", "", "", "", totalParc]);
+
     var nom = "flotte-et-conducteurs-" + iso(new Date()) + ".xlsx";
     window.TableurExport.telecharger(window.TableurExport.xlsx([
       { titre: "Véhicules", lignes: V },
       { titre: "Conducteurs", lignes: C },
       { titre: "À surveiller", lignes: alertes, largeurs: [28, 30, 22, 26] },
+      { titre: "Entretien", lignes: INT, largeurs: [16, 12, 12, 36, 24, 8, 12, 14, 12, 14, 14] },
       { titre: "Mode d'emploi", lignes: [
         ["Flotte et conducteurs"],
         ["Entreprise", p.denomination || ""],
@@ -1133,6 +1295,31 @@
         var T = vehicules();
         T.forEach(function (x) { if (x.id === duo[0] && x.pieces) delete x.pieces[duo[1]]; });
         garderVehicules(T);
+        rendre();
+        return;
+      }
+      var iadd = ev.target.closest ? ev.target.closest("[data-it-add]") : null;
+      if (iadd) {
+        var vida = iadd.getAttribute("data-it-add");
+        var Ta = vehicules();
+        Ta.forEach(function (x) {
+          if (x.id !== vida) return;
+          x.interventions = x.interventions || [];
+          x.interventions.push({ date: iso(new Date()), taux: lire(CLE_TAUX, "") });
+        });
+        garderVehicules(Ta);
+        rendre();
+        return;
+      }
+      var isup = ev.target.closest ? ev.target.closest("[data-it-sup]") : null;
+      if (isup) {
+        var duoi = isup.getAttribute("data-it-sup").split("|");
+        if (!window.confirm("Retirer cette intervention ?")) return;
+        var Ti = vehicules();
+        Ti.forEach(function (x) {
+          if (x.id === duoi[0] && x.interventions) x.interventions.splice(parseInt(duoi[1], 10), 1);
+        });
+        garderVehicules(Ti);
         rendre();
         return;
       }
