@@ -263,6 +263,11 @@
      intervention porte son total, et chaque véhicule son cumul, pour qu'on
      voie d'un coup d'oeil ce que coûte un camion. Les interventions voyagent
      avec le véhicule, dans son propre enregistrement. */
+  /* Le petit camion de la carte, posé dans le rond d'icône. */
+  var ICONE_VEH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
+    'stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h11v11H1z"/>' +
+    '<path d="M12 8h5l4 4v3h-9V8z"/><circle cx="5.5" cy="18" r="1.9"/><circle cx="16.5" cy="18" r="1.9"/></svg>';
+
   var CHAMPS_I = [
     { c: "date", lib: "Date de l'intervention", t: "date" },
     { c: "km", lib: "Kilométrage", t: "num" },
@@ -428,7 +433,7 @@
      26 septembre 2026. Ce qui manque s'affiche donc en rouge, et il est
      compté à part. */
   function pastilles(L) {
-    if (!L.length) return '<span class="p rouge">Aucune date renseignée : rien ne peut être contrôlé</span>';
+    if (!L.length) return '<span class="p vide">À compléter : aucune date renseignée</span>';
     return L.map(function (e) {
       var texte;
       if (e.km) {
@@ -654,8 +659,10 @@
       var sous = [genre, v.marque, v.km ? v.km + " km" : "", cum ? "entretien " + euros(cum) : ""]
         .filter(Boolean).join(" · ");
       var est = !!ouvert["v" + v.id];
-      return '<div class="carte-v' + (p === "passe" ? " urgent" : "") + '" data-v="' + ech(v.id) + '">' +
+      return '<div class="carte-v' + (p === "passe" ? " urgent" : "") + (est ? " ouverte" : "") +
+        '" data-v="' + ech(v.id) + '">' +
         '<div class="tt" data-plier="v' + ech(v.id) + '">' +
+        '<span class="ico">' + ICONE_VEH + "</span>" +
         '<span class="nom">' + ech(v.immat || "Immatriculation à saisir") +
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
