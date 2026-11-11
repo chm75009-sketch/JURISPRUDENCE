@@ -747,8 +747,14 @@
         : '<div class="vph-vide">' + ICONE_VEH + "</div>") +
       '<div class="vph-act">' +
       '<span class="vph-t">' + (ph ? "Photo ajoutée le " + ech(enFrancais(ph.le)) : "Photo du véhicule") + "</span>" +
-      '<input type="file" data-sans-base="1" data-photo="' + ech(v.id) + '" ' +
-      'accept="image/*,.jpg,.jpeg,.png,.heic" aria-label="Photo du véhicule">' +
+      '<div class="vph-boutons">' +
+      '<input type="file" data-sans-base="1" data-sans-nom="1" data-photo="' + ech(v.id) + '" ' +
+      'accept="image/*" capture="environment" data-libelle="Prendre une photo" ' +
+      'aria-label="Prendre une photo du véhicule">' +
+      '<input type="file" data-sans-base="1" data-sans-nom="1" data-photo="' + ech(v.id) + '" ' +
+      'accept="image/*,.jpg,.jpeg,.png,.heic" data-libelle="Choisir dans la galerie" ' +
+      'aria-label="Choisir une photo du véhicule dans la galerie">' +
+      "</div>" +
       (ph ? '<button type="button" class="lien" data-photo-sup="' + ech(v.id) + '">Retirer la photo</button>' : "") +
       "</div></div>";
   }

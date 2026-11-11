@@ -53,12 +53,16 @@
     var bouton = d.createElement(etiquette ? "span" : "button");
     if (!etiquette) bouton.type = "button";
     bouton.className = "cf-bouton";
-    bouton.textContent = libelle(e);
+    /* Un libellé sur mesure quand la page en demande un, « Prendre une photo »,
+       « Choisir dans la galerie », au lieu du « Choisir une photo » générique. */
+    bouton.textContent = e.getAttribute("data-libelle") || libelle(e);
     var nom = d.createElement("span");
     nom.className = "cf-nom";
     nom.textContent = vide(e);
     cadre.appendChild(bouton);
-    cadre.appendChild(nom);
+    /* « data-sans-nom » : pas de nom de fichier à côté du bouton, pour les
+       champs où un aperçu dit déjà ce qui a été choisi. */
+    if (!e.hasAttribute("data-sans-nom")) cadre.appendChild(nom);
 
     e.parentNode.insertBefore(cadre, e);
     e.style.display = "none";
