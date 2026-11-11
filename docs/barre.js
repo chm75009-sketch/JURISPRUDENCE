@@ -83,11 +83,29 @@
     catch (e) { return false; }
   }
 
+  /* LE CHEF DE PARC REVIENT TOUJOURS À SON TABLEAU DE BORD. Sa séance est
+     confinée au parc : un « retour historique » pourrait le laisser sur une
+     page qu'il ne doit pas revoir, ou ne rien faire dans l'application
+     installée. Pour ce role, le retour mène toujours, à coup sûr, au tableau de
+     bord du parc. Demande du 11 novembre 2026 : « quand je dis sinistre il me
+     donne la page de sinistre, mais je ne peux pas revenir en arrière ». */
+  function roleParc() {
+    try {
+      return (window.sessionStorage.getItem("seance-role") ||
+        window.localStorage.getItem("seance-role")) === "parc";
+    } catch (e) { return false; }
+  }
+
   function retourner(ev) {
     if (AVANT) {
       var reste = false;
       try { reste = AVANT() === true; } catch (e) { reste = false; }
       if (reste) { if (ev) ev.preventDefault(); return; }
+    }
+    if (roleParc() && (location.pathname.split("/").pop() || "") !== "parc-tableau.html") {
+      if (ev) ev.preventDefault();
+      location.href = "parc-tableau.html";
+      return;
     }
     if (interne() && history.length > 1) {
       if (ev) ev.preventDefault();
