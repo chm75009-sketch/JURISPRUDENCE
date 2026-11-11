@@ -635,8 +635,8 @@
     var tous = vehicules(), hote = $("vehicules");
     var fb = $("fbar"); if (fb) fb.hidden = tous.length < 2;
     if (!tous.length) {
-      hote.innerHTML = '<p class="rien">Aucun véhicule. Le bouton ci-dessus en ajoute un : ' +
-        "il suffit de l'immatriculation pour commencer.</p>";
+      hote.innerHTML = '<p class="rien">Aucun véhicule. Le bouton ci-dessous en ajoute un, ' +
+        "ou reprenez l'état de parc du client : il suffit de l'immatriculation pour commencer.</p>";
       majCount(0, 0);
       return;
     }

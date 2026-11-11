@@ -285,46 +285,10 @@
   <div class="compte" id="compte"></div>
 
   <section id="e-veh">
-    <div class="barre">
-      <button type="button" id="v-ajouter">+ Ajouter un véhicule</button>
-      <button type="button" class="second" id="v-annuler" hidden>Annuler la dernière importation</button>
-    </div>
-    <!-- « Vider la flotte » était posé à côté de « Ajouter un véhicule », sur
-         la même barre, à un pouce de distance sur un téléphone. Il passe
-         derrière un repli. Relevé le 27 septembre 2026. -->
-    <details class="repli" id="repli-vider" hidden>
-      <summary>Effacer</summary>
-      <div class="corps">
-        <p class="doux">Cette action retire tous les véhicules enregistrés sur cet appareil. Elle ne
-          se rattrape pas.</p>
-        <div class="barre">
-          <button type="button" class="second danger" id="v-vider">Vider la flotte</button>
-        </div>
-      </div>
-    </details>
-
-    <div id="jauge"></div>
-
-    <div id="acompleter"></div>
-
-    <!-- REPRENDRE L'ÉTAT DE PARC DU CLIENT. Personne ne retape quatre-vingt-dix
-         immatriculations : le classeur du client se lit, ses colonnes se
-         reconnaissent, et l'on voit ce qui va être ajouté avant que ce le soit.
-         Demande du 16 septembre 2026, avec l'état de parc de TEC. -->
-    <details class="repli" id="import">
-      <summary>Reprendre un état de parc</summary>
-      <div class="corps">
-        <p class="doux">Le classeur du client, tel qu'il est. Aucune ligne d'en-tête n'est
-          nécessaire : les colonnes sont reconnues sur leur contenu, et vous les corrigez avant
-          d'ajouter. Une immatriculation déjà présente n'est jamais ajoutée deux fois.</p>
-        <label class="champ"><span>Un fichier .xlsx ou .csv</span>
-          <input type="file" id="i-fichier" accept=".xlsx,.csv,.txt,.tsv"></label>
-        <label class="champ" style="margin-top:12px"><span>ou le tableau collé depuis Excel</span>
-          <textarea id="i-texte" placeholder="AA-142-NH	RENAULT	Camion	SOLDE"></textarea></label>
-        <div class="barre"><button type="button" class="second" id="i-lire">Lire ce tableau</button></div>
-        <div id="i-apercu"></div>
-      </div>
-    </details>
+    <!-- ON TOMBE DIRECTEMENT SUR LES VÉHICULES. La liste est le coeur de
+         l'écran : elle vient en premier, avec juste la recherche au-dessus. Le
+         réglage (ajouter, jauge, à compléter, reprendre un état de parc,
+         effacer) descend sous la liste. Demande du 11 novembre 2026. -->
 
     <!-- RECHERCHE, FILTRES ET TRI. Pour quatre-vingt-sept véhicules, on ne
          déroule pas : on cherche, on filtre, on trie. Demande du 10 novembre
@@ -353,6 +317,50 @@
     </div>
 
     <div id="vehicules"></div>
+
+    <!-- SOUS LA LISTE : AJOUTER, L'AVANCEMENT, CE QUI EST À COMPLÉTER,
+         REPRENDRE UN ÉTAT DE PARC, EFFACER. Le réglage ne passe plus avant les
+         véhicules. -->
+    <div class="barre" style="margin-top:22px">
+      <button type="button" id="v-ajouter">+ Ajouter un véhicule</button>
+      <button type="button" class="second" id="v-annuler" hidden>Annuler la dernière importation</button>
+    </div>
+
+    <div id="jauge"></div>
+
+    <div id="acompleter"></div>
+
+    <!-- REPRENDRE L'ÉTAT DE PARC DU CLIENT. Personne ne retape quatre-vingt-dix
+         immatriculations : le classeur du client se lit, ses colonnes se
+         reconnaissent, et l'on voit ce qui va être ajouté avant que ce le soit.
+         Demande du 16 septembre 2026, avec l'état de parc de TEC. -->
+    <details class="repli" id="import">
+      <summary>Reprendre un état de parc</summary>
+      <div class="corps">
+        <p class="doux">Le classeur du client, tel qu'il est. Aucune ligne d'en-tête n'est
+          nécessaire : les colonnes sont reconnues sur leur contenu, et vous les corrigez avant
+          d'ajouter. Une immatriculation déjà présente n'est jamais ajoutée deux fois.</p>
+        <label class="champ"><span>Un fichier .xlsx ou .csv</span>
+          <input type="file" id="i-fichier" accept=".xlsx,.csv,.txt,.tsv"></label>
+        <label class="champ" style="margin-top:12px"><span>ou le tableau collé depuis Excel</span>
+          <textarea id="i-texte" placeholder="AA-142-NH	RENAULT	Camion	SOLDE"></textarea></label>
+        <div class="barre"><button type="button" class="second" id="i-lire">Lire ce tableau</button></div>
+        <div id="i-apercu"></div>
+      </div>
+    </details>
+
+    <!-- « Vider la flotte » derrière un repli, loin de « Ajouter ». Relevé le
+         27 septembre 2026. -->
+    <details class="repli" id="repli-vider" hidden>
+      <summary>Effacer</summary>
+      <div class="corps">
+        <p class="doux">Cette action retire tous les véhicules enregistrés sur cet appareil. Elle ne
+          se rattrape pas.</p>
+        <div class="barre">
+          <button type="button" class="second danger" id="v-vider">Vider la flotte</button>
+        </div>
+      </div>
+    </details>
   </section>
 
   <section id="e-con" hidden>
