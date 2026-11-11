@@ -21,7 +21,7 @@
      de son espace. Chaque entrée mène à une page qui existe pour lui. */
   var DEST = [
     { nom: "Faire un entretien ou une réparation", ou: "Ouvrir un véhicule, onglet Entretien",
-      page: "flotte.html",
+      page: "flotte.html?faire=entretien",
       mots: "entretien entretenir reparation reparer vidange revision maintenance intervention panne depanner depannage travaux garage mecanique mecanicien pneu pneumatique frein freins plaquette plaquettes disque embrayage huile filtre courroie batterie ampoule eclairage amortisseur controler faire note cout" },
     { nom: "Déclarer un sinistre", ou: "Accident, bris de glace, vol...",
       page: "parc-sinistres.html",

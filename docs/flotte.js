@@ -571,8 +571,9 @@
     revision: 1, revisionKm: 1, extincteur: 1 };
   var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["entretien", "Entretien"], ["pieces", "Documents"]];
 
+  var tabParDefaut = "";   /* l'onglet sur lequel ouvrir une fiche, venu de la recherche */
   function corpsVehicule(v) {
-    var tab = vtabActif[v.id] || "infos";
+    var tab = vtabActif[v.id] || tabParDefaut || "infos";
     function champsDe(groupe) {
       return '<div class="gr">' + CHAMPS_V.filter(function (ch) {
         return (GR_ECH[ch.c] ? "ech" : "infos") === groupe;
@@ -651,7 +652,10 @@
       hote.innerHTML = '<p class="rien">Aucun véhicule ne correspond. Changez la recherche ou les filtres.</p>';
       return;
     }
-    hote.innerHTML = L.map(function (v) {
+    var rappel = tabParDefaut === "entretien"
+      ? '<p class="rappel-faire">Choisissez le camion concerné : sa fiche s\'ouvre sur l\'onglet Entretien, prête pour une intervention.</p>'
+      : "";
+    hote.innerHTML = rappel + L.map(function (v) {
       var E = echeancesVehicule(v), p = pire(E);
       var genre = "";
       GENRES.forEach(function (g) { if (g[0] === v.genre) genre = g[1]; });
@@ -1709,6 +1713,11 @@
       if (pr.get("etat")) { fEtat = pr.get("etat"); if ($("f-etat")) $("f-etat").value = fEtat; }
       if (pr.get("genre")) { fGenre = pr.get("genre"); if ($("f-genre")) $("f-genre").value = fGenre; }
       if (pr.get("q")) { fRecherche = pr.get("q"); if ($("f-rech")) $("f-rech").value = fRecherche; }
+      /* VENU DE LA RECHERCHE « FAIRE UN ENTRETIEN ». On ne peut pas saisir un
+         entretien sans savoir sur quel camion : la liste s'ouvre donc en « mode
+         entretien », un rappel en tête, et toute fiche ouverte tombe d'emblée
+         sur son onglet Entretien. */
+      if (pr.get("faire") === "entretien") tabParDefaut = "entretien";
       /* VENU DES DÉPENSES : OUVRIR UNE FICHE PRÉCISE. Un clic sur une dépense
          mène ici avec l'immatriculation, et l'onglet à montrer. On filtre sur
          cette immatriculation, on déplie sa fiche sur l'onglet voulu, et on y
