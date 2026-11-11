@@ -618,6 +618,7 @@
         if (fEtat === "depasse" && p !== "passe") return false;
         if (fEtat === "sanskm" && net(v.km)) return false;
         if (fEtat === "libre" && (v.genre === "remorque" || net(v.conducteur))) return false;
+        if (fEtat === "affecte" && !net(v.conducteur)) return false;
       }
       if (q) {
         var hay = (net(v.immat) + " " + net(v.marque) + " " + net(nomDe[v.conducteur] || "")).toLowerCase();

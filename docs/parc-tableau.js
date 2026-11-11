@@ -188,8 +188,8 @@
     var affectes = roulants.filter(function (v) { return net(v.conducteur); }).length;
     var libres = roulants.length - affectes;
     $("affectation").innerHTML = '<div class="tiles">' +
-      tile(affectes, "Affectés", affectes ? "vert" : "") +
-      tile(libres, "Libres", libres ? "ambre" : "", null, "flotte.html?etat=libre") + "</div>" +
+      tile(affectes, "Affectés", affectes ? "vert" : "", null, affectes ? "flotte.html?etat=affecte" : null) +
+      tile(libres, "Libres", libres ? "ambre" : "", null, libres ? "flotte.html?etat=libre" : null) + "</div>" +
       (V.length > roulants.length ? '<p class="rien">' + (V.length - roulants.length) +
         " remorque" + (V.length - roulants.length > 1 ? "s" : "") + ", comptée" +
         (V.length - roulants.length > 1 ? "s" : "") + " à part.</p>" : "");
