@@ -45,6 +45,10 @@
     typeDepense: ["Assurance et taxes", "Carburant", "Lubrifiant", "Maintenance",
       "Pièce de rechange", "Pneumatique", "Réparation", "Vidange", "Carrosserie", "Lavage",
       "Péage", "Contrôle technique"],
+    typePiece: ["Pneumatique", "Plaquettes de frein", "Disques de frein", "Filtre à huile",
+      "Filtre à air", "Filtre à carburant", "Courroie", "Batterie", "Embrayage", "Amortisseur",
+      "Éclairage, ampoule", "Essuie-glace", "Huile, lubrifiant", "Liquide de refroidissement",
+      "Pare-brise"],
     alertes: [
       { nom: "Fin d'assurance", jours: 45 },
       { nom: "Contrôle technique", jours: 30 },
@@ -109,6 +113,7 @@
       listeSimple("typeVehicule", "Type de véhicule", "Les genres de votre parc.") +
       listeSimple("marque", "Marque", "Les constructeurs présents dans le parc.") +
       listeSimple("typeDepense", "Type de dépense", "Les postes de coût, pour classer chaque dépense.") +
+      listeSimple("typePiece", "Type de pièce", "Les pièces posées, pour la liste déroulante d'une intervention.") +
       listeSimple("typeSinistre", "Type de sinistre", "Pour classer une déclaration de sinistre.") +
       listeAlertes() +
       listeSimple("maintenanceKm", "Paliers de maintenance, en kilomètres",

@@ -268,6 +268,7 @@
     { c: "km", lib: "Kilométrage", t: "num" },
     { c: "objet", lib: "Nature des travaux", t: "liste", parc: "typeDepense", large: true },
     { c: "par", lib: "Fait par (atelier interne ou prestataire)", t: "liste", parc: "entreprises", avant: ["Atelier interne"], large: true },
+    { c: "piece", lib: "Pièce posée", t: "liste", parc: "typePiece", large: true },
     { c: "heures", lib: "Main d'oeuvre interne, nombre d'heures", t: "dec" },
     { c: "taux", lib: "Taux horaire, en euros", t: "dec" },
     { c: "pieces", lib: "Coût des pièces, en euros", t: "dec" },
