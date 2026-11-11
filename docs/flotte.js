@@ -596,7 +596,7 @@
     else if (tab === "entretien") pan = interventionsHtml(v);
     else pan = piecesHtml(v) + '<div class="actions"><button type="button" class="second" data-sup="' +
       ech(v.id) + '">Retirer ce véhicule</button></div>';
-    return '<div class="corps">' + onglets + '<div class="vpan">' + pan + "</div></div>";
+    return '<div class="corps">' + photoHtml(v) + onglets + '<div class="vpan">' + pan + "</div></div>";
   }
 
   function prochaineEch(v) {
@@ -662,7 +662,8 @@
       return '<div class="carte-v' + (p === "passe" ? " urgent" : "") + (est ? " ouverte" : "") +
         '" data-v="' + ech(v.id) + '">' +
         '<div class="tt" data-plier="v' + ech(v.id) + '">' +
-        '<span class="ico">' + ICONE_VEH + "</span>" +
+        '<span class="ico' + (v.photo && v.photo.vignette ? " aphoto" : "") + '">' +
+        (v.photo && v.photo.vignette ? '<img src="' + ech(v.photo.vignette) + '" alt="">' : ICONE_VEH) + "</span>" +
         '<span class="nom">' + ech(v.immat || "Immatriculation à saisir") +
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
@@ -688,6 +689,7 @@
           if (c === "conducteur") lierVehiculeConducteur(v.id, val, avant);
         });
       brancherPieces(cadre, v.id);
+      brancherPhoto(cadre, v.id);
       brancherInterventions(cadre, v.id);
     });
   }
@@ -708,6 +710,72 @@
       }).join("") +
       '<p class="doux">Les documents déposés se retrouvent dans <a href="mes-documents.html">Mes documents</a>, ' +
       "rubrique Flotte.</p></div>";
+  }
+
+  /* LA PHOTO DU VÉHICULE. Le fichier plein va dans « Mes documents », comme
+     les pièces ; une petite vignette compressée reste sur la fiche et sert
+     d'image à la carte, sans alourdir le stockage. Demande du 11 novembre
+     2026 : « on peut ajouter la photo du camion à insérer ». */
+  function vignette(file, cb) {
+    try {
+      var r = new FileReader();
+      r.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var max = 420, w = img.width || 1, h = img.height || 1;
+          var sc = Math.min(1, max / Math.max(w, h));
+          var cw = Math.max(1, Math.round(w * sc)), ch = Math.max(1, Math.round(h * sc));
+          try {
+            var cv = document.createElement("canvas"); cv.width = cw; cv.height = ch;
+            cv.getContext("2d").drawImage(img, 0, 0, cw, ch);
+            cb(cv.toDataURL("image/jpeg", 0.72));
+          } catch (e) { cb(""); }
+        };
+        img.onerror = function () { cb(""); };
+        img.src = r.result;
+      };
+      r.onerror = function () { cb(""); };
+      r.readAsDataURL(file);
+    } catch (e) { cb(""); }
+  }
+
+  function photoHtml(v) {
+    var ph = v.photo;
+    return '<div class="vphoto">' +
+      (ph && ph.vignette
+        ? '<img class="vph-img" src="' + ech(ph.vignette) + '" alt="Photo du véhicule">'
+        : '<div class="vph-vide">' + ICONE_VEH + "</div>") +
+      '<div class="vph-act">' +
+      '<span class="vph-t">' + (ph ? "Photo ajoutée le " + ech(enFrancais(ph.le)) : "Photo du véhicule") + "</span>" +
+      '<input type="file" data-sans-base="1" data-photo="' + ech(v.id) + '" ' +
+      'accept="image/*,.jpg,.jpeg,.png,.heic" aria-label="Photo du véhicule">' +
+      (ph ? '<button type="button" class="lien" data-photo-sup="' + ech(v.id) + '">Retirer la photo</button>' : "") +
+      "</div></div>";
+  }
+
+  function brancherPhoto(cadre, idV) {
+    Array.prototype.forEach.call(cadre.querySelectorAll("[data-photo]"), function (el) {
+      el.addEventListener("change", function () {
+        var f = el.files && el.files[0];
+        if (!f) return;
+        var v = null; vehicules().forEach(function (x) { if (x.id === idV) v = x; });
+        vignette(f, function (vig) {
+          function poser(idDoc) {
+            var T = vehicules();
+            T.forEach(function (x) {
+              if (x.id === idV) x.photo = { nom: f.name, le: iso(new Date()), doc: idDoc || 0, vignette: vig || "" };
+            });
+            garderVehicules(T);
+            rendre();
+          }
+          if (window.Documents && window.Documents.disponible()) {
+            window.Documents.enregistrer("flotte", { nom: f.name, sorte: "depose", type: f.type || "",
+              contenu: f, note: "Photo du véhicule - " + ((v && v.immat) || "véhicule sans immatriculation") })
+              .then(function (l) { poser(l.id); }, function () { poser(0); });
+          } else poser(0);
+        });
+      });
+    });
   }
 
   function brancherPieces(cadre, idV) {
@@ -1516,6 +1584,16 @@
         rendre();
         var carte = document.querySelector('[data-v="' + vid + '"]');
         if (carte && carte.scrollIntoView) carte.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      var pph = ev.target.closest ? ev.target.closest("[data-photo-sup]") : null;
+      if (pph) {
+        if (!window.confirm("Retirer la photo de ce véhicule ?")) return;
+        var idph = pph.getAttribute("data-photo-sup");
+        var Tph = vehicules();
+        Tph.forEach(function (x) { if (x.id === idph) delete x.photo; });
+        garderVehicules(Tph);
+        rendre();
         return;
       }
       var ps = ev.target.closest ? ev.target.closest("[data-piece-sup]") : null;

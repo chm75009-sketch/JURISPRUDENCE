@@ -89,6 +89,19 @@
   .carte-v > .tt .ico{width:40px;height:40px;border-radius:12px;background:var(--accent-clair);
     color:var(--accent);display:flex;align-items:center;justify-content:center}
   .carte-v > .tt .ico svg{width:21px;height:21px}
+  .carte-v > .tt .ico.aphoto{background:none;overflow:hidden}
+  .carte-v > .tt .ico img{width:100%;height:100%;object-fit:cover}
+
+  /* LA PHOTO DU VÉHICULE, en tête de la fiche ouverte. */
+  .vphoto{display:flex;gap:14px;align-items:center;margin:0 0 var(--e3);padding:0 0 14px;
+    border-bottom:1px solid var(--filet)}
+  .vphoto .vph-img{width:104px;height:78px;object-fit:cover;border-radius:12px;flex:0 0 auto;background:var(--creux)}
+  .vphoto .vph-vide{width:104px;height:78px;border-radius:12px;flex:0 0 auto;background:var(--accent-clair);
+    color:var(--accent);display:flex;align-items:center;justify-content:center}
+  .vphoto .vph-vide svg{width:34px;height:34px}
+  .vphoto .vph-act{display:flex;flex-direction:column;gap:7px;align-items:flex-start;min-width:0}
+  .vphoto .vph-t{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .vphoto .lien{background:none;border:0;color:var(--rouge);font:600 var(--t1) system-ui;cursor:pointer;padding:0}
   .carte-v.urgent > .tt .ico{background:var(--rouge-clair);color:var(--rouge)}
   .carte-v > .tt .nom{font:700 var(--t4)/1.2 system-ui;letter-spacing:.02em}
   .carte-v > .tt .sous{display:block;font:400 var(--t2)/1.4 system-ui;color:var(--texte-2);
