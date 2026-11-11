@@ -114,6 +114,12 @@ et du 31 août 2026. C'est ce qui la rend présente à la session suivante, ce
 fichier étant relu à chaque démarrage. Une faute non écrite est une faute qui
 recommencera.
 
+Cas mesuré le 11 novembre 2026 - le courrier aux locataires. L'utilisatrice a dicté
+une phrase à ajouter, « Au-delà de cette date, vous occuperiez le logement sans droit
+ni titre, », qui finissait par une virgule. J'ai complété de moi-même par « et nous
+serions contraints d'engager les démarches nécessaires ». Une phrase dictée s'écrit
+telle quelle : une virgule finale n'est pas une invitation à finir la phrase.
+
 Cas mesuré du 30 août au 2 septembre 2026 : sur une semaine, la règle des deux
 ou trois phrases a été enfreinte à presque chaque réponse, avec titres, listes
 et tableaux non demandés, au point que l'utilisatrice a dû redemander les
