@@ -274,7 +274,7 @@
     { c: "objet", lib: "Nature des travaux", t: "liste", parc: "typeDepense", large: true },
     { c: "par", lib: "Fait par (atelier interne ou prestataire)", t: "liste", parc: "entreprises", avant: ["Atelier interne"], large: true },
     { c: "piece", lib: "Pièce posée", t: "liste", parc: "typePiece", large: true },
-    { c: "heures", lib: "Main d'oeuvre interne, nombre d'heures", t: "dec" },
+    { c: "heures", lib: "Main d'oeuvre interne, nombre d'heures", t: "heures" },
     { c: "taux", lib: "Taux horaire, en euros", t: "dec" },
     { c: "pieces", lib: "Coût des pièces, en euros", t: "dec" },
     { c: "sous", lib: "Sous-traitance, en euros", t: "dec" },
@@ -819,10 +819,33 @@
 
   /* ────────────────── L'ENTRETIEN ET LES COÛTS DU VÉHICULE ───────────────── */
 
+  /* « 1 h 30 » plutôt que « 1,5 » : le temps passé se dit en heures et demies. */
+  function labelH(x) {
+    if (x === 0) return "0";
+    var ent = Math.floor(x), demi = (x - ent) >= 0.5;
+    if (ent === 0) return "30 min";
+    return ent + " h" + (demi ? " 30" : "");
+  }
+
   function champIHtml(ch, valeur, pref) {
     var id = pref + "-" + ch.c, v = net(valeur);
     var h = '<label' + (ch.large ? ' class="large"' : "") + '><span>' + ech(ch.lib) + "</span>";
-    if (ch.t === "liste") {
+    if (ch.t === "heures") {
+      /* Le nombre d'heures : une liste par demi-heures, de 30 min à 12 h, et
+         « Autres » pour une durée hors palier. Demande du 11 novembre 2026. */
+      var pas = []; for (var hh = 0; hh <= 12.00001; hh += 0.5) pas.push(Math.round(hh * 2) / 2);
+      var vn = v === "" ? null : fnum(v);
+      var dansH = vn != null && pas.indexOf(vn) >= 0, autreH = vn != null && !dansH;
+      h += '<select data-chi-sel="' + ch.c + '" id="' + id + '-sel">' +
+        '<option value="">- à préciser -</option>' +
+        pas.map(function (s) {
+          return '<option value="' + s + '"' + (dansH && s === vn ? " selected" : "") + ">" + ech(labelH(s)) + "</option>";
+        }).join("") +
+        '<option value="__autre"' + (autreH ? " selected" : "") + ">Autres</option></select>" +
+        '<input type="text" inputmode="decimal" data-chi-txt="' + ch.c + '" id="' + id + '" ' +
+        'placeholder="Nombre d\'heures" value="' + ech(autreH ? v : "") + '"' + (autreH ? "" : " hidden") +
+        ' style="margin-top:8px">';
+    } else if (ch.t === "liste") {
       /* Une liste déroulante tirée des paramètres du parc, plus « Autres » qui
          ouvre un champ libre. Demande du 10 novembre 2026. */
       var opts = (ch.avant || []).concat(parcListe(ch.parc) || []);
@@ -927,10 +950,11 @@
         sel.addEventListener("change", function () {
           if (sel.value === "__autre") { if (txt) { txt.hidden = false; txt.focus(); } setVal(idx, key, txt ? net(txt.value) : ""); }
           else { if (txt) { txt.hidden = true; txt.value = ""; } setVal(idx, key, sel.value); }
+          majCout(cadre, idV);
         });
       });
       Array.prototype.forEach.call(carte.querySelectorAll("[data-chi-txt]"), function (txt) {
-        txt.addEventListener("input", function () { setVal(idx, txt.getAttribute("data-chi-txt"), txt.value); });
+        txt.addEventListener("input", function () { setVal(idx, txt.getAttribute("data-chi-txt"), txt.value); majCout(cadre, idV); });
       });
     });
   }
