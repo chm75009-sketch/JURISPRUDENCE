@@ -621,8 +621,25 @@
         if (fEtat === "affecte" && !net(v.conducteur)) return false;
       }
       if (q) {
-        var hay = (net(v.immat) + " " + net(v.marque) + " " + net(nomDe[v.conducteur] || "")).toLowerCase();
-        if (hay.indexOf(q) < 0) return false;
+        /* L'IMMATRICULATION SE CHERCHE PAR SON DÉBUT. « B » doit rendre les
+           plaques qui commencent par B, pas celles qui contiennent un B au
+           milieu. On compare la plaque sans tirets ni espaces. La marque et le
+           nom du conducteur, eux, se cherchent n'importe où dans le mot.
+           Demande du 11 novembre 2026. */
+        var qn = q.replace(/[^a-z0-9]/g, "");
+        var immat = net(v.immat).toLowerCase().replace(/[^a-z0-9]/g, "");
+        var marque = net(v.marque).toLowerCase();
+        var cond = net(nomDe[v.conducteur] || "").toLowerCase();
+        /* Une seule lettre : le début de la plaque, et rien d'autre, pour ne pas
+           ramener une marque qui contient cette lettre. Dès deux caractères, on
+           cherche aussi le milieu de la plaque, la marque et le conducteur. */
+        var ok = qn && immat.indexOf(qn) === 0;
+        if (!ok && q.length >= 2) {
+          ok = (qn && immat.indexOf(qn) >= 0) ||
+            (marque && marque.indexOf(q) >= 0) ||
+            (cond && cond.indexOf(q) >= 0);
+        }
+        if (!ok) return false;
       }
       return true;
     });
