@@ -167,9 +167,53 @@ def construire(elements, chemin, auteur=None, titre=None):
         s.left_margin = s.right_margin = Cm(2.2)
         s.top_margin = s.bottom_margin = Cm(2.0)
 
+    _entete(doc)
     _proprietes(doc, auteur, titre)
     doc.save(chemin)
     return chemin
+
+
+def _entete(doc):
+    """LA PAGINATION DANS L'EN-TÊTE : « Page X sur Y », à droite.
+
+    Les documents de l'utilisatrice la portent, et elle la veut partout, à
+    l'identique. Relevé le 13 novembre 2026, après que mes documents sont sortis
+    sans aucune pagination. On la pose une fois ici, pour tous les documents."""
+    XMLSPACE = "{http://www.w3.org/XML/1998/namespace}space"
+
+    def _run(txt):
+        r = OxmlElement("w:r")
+        rpr = OxmlElement("w:rPr")
+        sz = OxmlElement("w:sz")
+        sz.set(qn("w:val"), "20")
+        rpr.append(sz)
+        r.append(rpr)
+        t = OxmlElement("w:t")
+        t.set(XMLSPACE, "preserve")
+        t.text = txt
+        r.append(t)
+        return r
+
+    def _champ(instr):
+        f = OxmlElement("w:fldSimple")
+        f.set(qn("w:instr"), instr)
+        r = OxmlElement("w:r")
+        t = OxmlElement("w:t")
+        t.text = "1"
+        r.append(t)
+        f.append(r)
+        return f
+
+    for s in doc.sections:
+        s.header.is_linked_to_previous = False
+        p = s.header.paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        for r in list(p.runs):
+            r._element.getparent().remove(r._element)
+        p._p.append(_run("Page "))
+        p._p.append(_champ("PAGE"))
+        p._p.append(_run(" sur "))
+        p._p.append(_champ("NUMPAGES"))
 
 
 def _proprietes(doc, auteur=None, titre=None):
