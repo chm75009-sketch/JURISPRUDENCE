@@ -207,7 +207,7 @@ def _entete(doc):
     for s in doc.sections:
         s.header.is_linked_to_previous = False
         p = s.header.paragraphs[0]
-        p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         for r in list(p.runs):
             r._element.getparent().remove(r._element)
         p._p.append(_run("Page "))
