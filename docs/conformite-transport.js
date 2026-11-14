@@ -371,14 +371,27 @@
     return "";
   }
 
-  /* Porter au suivi les anomalies tirées de la carte, sans doublon : une même
-     date et un même type ne se réinscrivent pas. Rend le nombre ajouté. */
+  /* Un fait relève-t-il de la conduite du salarié ? On n'inscrit pas au suivi
+     disciplinaire une coupure d'alimentation ou un chevauchement horaire, qui
+     sont techniques, ni une journée illisible, ni un calcul seulement indicatif. */
+  function faitDeConduite(a) {
+    var t = (a.type || "").toLowerCase();
+    return /sans carte|insertion de la carte|mal cl|non cl|retir|dépassement de la conduite|conduite continue/.test(t);
+  }
+
+  /* Porter au suivi les anomalies tirées de la carte ou du rapport, sans doublon :
+     une même date et un même type ne se réinscrivent pas. Rend le nombre ajouté.
+     Les anomalies issues de la lecture de carte portent une source (appareil,
+     calcul, lecture) : on n'inscrit alors que les faits de conduite du salarié,
+     pour ne pas noyer le suivi avec le technique, l'indicatif ou l'illisible. Les
+     anomalies d'un rapport (sans source) sont déjà des infractions : on les garde. */
   function importerAnomalies(id, anomalies) {
     if (!id || !anomalies || !anomalies.length) return 0;
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
     s.anomalies = s.anomalies || [];
     var n = 0;
     anomalies.forEach(function (a) {
+      if (a.source && (a.source !== "appareil" || !faitDeConduite(a))) return;
       var existe = s.anomalies.some(function (x) {
         return (x.date || "") === (a.date || "") && (x.type || "") === (a.type || "");
       });
