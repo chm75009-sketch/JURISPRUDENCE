@@ -444,12 +444,12 @@
     if (sm) { var idsm = sm.getAttribute("data-sup-mes");
       CT.supprimerMesure(idsm, +sm.getAttribute("data-i")); peindreConducteurs(); reouvrir(idsm); return; }
   });
-  /* Le rapport de correspondance porte plusieurs conducteurs : on ventile chaque
-     conduite sans carte au conducteur du registre dont le nom correspond, par les
-     mots partagés (au moins deux, sans ambiguïté). Ce qui ne se rattache pas
-     - conducteur hors effectif, ou conduite sans carte sur un véhicule sans
-     session de carte encadrante - est listé à part, à confirmer à la main. */
-  function dispatcherCorrespondance(anoms) {
+  /* Un rapport multi-conducteurs (correspondance, infractions) porte le nom du
+     conducteur sur chaque anomalie. On ventile chacune au conducteur du registre
+     dont le nom correspond, par les mots partagés (au moins deux, sans
+     ambiguïté). Ce qui ne se rattache pas - conducteur hors effectif, ou nom
+     manquant - est listé à part, à confirmer à la main. */
+  function ventilerParNom(anoms) {
     var sals = (CT && CT.salaries) ? CT.salaries() : [];
     function toks(s) {
       return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
@@ -469,22 +469,47 @@
       if (best && bestN >= 2 && !tie) { (groupes[best.id] = groupes[best.id] || []).push(a); }
       else nonRattaches.push(a);
     });
-    var lignesMsg = [];
-    Object.keys(groupes).forEach(function (id) {
-      var n = CT.importerAnomalies(id, groupes[id]);
-      var sal = salToks.filter(function (s) { return s.id === id; })[0] || { nom: id };
-      lignesMsg.push("- " + sal.nom + " : " + n + " conduite(s) sans carte");
+    return { groupes: groupes, nonRattaches: nonRattaches,
+      nomDe: function (id) { var s = salToks.filter(function (x) { return x.id === id; })[0]; return s ? s.nom : id; } };
+  }
+
+  function messageNonRattaches(nonRattaches, intro) {
+    if (!nonRattaches.length) return "";
+    var noms = {};
+    nonRattaches.forEach(function (a) { var c = a.conducteur || "conducteur à confirmer"; noms[c] = (noms[c] || 0) + 1; });
+    return "\n\n" + intro + " :\n" +
+      Object.keys(noms).map(function (c) { return "- " + c + " : " + noms[c]; }).join("\n");
+  }
+
+  function dispatcherCorrespondance(anoms) {
+    var v = ventilerParNom(anoms), lignesMsg = [];
+    Object.keys(v.groupes).forEach(function (id) {
+      var n = CT.importerAnomalies(id, v.groupes[id]);
+      lignesMsg.push("- " + v.nomDe(id) + " : " + n + " conduite(s) sans carte");
     });
     peindreConducteurs();
     var msg = "Rapport de correspondance : " + (anoms || []).length + " conduites sans carte lues.\n\n" +
       (lignesMsg.length ? "Rattachées au registre :\n" + lignesMsg.join("\n")
         : "Aucune n'a pu être rattachée à un conducteur du registre.");
-    if (nonRattaches.length) {
-      var noms = {};
-      nonRattaches.forEach(function (a) { var c = a.conducteur || "conducteur à confirmer"; noms[c] = (noms[c] || 0) + 1; });
-      msg += "\n\nÀ confirmer (hors effectif, ou véhicule sans session de carte) :\n" +
-        Object.keys(noms).map(function (c) { return "- " + c + " : " + noms[c]; }).join("\n");
-    }
+    msg += messageNonRattaches(v.nonRattaches, "À confirmer (hors effectif, ou véhicule sans session de carte)");
+    alert(msg);
+  }
+
+  function dispatcherInfractions(anoms) {
+    var v = ventilerParNom(anoms), lignesMsg = [];
+    Object.keys(v.groupes).forEach(function (id) {
+      var grp = v.groupes[id], n = CT.importerAnomalies(id, grp);
+      var graves = grp.filter(function (a) { return a.grave; }).length;
+      lignesMsg.push("- " + v.nomDe(id) + " : " + n + " infraction(s)" +
+        (graves ? " dont " + graves + " grave(s)" : ""));
+    });
+    peindreConducteurs();
+    lignesMsg.sort();
+    var msg = "Rapport d'infractions : " + (anoms || []).length + " infraction(s) lue(s) pour " +
+      Object.keys(v.groupes).length + " conducteur(s).\n\n" +
+      (lignesMsg.length ? "Portées au registre :\n" + lignesMsg.join("\n")
+        : "Aucune n'a pu être rattachée à un conducteur du registre.");
+    msg += messageNonRattaches(v.nonRattaches, "À confirmer (conducteur hors effectif)");
     alert(msg);
   }
 
@@ -495,6 +520,14 @@
       var buf = fr.result, tete = new Uint8Array(buf.slice(0, 5));
       var estPdf = /\.pdf$/i.test(f.name) ||
         (tete[0] === 0x25 && tete[1] === 0x50 && tete[2] === 0x44 && tete[3] === 0x46);
+      /* Un classeur Excel ou un texte : on ne le lit pas, on le dit. */
+      if (/\.(xlsx|xls|xlsm|csv|txt|docx?)$/i.test(f.name) ||
+          (tete[0] === 0x50 && tete[1] === 0x4b && !estPdf)) {
+        alert("Ce fichier n'est pas lu ici. Déposez la carte du conducteur (.ddd ou .C1B), " +
+          "le relevé de correspondance ou le rapport d'infractions en PDF. Un classeur ou une note " +
+          "d'analyse ne sont pas des relevés tachygraphe.");
+        return;
+      }
       function importe(anoms) {
         var n = CT.importerAnomalies(id, anoms || []);
         peindreConducteurs(); reouvrir(id);
@@ -506,13 +539,24 @@
         window.LectureRapport.lire(buf).then(function (rap) {
           var anoms = window.LectureRapport.anomalies(rap);
           if (rap.source === "pdf-correspondance") dispatcherCorrespondance(anoms);
-          else importe(anoms);
+          else if (rap.source === "pdf-infractions") dispatcherInfractions(anoms);
+          else if (!anoms.length) {
+            alert("Ce PDF a été lu, mais ce n'est ni un relevé d'infractions, ni un relevé de " +
+              "correspondance, ni un rapport d'analyse reconnu (peut-être un graphique journalier " +
+              "ou un relevé de géolocalisation). Aucune infraction n'en a été tirée.");
+          } else importe(anoms);
         }).catch(function (err) { alert("PDF illisible : " + (err && err.message || err)); });
         return;
       }
       if (!window.LectureCarte) { alert("Le lecteur de carte n'est pas disponible."); return; }
       try {
         var carte = window.LectureCarte.lire(buf);
+        if (!carte.identification) {
+          alert("Ce fichier n'est pas une carte conducteur exploitable. C'est sans doute un " +
+            "téléchargement d'unité véhicule (.V1B) ou un fichier d'un autre type. Déposez la carte " +
+            "du conducteur (.ddd ou .C1B).");
+          return;
+        }
         importe(window.LectureCarte.analyser(carte).anomalies);
       } catch (err) { alert("Fichier illisible : " + err.message); }
     };

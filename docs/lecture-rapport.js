@@ -214,29 +214,180 @@
       var reste = (md[4] || "").replace(/ /g, " ");
       var prev = (txts[i - 1] || "").trim();
       var next = (txts[i + 1] || "").trim();
-      if (/Carte conducteur non ins[eé]r/i.test(prev)) {
-        /* conduite sans carte : km = dernier entier de la ligne, conducteur =
-           celui de la dernière session de carte du même véhicule */
-        var nums = reste.match(/\d{1,4}/g) || [];
+      /* Deux dispositions selon le producteur du PDF. B : tout l'enregistrement
+         sur une ligne, « Carte conducteur non insérée » dans la ligne même.
+         A : l'enregistrement est éclaté sur trois lignes, le libellé « Carte
+         conducteur non insérée » tient seul sur la ligne du dessus, qui ne
+         porte pas les deux horodatages. On ne retient prev que s'il n'est pas
+         lui-même une ligne d'enregistrement, sans quoi une session suivant une
+         conduite sans carte serait prise pour une conduite sans carte. */
+      var sansCarte = /Carte conducteur non ins[eé]r/i.test(reste) ||
+        (/Carte conducteur non ins[eé]r/i.test(prev) && !RE_PAIRE.test(prev));
+      if (sansCarte) {
+        /* conduite sans carte : km = dernier entier de la ligne (après avoir
+           ôté les durées en H:MM), conducteur = celui de la dernière session de
+           carte du même véhicule */
+        var nums = reste.replace(/\d{1,2}:\d{2}/g, " ").match(/\d{1,4}/g) || [];
         var km = nums.length ? parseInt(nums[nums.length - 1], 10) : null;
         out.push({ vehicule: veh, conducteur: dernier, date: date, km: km });
       } else {
-        /* une session de carte : en données définitives le nom est sur la ligne
-           des dates ; en données non définitives il est scindé entre la ligne
-           du dessus (prénom, avant « Données ») et celle du dessous (nom). */
-        var nom = motsNom(reste).join(" ").trim();
+        /* une session de carte. B : le nom est sur la ligne même, avant
+           « Données non définitives ». A : le nom est sur la ligne, ou scindé
+           entre la ligne du dessus (prénom, avant « Données ») et celle du
+           dessous (nom). */
+        var nom = nomSession(reste);
         if (!nom && /Donn[ée]es/i.test(prev)) {
           var prenom = prev.split(/Donn[ée]es|Dernier|error|!/i)[0].trim();
           var suite = next.replace(/\s*\d{1,2}:\d{2}.*$/, "").trim();
           nom = motsNom(prenom + " " + suite).join(" ").trim();
         }
         if (nom && nom.length <= 40 &&
-            !/TachoSAFE|Szoft|Developed|Design|Correspondance|Fuseau|Total|Donn[ée]es/i.test(nom)) {
+            !/TachoSAFE|Szoft|Developed|Design|Correspondance|Fuseau|Total|Donn[ée]es|Carte/i.test(nom)) {
           dernier = nom;
         }
       }
     }
     return out;
+  }
+  /* Le nom d'une session, pris avant « Données non définitives » ou la mention
+     de dernier téléchargement. */
+  function nomSession(s) {
+    var base = String(s || "").split(/Donn[ée]es|Dernier t[ée]l[ée]chargement|error|!/i)[0];
+    return motsNom(base).join(" ").trim();
+  }
+
+  /* ───────────────── le rapport « RAPPORT D'INFRACTIONS » ──────────────────
+     Le relevé mensuel produit par TachoSAFE, une section par conducteur. Chaque
+     section ouvre sur « Nom du conducteur », « Numéro de carte », « Période
+     sélectionnée », puis un tableau récapitulatif par code, puis le détail : une
+     ligne par infraction, avec date de début, date de fin parfois, code, durée,
+     norme, écart, et la gravité marquée par un point dans l'une des quatre
+     colonnes IM, IG, ITG, IPG. Le point est rendu par pdf.js comme un fragment
+     vide placé à l'abscisse de sa colonne : on lit donc la colonne, pas le
+     texte. Les descriptions des codes sont celles que le rapport imprime
+     lui-même, reprises mot pour mot. */
+
+  var CODES_INFRA = {
+    "2006/561/6.1a": "Dépassement de la durée de conduite journalière de 9 h lorsque l'extension à 10 h n'est pas autorisée.",
+    "2006/561/6.1b": "Dépassement de la durée de conduite journalière de 10 h lorsque l'extension est autorisée.",
+    "2006/561/6.2":  "Dépassement de la durée de conduite hebdomadaire.",
+    "2006/561/6.3":  "Dépassement de la durée totale de conduite sur deux semaines consécutives.",
+    "2006/561/7.0":  "Dépassement de la durée maximale de conduite continue.",
+    "2006/561/8.2a": "Repos journalier insuffisant de moins de 11 heures lorsqu'un repos journalier réduit n'est pas autorisé.",
+    "2006/561/8.2b": "Repos journalier réduit insuffisant de moins de 9 h lorsqu'un repos journalier réduit est autorisé.",
+    "2006/561/8.5":  "Repos journalier insuffisant de moins de 9 h en équipage multiple.",
+    "2006/561/8.6a": "Repos hebdomadaire insuffisant de moins de 45 h lorsqu'un repos hebdomadaire réduit n'est pas autorisé.",
+    "2006/561/8.6b": "Repos hebdomadaire insuffisant de moins de 45 h lorsqu'un repos hebdomadaire réduit est autorisé.",
+    "2006/561/8.6d": "Compensation insuffisante d'un repos hebdomadaire réduit.",
+    "2002/15/EC/15.7.1":  "Dépassement de la durée quotidienne de travail de 10 heures sur une période de 24 heures lorsqu'un travail de nuit est effectué et qu'aucune dérogation au titre de l'article 8 n'a été accordée.",
+    "2002/15/EC/15.5.1a": "Le temps de travail doit être interrompu par une pause d'au moins 30 minutes lorsque la durée totale du travail est comprise entre six et neuf heures.",
+    "2002/15/EC/15.5.1b": "Pause obligatoire insuffisante lorsque le temps de travail dépasse 9 heures.",
+    "2002/15/EC/15.4a": "Dépassement de la durée maximale hebdomadaire de travail de 48 h lorsque la possibilité d'extension à 60 h a déjà été utilisée.",
+    "2002/15/EC/15.4b": "Dépassement de la durée maximale hebdomadaire de travail de 60 h lorsqu'aucune dérogation au titre de l'article 8 n'a été accordée.",
+  };
+  function cleCode(c) { return String(c || "").replace(/_/g, "."); }
+
+  function estInfractions(textes) {
+    var s = textes.join(" ");
+    return /RAPPORT D.?INFRACTIONS/i.test(s) ||
+      (/Nom du conducteur/i.test(s) && /L[ée]gislation s[ée]lectionn[ée]e/i.test(s));
+  }
+
+  /* Un fragment est une date horodatée « JJ/MM/AAAA HH:MM ». */
+  var RE_DATEH = /^(\d{2})\/(\d{2})\/(\d{4})\s+\d{1,2}:\d{2}$/;
+  /* Un code de législation : « 2006/561/7.0 » ou « 2002/15/EC/15.7_1 ». */
+  function estCodeInfra(s) { return /\/(561|EC)\//.test(s) && /\d/.test(s); }
+  /* Une valeur de durée : « 10:00 », « 0:13 », « 40:23 » ou « --:-- ». */
+  function estHeure(s) { return /^(--:--|\d{1,3}:\d{2})$/.test(s); }
+
+  /* Les abscisses des quatre colonnes de gravité du tableau de détail
+     (en-têtes IM, IG, ITG, IPG), lues sur la ligne d'en-tête. */
+  function colonnesInfra(rang) {
+    var col = {};
+    rang.its.forEach(function (it) {
+      var s = (it.str || "").trim();
+      if (GRAVITE[s] && col[s] == null) col[s] = x(it) + (it.width || 0) / 2;
+    });
+    return col;
+  }
+
+  /* La gravité d'une ligne de détail : le point (fragment vide) posé à droite
+     de la colonne « Différence », dans l'une des quatre colonnes. On prend la
+     colonne la plus proche de ce fragment. */
+  function graviteInfra(rang, col) {
+    if (!col) return null;
+    var ordre = ["IM", "IG", "ITG", "IPG"], best = null, bestD = 10;
+    rang.its.forEach(function (it) {
+      /* le point de gravité est un glyphe d'une police d'icônes, dans la zone à
+         usage privé (U+E000 et au delà), et non un espace ou un tiret. */
+      var s = it.str || "";
+      if (!(s.length >= 1 && s.charCodeAt(0) >= 0xE000)) return;
+      var cx = x(it); if (!(cx > 485)) return;
+      ordre.forEach(function (k) {
+        if (col[k] == null) return;
+        var d = Math.abs(col[k] - cx);
+        if (d < bestD) { bestD = d; best = k; }
+      });
+    });
+    return best ? GRAVITE[best] : null;
+  }
+
+  /* Une ligne de détail, lue par abscisses : les dates à gauche, le code, puis
+     les trois durées (durée relevée, norme, écart), puis la gravité. */
+  function parseLigneInfra(rang, col) {
+    var its = rang.its.slice().sort(function (a, b) { return x(a) - x(b); });
+    var dates = [], code = null, heures = [];
+    its.forEach(function (it) {
+      var s = (it.str || "").trim();
+      if (!s) return;
+      if (RE_DATEH.test(s)) { dates.push({ x: x(it), s: s }); return; }
+      if (!code && estCodeInfra(s)) { code = s; return; }
+      if (code && estHeure(s)) heures.push(s);
+    });
+    if (!code || !dates.length) return null;
+    function iso(s) { var m = s.match(RE_DATEH); return m[3] + "-" + m[2] + "-" + m[1]; }
+    var debut = iso(dates[0].s);
+    var fin = dates.length > 1 ? iso(dates[1].s) : null;
+    var duree = heures[0] || null, norme = heures[1] || null, ecart = heures[2] || null;
+    return { date: debut, dateFin: fin, code: code,
+      duree: duree, norme: norme, ecart: ecart, gravite: graviteInfra(rang, col) };
+  }
+
+  function dedoublonnerInfra(L) {
+    var vus = {}, out = [];
+    L.forEach(function (i) {
+      var cle = [i.date, i.dateFin, cleCode(i.code), i.duree].join("|");
+      if (vus[cle]) return;
+      vus[cle] = true; out.push(i);
+    });
+    return out;
+  }
+
+  /* Le découpage en sections conducteur. Les rangs arrivent dans l'ordre de
+     lecture (haut vers le bas, page après page). Une section s'ouvre à
+     « Nom du conducteur », et tout le détail qui suit lui revient, jusqu'au
+     conducteur suivant. L'en-tête de détail fixe les colonnes de gravité. */
+  function parseInfractions(rangs) {
+    var conducteurs = [], cur = null, col = null;
+    rangs.forEach(function (r) {
+      var t = r.texte || "";
+      var mn = t.match(/Nom du conducteur\s+(.+)$/i);
+      if (mn) { cur = { nom: mn[1].trim(), numero: "", periode: "", infractions: [] };
+        conducteurs.push(cur); col = null; return; }
+      if (!cur) return;
+      var mc = t.match(/Num[ée]ro de carte\s+(\S+)/i);
+      if (mc) { cur.numero = mc[1]; return; }
+      var mp = t.match(/P[ée]riode s[ée]lectionn[ée]e\s+(.+)$/i);
+      if (mp) { cur.periode = mp[1].trim(); return; }
+      if (/Date de d[ée]but/i.test(t) && /\bIM\b/.test(t)) { col = colonnesInfra(r); return; }
+      if (RE_DATEH.test((t.match(/^\d{2}\/\d{2}\/\d{4}\s+\d{1,2}:\d{2}/) || [""])[0]) ) {
+        if (!estCodeInfra(t)) return;
+        var inf = parseLigneInfra(r, col);
+        if (inf) cur.infractions.push(inf);
+      }
+    });
+    conducteurs.forEach(function (c) { c.infractions = dedoublonnerInfra(c.infractions); });
+    return conducteurs.filter(function (c) { return c.infractions.length; });
   }
 
   function lire(buf) {
@@ -246,13 +397,13 @@
     }).then(function (doc) {
       var pages = [];
       for (var p = 1; p <= doc.numPages; p++) pages.push(p);
-      var nom = "", brut = [], textes = [];
+      var nom = "", brut = [], textes = [], rangsTous = [];
       return pages.reduce(function (ch, p) {
         return ch.then(function () {
           return doc.getPage(p).then(function (page) { return page.getTextContent(); })
             .then(function (contenu) {
               var rangs = lignes(contenu.items || []);
-              rangs.forEach(function (r) { if (r.texte) textes.push(r.texte); });
+              rangs.forEach(function (r) { if (r.texte) textes.push(r.texte); rangsTous.push(r); });
               if (!nom) nom = nomConducteur(rangs);
               var col = colonnes(rangs), jour = null;
               rangs.forEach(function (r) {
@@ -268,6 +419,9 @@
             });
         });
       }, Promise.resolve()).then(function () {
+        if (estInfractions(textes)) {
+          return { source: "pdf-infractions", conducteurs: parseInfractions(rangsTous) };
+        }
         if (estCorrespondance(textes)) {
           return { source: "pdf-correspondance", segments: parseCorrespondance(textes) };
         }
@@ -296,6 +450,25 @@
      porter dans la fiche du conducteur. La description sert de type ; à défaut,
      le code. La gravité suit. */
   function anomalies(rapport) {
+    if (rapport && rapport.source === "pdf-infractions") {
+      var out = [];
+      (rapport.conducteurs || []).forEach(function (c) {
+        (c.infractions || []).forEach(function (i) {
+          var desc = CODES_INFRA[cleCode(i.code)] || ("infraction " + i.code);
+          var g = i.gravite;
+          var detail = "Relevé au rapport d'infractions" +
+            (i.date ? " le " + i.date : "") +
+            (i.dateFin && i.dateFin !== i.date ? " (jusqu'au " + i.dateFin + ")" : "") +
+            " : " + desc +
+            (i.ecart && i.ecart !== "--:--" ? " Dépassement relevé : " + i.ecart +
+              (i.norme ? " (norme " + i.norme + ")" : "") + "." : "") +
+            " Code " + i.code + (g ? ", gravité " + g.label : "") + ".";
+          out.push({ date: i.date || "", type: desc.toLowerCase().replace(/\.$/, ""),
+            detail: detail, grave: !!(g && g.grave), code: i.code, conducteur: c.nom });
+        });
+      });
+      return out;
+    }
     if (rapport && rapport.source === "pdf-correspondance") {
       return (rapport.segments || []).map(function (s) {
         var detail = "Conduite sans carte relevée au rapport de correspondance" +
