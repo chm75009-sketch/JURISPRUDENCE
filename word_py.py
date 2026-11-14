@@ -118,7 +118,7 @@ def construire(elements, chemin, auteur=None, titre=None):
         elif k == "t1":
             _par(doc, e.get("t"), taille=20, gras=True, couleur=ENCRE, avant=6, apres=10)
         elif k == "trait":
-            _bord(_par(doc, "", taille=1, apres=8))
+            _par(doc, "", taille=2, apres=6)
         elif k == "h1":
             _par(doc, e.get("t"), taille=15, gras=True, couleur=BLEU, avant=14, apres=6)
         elif k == "h2":
