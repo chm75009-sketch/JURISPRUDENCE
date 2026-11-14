@@ -773,7 +773,7 @@
     var items = [bandeauEntreprise(),
       { k: "h1", t: "MISE EN GARDE" },
       { k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") },
-      { k: "p", t: "Les relevés de votre carte de conducteur font apparaître les infractions suivantes :" }];
+      { k: "p", t: "Les relevés de votre tachygraphe (carte de conducteur et unité véhicule) font apparaître les infractions suivantes :" }];
     if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
     else items.push({ k: "p", t: "Aucune infraction relevée à ce jour." });
     items.push({ k: "p", t: "Il vous est demandé de ne pas réitérer ces manquements. Pour mémoire, les règles à respecter : conduite continue de 4 h 30 au plus, suivie de 45 minutes de pause ; conduite journalière de 9 heures, 10 heures deux fois par semaine au plus ; repos journalier de 11 heures et repos de fin de semaine de 45 heures, hors cabine ; carte de conducteur insérée à tout déplacement." });
@@ -797,7 +797,7 @@
     if (s.entretien) {
       items.push({ k: "h1", t: "CONVOCATION À ENTRETIEN PRÉALABLE" });
       items.push({ k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") });
-      items.push({ k: "p", t: "Nous envisageons de prendre à votre encontre une sanction disciplinaire pouvant aller jusqu'à " + s.nom.toLowerCase() + ", en raison des faits suivants, relevés sur votre carte de conducteur :" });
+      items.push({ k: "p", t: "Nous envisageons de prendre à votre encontre une sanction disciplinaire pouvant aller jusqu'à " + s.nom.toLowerCase() + ", en raison des faits suivants, relevés sur les données de votre tachygraphe :" });
       if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
       items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le [DATE] à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
       items.push({ k: "note", t: s.note });
@@ -806,7 +806,7 @@
     } else {
       items.push({ k: "h1", t: s.nom.toUpperCase() });
       items.push({ k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") });
-      items.push({ k: "p", t: "Les faits suivants, relevés sur votre carte de conducteur, vous sont reprochés :" });
+      items.push({ k: "p", t: "Les faits suivants, relevés sur les données de votre tachygraphe, vous sont reprochés :" });
       if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
       else items.push({ k: "p", t: "Aucune infraction relevée." });
       items.push({ k: "p", t: "En conséquence, nous vous notifions " +
