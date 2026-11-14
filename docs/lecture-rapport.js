@@ -173,6 +173,59 @@
     return L;
   }
 
+  /* ─────────────────── le rapport « Correspondance des données » ───────────
+     Un autre format, par véhicule : chaque segment est soit une session de
+     carte (avec le conducteur nommé), soit une conduite sans carte (carte non
+     insérée), avec sa durée et ses kilomètres. La conduite sans carte ne porte
+     pas de nom : on la rattache au conducteur de la session qui la précède sur
+     le même véhicule. Si aucune session nommée ne précède sur ce véhicule, le
+     conducteur reste à confirmer : on ne reporte pas celui d'un autre camion. */
+  var RE_PLAQUE = /\b([A-Z]{2}-\d{3}-[A-Z]{2})\b/;
+  var RE_DT = /^(\d{2}\/\d{2}\/\d{4})\s+\d{1,2}:\d{2}$/;
+
+  function estCorrespondance(textes) {
+    return textes.some(function (t) { return /Correspondance des donn[ée]es/i.test(t); });
+  }
+  function dateDT(s) {
+    var m = (s || "").trim().match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+    return m ? m[3] + "-" + m[2] + "-" + m[1] : null;
+  }
+  function nettoyerNom(noms) {
+    return noms.join(" ").replace(/\s+/g, " ").trim().split(" ")
+      .filter(function (w) { return w && w !== "TEC" && w.length > 1; }).join(" ");
+  }
+  function parseCorrespondance(txts) {
+    var out = [], veh = null, dernier = null, i = 0, n = txts.length;
+    function estDT(s) { return RE_DT.test((s || "").trim()); }
+    while (i < n) {
+      var t = (txts[i] || "").trim(), mp = t.match(RE_PLAQUE);
+      if (mp && t.length <= 16) { if (mp[1] !== veh) { veh = mp[1]; dernier = null; } i++; continue; }
+      if (estDT(t)) {
+        var debut = t, fin = estDT(txts[i + 1]) ? txts[i + 1].trim() : null, j = i + (fin ? 2 : 1), pay = [];
+        while (j < n) {
+          var u = (txts[j] || "").trim();
+          if (estDT(u)) break;
+          if (RE_PLAQUE.test(u) && u.length <= 16) break;
+          pay.push(u); j++;
+        }
+        var bloc = pay.join(" ");
+        if (/Carte conducteur non ins[eé]r/i.test(bloc)) {
+          var km = null;
+          for (var k = pay.length - 1; k >= 0; k--) { var mk = pay[k].match(/^(\d{1,4})$/); if (mk) { km = +mk[1]; break; } }
+          out.push({ vehicule: veh, conducteur: dernier, date: dateDT(debut), km: km });
+        } else {
+          var noms = pay.filter(function (s) {
+            return /^[A-ZÀ-Ÿ][A-ZÀ-Ÿ' -]+$/.test(s) && !/ERROR|DONN|CARTE|NON|OUTLINE/i.test(s);
+          });
+          var nom = nettoyerNom(noms); if (nom) dernier = nom;
+        }
+        i = j; continue;
+      }
+      i++;
+    }
+    return out;
+  }
+
   function lire(buf) {
     return charger().then(function (pdfjsLib) {
       var data = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
@@ -180,12 +233,13 @@
     }).then(function (doc) {
       var pages = [];
       for (var p = 1; p <= doc.numPages; p++) pages.push(p);
-      var nom = "", brut = [];
+      var nom = "", brut = [], textes = [];
       return pages.reduce(function (ch, p) {
         return ch.then(function () {
           return doc.getPage(p).then(function (page) { return page.getTextContent(); })
             .then(function (contenu) {
               var rangs = lignes(contenu.items || []);
+              rangs.forEach(function (r) { if (r.texte) textes.push(r.texte); });
               if (!nom) nom = nomConducteur(rangs);
               var col = colonnes(rangs), jour = null;
               rangs.forEach(function (r) {
@@ -201,6 +255,9 @@
             });
         });
       }, Promise.resolve()).then(function () {
+        if (estCorrespondance(textes)) {
+          return { source: "pdf-correspondance", segments: parseCorrespondance(textes) };
+        }
         return { source: "pdf-rapport", conducteur: { nom: nom },
           infractions: completerDescriptions(dedoublonner(brut)) };
       });
@@ -226,6 +283,17 @@
      porter dans la fiche du conducteur. La description sert de type ; à défaut,
      le code. La gravité suit. */
   function anomalies(rapport) {
+    if (rapport && rapport.source === "pdf-correspondance") {
+      return (rapport.segments || []).map(function (s) {
+        var detail = "Conduite sans carte relevée au rapport de correspondance" +
+          (s.date ? " le " + s.date : "") + (s.vehicule ? ", véhicule " + s.vehicule : "") +
+          (s.km != null ? ", " + s.km + " km" : "") +
+          (s.conducteur ? ". Conducteur rattaché : " + s.conducteur + " (sessions encadrantes)."
+            : ". Conducteur à confirmer (aucune session de carte encadrante sur ce véhicule).");
+        return { date: s.date || "", type: "conduite sans carte",
+          detail: detail, grave: false, conducteur: s.conducteur || "", vehicule: s.vehicule || "" };
+      });
+    }
     return (rapport.infractions || []).map(function (i) {
       var type = (i.description || ("infraction " + i.code)).toLowerCase().replace(/\.$/, "");
       var detail = "Relevé au rapport" + (i.date ? " le " + i.date : "") +

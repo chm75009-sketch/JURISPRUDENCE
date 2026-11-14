@@ -444,6 +444,50 @@
     if (sm) { var idsm = sm.getAttribute("data-sup-mes");
       CT.supprimerMesure(idsm, +sm.getAttribute("data-i")); peindreConducteurs(); reouvrir(idsm); return; }
   });
+  /* Le rapport de correspondance porte plusieurs conducteurs : on ventile chaque
+     conduite sans carte au conducteur du registre dont le nom correspond, par les
+     mots partagés (au moins deux, sans ambiguïté). Ce qui ne se rattache pas
+     - conducteur hors effectif, ou conduite sans carte sur un véhicule sans
+     session de carte encadrante - est listé à part, à confirmer à la main. */
+  function dispatcherCorrespondance(anoms) {
+    var sals = (window.CT && CT.salaries) ? CT.salaries() : [];
+    function toks(s) {
+      return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+        .replace(/[^A-Z]+/g, " ").trim().split(" ").filter(function (w) { return w.length >= 2 && w !== "TEC"; });
+    }
+    var salToks = sals.map(function (s) { return { id: s.id, nom: s.nom, t: toks(s.nom) }; });
+    var groupes = {}, nonRattaches = [];
+    (anoms || []).forEach(function (a) {
+      var at = toks(a.conducteur);
+      if (!at.length) { nonRattaches.push(a); return; }
+      var best = null, bestN = 0, tie = false;
+      salToks.forEach(function (s) {
+        var inter = s.t.filter(function (w) { return at.indexOf(w) >= 0; }).length;
+        if (inter > bestN) { bestN = inter; best = s; tie = false; }
+        else if (inter === bestN && inter > 0 && best && s.id !== best.id) { tie = true; }
+      });
+      if (best && bestN >= 2 && !tie) { (groupes[best.id] = groupes[best.id] || []).push(a); }
+      else nonRattaches.push(a);
+    });
+    var lignesMsg = [];
+    Object.keys(groupes).forEach(function (id) {
+      var n = CT.importerAnomalies(id, groupes[id]);
+      var sal = salToks.filter(function (s) { return s.id === id; })[0] || { nom: id };
+      lignesMsg.push("- " + sal.nom + " : " + n + " conduite(s) sans carte");
+    });
+    peindreConducteurs();
+    var msg = "Rapport de correspondance : " + (anoms || []).length + " conduites sans carte lues.\n\n" +
+      (lignesMsg.length ? "Rattachées au registre :\n" + lignesMsg.join("\n")
+        : "Aucune n'a pu être rattachée à un conducteur du registre.");
+    if (nonRattaches.length) {
+      var noms = {};
+      nonRattaches.forEach(function (a) { var c = a.conducteur || "conducteur à confirmer"; noms[c] = (noms[c] || 0) + 1; });
+      msg += "\n\nÀ confirmer (hors effectif, ou véhicule sans session de carte) :\n" +
+        Object.keys(noms).map(function (c) { return "- " + c + " : " + noms[c]; }).join("\n");
+    }
+    alert(msg);
+  }
+
   function lireCartePour(id, f) {
     var cible = document.getElementById("cond-" + id);
     var fr = new FileReader();
@@ -459,8 +503,11 @@
       }
       if (estPdf) {
         if (!window.LectureRapport) { alert("Le lecteur de rapport PDF n'est pas disponible."); return; }
-        window.LectureRapport.lire(buf).then(function (rap) { importe(window.LectureRapport.anomalies(rap)); })
-          .catch(function (err) { alert("PDF illisible : " + (err && err.message || err)); });
+        window.LectureRapport.lire(buf).then(function (rap) {
+          var anoms = window.LectureRapport.anomalies(rap);
+          if (rap.source === "pdf-correspondance") dispatcherCorrespondance(anoms);
+          else importe(anoms);
+        }).catch(function (err) { alert("PDF illisible : " + (err && err.message || err)); });
         return;
       }
       if (!window.LectureCarte) { alert("Le lecteur de carte n'est pas disponible."); return; }
