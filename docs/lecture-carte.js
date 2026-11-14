@@ -298,27 +298,37 @@
     });
     var anomalies = [];
 
+    /* Au delà de treize heures, la journée n'est pas exploitable : la carte a
+       été retirée en roulant ou la session n'a pas été fermée, et le dernier
+       bloc court jusqu'à minuit. On ne calcule alors aucune conduite pour ce
+       jour, et on le dit, plutôt que d'inventer une journée de quinze heures. */
+    var SEUIL_ILLISIBLE = 780;
     jours.forEach(function (j) {
       if (!j.date) return;
+      if (j.minutes.conduite > SEUIL_ILLISIBLE || j.continueMax > SEUIL_ILLISIBLE) {
+        anomalies.push({ date: j.date, source: "lecture", type: "journée non exploitable",
+          detail: "Les données du " + j.date + " ne sont pas exploitables (carte retirée en roulant ou session non fermée) : la conduite de ce jour n'est pas calculée. À vérifier sur le relevé complet." });
+        return;
+      }
       if (j.minutes.conduite > 600) {
-        anomalies.push({ date: j.date, type: "dépassement de la conduite journalière",
-          detail: "Conduite de " + hhmm(j.minutes.conduite) + " le " + j.date +
-            " (maximum dix heures, et seulement deux fois par semaine)." });
+        anomalies.push({ date: j.date, source: "calcul", type: "dépassement de la conduite journalière",
+          detail: "Conduite calculée de " + hhmm(j.minutes.conduite) + " le " + j.date +
+            " (maximum dix heures, et seulement deux fois par semaine). Indicatif, à confirmer sur le relevé." });
       }
       if (j.continueMax > 270) {
-        anomalies.push({ date: j.date, type: "conduite continue sans pause suffisante",
-          detail: "Conduite continue d'environ " + hhmm(j.continueMax) + " le " + j.date +
+        anomalies.push({ date: j.date, source: "calcul", type: "conduite continue sans pause suffisante",
+          detail: "Conduite continue calculée d'environ " + hhmm(j.continueMax) + " le " + j.date +
             " (pause de 45 minutes requise au delà de 4 h 30). Indicatif, à confirmer." });
       }
     });
 
     (carte.evenements || []).forEach(function (e) {
-      anomalies.push({ date: e.debut || "", type: e.nom.toLowerCase(),
+      anomalies.push({ date: e.debut || "", source: "appareil", type: e.nom.toLowerCase(),
         detail: "Événement enregistré par l'appareil : " + e.nom +
           (e.debut ? ", le " + e.debut : "") + (e.immat ? ", véhicule " + e.immat : "") + "." });
     });
     (carte.defauts || []).forEach(function (e) {
-      anomalies.push({ date: e.debut || "", type: e.nom.toLowerCase(),
+      anomalies.push({ date: e.debut || "", source: "appareil", type: e.nom.toLowerCase(),
         detail: "Défaut enregistré par l'appareil : " + e.nom +
           (e.debut ? ", le " + e.debut : "") + (e.immat ? ", véhicule " + e.immat : "") + "." });
     });
