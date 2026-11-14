@@ -272,6 +272,12 @@ Rien ne presse : c'est l'utilisatrice qui donne le tempo, pas moi.
 
 ## Écrire — la ponctuation et le ton
 
+**Toujours en français.** Posé le 14 novembre 2026, dans ces termes : « En
+FRANÇAIS. PARLE EN FRANÇAIS. ÉCRIS EN FRANÇAIS. » Chaque réponse dans la
+discussion, chaque document, chaque écran, chaque commentaire de code, chaque
+message de commit s'écrit en français. Pas un mot d'anglais glissé par réflexe,
+pas de terme technique laissé en anglais quand le français existe.
+
 Ces trois règles valent partout, sans exception, et pour TOUS les documents,
 quels qu'ils soient : réponses dans la discussion, conclusions, documents Word,
 PDF, classeurs, courriers, contrats, notes, bordereaux, écrans de
