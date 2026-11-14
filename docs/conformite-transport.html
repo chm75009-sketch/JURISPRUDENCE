@@ -450,7 +450,7 @@
      - conducteur hors effectif, ou conduite sans carte sur un véhicule sans
      session de carte encadrante - est listé à part, à confirmer à la main. */
   function dispatcherCorrespondance(anoms) {
-    var sals = (window.CT && CT.salaries) ? CT.salaries() : [];
+    var sals = (CT && CT.salaries) ? CT.salaries() : [];
     function toks(s) {
       return String(s || "").toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
         .replace(/[^A-Z]+/g, " ").trim().split(" ").filter(function (w) { return w.length >= 2 && w !== "TEC"; });

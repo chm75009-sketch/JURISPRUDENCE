@@ -181,47 +181,60 @@
      le même véhicule. Si aucune session nommée ne précède sur ce véhicule, le
      conducteur reste à confirmer : on ne reporte pas celui d'un autre camion. */
   var RE_PLAQUE = /\b([A-Z]{2}-\d{3}-[A-Z]{2})\b/;
-  var RE_DT = /^(\d{2}\/\d{2}\/\d{4})\s+\d{1,2}:\d{2}$/;
+  /* La ligne centrale d'un enregistrement : deux horodatages à la suite, puis,
+     pour une conduite sans carte, les durées, l'odomètre et les kilomètres. */
+  var RE_PAIRE = /^(\d{2})\/(\d{2})\/(\d{4})\s+\d{1,2}:\d{2}\s+\d{2}\/\d{2}\/\d{4}\s+\d{1,2}:\d{2}(.*)$/;
 
   function estCorrespondance(textes) {
     return textes.some(function (t) { return /Correspondance des donn[ée]es/i.test(t); });
   }
-  function dateDT(s) {
-    var m = (s || "").trim().match(/^(\d{2})\/(\d{2})\/(\d{4})/);
-    return m ? m[3] + "-" + m[2] + "-" + m[1] : null;
+  function motsNom(s) {
+    return String(s || "").split(" ")
+      .filter(function (w) { return w && w !== "TEC" && /[A-Za-zÀ-ÿ]/.test(w); });
   }
-  function nettoyerNom(noms) {
-    return noms.join(" ").replace(/\s+/g, " ").trim().split(" ")
-      .filter(function (w) { return w && w !== "TEC" && w.length > 1; }).join(" ");
-  }
+  /* pdf.js rend l'enregistrement sur trois lignes : un libellé (nom du
+     conducteur et « Données non définitives », ou « Carte conducteur non
+     insérée »), puis la ligne des deux horodatages et des données, puis une
+     continuation (le nom de famille et une heure, ou « ! »). On lit donc la
+     ligne des dates et on classe d'après la ligne qui la précède. La conduite
+     sans carte se rattache au conducteur de la dernière session de carte du
+     même véhicule ; à défaut, elle reste à confirmer. */
   function parseCorrespondance(txts) {
-    var out = [], veh = null, dernier = null, i = 0, n = txts.length;
-    function estDT(s) { return RE_DT.test((s || "").trim()); }
-    while (i < n) {
-      var t = (txts[i] || "").trim(), mp = t.match(RE_PLAQUE);
-      if (mp && t.length <= 16) { if (mp[1] !== veh) { veh = mp[1]; dernier = null; } i++; continue; }
-      if (estDT(t)) {
-        var debut = t, fin = estDT(txts[i + 1]) ? txts[i + 1].trim() : null, j = i + (fin ? 2 : 1), pay = [];
-        while (j < n) {
-          var u = (txts[j] || "").trim();
-          if (estDT(u)) break;
-          if (RE_PLAQUE.test(u) && u.length <= 16) break;
-          pay.push(u); j++;
-        }
-        var bloc = pay.join(" ");
-        if (/Carte conducteur non ins[eé]r/i.test(bloc)) {
-          var km = null;
-          for (var k = pay.length - 1; k >= 0; k--) { var mk = pay[k].match(/^(\d{1,4})$/); if (mk) { km = +mk[1]; break; } }
-          out.push({ vehicule: veh, conducteur: dernier, date: dateDT(debut), km: km });
-        } else {
-          var noms = pay.filter(function (s) {
-            return /^[A-ZÀ-Ÿ][A-ZÀ-Ÿ' -]+$/.test(s) && !/ERROR|DONN|CARTE|NON|OUTLINE/i.test(s);
-          });
-          var nom = nettoyerNom(noms); if (nom) dernier = nom;
-        }
-        i = j; continue;
+    var out = [], veh = null, dernier = null;
+    for (var i = 0; i < txts.length; i++) {
+      var t = (txts[i] || "").trim();
+      var mp = t.match(RE_PLAQUE);
+      if (mp && t.length <= 18 && !/\d{2}\/\d{2}\/\d{4}/.test(t)) {
+        if (mp[1] !== veh) { veh = mp[1]; dernier = null; }
+        continue;
       }
-      i++;
+      var md = t.match(RE_PAIRE);
+      if (!md) continue;
+      var date = md[3] + "-" + md[2] + "-" + md[1];
+      var reste = (md[4] || "").replace(/ /g, " ");
+      var prev = (txts[i - 1] || "").trim();
+      var next = (txts[i + 1] || "").trim();
+      if (/Carte conducteur non ins[eé]r/i.test(prev)) {
+        /* conduite sans carte : km = dernier entier de la ligne, conducteur =
+           celui de la dernière session de carte du même véhicule */
+        var nums = reste.match(/\d{1,4}/g) || [];
+        var km = nums.length ? parseInt(nums[nums.length - 1], 10) : null;
+        out.push({ vehicule: veh, conducteur: dernier, date: date, km: km });
+      } else {
+        /* une session de carte : en données définitives le nom est sur la ligne
+           des dates ; en données non définitives il est scindé entre la ligne
+           du dessus (prénom, avant « Données ») et celle du dessous (nom). */
+        var nom = motsNom(reste).join(" ").trim();
+        if (!nom && /Donn[ée]es/i.test(prev)) {
+          var prenom = prev.split(/Donn[ée]es|Dernier|error|!/i)[0].trim();
+          var suite = next.replace(/\s*\d{1,2}:\d{2}.*$/, "").trim();
+          nom = motsNom(prenom + " " + suite).join(" ").trim();
+        }
+        if (nom && nom.length <= 40 &&
+            !/TachoSAFE|Szoft|Developed|Design|Correspondance|Fuseau|Total|Donn[ée]es/i.test(nom)) {
+          dernier = nom;
+        }
+      }
     }
     return out;
   }
