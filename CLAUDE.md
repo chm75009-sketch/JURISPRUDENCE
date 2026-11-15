@@ -71,6 +71,22 @@ Le réflexe, au moment où je m'apprête à conclure : **non, je n'ai pas fini, 
 je continue.** Et je ne le dis pas, je le fais : « je continue » écrit dans un
 message est précisément ce qui a été reproché le 27 septembre 2026.
 
+**Un texte donné se recopie, il ne se reformule pas. Contrôle à chaque réponse,
+pas seulement au démarrage.** Posé le 15 novembre 2026. Quand l'utilisatrice me
+donne un texte, je le reprends mot pour mot. Je ne modifie que ce qu'elle me
+demande explicitement de modifier ; tout le reste est collé tel quel. Je ne
+fluidifie pas, je n'harmonise pas, je n'améliore pas de ma propre initiative ; si
+une amélioration me paraît utile, je la propose à part, sans l'appliquer. Avant
+d'envoyer, je compare ma sortie à son texte et je retire toute différence qu'elle
+n'a pas demandée. Ce contrôle ne vaut pas qu'au lancement de la session : il se
+fait à chaque réponse, à chaque demande, à chaque instant.
+
+Cas mesuré le 15 novembre 2026 - l'exorde de la plaidoirie TEC. L'utilisatrice
+avait écrit son introduction avec ses puces et son « Cependant ». En
+reconstruisant la version 2, je l'ai réécrite en texte suivi, puces et
+« Cependant » supprimés, sans que rien ne le demande. Reformuler un texte donné,
+c'est désobéir à la règle au-dessus de toutes les autres.
+
 ## Contrôle avant chaque envoi - six questions, dans cet ordre
 
 Ce bloc existe parce que les consignes qui suivent sont connues et enfreintes
