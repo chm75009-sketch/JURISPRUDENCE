@@ -22,6 +22,7 @@ plus conservateur, que Word accepte.
 Usage : python3 word_py.py elements.json sortie.docx
 """
 import json
+import os
 import re
 import sys
 
@@ -134,6 +135,14 @@ def construire(elements, chemin, auteur=None, titre=None):
         elif k == "enc":
             _cadre(_par(doc, e.get("titre"), gras=True, couleur=BLEU, avant=10, apres=2))
             _cadre(_par(doc, e.get("t"), apres=10))
+        elif k == "image":
+            src = e.get("src")
+            if src and os.path.exists(src):
+                doc.add_picture(src, width=Cm(e.get("cm", 16)))
+                doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+            leg = e.get("legende")
+            if leg:
+                _par(doc, leg, taille=9, couleur=GRIS, apres=10)
         elif k == "saut":
             doc.add_page_break()
         elif k == "table":
