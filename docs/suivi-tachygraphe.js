@@ -546,6 +546,15 @@
     /* LES AUTRES VOIES : un compte rendu, un procès-verbal, un signalement */
     var NATURES = ["Conduite sans carte", "Carte non insérée", "Insertion de la carte pendant la conduite", "Dépassement de la conduite journalière",
       "Conduite continue sans pause suffisante", "Repos insuffisant", "Document de bord manquant"];
+    /* Le véhicule se choisit dans la flotte, en menu déroulant (demande du
+       21 novembre 2026) : une immatriculation tapée à la main s'écrit de dix
+       façons. Sans flotte enregistrée, le champ reste une saisie libre. */
+    function champVehicule() {
+      var L = (CT.vehicules() || []).map(function (v) { return (v && v.immat) || ""; }).filter(Boolean);
+      if (!L.length) return '<div class="st-champ"><label>Véhicule</label><input type="text" id="st-veh" placeholder="immatriculation"></div>';
+      return '<div class="st-champ"><label>Véhicule</label><select id="st-veh"><option value="">Choisir le véhicule</option>' +
+        L.map(function (i) { return '<option>' + ech(i) + '</option>'; }).join("") + '</select></div>';
+    }
     function saisir(source) {
       var SRC = ["Compte rendu reçu", "Procès-verbal reçu", "Courrier de l'administration", "Contrôle sur route", "Autre"];
       ouvrir("Saisir une infraction", '<p class="st-aide">Deux dates à ne pas confondre : celle des faits, et celle où l\'entreprise en a eu connaissance. C\'est la seconde qui fait courir les deux mois pour réagir.</p>' +
@@ -553,7 +562,7 @@
         '<div class="st-champ"><label>Infraction</label><select id="st-type">' + NATURES.map(function (s) { return '<option>' + s + '</option>'; }).join("") + '<option value="">Autre (à préciser ci-dessous)</option></select></div>' +
         '<div class="st-champ"><label>Date des faits</label><input type="date" id="st-date" max="' + aujourdhui() + '"></div>' +
         '<div class="st-champ"><label>Date où l\'entreprise en a eu connaissance (réception du document)</label><input type="date" id="st-connu" value="' + aujourdhui() + '" max="' + aujourdhui() + '"></div>' +
-        '<div class="st-champ"><label>Véhicule</label><input type="text" id="st-veh" placeholder="immatriculation"></div>' +
+        champVehicule() +
         '<div class="st-champ"><label>Précision</label><input type="text" id="st-det" placeholder="ce qui a été constaté"></div>');
       bouton("Ajouter l'infraction", true, function () {
         var v = function (i) { return document.getElementById(i).value.trim(); };
@@ -573,7 +582,7 @@
       ouvrir("Signalement du conducteur", '<p class="st-aide">Ce que le conducteur vous déclare lui-même. Le signalement est gardé au dossier, avec sa date.</p>' +
         '<div class="st-champ"><label>Ce qu\'il signale</label><select id="st-pb">' + P.map(function (s) { return '<option>' + s + '</option>'; }).join("") + '</select></div>' +
         '<div class="st-champ"><label>Date des faits</label><input type="date" id="st-date" value="' + aujourdhui() + '" max="' + aujourdhui() + '"></div>' +
-        '<div class="st-champ"><label>Véhicule</label><input type="text" id="st-veh" placeholder="immatriculation"></div>' +
+        champVehicule() +
         '<div class="st-champ"><label>Précision</label><input type="text" id="st-det" placeholder="ce qu\'il a fait : direction prévenue, relevé manuscrit…"></div>');
       bouton("Enregistrer le signalement", true, function () {
         var v = function (i) { return document.getElementById(i).value.trim(); };
