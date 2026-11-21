@@ -385,13 +385,18 @@
      calcul, lecture) : on n'inscrit alors que les faits de conduite du salarié,
      pour ne pas noyer le suivi avec le technique, l'indicatif ou l'illisible. Les
      anomalies d'un rapport (sans source) sont déjà des infractions : on les garde. */
+  /* Ce qui s'inscrit au suivi, parmi ce qui a été lu : sert aussi au message
+     de lecture, pour ne pas dire « déjà présentes » des lignes écartées. */
+  function seRetient(a) { return !(a.source && (a.source !== "appareil" || !faitDeConduite(a))); }
+  function anomaliesRetenues(anomalies) { return (anomalies || []).filter(seRetient); }
+
   function importerAnomalies(id, anomalies) {
     if (!id || !anomalies || !anomalies.length) return 0;
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
     s.anomalies = s.anomalies || [];
     var n = 0;
     anomalies.forEach(function (a) {
-      if (a.source && (a.source !== "appareil" || !faitDeConduite(a))) return;
+      if (!seRetient(a)) return;
       var existe = s.anomalies.some(function (x) {
         return (x.date || "") === (a.date || "") && (x.type || "") === (a.type || "");
       });
@@ -1044,6 +1049,7 @@
     supprimerMesure: supprimerMesure,
     matchConducteur: matchConducteur,
     importerAnomalies: importerAnomalies,
+    anomaliesRetenues: anomaliesRetenues,
     porterJoursVehicule: porterJoursVehicule,
     joursVehiculePourCarte: joursVehiculePourCarte,
     anomaliesVehicule: anomaliesVehicule,

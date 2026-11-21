@@ -734,8 +734,13 @@
       function importe(anoms, nonCloses) {
         var n = CT.importerAnomalies(id, anoms || []);
         peindreConducteurs(); reouvrir(id);
+        /* Trois nombres distincts : ce qui s'ajoute, ce qui y était déjà, et ce
+           qui ne s'inscrit pas au suivi (technique, indicatif ou illisible). */
+        var retenues = CT.anomaliesRetenues(anoms).length, deja = retenues - n, ecartees = (anoms || []).length - retenues;
         var msg = n + " infraction" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " à sa fiche" +
-          (anoms && n < anoms.length ? " (" + (anoms.length - n) + " déjà présente(s))" : "") + ".";
+          (deja > 0 ? " (" + deja + " déjà présente" + (deja > 1 ? "s" : "") + ")" : "") + "." +
+          (ecartees > 0 ? "\n" + ecartees + " ligne" + (ecartees > 1 ? "s" : "") + " non inscrite" + (ecartees > 1 ? "s" : "") +
+            " : faits techniques de l'appareil ou calculs seulement indicatifs." : "");
         /* Les journées où la carte n'a pas tout enregistré : on le dit, et on dit
            d'où vient la conduite retenue. */
         if (nonCloses && nonCloses.length) {
@@ -893,7 +898,9 @@
       var n = CT.importerAnomalies(cid, choisies);
       peindreConducteurs(); reouvrir(cid);
       msgCarte(n + " anomalie" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " au suivi" +
-        (n < choisies.length ? " (" + (choisies.length - n) + " déjà présente(s))" : "") + ".");
+        (function () { var r = CT.anomaliesRetenues(choisies).length, d = r - n, x = choisies.length - r;
+          return (d > 0 ? " (" + d + " déjà présente" + (d > 1 ? "s" : "") + ")" : "") + "." +
+            (x > 0 ? " " + x + " ligne" + (x > 1 ? "s" : "") + " non inscrite" + (x > 1 ? "s" : "") + " : faits techniques ou calculs indicatifs." : ""); })());
     });
   }
   function msgCarte(t) { var m = document.getElementById("carte-msg"); if (m) m.textContent = t; }
