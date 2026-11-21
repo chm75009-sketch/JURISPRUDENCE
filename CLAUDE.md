@@ -189,6 +189,22 @@ Un nombre d'agents, un nombre d'écrans, un nombre de documents : le chiffre
 écrit, pas un chiffre approchant. Je ne suis pas là pour penser mais pour
 exécuter, au service de l'utilisatrice.
 
+### Toujours un bouton de retour, en haut de chaque écran
+
+Rappelé le 21 novembre 2026, avec agacement parce que c'était déjà demandé :
+« toujours un bouton retour en arrière ». Chaque page, chaque écran, chaque
+fenêtre a un retour visible dès l'ouverture, en haut, sans avoir à faire
+défiler. L'application s'ouvre installée, sans barre de navigateur : une page
+sans retour est une page dont on ne sort qu'en quittant l'application.
+
+Le contrôle sur tout écran ajouté ou modifié : **par où revient-on en arrière,
+et le voit-on sans défiler ?**
+
+Cas mesuré le 21 novembre 2026 - le journal des accès du site du client. Le seul
+lien de retour était au pied de la page, sous plus de deux cents lignes :
+l'utilisatrice est restée coincée sur le journal et a dû quitter l'application.
+La page du chef de parc n'en avait aucun.
+
 ### Lisibilité, simplicité, présentation : la demande, pas mon idée
 
 Trois mots redemandés un nombre incalculable de fois : **lisibilité,
