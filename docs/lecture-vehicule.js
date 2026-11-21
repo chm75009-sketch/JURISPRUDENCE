@@ -146,21 +146,25 @@
      retrait (null quand le format ne les donne pas). On suit la convention de
      l'appareil : une carte insérée à 04:43:33 compte à partir de la minute
      04:43, une carte retirée à 13:46:20 est absente à partir de 13:46. */
-  function calculJour(mots, cartes, t0) {
+  function calculJour(mots, cartes, t0, courant) {
     var jour0 = Math.floor(t0 / 86400) * 86400, m, i;
+    /* Le jour du téléchargement s'arrête à l'heure du téléchargement : la
+       dernière ligne ne court pas jusqu'à minuit. */
+    var borne = 1440;
+    if (!vide(courant) && courant >= jour0 && courant < jour0 + 86400) borne = Math.floor((courant - jour0) / 60);
     var ins = new Uint8Array(1440), heuresConnues = true;
     (cartes || []).forEach(function (c) {
       if (c.insertion == null) { heuresConnues = false; return; }
       if (c.slot !== 0 || vide(c.insertion)) return;
       var A = Math.max(0, Math.floor((c.insertion - jour0) / 60));
-      var B = vide(c.retrait) ? 1440 : Math.min(1440, Math.floor((c.retrait - jour0) / 60));
+      var B = vide(c.retrait) ? borne : Math.min(borne, Math.floor((c.retrait - jour0) / 60));
       for (m = A; m < B; m++) ins[m] = 1;
     });
     var L = mots.map(changement).filter(function (c) { return c.slot === 0; });
     var absente = new Uint8Array(1440), conduite = new Uint8Array(1440);
     var min = { conduite: 0, travail: 0, "disponibilité": 0, repos: 0 };
     for (i = 0; i < L.length; i++) {
-      var deb = L[i].minute, fin = (i + 1 < L.length) ? L[i + 1].minute : 1440;
+      var deb = L[i].minute, fin = Math.min(borne, (i + 1 < L.length) ? L[i + 1].minute : 1440);
       if (fin <= deb) continue;
       min[ACTIVITE[L[i].activite]] += fin - deb;
       if (L[i].activite !== 3) continue;
@@ -208,7 +212,7 @@
   function ajouterJour(res, t0, mots, cartes) {
     if (vide(t0)) return;
     if (!motsValides(mots)) { reserve(res, "Une journée porte des minutes impossibles : elle n'est pas comptée."); return; }
-    var c = calculJour(mots, cartes, t0);
+    var c = calculJour(mots, cartes, t0, res.courantS);
     c.date = isoJour(Math.floor(t0 / 86400) * 86400);
     res.jours.push(c);
   }
@@ -235,7 +239,7 @@
     res.vin = ascii(a, 390, 17);
     res.pays = a[407];
     res.immatriculation = texte(a, 408, 14);
-    res.courant = timeReal(a, 422);
+    res.courantS = u32(a, 422); res.courant = isoJour(res.courantS);
     res.periode = { du: timeReal(a, 426), au: timeReal(a, 430) };
     if (!vide(u32(a, 435))) res.telechargementPrecedent = { date: timeReal(a, 435), societe: texte(a, 457, 36) };
     p = 493; n = a[p]; p += 1;
@@ -352,7 +356,7 @@
       var p = t.debut, k;
       if (t.rt === 0x0a && t.rs >= 17 && t.nr) res.vin = ascii(a, p, 17);
       if (t.rt === 0x24 && t.rs >= 15 && t.nr) { res.pays = a[p]; res.immatriculation = texte(a, p + 1, 14); }
-      if (t.rt === 0x03 && t.rs === 4 && t.nr) res.courant = timeReal(a, p);
+      if (t.rt === 0x03 && t.rs === 4 && t.nr) { res.courantS = u32(a, p); res.courant = isoJour(res.courantS); }
       if (t.rt === 0x13 && t.rs >= 8 && t.nr) res.periode = { du: timeReal(a, p), au: timeReal(a, p + 4) };
       if (t.rt === 0x14 && t.rs === 59 && t.nr && !vide(u32(a, p))) res.telechargementPrecedent = { date: timeReal(a, p), societe: texte(a, p + 23, 36) };
       if (t.rt === 0x10 && t.rs === 99) for (k = 0; k < t.nr; k++) {
