@@ -645,12 +645,13 @@
           var m = x.m, badge = m.convocation ? '<span class="st-badge orange">en cours</span>' : !x.compte ? '<span class="st-badge gris">non disciplinaire</span>'
             : x.ancienne ? '<span class="st-badge gris">plus de 3 ans</span>' : !p.enCours ? '' : x.meme ? '<span class="st-badge rouge">même nature</span>' : '<span class="st-badge orange">autre nature</span>';
           return '<div class="st-lig"><span><span class="st-lab">' + ech(x.nom) + '</span><br><span class="st-dates">' + jj(m.date) + (m.pour ? ' · ' + ech(m.pour) : '') + (m.ancienne ? ' · saisie après coup' : '') + '</span>' +
-            (m.convocation ? '<br><button type="button" class="st-lien" data-st="suite" data-v="' + x.rang + '">Enregistrer la suite de l\'entretien</button>' : '') + '</span>' + badge + '</div>';
+            (m.convocation ? '<br><button type="button" class="st-lien" data-st="suite" data-v="' + x.rang + '">Après l\'entretien : choisir la sanction</button>' : '') + '</span>' + badge + '</div>';
         }).join("") +
         (p.ecartees ? '<p class="st-dates">' + pluriel(p.ecartees, "sanction") + ' de plus de trois ans : ' + (p.ecartees > 1 ? 'elles ne peuvent plus être invoquées' : 'elle ne peut plus être invoquée') + ' (L. 1332-5).</p>' : '') +
         '<div class="st-btns"><button type="button" class="st-btn" data-st="ancienne">Ajouter une sanction ancienne</button><button type="button" class="st-btn" data-st="compte-rendu">Compte rendu en Word</button></div></div>';
       if (G.length) {
-        var cle = S.reac.cle || proposee(p, nb), s = sanctionDe(cle), R = retenus();
+        var DIRECTES = CT.SANCTIONS.filter(function (x) { return !x.entretien; });
+        var cle = S.reac.cle || (nb >= 3 ? "avertissement" : "rappel"), s = sanctionDe(cle), R = retenus();
         h += '<div class="st-carte"><div class="st-nom2">Faits retenus</div>' +
           '<div class="st-note"><b>Depuis quand le savez-vous ?</b> Vous avez deux mois pour engager les poursuites, à compter du jour où vous avez eu connaissance des faits (L. 1332-4). Vérifiez la date de chaque ligne : c\'est celle de la lecture du fichier, de la réception du procès-verbal ou du signalement, pas celle des faits.</div>' +
           G.map(function (g) {
@@ -667,23 +668,25 @@
               '<div class="st-dates suite">' + ech(suite) + '</div><button type="button" class="st-lien decale" data-st="detail" data-v="' + ech(g.cle) + '">Voir le détail des faits</button></div>';
           }).join("") +
           '<label class="st-coche petit"><input type="checkbox" data-st-penal="1"' + (S.reac.penal ? ' checked' : '') + '><span>Ces faits ont donné lieu à des poursuites pénales dans ce délai : le délai de deux mois ne joue alors pas.</span></label>' +
-          '<div class="st-sub" style="margin-top:10px">Sanction à notifier' + (S.reac.cle ? '' : p.valables ? ' (récidive : mesure plus ferme proposée)' : nb >= 3 ? ' (faits répétés : avertissement proposé)' : '') + '</div>' +
-          '<select id="st-sanction">' + CT.SANCTIONS.map(function (x) { return '<option value="' + x.cle + '"' + (x.cle === cle ? ' selected' : '') + '>' + ech(x.nom) + '</option>'; }).join("") + '</select>' +
-          '<div class="st-dates" style="margin-top:6px">' + ech(s.note) + '</div>';
+          '<div class="st-sub" style="margin-top:10px">Convocation à l\'entretien préalable</div>' +
+          '<div class="st-dates">Une convocation classique, la même dans tous les cas. La sanction se choisit après l\'entretien : avertissement, blâme, mise à pied ou licenciement.</div>';
         if (R.length) {
           var premier = R.slice().sort(function (x, y) { return delai(x).limite < delai(y).limite ? -1 : 1; })[0], dp = delai(premier);
           h += '<div class="st-ech">' + (S.reac.penal && dp.jours < 0 ? 'Poursuites pénales déclarées : le délai de deux mois ne bloque pas.'
             : 'Poursuites à engager au plus tard le <b>' + enLettres(dp.limite) + '</b> (' + (dp.jours === 0 ? "aujourd'hui" : "dans " + pluriel(dp.jours, "jour")) + ').') + '</div>';
         } else h += '<div class="st-alerte">Aucun fait retenu : tout est décoché, prescrit, ou sans date de connaissance.</div>';
-        if (s.entretien) {
-          var tot = premierEntretien(aujourdhui());
-          if (S.reac.entretien && S.reac.entretien < tot) S.reac.entretien = "";
-          h += '<div class="st-connu bloc"><label>Jour fixé pour l\'entretien préalable <input type="date" data-st-entretien="1" value="' + S.reac.entretien + '" min="' + tot + '"></label></div>';
-          h += '<div class="st-ech">Convocation remise aujourd\'hui : entretien <b>au plus tôt le ' + enLettres(tot) + '</b>. ' + REGLE_ENTRETIEN + '</div>';
-          h += S.reac.entretien ? '<div class="st-ech">La sanction se notifie <b>au plus tôt le ' + jj(apresOuvrables(S.reac.entretien, 2)) + '</b> et <b>au plus tard le ' + jj(plusMois(S.reac.entretien, 1)) + '</b> : ni moins de deux jours ouvrables, ni plus d\'un mois après le jour de l\'entretien (L. 1332-2). Les jours fériés ne sont pas comptés ici.</div>'
-            : '<div class="st-ech">Après l\'entretien, la sanction ne peut intervenir ni moins de deux jours ouvrables, ni plus d\'un mois après (L. 1332-2). Indiquez le jour de l\'entretien pour avoir les deux dates.</div>';
-        }
-        h += '<button type="button" class="st-btn pri large" data-st="courrier"' + (R.length ? '' : ' disabled') + '>' + (s.entretien ? "Préparer la convocation" : "Préparer le courrier") + '</button></div>';
+        var tot = premierEntretien(aujourdhui());
+        if (S.reac.entretien && S.reac.entretien < tot) S.reac.entretien = "";
+        h += '<div class="st-connu bloc"><label>Jour fixé pour l\'entretien préalable <input type="date" data-st-entretien="1" value="' + S.reac.entretien + '" min="' + tot + '"></label></div>';
+        h += '<div class="st-ech">Convocation remise aujourd\'hui : entretien <b>au plus tôt le ' + enLettres(tot) + '</b>. ' + REGLE_ENTRETIEN + '</div>';
+        h += S.reac.entretien ? '<div class="st-ech">La sanction se notifie <b>au plus tôt le ' + jj(apresOuvrables(S.reac.entretien, 2)) + '</b> et <b>au plus tard le ' + jj(plusMois(S.reac.entretien, 1)) + '</b> : ni moins de deux jours ouvrables, ni plus d\'un mois après le jour de l\'entretien (L. 1332-2). Les jours fériés ne sont pas comptés ici.</div>'
+          : '<div class="st-ech">Après l\'entretien, la sanction ne peut intervenir ni moins de deux jours ouvrables, ni plus d\'un mois après (L. 1332-2). Indiquez le jour de l\'entretien pour avoir les deux dates.</div>';
+        h += '<button type="button" class="st-btn pri large" data-st="courrier"' + (R.length ? '' : ' disabled') + '>Préparer la convocation</button>';
+        /* la voie sans entretien, gardée à part et repliée */
+        h += '<details class="st-repli dedans"' + (S.reac.direct ? ' open' : '') + ' data-st-direct="1"><summary>Sans entretien : rappel à l\'ordre, avertissement, blâme</summary>' +
+          '<select id="st-sanction">' + DIRECTES.map(function (x) { return '<option value="' + x.cle + '"' + (x.cle === cle ? ' selected' : '') + '>' + ech(x.nom) + '</option>'; }).join("") + '</select>' +
+          '<div class="st-dates" style="margin-top:6px">' + ech(s.note) + '</div>' +
+          '<div class="st-btns"><button type="button" class="st-btn" data-st="courrier-direct"' + (R.length ? '' : ' disabled') + '>Préparer le courrier</button></div></details></div>';
       } else h += '<div class="st-carte"><p class="st-vide">Aucun fait à traiter.</p></div>';
       /* les autres mesures, qui ne sont pas des sanctions : inchangées, repliées */
       var mes = CT.suiviConducteur(S.id).mesures;
@@ -701,32 +704,51 @@
       R.forEach(function (g) { g.faits.forEach(function (f) { L.push([jj(f.date), g.t, f.detail || ""]); }); });
       return L.sort(function (x, y) { return x[0].split("/").reverse().join("") < y[0].split("/").reverse().join("") ? -1 : 1; });
     }
+    /* LA CONVOCATION. Consigne du 21 novembre 2026 : « on fait une convocation
+       d'entretien classique et après, pour la sanction, l'employeur choisit ce
+       qu'il veut ». La convocation ne porte donc aucune sanction : elle
+       s'archive seule, et la sanction se choisit à la suite de l'entretien. */
+    function archiver(R, champs) {
+      var natures = R.map(function (g) { return g.t.toLowerCase(); }), rangs = [], nb = R.reduce(function (t, g) { return t + g.faits.length; }, 0);
+      R.forEach(function (g) { rangs = rangs.concat(g.rangs); });
+      champs.date = aujourdhui(); champs.pour = pluriel(nb, "fait") + " : " + natures.join(", "); champs.natures = natures; champs.nb = nb;
+      CT.ajouterMesure(S.id, champs);
+      CT.majAnomalies(S.id, rangs, { traite: aujourdhui() });
+      S.reac = { cle: null, penal: false, entretien: "", direct: false }; S.decoches = {};
+      fermer(); peindre(); prevenirPage();
+    }
     function courrier() {
       var R = retenus(); if (!R.length) { dire("Aucun fait retenu"); return; }
-      var p = passe(), nb = R.reduce(function (s, g) { return s + g.faits.length; }, 0);
-      var cle = S.reac.cle || proposee(p, groupes().reduce(function (s, g) { return s + g.faits.length; }, 0)), s = sanctionDe(cle);
-      if (s.entretien && !S.reac.entretien) { dire("Indiquez d'abord le jour de l'entretien"); return; }
-      if (s.entretien && S.reac.entretien < premierEntretien(aujourdhui())) { dire("Entretien au plus tôt le " + jj(premierEntretien(aujourdhui())) + " : il faut un délai après la convocation"); return; }
-      var lignes = lignesRetenues(R), entretien = s.entretien ? S.reac.entretien : "";
-      ouvrir(s.entretien ? "Convocation à entretien préalable" : s.nom, rendre(CT.sanctionItems(S.id, cle, lignes, entretien)));
-      bouton("Télécharger en Word", false, function () { if (!CT.enWordSanction(S.id, cle, lignes, entretien)) dire("Le générateur Word n'est pas disponible."); });
+      var tot = premierEntretien(aujourdhui());
+      if (!S.reac.entretien) { dire("Indiquez d'abord le jour de l'entretien"); return; }
+      if (S.reac.entretien < tot) { dire("Entretien au plus tôt le " + jj(tot) + " : il faut un délai après la convocation"); return; }
+      var lignes = lignesRetenues(R), entretien = S.reac.entretien;
+      ouvrir("Convocation à entretien préalable", rendre(CT.sanctionItems(S.id, "convocation", lignes, entretien)));
+      bouton("Télécharger en Word", false, function () { if (!CT.enWordSanction(S.id, "convocation", lignes, entretien)) dire("Le générateur Word n'est pas disponible."); });
       bouton("Enregistrer et archiver", true, function () {
-        var natures = R.map(function (g) { return g.t.toLowerCase(); }), rangs = [];
-        R.forEach(function (g) { rangs = rangs.concat(g.rangs); });
-        CT.ajouterMesure(S.id, { date: aujourdhui(), categorie: s.disciplinaire ? "sanction" : "correction",
-          objet: s.entretien ? "Convocation à entretien préalable (" + s.nom.toLowerCase() + " envisagé" + (cle === "miseapied" ? "e" : "") + ")" : s.nom,
-          pour: pluriel(nb, "fait") + " : " + natures.join(", "), cle: cle, natures: natures, nb: nb, lignes: lignes, convocation: s.entretien, entretien: entretien });
-        CT.majAnomalies(S.id, rangs, { traite: aujourdhui() });
-        S.reac = { cle: null, penal: false, entretien: "" }; S.decoches = {};
-        fermer(); peindre(); prevenirPage(); dire(s.entretien ? "Convocation archivée : pensez à enregistrer la suite de l'entretien" : "Courrier archivé au dossier");
+        archiver(R, { categorie: "sanction", objet: "Convocation à entretien préalable", cle: "convocation", lignes: lignes, convocation: true, entretien: entretien });
+        dire("Convocation archivée : après l'entretien, choisissez la sanction");
+      });
+    }
+    function courrierDirect() {
+      var R = retenus(); if (!R.length) { dire("Aucun fait retenu"); return; }
+      var sel = document.getElementById("st-sanction"), cle = sel ? sel.value : "", s = sanctionDe(cle);
+      if (!s || s.entretien) return;
+      var lignes = lignesRetenues(R);
+      ouvrir(s.nom, rendre(CT.sanctionItems(S.id, cle, lignes, "")));
+      bouton("Télécharger en Word", false, function () { if (!CT.enWordSanction(S.id, cle, lignes, "")) dire("Le générateur Word n'est pas disponible."); });
+      bouton("Enregistrer et archiver", true, function () {
+        archiver(R, { categorie: s.disciplinaire ? "sanction" : "correction", objet: s.nom, cle: cle, lignes: lignes, convocation: false, entretien: "" });
+        dire("Courrier archivé au dossier");
       });
     }
     /* Après l'entretien : la sanction réellement notifiée, ou l'absence de suite. */
     function suiteEntretien(rang) {
       var m = CT.suiviConducteur(S.id).mesures[rang]; if (!m) return;
       var tot = m.entretien ? apresOuvrables(m.entretien, 2) : "", tard = m.entretien ? plusMois(m.entretien, 1) : "";
-      ouvrir("Suite de l'entretien", (m.entretien ? '<p class="st-aide">Entretien fixé au ' + jj(m.entretien) + '. La sanction se notifie au plus tôt le ' + jj(tot) + ' et au plus tard le ' + jj(tard) + ' (L. 1332-2 ; jours fériés non comptés).</p>' : '') +
-        '<div class="st-champ"><label>Ce qui a été décidé</label><select id="st-issue">' + CT.SANCTIONS.map(function (x) { return '<option value="' + x.cle + '"' + (x.cle === m.cle ? ' selected' : '') + '>' + ech(x.nom) + '</option>'; }).join("") + '<option value="">Aucune sanction</option></select></div>' +
+      var p = passe(), prop = sanctionDe(m.cle) ? m.cle : proposee(p, m.nb || 0);
+      ouvrir("Après l'entretien : la sanction", (m.entretien ? '<p class="st-aide">Entretien fixé au ' + jj(m.entretien) + '. La sanction se notifie au plus tôt le ' + jj(tot) + ' et au plus tard le ' + jj(tard) + ' (L. 1332-2 ; jours fériés non comptés).</p>' : '') +
+        '<div class="st-champ"><label>Sanction retenue' + (p.valables ? ' (récidive : mesure plus ferme proposée)' : '') + '</label><select id="st-issue">' + CT.SANCTIONS.map(function (x) { return '<option value="' + x.cle + '"' + (x.cle === prop ? ' selected' : '') + '>' + ech(x.nom) + '</option>'; }).join("") + '<option value="">Aucune sanction</option></select></div>' +
         '<div class="st-champ"><label>Date de la notification</label><input type="date" id="st-notif" value="' + aujourdhui() + '" max="' + aujourdhui() + '"></div>');
       bouton("Enregistrer", true, function () {
         var issue = document.getElementById("st-issue").value, dn = document.getElementById("st-notif").value;
@@ -735,8 +757,11 @@
         if (issue && tot && dn < tot && !window.confirm("Cette date tombe moins de deux jours ouvrables après l'entretien (au plus tôt : " + jj(tot) + "). Enregistrer quand même ?")) return;
         var s = issue ? sanctionDe(issue) : null;
         CT.majMesure(S.id, rang, issue ? { date: dn, cle: issue, objet: s.nom, categorie: s.disciplinaire ? "sanction" : "correction", convocation: null }
-          : { date: dn, cle: "rappel", objet: "Entretien du " + jj(m.entretien || dn) + " : aucune sanction", categorie: "correction", convocation: null });
-        fermer(); peindre(); dire("Suite de l'entretien enregistrée");
+          : { date: dn, cle: "rappel", objet: "Entretien du " + jj(m.entretien || dn) + " : aucune sanction", categorie: "correction", convocation: null, lignes: null });
+        fermer(); peindre();
+        /* le courrier de la sanction choisie, quand l'application sait l'écrire */
+        if (issue && CT.sanctionItems(S.id, issue, m.lignes || [], "")) { voirSanction(rang); dire("Sanction enregistrée : voici le courrier"); }
+        else dire(issue ? "Sanction enregistrée. La lettre de notification n'est pas produite ici." : "Suite de l'entretien enregistrée");
       });
     }
     function sanctionAncienne() {
@@ -793,11 +818,12 @@
     }
     function voirSanction(i) {
       var m = CT.suiviConducteur(S.id).mesures[i]; if (!m) return;
-      var h = (m.lignes && m.cle) ? rendre(CT.sanctionItems(S.id, m.cle, m.lignes, m.entretien)) : '';
+      var cleDoc = m.convocation ? "convocation" : m.cle, items = (m.lignes && cleDoc) ? CT.sanctionItems(S.id, cleDoc, m.lignes, m.entretien) : null;
+      var h = items ? rendre(items) : '';
       h += '<div class="st-res"><p class="t">' + ech(m.objet) + '</p><p>' + (m.ancienne ? 'Notifiée le ' : 'Enregistrée le ') + jj(m.date) + (m.pour ? ' pour ' + ech(m.pour) : '') + '.</p>' +
         (m.ancienne ? '<p class="st-dates">Sanction saisie après coup : l\'original est à joindre au dossier.</p>' : '') + '</div>';
       ouvrir(m.objet, h);
-      if (m.lignes && m.cle) bouton("Télécharger en Word", false, function () { if (!CT.enWordSanction(S.id, m.cle, m.lignes, m.entretien)) dire("Le générateur Word n'est pas disponible."); });
+      if (items) bouton("Télécharger en Word", false, function () { if (!CT.enWordSanction(S.id, cleDoc, m.lignes, m.entretien)) dire("Le générateur Word n'est pas disponible."); });
       bouton("Retirer du dossier", false, function () {
         if (!window.confirm("Retirer cette ligne du dossier disciplinaire ? À ne faire que pour une saisie erronée.")) return;
         CT.supprimerMesure(S.id, i); fermer(); peindre();
@@ -899,6 +925,7 @@
       if (a === "compte-rendu") return compteRendu();
       if (a === "suite") return suiteEntretien(+v);
       if (a === "courrier") return courrier();
+      if (a === "courrier-direct") return courrierDirect();
       if (a === "voir-controle") return voirControle(+v);
       if (a === "voir-sanction") return voirSanction(+v);
       if (a === "sup-mesure") { if (window.confirm("Supprimer cette mesure ?")) { CT.supprimerMesure(S.id, +v); peindre(); } return; }
@@ -932,7 +959,7 @@
         if (x.value && x.value < tot) { S.reac.entretien = ""; peindre(); dire("Entretien au plus tôt le " + jj(tot) + " : il faut un délai après la convocation"); return; }
         S.reac.entretien = x.value; peindre(); return;
       }
-      if (x.id === "st-sanction") { S.reac.cle = x.value; peindre(); return; }
+      if (x.id === "st-sanction") { S.reac.cle = x.value; S.reac.direct = true; peindre(); return; }
     });
 
     return {

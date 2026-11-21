@@ -914,9 +914,9 @@
     { cle: "blame", nom: "Blâme", entretien: false, disciplinaire: true,
       note: "Sanction notifiée par écrit, dans les deux mois de la connaissance des faits (" + art("L1332-4") + ")." },
     { cle: "miseapied", nom: "Mise à pied disciplinaire", entretien: true, disciplinaire: true,
-      note: "Sanction précédée d'une convocation à entretien préalable. Le document produit est cette convocation ; la sanction se notifie après l'entretien, ni moins de deux jours ouvrables ni plus d'un mois après le jour fixé (L. 1332-2)." },
+      note: "Sanction notifiée après l'entretien préalable, ni moins de deux jours ouvrables ni plus d'un mois après le jour fixé (L. 1332-2)." },
     { cle: "licenciement", nom: "Licenciement pour faute", entretien: true, disciplinaire: true,
-      note: "Rupture précédée d'une convocation à entretien préalable, puis d'une notification. Le document produit est la convocation." },
+      note: "Licenciement disciplinaire notifié après l'entretien préalable, ni moins de deux jours ouvrables ni plus d'un mois après le jour fixé (L. 1332-2)." },
   ];
 
   function lignesInfractions(id) {
@@ -1012,12 +1012,20 @@
       { k: "puce", t: "l'inspection du travail : " + inspection }
     ];
   }
+  /* Le courrier d'une étape de la procédure. « convocation » rend la
+     convocation à l'entretien préalable, la même quelle que soit la suite
+     (consigne du 21 novembre 2026 : la sanction se choisit après l'entretien).
+     Une sanction rend sa lettre de notification quand l'application sait
+     l'écrire : rappel à l'ordre, avertissement, blâme. Pour la mise à pied et
+     le licenciement, la lettre n'est pas produite ici : la fonction rend null,
+     et l'écran le dit. */
   function sanctionItems(id, cle, lignes, entretien) {
-    var s = SANCTIONS.filter(function (x) { return x.cle === cle; })[0];
-    if (!s) return null;
+    var convocation = cle === "convocation";
+    var s = convocation ? null : SANCTIONS.filter(function (x) { return x.cle === cle; })[0];
+    if (!convocation && (!s || s.entretien)) return null;
     var sal = salDe(id), ls = lignes || lignesInfractions(id);
     var items = [bandeauEntreprise()];
-    if (s.entretien) {
+    if (convocation) {
       items.push({ k: "h1", t: "CONVOCATION À ENTRETIEN PRÉALABLE" });
       items.push({ k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") });
       items.push({ k: "p", t: "Objet : Convocation à un entretien préalable à une éventuelle sanction disciplinaire" });
@@ -1051,7 +1059,8 @@
   }
   function enWordSanction(id, cle, lignes, entretien) {
     if (!window.AuditExport) return false;
-    var s = SANCTIONS.filter(function (x) { return x.cle === cle; })[0], items = sanctionItems(id, cle, lignes, entretien);
+    var convocation = cle === "convocation";
+    var s = convocation ? { entretien: true, nom: "Convocation" } : SANCTIONS.filter(function (x) { return x.cle === cle; })[0], items = sanctionItems(id, cle, lignes, entretien);
     if (!s || !items) return false;
     var sal = salDe(id);
     /* Le nom du fichier d'une convocation ne dit pas la sanction envisagée :
