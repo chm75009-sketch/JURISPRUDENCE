@@ -433,6 +433,14 @@ l'humidimètre posé sur le parpaing du vide sanitaire a été lu « 39 % » sur
 à 100 dpi ; il affiche « 3,9 % ». La virgule d'un afficheur ne se voit pas à basse
 résolution : un chiffre lu sur une photographie se vérifie agrandi avant d'être écrit.
 
+Même dossier, même jour. Interrogé sur la quittance d'Abeille, j'ai écrit qu'aucune pièce
+n'établissait qu'elle n'avait pas été envoyée, et que rien ne montrait la proposition du
+31 août « restée sans réponse ». La note de la cliente (« Présentation 2 », partie 3) dit :
+« En m'en rendant compte a la derniere minute avant de renvoyer le devis signe, j'ai bloque
+l'envoi », et ses deux notes disent la mise en demeure réceptionnée et sans réponse. Je les
+avais lues, puis j'ai raisonné sur ma mémoire et sur la seule quittance. Avant de dire
+qu'une chose n'est nulle part, on relit tout le dossier, y compris les écrits du client.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
