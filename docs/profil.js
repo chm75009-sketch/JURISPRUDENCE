@@ -229,7 +229,7 @@
        ici, saisie une fois, avec le reste de ce qui ne change pas. Relevé le
        26 septembre 2026. */
     { c: "cabinetCourriel", nom: "Adresse de votre conseil, pour vos questions", t: "text", pleine: true,
-      aide: "C'est à cette adresse que partent les questions de l'écran « Mes questions ». Elle est saisie une fois ici." },
+      aide: "C'est à cette adresse que partent les questions de l'écran « Mes 5 questions à poser ». Elle est saisie une fois ici." },
   ];
 
   /* ═══════════════════════════════════════════════════════════════════════

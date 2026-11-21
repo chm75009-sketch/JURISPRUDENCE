@@ -55,7 +55,7 @@
     { page: "parc-parametres.html", nom: "Paramètres du parc" },
     { page: "agenda.html", nom: "Agenda social" },
     { page: "mes-documents.html", nom: "Mes documents" },
-    { page: "questions.html", nom: "Mes questions" },
+    { page: "questions.html", nom: "Mes 5 questions à poser" },
     { page: "recherche.html", nom: "Recherche de jurisprudence" },
     /* TROIS ENTRÉES QUI MANQUAIENT AU MENU. « Ni contrôles, ni parcours, ni
        "Mes données" ne figurent dans le menu » : liste du 26 septembre 2026.
