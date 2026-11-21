@@ -79,6 +79,36 @@
     d.setDate(d.getDate() + 1); if (d.getDay() === 0) d.setDate(d.getDate() + 1);
     return isoDe(d);
   }
+  /* LE DÉLAI ENTRE LA CONVOCATION ET L'ENTRETIEN. Défaut relevé le 21 novembre
+     2026 : une convocation datée du jour acceptait un entretien le jour même.
+
+     Pour un licenciement, le chiffre est dans le texte : « L'entretien
+     préalable ne peut avoir lieu moins de cinq jours ouvrables après la
+     présentation de la lettre recommandée ou la remise en main propre de la
+     lettre de convocation » (L. 1232-2, LEGIARTI000006901000), et le délai
+     qui expire un samedi, un dimanche ou un jour férié est prorogé « jusqu'au
+     premier jour ouvrable suivant » (R. 1231-1, LEGIARTI000018537730).
+
+     Pour une autre sanction, ni L. 1332-2 ni R. 1332-1 ne donnent de chiffre.
+     Le juge vérifie que le salarié a été convoqué « dans un délai suffisant
+     pour préparer sa défense » (Cass. soc., 31 mai 2000, n° 98-42.130). L'écran
+     refuse donc le jour même, et rappelle cette exigence.
+
+     Les jours fériés ne sont pas comptés : l'écran le dit. */
+  function lendemain(s) { var d = versDate(s); d.setDate(d.getDate() + 1); return isoDe(d); }
+  function premierEntretien(cle, remise) {
+    if (cle !== "licenciement") return lendemain(remise);
+    var d = versDate(remise), k = 0;
+    while (k < 5) { d.setDate(d.getDate() + 1); if (d.getDay() !== 0) k++; }
+    if (d.getDay() === 6) d.setDate(d.getDate() + 2);          /* expire un samedi : prorogé au lundi */
+    d.setDate(d.getDate() + 1); if (d.getDay() === 0) d.setDate(d.getDate() + 1);
+    return isoDe(d);
+  }
+  function regleEntretien(cle) {
+    return cle === "licenciement"
+      ? "L'entretien ne peut avoir lieu moins de cinq jours ouvrables après la remise en main propre de la convocation, ou la présentation de la lettre recommandée (L. 1232-2). Si la convocation part par la poste, comptez à partir du jour où elle est présentée. Les jours fériés ne sont pas comptés ici."
+      : "L'entretien ne peut pas avoir lieu le jour de la convocation. Le code ne fixe pas de nombre de jours pour une sanction autre que le licenciement : le salarié doit avoir un délai suffisant pour préparer sa défense (Cass. soc., 31 mai 2000, n° 98-42.130).";
+  }
   /* Une heure du tachygraphe (temps universel) rendue en heure de Paris. */
   function heureParis(jour, hm) {
     try {
@@ -651,7 +681,10 @@
             : 'Poursuites à engager au plus tard le <b>' + enLettres(dp.limite) + '</b> (' + (dp.jours === 0 ? "aujourd'hui" : "dans " + pluriel(dp.jours, "jour")) + ').') + '</div>';
         } else h += '<div class="st-alerte">Aucun fait retenu : tout est décoché, prescrit, ou sans date de connaissance.</div>';
         if (s.entretien) {
-          h += '<div class="st-connu bloc"><label>Jour fixé pour l\'entretien préalable <input type="date" data-st-entretien="1" value="' + S.reac.entretien + '" min="' + aujourdhui() + '"></label></div>';
+          var tot = premierEntretien(cle, aujourdhui());
+          if (S.reac.entretien && S.reac.entretien < tot) S.reac.entretien = "";
+          h += '<div class="st-connu bloc"><label>Jour fixé pour l\'entretien préalable <input type="date" data-st-entretien="1" value="' + S.reac.entretien + '" min="' + tot + '"></label></div>';
+          h += '<div class="st-ech">Convocation remise aujourd\'hui : entretien <b>au plus tôt le ' + enLettres(tot) + '</b>. ' + regleEntretien(cle) + '</div>';
           h += S.reac.entretien ? '<div class="st-ech">La sanction se notifie <b>au plus tôt le ' + jj(apresOuvrables(S.reac.entretien, 2)) + '</b> et <b>au plus tard le ' + jj(plusMois(S.reac.entretien, 1)) + '</b> : ni moins de deux jours ouvrables, ni plus d\'un mois après le jour de l\'entretien (L. 1332-2). Les jours fériés ne sont pas comptés ici.</div>'
             : '<div class="st-ech">Après l\'entretien, la sanction ne peut intervenir ni moins de deux jours ouvrables, ni plus d\'un mois après (L. 1332-2). Indiquez le jour de l\'entretien pour avoir les deux dates.</div>';
         }
@@ -668,6 +701,8 @@
         '<div class="st-btns"><button type="button" class="st-btn" data-st="mesure">Ajouter la mesure</button></div></details>';
       return h;
     }
+    /* La sanction en cours : celle qui a été choisie, sinon celle que l'écran propose. */
+    function cleChoisie() { return S.reac.cle || proposee(passe(), groupes().reduce(function (t, g) { return t + g.faits.length; }, 0)); }
     function lignesRetenues(R) {
       var L = [];
       R.forEach(function (g) { g.faits.forEach(function (f) { L.push([jj(f.date), g.t, f.detail || ""]); }); });
@@ -678,6 +713,7 @@
       var p = passe(), nb = R.reduce(function (s, g) { return s + g.faits.length; }, 0);
       var cle = S.reac.cle || proposee(p, groupes().reduce(function (s, g) { return s + g.faits.length; }, 0)), s = sanctionDe(cle);
       if (s.entretien && !S.reac.entretien) { dire("Indiquez d'abord le jour de l'entretien"); return; }
+      if (s.entretien && S.reac.entretien < premierEntretien(cle, aujourdhui())) { dire("Entretien au plus tôt le " + jj(premierEntretien(cle, aujourdhui())) + " : il faut un délai après la convocation"); return; }
       var lignes = lignesRetenues(R), entretien = s.entretien ? S.reac.entretien : "";
       ouvrir(s.entretien ? "Convocation à entretien préalable" : s.nom, rendre(CT.sanctionItems(S.id, cle, lignes, entretien)));
       bouton("Télécharger en Word", false, function () { if (!CT.enWordSanction(S.id, cle, lignes, entretien)) dire("Le générateur Word n'est pas disponible."); });
@@ -898,7 +934,11 @@
       }
       if (x.hasAttribute("data-st-coche")) { if (x.checked) delete S.decoches[x.getAttribute("data-st-coche")]; else S.decoches[x.getAttribute("data-st-coche")] = true; peindre(); return; }
       if (x.hasAttribute("data-st-penal")) { S.reac.penal = x.checked; peindre(); return; }
-      if (x.hasAttribute("data-st-entretien")) { S.reac.entretien = x.value; peindre(); return; }
+      if (x.hasAttribute("data-st-entretien")) {
+        var tot = premierEntretien(cleChoisie(), aujourdhui());
+        if (x.value && x.value < tot) { S.reac.entretien = ""; peindre(); dire("Entretien au plus tôt le " + jj(tot) + " : il faut un délai après la convocation"); return; }
+        S.reac.entretien = x.value; peindre(); return;
+      }
       if (x.id === "st-sanction") { S.reac.cle = x.value; peindre(); return; }
     });
 
