@@ -66,8 +66,10 @@
   function nommerCode(c) {
     if (CODES[c] != null) return CODES[c];
     if (c >= 0x10 && c <= 0x1f) return "Tentative d'atteinte à la sécurité (code 0x" + hex(c) + ")";
-    if (c >= 0x30 && c <= 0x3f) return "Défaut de carte (code 0x" + hex(c) + ")";
-    if (c >= 0x40 && c <= 0x4f) return "Défaut de l'appareil de contrôle (code 0x" + hex(c) + ")";
+    /* Annexe 1B du règlement (CE) n° 1360/2002, appendice 1, point 2.54 :
+       0x30 à 0x3f, défauts de l'appareil de contrôle ; 0x40 à 0x4f, défauts de carte. */
+    if (c >= 0x30 && c <= 0x3f) return "Défaut de l'appareil de contrôle (code 0x" + hex(c) + ")";
+    if (c >= 0x40 && c <= 0x4f) return "Défaut de carte (code 0x" + hex(c) + ")";
     return "Événement ou défaut, code 0x" + hex(c);
   }
   function hex(n) { var s = n.toString(16).toUpperCase(); return s.length < 2 ? "0" + s : s; }
