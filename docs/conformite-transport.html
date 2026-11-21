@@ -203,6 +203,15 @@
   .st-champ{margin:12px 14px;font-size:14px}.st-champ.serre{margin:10px 0}
   .st-champ label{display:block;color:var(--texte-2);font-size:13.5px;margin-bottom:4px}
   .st-champ input,.st-champ select{width:100%;box-sizing:border-box}
+  /* SUR IPHONE, UN CHAMP DE DATE SORTAIT DE L'ÉCRAN. Relevé le 21 novembre
+     2026 sur « Saisir une infraction » : Safari donne à ce champ une largeur
+     propre, qui ignore width:100 % et dépasse le bord droit. On lui retire
+     son habillage d'origine pour qu'il suive la largeur de sa ligne, texte à
+     gauche comme les autres champs. */
+  .st input[type=date],.st-ovl input[type=date]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;
+    box-sizing:border-box;min-height:42px;text-align:left}
+  .st input[type=date]::-webkit-date-and-time-value,.st-ovl input[type=date]::-webkit-date-and-time-value{text-align:left}
+  .st-champ input[type=date]{display:block}
   .st-champ canvas{display:block;width:100%;height:170px;border:1px solid var(--trait);border-radius:10px;background:#fff;touch-action:none}
   .st-doc{background:#fff;color:#1c2024;margin:12px 14px;border:1px solid #ddd;border-radius:10px;padding:16px;font-size:13.5px;line-height:1.5}
   .st-doc .ent{font-weight:700;margin:0 0 6px}.st-doc .ent small{display:block;font-weight:400;color:#444;font-size:11.5px}
