@@ -232,19 +232,87 @@
   function garderSuivi(id, s) {
     var e = etat(); e.suivi = e.suivi || {}; e.suivi[id] = s; garderEtat(e);
   }
+  /* Une anomalie porte, en plus de sa date et de sa nature : sa source (carte,
+     véhicule, compte rendu…), le jour où l'employeur en a eu connaissance, qui
+     fait courir les deux mois de l'article L. 1332-4, et la date de la mesure
+     qui l'a traitée. */
+  function ligneAnomalie(a, defauts) {
+    defauts = defauts || {};
+    var x = { date: a.date || iso(new Date()), type: net(a.type), detail: net(a.detail) };
+    var src = net(a.src || defauts.src), connu = net(a.connu || defauts.connu);
+    if (src) x.src = src;
+    if (connu) x.connu = connu;
+    return x;
+  }
   function ajouterAnomalie(id, a) {
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
     s.anomalies = s.anomalies || [];
-    s.anomalies.push({ date: a.date || iso(new Date()), type: net(a.type), detail: net(a.detail) });
+    s.anomalies.push(ligneAnomalie(a));
     e.suivi[id] = s; garderEtat(e);
+  }
+  /* Modifier des anomalies repérées par leur rang : la date de connaissance
+     (champ connu) ou le traitement (champ traite). */
+  function majAnomalies(id, rangs, champs) {
+    var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
+    (rangs || []).forEach(function (i) {
+      var a = s.anomalies && s.anomalies[i]; if (!a) return;
+      Object.keys(champs).forEach(function (k) { if (champs[k] == null || champs[k] === "") delete a[k]; else a[k] = champs[k]; });
+    });
+    garderSuivi(id, s);
   }
   function ajouterMesure(id, m) {
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
     s.mesures = s.mesures || [];
-    s.mesures.push({ date: m.date || iso(new Date()), categorie: net(m.categorie),
-      objet: net(m.objet), pour: net(m.pour) });
+    var x = { date: m.date || iso(new Date()), categorie: net(m.categorie),
+      objet: net(m.objet), pour: net(m.pour) };
+    /* Pour une sanction : sa clé dans l'échelle, la nature des faits visés, leur
+       nombre, et le fait qu'elle a été saisie après coup. */
+    if (m.cle) x.cle = m.cle;
+    if (m.natures && m.natures.length) x.natures = m.natures.slice();
+    if (m.nb) x.nb = m.nb;
+    if (m.ancienne) x.ancienne = true;
+    /* Les faits visés, pour pouvoir rééditer le même courrier ; et, quand un
+       entretien préalable est requis, le fait que seule la convocation est
+       partie : la sanction n'existe qu'une fois notifiée. */
+    if (m.lignes && m.lignes.length) x.lignes = m.lignes.slice();
+    if (m.convocation) x.convocation = true;
+    if (m.entretien) x.entretien = m.entretien;
+    s.mesures.push(x);
     e.suivi[id] = s; garderEtat(e);
   }
+  function majMesure(id, i, champs) {
+    var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
+    var m = s.mesures && s.mesures[i]; if (!m) return;
+    Object.keys(champs).forEach(function (k) { if (champs[k] == null || champs[k] === "") delete m[k]; else m[k] = champs[k]; });
+    garderSuivi(id, s);
+  }
+
+  /* CE QUE LA FICHE GARDE EN PLUS, PAR CONDUCTEUR : l'état des documents remis
+     (imprimé, signé, avec les deux dates et la signature faite à l'écran), le
+     journal des contrôles effectués, qui prouve le suivi, et l'identité de sa
+     carte une fois lue. */
+  function champSuivi(id, champ, defaut) {
+    var e = etat(), s = (e.suivi && e.suivi[id]) || {};
+    return s[champ] == null ? defaut : s[champ];
+  }
+  function poserSuivi(id, champ, valeur) {
+    var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
+    s[champ] = valeur; e.suivi[id] = s; garderEtat(e);
+  }
+  function docsRemis(id) { return champSuivi(id, "docs", {}); }
+  function porterDocRemis(id, cle, champs) {
+    var d = docsRemis(id); d[cle] = d[cle] || {};
+    Object.keys(champs).forEach(function (k) { d[cle][k] = champs[k]; });
+    poserSuivi(id, "docs", d);
+  }
+  function journalControles(id) { return champSuivi(id, "controles", []).slice(); }
+  function ajouterControle(id, c) {
+    var L = champSuivi(id, "controles", []);
+    L.push({ quand: new Date().toISOString(), lib: net(c.lib), resume: net(c.resume) });
+    poserSuivi(id, "controles", L);
+  }
+  function carteDe(id) { return champSuivi(id, "carte", null); }
+  function porterCarte(id, c) { poserSuivi(id, "carte", { numero: net(c.numero), titulaire: net(c.titulaire), expiration: net(c.expiration) }); }
   function supprimerAnomalie(id, i) {
     var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
     if (s.anomalies && s.anomalies[i]) { s.anomalies.splice(i, 1); garderSuivi(id, s); }
@@ -390,7 +458,7 @@
   function seRetient(a) { return !(a.source && (a.source !== "appareil" || !faitDeConduite(a))); }
   function anomaliesRetenues(anomalies) { return (anomalies || []).filter(seRetient); }
 
-  function importerAnomalies(id, anomalies) {
+  function importerAnomalies(id, anomalies, defauts) {
     if (!id || !anomalies || !anomalies.length) return 0;
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
     s.anomalies = s.anomalies || [];
@@ -401,7 +469,7 @@
         return (x.date || "") === (a.date || "") && (x.type || "") === (a.type || "");
       });
       if (existe) return;
-      s.anomalies.push({ date: a.date || iso(new Date()), type: net(a.type), detail: net(a.detail) });
+      s.anomalies.push(ligneAnomalie(a, defauts));
       n++;
     });
     e.suivi[id] = s; garderEtat(e);
@@ -799,7 +867,7 @@
     { cle: "blame", nom: "Blâme", entretien: false, disciplinaire: true,
       note: "Sanction notifiée par écrit, dans les deux mois de la connaissance des faits (" + art("L1332-4") + ")." },
     { cle: "miseapied", nom: "Mise à pied disciplinaire", entretien: true, disciplinaire: true,
-      note: "Sanction précédée d'une convocation à entretien préalable. Le document produit est cette convocation ; la sanction se notifie après l'entretien, dans les deux mois des faits (" + art("L1332-4") + ")." },
+      note: "Sanction précédée d'une convocation à entretien préalable. Le document produit est cette convocation ; la sanction se notifie après l'entretien, ni moins de deux jours ouvrables ni plus d'un mois après le jour fixé (L. 1332-2)." },
     { cle: "licenciement", nom: "Licenciement pour faute", entretien: true, disciplinaire: true,
       note: "Rupture précédée d'une convocation à entretien préalable, puis d'une notification. Le document produit est la convocation." },
   ];
@@ -856,18 +924,21 @@
   }
 
   /* LA SANCTION CHOISIE, OU LA CONVOCATION QUAND L'ENTRETIEN EST REQUIS. */
-  function enWordSanction(id, cle) {
-    if (!window.AuditExport) return false;
+  /* lignes, facultatif : les seuls faits retenus, quand l'employeur en a écarté
+     ou que certains sont prescrits. Sans lui, tous les faits de la fiche. */
+  function sanctionItems(id, cle, lignes, entretien) {
     var s = SANCTIONS.filter(function (x) { return x.cle === cle; })[0];
-    if (!s) return false;
-    var sal = salDe(id), ls = lignesInfractions(id);
+    if (!s) return null;
+    var sal = salDe(id), ls = lignes || lignesInfractions(id);
     var items = [bandeauEntreprise()];
     if (s.entretien) {
       items.push({ k: "h1", t: "CONVOCATION À ENTRETIEN PRÉALABLE" });
       items.push({ k: "p", t: sal.nom + (sal.poste ? ", " + sal.poste : "") });
       items.push({ k: "p", t: "Nous envisageons de prendre à votre encontre une sanction disciplinaire pouvant aller jusqu'à " + s.nom.toLowerCase() + ", en raison des faits suivants, relevés sur les données de votre tachygraphe :" });
       if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
-      items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le [DATE] à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
+      var jourEntretien = "[DATE]";
+      if (entretien) { try { jourEntretien = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(entretien + "T12:00:00")); } catch (err) { jourEntretien = entretien; } }
+      items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le " + jourEntretien + " à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
       items.push({ k: "note", t: s.note });
       items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
       items.push({ k: "p", t: "Pour l'entreprise :" });
@@ -884,10 +955,24 @@
       items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
       items.push({ k: "p", t: "Signature du conducteur :" });
     }
+    return items;
+  }
+  function enWordSanction(id, cle, lignes, entretien) {
+    if (!window.AuditExport) return false;
+    var s = SANCTIONS.filter(function (x) { return x.cle === cle; })[0], items = sanctionItems(id, cle, lignes, entretien);
+    if (!s || !items) return false;
+    var sal = salDe(id);
     var prefixe = s.entretien ? "convocation-" : "sanction-";
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, (s.entretien ? "Convocation - " : s.nom + " - ") + sal.nom, { sansTitre: false }),
       prefixe + cle + "-" + id + "-" + iso(new Date()) + ".docx");
+    return true;
+  }
+  /* Un document Word quelconque à l'en-tête de l'entreprise : sert au compte
+     rendu du passé disciplinaire. */
+  function telechargerWord(items, titre, fichier) {
+    if (!window.AuditExport) return false;
+    window.AuditExport.telecharger(window.AuditExport.docx([bandeauEntreprise()].concat(items), titre, { sansTitre: false }), fichier);
     return true;
   }
 
@@ -955,9 +1040,8 @@
   }
 
   /* LE DOCUMENT NOMINATIF À REMETTRE, à l'en-tête de l'entreprise. */
-  function enWordDocConducteur(id, kind) {
-    if (!window.AuditExport) return false;
-    var sal = salDe(id), nom = sal.nom, d = jour();
+  function docConducteurItems(id, kind) {
+    var sal = salDe(id), nom = sal.nom;
     var items = [bandeauEntreprise()];
     if (kind === "consigne") {
       items.push({ k: "h1", t: "CONSIGNE DE CONDUITE AVEC CARTE" });
@@ -1001,9 +1085,15 @@
       items.push({ k: "h1", t: "LIVRET INDIVIDUEL DE CONTRÔLE" });
       items.push({ k: "p", t: "Ouvert au nom de " + nom + ". Pour un véhicule léger non équipé de chronotachygraphe, le conducteur y inscrit, jour par jour : l'heure de début et de fin de service, les temps de conduite, les autres travaux, les pauses et les repos, et le total de la semaine." });
       items.push({ k: "p", t: "Les mêmes limites s'appliquent : conduite journalière, pauses après 4 h 30 de conduite continue, et repos. Le livret est tenu à jour chaque jour et présenté à tout contrôle." });
-    } else { return false; }
+    } else { return null; }
     items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
     items.push({ k: "p", t: "Signature du conducteur :" });
+    return items;
+  }
+  function enWordDocConducteur(id, kind) {
+    if (!window.AuditExport) return false;
+    var sal = salDe(id), nom = sal.nom, d = jour(), items = docConducteurItems(id, kind);
+    if (!items) return false;
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, kind + " - " + nom, { sansTitre: false }),
       "doc-" + kind + "-" + id + "-" + d + ".docx");
@@ -1015,6 +1105,17 @@
     SANCTIONS: SANCTIONS,
     enWordRapport: enWordRapport,
     enWordSanction: enWordSanction,
+    sanctionItems: sanctionItems,
+    telechargerWord: telechargerWord,
+    docConducteurItems: docConducteurItems,
+    majAnomalies: majAnomalies,
+    majMesure: majMesure,
+    docsRemis: docsRemis,
+    porterDocRemis: porterDocRemis,
+    journalControles: journalControles,
+    ajouterControle: ajouterControle,
+    carteDe: carteDe,
+    porterCarte: porterCarte,
     sanctionProposee: sanctionProposee,
     profilConducteur: profilConducteur,
     setProfilConducteur: setProfilConducteur,

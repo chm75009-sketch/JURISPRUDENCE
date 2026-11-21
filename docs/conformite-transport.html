@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#16181d">
 <link rel="icon" href="icons/icon-discipline-180.png">
-<title>Tachygraphe, cartes conducteurs et temps de conduite</title>
+<title>Suivi tachygraphe</title>
 <link rel="stylesheet" href="style.css">
 <script src="barre.js"></script>
 
@@ -25,6 +25,9 @@
 -->
 
 <style>
+  /* Les cartes et les filets de cette page : la feuille commune les nomme
+     surface et filet. Sans ces deux lignes, les cartes n'avaient ni fond ni bord. */
+  :root{--fond-2:var(--surface);--trait:var(--filet)}
   .enveloppe{max-width:820px;margin:0 auto;padding:0 16px}
   h1.titre{font:600 clamp(22px,3.4vw,30px)/1.3 system-ui;margin:var(--e5) 0 4px}
   .sous{color:var(--texte-2);margin:0 0 var(--e5)}
@@ -96,6 +99,112 @@
   .echeance .et-ligne>span.lab{color:var(--texte-2);font-size:var(--t2)}
   .echeance input[type=date]{font-size:15px;padding:7px 8px}
   .echeance input[type=file]{max-width:100%;font-size:13px}
+  /* ── le suivi tachygraphe du conducteur, en quatre étapes ── */
+  .st{margin:0 0 var(--e3)}
+  .st-entete{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin:0 0 10px}
+  .st-nom{font-weight:600;font-size:17px}.st-nom2{font-weight:600;font-size:15px}
+  .st-pl{font-size:11px;font-weight:400;background:var(--fond);border:1px solid var(--trait);border-radius:10px;padding:1px 8px;color:var(--texte-2)}
+  .st-sub{font-size:13px;color:var(--texte-2);margin-top:3px}
+  .st-h2{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--texte-2);margin:4px 0 8px;font-weight:700;border:0;padding:0}
+  .st button,.st-ovl button{margin:0;min-height:0;max-width:none}
+  .st label,.st-ovl label{color:inherit}
+  .st input,.st select,.st-ovl input,.st-ovl select{min-height:0}
+  .st .st-bandeau{display:block;width:100%;text-align:left;font:400 14.5px/1.4 system-ui;border:0;border-left:5px solid #b4231f;background:#fdecea;color:#7a1512;border-radius:0 10px 10px 0;padding:10px 12px;margin:0 0 8px;cursor:pointer}
+  .st-bandeau b{display:block}
+  .st .st-bandeau.orange{border-left-color:#9a6400;background:#fef6e6;color:#7a4f00}
+  .st .st-bandeau:hover{filter:brightness(.97)}
+  .st-etapes{display:flex;gap:6px;margin:6px 0 14px}
+  .st .st-etapes button{position:relative;flex:1;min-width:0;background:var(--surface);border:1px solid var(--filet);border-radius:12px;padding:8px 2px;cursor:pointer;color:var(--texte);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;font:400 12px/1.2 system-ui}
+  .st-etapes .num{width:26px;height:26px;border-radius:999px;background:var(--fond);color:var(--texte-2);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid var(--trait)}
+  .st-etapes .num.ok{background:#1f7a3d;color:#fff;border-color:#1f7a3d}
+  .st-etapes .lb{font-size:11px;line-height:1.15;text-align:center;color:var(--texte-2)}
+  .st .st-etapes button.on{border-color:var(--accent);background:var(--accent-clair)}
+  .st .st-etapes button:hover{background:var(--accent-clair);color:var(--texte)}
+  .st-etapes button.on .num{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .st-etapes button.on .lb{color:var(--accent);font-weight:600}
+  .st-etapes .point{position:absolute;top:5px;right:7px;width:12px;height:12px;border-radius:999px;background:#b4231f;border:2px solid var(--surface)}
+  .st-etapes .point.orange{background:#c98300}
+  .st-carte{background:var(--fond-2);border:1px solid var(--trait);border-radius:14px;padding:14px;margin:0 0 10px}
+  .st-carte.recidive{border-color:#b4231f;border-left-width:5px}
+  .st-tete{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .st-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+  .st-btns.col{flex-direction:column;align-items:stretch;margin-top:0}
+  .st .st-btn,.st-ovl .st-btn{font:500 15px/1.2 system-ui;cursor:pointer;border-radius:9px;border:1px solid var(--filet-2);background:var(--surface);color:var(--texte);padding:10px 14px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;text-align:center}
+  .st .st-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .st .st-btn:hover{background:var(--accent-clair);color:var(--texte);border-color:var(--filet-2)}
+  .st .st-btn.pri:hover{background:var(--accent-fonce);color:#fff}
+  .st .st-btn.large{width:100%;margin-top:12px;padding:13px;font-size:16px}
+  .st-btn[disabled]{opacity:.45;cursor:not-allowed}
+  .st-badge{font-size:11.5px;font-weight:700;border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .st-badge.gris{color:#555;background:#e8eaed}.st-badge.orange{color:#7a4f00;background:#fde9c2}
+  .st-badge.vert{color:#12602c;background:#d7f0df}.st-badge.rouge{color:#8a1a16;background:#fbd9d6}
+  .st-lig{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--trait)}
+  .st-lab{font-size:15px}.st-dates{font-size:12.5px;color:var(--texte-2);line-height:1.45}
+  .st-dates.suite{padding:2px 0 2px 30px}
+  .st .st-lien,.st-ovl .st-lien{display:inline;background:none;border:0;color:var(--accent);font:400 13.5px/1.3 system-ui;padding:4px 0;cursor:pointer;text-decoration:underline;text-align:left}
+  .st .st-lien:hover{background:none;color:var(--accent-fonce)}
+  .st .st-lien.decale{padding:0 0 10px 30px}
+  .st .st-retour{display:inline;background:none;border:0;color:var(--accent);font:500 15px/1.3 system-ui;padding:0 0 10px;cursor:pointer}
+  .st .st-retour:hover{background:none;color:var(--accent-fonce)}
+  .st-vide{font-size:13.5px;color:var(--texte-2);margin:4px 0}
+  .st-note{font-size:13px;border-left:3px solid #9a6400;background:#fef6e6;color:#4d3300;padding:8px 10px;border-radius:0 8px 8px 0;margin:10px 0}
+  .st-note.rouge{border-left-color:#b4231f;background:#fdecea;color:#7a1512}
+  .st-alerte{font-size:13px;color:#b4231f;font-weight:600;margin:8px 0}
+  .st-etat{font-size:14px;margin:6px 0 4px;color:#1f7a3d;font-weight:600}.st-etat.oui{color:#b4231f}
+  .st-ech{font-size:13px;color:var(--texte-2);margin:8px 0}.st-ech b{color:var(--texte)}
+  .st-grp{border-top:1px solid var(--trait)}
+  .st .st-coche{display:flex;gap:10px;align-items:flex-start;padding:9px 0 4px;cursor:pointer;font-size:15px;color:var(--texte)}
+  .st-coche input{width:20px;height:20px;margin:2px 0 0;flex:none}
+  .st .st-coche.petit{border-top:1px solid var(--trait);margin-top:4px;font-size:13.5px;color:var(--texte-2)}
+  .st-connu{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 0 2px 30px;font-size:13px;color:var(--texte-2)}
+  .st-connu.bloc{padding:10px 0 0}
+  .st .st-connu label{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13.5px;color:var(--texte-2)}
+  .st .st-connu input[type=date]{width:auto;font:400 15px/1.2 system-ui;padding:7px 9px;border-radius:8px;border:1px solid var(--filet-2);background:var(--surface);color:var(--texte)}
+  .st-champ input,.st-champ select,.st select{font:400 16px/1.3 system-ui;padding:10px 11px;border-radius:8px;border:1px solid var(--filet-2);background:var(--surface);color:var(--texte)}
+  .st select{width:100%;margin-top:6px}
+  .st-repli{border:1px solid var(--trait);border-radius:14px;padding:12px 14px;margin:0 0 10px;background:var(--fond-2)}
+  .st-repli>summary{cursor:pointer;font-weight:600;font-size:14px}
+  .st .st-sup,.st-ovl .st-sup{background:none;border:0;color:var(--texte-2);font:400 22px/1 system-ui;cursor:pointer;padding:4px 8px;min-width:36px}
+  .st .st-sup:hover,.st-ovl .st-sup:hover{background:none;color:var(--rouge)}
+  ul.st-cf{list-style:none;margin:0;padding:0}
+  ul.st-cf li{padding:9px 0;border-top:1px solid var(--trait)}ul.st-cf li:first-child{border-top:0}
+  .st ul.st-cf button{display:block;width:100%;background:none;border:0;color:var(--texte);text-align:left;padding:2px 0;cursor:pointer;font:400 15px/1.3 system-ui;border-radius:0}
+  .st ul.st-cf button:hover{background:none;color:var(--accent)}
+  ul.st-cf .l{display:block;font-size:14px;font-weight:600}ul.st-cf .d{display:block;font-size:12.5px;color:var(--texte-2);margin-top:2px}
+  /* la fenêtre du bas, pour un relevé, un document, une saisie */
+  .st-ovl{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:60}
+  .st-ovl.on{display:flex}
+  .st-modale{background:var(--surface);color:var(--texte);width:100%;max-width:560px;max-height:92vh;border-radius:16px 16px 0 0;display:flex;flex-direction:column}
+  .st-mtop{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--trait)}
+  .st-mtop b{font-size:16px}.st-ovl .st-mtop button{border:0;background:none;font:400 26px/1 system-ui;color:var(--texte-2);padding:2px 8px;cursor:pointer}
+  .st-ovl .st-mtop button:hover{background:none;color:var(--texte)}
+  .st-mc{overflow:auto;padding:0 0 6px;flex:1}
+  .st-ma{display:flex;gap:8px;padding:10px 12px 14px;border-top:1px solid var(--trait)}
+  .st-ovl .st-ma button{flex:1;font:500 16px/1.2 system-ui;padding:13px 10px;min-height:48px;border-radius:9px;border:1px solid var(--filet-2);background:var(--surface);color:var(--texte);cursor:pointer}
+  .st-ovl .st-ma button:hover{background:var(--accent-clair);color:var(--texte)}
+  .st-ovl .st-ma button.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .st-ovl .st-ma button.pri:hover{background:var(--accent-fonce);color:#fff}
+  .st-ma button[disabled]{opacity:.5}
+  .st-aide{font-size:13px;color:var(--texte-2);margin:10px 14px}
+  .st-res{margin:12px 14px;font-size:14.5px}.st-res p{margin:6px 0}.st-res .t{font-weight:600;font-size:15.5px}
+  .st-res h4{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--texte-2);margin:14px 0 6px}
+  table.st-tb{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.st-tb th,table.st-tb td{border-top:1px solid var(--trait);padding:6px 4px;text-align:left;vertical-align:top}
+  table.st-tb th{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:var(--texte-2);border-top:0}
+  table.st-tb td.n{white-space:nowrap}
+  .st-champ{margin:12px 14px;font-size:14px}.st-champ.serre{margin:10px 0}
+  .st-champ label{display:block;color:var(--texte-2);font-size:13.5px;margin-bottom:4px}
+  .st-champ input,.st-champ select{width:100%;box-sizing:border-box}
+  .st-champ canvas{display:block;width:100%;height:170px;border:1px solid var(--trait);border-radius:10px;background:#fff;touch-action:none}
+  .st-doc{background:#fff;color:#1c2024;margin:12px 14px;border:1px solid #ddd;border-radius:10px;padding:16px;font-size:13.5px;line-height:1.5}
+  .st-doc .ent{font-weight:700;margin:0 0 6px}.st-doc .ent small{display:block;font-weight:400;color:#444;font-size:11.5px}
+  .st-doc h3{font-size:15px;text-align:center;margin:12px 0}.st-doc h4{font-size:13.5px;margin:10px 0 2px}.st-doc p{margin:7px 0}
+  .st-doc .q{font-size:12px;color:#555}
+  .st-doc table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+  .st-doc th,.st-doc td{border:1px solid #ccc;padding:4px 6px;text-align:left;vertical-align:top}
+  .st-sig{display:block;max-width:220px;height:auto;border:1px solid #ddd;border-radius:6px;background:#fff;margin:8px 0}
+  .st-toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#1c2024;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:70;max-width:86vw;text-align:center}
+  .st-toast.on{opacity:1}
   .vu-res details,.vu-reg{margin:8px 0}
   .vu-res summary,.vu-reg summary{cursor:pointer;font-weight:600;font-size:var(--t2);padding:4px 0}
   .vu-res .alerte{border-left:4px solid #8a2020;padding:6px 10px;background:var(--fond);font-size:var(--t2)}
@@ -106,7 +215,7 @@
 <body>
 <div class="enveloppe">
   <div class="haut"><a class="retour" href="gerer.html">&larr; Retour</a></div>
-  <h1 class="titre">Tachygraphe, cartes conducteurs et temps de conduite</h1>
+  <h1 class="titre">Suivi tachygraphe</h1>
   <p class="sous">Le dispositif à tenir au quotidien, conducteur par conducteur, et le dossier prêt en cas de contrôle.</p>
   <div id="corps"></div>
 </div>
@@ -122,6 +231,7 @@
 <script src="lecture-vehicule.js"></script>
 <script src="lecture-rapport.js"></script>
 <script src="conformite-transport.js"></script>
+<script src="suivi-tachygraphe.js"></script>
 <script>
 "use strict";
 (function () {
@@ -166,8 +276,8 @@
 
   /* ───────── LE POINT D'ENTRÉE : LA FICHE DE CHAQUE CONDUCTEUR ───────── */
   html += '<div class="espace"><h2>Les conducteurs</h2>' +
-    '<p class="sous3">Choisissez un conducteur : sa fiche porte tout, son profil, ses documents à détenir et ' +
-    'à remettre, la lecture de sa carte, ses infractions et sa réaction.</p>' +
+    '<p class="sous3">Choisissez un conducteur, puis avancez en quatre étapes : les instructions qu\'il a signées, ' +
+    'le contrôle par la lecture de sa carte et du camion, la réaction, et le coffre-fort.</p>' +
     '<div id="cond-liste"></div></div>';
 
   /* ───────────────── ÉCHÉANCIER DES TÉLÉCHARGEMENTS ───────────────── */
@@ -476,168 +586,20 @@
     if (e.target.value) { CT.porterCertificatADR(e.target.value); peindreADR(); }
   });
 
-  /* ─── suivi par conducteur ─── */
-  function optionsCat(sel) {
-    return CT.CATEGORIES.map(function (c) {
-      return '<option value="' + c.cle + '"' + (c.cle === sel ? " selected" : "") +
-        '>' + ech(c.nom) + '</option>';
-    }).join("");
-  }
-  function seg(id, champ, opts, val) {
-    return '<div class="seg">' + opts.map(function (o) {
-      return '<button data-prof-c="' + champ + '" data-c="' + id + '" data-val="' + o[0] + '"' +
-        (o[0] === val ? ' class="on"' : '') + '>' + ech(o[1]) + '</button>';
-    }).join("") + '</div>';
-  }
-  function optionsSanctions(sel) {
-    return CT.SANCTIONS.map(function (s) {
-      return '<option value="' + s.cle + '"' + (s.cle === sel ? " selected" : "") + '>' + ech(s.nom) + '</option>';
-    }).join("");
-  }
-  var selId = null;
-  function peindreConducteurs() {
-    var cont = document.getElementById("cond-liste");
-    var L = CT.conducteurs(), h = '';
-    if (!L.length) { cont.innerHTML = '<p class="vide">Le registre du personnel ne porte encore aucun conducteur.</p>'; return; }
-    if (!selId || !L.some(function (x) { return x.id === selId; })) selId = L[0].id;
-    h += '<div class="choixcond"><label>Salarié (fichier du personnel)<select id="sel-cond">' +
-      L.map(function (x) {
-        return '<option value="' + x.id + '"' + (x.id === selId ? ' selected' : '') + '>' + ech(x.nom) +
-          (x.fond === "rouge" ? " (à traiter)" : "") + '</option>';
-      }).join("") + '</select></label></div>';
-    var c = L.filter(function (x) { return x.id === selId; })[0];
-    var s = CT.suiviConducteur(c.id);
-    h += '<div class="carte cond"><h3>' + ech(c.nom) +
-      (c.poidsLourd ? ' <span class="pl">poids lourd</span>' : '') +
-      ' <span class="pastille f-' + c.fond + '">' + ech(c.etat) + '</span></h3>' +
-      '<p class="sous3">' + ech(c.poste || "poste non précisé") + '  ·  ' +
-      c.anomalies + ' anomalie' + (c.anomalies > 1 ? 's' : '') + ', ' +
-      c.mesures + ' mesure' + (c.mesures > 1 ? 's' : '') + '</p>' +
-      '<button data-fiche="' + c.id + '">Télécharger la fiche en Word</button>' +
-      '<div class="doc ouvert" id="cond-' + c.id + '">';
-
-      /* profil, documents à détenir (avec échéances), documents à remettre */
-      var pr = CT.profilConducteur(c.id), eds = CT.echeancesDoc(c.id);
-      h += '<div class="bloc-h2">Profil</div>';
-      h += '<div class="ctl"><span class="lb">Type de véhicule</span>' +
-        seg(c.id, "pl", [["1", "Poids lourd"], ["0", "Léger"]], pr.pl ? "1" : "0") + '</div>';
-      h += '<div class="ctl"><span class="lb">Matière dangereuse (ADR)</span>' +
-        seg(c.id, "adr", [["1", "Oui"], ["0", "Non"]], pr.adr ? "1" : "0") + '</div>';
-
-      h += '<div class="bloc-h2">Ce qu\'il doit détenir</div>';
-      h += '<p class="sous3">Ses documents. Saisissez la date de validité, la fiche alerte avant l\'échéance.</p>';
-      CT.docsADetenir(pr).forEach(function (it) {
-        var val = eds[it[0]] || '', st = CT.statutDoc(val);
-        h += '<div class="fitem"><div class="ti"><b>' + ech(it[1]) + '</b><span>' + ech(it[2]) + '</span></div>' +
-          '<div class="co"><span class="lab">valable jusqu\'au</span>' +
-          '<input type="date" data-ech-c="' + it[0] + '" data-c="' + c.id + '" value="' + val + '">' +
-          '<span class="pastille f-' + st.fond + '">' + ech(st.txt) + '</span></div></div>';
-      });
-
-      h += '<div class="bloc-h2">Ce qu\'on lui remet et fait signer</div>';
-      h += '<p class="sous3">Produits à son nom, signés, versés à son dossier.</p>';
-      CT.docsARemettre(pr).forEach(function (it) {
-        h += '<div class="fitem"><div class="ti"><b>' + ech(it[1]) + '</b></div>' +
-          '<div class="co"><button data-remettre="' + it[0] + '" data-c="' + c.id + '">Produire</button></div></div>';
-      });
-
-      /* lire sa carte : le point de départ de la fiche */
-      h += '<div class="carte" style="margin:0 0 10px"><h3>Lire sa carte</h3>' +
-        '<p class="sous3">Le fichier .ddd ou .C1B, ou le rapport d\'analyse en PDF. Les infractions tombent ' +
-        'directement dans sa fiche. Rien n\'est envoyé.</p>' +
-        '<input type="file" data-lire-c="' + c.id + '" accept=".ddd,.C1B,.c1b,.DDD,.tgd,.TGD,.pdf,application/pdf,application/octet-stream"></div>';
-
-      /* anomalies */
-      h += '<div class="bloc-h2">Anomalies relevées</div>';
-      if (s.anomalies.length) {
-        h += '<table class="ech"><thead><tr><th>Date</th><th>Type</th><th>Détail</th><th></th></tr></thead><tbody>';
-        s.anomalies.forEach(function (a, i) {
-          h += '<tr><td>' + ech(a.date) + '</td><td>' + ech(a.type) + '</td><td>' + ech(a.detail) +
-            '</td><td><button class="sup" data-sup-ano="' + c.id + '" data-i="' + i + '" title="Supprimer">×</button></td></tr>';
-        });
-        h += '</tbody></table>';
-      } else { h += '<p class="vide">Aucune anomalie relevée.</p>'; }
-      h += '<div class="mini">' +
-        '<label>Date<input type="date" data-f="ano-date" data-c="' + c.id + '"></label>' +
-        '<label>Type<input type="text" data-f="ano-type" data-c="' + c.id + '" placeholder="ex. dépassement du temps de conduite"></label>' +
-        '<label>Détail<input type="text" data-f="ano-detail" data-c="' + c.id + '" placeholder="ce qui a été constaté"></label>' +
-        '<button data-add-ano="' + c.id + '">Ajouter l\'anomalie</button></div>';
-
-      /* réactions */
-      h += '<div class="bloc-h2">Réactions : correction, ajustement, sanction</div>';
-      if (s.mesures.length) {
-        h += '<table class="ech"><thead><tr><th>Date</th><th>Catégorie</th><th>Mesure</th><th>Pour</th><th></th></tr></thead><tbody>';
-        s.mesures.forEach(function (m, i) {
-          var cat = (CT.CATEGORIES.filter(function (x) { return x.cle === (m.categorie || "").toLowerCase(); })[0] || {}).nom || m.categorie;
-          h += '<tr><td>' + ech(m.date) + '</td><td>' + ech(cat) + '</td><td>' + ech(m.objet) +
-            '</td><td>' + ech(m.pour) + '</td><td><button class="sup" data-sup-mes="' + c.id + '" data-i="' + i + '" title="Supprimer">×</button></td></tr>';
-        });
-        h += '</tbody></table>';
-      } else { h += '<p class="vide">Aucune mesure prise.</p>'; }
-      h += '<div class="mini">' +
-        '<label>Date<input type="date" data-f="mes-date" data-c="' + c.id + '"></label>' +
-        '<label>Catégorie<select data-f="mes-cat" data-c="' + c.id + '">' + optionsCat("correction") + '</select></label>' +
-        '<label>Mesure<input type="text" data-f="mes-objet" data-c="' + c.id + '" placeholder="ce qui est fait"></label>' +
-        '<label>Pour<input type="text" data-f="mes-pour" data-c="' + c.id + '" placeholder="le type de manquement visé"></label>' +
-        '<button data-add-mes="' + c.id + '">Ajouter la mesure</button></div>';
-
-      /* rapport et sanction, à partir des infractions */
-      h += '<div class="bloc-h2">Rapport au conducteur et sanction</div>';
-      h += '<div class="mini">' +
-        '<button data-rapport="' + c.id + '">Mise en garde à signer</button>' +
-        '<label>Sanction proposée<select data-f="sanc" data-c="' + c.id + '">' +
-        optionsSanctions(CT.sanctionProposee(c.id)) + '</select></label>' +
-        '<button data-sanction="' + c.id + '">Éditer le document à signer</button></div>';
-
-      if (c.fond === "rouge") h += '<p class="bloc-note">' + ech(c.message) + '</p>';
-      h += '</div></div>';
-    cont.innerHTML = h;
-  }
-  function valeur(sel, id) {
-    var el = document.querySelector('[data-f="' + sel + '"][data-c="' + id + '"]');
-    return el ? el.value : "";
-  }
-  peindreConducteurs();
-  document.getElementById("cond-liste").addEventListener("click", function (e) {
-    var f = e.target.closest("button[data-fiche]");
-    if (f) { if (!CT.enWordSuivi(f.getAttribute("data-fiche"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
-    var pcb = e.target.closest("button[data-prof-c]");
-    if (pcb) { var idp = pcb.getAttribute("data-c");
-      CT.setProfilConducteur(idp, pcb.getAttribute("data-prof-c"), pcb.getAttribute("data-val") === "1");
-      peindreConducteurs(); reouvrir(idp); return; }
-    var rm = e.target.closest("button[data-remettre]");
-    if (rm) { if (!CT.enWordDocConducteur(rm.getAttribute("data-c"), rm.getAttribute("data-remettre"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
-    var rp = e.target.closest("button[data-rapport]");
-    if (rp) { if (!CT.enWordRapport(rp.getAttribute("data-rapport"))) alert("Le générateur Word n'est pas disponible sur cette page."); return; }
-    var sc = e.target.closest("button[data-sanction]");
-    if (sc) { var sid = sc.getAttribute("data-sanction");
-      var sel = document.querySelector('[data-f="sanc"][data-c="' + sid + '"]');
-      if (!CT.enWordSanction(sid, sel ? sel.value : "rappel")) alert("Le générateur Word n'est pas disponible sur cette page.");
-      return; }
-    var aa = e.target.closest("button[data-add-ano]");
-    if (aa) {
-      var id = aa.getAttribute("data-add-ano");
-      var type = valeur("ano-type", id);
-      if (!type) { alert("Indiquez au moins le type d'anomalie."); return; }
-      CT.ajouterAnomalie(id, { date: valeur("ano-date", id), type: type, detail: valeur("ano-detail", id) });
-      peindreConducteurs(); reouvrir(id); return;
-    }
-    var am = e.target.closest("button[data-add-mes]");
-    if (am) {
-      var idm = am.getAttribute("data-add-mes");
-      var objet = valeur("mes-objet", idm);
-      if (!objet) { alert("Indiquez la mesure prise."); return; }
-      CT.ajouterMesure(idm, { date: valeur("mes-date", idm), categorie: valeur("mes-cat", idm),
-        objet: objet, pour: valeur("mes-pour", idm) });
-      peindreConducteurs(); reouvrir(idm); return;
-    }
-    var sa = e.target.closest("button[data-sup-ano]");
-    if (sa) { var ida = sa.getAttribute("data-sup-ano");
-      CT.supprimerAnomalie(ida, +sa.getAttribute("data-i")); peindreConducteurs(); reouvrir(ida); return; }
-    var sm = e.target.closest("button[data-sup-mes]");
-    if (sm) { var idsm = sm.getAttribute("data-sup-mes");
-      CT.supprimerMesure(idsm, +sm.getAttribute("data-i")); peindreConducteurs(); reouvrir(idsm); return; }
+  /* LA FICHE DU CONDUCTEUR : le suivi tachygraphe en quatre étapes
+     (instructions, contrôle et suivi, réaction, coffre-fort). L'écran est dans
+     suivi-tachygraphe.js ; cette page lui passe la lecture des rapports PDF,
+     qui ventile sur plusieurs conducteurs, et repeint l'échéancier quand une
+     date de téléchargement a été portée. */
+  var ST = window.SuiviTachygraphe.monter({
+    cont: document.getElementById("cond-liste"),
+    lirePdf: function (id, f) { lireCartePour(id, f); },
+    apresChangement: function () { peindreEch(); }
   });
+  function peindreConducteurs() { ST.peindre(); }
+  function reouvrir(id) { ST.choisir(id); }
+  function aujourdhuiIso() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  peindreConducteurs();
   /* Un rapport multi-conducteurs (correspondance, infractions) porte le nom du
      conducteur sur chaque anomalie. On ventile chacune au conducteur du registre
      dont le nom correspond, par les mots partagés (au moins deux, sans
@@ -678,7 +640,7 @@
   function dispatcherCorrespondance(anoms) {
     var v = ventilerParNom(anoms), lignesMsg = [];
     Object.keys(v.groupes).forEach(function (id) {
-      var n = CT.importerAnomalies(id, v.groupes[id]);
+      var n = CT.importerAnomalies(id, v.groupes[id], { src: "relevé de correspondance", connu: aujourdhuiIso() });
       lignesMsg.push("- " + v.nomDe(id) + " : " + n + " conduite(s) sans carte");
     });
     peindreConducteurs();
@@ -692,7 +654,7 @@
   function dispatcherInfractions(anoms) {
     var v = ventilerParNom(anoms), lignesMsg = [];
     Object.keys(v.groupes).forEach(function (id) {
-      var grp = v.groupes[id], n = CT.importerAnomalies(id, grp);
+      var grp = v.groupes[id], n = CT.importerAnomalies(id, grp, { src: "rapport d'infractions", connu: aujourdhuiIso() });
       var graves = grp.filter(function (a) { return a.grave; }).length;
       lignesMsg.push("- " + v.nomDe(id) + " : " + n + " infraction(s)" +
         (graves ? " dont " + graves + " grave(s)" : ""));
@@ -732,8 +694,8 @@
         return;
       }
       function importe(anoms, nonCloses) {
-        var n = CT.importerAnomalies(id, anoms || []);
-        peindreConducteurs(); reouvrir(id);
+        var n = CT.importerAnomalies(id, anoms || [], { src: "rapport d'analyse", connu: aujourdhuiIso() });
+        reouvrir(id); peindreConducteurs();
         /* Trois nombres distincts : ce qui s'ajoute, ce qui y était déjà, et ce
            qui ne s'inscrit pas au suivi (technique, indicatif ou illisible). */
         var retenues = CT.anomaliesRetenues(anoms).length, deja = retenues - n, ecartees = (anoms || []).length - retenues;
@@ -755,6 +717,7 @@
             ", la carte ne donne qu'un minimum : lisez le fichier du tachygraphe du véhicule dans l'échéancier, puis relisez la carte.";
         }
         alert(msg);
+        if (n) ST.versReaction(id, n + " fait" + (n > 1 ? "s" : "") + " porté" + (n > 1 ? "s" : "") + " à sa fiche");
       }
       if (estPdf) {
         if (!window.LectureRapport) { alert("Le lecteur de rapport PDF n'est pas disponible."); return; }
@@ -786,18 +749,6 @@
     fr.onerror = function () { alert("Le fichier n'a pas pu être ouvert."); };
     fr.readAsArrayBuffer(f);
   }
-  document.getElementById("cond-liste").addEventListener("change", function (e) {
-    var sc = e.target.closest("#sel-cond");
-    if (sc) { selId = sc.value; peindreConducteurs(); return; }
-    var lc = e.target.closest("[data-lire-c]");
-    if (lc) { var idl = lc.getAttribute("data-lire-c"); var f = lc.files && lc.files[0];
-      if (f) { lc.value = ""; lireCartePour(idl, f); } return; }
-    var ed = e.target.closest("[data-ech-c]");
-    if (ed) { var ide = ed.getAttribute("data-c");
-      CT.porterEcheanceDoc(ide, ed.getAttribute("data-ech-c"), ed.value);
-      peindreConducteurs(); reouvrir(ide); return; }
-  });
-  function reouvrir(id) { selId = id; }
 
   /* ─── lecture d'une carte conducteur ─── */
   function optionsConducteurs(sel) {
