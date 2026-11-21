@@ -95,6 +95,12 @@
   .echeance .et-ligne{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:space-between;margin:6px 0}
   .echeance .et-ligne>span.lab{color:var(--texte-2);font-size:var(--t2)}
   .echeance input[type=date]{font-size:15px;padding:7px 8px}
+  .echeance input[type=file]{max-width:100%;font-size:13px}
+  .vu-res details,.vu-reg{margin:8px 0}
+  .vu-res summary,.vu-reg summary{cursor:pointer;font-weight:600;font-size:var(--t2);padding:4px 0}
+  .vu-res .alerte{border-left:4px solid #8a2020;padding:6px 10px;background:var(--fond);font-size:var(--t2)}
+  .vu-res .vu-liste{margin:6px 0 0;padding-left:20px;font-size:var(--t2)}
+  .vu-res table.ech,.vu-reg table.ech{font-size:13px}
 </style>
 </head>
 <body>
@@ -256,15 +262,30 @@
       if (!carte) {
         /* Lecture du fichier du tachygraphe du véhicule : la date du dernier
            téléchargement se porte seule, et la conduite sans carte s'affiche. */
-        h += '<div class="et-ligne"><span class="lab">Fichier du tachygraphe</span>' +
+        h += '<div class="et-ligne"><span class="lab">Fichier du tachygraphe (.V1B)</span>' +
           '<input type="file" data-lire-v="' + i + '" data-qui="' + ech(x.qui) +
           '" accept=".V1B,.v1b,.ddd,.DDD,.tgd,.TGD,application/octet-stream"></div>' +
           '<div class="vu-res" id="vu-res-' + i + '"></div>';
+        /* Le registre du véhicule : ce qui y a été porté reste, d'une visite à l'autre. */
+        var reg = CT.anomaliesVehicule(x.qui);
+        if (reg.length) {
+          h += '<details class="vu-reg"><summary>Registre du véhicule : ' + reg.length + ' fait' + (reg.length > 1 ? 's' : '') +
+            ' de conduite sans carte</summary>' +
+            '<table class="ech"><thead><tr><th>Date</th><th>Détail</th><th></th></tr></thead><tbody>';
+          reg.forEach(function (r, k) {
+            h += '<tr><td>' + ech(joliDate(r.date)) + '</td><td>' + ech(r.detail) + '</td><td>' +
+              '<button class="sup" data-sup-v="' + k + '" data-qui="' + ech(x.qui) + '" title="Supprimer">×</button></td></tr>';
+          });
+          h += '</tbody></table><p><button data-vider-v="1" data-qui="' + ech(x.qui) + '">Vider le registre de ce véhicule</button></p></details>';
+        }
       }
       h += '</div>';
     });
     tb.innerHTML = h;
+    /* Un fichier déjà lu reste affiché quand l'échéancier se repeint. */
+    L.forEach(function (x, i) { if (vuLus[x.qui]) peindreVehicule(i, x.qui, vuLus[x.qui]); });
   }
+  var vuLus = {};
   peindreEch();
   document.getElementById("ech-corps").addEventListener("change", function (e) {
     var inp = e.target;
@@ -287,94 +308,157 @@
 
   /* Lecture d'un fichier de téléchargement d'unité véhicule (.V1B). On porte
      seul la date du dernier téléchargement, et on montre, pour le véhicule, la
-     période, les conducteurs enregistrés, et la conduite sans carte jour par
-     jour. Rien n'est envoyé : tout se lit dans le navigateur. */
+     période, les conducteurs enregistrés, la conduite sans carte et ce que
+     l'appareil a noté. Rien n'est envoyé : tout se lit dans le navigateur. */
+  function memeImmat(x, y) {
+    function n(s) { return String(s || "").replace(/[^A-Za-z0-9]/g, "").toUpperCase(); }
+    return n(x) === n(y);
+  }
   function lireVehiculePour(idx, immatRow, f) {
     var cible = document.getElementById("vu-res-" + idx);
-    if (cible) cible.innerHTML = '<p class="sous3">Lecture du fichier…</p>';
-    if (!window.LectureVehicule) { if (cible) cible.innerHTML = '<p class="vide">Le lecteur de fichier véhicule n\'est pas disponible sur cette page.</p>'; return; }
+    function dire(msg) { if (cible) cible.innerHTML = '<p class="vide">' + msg + '</p>'; }
+    dire("Lecture du fichier…");
+    if (!window.LectureVehicule) { dire("Le lecteur de fichier véhicule n'est pas disponible sur cette page."); return; }
     var fr = new FileReader();
     fr.onload = function () {
       var buf = fr.result;
       if (!window.LectureVehicule.estVehicule(buf)) {
-        if (cible) cible.innerHTML = '<p class="vide">Ce fichier n\'est pas un téléchargement d\'unité véhicule. Déposez le fichier .V1B tiré du tachygraphe du véhicule.</p>';
+        dire("Ce fichier n'est pas un téléchargement d'unité véhicule. Déposez le fichier .V1B tiré du tachygraphe du véhicule ; la carte d'un conducteur se lit dans sa fiche.");
         return;
       }
       var a;
       try { a = window.LectureVehicule.analyser(window.LectureVehicule.lire(buf)); }
-      catch (err) { if (cible) cible.innerHTML = '<p class="vide">Fichier illisible : ' + ech(err && err.message || err) + '</p>'; return; }
-      if (!a) { if (cible) cible.innerHTML = '<p class="vide">Fichier véhicule illisible.</p>'; return; }
-      /* La date du dernier téléchargement : la fin de la période téléchargeable. */
-      var dteDl = a.telechargement || (a.periode && a.periode.au);
-      if (dteDl) CT.porterTelechargementVehicule(immatRow, dteDl);
-      peindreEch();                       /* rafraîchit la pastille d'échéance */
-      peindreVehicule(idx, immatRow, a);  /* puis remplit le résultat, qui vient d'être recréé vide */
+      catch (err) { dire("Fichier illisible : " + ech(err && err.message || err)); return; }
+      if (!a) { dire("Fichier véhicule illisible."); return; }
+      a.fichier = f.name;
+      a.memeVehicule = memeImmat(a.immatriculation, immatRow);
+      /* La date ne se porte que si le fichier est bien celui de ce véhicule. */
+      if (a.memeVehicule && a.telechargement) CT.porterTelechargementVehicule(immatRow, a.telechargement);
+      vuLus[immatRow] = a;
+      peindreEch();
     };
-    fr.onerror = function () { if (cible) cible.innerHTML = '<p class="vide">Le fichier n\'a pas pu être ouvert.</p>'; };
+    fr.onerror = function () { dire("Le fichier n'a pas pu être ouvert."); };
     fr.readAsArrayBuffer(f);
   }
 
+  function tableRepliee(titre, n, corps) {
+    return n > 12 ? '<details><summary>' + titre + ' (' + n + ')</summary>' + corps + '</details>' : corps;
+  }
   function peindreVehicule(idx, immatRow, a) {
     var cible = document.getElementById("vu-res-" + idx);
     if (!cible) return;
-    var g = a.generation === 1 ? "1re génération" : "2e génération";
-    var discord = (a.immatriculation && immatRow && a.immatriculation.replace(/\s/g, "").toUpperCase() !== immatRow.replace(/\s/g, "").toUpperCase());
+    function pl(n, mot) { return n + ' ' + mot + (n > 1 ? 's' : ''); }
     var h = '<div class="doc ouvert" style="margin-top:8px">';
-    h += '<div class="bloc-h2">Fichier lu, ' + ech(g) + '</div>';
-    h += '<p>' + ech(a.immatriculation || "immatriculation non lue") +
-      (a.vin ? '  ·  châssis ' + ech(a.vin) : '') + '</p>';
-    if (discord) h += '<p class="bloc-note">Attention : l\'immatriculation du fichier (' + ech(a.immatriculation) +
-      ') ne correspond pas à la ligne (' + ech(immatRow) + '). Dernier téléchargement non porté sur une mauvaise ligne : vérifiez le véhicule.</p>';
-    if (a.periode) h += '<p class="sous3">Période : du ' + ech(joliDate(a.periode.du)) + ' au ' +
-      ech(joliDate(a.periode.au)) + ', ' + a.nbJours + ' jour' + (a.nbJours > 1 ? 's' : '') + ' d\'activité.</p>';
-    if (a.cartes && a.cartes.length) {
-      h += '<p class="sous3">Conducteurs enregistrés : ' + a.cartes.map(function (c) {
-        return ech(c.titulaire || c.numero); }).join(', ') + '.</p>';
+    h += '<div class="bloc-h2">Fichier lu, ' + (a.generation === 1 ? "tachygraphe de 1re génération" : "tachygraphe de 2e génération") + '</div>';
+    h += '<p>' + ech(a.immatriculation || "immatriculation non lue") + (a.vin ? '  ·  châssis ' + ech(a.vin) : '') + '</p>';
+    if (!a.memeVehicule) h += '<p class="alerte">Ce fichier est celui du véhicule ' + ech(a.immatriculation || "inconnu") +
+      ', pas celui de cette ligne (' + ech(immatRow) + '). La date du dernier téléchargement n\'a pas été portée et rien ne peut être inscrit au registre depuis ici : déposez le fichier sur la bonne ligne.</p>';
+    if (a.lecture && !a.lecture.complete) h += '<p class="alerte">Lecture incomplète. ' +
+      a.lecture.reserves.map(ech).join(' ') + ' Ce qui suit ne vaut que pour la partie lue.</p>';
+
+    if (a.telechargement) h += '<p class="sous3">Téléchargé le ' + ech(joliDate(a.telechargement)) + '.' +
+      (a.activite ? ' ' + pl(a.nbJours, 'journée') + ' d\'activité, du ' + ech(joliDate(a.activite.du)) + ' au ' + ech(joliDate(a.activite.au)) + '.' : '') + '</p>';
+    var prec = a.telechargementPrecedent;
+    if (prec && prec.date) {
+      var ecartJ = a.telechargement ? Math.round((new Date(a.telechargement) - new Date(prec.date)) / 86400000) : null;
+      h += '<p class="sous3">Téléchargement précédent : ' + ech(joliDate(prec.date)) + (prec.societe ? ' (' + ech(prec.societe) + ')' : '') +
+        (ecartJ != null ? ', soit ' + pl(ecartJ, 'jour') + ' avant celui-ci' : '') + '.</p>';
     }
-    /* La conduite sans carte : le fait que seul le fichier véhicule révèle. */
-    var sc = (a.jours || []).filter(function (j) { return j.conduiteSansCarte >= 2; });
+    if (a.verrous.length) {
+      var ouverts = a.verrous.filter(function (v) { return !v.au; });
+      h += '<p class="sous3">Verrou d\'entreprise : ' + a.verrous.map(function (v) {
+        return ech(v.societe || "société non lue") + ', posé le ' + ech(joliDate(v.du)) + (v.au ? ', levé le ' + ech(joliDate(v.au)) : ', toujours en place');
+      }).join(' ; ') + '.' + (ouverts.length ? '' : ' Aucun verrou d\'entreprise n\'est en place dans ce fichier.') + '</p>';
+    }
+    if (a.controles.length) h += '<p class="sous3">' + pl(a.controles.length, 'contrôle') + ' enregistré' + (a.controles.length > 1 ? 's' : '') + ' par l\'appareil : ' +
+      a.controles.map(function (c) {
+        var fait = []; if (c.carteTelechargee) fait.push("carte téléchargée"); if (c.vehiculeTelecharge) fait.push("appareil téléchargé");
+        if (c.impression) fait.push("impression"); if (c.affichage) fait.push("affichage");
+        return ech(joliDate(c.date)) + (fait.length ? ' (' + fait.join(', ') + ')' : '');
+      }).join(' ; ') + '.</p>';
+    if (a.cartes.length) h += '<p class="sous3">Cartes insérées sur la période : ' +
+      a.cartes.map(function (c) { return ech(c.titulaire || c.numero); }).join(', ') + '.</p>';
+
+    /* La conduite sans carte : le fait que seul le fichier du véhicule révèle. */
+    var sc = a.sansCarte || [];
     h += '<div class="bloc-h2">Conduite sans carte</div>';
     if (sc.length) {
-      h += '<p class="sous3">' + sc.length + ' jour' + (sc.length > 1 ? 's' : '') +
-        ' avec de la conduite sans carte insérée, pour un total de ' + ech(a.hhmm(a.totalSansCarte)) +
-        '. Ces faits ne sont imputables à aucun conducteur, puisque la carte était absente.</p>';
-      var corpsSC = '<table class="ech"><thead><tr><th>Date</th><th>Durée</th></tr></thead><tbody>';
-      sc.slice().sort(function (x, y) { return y.date.localeCompare(x.date); })
-        .forEach(function (j) { corpsSC += '<tr><td>' + ech(joliDate(j.date)) + '</td><td>' + ech(a.hhmm(j.conduiteSansCarte)) + '</td></tr>'; });
-      corpsSC += '</tbody></table>';
-      /* Au delà de douze jours, on replie le tableau : le résumé reste visible. */
-      h += (sc.length > 12) ? '<details><summary>Voir le détail jour par jour (' + sc.length + ')</summary>' + corpsSC + '</details>' : corpsSC;
-    } else { h += '<p class="vide">Aucune conduite sans carte significative sur la période.</p>'; }
-    /* Les excès de vitesse enregistrés : utiles à la défense, peu nombreux. */
-    if (a.survitesses && a.survitesses.length) {
-      h += '<div class="bloc-h2">Excès de vitesse enregistrés</div>';
-      h += '<table class="ech"><thead><tr><th>Date</th><th>Max</th><th>Moyenne</th></tr></thead><tbody>';
-      a.survitesses.slice().sort(function (x, y) { return (y.debut || "").localeCompare(x.debut || ""); })
-        .forEach(function (e) {
-          h += '<tr><td>' + ech(joliDate(e.debut) || "") + '</td><td>' + (e.vMax != null ? ech(e.vMax) + ' km/h' : '') +
-            '</td><td>' + (e.vMoyenne != null ? ech(e.vMoyenne) + ' km/h' : '') + '</td></tr>';
-        });
-      h += '</tbody></table>';
+      h += '<p class="sous3">' + pl(sc.length, 'journée') + ' sur ' + a.nbJours + ', pour ' + ech(a.hhmm(a.totalSansCarte)) +
+        ' au total. Seules les journées d\'au moins ' + a.seuil + ' minutes sont retenues.</p>';
+      var c1 = '<table class="ech"><thead><tr><th>Date</th><th>Durée</th><th>Heures (temps universel)</th></tr></thead><tbody>';
+      sc.slice().reverse().forEach(function (j) {
+        c1 += '<tr><td>' + ech(joliDate(j.date)) + '</td><td>' + ech(a.hhmm(j.conduiteSansCarte)) + '</td><td>' +
+          j.segments.map(function (s) { return ech(s.de) + ' à ' + ech(s.a); }).join(', ') + '</td></tr>';
+      });
+      c1 += '</tbody></table>';
+      h += tableRepliee('Voir le détail jour par jour', sc.length, c1);
+    } else {
+      h += '<p class="vide">' + (a.nbJours ? 'Aucune journée ne porte ' + a.seuil + ' minutes ou plus de conduite sans carte, sur les ' + a.nbJours + ' lues.'
+        : 'Aucune journée d\'activité n\'a été lue : on ne peut rien en conclure.') + '</p>';
     }
-    /* Les autres événements et défauts : résumés par nature, la liste complète
-       repliée pour ne pas noyer l'écran. L'appareil garde plusieurs années. */
-    var ev = (a.evenements || []).concat(a.defauts || []).filter(function (e) { return e.code !== 0x07; });
+    if (a.joursEnEcart.length) h += '<p class="alerte">' + pl(a.joursEnEcart.length, 'journée') +
+      ' où les lignes d\'activité et les heures d\'insertion de carte ne concordent pas (' +
+      a.joursEnEcart.map(function (d) { return ech(joliDate(d)); }).join(', ') + ') : à vérifier sur le relevé.</p>';
+
+    /* Ce que l'appareil garde en mémoire hors des journées téléchargées. */
+    var couverts = {}; a.jours.forEach(function (j) { couverts[j.date] = 1; });
+    var hors = a.appareilSansCarte.filter(function (e) { return !couverts[e.debut] && e.dureeMin; });
+    if (hors.length) {
+      h += '<p class="sous3">En dehors de ces journées, l\'appareil garde en mémoire ' + pl(hors.length, 'événement') + ' de conduite sans carte :</p>';
+      var c2 = '<table class="ech"><thead><tr><th>Date</th><th>Heure</th><th>Durée</th></tr></thead><tbody>';
+      hors.slice().sort(function (x, y) { return x.debut < y.debut ? 1 : -1; }).forEach(function (e) {
+        c2 += '<tr><td>' + ech(joliDate(e.debut)) + '</td><td>' + ech(e.heure) + '</td><td>' + ech(a.hhmm(e.dureeMin)) + '</td></tr>';
+      });
+      h += c2 + '</tbody></table>';
+    }
+    h += '<p class="bloc-note">Les heures sont celles du tachygraphe, en temps universel : en France, ajouter une heure en hiver et deux en été. La conduite sans carte n\'est imputable à un conducteur que si l\'on établit qui roulait.</p>';
+    if (a.anomalies.length && a.memeVehicule) h += '<p><button data-porter-v="' + idx + '" data-qui="' + ech(immatRow) + '">Porter ces ' +
+      a.anomalies.length + ' faits au registre du véhicule</button></p>';
+
+    /* Les excès de vitesse enregistrés. */
+    if (a.survitesses.length) {
+      h += '<div class="bloc-h2">Excès de vitesse enregistrés</div>';
+      var c3 = '<table class="ech"><thead><tr><th>Date</th><th>Maximum</th><th>Moyenne</th></tr></thead><tbody>';
+      a.survitesses.slice().sort(function (x, y) { return (y.debut || "").localeCompare(x.debut || ""); }).forEach(function (e) {
+        c3 += '<tr><td>' + ech(joliDate(e.debut) || "") + '</td><td>' + ech(e.vMax) + ' km/h</td><td>' + ech(e.vMoyenne) + ' km/h</td></tr>';
+      });
+      h += tableRepliee('Voir les excès de vitesse', a.survitesses.length, c3 + '</tbody></table>');
+    }
+    /* Le reste : résumé par nature, détail replié. L'appareil garde des années. */
+    var ev = a.evenements.concat(a.defauts).filter(function (e) { return e.code !== 0x04; });
     if (ev.length) {
       var par = {};
       ev.forEach(function (e) { par[e.nom] = (par[e.nom] || 0) + 1; });
-      var noms = Object.keys(par).sort(function (x, y) { return par[y] - par[x]; });
-      h += '<div class="bloc-h2">Autres événements et défauts enregistrés</div>';
-      h += '<p class="sous3">' + noms.map(function (n) { return ech(n) + ' : ' + par[n]; }).join('  ·  ') + '.</p>';
-      h += '<details><summary>Voir le détail daté (' + ev.length + ')</summary>' +
-        '<table class="ech"><thead><tr><th>Date</th><th>Nature</th></tr></thead><tbody>';
-      ev.slice().sort(function (x, y) { return (y.debut || "").localeCompare(x.debut || ""); })
-        .forEach(function (e) { h += '<tr><td>' + ech(joliDate(e.debut) || "") + '</td><td>' + ech(e.nom) + '</td></tr>'; });
-      h += '</tbody></table></details>';
+      h += '<div class="bloc-h2">Autres événements et défauts en mémoire</div><ul class="vu-liste">' +
+        Object.keys(par).sort(function (x, y) { return par[y] - par[x]; }).map(function (n) {
+          return '<li>' + ech(n) + ' : ' + par[n] + '</li>'; }).join('') + '</ul>';
+      var c4 = '<table class="ech"><thead><tr><th>Date</th><th>Nature</th></tr></thead><tbody>';
+      ev.slice().sort(function (x, y) { return (y.debut || "").localeCompare(x.debut || ""); }).forEach(function (e) {
+        c4 += '<tr><td>' + ech(joliDate(e.debut) || "") + '</td><td>' + ech(e.nom) + '</td></tr>'; });
+      h += '<details><summary>Voir le détail daté (' + ev.length + ')</summary>' + c4 + '</tbody></table></details>';
+      h += '<p class="bloc-note">Libellés de l\'annexe 1B du règlement (CE) n° 1360/2002. Les codes plus récents ou propres au constructeur sont rendus par leur numéro.</p>';
     }
-    h += '<p class="bloc-note">La date du dernier téléchargement a été portée seule au-dessus. Rien n\'est envoyé : le fichier est lu dans le navigateur.</p>';
+    h += '<p class="bloc-note">Fichier ' + ech(a.fichier || "") + ', lu dans le navigateur : rien n\'est envoyé. Sa signature n\'est pas vérifiée ici.</p>';
     h += '</div>';
     cible.innerHTML = h;
   }
+  document.getElementById("ech-corps").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-porter-v]"), q;
+    if (b) {
+      q = b.getAttribute("data-qui");
+      var a = vuLus[q]; if (!a || !a.memeVehicule) return;
+      var n = CT.importerAnomaliesVehicule(q, a.anomalies);
+      peindreEch();
+      alert(n + " fait" + (n > 1 ? "s" : "") + " porté" + (n > 1 ? "s" : "") + " au registre du véhicule " + q +
+        (n < a.anomalies.length ? " (" + (a.anomalies.length - n) + " déjà présent" + (a.anomalies.length - n > 1 ? "s" : "") + ")" : "") + ".");
+      return;
+    }
+    b = e.target.closest("[data-sup-v]");
+    if (b) { CT.supprimerAnomalieVehicule(b.getAttribute("data-qui"), +b.getAttribute("data-sup-v")); peindreEch(); return; }
+    b = e.target.closest("[data-vider-v]");
+    if (b) { q = b.getAttribute("data-qui");
+      if (confirm("Vider le registre du véhicule " + q + " ?")) { CT.viderAnomaliesVehicule(q); peindreEch(); } }
+  });
 
   /* certificat ADR */
   function peindreADR() {

@@ -403,6 +403,40 @@
     return n;
   }
 
+  /* LE REGISTRE DU VÉHICULE. La conduite sans carte lue dans le fichier du
+     tachygraphe n'est imputable à aucun conducteur tant qu'on n'a pas établi qui
+     roulait : elle se range donc sous le véhicule, par immatriculation, et non
+     dans la fiche d'un salarié. Sans doublon : une même date et un même détail
+     ne se réinscrivent pas. Rend le nombre ajouté. */
+  function anomaliesVehicule(immat) {
+    var e = etat(); var s = (e.suiviVehicules || {})[immat] || {};
+    return (s.anomalies || []).slice();
+  }
+  function importerAnomaliesVehicule(immat, anomalies) {
+    if (!immat || !anomalies || !anomalies.length) return 0;
+    var e = etat(); e.suiviVehicules = e.suiviVehicules || {};
+    var s = e.suiviVehicules[immat] || {}; s.anomalies = s.anomalies || [];
+    var n = 0;
+    anomalies.forEach(function (a) {
+      var existe = s.anomalies.some(function (x) {
+        return (x.date || "") === (a.date || "") && (x.detail || "") === net(a.detail);
+      });
+      if (existe) return;
+      s.anomalies.push({ date: a.date || iso(new Date()), type: net(a.type), detail: net(a.detail) });
+      n++;
+    });
+    s.anomalies.sort(function (x, y) { return (x.date || "") < (y.date || "") ? -1 : (x.date || "") > (y.date || "") ? 1 : 0; });
+    e.suiviVehicules[immat] = s; garderEtat(e);
+    return n;
+  }
+  function supprimerAnomalieVehicule(immat, i) {
+    var e = etat(); var s = (e.suiviVehicules || {})[immat];
+    if (s && s.anomalies && s.anomalies[i]) { s.anomalies.splice(i, 1); garderEtat(e); }
+  }
+  function viderAnomaliesVehicule(immat) {
+    var e = etat(); if (e.suiviVehicules && e.suiviVehicules[immat]) { delete e.suiviVehicules[immat]; garderEtat(e); }
+  }
+
   function enWordSuivi(id) {
     if (!window.AuditExport) return false;
     var sal = salariesRegistre().filter(function (x) { return x.id === id; })[0] || { nom: id };
@@ -981,6 +1015,10 @@
     supprimerMesure: supprimerMesure,
     matchConducteur: matchConducteur,
     importerAnomalies: importerAnomalies,
+    anomaliesVehicule: anomaliesVehicule,
+    importerAnomaliesVehicule: importerAnomaliesVehicule,
+    supprimerAnomalieVehicule: supprimerAnomalieVehicule,
+    viderAnomaliesVehicule: viderAnomaliesVehicule,
     enWordSuivi: enWordSuivi,
     DELAI_CARTE: DELAI_CARTE, DELAI_VEHICULE: DELAI_VEHICULE,
   };
