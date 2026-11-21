@@ -334,6 +334,8 @@
       a.memeVehicule = memeImmat(a.immatriculation, immatRow);
       /* La date ne se porte que si le fichier est bien celui de ce véhicule. */
       if (a.memeVehicule && a.telechargement) CT.porterTelechargementVehicule(immatRow, a.telechargement);
+      /* Ce que chaque carte a fait dans ce véhicule, gardé pour compléter les cartes. */
+      if (a.memeVehicule) CT.porterJoursVehicule(immatRow, a.parCarte);
       vuLus[immatRow] = a;
       peindreEch();
     };
@@ -729,11 +731,25 @@
           "d'analyse ne sont pas des relevés tachygraphe.");
         return;
       }
-      function importe(anoms) {
+      function importe(anoms, nonCloses) {
         var n = CT.importerAnomalies(id, anoms || []);
         peindreConducteurs(); reouvrir(id);
-        alert(n + " infraction" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " à sa fiche" +
-          (anoms && n < anoms.length ? " (" + (anoms.length - n) + " déjà présente(s))" : "") + ".");
+        var msg = n + " infraction" + (n > 1 ? "s" : "") + " ajoutée" + (n > 1 ? "s" : "") + " à sa fiche" +
+          (anoms && n < anoms.length ? " (" + (anoms.length - n) + " déjà présente(s))" : "") + ".";
+        /* Les journées où la carte n'a pas tout enregistré : on le dit, et on dit
+           d'où vient la conduite retenue. */
+        if (nonCloses && nonCloses.length) {
+          var repris = nonCloses.filter(function (j) { return j.source === "véhicule"; }).length;
+          var reste = nonCloses.length - repris, une = nonCloses.length === 1;
+          msg += "\n\nAttention : sur " + nonCloses.length + " journée" + (une ? "" : "s") +
+            ", la carte n'a pas tout enregistré : " +
+            nonCloses.map(function (j) { return joliDate(j.date); }).join(", ") + ".";
+          if (repris) msg += "\nLa conduite a été reprise du fichier du véhicule pour " +
+            (reste ? repris + " d'entre elles." : (une ? "cette journée." : "toutes ces journées."));
+          if (reste) msg += "\n" + (repris ? "Pour " + (reste === 1 ? "la dernière" : "les " + reste + " autres") : (une ? "Pour cette journée" : "Pour ces journées")) +
+            ", la carte ne donne qu'un minimum : lisez le fichier du tachygraphe du véhicule dans l'échéancier, puis relisez la carte.";
+        }
+        alert(msg);
       }
       if (estPdf) {
         if (!window.LectureRapport) { alert("Le lecteur de rapport PDF n'est pas disponible."); return; }
@@ -758,7 +774,8 @@
             "du conducteur (.ddd ou .C1B).");
           return;
         }
-        importe(window.LectureCarte.analyser(carte).anomalies);
+        var an = window.LectureCarte.analyser(carte, CT.joursVehiculePourCarte(carte.identification.numero));
+        importe(an.anomalies, an.nonCloses);
       } catch (err) { alert("Fichier illisible : " + err.message); }
     };
     fr.onerror = function () { alert("Le fichier n'a pas pu être ouvert."); };

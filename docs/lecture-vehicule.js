@@ -152,16 +152,17 @@
        dernière ligne ne court pas jusqu'à minuit. */
     var borne = 1440;
     if (!vide(courant) && courant >= jour0 && courant < jour0 + 86400) borne = Math.floor((courant - jour0) / 60);
-    var ins = new Uint8Array(1440), heuresConnues = true;
+    var ins = new Uint8Array(1440), heuresConnues = true, insCarte = {};
     (cartes || []).forEach(function (c) {
       if (c.insertion == null) { heuresConnues = false; return; }
       if (c.slot !== 0 || vide(c.insertion)) return;
       var A = Math.max(0, Math.floor((c.insertion - jour0) / 60));
       var B = vide(c.retrait) ? borne : Math.min(borne, Math.floor((c.retrait - jour0) / 60));
-      for (m = A; m < B; m++) ins[m] = 1;
+      var propre = insCarte[c.numero] || (insCarte[c.numero] = new Uint8Array(1440));
+      for (m = A; m < B; m++) { ins[m] = 1; propre[m] = 1; }
     });
     var L = mots.map(changement).filter(function (c) { return c.slot === 0; });
-    var absente = new Uint8Array(1440), conduite = new Uint8Array(1440);
+    var absente = new Uint8Array(1440), conduite = new Uint8Array(1440), act = new Int8Array(1440);
     var min = { conduite: 0, travail: 0, "disponibilité": 0, repos: 0 };
     for (i = 0; i < L.length; i++) {
       var deb = L[i].minute, fin = Math.min(borne, (i + 1 < L.length) ? L[i + 1].minute : 1440);
@@ -170,6 +171,25 @@
       if (L[i].activite !== 3) continue;
       for (m = deb; m < fin; m++) { conduite[m] = 1; if (L[i].carteAbsente) absente[m] = 1; }
     }
+    for (i = 0; i < L.length; i++) {
+      var d2 = L[i].minute, f2 = Math.min(borne, (i + 1 < L.length) ? L[i + 1].minute : 1440);
+      for (m = d2; m < f2; m++) act[m] = L[i].activite;
+    }
+    /* Ce que chaque carte a fait ce jour-là dans ce véhicule : la conduite, et
+       la plus longue conduite continue (une pause est un repos cumulé de 45
+       minutes ; hors du véhicule, la carte est tenue pour au repos). Cela sert
+       à compléter une carte dont une session a été mal clôturée. */
+    var parCarte = {};
+    Object.keys(insCarte).forEach(function (num) {
+      var p = insCarte[num], c = 0, run = 0, runMax = 0, pause = 0, present = 0;
+      for (m = 0; m < 1440; m++) {
+        var a = p[m] ? act[m] : 0;
+        if (p[m]) present++;
+        if (a === 3) { c++; run++; pause = 0; if (run > runMax) runMax = run; }
+        else if (a === 0) { pause++; if (pause >= 45) run = 0; }
+      }
+      if (present) parCarte[num] = { conduite: c, continueMax: runMax };
+    });
     /* Retenu : la ligne dit « absente » et aucune carte n'est insérée. L'autre
        mesure, pour contrôle : conduite hors de toute insertion. */
     var total = 0, autre = 0, segments = [], debSeg = -1;
@@ -179,7 +199,7 @@
       if (oui) { total++; if (debSeg < 0) debSeg = m; }
       else if (debSeg >= 0) { segments.push({ de: hm(debSeg), a: hm(m), minutes: m - debSeg }); debSeg = -1; }
     }
-    return { conduiteSansCarte: total, segments: segments, minutes: min,
+    return { conduiteSansCarte: total, segments: segments, minutes: min, parCarte: parCarte,
       ecart: heuresConnues ? (autre !== total) : false, heuresConnues: heuresConnues };
   }
 
@@ -201,7 +221,7 @@
   function resultat(generation) {
     return { generation: generation, vin: null, immatriculation: null, pays: null, courant: null,
       periode: null, telechargementPrecedent: null, verrous: [], controles: [], cartes: [], jours: [],
-      evenements: [], defauts: [], survitesses: [], lecture: { complete: true, reserves: [] } };
+      evenements: [], defauts: [], survitesses: [], parCarte: {}, lecture: { complete: true, reserves: [] } };
   }
   function reserve(res, texteReserve) { res.lecture.complete = false; res.lecture.reserves.push(texteReserve); }
   function ajouterCartes(res, vus, cartes) {
@@ -214,6 +234,10 @@
     if (!motsValides(mots)) { reserve(res, "Une journée porte des minutes impossibles : elle n'est pas comptée."); return; }
     var c = calculJour(mots, cartes, t0, res.courantS);
     c.date = isoJour(Math.floor(t0 / 86400) * 86400);
+    Object.keys(c.parCarte).forEach(function (num) {
+      (res.parCarte[num] || (res.parCarte[num] = {}))[c.date] = c.parCarte[num];
+    });
+    delete c.parCarte;
     res.jours.push(c);
   }
 
@@ -435,7 +459,7 @@
       periode: vu.periode, telechargement: vu.courant || (vu.periode && vu.periode.au) || null,
       telechargementPrecedent: vu.telechargementPrecedent, verrous: vu.verrous || [], controles: vu.controles || [],
       nbJours: jours.length, activite: jours.length ? { du: jours[0].date, au: jours[jours.length - 1].date } : null,
-      jours: jours, cartes: vu.cartes || [],
+      jours: jours, cartes: vu.cartes || [], parCarte: vu.parCarte || {},
       sansCarte: retenus, totalSansCarte: retenus.reduce(function (s, j) { return s + j.conduiteSansCarte; }, 0),
       joursEnEcart: jours.filter(function (j) { return j.ecart; }).map(function (j) { return j.date; }),
       appareilSansCarte: appareil,

@@ -28,7 +28,13 @@
    génération (GNSS, données complémentaires) ne sont pas décodés, et la
    signature n'est pas vérifiée : le fichier est lu pour son contenu, la preuve
    de son intégrité reste la carte elle-même. Rien n'est affirmé qui ne se lise
-   dans les octets du fichier.                                                 */
+   dans les octets du fichier.
+
+   UNE CARTE NE CONTIENT PAS TOUJOURS TOUT. Quand une session est mal clôturée,
+   l'activité de cette session manque sur la carte, alors que le véhicule l'a
+   enregistrée. Ces périodes, que l'appareil note lui-même sur la carte, ne sont
+   pas comptées ; la conduite du jour se reprend du fichier du véhicule quand il
+   a été lu, et sinon elle n'est pas calculée.                                 */
 
 (function (root) {
   "use strict";
@@ -87,9 +93,10 @@
   function u32(a, o) { return ((a[o] * 0x1000000) + (a[o + 1] << 16) + (a[o + 2] << 8) + a[o + 3]); }
   function timeReal(a, o) {
     var s = u32(a, o);
-    if (!s) return null;
+    if (!s || s === 0xffffffff) return null;    /* vide : session non close, par exemple */
     return new Date(s * 1000).toISOString().slice(0, 10);
   }
+  function secondes(a, o) { var s = u32(a, o); return (!s || s === 0xffffffff) ? null : s; }
   function bcd(x) { return ((x >> 4) & 0x0f) * 10 + (x & 0x0f); }
   function datef(a, o) {
     /* 4 octets DCB : AAAA MM JJ. */
@@ -168,7 +175,7 @@
   }
 
   function decoderChangement(mot) {
-    return { slot: (mot >> 15) & 1, activite: (mot >> 11) & 3, minute: mot & 0x07ff };
+    return { slot: (mot >> 15) & 1, carteAbsente: (mot >> 13) & 1, activite: (mot >> 11) & 3, minute: mot & 0x07ff };
   }
 
   function lireActivites(a, b) {
@@ -211,8 +218,9 @@
       var premier = timeReal(a, p + 6), dernier = timeReal(a, p + 10);
       var immat = immatriculation(a, p + 14);
       if (!premier && !dernier && !immat) continue;
+      var finConnue = fin !== 0xffffff;          /* compteur de fin vide : session non close */
       out.push({ immat: immat, premier: premier, dernier: dernier,
-        kmDebut: debut, kmFin: fin, km: (fin >= debut ? fin - debut : null) });
+        kmDebut: debut, kmFin: finConnue ? fin : null, km: (finConnue && fin >= debut ? fin - debut : null) });
     }
     return out;
   }
@@ -227,7 +235,8 @@
       var debut = timeReal(a, p + 1), fin = timeReal(a, p + 5);
       var immat = immatriculation(a, p + 9);
       if (type === 0 && !debut) continue;
-      out.push({ code: type, nom: nommerCode(type), debut: debut, fin: fin, immat: immat });
+      out.push({ code: type, nom: nommerCode(type), debut: debut, fin: fin, immat: immat,
+        debutS: secondes(a, p + 1), finS: secondes(a, p + 5) });
     }
     return out;
   }
@@ -280,6 +289,62 @@
     return runMax;
   }
 
+  /* LES SESSIONS MAL CLÔTURÉES.
+
+     Quand une carte est retirée sans que l'appareil ait pu clore la session, la
+     carte ne reçoit pas l'activité de cette session : il y manque de la conduite
+     réellement faite, ou bien la dernière ligne écrite reste ouverte et paraît
+     courir jusqu'à l'insertion suivante. L'appareil le note sur la carte par
+     l'événement « dernière session de carte mal clôturée », dont le début est
+     l'insertion de la session perdue et la fin l'insertion suivante. Entre ces
+     deux instants, ce que la carte porte n'est pas l'activité réelle : on ne le
+     compte pas, ni en conduite ni en pause. Mesuré sur une carte réelle,
+     comparée au fichier du véhicule : 1 h 05 de conduite sur la carte pour
+     4 h 59 enregistrées par le véhicule un jour, 15 h 58 calculées pour 6 h 17
+     réelles un autre. */
+  function sessionsMalCloses(carte) {
+    return (carte.evenements || []).filter(function (e) { return e.code === 0x06 && e.debutS; })
+      .map(function (e) { return { de: e.debutS, a: e.finS || Infinity, immat: e.immat }; });
+  }
+
+  function hm(min) { return (min < 600 ? "0" : "") + Math.floor(min / 60) + ":" + (min % 60 < 10 ? "0" : "") + (min % 60); }
+
+  /* Le calcul d'un jour sur une ligne de 1440 minutes. exclus : les périodes
+     des sessions mal clôturées. dernierJour : la carte s'arrête ce jour-là, on
+     ne prolonge pas sa dernière ligne ouverte jusqu'à minuit. */
+  function calculJour(jour, exclus, dernierJour, debutDouteux) {
+    var jour0 = jour.date ? Date.parse(jour.date + "T00:00:00Z") / 1000 : 0;
+    var ch = jour.changements.slice().sort(function (x, y) { return x.minute - y.minute; });
+    var act = new Int8Array(1440), i, m;
+    for (m = 0; m < 1440; m++) act[m] = -1;                    /* -1 : rien d'enregistré */
+    for (i = 0; i < ch.length; i++) {
+      var deb = ch[i].minute, fin = (i + 1 < ch.length) ? ch[i + 1].minute : 1440;
+      if (i + 1 >= ch.length && dernierJour && !ch[i].carteAbsente) fin = deb;   /* ligne ouverte, fin de carte */
+      for (m = deb; m < fin && m < 1440; m++) act[m] = ch[i].activite;
+    }
+    var inconnues = 0, periodes = [], debP = -1;
+    for (m = 0; m <= 1440; m++) {
+      var hors = m < (debutDouteux || 0);
+      if (m < 1440 && !hors) for (i = 0; i < exclus.length; i++) {
+        var s = jour0 + m * 60;
+        if (s >= Math.floor(exclus[i].de / 60) * 60 && s < Math.floor(exclus[i].a / 60) * 60) { hors = true; break; }
+      }
+      if (hors) { act[m] = -2; inconnues++; if (debP < 0) debP = m; }
+      else if (debP >= 0) { periodes.push({ de: hm(debP), a: m === 1440 ? "24:00" : hm(m) }); debP = -1; }
+    }
+    var min = { conduite: 0, travail: 0, "disponibilité": 0, repos: 0 };
+    var runMax = 0, run = 0, pause = 0;
+    for (m = 0; m < 1440; m++) {
+      /* Une période non enregistrée ne s'ajoute à rien et coupe la conduite
+         continue : ce qui est calculé reste un minimum, jamais un excès. */
+      if (act[m] < 0) { run = 0; pause = 0; continue; }
+      min[ACTIVITE[act[m]]]++;
+      if (act[m] === 3) { run++; pause = 0; if (run > runMax) runMax = run; }
+      else if (act[m] === 0) { pause++; if (pause >= 45) run = 0; }
+    }
+    return { minutes: min, continueMax: runMax, inconnues: inconnues, periodes: periodes };
+  }
+
   function hhmm(min) {
     var h = Math.floor(min / 60), m = min % 60;
     return h + " h" + (m ? " " + (m < 10 ? "0" : "") + m : "");
@@ -292,21 +357,72 @@
      ils passent tels quels. Le dépassement de conduite journalière au delà de
      dix heures est calculé à partir des activités. La conduite continue au delà
      de quatre heures et demie est signalée comme indicative. */
-  function analyser(carte) {
-    var jours = (carte.jours || []).map(function (j) {
-      var m = minutesJour(j);
-      return { date: j.date, distance: j.distance, minutes: m,
-        continueMax: conduiteContinueMax(j) };
+  /* UNE JOURNÉE QUI COMMENCE CARTE INSÉRÉE ALORS QUE LA VEILLE FINIT CARTE
+     RETIRÉE. La première ligne d'une journée dit l'état à minuit. Si elle dit
+     « carte insérée » alors que la journée précédente se termine carte retirée,
+     ou n'existe pas, cette première ligne n'est pas l'activité réelle : mesuré
+     sur une carte, elle portait 7 h 25 de conduite depuis minuit, quand le
+     véhicule n'en avait enregistré que 3 h 19, à partir de 04:06. On ne compte
+     pas cette première période. Rend la minute où elle finit, ou 0. */
+  function debutDouteux(bruts, k, parDate) {
+    if (k === 0 || !bruts[k].date) return 0;
+    var ch = bruts[k].changements.slice().sort(function (x, y) { return x.minute - y.minute; });
+    if (!ch.length || ch[0].minute !== 0 || ch[0].carteAbsente) return 0;
+    var veille = parDate[new Date(Date.parse(bruts[k].date + "T00:00:00Z") - 86400000).toISOString().slice(0, 10)];
+    if (veille) {
+      var dern = veille.changements.slice().sort(function (x, y) { return x.minute - y.minute; }).pop();
+      if (dern && !dern.carteAbsente) return 0;       /* la carte est bien restée insérée */
+    }
+    return ch.length > 1 ? ch[1].minute : 1440;
+  }
+
+  function analyser(carte, reference) {
+    /* reference, facultatif : ce que les fichiers des véhicules ont enregistré
+       pour cette carte, par date : { conduite, continueMax, vehicules }. */
+    var exclus = sessionsMalCloses(carte), bruts = carte.jours || [], parDate = {};
+    bruts.forEach(function (j) { if (j.date) parDate[j.date] = j; });
+    var jours = bruts.map(function (j, k) {
+      var douteux = debutDouteux(bruts, k, parDate);
+      var c = calculJour(j, exclus, k === bruts.length - 1, douteux);
+      return { date: j.date, distance: j.distance, minutes: c.minutes, continueMax: c.continueMax,
+        nonClose: c.inconnues > 0, periodes: c.periodes, debutDouteux: douteux > 0, source: "carte" };
     });
     var anomalies = [];
 
-    /* Au delà de treize heures, la journée n'est pas exploitable : la carte a
-       été retirée en roulant ou la session n'a pas été fermée, et le dernier
-       bloc court jusqu'à minuit. On ne calcule alors aucune conduite pour ce
-       jour, et on le dit, plutôt que d'inventer une journée de quinze heures. */
+    /* Au delà de treize heures, la journée n'est pas exploitable : on ne calcule
+       alors aucune conduite pour ce jour, et on le dit, plutôt que d'inventer
+       une journée de quinze heures. Filet de sécurité : les périodes que la
+       carte n'a pas réellement enregistrées sont déjà écartées plus haut. */
     var SEUIL_ILLISIBLE = 780;
     jours.forEach(function (j) {
       if (!j.date) return;
+      var dapres = "", ref = reference && reference[j.date];
+      /* Le véhicule a enregistré plus de conduite avec cette carte que la carte
+         n'en porte : la carte est incomplète ce jour-là, même sans autre signe
+         (une carte insérée en roulant, par exemple). */
+      var vehiculeEnPlus = !!ref && ref.conduite > j.minutes.conduite + 2;
+      if (j.nonClose || vehiculeEnPlus) {
+        var motifs = [];
+        if (j.nonClose) motifs.push("de " + j.periodes.map(function (p) { return p.de + " à " + p.a; }).join(", de ") +
+          " (temps universel), la carte ne porte pas l'activité réelle (" +
+          (j.debutDouteux ? "elle commence la journée carte insérée alors que la veille finit carte retirée" : "session mal clôturée, notée par l'appareil") + ")");
+        if (vehiculeEnPlus) motifs.push("le véhicule " + ref.vehicules.join(", ") + " a enregistré " + hhmm(ref.conduite) +
+          " de conduite avec cette carte, la carte " + hhmm(j.minutes.conduite));
+        var surCarte = j.minutes.conduite;
+        j.nonClose = true;
+        if (ref && ref.conduite >= surCarte) {
+          j.minutes.conduite = ref.conduite; j.continueMax = Math.max(j.continueMax, ref.continueMax);
+          j.source = "véhicule"; j.vehicules = ref.vehicules || [];
+          dapres = " d'après le fichier du véhicule " + j.vehicules.join(", ");
+          anomalies.push({ date: j.date, source: "lecture", type: "carte incomplète ce jour",
+            detail: "Le " + j.date + ", " + motifs.join(" ; ") + ". La conduite retenue pour ce jour est celle du fichier du véhicule : " + hhmm(ref.conduite) + "." });
+        } else {
+          dapres = " au moins, hors période non enregistrée";
+          anomalies.push({ date: j.date, source: "lecture", type: "carte incomplète ce jour",
+            detail: "Le " + j.date + ", " + motifs.join(" ; ") + ". Ce que la carte donne pour ce jour (" + hhmm(surCarte) +
+              " de conduite) est un minimum. Pour le chiffre réel, lisez le fichier du tachygraphe du véhicule dans l'échéancier, puis relisez la carte." });
+        }
+      }
       if (j.minutes.conduite > SEUIL_ILLISIBLE || j.continueMax > SEUIL_ILLISIBLE) {
         anomalies.push({ date: j.date, source: "lecture", type: "journée non exploitable",
           detail: "Les données du " + j.date + " ne sont pas exploitables (carte retirée en roulant ou session non fermée) : la conduite de ce jour n'est pas calculée. À vérifier sur le relevé complet." });
@@ -314,12 +430,12 @@
       }
       if (j.minutes.conduite > 600) {
         anomalies.push({ date: j.date, source: "calcul", type: "dépassement de la conduite journalière",
-          detail: "Conduite calculée de " + hhmm(j.minutes.conduite) + " le " + j.date +
+          detail: "Conduite calculée de " + hhmm(j.minutes.conduite) + " le " + j.date + dapres +
             " (maximum dix heures, et seulement deux fois par semaine). Indicatif, à confirmer sur le relevé." });
       }
       if (j.continueMax > 270) {
         anomalies.push({ date: j.date, source: "calcul", type: "conduite continue sans pause suffisante",
-          detail: "Conduite continue calculée d'environ " + hhmm(j.continueMax) + " le " + j.date +
+          detail: "Conduite continue calculée d'environ " + hhmm(j.continueMax) + " le " + j.date + dapres +
             " (pause de 45 minutes requise au delà de 4 h 30). Indicatif, à confirmer." });
       }
     });
@@ -345,11 +461,12 @@
       evenements: carte.evenements || [],
       defauts: carte.defauts || [],
       anomalies: anomalies,
+      nonCloses: jours.filter(function (j) { return j.nonClose; }),
       hhmm: hhmm,
     };
   }
 
-  var API = { lire: lire, analyser: analyser, minutesJour: minutesJour,
+  var API = { lire: lire, analyser: analyser, calculJour: calculJour, sessionsMalCloses: sessionsMalCloses, minutesJour: minutesJour,
     conduiteContinueMax: conduiteContinueMax, hhmm: hhmm, EF: EF, CODES: CODES };
 
   if (root) root.LectureCarte = API;

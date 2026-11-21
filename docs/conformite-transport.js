@@ -437,6 +437,35 @@
     var e = etat(); if (e.suiviVehicules && e.suiviVehicules[immat]) { delete e.suiviVehicules[immat]; garderEtat(e); }
   }
 
+  /* CE QUE LES VÉHICULES ONT ENREGISTRÉ POUR CHAQUE CARTE. Quand le fichier du
+     tachygraphe d'un véhicule est lu, on garde, par numéro de carte et par
+     jour, la conduite et la plus longue conduite continue faites dans ce
+     véhicule. Une carte dont une session a été mal clôturée ne porte pas cette
+     activité : c'est ici qu'on la retrouve. */
+  function porterJoursVehicule(immat, parCarte) {
+    if (!immat || !parCarte) return;
+    var e = etat(); e.vuCartes = e.vuCartes || {};
+    Object.keys(parCarte).forEach(function (num) {
+      var c = e.vuCartes[num] || (e.vuCartes[num] = {});
+      Object.keys(parCarte[num]).forEach(function (date) {
+        var j = parCarte[num][date];
+        (c[date] || (c[date] = {}))[immat] = [j.conduite, j.continueMax];
+      });
+    });
+    garderEtat(e);
+  }
+  function joursVehiculePourCarte(numero) {
+    var c = (etat().vuCartes || {})[numero] || {}, out = {};
+    Object.keys(c).forEach(function (date) {
+      var r = { conduite: 0, continueMax: 0, vehicules: [] };
+      Object.keys(c[date]).forEach(function (immat) {
+        r.conduite += c[date][immat][0]; r.continueMax = Math.max(r.continueMax, c[date][immat][1]); r.vehicules.push(immat);
+      });
+      out[date] = r;
+    });
+    return out;
+  }
+
   function enWordSuivi(id) {
     if (!window.AuditExport) return false;
     var sal = salariesRegistre().filter(function (x) { return x.id === id; })[0] || { nom: id };
@@ -1015,6 +1044,8 @@
     supprimerMesure: supprimerMesure,
     matchConducteur: matchConducteur,
     importerAnomalies: importerAnomalies,
+    porterJoursVehicule: porterJoursVehicule,
+    joursVehiculePourCarte: joursVehiculePourCarte,
     anomaliesVehicule: anomaliesVehicule,
     importerAnomaliesVehicule: importerAnomaliesVehicule,
     supprimerAnomalieVehicule: supprimerAnomalieVehicule,
