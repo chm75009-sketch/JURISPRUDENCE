@@ -428,6 +428,11 @@ alors que je n'avais pas toutes les pièces du dossier : on écrit « absent des
 j'ai », pas « non sourcé ». Le même jour, j'ai nié l'existence d'une liste de dix-sept
 infractions de temps qui figure aux pages 4 à 6 de la clôture, pièce que j'avais déjà lue.
 
+Cas mesuré le 21 novembre 2026 - dossier CISSÉ, expertise GEB, page 5. Le relevé de
+l'humidimètre posé sur le parpaing du vide sanitaire a été lu « 39 % » sur une image rendue
+à 100 dpi ; il affiche « 3,9 % ». La virgule d'un afficheur ne se voit pas à basse
+résolution : un chiffre lu sur une photographie se vérifie agrandi avant d'être écrit.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
