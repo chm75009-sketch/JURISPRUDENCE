@@ -441,6 +441,12 @@ l'envoi », et ses deux notes disent la mise en demeure réceptionnée et sans r
 avais lues, puis j'ai raisonné sur ma mémoire et sur la seule quittance. Avant de dire
 qu'une chose n'est nulle part, on relit tout le dossier, y compris les écrits du client.
 
+Même dossier, même jour, troisième faute. J'ai écrit deux fois que la date de naissance,
+la nationalité et la profession de Mme CISSÉ ne figuraient dans aucune pièce. Elles sont à
+la page 2 du constat, que j'avais lu : « née le 03/04/1981 à HOUILLES (78), de nationalité
+Française, DRH ». « Aucune pièce » ne s'écrit qu'après avoir rouvert les pièces, pas sur
+la foi de ses notes de lecture.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
