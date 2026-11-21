@@ -66,11 +66,12 @@
     0x07: "Excès de vitesse",
     0x08: "Coupure de l'alimentation électrique",
     0x09: "Erreur sur les données de mouvement",
-    0x0A: "Conflit de mouvement du véhicule",
-    0x0B: "Dépassement du temps de conduite",
   };
   function nommerCode(c) {
     if (CODES[c] != null) return CODES[c];
+    /* 0x0A à 0x0F : réservés dans l'annexe 1B, définis depuis par l'annexe 1C,
+       qui n'a pas pu être relue : rendus par leur numéro plutôt que nommés. */
+    if (c >= 0x0a && c <= 0x0f) return "Événement général (code 0x" + hex(c) + ")";
     if (c >= 0x10 && c <= 0x1f) return "Tentative d'atteinte à la sécurité (code 0x" + hex(c) + ")";
     /* Annexe 1B du règlement (CE) n° 1360/2002, appendice 1, point 2.54 :
        0x30 à 0x3f, défauts de l'appareil de contrôle ; 0x40 à 0x4f, défauts de carte. */
@@ -271,23 +272,38 @@
     return m;
   }
 
-  /* La conduite continue la plus longue, interrompue seulement par des pauses
-     de moins de 45 minutes. Indicatif : la règle des pauses fractionnées
-     (15 puis 30 minutes) n'est pas tranchée ici, seul le seuil de 45 l'est. */
-  function conduiteContinueMax(jour) {
-    var ch = jour.changements.slice().sort(function (x, y) { return x.minute - y.minute; });
-    var runMax = 0, run = 0, pause = 0;
-    for (var i = 0; i < ch.length; i++) {
-      var deb = ch[i].minute, finMin = (i + 1 < ch.length) ? ch[i + 1].minute : 1440;
-      var duree = finMin - deb; if (duree < 0) duree = 0;
-      var act = ch[i].activite;
-      if (act === 3) { run += duree; pause = 0; if (run > runMax) runMax = run; }
-      else if (act === 0) { pause += duree; if (pause >= 45) run = 0; }
-      /* travail et disponibilité n'allongent pas la conduite et ne valent pas
-         pause : la conduite continue reste en l'état. */
+  /* LA PLUS LONGUE CONDUITE SANS PAUSE SUFFISANTE. Règlement (CE) n° 561/2006,
+     article 7, version consolidée du 22 mai 2024, lue sur EUR-Lex : « Après un
+     temps de conduite de quatre heures et demie, un conducteur observe une pause
+     ininterrompue d'au moins quarante-cinq minutes, à moins qu'il ne prenne un
+     temps de repos. Cette pause peut être remplacée par une pause d'au moins
+     quinze minutes suivie d'une pause d'au moins trente minutes ». On cumule
+     donc la conduite, et on repart de zéro après un repos d'un seul tenant de
+     45 minutes, ou après un repos d'au moins 15 minutes suivi, plus tard, d'un
+     repos d'au moins 30 minutes, dans cet ordre. Le travail et la disponibilité
+     ne sont pas une pause et interrompent le repos en cours. Une minute dont
+     l'activité n'est pas connue remet tout à zéro : le résultat reste un
+     minimum. lire(m) rend l'activité de la minute m (0 repos, 1 disponibilité,
+     2 travail, 3 conduite), ou un nombre négatif si elle n'est pas connue. */
+  function plusLongueConduite(lire) {
+    var cumul = 0, max = 0, repos = 0, premiere = false, servi = false;
+    function clore() { if (!servi && repos >= 15) premiere = true; repos = 0; servi = false; }
+    for (var m = 0; m < 1440; m++) {
+      var a = lire(m);
+      if (a < 0) { cumul = 0; repos = 0; premiere = false; servi = false; continue; }
+      if (a === 0) {
+        repos++;
+        if (repos >= 45) { cumul = 0; premiere = false; servi = true; }
+        else if (premiere && repos >= 30) { cumul = 0; premiere = false; servi = true; }
+        continue;
+      }
+      clore();
+      if (a === 3) { cumul++; if (cumul > max) max = cumul; }
     }
-    return runMax;
+    return max;
   }
+
+  function conduiteContinueMax(jour) { return calculJour(jour, [], false, 0).continueMax; }
 
   /* LES SESSIONS MAL CLÔTURÉES.
 
@@ -333,15 +349,10 @@
       else if (debP >= 0) { periodes.push({ de: hm(debP), a: m === 1440 ? "24:00" : hm(m) }); debP = -1; }
     }
     var min = { conduite: 0, travail: 0, "disponibilité": 0, repos: 0 };
-    var runMax = 0, run = 0, pause = 0;
-    for (m = 0; m < 1440; m++) {
-      /* Une période non enregistrée ne s'ajoute à rien et coupe la conduite
-         continue : ce qui est calculé reste un minimum, jamais un excès. */
-      if (act[m] < 0) { run = 0; pause = 0; continue; }
-      min[ACTIVITE[act[m]]]++;
-      if (act[m] === 3) { run++; pause = 0; if (run > runMax) runMax = run; }
-      else if (act[m] === 0) { pause++; if (pause >= 45) run = 0; }
-    }
+    for (m = 0; m < 1440; m++) if (act[m] >= 0) min[ACTIVITE[act[m]]]++;
+    /* Une période non enregistrée ne s'ajoute à rien et coupe la conduite
+       cumulée : ce qui est calculé reste un minimum, jamais un excès. */
+    var runMax = plusLongueConduite(function (k) { return act[k]; });
     return { minutes: min, continueMax: runMax, inconnues: inconnues, periodes: periodes };
   }
 
@@ -435,8 +446,8 @@
       }
       if (j.continueMax > 270) {
         anomalies.push({ date: j.date, source: "calcul", type: "conduite continue sans pause suffisante",
-          detail: "Conduite continue calculée d'environ " + hhmm(j.continueMax) + " le " + j.date + dapres +
-            " (pause de 45 minutes requise au delà de 4 h 30). Indicatif, à confirmer." });
+          detail: "Conduite cumulée de " + hhmm(j.continueMax) + " sans pause suffisante le " + j.date + dapres +
+            " (après 4 h 30 de conduite, pause de 45 minutes, ou de 15 puis 30 minutes : article 7 du règlement (CE) n° 561/2006). Calculé sur la journée en temps universel, à confirmer sur le relevé." });
       }
     });
 

@@ -141,6 +141,37 @@
     return true;
   }
 
+  /* LA PLUS LONGUE CONDUITE SANS PAUSE SUFFISANTE. Règlement (CE) n° 561/2006,
+     article 7, version consolidée du 22 mai 2024, lue sur EUR-Lex : « Après un
+     temps de conduite de quatre heures et demie, un conducteur observe une pause
+     ininterrompue d'au moins quarante-cinq minutes, à moins qu'il ne prenne un
+     temps de repos. Cette pause peut être remplacée par une pause d'au moins
+     quinze minutes suivie d'une pause d'au moins trente minutes ». On cumule
+     donc la conduite, et on repart de zéro après un repos d'un seul tenant de
+     45 minutes, ou après un repos d'au moins 15 minutes suivi, plus tard, d'un
+     repos d'au moins 30 minutes, dans cet ordre. Le travail et la disponibilité
+     ne sont pas une pause et interrompent le repos en cours. Une minute dont
+     l'activité n'est pas connue remet tout à zéro : le résultat reste un
+     minimum. lire(m) rend l'activité de la minute m (0 repos, 1 disponibilité,
+     2 travail, 3 conduite), ou un nombre négatif si elle n'est pas connue. */
+  function plusLongueConduite(lire) {
+    var cumul = 0, max = 0, repos = 0, premiere = false, servi = false;
+    function clore() { if (!servi && repos >= 15) premiere = true; repos = 0; servi = false; }
+    for (var m = 0; m < 1440; m++) {
+      var a = lire(m);
+      if (a < 0) { cumul = 0; repos = 0; premiere = false; servi = false; continue; }
+      if (a === 0) {
+        repos++;
+        if (repos >= 45) { cumul = 0; premiere = false; servi = true; }
+        else if (premiere && repos >= 30) { cumul = 0; premiere = false; servi = true; }
+        continue;
+      }
+      clore();
+      if (a === 3) { cumul++; if (cumul > max) max = cumul; }
+    }
+    return max;
+  }
+
   /* Le calcul d'un jour. t0 est la date du jour en secondes ; cartes porte, pour
      chaque carte du jour, l'emplacement et les secondes d'insertion et de
      retrait (null quand le format ne les donne pas). On suit la convention de
@@ -176,19 +207,14 @@
       for (m = d2; m < f2; m++) act[m] = L[i].activite;
     }
     /* Ce que chaque carte a fait ce jour-là dans ce véhicule : la conduite, et
-       la plus longue conduite continue (une pause est un repos cumulé de 45
-       minutes ; hors du véhicule, la carte est tenue pour au repos). Cela sert
-       à compléter une carte dont une session a été mal clôturée. */
+       la plus longue conduite sans pause suffisante (hors du véhicule, la carte
+       est tenue pour au repos). Cela sert à compléter une carte incomplète. */
     var parCarte = {};
     Object.keys(insCarte).forEach(function (num) {
-      var p = insCarte[num], c = 0, run = 0, runMax = 0, pause = 0, present = 0;
-      for (m = 0; m < 1440; m++) {
-        var a = p[m] ? act[m] : 0;
-        if (p[m]) present++;
-        if (a === 3) { c++; run++; pause = 0; if (run > runMax) runMax = run; }
-        else if (a === 0) { pause++; if (pause >= 45) run = 0; }
-      }
-      if (present) parCarte[num] = { conduite: c, continueMax: runMax };
+      var p = insCarte[num], c = 0, present = 0;
+      for (m = 0; m < 1440; m++) { if (p[m]) { present++; if (act[m] === 3) c++; } }
+      if (present) parCarte[num] = { conduite: c,
+        continueMax: plusLongueConduite(function (k) { return p[k] ? act[k] : 0; }) };
     });
     /* Retenu : la ligne dit « absente » et aucune carte n'est insérée. L'autre
        mesure, pour contrôle : conduite hors de toute insertion. */
