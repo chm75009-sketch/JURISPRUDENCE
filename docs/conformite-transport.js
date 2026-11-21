@@ -88,6 +88,49 @@
   }
   function garderEtat(e) { garder(STORE, e); }
 
+  /* LE MODE ESSAI. Demande du 21 novembre 2026 : pouvoir faire des simulations
+     pour voir comment l'écran se comporte, puis les annuler. Au début d'un
+     essai, tout l'état du module (fiches, échéancier, registres des véhicules)
+     est mis de côté, tel qu'il est écrit. Annuler l'essai le remet à
+     l'identique : rien de ce qui a été fait entre-temps ne reste. Une
+     démonstration ajoute, le temps de l'essai, un conducteur et un véhicule
+     fictifs, qui disparaissent avec lui. */
+  var AVANT_ESSAI = "conformite-transport-avant-essai";
+  function essaiEnCours() { return etat().essai || null; }
+  function commencerEssai(o) {
+    if (essaiEnCours()) return false;
+    var brut = null;
+    try {
+      brut = window.localStorage.getItem(STORE);
+      window.localStorage.setItem(AVANT_ESSAI, brut == null ? "__vide__" : brut);
+      if (window.localStorage.getItem(AVANT_ESSAI) !== (brut == null ? "__vide__" : brut)) return false;
+    } catch (err) { return false; }      /* sans copie sûre, pas d'essai */
+    var e = etat();
+    e.essai = { depuis: new Date().toISOString(), demonstration: !!(o && o.demonstration),
+      conducteur: (o && o.conducteur) || null, vehicule: (o && o.vehicule) || null, docIds: [] };
+    garderEtat(e);
+    return true;
+  }
+  /* Un fichier rangé dans la base des documents pendant l'essai : on retient son
+     numéro pour le retirer si l'essai est annulé. */
+  function noterDocEssai(id) { var e = etat(); if (e.essai && id != null) { e.essai.docIds.push(id); garderEtat(e); } }
+  function annulerEssai() {
+    var e = etat(); if (!e.essai) return null;
+    var ids = e.essai.docIds || [], avant = null;
+    try { avant = window.localStorage.getItem(AVANT_ESSAI); } catch (err) {}
+    if (avant == null) return null;      /* la copie a disparu : on ne détruit rien */
+    try {
+      if (avant === "__vide__") window.localStorage.removeItem(STORE); else window.localStorage.setItem(STORE, avant);
+      window.localStorage.removeItem(AVANT_ESSAI);
+    } catch (err) { return null; }
+    return { docIds: ids };
+  }
+  function garderEssai() {
+    var e = etat(); if (!e.essai) return;
+    delete e.essai; garderEtat(e);
+    try { window.localStorage.removeItem(AVANT_ESSAI); } catch (err) {}
+  }
+
   function iso(d) { return new Date(d).toISOString().slice(0, 10); }
   function ajouterJours(dateStr, n) {
     var d = new Date(dateStr + "T00:00:00");
@@ -113,8 +156,9 @@
   var DELAI_CARTE = 28, DELAI_VEHICULE = 90;
 
   function vehiculesFlotte() {
-    if (window.Flotte && window.Flotte.vehicules) return window.Flotte.vehicules() || [];
-    return lire("flotte-vehicules", []) || [];
+    var L = (window.Flotte && window.Flotte.vehicules) ? (window.Flotte.vehicules() || []) : (lire("flotte-vehicules", []) || []);
+    var es = essaiEnCours();
+    return (es && es.vehicule) ? L.concat([es.vehicule]) : L;
   }
 
   /* LES CONDUCTEURS DU REGISTRE. On réutilise la lecture de la flotte quand
@@ -149,10 +193,13 @@
     var L = salariesTous();
     var C = L.filter(function (s) { return s.conduit && !net(s.sor); });
     var base = C.length ? C : L.filter(function (s) { return !net(s.sor); });
-    return base.map(function (s) {
+    var out = base.map(function (s) {
       return { id: s.id, nom: s.nom, poste: s.emp || s.poste || "",
         conduit: s.conduit !== false, poidsLourd: POIDS_LOURD.test(net(s.emp || s.poste)) };
     });
+    var es = essaiEnCours();
+    if (es && es.conducteur) out.push({ id: es.conducteur.id, nom: es.conducteur.nom, poste: es.conducteur.poste || "", conduit: true, poidsLourd: true });
+    return out;
   }
 
   function echeances() {
@@ -308,7 +355,7 @@
   function journalControles(id) { return champSuivi(id, "controles", []).slice(); }
   function ajouterControle(id, c) {
     var L = champSuivi(id, "controles", []);
-    L.push({ quand: new Date().toISOString(), lib: net(c.lib), resume: net(c.resume) });
+    L.push({ quand: c.quand || new Date().toISOString(), lib: net(c.lib), resume: net(c.resume) });
     poserSuivi(id, "controles", L);
   }
   function carteDe(id) { return champSuivi(id, "carte", null); }
@@ -1108,6 +1155,11 @@
     sanctionItems: sanctionItems,
     telechargerWord: telechargerWord,
     docConducteurItems: docConducteurItems,
+    essaiEnCours: essaiEnCours,
+    commencerEssai: commencerEssai,
+    annulerEssai: annulerEssai,
+    garderEssai: garderEssai,
+    noterDocEssai: noterDocEssai,
     majAnomalies: majAnomalies,
     majMesure: majMesure,
     docsRemis: docsRemis,

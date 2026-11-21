@@ -223,10 +223,14 @@
       var L = CT.conducteurs();
       if (!L.length) { cont.innerHTML = '<p class="vide">Le registre du personnel ne porte encore aucun conducteur.</p>'; return; }
       if (!S.id || !L.some(function (x) { return x.id === S.id; })) { S.id = L[0].id; S.etape = 0; S.decoches = {}; }
-      var c = conducteur(), A = alertes(c);
-      var h = '<div class="choixcond"><label>Salarié (fichier du personnel)<select id="sel-cond">' +
+      var c = conducteur(), A = alertes(c), es = CT.essaiEnCours();
+      var h = (es ? '<div class="st-essai"><b>Mode essai' + (es.demonstration ? ' : démonstration' : '') + '</b>' +
+          (es.demonstration ? 'Conducteur et camion fictifs, parcours déjà déroulé. Touchez à tout : rien n\'est gardé.' : 'Ce que vous faites depuis le début de l\'essai peut être effacé d\'un geste.') +
+          '<div class="st-btns"><button type="button" class="st-btn pri" data-st="essai-annuler">Annuler l\'essai et tout remettre comme avant</button>' +
+          (es.demonstration ? '' : '<button type="button" class="st-btn" data-st="essai-garder">Garder ce que j\'ai fait</button>') + '</div></div>' : '') +
+        '<div class="choixcond"><label>Salarié (fichier du personnel)<select id="sel-cond">' +
         L.map(function (x) { return '<option value="' + ech(x.id) + '"' + (x.id === S.id ? ' selected' : '') + '>' + ech(x.nom) + (x.fond === "rouge" ? " (à traiter)" : "") + '</option>'; }).join("") +
-        '</select></label></div>';
+        '</select></label>' + (es ? '' : '<button type="button" class="st-lien" data-st="essai">Faire un essai, sans rien modifier</button>') + '</div>';
       h += '<div class="st"><div class="st-entete"><div><div class="st-nom">' + ech(c.nom) + (c.poidsLourd ? ' <span class="st-pl">poids lourd</span>' : '') + '</div>' +
         '<div class="st-sub">' + ech(c.poste || "poste non précisé") + '</div></div>' +
         '<button type="button" class="st-lien" data-st="fiche">Fiche en Word</button></div>';
@@ -336,7 +340,7 @@
         }
         b.disabled = true;
         if (window.Documents) window.Documents.enregistrer(RUBRIQUE, { nom: d.nom + " - " + f.name, sorte: "depose", type: f.type, contenu: f })
-          .then(function (l) { finir(l && l.id); }).catch(function () { finir(""); });
+          .then(function (l) { if (l && l.id != null) CT.noterDocEssai(l.id); finir(l && l.id); }).catch(function () { finir(""); });
         else finir("");
       });
     }
@@ -735,6 +739,7 @@
       var docs = listeDocs().filter(function (d) { return d.etat === "signe"; }).sort(function (x, y) { return (x.e.verseLe || "") < (y.e.verseLe || "") ? 1 : -1; })
         .map(function (d) { return '<li><button type="button" data-st="voir-doc" data-v="' + d.cle + '"><span class="l">' + ech(d.nom) + '</span><span class="d">signé le ' + jj(d.e.signeLe) + (d.e.mode === "ecran" ? " à l'écran" : " sur papier") + ' · versé le ' + horodatage(d.e.verseLe) + '</span></button></li>'; });
       var ctrl = CT.journalControles(S.id).map(function (x, i) { return { x: x, i: i }; }).reverse()
+        .sort(function (x, y) { return (x.x.quand || "") < (y.x.quand || "") ? 1 : (x.x.quand || "") > (y.x.quand || "") ? -1 : 0; })
         .map(function (o) { return '<li><button type="button" data-st="voir-controle" data-v="' + o.i + '"><span class="l">' + ech(o.x.lib) + '</span><span class="d">' + horodatage(o.x.quand) + '</span></button></li>'; });
       var sanc = CT.suiviConducteur(S.id).mesures.map(function (m, i) { return { m: m, i: i }; }).filter(function (o) { return o.m.cle || (o.m.categorie || "").toLowerCase() === "sanction"; })
         .sort(function (x, y) { return (x.m.date || "") < (y.m.date || "") ? 1 : -1; })
@@ -761,6 +766,79 @@
       });
     }
 
+    /* ───────────────────────────── le mode essai ────────────────────────── */
+
+    function proposerEssai() {
+      ouvrir("Faire un essai", '<div class="st-res"><p>Un essai ne laisse aucune trace. Au départ, l\'état des fiches, de l\'échéancier et des registres des véhicules est mis de côté ; « Annuler l\'essai » le remet exactement comme il était.</p>' +
+        '<p><b>Sur mes conducteurs</b> : vous lisez de vrais fichiers, vous préparez un courrier, puis vous annulez.</p>' +
+        '<p><b>Une démonstration</b> : un conducteur et un camion fictifs, avec un parcours déjà fait de la première à la dernière étape, pour voir chaque écran rempli.</p></div>');
+      bouton("Sur mes conducteurs", false, function () {
+        if (!CT.commencerEssai({})) { dire("L'essai n'a pas pu démarrer : la copie de l'état n'a pas pu être faite."); return; }
+        fermer(); peindre(); dire("Essai commencé : rien n'est définitif");
+      });
+      bouton("Voir une démonstration", true, function () { fermer(); demonstration(); });
+    }
+    function finEssai(garder) {
+      if (garder) { CT.garderEssai(); peindre(); prevenirPage(); dire("Essai terminé : ce qui a été fait est gardé"); return; }
+      if (!window.confirm("Annuler l'essai ? Tout ce qui a été fait depuis son début sera effacé, et l'état d'avant sera remis.")) return;
+      var r = CT.annulerEssai();
+      if (!r) { window.alert("L'état d'avant l'essai n'a pas été retrouvé sur cet appareil : rien n'a été effacé."); return; }
+      if (window.Documents) (r.docIds || []).forEach(function (id) { try { window.Documents.supprimer(id); } catch (e) {} });
+      S.id = null; S.etape = 0; S.decoches = {}; S.reac = { cle: null, penal: false, entretien: "" };
+      peindre(); prevenirPage(); dire("Essai annulé : tout est comme avant");
+    }
+    /* LA DÉMONSTRATION : un parcours complet, joué sur un conducteur et un camion
+       qui n'existent pas. Un premier cycle est allé jusqu'au bout (documents
+       signés, lecture, avertissement, coffre-fort) ; un second est en cours,
+       avec des faits de même nature et un délai qui approche. */
+    function signatureFictive() {
+      var cv = document.createElement("canvas"); cv.width = 300; cv.height = 110;
+      var x = cv.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, 300, 110);
+      x.strokeStyle = "#1c3a8a"; x.lineWidth = 2.4; x.lineCap = "round"; x.beginPath();
+      x.moveTo(18, 74); x.bezierCurveTo(48, 12, 66, 96, 96, 56); x.bezierCurveTo(118, 26, 132, 92, 160, 62);
+      x.bezierCurveTo(182, 40, 204, 84, 232, 44); x.bezierCurveTo(246, 30, 262, 60, 284, 50); x.stroke();
+      return cv.toDataURL("image/png");
+    }
+    function demonstration() {
+      var ID = "conducteur-d-essai", NOM = "MARTIN Paul (fictif)", IMMAT = "ES-000-AI", CARTE = "ESSAI00000000001";
+      if (!CT.commencerEssai({ demonstration: true, conducteur: { id: ID, nom: NOM, poste: "Conducteur poids lourd" }, vehicule: { immat: IMMAT } })) {
+        dire("La démonstration n'a pas pu démarrer : la copie de l'état n'a pas pu être faite."); return; }
+      var J = function (n) { return plusJours(aujourdhui(), -n); };
+      var H = function (n, h) { return new Date(versDate(J(n)).getTime() + (h - 12) * 3600000).toISOString(); };
+      /* 1. les instructions */
+      CT.porterDocRemis(ID, "consigne", { etat: "signe", imprimeLe: J(41), signeLe: J(40), verseLe: H(40, 9), mode: "ecran", sig: signatureFictive(), docId: "" });
+      CT.porterDocRemis(ID, "formation", { etat: "signe", imprimeLe: J(40), signeLe: J(38), verseLe: H(36, 15), mode: "papier", sig: "", docId: "" });
+      CT.porterDocRemis(ID, "note", { etat: "imprime", imprimeLe: J(3) });
+      /* 2. le contrôle : premier cycle, il y a un mois */
+      CT.porterCarte(ID, { numero: CARTE, titulaire: "MARTIN PAUL", expiration: plusJours(aujourdhui(), 520) });
+      CT.ajouterControle(ID, { quand: H(30, 10), lib: "Fichier du camion " + IMMAT + " lu", resume: "Téléchargement du " + jj(J(30)) + ". Conduite sans carte : 2 journées, 0 h 41. 2 faits portés à la fiche de " + NOM + "." });
+      CT.importerAnomalies(ID, [
+        { date: J(44), source: "appareil", type: "conduite sans carte", detail: "Véhicule " + IMMAT + " : 0 h 23, de 13:36 à 13:59 (heure de Paris)." },
+        { date: J(37), source: "appareil", type: "conduite sans carte", detail: "Véhicule " + IMMAT + " : 0 h 18, de 14:02 à 14:20 (heure de Paris)." }], { src: "camion " + IMMAT, connu: J(30) });
+      /* 3. la réaction du premier cycle : un avertissement, deux jours plus tard */
+      var lignes1 = [[jj(J(44)), "Conduite sans carte", "Véhicule " + IMMAT + " : 0 h 23, de 13:36 à 13:59 (heure de Paris)."], [jj(J(37)), "Conduite sans carte", "Véhicule " + IMMAT + " : 0 h 18, de 14:02 à 14:20 (heure de Paris)."]];
+      CT.ajouterMesure(ID, { date: J(28), categorie: "sanction", objet: "Avertissement", pour: "2 faits : conduite sans carte", cle: "avertissement", natures: ["conduite sans carte"], nb: 2, lignes: lignes1 });
+      CT.majAnomalies(ID, [0, 1], { traite: J(28) });
+      /* le second cycle : lecture de la carte et du camion il y a neuf jours */
+      CT.porterTelechargementCarte(ID, J(25));
+      CT.porterTelechargementVehicule(IMMAT, J(9));
+      var jours = {}; [44, 37, 20, 18, 12].forEach(function (n) { jours[J(n)] = { conduite: 380, continueMax: 250 }; });
+      var parCarte = {}; parCarte[CARTE] = jours; CT.porterJoursVehicule(IMMAT, parCarte);
+      CT.ajouterControle(ID, { quand: H(9, 11), lib: "Carte du conducteur lue", resume: "MARTIN PAUL, carte n° " + CARTE + ". Activités sur 96 journées. 1 fait relevé par l'appareil, 1 porté à la fiche. Téléchargement du " + jj(J(25)) + "." });
+      CT.ajouterControle(ID, { quand: H(9, 11.2), lib: "Fichier du camion " + IMMAT + " lu", resume: "Téléchargement du " + jj(J(9)) + ". Conduite sans carte : 3 journées, 1 h 02. 3 faits portés à la fiche de " + NOM + "." });
+      CT.importerAnomalies(ID, [{ date: J(15), source: "appareil", type: "insertion de la carte pendant la conduite", detail: "Événement enregistré par l'appareil, véhicule " + IMMAT + "." }], { src: "carte du conducteur", connu: J(9) });
+      CT.importerAnomalies(ID, [
+        { date: J(20), source: "appareil", type: "conduite sans carte", detail: "Véhicule " + IMMAT + " : 0 h 27, de 13:51 à 14:18 (heure de Paris)." },
+        { date: J(18), source: "appareil", type: "conduite sans carte", detail: "Véhicule " + IMMAT + " : 0 h 21, de 13:46 à 14:07 (heure de Paris)." },
+        { date: J(12), source: "appareil", type: "conduite sans carte", detail: "Véhicule " + IMMAT + " : 0 h 14, de 14:13 à 14:27 (heure de Paris)." }], { src: "camion " + IMMAT, connu: J(9) });
+      /* un procès-verbal reçu il y a cinquante jours : le délai approche */
+      CT.ajouterAnomalie(ID, { date: J(70), type: "dépassement de la conduite journalière", detail: "Véhicule " + IMMAT + " : 10 h 40 de conduite relevées au contrôle.", src: "procès-verbal reçu", connu: J(50) });
+      CT.ajouterControle(ID, { quand: H(50, 16), lib: "Procès-verbal reçu", resume: "Dépassement de la conduite journalière du " + jj(J(70)) + ", connu le " + jj(J(50)) + "." });
+      S.id = ID; S.etape = 0; S.decoches = {}; S.reac = { cle: null, penal: false, entretien: "" };
+      peindre(); prevenirPage(); window.scrollTo(0, cont.getBoundingClientRect().top + window.pageYOffset - 12);
+      dire("Démonstration chargée : parcourez les quatre étapes");
+    }
+
     /* ───────────────────────────── les gestes ───────────────────────────── */
 
     cont.addEventListener("click", function (e) {
@@ -768,6 +846,9 @@
       var a = b.getAttribute("data-st"), v = b.getAttribute("data-v");
       if (a === "etape" || a === "aller") { S.etape = +v; peindre(); if (a === "aller") window.scrollTo(0, cont.getBoundingClientRect().top + window.pageYOffset - 12); return; }
       if (a === "fiche") { if (!CT.enWordSuivi(S.id)) dire("Le générateur Word n'est pas disponible."); return; }
+      if (a === "essai") return proposerEssai();
+      if (a === "essai-annuler") return finEssai(false);
+      if (a === "essai-garder") return finEssai(true);
       if (a === "voir-doc") return voirDoc(v);
       if (a === "imprimer") return imprimer(v);
       if (a === "importer") return importerCopie(v);
