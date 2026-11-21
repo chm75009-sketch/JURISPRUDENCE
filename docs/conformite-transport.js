@@ -973,6 +973,41 @@
   /* LA SANCTION CHOISIE, OU LA CONVOCATION QUAND L'ENTRETIEN EST REQUIS. */
   /* lignes, facultatif : les seuls faits retenus, quand l'employeur en a écarté
      ou que certains sont prescrits. Sans lui, tous les faits de la fiche. */
+  /* L'ASSISTANCE DU SALARIÉ À L'ENTRETIEN PRÉALABLE AU LICENCIEMENT.
+
+     Demande du 21 novembre 2026 : la convocation dit qu'il peut se faire
+     assister, et donne l'adresse où se trouve la liste des conseillers.
+
+     Le texte : « La lettre de convocation à l'entretien préalable adressée au
+     salarié mentionne la possibilité de recourir à un conseiller du salarié et
+     précise l'adresse des services dans lesquels la liste de ces conseillers
+     est tenue à sa disposition » (L. 1232-4, LEGIARTI000006901002). Cette
+     liste est tenue « dans chaque section d'inspection du travail et dans
+     chaque mairie » (D. 1232-5, LEGIARTI000018537714).
+
+     La rédaction est celle de la convocation du 15 novembre 2026, reprise mot
+     pour mot, avec ses deux adresses : la mairie d'Argenteuil et l'inspection
+     du travail du Val-d'Oise. Pour un autre département, l'inspection est
+     celle que porte la fiche d'entreprise (orgInspection) ; à défaut, et pour
+     une autre commune, l'adresse reste à compléter, entre crochets.
+
+     Pour une sanction autre que le licenciement, le texte ne prévoit que
+     l'assistance par une personne du personnel de l'entreprise (L. 1332-2,
+     R. 1332-1) : la convocation à une mise à pied garde cette seule mention. */
+  var MAIRIES_CONSEILLERS = { "argenteuil": "12-14 Bd Léon Feix, 95100 Argenteuil" };
+  var INSPECTIONS_TRAVAIL = { "95": "Immeuble Atrium, 3, boulevard de l'Oise, CS 20305, 95014 Cergy-Pontoise Cedex" };
+  function assistanceLicenciement() {
+    var p = profil(), adr = String(p.adresse || p.siege || "");
+    var cp = (adr.match(/\b(\d{5})\b/) || [])[1] || "";
+    var commune = ville().toLowerCase().replace(/\s+cedex.*$/, "").trim();
+    var mairie = MAIRIES_CONSEILLERS[commune] || "[adresse de la mairie]";
+    var inspection = INSPECTIONS_TRAVAIL[cp.slice(0, 2)] || net(p.orgInspection) || "[adresse de l'inspection du travail]";
+    return [
+      { k: "p", t: "Lors de cet entretien, vous pourrez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise, ou, à défaut de représentants du personnel, par un conseiller du salarié figurant sur la liste départementale" },
+      { k: "puce", t: "liste disponible à la mairie : " + mairie },
+      { k: "puce", t: "l'inspection du travail : " + inspection }
+    ];
+  }
   function sanctionItems(id, cle, lignes, entretien) {
     var s = SANCTIONS.filter(function (x) { return x.cle === cle; })[0];
     if (!s) return null;
@@ -985,7 +1020,12 @@
       if (ls.length) items.push({ k: "table", head: ["Date", "Infraction", "Détail"], rows: ls });
       var jourEntretien = "[DATE]";
       if (entretien) { try { jourEntretien = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(entretien + "T12:00:00")); } catch (err) { jourEntretien = entretien; } }
-      items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le " + jourEntretien + " à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
+      if (s.cle === "licenciement") {
+        items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le " + jourEntretien + " à [HEURE], à [LIEU]." });
+        assistanceLicenciement().forEach(function (x) { items.push(x); });
+      } else {
+        items.push({ k: "p", t: "Vous êtes convoqué à un entretien préalable le " + jourEntretien + " à [HEURE], à [LIEU]. Vous pouvez vous faire assister par une personne de votre choix appartenant au personnel de l'entreprise." });
+      }
       items.push({ k: "note", t: s.note });
       items.push({ k: "p", t: "Fait à " + ville() + ", le " + dateFr() + "." });
       items.push({ k: "p", t: "Pour l'entreprise :" });
