@@ -106,6 +106,8 @@
     background:var(--accent-clair);color:var(--accent);border:2px solid var(--accent)}
   #modifier-fiche.retour:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
   .rappel{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--filet)}
+  .modifier-fiche{flex:none;min-height:0;padding:9px 12px;border:1px solid var(--filet);border-radius:10px;background:var(--surface);
+    color:var(--accent);font:600 14px/1.2 system-ui;cursor:pointer}
   .rappel .texte{flex:1;min-width:0;font-size:16px;line-height:1.35;color:var(--texte-2)}
   .rappel .texte b{color:var(--texte);font-size:17px}
   .chapeau{margin:20px 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
@@ -224,9 +226,9 @@
   </section>
 
   <section id="ecran-portes" hidden>
-    <button type="button" id="modifier-fiche" class="retour">&#8592; Retour à la fiche</button>
     <div class="rappel">
       <div class="texte"><b id="rail-ent"></b> <span id="rail-ent-txt"></span></div>
+      <button type="button" id="modifier-fiche" class="modifier-fiche">Modifier la fiche</button>
     </div>
     <!-- CE QUI EST À FAIRE CETTE SEMAINE, AVANT LES BOUTONS.
          L'accueil offrait cinq portes et aucune date : le dirigeant n'avait
@@ -1029,11 +1031,16 @@
   });
   $("modifier-fiche").addEventListener("click", montrerFiche);
 
-  /* La fiche s'affiche à chaque ouverture, pré-remplie de ce qui est déjà
-     enregistré : demande du 8 septembre 2026, « à chaque fois je choisis le
-     secteur, la convention et l'effectif que je veux ». Continuer mène aux
-     deux boutons. */
-  montrerFiche();
+  /* UNE FICHE DÉJÀ REMPLIE NE SE REDEMANDE PAS À CHAQUE OUVERTURE.
+
+     Depuis le 8 septembre 2026, la fiche s'affichait à chaque ouverture, parce
+     qu'on changeait alors de secteur et d'effectif à chaque essai. Le client,
+     lui, ouvre l'application pour travailler : il traversait trente-cinq champs
+     sur deux écrans et demi pour toucher « Continuer ». Relevé le 22 novembre
+     2026. Quand la fiche est complète, on arrive donc droit sur l'accueil ;
+     elle reste à un geste, par « Modifier la fiche ». Tant qu'il y manque
+     quelque chose, c'est elle qui s'ouvre, comme avant. */
+  if (complet(profil())) montrerPortes(); else montrerFiche();
 
   /* Mise à jour de l'application : un bandeau, jamais un rechargement imposé. */
   if ("serviceWorker" in navigator) {
