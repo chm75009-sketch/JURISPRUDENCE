@@ -26,6 +26,19 @@
      mots que le dirigeant emploie vraiment. Toute destination nouvelle
      s'ajoute ici. */
   var DEST = [
+    /* LE LICENCIEMENT MÈNE À SA PROCÉDURE, PAS À UN AUDIT.
+
+       Relevé le 22 novembre 2026 : dire « licenciement » ouvrait l'audit de
+       la discipline, qui demande si l'entreprise a un règlement des sanctions.
+       Celui qui dit « licenciement » veut la convocation à l'entretien
+       préalable et la lettre : elles existent dans Gérer, et la recherche n'y
+       menait pas. Ces trois entrées sont en tête, pour l'emporter à égalité. */
+    { nom: "Licenciement pour faute", ou: "Convocation à l'entretien préalable, puis lettre de licenciement", page: "gerer.html#faute",
+      mots: "licenciement licencier renvoyer virer congedier rupture depart faute simple grave lourde entretien prealable convocation convoquer procedure lettre notification motif cause reelle serieuse separer mettre dehors remercier preavis indemnite salarie conducteur chauffeur employe" },
+    { nom: "Licenciement économique", ou: "Convocation, entretien préalable, lettre", page: "gerer.html#eco",
+      mots: "licenciement licencier economique motif suppression poste emploi supprime difficultes entretien prealable convocation procedure lettre contrat securisation professionnelle" },
+    { nom: "Mise à pied conservatoire", ou: "Écarter le salarié le temps de la procédure", page: "gerer.html#conservatoire",
+      mots: "mise pied conservatoire ecarter suspendre attente procedure licenciement faute grave entretien prealable convocation" },
     { nom: "Éditer un contrat de travail", ou: "Contrats du transport", page: "contrats-transport.html",
       mots: "contrat travail cdi cdd embauche embaucher recruter recrutement rediger ecrire etablir faire salarie employe ouvrier chauffeur conducteur engager engagement promesse essai avenant temps partiel complet nouveau transport" },
     { nom: "Contester une contravention", ou: "Avis de contravention", page: "contraventions.html",
@@ -34,8 +47,6 @@
       mots: "urssaf controle cotisations redressement inspecteur avis contradictoire charte deduction forfaitaire specifique dfs frais deplacement grand deplacement lettre observations recours commission amiable prescription mandataire exoneration reduction generale cotisation redresser inspection recouvrement" },
     { nom: "Avertissement, sanction, discipline", ou: "Discipline", page: "audit-discipline.html",
       mots: "avertissement sanction sanctionner discipline disciplinaire infliger donner mettre blame mise a pied faute reproche punir rappel ordre recadrer reprimande comportement mauvaise conduite retard insubordination procedure" },
-    { nom: "Licenciement", ou: "Discipline", page: "audit-discipline.html",
-      mots: "licenciement licencier renvoyer virer congedier rupture depart faute grave lourde entretien prealable convocation motif cause reelle serieuse separer mettre dehors remercier" },
     { nom: "Registre des sanctions", ou: "Discipline", page: "sanctions.html",
       mots: "registre sanctions historique avertissements suivi disciplinaire" },
     { nom: "Mise en demeure, absence, abandon de poste", ou: "Courriers et e-mails", page: "courriers.html",
