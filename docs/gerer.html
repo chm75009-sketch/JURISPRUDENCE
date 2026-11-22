@@ -150,6 +150,7 @@
   .refus{background:var(--rouge-clair);border:1px solid #e6cccc;border-radius:10px;padding:14px 16px;
     margin:0 0 12px;color:var(--rouge);font-size:15px;line-height:1.55}
   .refus b{display:block;margin-bottom:4px}
+  .refus div+div{margin-top:8px}
   .alerte{background:var(--ambre-clair);border:1px solid #e8ddc6;border-radius:8px;padding:10px 14px;
     margin:0 0 12px;color:var(--ambre);font-size:14.5px;line-height:1.55}
   /* IL MANQUE QUELQUE CHOSE : ON NE PEUT PAS L'ENVOYER AINSI. Demande du
@@ -2121,6 +2122,33 @@
     return "Le délai de deux mois est écoulé depuis le " + dateFr(dm.limite) + " : les poursuites disciplinaires ne peuvent plus être engagées sur ces seuls faits (" + ref(["L1332-4"]) + "), sauf poursuites pénales exercées dans le même délai.";
   }
 
+  /* UN REFUS NE CACHE PAS LES AUTRES ANOMALIES.
+
+     Relevé le 22 novembre 2026 sur le licenciement pour faute : des faits
+     connus le 20 juin, un entretien fixé deux jours plus tard. L'écran refusait
+     la lettre pour le délai de cinq jours ouvrables et ne disait rien de la
+     prescription ; une fois la date corrigée, la prescription apparaissait à
+     son tour. Une anomalie à la fois, c'est autant d'allers et retours. Le
+     refus garde sa raison première et porte maintenant tout le reste : la
+     prescription dans le même encadré, la carte du délai de deux mois, ce qui
+     manque encore, l'heure hors du service et le jour de repos. */
+  function refusEtLeReste(refuse, v, dm, article, quoi, carte, loi) {
+    var lignes = refuse.slice();
+    if (dm && dm.prescrit) lignes.push(alertePrescrit(dm));
+    var alertes = [];
+    var m = manques(v, true);
+    if (m.length) alertes.push(alerteManques(m, quoi));
+    var hors = alerteHorsTravail(v);
+    if (hors) alertes.push(hors);
+    var repos = alerteJourDeRepos(v);
+    if (repos) alertes.push(repos);
+    var pres = presentationDe(v);
+    var dates = [carteDeuxMois(dm, carte),
+      { q: "Entretien au plus tôt", d: dateFrJour(entretienAuPlusTot(v)),
+        f: "cinq jours ouvrables après " + pres.dit + " (" + ref([article]) + ")", c: "tot" }];
+    return { refus: lignes, dates: dates, alertes: alertes, loi: ["L1332-4"].concat(loi) };
+  }
+
   function sanction(v, type) {
     var S = SANCTIONS[type];
     var nomS = v.nom || "[nom et prénom du salarié]";
@@ -2308,7 +2336,8 @@
     var dm = deuxMois(v);
     var convocation = AUJOURDHUI;
     var refuse = refusEntretien(v, "L1232-2");
-    if (refuse) return { refus: refuse, loi: ["L1232-2", "L1232-3", "L1232-4"] };
+    if (refuse) return refusEtLeReste(refuse, v, dm, "L1232-2", "convocation",
+      "Dernier jour pour convoquer", ["L1232-2", "L1232-3", "L1232-4"]);
     var entretien = dateDe(v.eDate) || entretienAuPlusTot(v);
     var quand = v.eDate ? dateFrJour(dateDe(v.eDate)) : "[date de l'entretien]";
     var heure = String(v.eHeure || "").trim() || "[heure]";
@@ -4123,7 +4152,8 @@
     var civ = civiliteDe(nomS);
     var dm = deuxMois(v);
     var refuse = refusEntretien(v, "L1332-2");
-    if (refuse) return { refus: refuse, loi: ["L1332-2", "L1332-3"] };
+    if (refuse) return refusEtLeReste(refuse, v, dm, "L1332-2", "lettre",
+      "Dernier jour pour engager les poursuites", ["L1332-2", "L1332-3"]);
     var b = [], dates = [];
     b.push({ k: "t1", t: "Mise à pied conservatoire et convocation à entretien préalable" });
     enTete(b, nomS, "votre mise à pied à titre conservatoire et votre convocation à un entretien préalable",
