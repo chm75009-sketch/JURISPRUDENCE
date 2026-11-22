@@ -105,6 +105,31 @@
        trois documents d'un conducteur demandait de parcourir douze rubriques.
        Relevé le 26 septembre 2026. Les noms viennent du registre du personnel,
        les plaques de la flotte : on choisit, on ne retape pas. -->
+  <!-- QUATRE ENTRÉES, LES MÊMES QUE DANS GÉRER.
+       Demande du 22 novembre 2026 : chaque tuile ouvre sa propre liste de
+       pièces. Par salarié et par camion, les pièces sont rassemblées sous le
+       nom ou la plaque que leur intitulé porte ; les documents types et les
+       relations collectives rassemblent leurs rubriques. Sans tuile choisie,
+       la page montre tout, rubrique par rubrique, comme avant. -->
+  <style>
+    .quatre{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 6px}
+    .quatre button{background:var(--surface);border:1px solid var(--filet);border-radius:16px;padding:14px 6px 12px;
+      display:flex;flex-direction:column;align-items:center;gap:7px;font:600 14.5px/1.2 system-ui;color:var(--accent);
+      text-align:center;cursor:pointer;min-height:0}
+    .quatre button svg{width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+    .quatre button small{font:400 12.5px/1.2 system-ui;color:var(--texte-2)}
+    .quatre button.ici{border-color:var(--accent);background:var(--accent-clair)}
+    .tout-voir{display:inline-block;margin:6px 0 0;background:none;border:0;padding:6px 0;color:var(--accent);
+      font:600 15px/1.2 system-ui;text-decoration:underline;cursor:pointer;min-height:0}
+  </style>
+  <div class="quatre" id="quatre">
+    <button type="button" data-vue="salaries"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Salariés<small id="n-salaries"></small></button>
+    <button type="button" data-vue="camions"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>Camions<small id="n-camions"></small></button>
+    <button type="button" data-vue="types"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Documents types<small id="n-types"></small></button>
+    <button type="button" data-vue="collectif"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M2 20a6 6 0 0112 0M14.5 20a4.5 4.5 0 017.5-3.3"/></svg>Relations collectives<small id="n-collectif"></small></button>
+  </div>
+  <button type="button" class="tout-voir" id="tout-voir" hidden>Voir tous les documents</button>
+
   <div class="filtres" id="filtres">
     <label class="ch"><span>Chercher</span>
       <input type="search" id="f-texte" placeholder="un mot du nom du document"></label>
@@ -357,6 +382,32 @@
     return out;
   }
 
+  /* LES QUATRE VUES. Deux rassemblent des rubriques ; deux regroupent les
+     pièces sous le nom d'un salarié ou la plaque d'un camion, lus dans
+     l'intitulé de la pièce comme le font déjà les deux filtres. */
+  var VUE = null;
+  var RUB_TYPES = ["notes-service", "courriers", "registre", "controler-ri", "controler-duerp", "duerp",
+    "controler-affichages", "controle-urssaf", "controler-mutuelle", "controler-discipline", "audit-discipline", "audit-sst"];
+  var RUB_COLLECTIF = ["controler-cse", "audit-cse", "controler-nao", "audit-nao", "bdese", "controler-bdese", "audit-bdese",
+    "audit-pse", "audit", "controler-egalite", "egalite", "parcours", "documents", "audit-social"];
+  var TITRE_VUE = { salaries: "Salariés", camions: "Camions", types: "Documents types", collectif: "Relations collectives" };
+  function parNom(rubs, noms, plaque) {
+    var tous = [];
+    rubs.forEach(function (x) { tous = tous.concat(x.L); });
+    return noms.map(function (n) {
+      var c = sansAccent(n).trim(), mots = plaque ? null : c.split(/\s+/);
+      return { r: n, titre: n, L: tous.filter(function (d) {
+        return plaque ? (porte(d, [c.replace(/\s+/g, "")]) || porte(d, [c])) : porte(d, mots); }) };
+    }).filter(function (g) { return g.L.length; });
+  }
+  function vueDe(rubs, v) {
+    if (v === "salaries") return parNom(rubs, salaries(), false);
+    if (v === "camions") return parNom(rubs, vehicules(), true);
+    var R = v === "types" ? RUB_TYPES : RUB_COLLECTIF;
+    return rubs.filter(function (x) { return R.indexOf(x.r) >= 0; });
+  }
+  function compter(G) { var vus = {}; G.forEach(function (g) { g.L.forEach(function (d) { vus[d.id] = 1; }); }); return Object.keys(vus).length; }
+
   function rendre() {
     if (!window.Documents || !window.Documents.disponible()) {
       $("liste").innerHTML = '<div class="avis att"><b>Ce navigateur ne garde pas les documents</b>' +
@@ -365,7 +416,24 @@
     }
     toutes().then(function (rubs) {
       var pleines = rubs.filter(function (x) { return x.L.length; });
-      if (!pleines.length) {
+      /* le compte de chaque tuile, et la vue choisie */
+      ["salaries", "camions", "types", "collectif"].forEach(function (v) {
+        var n = compter(vueDe(pleines, v));
+        $("n-" + v).textContent = n + " pièce" + (n > 1 ? "s" : "");
+      });
+      Array.prototype.forEach.call($("quatre").children, function (b) { b.classList.toggle("ici", b.getAttribute("data-vue") === VUE); });
+      $("tout-voir").hidden = !VUE;
+      var toutesPleines = pleines;
+      if (VUE) pleines = vueDe(pleines, VUE);
+      if (VUE && !pleines.length) {
+        $("f-dit").textContent = "";
+        $("liste").innerHTML = '<div class="avis info"><b>' + ech(TITRE_VUE[VUE]) + " : aucune pièce pour l'instant</b>" +
+          (VUE === "salaries" || VUE === "camions"
+            ? "Une pièce vient ici quand son intitulé porte le nom du salarié ou la plaque du véhicule."
+            : "Les pièces produites ou déposées dans ces rubriques viendront ici.") + "</div>";
+        return;
+      }
+      if (!toutesPleines.length) {
         $("liste").innerHTML = '<div class="avis info"><b>Aucun document gardé pour l\'instant</b>' +
           "Déposez un document dans un écran de contrôle, ou téléchargez-en un que l'application " +
           "écrit : il viendra ici, daté.</div>";
@@ -375,7 +443,7 @@
       pleines.forEach(function (x) {
         var F = filtrer(x.L);
         total += F.length;
-        if (F.length) gardees.push({ r: x.r, L: F });
+        if (F.length) gardees.push({ r: x.r, titre: x.titre, L: F });
       });
       var actif = !!($("f-texte").value.trim() || $("f-salarie").value || $("f-vehicule").value);
       $("f-dit").textContent = actif
@@ -391,7 +459,7 @@
         return;
       }
       $("liste").innerHTML = gardees.map(function (x) {
-        return '<section class="rub"><h2>' + ech(nomDe(x.r)) + "</h2>" +
+        return '<section class="rub"><h2>' + ech(x.titre || nomDe(x.r)) + "</h2>" +
           /* « 2 document(s) » : le pluriel se décide, il ne se met pas entre
              parenthèses. Relevé le 26 septembre 2026. */
           '<p class="compte">' + x.L.length + " document" +
@@ -441,6 +509,18 @@
       });
     });
   }
+
+  $("quatre").addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("[data-vue]") : null; if (!b) return;
+    VUE = VUE === b.getAttribute("data-vue") ? null : b.getAttribute("data-vue");
+    rendre();
+  });
+  $("tout-voir").addEventListener("click", function () { VUE = null; rendre(); });
+  /* Le retour ramène d'une vue à la liste entière ; sinon, il quitte la page. */
+  if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
+    if (!VUE) return false;
+    VUE = null; rendre(); return true;
+  });
 
   remplirFiltres();
   ["f-texte", "f-salarie", "f-vehicule"].forEach(function (id) {

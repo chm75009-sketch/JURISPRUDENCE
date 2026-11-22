@@ -63,7 +63,7 @@
   .haut span{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .aide{margin:14px 0 0;color:var(--texte-2);font-size:16px;max-width:none}
   .pq{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:20px 2px 10px}
-  .trois{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .trois{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .trois a,.trois button{background:var(--surface);border:1px solid var(--filet);border-radius:16px;padding:16px 6px 13px;
     display:flex;flex-direction:column;align-items:center;gap:8px;font:600 14.5px/1.2 system-ui;color:var(--accent);
     text-align:center;text-decoration:none;cursor:pointer;min-height:0}
@@ -231,11 +231,16 @@
          lui : un salarié, un camion, l'entreprise. Rien n'est retiré : la
          liste entière reste dessous, repliée, sous « Tous les actes ». -->
     <div id="pour-qui">
-      <h2 class="pq">Pour qui ?</h2>
+      <h2 class="pq">Pour qui, pour quoi ?</h2>
+      <!-- Quatre tuiles depuis le 22 novembre 2026. « L'entreprise » ne disait
+           rien : un salarié et un camion en font partie aussi. Elle est
+           remplacée par ce qu'elle contenait, les documents types et les
+           relations collectives. -->
       <div class="trois">
-        <a href="salaries.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Un salarié<small>conducteurs et sédentaires</small></a>
+        <a href="salaries.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>Un conducteur ou un salarié<small>le registre du personnel</small></a>
         <a href="flotte.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v9H2zM13 10h4l4 3v3h-8z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>Un camion<small>la flotte</small></a>
-        <button type="button" id="pour-entreprise"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V5l8-2v18M12 9h8v12M2 21h20"/><path d="M7 8h2M7 12h2M7 16h2M15 13h2M15 17h2"/></svg>L'entreprise<small>comité, notes, courriers</small></button>
+        <button type="button" data-pour="types"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg>Documents types<small>notes de service, courriers</small></button>
+        <button type="button" data-pour="collectif"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M2 20a6 6 0 0112 0M14.5 20a4.5 4.5 0 017.5-3.3"/></svg>Relations collectives<small>représentants du personnel</small></button>
       </div>
       <h2 class="pq">Ou dites-le</h2>
     </div>
@@ -244,7 +249,7 @@
     <h2 class="pq" id="titre-pour" hidden></h2>
     <details id="tous-actes" class="pli-actes">
       <summary>Tous les actes, par thème</summary>
-      <a class="carte-urssaf" href="controle-urssaf.html" data-pour="entreprise">
+      <a class="carte-urssaf" href="controle-urssaf.html" data-pour="types">
         <b>Contrôle URSSAF</b>
         <span>Se préparer, répondre, limiter les redressements. Visite le 17 novembre 2026.</span>
       </a>
@@ -6089,14 +6094,15 @@
   /* POUR QUI : LA MÊME LISTE, RÉDUITE À CE QUI CONCERNE L'OBJET CHOISI.
 
      La liste n'est pas réécrite : chaque ligne est rattachée à un salarié, à
-     un camion ou à l'entreprise, et le choix cache les autres. « L'entreprise »
-     se choisit ici ; un salarié se choisit sur sa page, qui renvoie ici avec
-     « ?pour=salarie » quand il s'agit de faire un acte. */
-  var POUR_GROUPE = { "Embaucher dans le transport": "salarie", "Écrire": "entreprise", "Suivre": "salarie",
-    "Transport": "entreprise", "Embaucher": "salarie", "Pendant le contrat": "salarie", "Sanctionner": "salarie",
-    "Rompre": "salarie", "Collectif": "entreprise" };
-  var POUR_LIGNE = { "registre.html": "entreprise", "flotte.html": "camion", "autorisation": "salarie" };
-  var TITRE_POUR = { salarie: "Pour un salarié", entreprise: "Pour l'entreprise" };
+     un camion, aux documents types ou aux relations collectives, et le choix
+     cache les autres. Ces deux derniers se choisissent ici ; un salarié se
+     choisit sur sa page, qui renvoie ici avec « ?pour=salarie » quand il s'agit
+     de faire un acte. */
+  var POUR_GROUPE = { "Embaucher dans le transport": "salarie", "Écrire": "types", "Suivre": "salarie",
+    "Transport": "types", "Embaucher": "salarie", "Pendant le contrat": "salarie", "Sanctionner": "salarie",
+    "Rompre": "salarie", "Collectif": "collectif" };
+  var POUR_LIGNE = { "registre.html": "types", "flotte.html": "camion", "autorisation": "salarie" };
+  var TITRE_POUR = { salarie: "Pour un salarié", types: "Documents types", collectif: "Relations collectives" };
   var POUR = new URLSearchParams(location.search).get("pour"), parTuile = false;
   if (!TITRE_POUR[POUR]) POUR = null;
   function peindrePour() {
@@ -6114,7 +6120,7 @@
     Array.prototype.forEach.call($("liste").children, function (el) {
       if (el.classList.contains("groupe")) { clore(); entete = el; groupe = el.textContent; vus = 0; return; }
       var cle = el.getAttribute("data-vers") || el.getAttribute("data-doc");
-      var pour = cle ? (POUR_LIGNE[cle] || POUR_GROUPE[groupe] || "entreprise") : (POUR_GROUPE[groupe] || "entreprise");
+      var pour = cle ? (POUR_LIGNE[cle] || POUR_GROUPE[groupe] || "types") : (POUR_GROUPE[groupe] || "types");
       var montre = !POUR || pour === POUR;
       el.hidden = !montre;
       if (montre && cle) vus++;
@@ -6122,7 +6128,10 @@
     clore();
     window.scrollTo(0, 0);
   }
-  $("pour-entreprise").addEventListener("click", function () { POUR = "entreprise"; parTuile = true; peindrePour(); });
+  $("pour-qui").addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("button[data-pour]") : null; if (!b) return;
+    POUR = b.getAttribute("data-pour"); parTuile = true; peindrePour();
+  });
   /* Le retour ramène aux trois objets quand on en vient ; sinon, il fait ce
      qu'il a toujours fait. */
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
