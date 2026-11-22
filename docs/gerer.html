@@ -957,17 +957,39 @@
      27 septembre 2026) : la liste « est tenue à la disposition des salariés
      dans chaque section d'inspection du travail et dans chaque mairie ».
      L'inspection est dans la fiche, la mairie est celle du siège. */
+  /* LES DEUX ADRESSES S'ÉCRIVENT DANS LA LETTRE.
+
+     Relevé le 22 novembre 2026 sur la convocation du licenciement pour faute :
+     elle renvoyait à « la section d'inspection du travail dont relève
+     l'établissement » et à « la mairie d'Argenteuil », sans dire où elles se
+     trouvent. La convocation du suivi du chronotachygraphe, elle, les donnait
+     déjà (conformite-transport.js). Ce sont les mêmes adresses, celles de la
+     lettre envoyée le 15 novembre 2026 : la mairie d'Argenteuil et
+     l'inspection du travail du Val-d'Oise. Pour un autre département,
+     l'inspection est celle de la fiche d'entreprise ; à défaut, et pour une
+     autre commune, l'adresse reste à compléter, entre crochets. Les adresses
+     suivent une virgule et non une parenthèse : la phrase se termine déjà par
+     celle des articles. */
+  var MAIRIES_CONSEILLERS = { "argenteuil": "12-14 Bd Léon Feix, 95100 Argenteuil" };
+  var INSPECTIONS_TRAVAIL = { "95": "Immeuble Atrium, 3, boulevard de l'Oise, CS 20305, 95014 Cergy-Pontoise Cedex" };
+  function lieuxListe() {
+    var adr = String((profil && profil.adresse) || "");
+    var cp = (adr.match(/\b(\d{5})\b/) || [])[1] || "";
+    var commune = ville().toLowerCase().replace(/\s+cedex.*$/, "").trim();
+    var inspection = INSPECTIONS_TRAVAIL[cp.slice(0, 2)] ||
+      String((profil && profil.orgInspection) || "").trim() ||
+      "[adresse de l'inspection du travail]";
+    var mairie = MAIRIES_CONSEILLERS[commune] || "[adresse de la mairie]";
+    return "la section d'inspection du travail dont relève l'établissement, " + inspection +
+      ", et à la mairie " + de(ville()) + ", " + mairie;
+  }
   function assistance(art) {
     var rep = String((profil && profil.cseExiste) || "").trim().toLowerCase();
-    var ou = String((profil && profil.orgInspection) || "").trim();
     /* DEUX PARENTHÈSES CÔTE À CÔTE. La phrase finissait par « (D. 1232-5)
        (L. 1232-4). » : la liste portait sa référence, et la phrase ajoutait la
        sienne. Relevé le 28 septembre 2026. Les deux articles tiennent dans une
        seule parenthèse, à la fin. */
-    var liste = "cette liste est tenue à votre disposition à " +
-      (ou ? "la section d'inspection du travail dont relève l'établissement, " + ou + "," :
-        "la section d'inspection du travail dont relève l'établissement") +
-      " et à la mairie " + de(ville());
+    var liste = "cette liste est tenue à votre disposition à " + lieuxListe();
     if (rep.indexOf("oui") === 0)
       return "Vous pouvez vous faire assister par une personne de votre choix appartenant au " +
         "personnel de l'entreprise (" + ref([art]) + ").";
@@ -989,12 +1011,8 @@
      alors que la fiche dit si le comité existe. Relevé le 27 septembre 2026. */
   function assistanceTiers(art) {
     var rep = String((profil && profil.cseExiste) || "").trim().toLowerCase();
-    var ou = String((profil && profil.orgInspection) || "").trim();
     var conseiller = "par un conseiller du salarié choisi sur une liste dressée par l'autorité " +
-      "administrative, tenue à sa disposition à " +
-      (ou ? "la section d'inspection du travail dont relève l'établissement, " + ou + "," :
-        "la section d'inspection du travail dont relève l'établissement") +
-      " et à la mairie " + de(ville());
+      "administrative, tenue à sa disposition à " + lieuxListe();
     if (rep.indexOf("oui") === 0)
       return "le salarié [s'est fait assister par ... / a été informé qu'il pouvait se faire " +
         "assister par une personne de son choix appartenant au personnel de l'entreprise] (" +
