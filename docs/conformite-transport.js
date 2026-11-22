@@ -1247,6 +1247,9 @@
     delaiDisciplinaire: delaiDisciplinaire,
     vehicules: vehiculesFlotte,
     salaries: salariesRegistre,
+    /* Tous les salariés du registre, conducteurs ou non : la page des
+       salariés en a besoin, le suivi tachygraphe non. */
+    tousSalaries: salariesTous,
     CATEGORIES: CATEGORIES,
     conducteurs: conducteurs,
     suiviConducteur: suiviConducteur,

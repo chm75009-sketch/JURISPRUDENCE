@@ -615,6 +615,16 @@
   });
   function peindreConducteurs() { ST.peindre(); }
   function reouvrir(id) { ST.choisir(id); }
+  /* ARRIVER SUR UN CONDUCTEUR DONNÉ. La page des salariés ouvre le suivi de
+     la personne choisie par « ?c=identifiant » : on ne lui fait pas rechercher
+     son conducteur une seconde fois. */
+  (function () {
+    var c = null;
+    try { c = new URLSearchParams(location.search).get("c"); } catch (e) { c = null; }
+    if (!c) return;
+    var connu = (window.ConformiteTransport.salaries() || []).some(function (x) { return x.id === c; });
+    if (connu) { ST.choisir(c); ST.peindre(); }
+  })();
   function aujourdhuiIso() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
   peindreConducteurs();
   /* Un rapport multi-conducteurs (correspondance, infractions) porte le nom du

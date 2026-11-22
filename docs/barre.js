@@ -44,6 +44,7 @@
     { page: "index.html", nom: "Accueil" },
     { page: "auditer.html", nom: "Audit et conformité" },
     { page: "gerer.html", nom: "Gestion du quotidien" },
+    { page: "salaries.html", nom: "Salariés" },
     { page: "controle-urssaf.html", nom: "Contrôle URSSAF" },
     { page: "registre.html", nom: "Registre du personnel" },
     { page: "courriers.html", nom: "Courriers et e-mails" },
@@ -348,9 +349,58 @@
     if (e.key === "Escape") fermer();
   });
 
+  /* ─────────────────── les quatre places du bas ───────────────────────
+
+     Demande du 21 novembre 2026 : une application cohérente, simple, où la
+     navigation ne change jamais. La maquette validée ce jour-là pose quatre
+     places fixes au pied de chaque écran : l'accueil, l'agenda, les documents,
+     les questions. Le retour reste en haut, le menu aussi : rien de ce qui
+     existait n'est retiré, les quatre places s'ajoutent.
+
+     Le chef de parc garde les siennes : sa séance est confinée au parc, et
+     l'accueil ne lui est pas ouvert. */
+  var ICONES = {
+    accueil: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+    agenda: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    documents: '<path d="M4 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2z"/>',
+    questions: '<path d="M21 12a8 8 0 01-11.5 7.2L4 20l1-4.6A8 8 0 1121 12z"/>',
+    camion: '<path d="M2 7h11v9H2zM13 10h4l4 3v3h-8z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+    depenses: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5a3.5 3.5 0 100 5M7 11h6M7 13.5h6"/>',
+    sinistres: '<path d="M12 3l9 17H3z"/><path d="M12 10v5M12 17.5v.5"/>'
+  };
+  var PLACES = [
+    { page: "index.html", nom: "Accueil", ico: "accueil" },
+    { page: "agenda.html", nom: "Agenda", ico: "agenda" },
+    { page: "mes-documents.html", nom: "Documents", ico: "documents" },
+    { page: "questions.html", nom: "Questions", ico: "questions" }
+  ];
+  var PLACES_PARC = [
+    { page: "parc-tableau.html", nom: "Tableau", ico: "accueil" },
+    { page: "flotte.html", nom: "Véhicules", ico: "camion" },
+    { page: "parc-depenses.html", nom: "Dépenses", ico: "depenses" },
+    { page: "parc-sinistres.html", nom: "Sinistres", ico: "sinistres" }
+  ];
+  function poserBas() {
+    if (document.getElementById("barre-bas") || !document.body) return;
+    /* Une page sans barre du haut n'est pas un écran de l'application : la
+       porte du site, une page à imprimer. Elle ne reçoit pas le bas non plus. */
+    if (!$("header.site .wrap") && !$(".haut") && !$(".db-tete")) return;
+    var liste = roleParc() ? PLACES_PARC : PLACES;
+    var n = document.createElement("nav");
+    n.id = "barre-bas";
+    n.setAttribute("aria-label", "Les quatre places de l'application");
+    n.innerHTML = liste.map(function (x) {
+      return '<a href="' + x.page + '"' + (x.page === page ? ' class="ici" aria-current="page"' : "") + '>' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICONES[x.ico] + "</svg>" + x.nom + "</a>";
+    }).join("");
+    document.body.appendChild(n);
+    document.body.classList.add("avec-bas");
+  }
+
+  function poserTout() { poser(); poserBas(); }
   if (document.readyState === "loading")
-    document.addEventListener("DOMContentLoaded", poser);
-  else poser();
+    document.addEventListener("DOMContentLoaded", poserTout);
+  else poserTout();
 
   /* LES PAGES QUI AVANCENT PAR ÉCRANS.
 

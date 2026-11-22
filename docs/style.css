@@ -488,6 +488,22 @@ section.fiche label{display:flex;flex-direction:column;gap:6px;position:relative
 
 /* Le menu passe au-dessus de tout, y compris du bouton rond de l'assistant,
    qui sinon recouvrait la dernière ligne de la feuille. */
+/* LES QUATRE PLACES DU BAS. Posées par barre.js sur chaque écran : accueil,
+   agenda, documents, questions. Elles restent sous les fenêtres et le menu,
+   et la page garde de quoi défiler jusqu'à son dernier bouton. */
+#barre-bas{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;justify-content:center;gap:2px;
+  background:var(--surface);border-top:1px solid var(--filet);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+#barre-bas a{flex:1;max-width:150px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px 5px;
+  border-radius:12px;font:600 11.5px/1.1 system-ui;color:var(--texte-2);text-decoration:none;min-height:0}
+#barre-bas a svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#barre-bas a.ici{color:var(--accent);background:var(--accent-clair)}
+body.avec-bas{padding-bottom:calc(74px + env(safe-area-inset-bottom))}
+body.avec-bas #assist-bouton{bottom:calc(84px + env(safe-area-inset-bottom))}
+body.avec-bas .st-toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+/* La rangée de boutons qui colle au bas de l'écran des contrats reste au-dessus des quatre places. */
+body.avec-bas #e-champs .barre{bottom:calc(66px + env(safe-area-inset-bottom))}
+body:has(#barre-menu) #barre-bas{display:none}
+@media print{#barre-bas{display:none}body.avec-bas{padding-bottom:0}}
 #barre-menu{position:fixed;inset:0;z-index:9992}
 body:has(#barre-menu) #assist-bouton{display:none}
 #barre-menu .fond{position:absolute;inset:0;background:rgba(17,24,36,.45)}

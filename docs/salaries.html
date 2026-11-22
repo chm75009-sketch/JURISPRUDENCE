@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salariés</title>
+<meta name="theme-color" content="#1c2126">
+
+<!--
+  UN SALARIÉ, ET TOUT CE QUI LE CONCERNE.
+
+  Demande du 21 novembre 2026 : une application cohérente, simple, intuitive,
+  avec une logique d'un module à l'autre. La maquette validée ce jour-là part
+  de trois objets que le transporteur a devant lui : un salarié, un camion,
+  l'entreprise.
+
+  Avant, ce qui touche une même personne était réparti sur huit pages : le
+  suivi tachygraphe, les visites médicales, le décompte des heures, les
+  sanctions, les contrats, la flotte, le registre, les documents. Il fallait
+  savoir laquelle ouvrir. Cette page part de la personne.
+
+  Elle n'invente rien et ne garde rien. Les salariés viennent du registre du
+  personnel. Les échéances viennent des trois sources que l'agenda lit déjà :
+  la flotte (permis, formation, carte), les salariés (visites, heures, contrat)
+  et le suivi tachygraphe (téléchargement de la carte, faits à traiter). Chaque
+  ligne renvoie à la page qui tient la donnée.
+
+  Le feu : rouge pour une échéance dépassée ou dans les sept jours, orange dans
+  le mois, vert quand rien ne presse. Une date qui manque n'allume rien : elle
+  est comptée à part, « à dater ».
+-->
+
+<link rel="stylesheet" href="style.css">
+<script src="droits.js"></script>
+<script src="flotte.js"></script>
+<script src="documents-transport.js"></script>
+<script src="conformite-transport.js"></script>
+<script src="echeances-salaries.js"></script>
+<script src="barre.js"></script>
+<script src="installer.js"></script>
+<style>
+  main.wrap{max-width:560px;padding-bottom:var(--e7)}
+  [hidden]{display:none !important}
+  .pq{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:20px 2px 10px}
+  .cherche{width:100%;box-sizing:border-box;margin:14px 0 0;border:1px solid var(--filet);border-radius:14px;padding:13px 14px;
+    font:400 16px/1.2 system-ui;background:var(--surface);color:var(--texte);min-height:0}
+  .lig{width:100%;text-align:left;background:var(--surface);border:1px solid var(--filet);border-radius:14px;
+    padding:13px 12px 13px 14px;margin:0 0 8px;display:flex;align-items:center;gap:11px;min-height:60px;
+    text-decoration:none;color:var(--texte);cursor:pointer;font:inherit}
+  .lig:hover{border-color:var(--accent)}
+  .lig .t{flex:1;min-width:0}
+  .lig .t b{display:block;font:600 16px/1.25 system-ui;color:var(--texte)}
+  .lig .t span{display:block;font-size:13.5px;line-height:1.35;color:var(--texte-2);margin-top:2px}
+  .lig .ch{flex:none;color:#9aa2ad;font-size:22px}
+  .feu{flex:none;width:12px;height:12px;border-radius:50%;background:#b9c0c9}
+  .feu.v{background:#1e7b45}.feu.o{background:#d98e00}.feu.r{background:#b3261e}
+  .puce{flex:none;font:600 12px/1 system-ui;border-radius:999px;padding:6px 9px;white-space:nowrap}
+  .puce.v{background:var(--vert-clair);color:var(--vert)}.puce.o{background:#fdf3dc;color:#9a6400}
+  .puce.r{background:#fbe9e7;color:#b3261e}.puce.g{background:#eceef1;color:var(--texte-2)}
+  .tete{display:flex;align-items:center;gap:12px;margin:16px 2px 4px}
+  .tete .rond{flex:none;width:54px;height:54px;border-radius:50%;background:var(--accent);color:#fff;display:flex;
+    align-items:center;justify-content:center;font:700 18px/1 system-ui}
+  .tete b{display:block;font:700 19px/1.2 system-ui;color:var(--texte)}
+  .tete span span{display:block;font-size:14px;color:var(--texte-2)}
+  .btn-acte{display:block;width:100%;box-sizing:border-box;border-radius:14px;padding:15px 12px;border:1px solid var(--accent);
+    background:var(--accent);color:#fff;font:600 16px/1.2 system-ui;margin:12px 0 0;text-align:center;text-decoration:none}
+  .mention{font-size:13.5px;color:var(--texte-2);margin:10px 2px 0}
+  .vide{background:var(--surface);border:1px solid var(--filet);border-radius:14px;padding:16px 14px;color:var(--texte-2);font-size:15px}
+  .vide a{color:var(--accent);font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <p class="marque" id="titre-page">Salariés</p>
+    <div class="outils">
+      <a href="gerer.html">Gérer</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <!-- écran 1 : la liste -->
+  <section id="e-liste">
+    <input type="search" class="cherche" id="cherche" placeholder="Chercher un nom" aria-label="Chercher un salarié" hidden>
+    <h2 class="pq" id="titre-liste">Vos salariés</h2>
+    <div id="liste"></div>
+    <p class="mention" id="legende" hidden>Rouge : une échéance dépassée ou dans les sept jours. Orange : dans le mois. Vert : rien ne presse.</p>
+  </section>
+
+  <!-- écran 2 : la fiche d'une personne -->
+  <section id="e-fiche" hidden>
+    <div id="fiche"></div>
+  </section>
+
+</main>
+
+<script src="profil.js"></script>
+<script>
+(function () {
+  "use strict";
+  var CT = window.ConformiteTransport;
+  function $(i) { return document.getElementById(i); }
+  function ech(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function net(s) { return String(s == null ? "" : s).trim(); }
+  function cle(s) {
+    try { return net(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim(); }
+    catch (e) { return net(s).toLowerCase(); }
+  }
+  function jj(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || ""); return m ? m[3] + "/" + m[2] + "/" + m[1] : ""; }
+  function joursAvant(iso) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || ""); if (!m) return null;
+    var d = new Date(+m[1], +m[2] - 1, +m[3], 12), a = new Date(); a.setHours(12, 0, 0, 0);
+    return Math.round((d - a) / 86400000);
+  }
+  function profil() {
+    try { return (window.Profil && window.Profil.lire) ? (window.Profil.lire() || {}) : (JSON.parse(localStorage.getItem("profil-entreprise") || "null") || {}); }
+    catch (e) { return {}; }
+  }
+  var transport = /transport/i.test(String(profil().secteur || "")) || /^0*16\b/.test(String(profil().conventionCollective || profil().idcc || "").trim());
+
+  /* LES ÉCHÉANCES, DE LEURS TROIS SOURCES. Aucune n'est recalculée ici. */
+  function toutes() {
+    var L = [];
+    try { if (window.Flotte && window.Flotte.echeances) L = L.concat(window.Flotte.echeances()); } catch (e) {}
+    try { if (window.EcheancesSalaries && window.EcheancesSalaries.echeances) L = L.concat(window.EcheancesSalaries.echeances()); } catch (e) {}
+    try { if (CT && CT.echeances) L = L.concat(CT.echeances()); } catch (e) {}
+    return L;
+  }
+  /* La page qui tient la donnée d'une échéance, d'après son intitulé. */
+  function pageDe(quoi, id) {
+    var q = cle(quoi);
+    if (/telechargement/.test(q)) return "conformite-transport.html?c=" + encodeURIComponent(id);
+    if (/visite|examen|medical/.test(q)) return "visites.html";
+    if (/heures|decompte|duree/.test(q)) return "heures.html";
+    if (/forfait/.test(q)) return "forfait.html";
+    if (/permis|fco|fimo|formation|carte|adr|points|qualification/.test(q)) return "flotte.html";
+    return "agenda.html";
+  }
+  function feuDe(j) { return j === null ? "" : j <= 7 ? "r" : j <= 30 ? "o" : "v"; }
+  function delaiDit(j) {
+    if (j === null) return "à dater";
+    if (j < 0) return "en retard";
+    if (j === 0) return "aujourd'hui";
+    return j + " jour" + (j > 1 ? "s" : "");
+  }
+
+  var PERSONNES = [], OUVERT = null;
+  function charger() {
+    var E = toutes(), parNom = {};
+    E.forEach(function (e) {
+      var k = cle(e.qui); if (!k) return;
+      (parNom[k] = parNom[k] || []).push(e);
+    });
+    var L = (CT && CT.tousSalaries) ? CT.tousSalaries() : [];
+    PERSONNES = L.filter(function (s) { return !net(s.sor); }).map(function (s) {
+      var mes = (parNom[cle(s.nom)] || []).map(function (e) {
+        var j = (e.inconnu || !e.date) ? null : joursAvant(e.date);
+        return { quoi: e.quoi, date: e.date, j: j, feu: feuDe(j) };
+      });
+      mes.sort(function (a, b) { return (a.j === null ? 99999 : a.j) - (b.j === null ? 99999 : b.j); });
+      /* les faits que le suivi tachygraphe attend de voir traiter */
+      var faits = 0;
+      try { faits = (CT.suiviConducteur(s.id).anomalies || []).filter(function (a) { return !a.traite; }).length; } catch (e) { faits = 0; }
+      var datees = mes.filter(function (m) { return m.j !== null; });
+      var feu = datees.some(function (m) { return m.feu === "r"; }) ? "r"
+        : (datees.some(function (m) { return m.feu === "o"; }) || faits) ? "o" : "v";
+      var dit = datees.length && datees[0].feu !== "v"
+        ? datees[0].quoi.charAt(0).toLowerCase() + datees[0].quoi.slice(1) + (datees[0].j < 0 ? ", en retard" : ", avant le " + jj(datees[0].date))
+        : faits ? faits + " fait" + (faits > 1 ? "s" : "") + " à traiter au suivi tachygraphe" : "rien ne presse";
+      return { id: s.id, nom: s.nom, poste: net(s.emp), ent: net(s.ent), conduit: !!s.conduit, mes: mes, faits: faits, feu: feu, dit: dit };
+    });
+    var rang = { r: 0, o: 1, v: 2 };
+    PERSONNES.sort(function (a, b) { return rang[a.feu] - rang[b.feu] || (a.nom < b.nom ? -1 : 1); });
+  }
+
+  function peindreListe() {
+    var q = cle($("cherche").value), L = PERSONNES.filter(function (p) { return !q || cle(p.nom).indexOf(q) >= 0; });
+    $("cherche").hidden = PERSONNES.length < 8;
+    $("legende").hidden = !PERSONNES.length;
+    $("titre-liste").textContent = PERSONNES.length ? "Vos salariés (" + PERSONNES.length + ")" : "Vos salariés";
+    if (!PERSONNES.length) {
+      $("liste").innerHTML = '<p class="vide">Le registre du personnel est vide. <a href="registre.html">Ouvrir le registre</a> pour y porter vos salariés : ils apparaîtront ici.</p>';
+      return;
+    }
+    $("liste").innerHTML = L.map(function (p) {
+      return '<button type="button" class="lig" data-id="' + ech(p.id) + '"><i class="feu ' + p.feu + '"></i><span class="t"><b>' + ech(p.nom) +
+        '</b><span>' + ech(p.dit) + '</span></span><span class="ch">&rsaquo;</span></button>';
+    }).join("") || '<p class="vide">Aucun nom ne correspond.</p>';
+  }
+
+  function lien(vers, titre, sous, puce) {
+    return '<a class="lig" href="' + vers + '"><span class="t"><b>' + ech(titre) + '</b>' + (sous ? '<span>' + ech(sous) + '</span>' : '') + '</span>' +
+      (puce ? '<span class="puce ' + puce[0] + '">' + ech(puce[1]) + '</span>' : '<span class="ch">&rsaquo;</span>') + '</a>';
+  }
+  function peindreFiche(p) {
+    var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
+    var h = '<div class="tete"><span class="rond">' + ech(ini) + '</span><span><b>' + ech(p.nom) + '</b><span>' +
+      ech([p.poste, p.ent ? "entré le " + (jj(p.ent) || p.ent) : ""].filter(Boolean).join(" · ")) + '</span></span></div>';
+    var datees = p.mes.filter(function (m) { return m.j !== null; }), sansDate = p.mes.length - datees.length;
+    var presse = datees.filter(function (m) { return m.feu !== "v"; });
+    if (presse.length || p.faits) {
+      h += '<h2 class="pq">Ce qui presse</h2>';
+      if (p.faits) h += lien("conformite-transport.html?c=" + encodeURIComponent(p.id), "Suivi tachygraphe",
+        p.faits + " fait" + (p.faits > 1 ? "s" : "") + " à traiter", ["o", "À traiter"]);
+      h += presse.map(function (m) { return lien(pageDe(m.quoi, p.id), m.quoi, m.j < 0 ? "échéance du " + jj(m.date) : "avant le " + jj(m.date), [m.feu, delaiDit(m.j)]); }).join("");
+    }
+    h += '<h2 class="pq">Tout ce qui le concerne</h2>';
+    if (transport && p.conduit) h += lien("conformite-transport.html?c=" + encodeURIComponent(p.id), "Suivi tachygraphe", "instructions, contrôle et suivi, réaction, coffre-fort");
+    h += lien("visites.html", "Visites médicales", "information et prévention, renouvellement, reprise") +
+      lien("heures.html", "Décompte des heures", "relevé du mois, à clore et à faire signer") +
+      lien("sanctions.html", "Discipline", "ce qui a été prononcé, et ce qui reste invocable") +
+      lien(transport ? "contrats-transport.html" : "gerer.html?pour=salarie", "Contrat", "contrat et avenants") +
+      (transport ? lien("flotte.html", "Titres de conduite", "permis, formation, carte de conducteur") : "") +
+      lien("mes-documents.html", "Documents", "ce qui a été rangé");
+    var plus = datees.filter(function (m) { return m.feu === "v"; });
+    if (plus.length) h += '<h2 class="pq">Plus tard</h2>' + plus.slice(0, 6).map(function (m) { return lien(pageDe(m.quoi, p.id), m.quoi, "avant le " + jj(m.date), ["v", delaiDit(m.j)]); }).join("");
+    if (sansDate) h += '<p class="mention">' + sansDate + " date" + (sansDate > 1 ? "s" : "") + ' à saisir pour cette personne : <a href="agenda.html">les compléter à l\'agenda</a>.</p>';
+    h += '<a class="btn-acte" href="gerer.html?pour=salarie">Faire un acte</a>' +
+      '<p class="mention">Avenant, congés, arrêt de travail, convocation, sanction, rupture : le document s\'ouvre déjà rempli.</p>';
+    $("fiche").innerHTML = h;
+  }
+
+  function montrer(id) {
+    var p = PERSONNES.filter(function (x) { return x.id === id; })[0];
+    OUVERT = p ? id : null;
+    $("e-liste").hidden = !!p; $("e-fiche").hidden = !p;
+    $("titre-page").textContent = p ? p.nom : "Salariés";
+    if (p) peindreFiche(p); else peindreListe();
+    window.scrollTo(0, 0);
+  }
+
+  $("liste").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-id]") : null; if (!b) return;
+    try { history.replaceState(null, "", location.pathname + "?s=" + encodeURIComponent(b.getAttribute("data-id"))); } catch (ex) {}
+    montrer(b.getAttribute("data-id"));
+  });
+  $("cherche").addEventListener("input", peindreListe);
+  /* Le retour ramène de la fiche à la liste ; depuis la liste, il quitte la page. */
+  if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
+    if (!OUVERT) return false;
+    try { history.replaceState(null, "", location.pathname); } catch (ex) {}
+    montrer(null); return true;
+  });
+
+  charger();
+  var demande = null;
+  try { demande = new URLSearchParams(location.search).get("s"); } catch (e) { demande = null; }
+  montrer(demande);
+})();
+</script>
+</body>
+</html>

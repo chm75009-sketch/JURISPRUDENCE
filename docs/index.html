@@ -110,7 +110,19 @@
   .rappel .texte b{color:var(--texte);font-size:17px}
   .chapeau{margin:20px 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
   .chapeau b{color:var(--texte)}
-  .portes{display:flex;flex-direction:column;gap:14px;margin:20px 0 0}
+  .portes{display:flex;flex-direction:column;gap:12px;margin:0}
+  .titre-portes{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:22px 2px 10px}
+  .porte{display:flex;align-items:center;gap:14px;padding:18px 16px;border-radius:18px;border:2px solid var(--accent);
+    background:var(--accent-clair);text-decoration:none;color:var(--texte)}
+  .porte .ico{flex:none;width:52px;height:52px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+  .porte .ico svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .porte .mots{flex:1;min-width:0}
+  .porte .mots b{display:block;font:700 22px/1.15 system-ui;color:var(--accent)}
+  .porte .mots span{display:block;font-size:15px;line-height:1.4;color:var(--texte-2);margin-top:3px}
+  .porte:hover{background:#dfe6f2}
+  .pied-portes{text-align:center;margin:18px 0 0}
+  .installer-app.petit{border:1px solid var(--filet);background:var(--surface);color:var(--accent);
+    border-radius:12px;padding:12px 18px;font:600 15px/1.2 system-ui;min-height:0}
   .grand{display:flex;align-items:center;min-height:92px;padding:26px 20px;border-radius:16px;
     border:2px solid var(--accent);background:var(--accent-clair);color:var(--accent);
     font:600 26px/1.2 system-ui;text-decoration:none}
@@ -127,6 +139,7 @@
        reviennent à la ligne, deux par deux. */
     .portes{flex-direction:row;flex-wrap:wrap}
     .grand{flex:1 1 calc(50% - 7px);min-height:110px;justify-content:center;font-size:23px}
+    .porte{flex:1 1 calc(50% - 7px)}
   }
 
   footer{margin:40px 0 32px;padding-top:14px;border-top:1px solid var(--filet);
@@ -215,11 +228,6 @@
     <div class="rappel">
       <div class="texte"><b id="rail-ent"></b> <span id="rail-ent-txt"></span></div>
     </div>
-    <!-- RECHERCHE RAPIDE : un mot ou une phrase mène droit au bon écran.
-         Tout se calcule dans le navigateur, sans serveur, hors ligne.
-         Demandée par le client le 15 octobre 2026. Le code est dans
-         recherche-rapide.js, l'index des destinations y est tenu à jour. -->
-    <div id="recherche-rapide"></div>
     <!-- CE QUI EST À FAIRE CETTE SEMAINE, AVANT LES BOUTONS.
          L'accueil offrait cinq portes et aucune date : le dirigeant n'avait
          nulle part une liste de ce qui vient. Ce bloc ramasse les échéances
@@ -231,23 +239,37 @@
       <div id="semaine-liste"></div>
       <a class="semaine-tout" href="agenda.html">Tout l'agenda social</a>
     </section>
-    <p class="chapeau"><b>Audit</b> : une question par obligation, oui ou non ; à non, le document
-    manquant est écrit pour vous ; à oui, vous déposez le vôtre et il est contrôlé.
-    <b>Gérer</b> : les documents du quotidien, de l'embauche à la rupture, contrat, sanction,
-    licenciement, comité, remplis au nom de votre entreprise et prêts en Word.</p>
+    <!-- DEUX PORTES, ET CHACUNE DIT CE QU'ON Y FAIT.
+
+         Demande du 21 novembre 2026 : une application cohérente, simple,
+         intuitive, « sans trop charger ». La maquette validée ce jour-là garde
+         les deux portes de l'architecture et retire le reste de l'accueil : les
+         documents et les questions ont leur place fixe au pied de chaque écran,
+         ils n'ont plus à être cherchés ici. Le paragraphe qui expliquait les
+         deux portes est devenu leur sous-titre. -->
+    <h2 class="titre-portes">Que voulez-vous faire ?</h2>
     <div class="portes">
-      <a class="grand" href="auditer.html">Audit</a>
-      <a class="grand" href="gerer.html">Gérer</a>
-      <a class="grand second" href="mes-documents.html">Mes documents</a>
-      <!-- Les questions de l'abonnement : cinq par mois, et par ce seul canal.
-           Demandé le 24 septembre 2026. L'entrée est ici parce qu'un canal
-           obligatoire qu'on ne voit pas n'est pas un canal. -->
-      <a class="grand second" href="questions.html">Mes 5 questions à poser</a>
-      <!-- Installer l'application, sans chercher dans le menu du navigateur.
-           Demandé le 25 septembre 2026. Le bouton disparaît de lui-même quand
-           l'application est déjà installée. -->
-      <button type="button" class="grand second installer-app" id="installer-app">Installer l'application</button>
+      <a class="porte" href="auditer.html">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg></span>
+        <span class="mots"><b>Audit</b><span>Suis-je en règle ? Oui ou non, obligation par obligation.</span></span>
+      </a>
+      <a class="porte" href="gerer.html">
+        <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></span>
+        <span class="mots"><b>Gérer</b><span>J'ai quelque chose à faire : pour un salarié, un camion ou l'entreprise.</span></span>
+      </a>
     </div>
+    <!-- RECHERCHE RAPIDE : un mot ou une phrase mène droit au bon écran.
+         Tout se calcule dans le navigateur, sans serveur, hors ligne.
+         Demandée par le client le 15 octobre 2026. Le code est dans
+         recherche-rapide.js, l'index des destinations y est tenu à jour.
+         Elle passe sous les deux portes depuis le 21 novembre 2026 : l'accueil
+         montre d'abord ce qui presse et les deux portes, sans avoir à défiler. -->
+    <h2 class="titre-portes">Ou dites-le</h2>
+    <div id="recherche-rapide"></div>
+    <!-- Installer l'application, sans chercher dans le menu du navigateur.
+         Demandé le 25 septembre 2026. Le bouton disparaît de lui-même quand
+         l'application est déjà installée. -->
+    <p class="pied-portes"><button type="button" class="installer-app petit" id="installer-app">Installer l'application</button></p>
   </section>
 
   <!-- « Le lien "clé personnelle" est toujours là, ainsi que la phrase en pied
@@ -524,7 +546,9 @@
     if (!hote) return;
     if (!L.length && !aDater.length) { hote.hidden = true; return; }
     hote.hidden = false;
-    var MAX = 8;
+    /* Trois lignes, pas huit : l'accueil dit ce qui presse, l'agenda dit tout.
+       Maquette du 21 novembre 2026. */
+    var MAX = 3;
     var h = L.slice(0, MAX).map(function (e) {
       return '<div class="sem-l ' + (e.etat === "passe" ? "passe" : "proche") + '">' +
         '<span class="sem-d">' + (e.etat === "passe" ? "en retard" : enFrCourt(e.date)) + "</span>" +
