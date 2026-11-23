@@ -568,6 +568,20 @@
      depuis le registre le font après le chargement. */
   window.setTimeout(ligneEntreprise, 700);
 
+  /* LE MICRO DES CHAMPS DE RECHERCHE. barre.js est sur toutes les pages : il
+     charge micro-champ.js, qui pose un micro dans chaque champ de recherche.
+     Demande du 23 novembre 2026, « la recherche vocale partout où on peut ».
+     Le chemin se prend sur celui de barre.js, pour suivre la page où qu'elle
+     soit rangée. */
+  (function () {
+    if (window.MicroChamp || document.getElementById("mc-script")) return;
+    var moi = document.currentScript && document.currentScript.src;
+    var s = document.createElement("script");
+    s.id = "mc-script";
+    s.src = moi ? moi.replace(/barre\.js(\?.*)?$/, "micro-champ.js") : "micro-champ.js";
+    (document.head || document.documentElement).appendChild(s);
+  })();
+
   window.Barre = {
     avant: function (fn) { AVANT = typeof fn === "function" ? fn : null; },
     ecrans: ecrans,
