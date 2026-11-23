@@ -495,6 +495,18 @@ infractions retenues, mais il fallait ouvrir la page 4 avant d'écrire « rien d
 et chercher ce qui, dans le rapport lui-même, contredisait la thèse. Une lecture qui
 confirme ce qu'on cherche n'est pas une lecture.
 
+Cas mesuré le 23 novembre 2026 - dossier TEC, la convocation devant la commission. Sur le
+Drive, le fichier nommé « CONVOCATION SANCTIONS DREAT » ne contenait que la lettre de
+saisine et le rapport. J'en ai tiré, dans deux documents remis à l'utilisatrice, que « le
+dossier ne contient aucune lettre de convocation adressée à T.E.C. » et que ni l'heure ni
+le lieu de la séance n'étaient connus, et j'ai bâti là-dessus un argument de procédure. La
+convocation existait : lettre du président de la commission du 20 octobre 2026, recommandé
+n° 1A 218 445 9049 6, « le 26 novembre 2026 à 9h30 », salle Juine, avec la sanction
+encourue et la consultation du dossier sur rendez-vous. Elle n'était simplement pas dans le
+fichier ouvert. Ne pas trouver une pièce sur le Drive ne dit pas qu'elle n'existe pas : on
+écrit « je ne l'ai pas trouvée sur le Drive », on demande si elle existe ailleurs, et on ne
+construit rien sur une absence avant d'avoir la réponse.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
