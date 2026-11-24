@@ -447,6 +447,14 @@ la page 2 du constat, que j'avais lu : « née le 03/04/1981 à HOUILLES (78), d
 Française, DRH ». « Aucune pièce » ne s'écrit qu'après avoir rouvert les pièces, pas sur
 la foi de ses notes de lecture.
 
+Même dossier, 24 novembre 2026. Dans le compte rendu préparatoire, j'ai titré « La cause du
+dommage était connue avant la réception » sur la foi du rapport PIPA de 2023, qui parle de
+capillarité et non de la fuite du raccord PER retenue par IXI. Le titre disait plus que la pièce,
+et offrait à l'adversaire un vice apparent non réservé. J'ai aussi omis les éléments contraires
+(pas de « moisissures » au constat, autres venues d'eau), que j'avais pourtant relevés le 21.
+Un titre se vérifie contre la pièce comme une phrase ; et les points faibles se rappellent à
+chaque compte rendu, pas une seule fois.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
