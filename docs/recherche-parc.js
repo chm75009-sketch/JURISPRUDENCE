@@ -197,18 +197,33 @@
     /* LE MICRO : dictée en français, le texte s'écrit en direct, arrêt au bout
        de dix secondes ou à un second appui. Sans reconnaissance vocale, on
        invite à dicter au clavier. */
-    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    var reco = null, enEcoute = false, minuterie = null;
+    /* CHROME, FIREFOX OU EDGE SUR IPHONE NE DICTENT PAS. Relevé le
+     24 novembre 2026 : « la commande vocale ne fonctionne pas sur Chrome ».
+     Sur iPhone, seul Safari donne la reconnaissance vocale aux pages ; les
+     autres navigateurs annoncent l'outil, mais il ne démarre jamais, sans un
+     message (bogue WebKit 239816). On les reconnaît à leur nom, et le micro
+     renvoie alors au micro du clavier. Et partout ailleurs, une écoute qui
+     n'a pas démarré au bout de huit secondes est abandonnée avec le même
+     message, plutôt que de laisser croire qu'elle écoute. */
+    var IOS_AUTRE = /(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(navigator.userAgent || "");
+    var SR = IOS_AUTRE ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+    var reco = null, enEcoute = false, minuterie = null, guet = null;
 
     function finEcoute() {
       enEcoute = false; mic.classList.remove("rp-on"); mic.innerHTML = MIC; ecoute.hidden = true;
       if (minuterie) { window.clearTimeout(minuterie); minuterie = null; }
+      if (guet) { window.clearTimeout(guet); guet = null; }
     }
     function message(txt) {
       res.textContent = "";
       var v = document.createElement("div"); v.className = "rp-vide"; v.textContent = txt; res.appendChild(v);
     }
-    function clavier() { champ.focus(); message("Touchez le micro de votre clavier pour dicter, ou écrivez votre demande."); }
+    function clavier() {
+      champ.focus();
+      message(IOS_AUTRE
+        ? "Sur iPhone, seul Safari sait dicter ici. Touchez le micro de votre clavier pour dicter, ou ouvrez l'application dans Safari."
+        : "Touchez le micro de votre clavier pour dicter, ou écrivez votre demande.");
+    }
 
     if (!SR) { mic.classList.add("rp-indispo"); mic.addEventListener("click", clavier); }
     else {
@@ -217,6 +232,7 @@
         try {
           reco = new SR(); reco.lang = "fr-FR"; reco.interimResults = true; reco.maxAlternatives = 1;
           reco.onstart = function () {
+            if (guet) { window.clearTimeout(guet); guet = null; }
             enEcoute = true; mic.classList.add("rp-on"); mic.innerHTML = STOP; ecoute.hidden = false;
             minuterie = window.setTimeout(function () { try { reco.stop(); } catch (e) {} }, 10000);
           };
@@ -234,6 +250,12 @@
           };
           reco.onend = function () { finEcoute(); champ.focus(); };
           reco.start();
+          guet = window.setTimeout(function () {
+            guet = null;
+            if (enEcoute) return;
+            try { reco.abort(); } catch (e) {}
+            finEcoute(); clavier();
+          }, 8000);
         } catch (e) { finEcoute(); clavier(); }
       });
     }

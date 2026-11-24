@@ -33,7 +33,16 @@
   "use strict";
   if (window.MicroChamp) return;
 
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  /* CHROME, FIREFOX OU EDGE SUR IPHONE NE DICTENT PAS. Relevé le
+     24 novembre 2026 : « la commande vocale ne fonctionne pas sur Chrome ».
+     Sur iPhone, seul Safari donne la reconnaissance vocale aux pages ; les
+     autres navigateurs annoncent l'outil, mais il ne démarre jamais, sans un
+     message (bogue WebKit 239816). On les reconnaît à leur nom, et le micro
+     renvoie alors au micro du clavier. Et partout ailleurs, une écoute qui
+     n'a pas démarré au bout de huit secondes est abandonnée avec le même
+     message, plutôt que de laisser croire qu'elle écoute. */
+  var IOS_AUTRE = /(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(navigator.userAgent || "");
+  var SR = IOS_AUTRE ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
 
   var MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
     'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" ' +
@@ -166,12 +175,14 @@
 
     function clavier() {
       try { inp.focus(); } catch (e) {}
-      dire("Touchez le micro de votre clavier pour dicter, ou écrivez votre recherche.", 6000);
+      dire(IOS_AUTRE
+        ? "Sur iPhone, seul Safari sait dicter ici. Touchez le micro de votre clavier pour dicter, ou ouvrez l'application dans Safari."
+        : "Touchez le micro de votre clavier pour dicter, ou écrivez votre recherche.", 7000);
     }
 
     if (!SR) { mic.addEventListener("click", clavier); return; }
 
-    var reco = null, actif = false, minuterie = null, ancienPh = null;
+    var reco = null, actif = false, minuterie = null, ancienPh = null, guet = null;
 
     function fin() {
       actif = false;
@@ -181,6 +192,7 @@
       mic.setAttribute("aria-label", "Dicter la recherche");
       if (ancienPh !== null) { inp.placeholder = ancienPh; ancienPh = null; }
       if (minuterie) { window.clearTimeout(minuterie); minuterie = null; }
+      if (guet) { window.clearTimeout(guet); guet = null; }
     }
     function arreter() { try { if (reco) reco.stop(); } catch (e) {} }
 
@@ -195,6 +207,7 @@
         reco.continuous = false;
         reco.maxAlternatives = 1;
         reco.onstart = function () {
+          if (guet) { window.clearTimeout(guet); guet = null; }
           actif = true;
           enCours = arreter;
           mic.classList.add("mc-on");
@@ -221,6 +234,12 @@
         };
         reco.onend = function () { fin(); };
         reco.start();
+        guet = window.setTimeout(function () {
+          guet = null;
+          if (actif) return;
+          try { reco.abort(); } catch (e) {}
+          fin(); clavier();
+        }, 8000);
       } catch (e) { fin(); clavier(); }
     });
   }
