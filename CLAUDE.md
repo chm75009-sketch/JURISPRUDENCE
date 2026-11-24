@@ -543,6 +543,16 @@ désaccord dit franchement. Quand une pièce dessert la thèse, le dire. Quand u
 affirmation de l'utilisateur est démentie par une pièce, le dire, avec la citation.
 Quand on ne sait pas, écrire « je n'ai pas trouvé » et s'arrêter là.
 
+Cas mesuré le 24 novembre 2026 - dossier CISSÉ, la lettre du 5 octobre. Un avis signalait
+qu'Abeille détenait une lettre de Mme CISSÉ disant la quittance « signée le 22 septembre ».
+J'ai répondu que cette lettre n'avait jamais été envoyée, en reprenant ce que
+l'utilisatrice avait dit, et en m'appuyant sur la seule pièce 15 telle que je l'avais
+montée. Le courriel d'Abeille « réponse à mon 1er mail du 5 octobre » porte pourtant en
+pièce jointe le transfert interne d'Abeille de cette lettre, reçue le 5 octobre à 13 h 26 :
+« avant de vous retourner la quittance signée le 22 septembre 2026 ». Avant de dire qu'un
+écrit n'a pas été envoyé, on ouvre tous les courriels et leurs pièces jointes ; et quand
+une pièce dément ce que dit l'utilisatrice, on le dit, avec la citation.
+
 ## Documents Word — règle impérative
 
 **Générer tous les .docx avec `python-docx`, jamais avec la bibliothèque JavaScript `docx`.**
