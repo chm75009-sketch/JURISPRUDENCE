@@ -6138,6 +6138,10 @@
       reco.onerror = function (er) {
         var c = er && er.error;
         finDictee();
+        if (c !== "aborted" && window.MicroChamp && window.MicroChamp.raison) {
+          var zr = champDictee(id); if (zr) zr.focus();
+          direDictee(id, window.MicroChamp.raison(c)); return;
+        }
         if (c === "not-allowed" || c === "service-not-allowed")
           dicterAuClavier(id, "Le micro n'est pas autorisé pour cette application.");
         else if (c === "no-speech") direDictee(id, "Je n'ai rien entendu. Touchez « Dicter » et réessayez.");

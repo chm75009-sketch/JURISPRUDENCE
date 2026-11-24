@@ -207,7 +207,7 @@
      message, plutôt que de laisser croire qu'elle écoute. */
     var IOS_AUTRE = /(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(navigator.userAgent || "");
     var SR = IOS_AUTRE ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
-    var reco = null, enEcoute = false, minuterie = null, guet = null;
+    var reco = null, enEcoute = false, minuterie = null, guet = null, entendu = false, erreur = false;
 
     function finEcoute() {
       enEcoute = false; mic.classList.remove("rp-on"); mic.innerHTML = MIC; ecoute.hidden = true;
@@ -230,6 +230,7 @@
       mic.addEventListener("click", function () {
         if (enEcoute) { try { reco.stop(); } catch (e) {} return; }
         try {
+          entendu = false; erreur = false;
           reco = new SR(); reco.lang = "fr-FR"; reco.interimResults = true; reco.maxAlternatives = 1;
           reco.onstart = function () {
             if (guet) { window.clearTimeout(guet); guet = null; }
@@ -238,17 +239,24 @@
           };
           reco.onresult = function (e) {
             var t = ""; for (var k = 0; k < e.results.length; k++) t += e.results[k][0].transcript;
-            if (t) { champ.value = t; rendre(); }
+            if (t) { entendu = true; champ.value = t; rendre(); }
           };
           reco.onerror = function (ev) {
             finEcoute();
             var c = ev && ev.error;
+            erreur = true;
+            if (c !== "aborted" && window.MicroChamp && window.MicroChamp.raison) { champ.focus(); message(window.MicroChamp.raison(c)); return; }
             if (c === "not-allowed" || c === "service-not-allowed") message("Le micro n'est pas autorisé. Autorisez-le, ou écrivez votre demande.");
             else if (c === "no-speech") message("Je n'ai rien entendu. Réessayez, ou écrivez votre demande.");
             else if (c === "audio-capture") message("Aucun micro détecté. Écrivez votre demande.");
             else clavier();
           };
-          reco.onend = function () { finEcoute(); champ.focus(); };
+          reco.onend = function () {
+            /* Une écoute finie sans un mot compris le dit, au lieu de se taire. */
+            var vide = enEcoute && !entendu && !erreur;
+            finEcoute(); champ.focus();
+            if (vide && window.MicroChamp && window.MicroChamp.raison) message(window.MicroChamp.raison("rien"));
+          };
           reco.start();
           guet = window.setTimeout(function () {
             guet = null;

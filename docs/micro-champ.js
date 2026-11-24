@@ -44,6 +44,43 @@
   var IOS_AUTRE = /(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(navigator.userAgent || "");
   var SR = IOS_AUTRE ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
 
+  /* LA CAUSE DITE EN CLAIR. Relevé le 24 novembre 2026, sur Chrome pour
+     Windows : le micro écoutait (« Parlez, je vous écoute… »), et rien ne
+     s'écrivait. Chrome envoie la voix à son service de reconnaissance, par
+     Internet ; si ce service ne répond pas, ou si le micro de l'ordinateur ne
+     capte rien, l'écran disait « touchez le micro de votre clavier », ce qui
+     n'a pas de sens sur un ordinateur. Chaque cause a maintenant sa phrase,
+     et le recours proposé dépend de l'appareil. */
+  var UA = navigator.userAgent || "";
+  var WINDOWS = /Windows/.test(UA);
+  var MAC = /Macintosh/.test(UA) && !("ontouchend" in document);
+  var ORDI = WINDOWS || MAC || /CrOS|Linux x86_64/.test(UA);
+  function secours() {
+    if (/(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(UA))
+      return "Sur iPhone, seul Safari sait dicter ici. Touchez le micro de votre clavier, ou ouvrez l'application dans Safari.";
+    if (WINDOWS) return "Vous pouvez aussi dicter avec Windows : cliquez dans le champ, puis touches Windows + H.";
+    if (MAC) return "Vous pouvez aussi dicter avec le Mac : cliquez dans le champ, puis appuyez deux fois sur la touche Fn.";
+    return "Touchez le micro de votre clavier pour dicter, ou écrivez.";
+  }
+  function raison(code) {
+    var r = {
+      "network": "La reconnaissance vocale du navigateur n'a pas pu être jointe : Chrome et Edge l'envoient par Internet, et quelque chose la bloque (connexion, pare-feu, réseau d'entreprise).",
+      "no-speech": ORDI
+        ? "Je n'ai rien entendu. Vérifiez que le micro de l'ordinateur n'est pas coupé et que c'est le bon qui est choisi (Windows : Paramètres, Système, Son, Entrée)."
+        : "Je n'ai rien entendu. Touchez le micro et parlez tout de suite.",
+      "not-allowed": "Le micro est refusé pour ce site. Cliquez sur le cadenas ou sur l'icône à gauche de l'adresse, et autorisez le micro.",
+      "service-not-allowed": "Ce navigateur ne permet pas la dictée sur cette page.",
+      "audio-capture": "Aucun micro n'a été trouvé sur cet appareil, ou il est déjà pris par une autre application.",
+      "language-not-supported": "La dictée en français n'est pas disponible dans ce navigateur.",
+      "bad-grammar": "",
+      "rien": ORDI
+        ? "L'écoute s'est arrêtée sans rien comprendre. Vérifiez le micro de l'ordinateur (Windows : Paramètres, Système, Son, Entrée), puis réessayez."
+        : "L'écoute s'est arrêtée sans rien comprendre. Réessayez en parlant tout de suite.",
+      "muet": "La dictée ne démarre pas dans ce navigateur.",
+    }[code];
+    return (r ? r + " " : "") + secours();
+  }
+
   var MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" ' +
     'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" ' +
     'height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg>';
@@ -175,14 +212,13 @@
 
     function clavier() {
       try { inp.focus(); } catch (e) {}
-      dire(IOS_AUTRE
-        ? "Sur iPhone, seul Safari sait dicter ici. Touchez le micro de votre clavier pour dicter, ou ouvrez l'application dans Safari."
-        : "Touchez le micro de votre clavier pour dicter, ou écrivez votre recherche.", 7000);
+      dire(secours(), 8000);
     }
 
     if (!SR) { mic.addEventListener("click", clavier); return; }
 
     var reco = null, actif = false, minuterie = null, ancienPh = null, guet = null;
+    var entendu = false, erreur = false, arretDemande = false;
 
     function fin() {
       actif = false;
@@ -194,12 +230,13 @@
       if (minuterie) { window.clearTimeout(minuterie); minuterie = null; }
       if (guet) { window.clearTimeout(guet); guet = null; }
     }
-    function arreter() { try { if (reco) reco.stop(); } catch (e) {} }
+    function arreter() { arretDemande = true; try { if (reco) reco.stop(); } catch (e) {} }
 
     mic.addEventListener("click", function () {
       if (actif) { arreter(); return; }
       if (enCours) enCours();
       taire();
+      entendu = false; erreur = false; arretDemande = false;
       try {
         reco = new SR();
         reco.lang = "fr-FR";
@@ -215,30 +252,33 @@
           mic.setAttribute("aria-label", "Arrêter la dictée");
           ancienPh = inp.placeholder;
           inp.placeholder = "Parlez, je vous écoute…";
-          minuterie = window.setTimeout(arreter, 10000);
+          minuterie = window.setTimeout(function () { try { reco.stop(); } catch (e) {} }, 10000);
         };
         reco.onresult = function (e) {
           var t = "";
           for (var k = 0; k < e.results.length; k++) t += e.results[k][0].transcript;
           t = t.replace(/\s+/g, " ").replace(/[.?!]+$/, "").trim();
-          if (t) ecrire(t);
+          if (t) { entendu = true; ecrire(t); }
         };
         reco.onerror = function (ev) {
           var c = ev && ev.error;
+          erreur = true;
           fin();
-          if (c === "not-allowed" || c === "service-not-allowed") dire("Le micro n'est pas autorisé. Autorisez-le dans les réglages, ou écrivez votre recherche.", 7000);
-          else if (c === "no-speech") dire("Je n'ai rien entendu. Touchez le micro et parlez, ou écrivez votre recherche.");
-          else if (c === "audio-capture") dire("Aucun micro détecté. Écrivez votre recherche.");
-          else if (c === "aborted") { /* arrêt demandé : rien à dire */ }
-          else clavier();
+          if (c === "aborted") return;      /* arrêt demandé : rien à dire */
+          try { inp.focus(); } catch (e) {}
+          dire(raison(c), 12000);
         };
-        reco.onend = function () { fin(); };
+        reco.onend = function () {
+          var vide = actif && !entendu && !erreur && !arretDemande;
+          fin();
+          if (vide) dire(raison("rien"), 12000);
+        };
         reco.start();
         guet = window.setTimeout(function () {
           guet = null;
           if (actif) return;
           try { reco.abort(); } catch (e) {}
-          fin(); clavier();
+          fin(); dire(raison("muet"), 12000);
         }, 8000);
       } catch (e) { fin(); clavier(); }
     });
@@ -271,7 +311,7 @@
     }
   }
 
-  window.MicroChamp = { balayer: balayer };
+  window.MicroChamp = { balayer: balayer, raison: raison, secours: secours };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", demarrer);
   else demarrer();
 })(window, document);
