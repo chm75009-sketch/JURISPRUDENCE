@@ -507,6 +507,18 @@ fichier ouvert. Ne pas trouver une pièce sur le Drive ne dit pas qu'elle n'exis
 écrit « je ne l'ai pas trouvée sur le Drive », on demande si elle existe ailleurs, et on ne
 construit rien sur une absence avant d'avoir la réponse.
 
+Cas mesuré le 24 novembre 2026 - dossier CISSÉ, l'assignation au fond. Deux arrêts
+étaient cités pour ce qu'ils ne disent pas, sans avoir été lus : Cass. 3e civ.
+23 septembre 2020, n° 19-20.374, présenté comme jugeant que « la faute du sous-traitant
+n'est pas une cause étrangère », alors qu'il juge que le constructeur répond de plein droit
+des désordres causés par des fuites d'eau sauf cause étrangère (points 5 à 7) ; et Cass.
+3e civ. 13 janvier 2010, n° 08-13.562, rattaché à l'assurance dommages-ouvrage alors qu'il
+porte sur l'assurance de responsabilité obligatoire (L. 241-1 et A. 243-1). Corrigé après
+lecture intégrale sur Judilibre. Un arrêt cité se lit en entier avant d'être cité. Même jour,
+la quittance sans signature faite le 21 novembre a dû être redemandée plusieurs fois avant
+d'être retrouvée sur le Drive : ce qui a déjà été produit se cherche dans l'historique et sur
+le Drive avant d'être demandé ou refait.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
