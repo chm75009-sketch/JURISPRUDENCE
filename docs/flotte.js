@@ -172,6 +172,17 @@
     { c: "limMois", lib: "Périodicité du limiteur, en mois", t: "num" },
     { c: "chrono", lib: "Dernier contrôle du chronotachygraphe", t: "date" },
     { c: "chronoMois", lib: "Périodicité du chronotachygraphe, en mois", t: "num" },
+    /* L'APPAREIL LUI-MÊME. Demande du 24 novembre 2026 : le chronotachygraphe
+       doit se voir sur la fiche, « avec référence ou modèle, relevé ou pas,
+       échéance ». La génération dit ce que l'appareil enregistre ; la marque et
+       la référence disent lequel est monté. */
+    { c: "chronoType", lib: "Type d'appareil", t: "select", opts: [
+      ["", "- à préciser -"],
+      ["g2v2", "Intelligent, 2e version (G2V2)"],
+      ["g2v1", "Intelligent, 1re version (G2V1)"],
+      ["g1", "Numérique, 1re génération"],
+      ["analogique", "Analogique, à disques"]] },
+    { c: "chronoRef", lib: "Marque, modèle et référence", t: "text", ph: "ex. VDO DTCO 4.1, Stoneridge SE5000" },
     { c: "telecUnite", lib: "Dernier téléchargement de l'unité embarquée", t: "date" },
     { c: "telecUniteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
     { c: "assur", lib: "Échéance de l'assurance", t: "date" },
@@ -507,15 +518,23 @@
       h += '<input type="' + type + '" id="' + id + '" data-ch="' + ch.c + '" value="' + ech(valeur) + '"' +
         (ch.t === "num" ? ' inputmode="numeric"' : "") +
         (ch.t === "dec" ? ' inputmode="decimal"' : "") +
+        (ch.ph ? ' placeholder="' + ech(ch.ph) + '"' : "") +
         (ch.maj ? ' style="text-transform:uppercase"' : "") + ">";
     }
     return h + "</label>";
   }
 
+  /* UNE SAISIE NE SE COUPE PAS À LA PREMIÈRE LETTRE. La fiche se redessinait
+     à chaque touche : le champ était remplacé, le clavier se fermait, et
+     « RENAULT » tapé lettre à lettre s'enregistrait « R ». Relevé le
+     24 novembre 2026 en ajoutant la référence du chronotachygraphe. Un champ
+     qu'on tape s'enregistre à chaque touche, mais la fiche ne se redessine
+     qu'à la sortie du champ. Une liste ou une date, elles, se choisissent
+     d'un geste : elles redessinent tout de suite. */
   function brancher(cadre, prefixe, lit, ecrit, apres) {
     Array.prototype.forEach.call(cadre.querySelectorAll("[data-ch]"), function (el) {
-      var quand = (el.tagName === "SELECT" || el.type === "date") ? "change" : "input";
-      el.addEventListener(quand, function () {
+      var choix = el.tagName === "SELECT" || el.type === "date";
+      function enregistrer() {
         var o = lit(), c = el.getAttribute("data-ch");
         var v = el.value;
         if (c === "immat") v = v.toUpperCase();
@@ -523,9 +542,32 @@
         o[c] = v;
         ecrit(o);
         if (apres) apres(c, v, avant, o);
-        rendre();
-      });
+      }
+      if (choix) {
+        el.addEventListener("change", function () { enregistrer(); rendre(); });
+      } else {
+        el.addEventListener("input", enregistrer);
+        el.addEventListener("change", function () { enregistrer(); rendreApresSaisie(); });
+      }
     });
+  }
+  /* En sortant d'un champ, on touche souvent autre chose : un bouton
+     (« Relevé aujourd'hui »), ou le champ suivant. Redessiner tout de suite
+     faisait disparaître ce bouton sous le doigt, ou fermait le champ suivant.
+     La fiche attend donc que le geste soit fini, et que plus aucun champ de
+     la fiche ne soit en cours de saisie. */
+  var rendreAttente = null;
+  function rendreApresSaisie() {
+    if (rendreAttente) window.clearTimeout(rendreAttente);
+    rendreAttente = window.setTimeout(function () {
+      rendreAttente = null;
+      var a = document.activeElement;
+      if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.hasAttribute("data-ch")) {
+        a.addEventListener("blur", rendreApresSaisie, { once: true });
+        return;
+      }
+      rendre();
+    }, 350);
   }
 
   /* LE CHAUFFEUR ATTITRÉ ET SON VÉHICULE, LES DEUX FACES DU MÊME LIEN.
@@ -572,28 +614,161 @@
   var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["entretien", "Entretien"], ["pieces", "Documents"]];
 
   var tabParDefaut = "";   /* l'onglet sur lequel ouvrir une fiche, venu de la recherche */
-  function corpsVehicule(v) {
-    var tab = vtabActif[v.id] || tabParDefaut || "infos";
-    function champsDe(groupe) {
-      return '<div class="gr">' + CHAMPS_V.filter(function (ch) {
-        return (GR_ECH[ch.c] ? "ech" : "infos") === groupe;
-      }).map(function (ch) {
-        var val = v[ch.c];
+
+  /* LA FICHE EN RUBRIQUES REPLIABLES. Demande du 24 novembre 2026 : « des
+     menus intelligents pour ne pas encombrer la fiche ». Chaque onglet se
+     découpe en rubriques. Une rubrique fermée tient sur une ligne, qui dit
+     l'essentiel (l'échéance, le relevé, le kilométrage) ; on la touche pour
+     l'ouvrir. Elle s'ouvre d'elle-même quand il y manque une donnée
+     indispensable ou que son échéance est proche ou dépassée. Une rubrique sans
+     objet pour le genre du véhicule ne paraît pas (pas de chronotachygraphe sur
+     une voiture ni sur une remorque), sauf si elle porte déjà une donnée. */
+  var secOuverte = {};     /* rubriques ouvertes ou fermées à la main, « id|clé » */
+
+  function genreLourd(v) {
+    return v.genre === "pl" || v.genre === "tracteur" || v.genre === "commun" || v.genre === "public10";
+  }
+  function genreIncertain(v) { return !net(v.genre) || v.genre === "autre"; }
+  function rempli(v, cles) { return cles.some(function (c) { return net(v[c]); }); }
+
+  var SECTIONS_V = {
+    infos: [
+      { k: "ident", titre: "Identification", fixe: true, champs: ["immat", "genre", "marque", "conducteur"] },
+      { k: "chrono", titre: "Chronotachygraphe", ech: ["Chronotachygraphe", "Téléchargement de l'unité embarquée"],
+        champs: ["chronoType", "chronoRef", "telecUnite", "telecUniteJours", "chrono", "chronoMois"],
+        si: function (v) { return genreLourd(v) || v.genre === "vul" || genreIncertain(v); } },
+      { k: "km", titre: "Kilométrage et mise en circulation", champs: ["km", "kmLe", "mec"] },
+      { k: "energie", titre: "Carburant et places", champs: ["carburant", "places"],
+        si: function (v) { return v.genre !== "remorque"; } },
+      { k: "achat", titre: "Achat et financement", champs: ["dateAchat", "financementType", "financement"] },
+      { k: "note", titre: "Observations", champs: ["note"] },
+    ],
+    ech: [
+      { k: "ct", titre: "Contrôle technique", ech: ["Contrôle technique"], champs: ["ct", "ctMois"] },
+      { k: "chrono", titre: "Chronotachygraphe", ech: ["Chronotachygraphe", "Téléchargement de l'unité embarquée"],
+        champs: ["chronoType", "chronoRef", "telecUnite", "telecUniteJours", "chrono", "chronoMois"],
+        si: function (v) { return genreLourd(v) || v.genre === "vul" || genreIncertain(v); } },
+      { k: "lim", titre: "Limiteur de vitesse", ech: ["Limiteur"], champs: ["lim", "limMois"],
+        si: function (v) { return genreLourd(v) || genreIncertain(v); } },
+      { k: "assur", titre: "Assurance", ech: ["Assurance"], champs: ["assur", "assurContrat"] },
+      { k: "licence", titre: "Copie conforme de licence", ech: ["Copie conforme"], champs: ["licence", "licenceFin"],
+        si: function (v) { return v.genre !== "vl"; } },
+      { k: "revision", titre: "Révision", ech: ["Révision"], champs: ["revision", "revisionKm"] },
+      { k: "extincteur", titre: "Extincteur", ech: ["Extincteur"], champs: ["extincteur"] },
+    ],
+  };
+  /* Le chauffeur attitré n'a pas de sens sur une remorque : il ne paraît pas,
+     sauf s'il est déjà saisi. */
+  function champVisible(v, c) {
+    if (c === "conducteur") return v.genre !== "remorque" || !!net(v.conducteur);
+    return true;
+  }
+
+  var CHAMP_DE = {};
+  CHAMPS_V.forEach(function (ch) { CHAMP_DE[ch.c] = ch; });
+
+  /* Ce qu'indique la ligne d'une rubrique fermée. */
+  function resumeSection(v, sec, E, manques) {
+    var morceaux = [], etatSec = "";
+    function pireEtat(a, b) {
+      var rang = { "": 0, vert: 1, ambre: 2, rouge: 3, passe: 4 };
+      return (rang[b] || 0) > (rang[a] || 0) ? b : a;
+    }
+    if (sec.k === "chrono") {
+      var type = "";
+      (CHAMP_DE.chronoType.opts || []).forEach(function (o) { if (o[0] && o[0] === v.chronoType) type = o[1]; });
+      var nomApp = net(v.chronoRef) || (type ? type.replace(/,.*$/, "") : "");
+      if (nomApp) morceaux.push(nomApp);
+      morceaux.push(net(v.telecUnite) ? "relevé le " + enFrancais(v.telecUnite) : "jamais relevé");
+    }
+    if (sec.k === "km") {
+      if (net(v.km)) morceaux.push(String(v.km).replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " km" +
+        (net(v.kmLe) ? ", relevé le " + enFrancais(v.kmLe) : ""));
+      if (net(v.mec)) morceaux.push("en circulation depuis le " + enFrancais(v.mec));
+    }
+    if (sec.k === "energie") {
+      if (net(v.carburant)) morceaux.push(v.carburant);
+      if (net(v.places)) morceaux.push(v.places + " place" + (parseInt(v.places, 10) > 1 ? "s" : ""));
+    }
+    if (sec.k === "achat") {
+      if (net(v.dateAchat)) morceaux.push("acheté le " + enFrancais(v.dateAchat));
+      if (net(v.financementType)) morceaux.push(v.financementType);
+      if (net(v.financement)) morceaux.push(v.financement);
+    }
+    if (sec.k === "note" && net(v.note)) {
+      var n = net(v.note); morceaux.push(n.length > 48 ? n.slice(0, 46) + "…" : n);
+    }
+    if (sec.k === "assur" && net(v.assurContrat)) morceaux.push("contrat " + v.assurContrat);
+    if (sec.k === "licence" && net(v.licence)) morceaux.push("n° " + v.licence);
+    (sec.ech || []).forEach(function (quoi) {
+      E.forEach(function (e) {
+        if (e.quoi !== quoi) return;
+        etatSec = pireEtat(etatSec, e.etat);
+        if (e.km) { morceaux.push(e.reste < 0 ? "dépassée de " + (-e.reste) + " km" : "dans " + e.reste + " km"); return; }
+        var dite = e.jours < 0 ? dit(e.jours) : "avant le " + enFrancais(e.date);
+        if (quoi === "Chronotachygraphe") morceaux.push("contrôle " + dite);
+        else if (quoi === "Téléchargement de l'unité embarquée") {
+          /* Le prochain relevé ne s'affiche que s'il approche : c'est lui qui
+             colore alors la rubrique, il faut dire pourquoi. */
+          if (e.etat === "passe") morceaux.push("relevé en retard, " + dit(e.jours));
+          else if (e.etat === "rouge" || e.etat === "ambre") morceaux.push("prochain relevé avant le " + enFrancais(e.date));
+        }
+        else morceaux.push(dite);
+      });
+    });
+    var manqueIci = manques.filter(function (m) { return m.sec === sec.k; });
+    if (manqueIci.length) { etatSec = pireEtat(etatSec, "ambre"); morceaux.push("à compléter : " + manqueIci.map(function (m) { return m.quoi; }).join(", ")); }
+    return { texte: morceaux.join(" · "), etat: etatSec, manque: manqueIci.length > 0 };
+  }
+
+  /* Les manques de la fiche (fonction manque), rattachés à leur rubrique. */
+  var MANQUE_SEC = {
+    "immatriculation": "ident", "genre du véhicule": "ident", "chauffeur attitré": "ident",
+    "date du dernier contrôle technique": "ct", "échéance de l'assurance": "assur",
+    "contrôle du chronotachygraphe": "chrono", "contrôle du limiteur": "lim",
+    "copie conforme de licence": "licence", "kilométrage": "km",
+  };
+
+  function sectionsHtml(v, groupe) {
+    var E = echeancesVehicule(v);
+    var manques = manque(v).map(function (m) { return { quoi: m, sec: MANQUE_SEC[m] || "" }; });
+    return '<div class="secs">' + SECTIONS_V[groupe].filter(function (sec) {
+      return !sec.si || sec.si(v) || rempli(v, sec.champs);
+    }).map(function (sec) {
+      var champs = '<div class="gr">' + sec.champs.filter(function (c) { return champVisible(v, c); }).map(function (c) {
+        var ch = CHAMP_DE[c], val = v[c];
         if (val == null || val === "") {
-          if (ch.c === "ctMois") val = CT_DEFAUT[v.genre] || 12;
-          if (ch.c === "limMois") val = 24;
-          if (ch.c === "chronoMois") val = 24;
+          if (c === "ctMois") val = CT_DEFAUT[v.genre] || 12;
+          if (c === "limMois") val = 24;
+          if (c === "chronoMois") val = 24;
         }
         return champHtml(ch, val, "v" + v.id);
       }).join("") + "</div>";
-    }
+      if (sec.k === "chrono") {
+        champs += '<div class="sec-act"><button type="button" class="second" data-auj="' + ech(v.id) +
+          '|telecUnite">Relevé aujourd\'hui</button></div>';
+      }
+      if (sec.fixe) return '<div class="sec fixe">' + champs + "</div>";
+      var r = resumeSection(v, sec, E, manques);
+      var cle = v.id + "|" + sec.k;
+      var auto = r.manque || r.etat === "passe" || r.etat === "rouge";
+      var ouverte = secOuverte.hasOwnProperty(cle) ? secOuverte[cle] : auto;
+      return '<details class="sec' + (r.etat ? " " + r.etat : "") + '" data-sec="' + ech(cle) + '"' + (ouverte ? " open" : "") + ">" +
+        '<summary><span class="st">' + ech(sec.titre) + "</span>" +
+        '<span class="sr">' + ech(r.texte || "à renseigner") + "</span></summary>" +
+        '<div class="sc">' + champs + "</div></details>";
+    }).join("") + "</div>";
+  }
+
+  function corpsVehicule(v) {
+    var tab = vtabActif[v.id] || tabParDefaut || "infos";
     var onglets = '<div class="vtabs" role="tablist">' + VTABS.map(function (t) {
       return '<button type="button" data-vtab="' + ech(v.id) + "|" + t[0] + '"' +
         (t[0] === tab ? ' aria-selected="true"' : "") + ">" + ech(t[1]) + "</button>";
     }).join("") + "</div>";
     var pan = "";
-    if (tab === "infos") pan = champsDe("infos");
-    else if (tab === "ech") pan = champsDe("ech");
+    if (tab === "infos") pan = sectionsHtml(v, "infos");
+    else if (tab === "ech") pan = sectionsHtml(v, "ech");
     else if (tab === "entretien") pan = interventionsHtml(v);
     else pan = piecesHtml(v) + '<div class="actions"><button type="button" class="second" data-sup="' +
       ech(v.id) + '">Retirer ce véhicule</button></div>';
@@ -710,6 +885,18 @@
         function (c, val, avant) {
           if (c === "conducteur") lierVehiculeConducteur(v.id, val, avant);
         });
+      Array.prototype.forEach.call(cadre.querySelectorAll("details.sec[data-sec]"), function (d) {
+        d.addEventListener("toggle", function () { secOuverte[d.getAttribute("data-sec")] = d.open; });
+      });
+      Array.prototype.forEach.call(cadre.querySelectorAll("[data-auj]"), function (bt) {
+        bt.addEventListener("click", function () {
+          var c = bt.getAttribute("data-auj").split("|")[1];
+          var T = vehicules();
+          T.forEach(function (x) { if (x.id === v.id) x[c] = iso(new Date()); });
+          garderVehicules(T);
+          rendre();
+        });
+      });
       brancherPieces(cadre, v.id);
       brancherPhoto(cadre, v.id);
       brancherInterventions(cadre, v.id);

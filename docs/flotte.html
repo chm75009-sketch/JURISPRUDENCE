@@ -147,6 +147,39 @@
     background:var(--surface);color:var(--texte)}
   .gr textarea{min-height:76px;line-height:1.45;resize:vertical}
   .gr .aide{font:400 var(--t1)/1.4 system-ui;color:var(--texte-3);text-transform:none;letter-spacing:0}
+  /* LES RUBRIQUES DE LA FICHE. Fermées, elles tiennent sur une ligne : le titre,
+     puis ce qu'il faut en savoir. La couleur du bord dit l'échéance. */
+  .secs{display:flex;flex-direction:column;gap:10px}
+  .sec.fixe{margin:0 0 2px}
+  details.sec{margin:0;background:var(--surface);border:1px solid var(--filet);border-left:4px solid var(--filet-2);
+    border-radius:var(--r1)}
+  details.sec.vert{border-left-color:var(--vert)}
+  details.sec.ambre{border-left-color:var(--ambre)}
+  details.sec.rouge,details.sec.passe{border-left-color:var(--rouge)}
+  /* Le style général des « summary » (style.css) centre le texte et pose un
+     chevron devant : ici le titre se lit à gauche, la flèche est à droite. */
+  details.sec > summary{list-style:none;cursor:pointer;padding:12px 44px 12px 14px;position:relative;
+    display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:3px;min-height:48px;
+    justify-content:center;margin:0}
+  details.sec > summary::-webkit-details-marker{display:none}
+  details.sec > summary::marker{content:""}
+  details.sec > summary::before{content:none;display:none}
+  details.sec > summary::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;
+    border-right:2px solid var(--texte-3);border-bottom:2px solid var(--texte-3);
+    transform:translateY(-70%) rotate(45deg)}
+  details.sec[open] > summary::after{transform:translateY(-30%) rotate(-135deg)}
+  details.sec .st{font:700 var(--t3)/1.25 system-ui;color:var(--texte)}
+  details.sec .sr{font:400 var(--t1)/1.35 system-ui;color:var(--texte-2);letter-spacing:0}
+  details.sec.ambre .sr{color:var(--ambre)}
+  details.sec.rouge .sr,details.sec.passe .sr{color:var(--rouge);font-weight:600}
+  details.sec[open] > summary{border-bottom:1px solid var(--filet)}
+  details.sec .sc{padding:14px}
+  .sec-act{margin:12px 0 0}
+  .sec-act button{min-height:44px;border-radius:var(--r1);font:600 var(--t2) system-ui;width:auto;padding:0 16px}
+  /* La date sur iPhone garde la largeur de son champ : sans cela, elle
+     débordait de la fiche, à droite. */
+  .gr input[type=date]{-webkit-appearance:none;appearance:none;display:block;max-width:100%}
+  .gr input[type=date]::-webkit-date-and-time-value{text-align:left}
   .actions{display:flex;flex-wrap:wrap;gap:10px;margin:var(--e3) 0 0}
   .actions button{min-height:46px;border-radius:var(--r1);font:600 var(--t3) system-ui;width:auto;padding:0 16px}
 
