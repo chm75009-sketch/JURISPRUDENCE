@@ -22,22 +22,37 @@
   var DEST = [
     { nom: "Faire un entretien ou une réparation", ou: "Ouvrir un véhicule, onglet Entretien",
       page: "flotte.html?faire=entretien",
-      mots: "entretien entretenir reparation reparer vidange revision maintenance intervention panne depanner depannage travaux garage mecanique mecanicien pneu pneumatique frein freins plaquette plaquettes disque embrayage huile filtre courroie batterie ampoule eclairage amortisseur controler faire note cout" },
+      mots: "entretien entretenir entretiens reparation reparations reparer repare vidange vidanger revision reviser maintenance intervention intervenir panne pannes tombe depanner depannage depanneuse remorquer remorquage travaux garage garagiste concession atelier mecanique mecanicien pneu pneus pneumatique pneumatiques crevaison creve permutation geometrie parallelisme frein freins freinage plaquette plaquettes disque disques embrayage boite vitesse huile niveau niveaux liquide adblue filtre filtres courroie distribution batterie demarre demarrage ampoule eclairage phare phares feu feux clignotant amortisseur amortisseurs suspension direction moteur turbo injecteur radiateur refroidissement fuite fuit bruit voyant clim climatisation chauffage essuie glace balai retroviseur hayon benne frigo groupe froid graissage graisser lavage laver nettoyer nettoyage carrosserie peinture debosselage soudure changer remplacer piece pieces faire note kilometres" },
     { nom: "Déclarer un sinistre", ou: "Accident, bris de glace, vol...",
       page: "parc-sinistres.html",
-      mots: "sinistre sinistres accident declarer declaration bris glace vol vole incendie vandalisme choc degat degats dommage collision accrochage assurance constat rayure carrosserie" },
+      mots: "sinistre sinistres accident accidente accidents declarer declaration bris glace pare brise impact fissure vol vole volee voler cambriole cambriolage effraction carburant gasoil siphonne incendie feu brule vandalisme vandalise tague casse choc degat degats dommage dommages collision accroche accrochage accroché heurte percute tamponne rentre dedans marche arriere constat amiable expert expertise franchise assurance assureur tiers rayure raye carrosserie enfonce pietons blesse recule reculer reculant arrache arracher retroviseur mur poteau barriere portail quai" },
     { nom: "Voir les dépenses du parc", ou: "Coûts d'entretien, par véhicule",
       page: "parc-depenses.html",
-      mots: "depense depenses cout couts facture factures combien prix budget argent depenser total somme montant entretien reparation" },
+      mots: "depense depenses cout couts coute facture factures facturer devis combien prix budget argent depenser total somme montant euros ht ttc paye payer garage garages garagiste regle achat achete frais historique annee mois comparer rentabilite cher" },
     { nom: "Liste des véhicules", ou: "Chercher un camion, sa fiche",
       page: "flotte.html",
-      mots: "vehicule vehicules camion camions voiture fourgon flotte parc liste immatriculation plaque chercher trouver fiche conducteur chauffeur affectation kilometrage photo document carte grise" },
+      mots: "vehicule vehicules camion camions voiture voitures fourgon fourgons utilitaire utilitaires porteur porteurs tracteur tracteurs semi remorque remorques poids lourd lourds pl vl flotte parc liste tous immatriculation immat plaque chercher trouver rechercher fiche fiches conducteur chauffeur affectation affecter attribuer kilometrage compteur photo photos document documents carte grise marque modele ajouter nouveau acheter vendre vendu sortir" },
     { nom: "Échéances à surveiller", ou: "Contrôles et assurances qui approchent",
       page: "flotte.html?etat=proche",
-      mots: "echeance echeances controle technique assurance alerte date expire expiration bientot prochain prochaine depasse depassee urgent limiteur chronotachygraphe licence copie conforme carte grise extincteur renouveler renouvellement" },
+      mots: "echeance echeances controle technique ct assurance attestation alerte alertes date dates expire expiration bientot prochain prochaine prochains approche arrive surveiller rappel limiteur vitesse chronotachygraphe tachygraphe etalonnage licence copie conforme extincteur extincteurs renouveler renouvellement tachy mines" },
+    { nom: "Échéances dépassées", ou: "Ce qui n'est plus à jour",
+      page: "flotte.html?etat=depasse",
+      mots: "controle technique ct assurance depasse depassee depassees depasses retard perime perimee perimes expire expiree expirees caduc hors delai oublie oublies plus jour plus valable pas jour" },
+    { nom: "Véhicules sans relevé kilométrique", ou: "Kilométrage à saisir",
+      page: "flotte.html?etat=sanskm",
+      mots: "camion camions vehicule vehicules sans releve kilometrique kilometrage km kilometres compteur saisir releve noter releves manquant" },
+    { nom: "Véhicules sans conducteur", ou: "Camions libres",
+      page: "flotte.html?etat=libre",
+      mots: "camion camions vehicule vehicules sans conducteur libre libres disponible disponibles dispo inutilise inutilises gare parking reserve personne affecte" },
+    { nom: "Fiches à compléter", ou: "Véhicules incomplets",
+      page: "flotte.html?etat=incomplet",
+      mots: "camion camions vehicule vehicules fiche fiches completer incomplet incomplete incompletes incomplets manque manquant manquante informations infos renseigner remplir vide vides" },
     { nom: "Tableau de bord du parc", ou: "La synthèse du parc",
       page: "parc-tableau.html",
-      mots: "tableau bord synthese resume vue ensemble accueil indicateur indicateurs kpi structure surveillance" }
+      mots: "tableau bord synthese resume vue ensemble accueil indicateur indicateurs kpi structure surveillance etat general bilan point chiffres statistiques stats graphique" },
+    { nom: "Paramètres du parc", ou: "Listes et réglages",
+      page: "parc-parametres.html",
+      mots: "ajouter liste parametres parametre reglages reglage regler listes types type depenses garages garage entreprises fournisseurs prestataires configurer configuration personnaliser categories" }
   ];
 
   /* Quand rien n'est compris, on propose les trois gestes les plus courants. */
@@ -47,23 +62,42 @@
     "fais": 1, "faut": 1, "un": 1, "une": 1, "des": 1, "le": 1, "la": 1, "les": 1, "de": 1,
     "du": 1, "d": 1, "a": 1, "au": 1, "aux": 1, "pour": 1, "mon": 1, "ma": 1, "mes": 1,
     "ce": 1, "cette": 1, "comment": 1, "ou": 1, "et": 1, "en": 1, "sur": 1, "avec": 1,
-    "me": 1, "se": 1, "son": 1, "sa": 1, "il": 1, "elle": 1, "y": 1, "ne": 1, "plus": 1, "pas": 1 };
+    "me": 1, "se": 1, "son": 1, "sa": 1, "il": 1, "elle": 1, "y": 1, "ne": 1, "plus": 1, "pas": 1,
+    "est": 1, "qu": 1, "que": 1, "qui": 1, "on": 1, "nous": 1, "vous": 1, "ils": 1, "elles": 1,
+    "mais": 1, "donc": 1, "par": 1, "dans": 1, "chez": 1, "ai": 1, "as": 1, "avoir": 1,
+    "voir": 1, "afficher": 1, "montrer": 1, "ouvrir": 1 };
 
   function norm(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
       .replace(/[^a-z0-9 ]/g, " ");
   }
   function toks(s) {
-    return norm(s).split(/\s+/).filter(function (w) { return w && !VIDES[w]; });
+    return norm(s).split(/\s+/).filter(function (w) { return w.length > 1 && !VIDES[w]; });
   }
-  DEST.forEach(function (d) { d._m = norm(d.nom + " " + d.mots).split(/\s+/).filter(Boolean); });
+  DEST.forEach(function (d) {
+    d._m = norm(d.nom + " " + d.mots).split(/\s+/).filter(Boolean);
+    d._s = " " + toks(d.nom).join(" ") + " | " + toks(d.mots).join(" ") + " ";
+  });
+
+  /* DEUX MOTS QUI SE SUIVENT DISENT PLUS QU'UN MOT SEUL : quand deux mots de
+     la demande se suivent aussi dans l'entrée, l'entrée gagne deux points. */
+  function expressions(d, qs) {
+    var s = 0;
+    for (var i = 0; i + 1 < qs.length; i++) {
+      if (d._s.indexOf(" " + qs[i] + " " + qs[i + 1]) >= 0) s += 2;
+    }
+    return s;
+  }
 
   /* LES MOTS DE PERSONNE NE DÉCIDENT PAS. Relevé le 25 novembre 2026 :
      « sanctionner un chauffeur » ouvrait la liste des véhicules, parce que
      « chauffeur » y figure. Ces mots désignent quelqu'un, pas ce qu'on veut
      faire : ils ne comptent plus que pour un point. */
   var GENERIQUES = { chauffeur: 1, chauffeurs: 1, conducteur: 1, conducteurs: 1, salarie: 1,
-    salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1 };
+    salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1,
+    /* Le camion désigne l'objet, pas le geste : « camion volé » est un sinistre,
+       « camion en panne » un entretien. */
+    camion: 1, camions: 1, vehicule: 1, vehicules: 1, voiture: 1, voitures: 1 };
 
   /* CE QUI N'EST PAS DU PARC. Une sanction, un contrat, la paie, un arrêt :
      le chef de parc n'en a pas la main. Plutôt que de l'envoyer n'importe où,
@@ -72,11 +106,40 @@
     "licenci", "renvoy", "virer", "vire", "mise a pied", "faute", "contrat", "embauch", "recrut",
     "salaire", "paie", "paye", "conge", "demission", "rupture", "absence", "absent", "abandon",
     "retard", "arret maladie", "maladie", "inaptitude", "visite medicale", "discipl", "convoc",
-    "entretien prealable", "heures supp", "prime", "mutuelle"];
+    "entretien prealable", "heures supp", "prime", "mutuelle",
+    "avertis", "recadr", "reprimand", "engueul", "mise en demeure", "cdd", "cdi", "avenant", "dpae",
+    "salair", "bulletin", "fiche de paie", "remuner", "augment", "conges", "vacances", "rtt", "demissio",
+    "arret de travail", "accident du travail", "medecin du travail", "inapte", "reclass", "cse",
+    "election", "syndic", "greve", "urssaf", "prud", "harcel", "mutuel", "retraite", "formation",
+    "entretien annuel", "entretien professionnel", "promesse d embauche", "periode d essai",
+    "solde de tout compte", "certificat de travail", "rupture conventionnelle", "amende", "contravention",
+    "radar", "designer le conducteur", "pv de stationnement", "exces de vitesse", "malade",
+    "vient plus", "revient plus", "venu travailler", "pas venu"];
+  /* Ce qui reste de la demande une fois retirés les mots hors du parc :
+     « accident du travail » ne laisse pas « accident » passer pour un sinistre. */
+  function resteDuParc(texte) {
+    var t = " " + norm(texte).replace(/\s+/g, " ") + " ";
+    /* Les expressions longues d'abord : « fiche de paie » avant « paie ». */
+    HORS_PARC.slice().sort(function (a, b) { return b.length - a.length; }).forEach(function (h) { t = t.replace(new RegExp(" " + h + "[a-z]*", "g"), " "); });
+    return t;
+  }
   function horsParc(texte) {
     var t = " " + norm(texte).replace(/\s+/g, " ") + " ";
     for (var i = 0; i < HORS_PARC.length; i++) if (t.indexOf(" " + HORS_PARC[i]) >= 0) return true;
     return false;
+  }
+
+  /* LES FORMES D'UN MÊME MOT. « téléphonait » est « téléphone », « camions »
+     est « camion », « malade » est « maladie » : un mot reconnu à sa racine
+     compte comme un début de mot. Le reste de la phrase ne trompe pas pour
+     autant : « contrat » ne rejoint pas « contravention », la fin diffère. */
+  function memeRacine(q, m) {
+    if (m.length >= 5 && q.indexOf(m) === 0) return true;
+    var court = q.length <= m.length ? q : m, long = court === q ? m : q;
+    if (court.length < 5) return false;
+    var n = 0;
+    while (n < court.length && court.charAt(n) === long.charAt(n)) n++;
+    return n >= court.length - 1 && "ersx".indexOf(court.charAt(court.length - 1)) >= 0;
   }
 
   function score(d, qs) {
@@ -85,13 +148,17 @@
     qs.forEach(function (q) {
       var hit = 0, i;
       for (i = 0; i < d._m.length; i++) {
-        if (d._m[i].indexOf(q) === 0) { hit = (d._m[i] === q ? 3 : 2); break; }
+        if (d._m[i] === q) { hit = 3; break; }
+        if (!hit && d._m[i].indexOf(q) === 0) hit = 2;
+      }
+      if (!hit) {
+        for (i = 0; i < d._m.length; i++) { if (memeRacine(q, d._m[i])) { hit = 2; break; } }
       }
       if (!hit) { for (i = 0; i < d._m.length; i++) { if (d._m[i].indexOf(q) > 0) { hit = 1; break; } } }
       if (GENERIQUES[q] && hit) hit = 1;
       s += hit;
     });
-    return s;
+    return s ? s + expressions(d, qs) : 0;
   }
   function classer(texte) {
     var qs = toks(texte);
@@ -185,7 +252,7 @@
       var liste = classer(texte);
       /* Une demande hors du parc n'ouvre rien du parc, sauf si elle porte
          aussi un vrai geste du parc (« réparation », « sinistre »...). */
-      var gestesDuParc = toks(texte).filter(function (q) {
+      var gestesDuParc = toks(resteDuParc(texte)).filter(function (q) {
         return !GENERIQUES[q] && !horsParc(q) && classer(q).some(function (o) { return o.s >= 2; });
       });
       if (horsParc(texte) && !gestesDuParc.length) {

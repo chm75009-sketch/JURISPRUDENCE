@@ -40,109 +40,159 @@
        désormais son entrée, qui ouvre le document lui-même. Placées en tête,
        elles l'emportent à égalité sur les audits. */
     { nom: "Avertissement : sanctionner un salarié", ou: "Gérer, la lettre d'avertissement", page: "gerer.html#avert",
-      mots: "avertissement avertir donner infliger mettre sanction sanctions sanctionner sanctionne blame punir punition recadrer reprimande rappel ordre faute retard retards comportement insubordination insolence refus mauvais travail disciplinaire" },
+      mots: "insolent impoli malpoli grossier grossierete injure injurie client clients avertissement avertir donner infliger mettre sanction sanctions sanctionner sanctionne blame punir punition recadrer reprimande rappel ordre faute retard retards comportement insubordination insolence refus mauvais travail disciplinaire recadrage rappeler engueuler gronder remontrance observation ecrite lettre premier dernier insulte insulter manque respect irrespect desobeissance desobeir refuse obeir tard retarde excès vitesse telephone volant conduite dangereuse accrochage negligence oubli erreur bavure manquement consigne" },
     { nom: "Mise à pied disciplinaire", ou: "Gérer, la sanction et sa notification", page: "gerer.html#miseapied",
-      mots: "mise pied disciplinaire sanction sanctionner suspendre suspension jours sans salaire punir" },
+      mots: "mise pied disciplinaire sanction sanctionner suspendre suspension jours sans salaire punir mettre lourde temporaire privation retenue" },
     { nom: "Rupture conventionnelle", ou: "Gérer, la convention et le calendrier", page: "gerer.html#rc",
-      mots: "rupture conventionnelle commun accord amiable separer separation negocier depart homologation partir" },
+      mots: "rupture conventionnelle commun accord amiable separer separation negocier depart homologation partir rc ensemble arrangement parties indemnite specifique homologuer dreets formulaire cerfa veut" },
     { nom: "Démission", ou: "Gérer, la démission et le préavis", page: "gerer.html#demission",
-      mots: "demission demissionner demissionne quitter partir depart volontaire lettre preavis" },
+      mots: "donne donner remis remet demission demissionner demissionne quitter partir depart volontaire lettre preavis demissionnaire quitte entreprise lache part veut dispense" },
     { nom: "Abandon de poste", ou: "Gérer, la mise en demeure", page: "gerer.html#abandon",
-      mots: "abandon poste disparu vient venu revient plus absence injustifiee presomption demission mise demeure" },
+      mots: "abandon poste disparu vient venu revient plus absence injustifiee presomption demission mise demeure abandonne injoignable repond absent sans nouvelles lache travail" },
     { nom: "Fin de CDD", ou: "Gérer, le terme du contrat", page: "gerer.html#fincdd",
-      mots: "fin cdd terme echeance renouveler renouvellement indemnite precarite" },
+      mots: "fin cdd terme echeance renouveler renouvellement indemnite precarite arrive finir terminer contrat duree determinee non prime contrat" },
     { nom: "Suspension ou retrait du permis", ou: "Gérer, le conducteur sans permis", page: "gerer.html#permis",
-      mots: "permis suspension suspendu retrait retire points perdu annule annulation conduire plus" },
+      mots: "permis suspension suspendu retrait retire points perdu annule annulation conduire plus invalide zero point solde nul interdit gendarmerie police alcool alcoolemie stupefiants excès vitesse" },
     { nom: "Arrêt maladie", ou: "Gérer, l'arrêt et la reprise", page: "gerer.html#maladie",
-      mots: "arret maladie malade certificat medical indemnites journalieres subrogation prolongation" },
+      mots: "arret maladie malade certificat medical medical indemnites journalieres subrogation prolongation arrete travail medecin reprise ij carence absence" },
     { nom: "Accident du travail", ou: "Gérer, la déclaration", page: "gerer.html#at",
-      mots: "accident travail at blesse blessure trajet declaration declarer cpam" },
+      mots: "mal fait douleur dos dechargement dechargeant decharger chargeant manutention accident travail at blesse blessure trajet declaration declarer cpam blesser tombe chute mission 48 heures temoin depot entrepot atelier quai chantier route" },
     { nom: "Inaptitude", ou: "Gérer, l'avis du médecin du travail", page: "gerer.html#inaptitude",
-      mots: "inaptitude inapte medecin travail avis reclassement" },
+      mots: "inaptitude inapte medecin travail avis reclassement impossibilite reprise licenciement" },
     { nom: "Congés payés", ou: "Gérer, la demande et la réponse", page: "gerer.html#conges",
-      mots: "conges conge payes vacances poser demande refuser accorder" },
+      mots: "conges conge payes vacances poser demande refuser accorder jours repos rtt periode prise ordre departs" },
     { nom: "Entretien professionnel", ou: "Gérer, le compte rendu", page: "gerer.html#entretien",
-      mots: "entretien professionnel annuel evaluation bilan six ans formation" },
+      mots: "entretien professionnel annuel evaluation bilan six ans formation perspectives evolution" },
     { nom: "Déclaration d'embauche (DPAE)", ou: "Gérer, la DPAE", page: "gerer.html#dpae",
-      mots: "dpae declaration prealable embauche declarer urssaf" },
+      mots: "dpae declaration prealable embauche declarer urssaf nouveau salarie arrivee" },
     { nom: "Avenant au contrat", ou: "Gérer, l'avenant", page: "gerer.html#avenant",
-      mots: "avenant modifier modification changer changement horaires poste salaire" },
+      mots: "augmenter avenant modifier modification changer changement horaires poste salaire augmentation mutation lieu temps travail" },
     { nom: "Titres du conducteur", ou: "Gérer, les titres à contrôler", page: "gerer.html#titres",
-      mots: "titres permis carte conducteur fimo fco qualification verifier controler validite" },
+      mots: "titres permis carte conducteur fimo fco qualification verifier controler validite chronotachygraphe initiale formation continue expire expiration" },
     { nom: "Autorisation de conduite", ou: "Gérer, l'autorisation", page: "gerer.html#autorisation",
-      mots: "autorisation conduite caces engin chariot nacelle grue" },
+      mots: "autorisation conduite caces engin chariot nacelle grue elevateur hayon" },
     { nom: "Certificat de travail et solde de tout compte", ou: "Gérer, les documents de fin de contrat", page: "gerer.html#fin",
-      mots: "certificat travail solde tout compte attestation france pole emploi documents fin contrat sortie" },
+      mots: "certificat travail solde tout compte attestation france pole emploi papiers fin contrat sortie stc depart papiers" },
     { nom: "Promesse d'embauche", ou: "Gérer, la promesse", page: "gerer.html#promesse",
-      mots: "promesse embauche engagement proposition" },
-    { nom: "Départ ou mise à la retraite", ou: "Gérer, la retraite", page: "gerer.html#retraite",
-      mots: "retraite depart mise retraiter" },
+      mots: "promesse embauche engagement proposition offre emploi" },
+    { nom: "Départ à la retraite", ou: "Gérer, la retraite", page: "gerer.html#retraite",
+      mots: "retraite depart retraiter partir age pension demande salarie" },
+    { nom: "Contrat CDI", ou: "Gérer, le contrat", page: "gerer.html#cdi",
+      mots: "embaucher embauche recruter cdi contrat duree indeterminee embaucher definitivement titulariser permanent" },
+    { nom: "Contrat CDD", ou: "Gérer, le contrat", page: "gerer.html#cdd",
+      mots: "embaucher embauche recruter cdd contrat duree determinee temporaire remplacement surcroit activite saisonnier" },
+    { nom: "Temps partiel", ou: "Gérer, le contrat", page: "gerer.html#partiel",
+      mots: "embaucher embauche recruter contrat temps partiel mi temps heures complementaires reduit" },
+    { nom: "Contrat de professionnalisation", ou: "Gérer, le contrat", page: "gerer.html#pro",
+      mots: "embaucher embauche recruter professionnalisation contrat pro alternance apprenti apprentissage formation tuteur" },
+    { nom: "Mutuelle : mise en place", ou: "Gérer, la décision unilatérale", page: "gerer.html#mutuelle",
+      mots: "mettre place mutuelle decision unilaterale due complementaire sante obligatoire" },
+    { nom: "Mutuelle : demande de dispense", ou: "Gérer, la dispense", page: "gerer.html#dispense",
+      mots: "dispense mutuelle refuser mutuelle deja couvert conjoint ayant droit" },
+    { nom: "Visite d'information et de prévention", ou: "Gérer, la VIP", page: "gerer.html#vip",
+      mots: "vip visite information prevention embauche medecine travail" },
+    { nom: "Protocole de sécurité", ou: "Gérer, chargement et déchargement", page: "gerer.html#protocole",
+      mots: "protocole securite chargement dechargement quai livraison client entreprise exterieure" },
+    { nom: "Mise à la retraite", ou: "Gérer, décidée par l'employeur", page: "gerer.html#miseretraite",
+      mots: "mise retraite mettre retraite 70 ans employeur decide" },
+    { nom: "Convocation du CSE", ou: "Gérer, la convocation", page: "gerer.html#convoc",
+      mots: "reunion cse convoquer convocation cse reunion comite elus" },
+    { nom: "Ordre du jour du CSE", ou: "Gérer, l'ordre du jour", page: "gerer.html#odj",
+      mots: "ordre jour odj reunion cse" },
+    { nom: "Procès-verbal du CSE", ou: "Gérer, le procès-verbal", page: "gerer.html#pv",
+      mots: "proces verbal pv compte rendu reunion cse" },
+    { nom: "Accord NAO", ou: "Gérer, l'accord", page: "gerer.html#nao",
+      mots: "accord nao negociation annuelle signer" },
+    { nom: "PV de désaccord", ou: "Gérer, la NAO sans accord", page: "gerer.html#desaccord",
+      mots: "annuelle desaccord pv desaccord echec negociation nao" },
+    { nom: "Élections du CSE", ou: "Gérer, information, invitations, carence", page: "gerer.html#elections",
+      mots: "elections election cse vote voter candidats candidature liste protocole preelectoral pv carence proces verbal carence premier second tour scrutin" },
+    { nom: "Suivi tachygraphe", ou: "Tachygraphe et cartes conducteurs", page: "conformite-transport.html",
+      mots: "tachygraphe chronotachygraphe carte conducteur telechargement ddd temps conduite repos pause infraction controle dreal drieat 561 temps service" },
+    { nom: "Sinistres du parc", ou: "Accident, bris de glace, vol", page: "parc-sinistres.html",
+      mots: "sinistre sinistres declarer declaration accident camion vehicule bris glace vol vole incendie vandalisme choc degats dommage collision accrochage constat assurance" },
+    { nom: "Dépenses du parc", ou: "Coûts par véhicule", page: "parc-depenses.html",
+      mots: "depenses cout couts parc facture factures garage reparation entretien budget" },
+    { nom: "Tableau de bord du parc", ou: "La synthèse du parc", page: "parc-tableau.html",
+      mots: "tableau bord parc synthese chef parc vue ensemble" },
+    { nom: "Paramètres du parc", ou: "Listes et réglages du parc", page: "parc-parametres.html",
+      mots: "parametres reglages parc listes types depenses entreprises garages" },
+    { nom: "Fiches des salariés", ou: "Salariés", page: "salaries.html",
+      mots: "salaries fiche salarie dossier personnel coordonnees" },
+    { nom: "Parcours guidés", ou: "Pas à pas", page: "parcours.html",
+      mots: "parcours guide pas pas etapes accompagnement" },
+    { nom: "Mes 5 questions à poser", ou: "Questions", page: "questions.html",
+      mots: "questions poser avocat cabinet demander conseil" },
+    { nom: "Contrôler un document", ou: "Déposer et vérifier", page: "controler.html",
+      mots: "controler verifier relire document existant deposer clause illicite conforme" },
+    { nom: "Audit et conformité", ou: "Toutes les obligations", page: "auditer.html",
+      mots: "audit conformite obligations controle verifier diagnostic suis je en regle" },
+    { nom: "Audit social", ou: "Audit social", page: "audit-social.html",
+      mots: "audit social obligations effectif seuils" },
     { nom: "Licenciement pour faute", ou: "Convocation à l'entretien préalable, puis lettre de licenciement", page: "gerer.html#faute",
-      mots: "licenciement licencier renvoyer virer congedier rupture depart faute simple grave lourde entretien prealable convocation convoquer procedure lettre notification motif cause reelle serieuse separer mettre dehors remercier preavis indemnite salarie conducteur chauffeur employe" },
+      mots: "venu bourre ivre saoul alcoolise ebriete drogue drogue stupefiants travail battu battre bagarre frappe frapper coup coups collegue violent agression agresse menace menacer licenciement licencier renvoyer virer congedier rupture depart faute simple grave lourde licenciement faute grave entretien prealable convocation convoquer procedure lettre notification motif cause reelle serieuse separer mettre dehors remercier preavis indemnite salarie conducteur chauffeur employe licencie licencies renvoi viré porte vol vole voler gasoil carburant marchandise caisse alcool violence bagarre insubordination" },
     { nom: "Licenciement économique", ou: "Convocation, entretien préalable, lettre", page: "gerer.html#eco",
-      mots: "licenciement licencier economique motif suppression poste emploi supprime difficultes entretien prealable convocation procedure lettre contrat securisation professionnelle" },
+      mots: "supprimer postes manque travail assez licenciement licencier economique motif suppression poste emploi supprime difficultes entretien prealable convocation procedure lettre contrat securisation professionnelle economiques baisse activite chiffre affaires perte marche reorganisation csp" },
     { nom: "Mise à pied conservatoire", ou: "Écarter le salarié le temps de la procédure", page: "gerer.html#conservatoire",
-      mots: "mise pied conservatoire ecarter suspendre attente procedure licenciement faute grave entretien prealable convocation" },
+      mots: "mise pied conservatoire ecarter tout suite immediatement sur champ suspendre attente procedure licenciement faute grave entretien prealable convocation immediatement renvoyer maison" },
     { nom: "Éditer un contrat de travail", ou: "Contrats du transport", page: "contrats-transport.html",
-      mots: "contrat travail cdi cdd embauche embaucher recruter recrutement rediger ecrire etablir faire salarie employe ouvrier chauffeur conducteur engager engagement promesse essai avenant temps partiel complet nouveau transport" },
+      mots: "poids lourd pl spl super lourd contrat travail cdi cdd embauche embaucher recruter recrutement rediger ecrire etablir faire salarie employe ouvrier chauffeur conducteur engager engagement promesse essai avenant temps partiel complet nouveau transport routier signer periode" },
     { nom: "Contester une contravention", ou: "Avis de contravention", page: "contraventions.html",
-      mots: "contravention amende pv proces verbal stationnement exces vitesse radar feu rouge contester designer denoncer conducteur fps forfait post stationnement infraction prune flash contestation requete" },
+      mots: "recu recue recois contravention amende pv proces verbal stationnement exces vitesse radar feu rouge contester designer denoncer conducteur fps forfait post stationnement infraction prune flash contestation requete ticket excès ceinture telephone ants majoree avis" },
     { nom: "Contrôle URSSAF", ou: "Contrôle URSSAF", page: "controle-urssaf.html",
-      mots: "urssaf controle cotisations redressement inspecteur avis contradictoire charte deduction forfaitaire specifique dfs frais deplacement grand deplacement lettre observations recours commission amiable prescription mandataire exoneration reduction generale cotisation redresser inspection recouvrement" },
+      mots: "urssaf controle cotisations redressement inspecteur avis contradictoire charte deduction forfaitaire specifique dfs frais deplacement grand deplacement lettre observations recours commission amiable prescription mandataire exoneration reduction generale cotisation redresser inspection recouvrement controleur mise demeure" },
     { nom: "Avertissement, sanction, discipline", ou: "Discipline", page: "audit-discipline.html",
-      mots: "avertissement sanction sanctionner discipline disciplinaire infliger donner mettre blame mise a pied faute reproche punir rappel ordre recadrer reprimande comportement mauvaise conduite retard insubordination procedure" },
+      mots: "avertissement sanction sanctionner discipline disciplinaire infliger donner mettre blame mise a pied faute reproche punir rappel ordre recadrer reprimande comportement mauvaise conduite retard insubordination procedure audit conformite regles echelle sanctions" },
     { nom: "Registre des sanctions", ou: "Discipline", page: "sanctions.html",
-      mots: "registre sanctions historique avertissements suivi disciplinaire" },
+      mots: "registre sanctions historique avertissements suivi disciplinaire passes anterieures liste trois ans" },
     { nom: "Mise en demeure, absence, abandon de poste", ou: "Courriers et e-mails", page: "courriers.html",
       mots: "mise demeure absence absent injustifiee abandon poste presomption demission relance relancer justifier reprendre revenir courrier lettre disparu vient plus repond plus" },
     { nom: "Courriers types", ou: "Courriers et e-mails", page: "courriers.html",
-      mots: "courrier lettre modele type attestation convocation reponse reclamation client fournisseur salarie demande relance ecrire envoyer mail e-mail" },
+      mots: "courrier lettre modele type attestation convocation reponse reclamation client fournisseur salarie demande relance ecrire envoyer mail e-mail courriers lettres email rediger" },
     { nom: "Règlement intérieur", ou: "Règlement intérieur", page: "controler-ri.html",
-      mots: "reglement interieur ri discipline affichage depot greffe inspection obligatoire redaction regles internes controler" },
+      mots: "reglement interieur ri discipline affichage depot greffe inspection obligatoire redaction regles internes controler sanctions conseil prud hommes 50 salaries" },
     { nom: "Document unique (DUERP)", ou: "Document unique", page: "duerp.html",
-      mots: "duerp document unique risques professionnels securite danger evaluation prevention penibilite accident travail sante hygiene" },
+      mots: "duerp document unique risques professionnels securite danger evaluation prevention penibilite accident travail sante hygiene plan action mise jour annuelle" },
     { nom: "Registre du personnel", ou: "Registre du personnel", page: "registre.html",
-      mots: "registre personnel unique entree sortie salaries liste effectif embauche depart mouvement declarer dpae ajouter salarie" },
+      mots: "registre personnel unique entree sortie salaries liste effectif embauche depart mouvement declarer dpae ajouter salarie entrees sorties nouveau" },
     { nom: "Flotte et conducteurs", ou: "Flotte et conducteurs", page: "flotte.html",
-      mots: "flotte vehicule camion camions voiture ajouter nouveau parc conducteur affectation carte grise assurance immatriculation controle technique entretien poids lourd" },
+      mots: "flotte vehicule camion camions voiture ajouter nouveau parc conducteur affectation carte grise assurance immatriculation controle technique entretien poids lourd vehicules pl semi remorque tracteur porteur fourgon utilitaire plaque kilometrage" },
     { nom: "Forfait en jours", ou: "Forfait en jours", page: "forfait.html",
-      mots: "forfait jours cadre autonomie suivi charge entretien convention temps travail jours travailles decompte" },
+      mots: "forfait jours cadre autonomie suivi charge entretien convention temps travail jours travailles decompte annuel 218 repos" },
     { nom: "Décompte des heures", ou: "Décompte des heures", page: "heures.html",
-      mots: "heures supplementaires paie paye payer salaire bulletin fiche majoration nuit prime panier decompte temps travail" },
+      mots: "heures supplementaires paie paye payer salaire bulletin fiche majoration nuit prime panier decompte temps travail sup dimanche repas amplitude coupure" },
     { nom: "Minima conventionnels", ou: "Minima conventionnels", page: "minima.html",
-      mots: "minima conventionnel salaire minimum grille coefficient convention collective taux horaire smic" },
+      mots: "minima conventionnel salaire minimum grille coefficient convention collective taux horaire smic groupe augmentation" },
     { nom: "Notes de service", ou: "Notes de service", page: "notes-service.html",
-      mots: "note service consigne information affichage directive interne communication informer prevenir equipe" },
+      mots: "note service consigne information affichage directive interne communication informer prevenir equipe rappel regle" },
     { nom: "Visites médicales", ou: "Visites médicales", page: "visites.html",
-      mots: "visite medicale reprise embauche suivi medecine travail aptitude inaptitude sst examen rendez vous docteur" },
+      mots: "visite medicale reprise embauche suivi medecine travail aptitude inaptitude sst examen rendez vous docteur medecin periodique" },
     { nom: "Complémentaire santé (mutuelle)", ou: "Complémentaire santé", page: "controler-mutuelle.html",
-      mots: "mutuelle complementaire sante frais prevoyance affiliation dispense remboursement" },
+      mots: "mutuelle complementaire sante frais prevoyance affiliation dispense remboursement adhesion obligatoire" },
     { nom: "Affichages obligatoires", ou: "Affichages obligatoires", page: "controler-affichages.html",
-      mots: "affichage obligatoire panneau horaires collectifs inspection medecine egalite consignes securite" },
+      mots: "affichage obligatoire panneau horaires collectifs inspection medecine egalite consignes securite affichages travail harcelement" },
     { nom: "Égalité femmes-hommes", ou: "Égalité professionnelle", page: "egalite.html",
-      mots: "egalite femmes hommes index ecart remuneration penalite publication parite discrimination" },
+      mots: "egalite femmes hommes index ecart remuneration penalite publication parite discrimination salaires" },
     { nom: "Base de données (BDESE)", ou: "Ma base de données", page: "bdese.html",
-      mots: "bdese base donnees economiques sociales environnementales information consultation" },
+      mots: "bdese base donnees economiques sociales environnementales information consultation bdes cse" },
     { nom: "Comité social et économique (CSE)", ou: "Comité social", page: "audit-cse.html",
-      mots: "cse comite social economique elections representants personnel delegue reunion" },
+      mots: "cse comite social economique elections representants personnel delegue reunion delegues elus consultation" },
     { nom: "Négociation annuelle (NAO)", ou: "Négociation annuelle", page: "audit-nao.html",
-      mots: "nao negociation annuelle obligatoire salaires delegue syndical accord augmentation" },
+      mots: "nao negociation annuelle obligatoire salaires delegue syndical accord augmentation syndicat" },
     { nom: "Santé et sécurité au travail", ou: "Santé et sécurité", page: "audit-sst.html",
-      mots: "sst sante securite travail risques accident prevention protection equipement" },
+      mots: "sst sante securite travail risques accident prevention protection equipement epi" },
     { nom: "Licenciement économique (PSE)", ou: "Plan de sauvegarde", page: "audit-pse.html",
-      mots: "pse plan sauvegarde emploi licenciement economique collectif reclassement" },
+      mots: "pse plan sauvegarde emploi licenciement economique collectif reclassement dix salaries" },
     { nom: "Agenda social et échéances", ou: "Agenda social", page: "agenda.html",
-      mots: "agenda echeance delai calendrier rappel date retroplanning planning" },
+      mots: "agenda echeance delai calendrier rappel date retroplanning planning echeances delais rappels dates a faire" },
     { nom: "Mes documents", ou: "Mes documents", page: "mes-documents.html",
-      mots: "documents dossier mes fichiers telecharger archive garder enregistrer sauvegarde retrouver" },
+      mots: "documents dossier mes fichiers telecharger archive garder enregistrer sauvegarde retrouver pieces scans" },
     { nom: "Modèles de documents", ou: "Modèles de documents", page: "documents.html",
-      mots: "modele document vierge type exemple trame" },
+      mots: "modele document vierge type exemple trame modeles formulaire" },
     { nom: "Équipe et droits", ou: "Équipe", page: "equipe.html",
-      mots: "equipe droits acces journal collaborateur partage utilisateur" },
+      mots: "donner comptable expert associe secretaire inviter equipe droits acces journal collaborateur partage utilisateur mot passe" },
     { nom: "Jurisprudence et textes", ou: "Recherche Judilibre", page: "recherche.html",
-      mots: "jurisprudence arret decision cour cassation judilibre texte legifrance article loi recherche juridique" },
-    { nom: "Audit et conformité", ou: "Toutes les obligations", page: "auditer.html",
-      mots: "audit conformite obligations controle verifier diagnostic" },
+      mots: "chercher trouver jurisprudence arret decision cour cassation judilibre texte legifrance article loi recherche juridique arrets appel code travail" },
     { nom: "Gérer le quotidien", ou: "Documents du quotidien", page: "gerer.html",
       mots: "gerer gestion quotidien rh documents embauche rupture" }
   ];
@@ -157,16 +207,33 @@
     "fais": 1, "faut": 1, "un": 1, "une": 1, "des": 1, "le": 1, "la": 1, "les": 1, "de": 1,
     "du": 1, "d": 1, "a": 1, "au": 1, "aux": 1, "pour": 1, "mon": 1, "ma": 1, "mes": 1,
     "ce": 1, "cette": 1, "comment": 1, "ou": 1, "et": 1, "en": 1, "sur": 1, "avec": 1,
-    "me": 1, "se": 1, "son": 1, "sa": 1, "il": 1, "elle": 1, "y": 1, "ne": 1, "plus": 1, "pas": 1 };
+    "me": 1, "se": 1, "son": 1, "sa": 1, "il": 1, "elle": 1, "y": 1, "ne": 1, "plus": 1, "pas": 1,
+    "est": 1, "qu": 1, "que": 1, "qui": 1, "on": 1, "nous": 1, "vous": 1, "ils": 1, "elles": 1,
+    "mais": 1, "donc": 1, "par": 1, "dans": 1, "chez": 1, "ai": 1, "as": 1, "avoir": 1 };
 
   function norm(s) {
     return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
       .replace(/[^a-z0-9 ]/g, " ");
   }
   function toks(s) {
-    return norm(s).split(/\s+/).filter(function (w) { return w && !VIDES[w]; });
+    return norm(s).split(/\s+/).filter(function (w) { return w.length > 1 && !VIDES[w]; });
   }
-  DEST.forEach(function (d) { d._m = norm(d.nom + " " + d.mots).split(/\s+/).filter(Boolean); });
+  DEST.forEach(function (d) {
+    d._m = norm(d.nom + " " + d.mots).split(/\s+/).filter(Boolean);
+    d._s = " " + toks(d.nom) .join(" ") + " | " + toks(d.mots).join(" ") + " ";
+  });
+
+  /* DEUX MOTS QUI SE SUIVENT DISENT PLUS QU'UN MOT SEUL. « certificat de
+     travail » n'est pas « certificat médical », « mise à la retraite » n'est
+     pas « départ à la retraite » : quand deux mots de la demande se suivent
+     aussi dans l'entrée, l'entrée gagne deux points. */
+  function expressions(d, qs) {
+    var s = 0;
+    for (var i = 0; i + 1 < qs.length; i++) {
+      if (d._s.indexOf(" " + qs[i] + " " + qs[i + 1]) >= 0) s += 2;
+    }
+    return s;
+  }
 
   /* LES MOTS DE PERSONNE NE DÉCIDENT PAS. « chauffeur », « salarié » désignent
      quelqu'un, pas ce qu'on veut faire : ils ne comptent que pour un point,
@@ -174,13 +241,30 @@
   var GENERIQUES = { chauffeur: 1, chauffeurs: 1, conducteur: 1, conducteurs: 1, salarie: 1,
     salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1 };
 
+  /* LES FORMES D'UN MÊME MOT. « téléphonait » est « téléphone », « camions »
+     est « camion », « malade » est « maladie » : un mot reconnu à sa racine
+     compte comme un début de mot. Le reste de la phrase ne trompe pas pour
+     autant : « contrat » ne rejoint pas « contravention », la fin diffère. */
+  function memeRacine(q, m) {
+    if (m.length >= 5 && q.indexOf(m) === 0) return true;
+    var court = q.length <= m.length ? q : m, long = court === q ? m : q;
+    if (court.length < 5) return false;
+    var n = 0;
+    while (n < court.length && court.charAt(n) === long.charAt(n)) n++;
+    return n >= court.length - 1 && "ersx".indexOf(court.charAt(court.length - 1)) >= 0;
+  }
+
   function score(d, qs) {
     if (!qs.length) return 0;
     var s = 0;
     qs.forEach(function (q) {
       var hit = 0, i;
       for (i = 0; i < d._m.length; i++) {
-        if (d._m[i].indexOf(q) === 0) { hit = (d._m[i] === q ? 3 : 2); break; }
+        if (d._m[i] === q) { hit = 3; break; }
+        if (!hit && d._m[i].indexOf(q) === 0) hit = 2;
+      }
+      if (!hit) {
+        for (i = 0; i < d._m.length; i++) { if (memeRacine(q, d._m[i])) { hit = 2; break; } }
       }
       if (!hit) {
         for (i = 0; i < d._m.length; i++) { if (d._m[i].indexOf(q) > 0) { hit = 1; break; } }
@@ -188,7 +272,7 @@
       if (GENERIQUES[q] && hit) hit = 1;
       s += hit;
     });
-    return s;
+    return s ? s + expressions(d, qs) : 0;
   }
   function classer(texte) {
     var qs = toks(texte);
