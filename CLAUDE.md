@@ -455,6 +455,12 @@ et offrait à l'adversaire un vice apparent non réservé. J'ai aussi omis les �
 Un titre se vérifie contre la pièce comme une phrase ; et les points faibles se rappellent à
 chaque compte rendu, pas une seule fois.
 
+Cas mesuré le 25 novembre 2026 - les documents du conducteur poids lourd. J'ai donné de
+mémoire une liste où figuraient « les enregistrements du jour et des 28 jours précédents ».
+L'article R. 3315-11 du code des transports, qui renvoie à l'article 36 du règlement
+n° 165/2014, porte la durée à 56 jours. Écrire « non vérifié » en tête n'excuse pas un
+chiffre faux : un texte que le relais peut servir se lit avant de répondre.
+
 ### Ne pas faire plaisir
 
 **Ne jamais tordre un fait, un texte ou le bon sens pour aller dans le sens de
