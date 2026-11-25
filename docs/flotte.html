@@ -305,13 +305,22 @@
      médicales : ce sont des données du personnel, étrangères à la seule
      gestion du parc. Pour une séance de role « parc », l'onglet disparaît et
      la flotte occupe toute la largeur. */
-  :root[data-role="parc"] #o-con{display:none}
-  :root[data-role="parc"] .onglets{grid-template-columns:1fr}
+  :root[data-role="parc"]:not([data-conducteurs="oui"]) #o-con{display:none}
+  :root[data-role="parc"]:not([data-conducteurs="oui"]) .onglets{grid-template-columns:1fr}
+  /* L'INTERRUPTEUR DE T.E.C (25 novembre 2026). Les fiches conducteur restent
+     cachées au chef de parc ; T.E.C, ou le cabinet, peut décider de les lui
+     montrer. L'interrupteur n'apparaît qu'à eux, jamais au chef de parc. */
+  .droit-parc{display:flex;gap:10px;align-items:center;margin:var(--e3) 0 0;
+    font-size:var(--t2);color:var(--texte-2)}
+  .droit-parc input{width:20px;height:20px;min-height:0;margin:0;flex:none}
+  :root[data-role="parc"] .droit-parc{display:none}
 </style>
 <script>
   try {
     if ((sessionStorage.getItem("seance-role") || localStorage.getItem("seance-role")) === "parc") {
       document.documentElement.setAttribute("data-role", "parc");
+      if (localStorage.getItem("parc-conducteurs-visibles") === "oui")
+        document.documentElement.setAttribute("data-conducteurs", "oui");
       /* Le chef de parc n'a pas accès à la gestion : son retour mène au
          tableau de bord du parc, pour qu'il y ait toujours un retour. */
       document.addEventListener("DOMContentLoaded", function () {
@@ -343,6 +352,26 @@
     <button type="button" id="o-veh" role="tab" aria-selected="true">Véhicules</button>
     <button type="button" id="o-con" role="tab" aria-selected="false">Conducteurs</button>
   </div>
+  <label class="droit-parc" id="droit-parc" hidden>
+    <input type="checkbox" id="conducteurs-parc">
+    <span>Le chef de parc voit les fiches conducteur</span>
+  </label>
+  <script>
+    /* Visible seulement sur le site du client, là où le partage existe, et
+       jamais pour le chef de parc (la feuille de style le cache). Le choix
+       voyage avec le parc : le chef de parc le reçoit à sa page suivante. */
+    (function () {
+      try {
+        if (!localStorage.getItem("synchro-cle")) return;
+        var l = document.getElementById("droit-parc"), c = document.getElementById("conducteurs-parc");
+        l.hidden = false;
+        c.checked = localStorage.getItem("parc-conducteurs-visibles") === "oui";
+        c.addEventListener("change", function () {
+          localStorage.setItem("parc-conducteurs-visibles", c.checked ? "oui" : "non");
+        });
+      } catch (e) {}
+    })();
+  </script>
 
   <div class="compte" id="compte"></div>
 
