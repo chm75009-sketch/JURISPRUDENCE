@@ -58,6 +58,27 @@
   }
   DEST.forEach(function (d) { d._m = norm(d.nom + " " + d.mots).split(/\s+/).filter(Boolean); });
 
+  /* LES MOTS DE PERSONNE NE DÉCIDENT PAS. Relevé le 25 novembre 2026 :
+     « sanctionner un chauffeur » ouvrait la liste des véhicules, parce que
+     « chauffeur » y figure. Ces mots désignent quelqu'un, pas ce qu'on veut
+     faire : ils ne comptent plus que pour un point. */
+  var GENERIQUES = { chauffeur: 1, chauffeurs: 1, conducteur: 1, conducteurs: 1, salarie: 1,
+    salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1 };
+
+  /* CE QUI N'EST PAS DU PARC. Une sanction, un contrat, la paie, un arrêt :
+     le chef de parc n'en a pas la main. Plutôt que de l'envoyer n'importe où,
+     on le lui dit. */
+  var HORS_PARC = ["sanction", "sanctionn", "avertiss", "avertir", "blame", "punir", "punition",
+    "licenci", "renvoy", "virer", "vire", "mise a pied", "faute", "contrat", "embauch", "recrut",
+    "salaire", "paie", "paye", "conge", "demission", "rupture", "absence", "absent", "abandon",
+    "retard", "arret maladie", "maladie", "inaptitude", "visite medicale", "discipl", "convoc",
+    "entretien prealable", "heures supp", "prime", "mutuelle"];
+  function horsParc(texte) {
+    var t = " " + norm(texte).replace(/\s+/g, " ") + " ";
+    for (var i = 0; i < HORS_PARC.length; i++) if (t.indexOf(" " + HORS_PARC[i]) >= 0) return true;
+    return false;
+  }
+
   function score(d, qs) {
     if (!qs.length) return 0;
     var s = 0;
@@ -67,6 +88,7 @@
         if (d._m[i].indexOf(q) === 0) { hit = (d._m[i] === q ? 3 : 2); break; }
       }
       if (!hit) { for (i = 0; i < d._m.length; i++) { if (d._m[i].indexOf(q) > 0) { hit = 1; break; } } }
+      if (GENERIQUES[q] && hit) hit = 1;
       s += hit;
     });
     return s;
@@ -161,6 +183,17 @@
       var texte = champ.value.trim();
       if (!texte) return;
       var liste = classer(texte);
+      /* Une demande hors du parc n'ouvre rien du parc, sauf si elle porte
+         aussi un vrai geste du parc (« réparation », « sinistre »...). */
+      var gestesDuParc = toks(texte).filter(function (q) {
+        return !GENERIQUES[q] && !horsParc(q) && classer(q).some(function (o) { return o.s >= 2; });
+      });
+      if (horsParc(texte) && !gestesDuParc.length) {
+        var h = document.createElement("div"); h.className = "rp-vide";
+        h.textContent = "Cette démarche ne se fait pas depuis l'espace du parc : sanctions, contrats, paie et absences se traitent depuis l'accès de T.E.C. Prévenez la direction.";
+        res.appendChild(h);
+        return;
+      }
       if (liste.length) {
         var best = liste[0].d;
         var c = document.createElement("div"); c.className = "rp-compris";

@@ -33,6 +33,50 @@
        Celui qui dit « licenciement » veut la convocation à l'entretien
        préalable et la lettre : elles existent dans Gérer, et la recherche n'y
        menait pas. Ces trois entrées sont en tête, pour l'emporter à égalité. */
+    /* CE QU'ON DIT MÈNE AU DOCUMENT, PAS À UN AUDIT NI À UNE LISTE.
+
+       Demande du 25 novembre 2026 : « que les mots prononcés renvoient aux
+       parties concernées, et pas n'importe où ». Chaque geste de « Gérer » a
+       désormais son entrée, qui ouvre le document lui-même. Placées en tête,
+       elles l'emportent à égalité sur les audits. */
+    { nom: "Avertissement : sanctionner un salarié", ou: "Gérer, la lettre d'avertissement", page: "gerer.html#avert",
+      mots: "avertissement avertir donner infliger mettre sanction sanctions sanctionner sanctionne blame punir punition recadrer reprimande rappel ordre faute retard retards comportement insubordination insolence refus mauvais travail disciplinaire" },
+    { nom: "Mise à pied disciplinaire", ou: "Gérer, la sanction et sa notification", page: "gerer.html#miseapied",
+      mots: "mise pied disciplinaire sanction sanctionner suspendre suspension jours sans salaire punir" },
+    { nom: "Rupture conventionnelle", ou: "Gérer, la convention et le calendrier", page: "gerer.html#rc",
+      mots: "rupture conventionnelle commun accord amiable separer separation negocier depart homologation partir" },
+    { nom: "Démission", ou: "Gérer, la démission et le préavis", page: "gerer.html#demission",
+      mots: "demission demissionner demissionne quitter partir depart volontaire lettre preavis" },
+    { nom: "Abandon de poste", ou: "Gérer, la mise en demeure", page: "gerer.html#abandon",
+      mots: "abandon poste disparu vient venu revient plus absence injustifiee presomption demission mise demeure" },
+    { nom: "Fin de CDD", ou: "Gérer, le terme du contrat", page: "gerer.html#fincdd",
+      mots: "fin cdd terme echeance renouveler renouvellement indemnite precarite" },
+    { nom: "Suspension ou retrait du permis", ou: "Gérer, le conducteur sans permis", page: "gerer.html#permis",
+      mots: "permis suspension suspendu retrait retire points perdu annule annulation conduire plus" },
+    { nom: "Arrêt maladie", ou: "Gérer, l'arrêt et la reprise", page: "gerer.html#maladie",
+      mots: "arret maladie malade certificat medical indemnites journalieres subrogation prolongation" },
+    { nom: "Accident du travail", ou: "Gérer, la déclaration", page: "gerer.html#at",
+      mots: "accident travail at blesse blessure trajet declaration declarer cpam" },
+    { nom: "Inaptitude", ou: "Gérer, l'avis du médecin du travail", page: "gerer.html#inaptitude",
+      mots: "inaptitude inapte medecin travail avis reclassement" },
+    { nom: "Congés payés", ou: "Gérer, la demande et la réponse", page: "gerer.html#conges",
+      mots: "conges conge payes vacances poser demande refuser accorder" },
+    { nom: "Entretien professionnel", ou: "Gérer, le compte rendu", page: "gerer.html#entretien",
+      mots: "entretien professionnel annuel evaluation bilan six ans formation" },
+    { nom: "Déclaration d'embauche (DPAE)", ou: "Gérer, la DPAE", page: "gerer.html#dpae",
+      mots: "dpae declaration prealable embauche declarer urssaf" },
+    { nom: "Avenant au contrat", ou: "Gérer, l'avenant", page: "gerer.html#avenant",
+      mots: "avenant modifier modification changer changement horaires poste salaire" },
+    { nom: "Titres du conducteur", ou: "Gérer, les titres à contrôler", page: "gerer.html#titres",
+      mots: "titres permis carte conducteur fimo fco qualification verifier controler validite" },
+    { nom: "Autorisation de conduite", ou: "Gérer, l'autorisation", page: "gerer.html#autorisation",
+      mots: "autorisation conduite caces engin chariot nacelle grue" },
+    { nom: "Certificat de travail et solde de tout compte", ou: "Gérer, les documents de fin de contrat", page: "gerer.html#fin",
+      mots: "certificat travail solde tout compte attestation france pole emploi documents fin contrat sortie" },
+    { nom: "Promesse d'embauche", ou: "Gérer, la promesse", page: "gerer.html#promesse",
+      mots: "promesse embauche engagement proposition" },
+    { nom: "Départ ou mise à la retraite", ou: "Gérer, la retraite", page: "gerer.html#retraite",
+      mots: "retraite depart mise retraiter" },
     { nom: "Licenciement pour faute", ou: "Convocation à l'entretien préalable, puis lettre de licenciement", page: "gerer.html#faute",
       mots: "licenciement licencier renvoyer virer congedier rupture depart faute simple grave lourde entretien prealable convocation convoquer procedure lettre notification motif cause reelle serieuse separer mettre dehors remercier preavis indemnite salarie conducteur chauffeur employe" },
     { nom: "Licenciement économique", ou: "Convocation, entretien préalable, lettre", page: "gerer.html#eco",
@@ -60,7 +104,7 @@
     { nom: "Registre du personnel", ou: "Registre du personnel", page: "registre.html",
       mots: "registre personnel unique entree sortie salaries liste effectif embauche depart mouvement declarer dpae ajouter salarie" },
     { nom: "Flotte et conducteurs", ou: "Flotte et conducteurs", page: "flotte.html",
-      mots: "flotte vehicule camion voiture parc conducteur affectation carte grise assurance immatriculation controle technique entretien poids lourd" },
+      mots: "flotte vehicule camion camions voiture ajouter nouveau parc conducteur affectation carte grise assurance immatriculation controle technique entretien poids lourd" },
     { nom: "Forfait en jours", ou: "Forfait en jours", page: "forfait.html",
       mots: "forfait jours cadre autonomie suivi charge entretien convention temps travail jours travailles decompte" },
     { nom: "Décompte des heures", ou: "Décompte des heures", page: "heures.html",
@@ -124,6 +168,12 @@
   }
   DEST.forEach(function (d) { d._m = norm(d.nom + " " + d.mots).split(/\s+/).filter(Boolean); });
 
+  /* LES MOTS DE PERSONNE NE DÉCIDENT PAS. « chauffeur », « salarié » désignent
+     quelqu'un, pas ce qu'on veut faire : ils ne comptent que pour un point,
+     pour que le geste (sanctionner, licencier, déclarer) choisisse l'écran. */
+  var GENERIQUES = { chauffeur: 1, chauffeurs: 1, conducteur: 1, conducteurs: 1, salarie: 1,
+    salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1 };
+
   function score(d, qs) {
     if (!qs.length) return 0;
     var s = 0;
@@ -135,6 +185,7 @@
       if (!hit) {
         for (i = 0; i < d._m.length; i++) { if (d._m[i].indexOf(q) > 0) { hit = 1; break; } }
       }
+      if (GENERIQUES[q] && hit) hit = 1;
       s += hit;
     });
     return s;
