@@ -131,7 +131,9 @@
 
   .corps{border-top:1px solid var(--filet);padding:16px 18px;background:var(--creux)}
   /* LA FICHE EN ONGLETS : simple, on ne voit que ce qu'on cherche. */
-  .vtabs{display:flex;gap:2px;margin:0 0 var(--e3);border-bottom:1px solid var(--filet);overflow-x:auto}
+  /* Cinq onglets depuis l'ajout de « À bord » : sur un téléphone ils passent
+     à la ligne plutôt que de se cacher hors de l'écran. */
+  .vtabs{display:flex;flex-wrap:wrap;gap:2px;margin:0 0 var(--e3);border-bottom:1px solid var(--filet)}
   .vtabs button{flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;
     color:var(--texte-2);font:600 var(--t2) system-ui;padding:11px 13px;min-height:0;width:auto;
     cursor:pointer;white-space:nowrap}
@@ -281,6 +283,23 @@
   .barre2{margin:var(--e3) 0 0}
   .barre2 button{width:100%;min-height:46px;border-radius:var(--r1);font:600 var(--t3) system-ui;padding:0 16px}
   .inter .doux{margin:10px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
+  /* LES PAPIERS À BORD. Une case par papier, son fondement dessous en petit. */
+  .bord{margin:0}
+  .bord-etat{margin:0 0 var(--e3);padding:11px 13px;border-radius:var(--r1);font:600 var(--t2)/1.45 system-ui}
+  .bord-etat.ok{background:var(--vert-clair);color:var(--vert)}
+  .bord-etat.mq{background:var(--rouge-clair);color:var(--rouge)}
+  .bord-etat.jamais{background:var(--ambre-clair);color:var(--ambre)}
+  .bd-g{margin:0 0 var(--e3)}
+  .bd-g .pt{margin:0 0 6px;font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .bd-l{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--filet);cursor:pointer}
+  .bd-l input{flex:0 0 auto;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
+  .bd-t{font:600 var(--t2)/1.4 system-ui;color:var(--texte);min-width:0}
+  .bd-l.si .bd-t{font-weight:400;color:var(--texte-2)}
+  .bd-r{display:block;margin-top:2px;font:400 var(--t1)/1.35 system-ui;color:var(--texte-3)}
+  .bd-date{display:block;margin-top:3px;font:600 var(--t1)/1.35 system-ui;color:var(--vert)}
+  .bd-date.proche{color:var(--ambre)}
+  .bd-date.passe{color:var(--rouge)}
+  .bd-g .doux{margin:8px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
   /* RECHERCHE, FILTRES, TRI. */
   .fbar{margin:var(--e4) 0 0;display:flex;flex-direction:column;gap:10px}
   .fbar #f-rech{font-size:16px;min-height:48px;padding:11px 14px;width:100%;box-sizing:border-box;

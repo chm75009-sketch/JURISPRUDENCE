@@ -611,7 +611,7 @@
   var GR_ECH = { ct: 1, ctMois: 1, lim: 1, limMois: 1, chrono: 1, chronoMois: 1,
     telecUnite: 1, telecUniteJours: 1, assur: 1, assurContrat: 1, licence: 1, licenceFin: 1,
     revision: 1, revisionKm: 1, extincteur: 1 };
-  var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["entretien", "Entretien"], ["pieces", "Documents"]];
+  var VTABS = [["infos", "Infos"], ["ech", "Échéances"], ["bord", "À bord"], ["entretien", "Entretien"], ["pieces", "Documents"]];
 
   var tabParDefaut = "";   /* l'onglet sur lequel ouvrir une fiche, venu de la recherche */
 
@@ -760,6 +760,188 @@
     }).join("") + "</div>";
   }
 
+  /* ─────────────────────────── les papiers à bord ───────────────────────── */
+
+  /* CE QUI DOIT SE TROUVER À BORD, ET LE CONTRÔLE QUI VA AVEC.
+
+     Demande du 25 novembre 2026 : « les papiers que le conducteur doit avoir
+     dans son camion », en trois parties (le conducteur, le véhicule, la
+     marchandise), poids lourd et pas poids lourd, « de manière à ce qu'on
+     puisse contrôler ça aussi ». Chaque véhicule a donc un onglet « À bord » :
+     la liste propre à son genre, une case par papier, la date et l'auteur du
+     dernier contrôle.
+
+     Tout a été lu à la source le 25 novembre 2026, deux lectures concordantes
+     pour chaque article du relais :
+     - code de la route, R. 233-1 (LEGIARTI000053304279), R. 221-10
+       (LEGIARTI000051682550), R. 323-25 (LEGIARTI000034075679), R. 323-23
+       (LEGIARTI000037676165) ;
+     - code des transports, R. 3411-13 (LEGIARTI000048629458), R. 3211-12
+       (LEGIARTI000046177442), R. 3315-2 (LEGIARTI000044326172), R. 3315-11
+       (LEGIARTI000046177527), R. 3312-58 (LEGIARTI000043651176), L. 3314-2
+       (LEGIARTI000027473960) ;
+     - code des assurances, R. 211-14 (LEGIARTI000048547657), qui ne vise plus
+       que les véhicules non immatriculés ;
+     - arrêté du 9 novembre 1999 relatif aux documents de transport ou de
+       location à bord (LEGITEXT000005628727), lu en entier ;
+     - règlement (UE) 165/2014, art. 36, modifié par le règlement (UE)
+       2020/1054 (cinquante-six jours), art. 3, et règlement (CE) 561/2006, art. 2,
+       version consolidée du 22 mai 2024, lus sur le site des publications de
+       l'Union.
+
+     Une ligne « si » ne vaut que dans un cas particulier (camion loué,
+     cabotage...) : elle se coche quand elle s'applique, et ne compte jamais
+     comme un manque. */
+  function papiersBord(v) {
+    var g = v.genre || "";
+    var lourd = g === "pl" || g === "tracteur" || !g || g === "autre";
+    var leger = g === "vl" || g === "vul";
+    var personnes = g === "public10" || g === "commun";
+    var G = [];
+    if (g === "remorque") {
+      G.push({ titre: "La remorque", L: [
+        { k: "cg-rem", t: "Sa carte grise, dans le véhicule qui la tire, si elle pèse plus de 500 kg en charge, ou s'il s'agit d'une semi-remorque",
+          r: "code de la route, R. 233-1, 2°" },
+      ] });
+      return G;
+    }
+    var C = [];
+    if (lourd) {
+      C.push({ k: "permis", t: "Le permis de conduire C ou CE, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", f: "permisFin" });
+      C.push({ k: "fimo", t: "La carte de qualification de conducteur (FIMO ou FCO), ou le permis s'il porte le code 95", r: "code des transports, R. 3315-2", f: "carteQualif" });
+      C.push({ k: "carte", t: "La carte conducteur du chronotachygraphe", r: "code des transports, R. 3315-11, 3°, g", f: "carteCond" });
+      C.push({ k: "tickets", si: true, t: "Si, sur les 56 derniers jours, il a imprimé un ticket, écrit à la main ou conduit un camion à disques : ces tickets, ces notes et ces disques", r: "règlement (UE) 165/2014, art. 36" });
+      C.push({ k: "attest", si: true, t: "S'il n'est pas ressortissant de l'Espace économique européen et fait de l'international ou du cabotage : l'attestation de conducteur", r: "code des transports, R. 3411-13, 4°" });
+    } else if (leger) {
+      C.push({ k: "permis", t: "Le permis de conduire, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", f: "permisFin" });
+      if (g === "vul") {
+        C.push({ k: "livret", t: "Le livret individuel de contrôle, rempli chaque jour, ou l'horaire de service pour une tournée à horaire fixe avec retour chaque soir", r: "code des transports, R. 3312-58" });
+        C.push({ k: "carte25", si: true, t: "Si le véhicule dépasse 2,5 t et fait de l'international ou du cabotage : la carte conducteur, ces transports relevant depuis le 1er juillet 2026 des temps de conduite européens et du tachygraphe", r: "règlement (CE) 561/2006, art. 2, 1, aa ; règlement (UE) 165/2014, art. 3" });
+      }
+    } else if (personnes) {
+      C.push({ k: "permis", t: "Le permis de conduire de la catégorie du véhicule, en cours de validité", r: "code de la route, R. 233-1, 1°", f: "permisFin" });
+      if (g === "commun") {
+        C.push({ k: "fimo", t: "La carte de qualification de conducteur, ou le permis s'il porte le code 95", r: "code des transports, R. 3315-2", f: "carteQualif" });
+        C.push({ k: "carte", t: "La carte conducteur du chronotachygraphe", r: "code des transports, R. 3315-11, 3°, g", f: "carteCond" });
+      }
+    }
+    G.push({ titre: "Le conducteur", L: C });
+
+    var V = [{ k: "cg", t: "La carte grise du véhicule", r: "code de la route, R. 233-1, 2°" },
+      { k: "cg-rem", si: true, t: "S'il tire une remorque de plus de 500 kg en charge ou une semi-remorque : la carte grise de celle-ci", r: "code de la route, R. 233-1, 2°" }];
+    if (lourd || g === "commun") V.push({ k: "ct", t: "Le procès-verbal du dernier contrôle technique", r: "code de la route, R. 233-1, 7°, et R. 323-23 ou R. 323-25" });
+    V.push({ k: "triangle", t: "Le triangle de présignalisation", r: "code de la route, R. 233-1, 8°" });
+    V.push({ k: "gilet", t: "Le gilet de haute visibilité", r: "code de la route, R. 233-1, 9°" });
+    G.push({ titre: "Le véhicule", L: V,
+      note: "L'attestation d'assurance n'a plus à être à bord : le code des assurances ne l'exige que pour les véhicules sans immatriculation (R. 211-14)." +
+        (leger ? " Le procès-verbal du contrôle technique n'a pas non plus à être présenté au-dessous de 3,5 t (R. 233-1, 7°)." : "") });
+
+    if (!personnes) {
+      var M = [
+        { k: "licence", t: lourd ? "La copie conforme de la licence communautaire"
+            : "La copie conforme de la licence de transport intérieur, ou de la licence communautaire « inférieur ou égal à 3,5 tonnes » à l'international",
+          r: "code des transports, R. 3411-13, 1°, et R. 3211-12" },
+        { k: "lv", t: "La lettre de voiture, sur papier ou sur téléphone, et l'état récapitulatif s'il y a plusieurs lots", r: "code des transports, R. 3411-13, 2° ; arrêté du 9 novembre 1999, art. 4 et 5" },
+        { k: "loc", si: true, t: "Si le véhicule est loué : le contrat ou la feuille de location", r: "code des transports, R. 3411-13, 3° ; arrêté du 9 novembre 1999, art. 7" },
+        { k: "cabotage", si: true, t: "En cabotage : la lettre de voiture du transport international et celle de chaque opération de cabotage", r: "code des transports, R. 3411-13, 5°" },
+        { k: "contrat", si: true, t: "Si le véhicule, immatriculé dans un pays de l'Union, est loué dans un autre : le contrat de travail du conducteur, ou une fiche de paie de moins de trois mois", r: "code des transports, R. 3411-13, 6°" },
+      ];
+      G.push({ titre: "La marchandise (transport pour autrui)", L: M,
+        note: "Pour un transport fait pour le compte de l'entreprise elle-même, la lettre de voiture et la licence sont remplacées par la facture, le bon d'enlèvement ou le bon de livraison (arrêté du 9 novembre 1999, art. 2)." });
+    }
+    return G;
+  }
+
+  var QUI_BORD = { tec: "T.E.C", lea: "le cabinet", parc: "le chef de parc" };
+  function quiControle() {
+    var q = "";
+    try { q = window.localStorage.getItem("journal-qui") || ""; } catch (e) {}
+    return QUI_BORD[q] || "";
+  }
+  function bordManquants(v) {
+    var c = (v.bord && v.bord.c) || {}, n = 0;
+    papiersBord(v).forEach(function (gr) { gr.L.forEach(function (it) { if (!it.si && !c[it.k]) n++; }); });
+    return n;
+  }
+
+  function bordHtml(v) {
+    var b = v.bord || {}, c = b.c || {};
+    var f = net(v.conducteur) ? fiche(v.conducteur) : {};
+    var nomC = "";
+    if (net(v.conducteur)) salaries(true).forEach(function (s) { if (s.id === v.conducteur) nomC = s.nom; });
+    var n = bordManquants(v);
+    var tete;
+    if (b.le) {
+      tete = '<div class="bord-etat ' + (n ? "mq" : "ok") + '">Dernier contrôle le ' + ech(enFrancais(b.le)) +
+        (b.par ? ", par " + ech(b.par) : "") + " : " +
+        (n ? n + " papier" + (n > 1 ? "s" : "") + " manquant" + (n > 1 ? "s" : "") : "tout est à bord") + "</div>";
+    } else {
+      tete = '<div class="bord-etat jamais">Jamais contrôlé. Cochez ce qui est à bord, puis enregistrez le contrôle.</div>';
+    }
+    var corps = papiersBord(v).map(function (gr) {
+      var lignes = gr.L.map(function (it) {
+        var date = "";
+        if (it.f && net(f[it.f])) {
+          var j = joursAvant(f[it.f]);
+          date = '<span class="bd-date' + (j < 0 ? " passe" : (j <= 30 ? " proche" : "")) + '">' +
+            (j < 0 ? "Plus valable depuis le " : "Valable jusqu'au ") + ech(enFrancais(f[it.f])) +
+            (nomC ? " (" + ech(nomC) + ")" : "") + "</span>";
+        }
+        return '<label class="bd-l' + (it.si ? " si" : "") + '">' +
+          '<input type="checkbox" data-bord="' + ech(v.id) + "|" + ech(it.k) + '"' + (c[it.k] ? " checked" : "") + ">" +
+          '<span class="bd-t">' + ech(it.t) + '<span class="bd-r">' + ech(it.r) + "</span>" + date + "</span></label>";
+      }).join("");
+      return '<div class="bd-g"><p class="pt">' + ech(gr.titre) + "</p>" + lignes +
+        (gr.note ? '<p class="doux">' + ech(gr.note) + "</p>" : "") + "</div>";
+    }).join("");
+    return '<div class="bord">' + tete + corps +
+      '<div class="barre2"><button type="button" data-bord-ok="' + ech(v.id) + '">Enregistrer le contrôle d\'aujourd\'hui</button></div>' +
+      '<div class="barre2"><button type="button" class="second" data-bord-raz="' + ech(v.id) + '">Nouveau contrôle : tout décocher</button></div>' +
+      "</div>";
+  }
+
+  function brancherBord(cadre, idV) {
+    Array.prototype.forEach.call(cadre.querySelectorAll("[data-bord]"), function (el) {
+      el.addEventListener("change", function () {
+        var k = el.getAttribute("data-bord").split("|")[1];
+        var T = vehicules();
+        T.forEach(function (x) {
+          if (x.id !== idV) return;
+          x.bord = x.bord || {}; x.bord.c = x.bord.c || {};
+          if (el.checked) x.bord.c[k] = true; else delete x.bord.c[k];
+        });
+        garderVehicules(T);
+        var v = null; T.forEach(function (x) { if (x.id === idV) v = x; });
+        var e = cadre.querySelector(".bord-etat");
+        if (v && e && v.bord && v.bord.le) {
+          var n = bordManquants(v);
+          e.className = "bord-etat " + (n ? "mq" : "ok");
+          e.textContent = "Dernier contrôle le " + enFrancais(v.bord.le) + (v.bord.par ? ", par " + v.bord.par : "") + " : " +
+            (n ? n + " papier" + (n > 1 ? "s" : "") + " manquant" + (n > 1 ? "s" : "") : "tout est à bord");
+        }
+      });
+    });
+    var ok = cadre.querySelector("[data-bord-ok]");
+    if (ok) ok.addEventListener("click", function () {
+      var T = vehicules();
+      T.forEach(function (x) {
+        if (x.id !== idV) return;
+        x.bord = x.bord || {}; x.bord.c = x.bord.c || {};
+        x.bord.le = iso(new Date()); x.bord.par = quiControle();
+      });
+      garderVehicules(T);
+      rendre();
+    });
+    var raz = cadre.querySelector("[data-bord-raz]");
+    if (raz) raz.addEventListener("click", function () {
+      if (!window.confirm("Tout décocher pour commencer un nouveau contrôle ? La date du dernier contrôle est gardée.")) return;
+      var T = vehicules();
+      T.forEach(function (x) { if (x.id === idV) { x.bord = x.bord || {}; x.bord.c = {}; } });
+      garderVehicules(T);
+      rendre();
+    });
+  }
+
   function corpsVehicule(v) {
     var tab = vtabActif[v.id] || tabParDefaut || "infos";
     var onglets = '<div class="vtabs" role="tablist">' + VTABS.map(function (t) {
@@ -769,6 +951,7 @@
     var pan = "";
     if (tab === "infos") pan = sectionsHtml(v, "infos");
     else if (tab === "ech") pan = sectionsHtml(v, "ech");
+    else if (tab === "bord") pan = bordHtml(v);
     else if (tab === "entretien") pan = interventionsHtml(v);
     else pan = piecesHtml(v) + '<div class="actions"><button type="button" class="second" data-sup="' +
       ech(v.id) + '">Retirer ce véhicule</button></div>';
@@ -900,6 +1083,7 @@
       brancherPieces(cadre, v.id);
       brancherPhoto(cadre, v.id);
       brancherInterventions(cadre, v.id);
+      brancherBord(cadre, v.id);
     });
   }
 
