@@ -142,23 +142,51 @@
     return n >= court.length - 1 && "ersx".indexOf(court.charAt(court.length - 1)) >= 0;
   }
 
+  /* LES MOTS MAL TAPÉS. Relevé le 25 novembre 2026 : « entretine
+     prépalable » ne menait nulle part. Une lettre de trop, de moins, changée
+     ou inversée (deux à partir de huit lettres) : le mot est reconnu comme
+     celui qu'on voulait écrire. Seulement pour les mots de cinq lettres et
+     plus, pour que « vol » ne devienne pas « col ». */
+  function proche(q, m) {
+    if (q.length < 5 || m.length < 5) return false;
+    var max = Math.min(q.length, m.length) >= 8 ? 2 : 1;
+    if (Math.abs(q.length - m.length) > max) return false;
+    var a = [], i, j;
+    for (i = 0; i <= q.length; i++) { a[i] = [i]; }
+    for (j = 0; j <= m.length; j++) a[0][j] = j;
+    for (i = 1; i <= q.length; i++) {
+      var minLigne = 99;
+      for (j = 1; j <= m.length; j++) {
+        var c = q.charAt(i - 1) === m.charAt(j - 1) ? 0 : 1;
+        var v = Math.min(a[i - 1][j] + 1, a[i][j - 1] + 1, a[i - 1][j - 1] + c);
+        if (i > 1 && j > 1 && q.charAt(i - 1) === m.charAt(j - 2) && q.charAt(i - 2) === m.charAt(j - 1)) v = Math.min(v, a[i - 2][j - 2] + 1);
+        a[i][j] = v; if (v < minLigne) minLigne = v;
+      }
+      if (minLigne > max) return false;
+    }
+    return a[q.length][m.length] <= max;
+  }
+
   function score(d, qs) {
     if (!qs.length) return 0;
-    var s = 0;
+    var s = 0, lus = [];
     qs.forEach(function (q) {
-      var hit = 0, i;
+      var hit = 0, i, lu = q;
       for (i = 0; i < d._m.length; i++) {
         if (d._m[i] === q) { hit = 3; break; }
-        if (!hit && d._m[i].indexOf(q) === 0) hit = 2;
+        if (!hit && d._m[i].indexOf(q) === 0) { hit = 2; lu = d._m[i]; }
       }
       if (!hit) {
-        for (i = 0; i < d._m.length; i++) { if (memeRacine(q, d._m[i])) { hit = 2; break; } }
+        for (i = 0; i < d._m.length; i++) { if (memeRacine(q, d._m[i])) { hit = 2; lu = d._m[i]; break; } }
       }
       if (!hit) { for (i = 0; i < d._m.length; i++) { if (d._m[i].indexOf(q) > 0) { hit = 1; break; } } }
+      if (!hit) {
+        for (i = 0; i < d._m.length; i++) { if (proche(q, d._m[i])) { hit = 2; lu = d._m[i]; break; } }
+      }
       if (GENERIQUES[q] && hit) hit = 1;
-      s += hit;
+      s += hit; lus.push(lu);
     });
-    return s ? s + expressions(d, qs) : 0;
+    return s ? s + expressions(d, lus) : 0;
   }
   function classer(texte) {
     var qs = toks(texte);
