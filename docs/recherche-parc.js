@@ -52,7 +52,10 @@
       mots: "tableau bord synthese resume vue ensemble accueil indicateur indicateurs kpi structure surveillance etat general bilan point chiffres statistiques stats graphique" },
     { nom: "Paramètres du parc", ou: "Listes et réglages",
       page: "parc-parametres.html",
-      mots: "ajouter liste parametres parametre reglages reglage regler listes types type depenses garages garage entreprises fournisseurs prestataires configurer configuration personnaliser categories" }
+      mots: "ajouter liste parametres parametre reglages reglage regler listes types type depenses garages garage entreprises fournisseurs prestataires configurer configuration personnaliser categories" },
+    { nom: "Contrôler les papiers à bord", ou: "Ouvrir un véhicule, onglet À bord",
+      page: "flotte.html?faire=bord",
+      mots: "papiers bord documents carte grise licence copie conforme lettre voiture triangle gilet proces verbal controle controler verifier cocher manque manquant" }
   ];
 
   /* Quand rien n'est compris, on propose les trois gestes les plus courants. */

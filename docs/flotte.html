@@ -299,6 +299,17 @@
   .bd-date{display:block;margin-top:3px;font:600 var(--t1)/1.35 system-ui;color:var(--vert)}
   .bd-date.proche{color:var(--ambre)}
   .bd-date.passe{color:var(--rouge)}
+  /* Les papiers personnels du chauffeur, en tête de sa fiche. */
+  .pap{margin:0 0 var(--e4);padding:0 0 var(--e3);border-bottom:1px solid var(--filet)}
+  .pap .pt{margin:0 0 8px;font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .pf-choix{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 var(--e3)}
+  .pf-choix button{min-height:58px;border:2px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);
+    color:var(--texte);font:700 var(--t2)/1.2 system-ui;padding:8px;width:100%;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .pf-choix button small{display:block;margin-top:3px;font:400 var(--t1)/1.2 system-ui;color:var(--texte-3)}
+  .pf-choix button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-clair);color:var(--accent)}
+  .pf-nb{margin:0 0 8px;font:700 var(--t3)/1.3 system-ui;color:var(--texte)}
+  .pap .doux{margin:0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
   .bd-g .doux{margin:8px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
   /* RECHERCHE, FILTRES, TRI. */
   .fbar{margin:var(--e4) 0 0;display:flex;flex-direction:column;gap:10px}

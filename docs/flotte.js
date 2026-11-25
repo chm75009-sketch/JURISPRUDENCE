@@ -1030,7 +1030,9 @@
     }
     var rappel = tabParDefaut === "entretien"
       ? '<p class="rappel-faire">Choisissez le camion concerné : sa fiche s\'ouvre sur l\'onglet Entretien, prête pour une intervention.</p>'
-      : "";
+      : (tabParDefaut === "bord"
+        ? '<p class="rappel-faire">Choisissez le camion à contrôler : sa fiche s\'ouvre sur l\'onglet À bord, la liste des papiers à cocher.</p>'
+        : "");
     hote.innerHTML = rappel + L.map(function (v) {
       var E = echeancesVehicule(v), p = pire(E);
       var genre = "";
@@ -1353,6 +1355,118 @@
      d'atelier et l'assistante de direction, et gardait les salariés sortis.
      Les sortis ne sont plus suivis ; les conducteurs viennent en tête, les
      autres salariés suivent, pour leurs seules visites médicales. */
+  /* LES PAPIERS PERSONNELS DU CHAUFFEUR, SELON SON PROFIL.
+
+     Demande du 25 novembre 2026 : en tête de la fiche du chauffeur, « poids
+     lourd » ou « pas poids lourd », et la liste de ses papiers s'ouvre
+     aussitôt, à cocher, avec la date du contrôle. Le profil se déduit des
+     catégories du permis quand elles sont saisies (C, C1, CE, C1E), et se
+     change d'un geste. Les fondements sont ceux de l'onglet « À bord », lus à
+     la source le même jour : R. 233-1 du code de la route ; R. 3315-2,
+     R. 3315-11, R. 3411-13 et R. 3312-58 du code des transports ; règlement
+     (UE) 165/2014, art. 3 et 36 ; règlement (CE) 561/2006, art. 2. */
+  function profilChauffeur(f) {
+    if (f.profil === "pl" || f.profil === "leger") return f.profil;
+    var cat = net(f.permisCat).toUpperCase();
+    if (!cat) return "";
+    return /(^|[^A-Z])C1?E?([^A-Z]|$)/.test(cat) ? "pl" : "leger";
+  }
+  function finFco(f) {
+    if (net(f.carteQualif)) return f.carteQualif;
+    return f.fco ? plusMois(f.fco, f.fcoMois || 60) : "";
+  }
+  function papiersChauffeur(profil, f) {
+    if (profil === "pl") return [
+      { k: "permis", t: "Le permis de conduire C ou CE, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", d: f.permisFin },
+      { k: "fimo", t: "La carte de qualification de conducteur (FIMO ou FCO), ou le permis s'il porte le code 95", r: "code des transports, R. 3315-2", d: finFco(f) },
+      { k: "carte", t: "La carte conducteur du chronotachygraphe", r: "code des transports, R. 3315-11, 3°, g", d: f.carteCond },
+      { k: "tickets", si: true, t: "Si, sur les 56 derniers jours, il a imprimé un ticket, écrit à la main ou conduit un camion à disques : ces tickets, ces notes et ces disques", r: "règlement (UE) 165/2014, art. 36" },
+      { k: "attest", si: true, t: "S'il n'est pas ressortissant de l'Espace économique européen et fait de l'international ou du cabotage : l'attestation de conducteur", r: "code des transports, R. 3411-13, 4°" },
+    ];
+    return [
+      { k: "permis", t: "Le permis de conduire B, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", d: f.permisFin },
+      { k: "livret", t: "Le livret individuel de contrôle, rempli chaque jour, ou l'horaire de service pour une tournée à horaire fixe avec retour chaque soir", r: "code des transports, R. 3312-58" },
+      { k: "carte25", si: true, t: "Si le véhicule dépasse 2,5 t et fait de l'international ou du cabotage : la carte conducteur du chronotachygraphe", r: "règlement (CE) 561/2006, art. 2, 1, aa ; règlement (UE) 165/2014, art. 3" },
+    ];
+  }
+  function papiersEtat(P, c) {
+    var n = 0; P.forEach(function (it) { if (!it.si && !c[it.k]) n++; });
+    return n;
+  }
+  function papiersTexte(p, n) {
+    return "Dernier contrôle le " + enFrancais(p.le) + (p.par ? ", par " + p.par : "") + " : " +
+      (n ? n + " papier" + (n > 1 ? "s" : "") + " manquant" + (n > 1 ? "s" : "") : "il a tout sur lui");
+  }
+
+  function papiersChauffeurHtml(s, f) {
+    var profil = profilChauffeur(f);
+    var choix = '<div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
+      '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (profil === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C ou CE</small></button>" +
+      '<button type="button" data-profil="' + ech(s.id) + '|leger"' + (profil === "leger" ? ' aria-pressed="true"' : "") + ">Pas poids lourd<small>permis B</small></button></div>";
+    if (!profil) {
+      return '<div class="pap"><p class="pt">Ses papiers personnels</p>' + choix +
+        '<p class="doux">Choisissez son profil : la liste de ses papiers s\'ouvre aussitôt.</p></div>';
+    }
+    var P = papiersChauffeur(profil, f), p = f.papiers || {}, c = p.c || {};
+    var nb = P.filter(function (it) { return !it.si; }).length;
+    var n = papiersEtat(P, c);
+    var tete = p.le
+      ? '<div class="bord-etat ' + (n ? "mq" : "ok") + '">' + ech(papiersTexte(p, n)) + "</div>"
+      : '<div class="bord-etat jamais">Jamais contrôlé. Cochez ce qu\'il a sur lui, puis enregistrez le contrôle.</div>';
+    var lignes = P.map(function (it) {
+      var date = "";
+      if (net(it.d)) {
+        var j = joursAvant(it.d);
+        date = '<span class="bd-date' + (j < 0 ? " passe" : (j <= 30 ? " proche" : "")) + '">' +
+          (j < 0 ? "Plus valable depuis le " : "Valable jusqu'au ") + ech(enFrancais(it.d)) + "</span>";
+      }
+      return '<label class="bd-l' + (it.si ? " si" : "") + '">' +
+        '<input type="checkbox" data-pap="' + ech(s.id) + "|" + ech(it.k) + '"' + (c[it.k] ? " checked" : "") + ">" +
+        '<span class="bd-t">' + ech(it.t) + '<span class="bd-r">' + ech(it.r) + "</span>" + date + "</span></label>";
+    }).join("");
+    return '<div class="pap"><p class="pt">Ses papiers personnels</p>' + choix +
+      '<p class="pf-nb">' + nb + " documents à avoir sur lui" + "</p>" + tete +
+      '<div class="bd-g">' + lignes + "</div>" +
+      '<div class="barre2"><button type="button" data-pap-ok="' + ech(s.id) + '">Enregistrer le contrôle d\'aujourd\'hui</button></div>' +
+      '<div class="barre2"><button type="button" class="second" data-pap-raz="' + ech(s.id) + '">Nouveau contrôle : tout décocher</button></div>' +
+      "</div>";
+  }
+
+  function brancherPapiers(cadre, sid) {
+    Array.prototype.forEach.call(cadre.querySelectorAll("[data-profil]"), function (b) {
+      b.addEventListener("click", function () {
+        var f = fiche(sid); f.profil = b.getAttribute("data-profil").split("|")[1];
+        garderFiche(sid, f); rendre();
+      });
+    });
+    Array.prototype.forEach.call(cadre.querySelectorAll("[data-pap]"), function (el) {
+      el.addEventListener("change", function () {
+        var k = el.getAttribute("data-pap").split("|")[1];
+        var f = fiche(sid); f.papiers = f.papiers || {}; f.papiers.c = f.papiers.c || {};
+        if (el.checked) f.papiers.c[k] = true; else delete f.papiers.c[k];
+        garderFiche(sid, f);
+        var e = cadre.querySelector(".pap .bord-etat");
+        if (e && f.papiers.le) {
+          var n = papiersEtat(papiersChauffeur(profilChauffeur(f), f), f.papiers.c);
+          e.className = "bord-etat " + (n ? "mq" : "ok");
+          e.textContent = papiersTexte(f.papiers, n);
+        }
+      });
+    });
+    var ok = cadre.querySelector("[data-pap-ok]");
+    if (ok) ok.addEventListener("click", function () {
+      var f = fiche(sid); f.papiers = f.papiers || {}; f.papiers.c = f.papiers.c || {};
+      f.papiers.le = iso(new Date()); f.papiers.par = quiControle();
+      garderFiche(sid, f); rendre();
+    });
+    var raz = cadre.querySelector("[data-pap-raz]");
+    if (raz) raz.addEventListener("click", function () {
+      if (!window.confirm("Tout décocher pour commencer un nouveau contrôle ? La date du dernier contrôle est gardée.")) return;
+      var f = fiche(sid); f.papiers = f.papiers || {}; f.papiers.c = {};
+      garderFiche(sid, f); rendre();
+    });
+  }
+
   var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
   function rendreConducteurs() {
     var G = salaries().filter(function (s) { return !s.sor; });
@@ -1372,7 +1486,7 @@
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
         '<div class="ech">' + pastilles(E) + "</div>" +
-        (est ? '<div class="corps"><div class="gr">' +
+        (est ? '<div class="corps">' + (CONDUIT.test(s.emp) ? papiersChauffeurHtml(s, f) : "") + '<div class="gr">' +
           CHAMPS_C.map(function (ch) {
             var val = f[ch.c];
             if ((val == null || val === "") && ch.c === "fcoMois") val = 60;
@@ -1390,6 +1504,7 @@
         function (c, val, avant) {
           if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
         });
+      brancherPapiers(cadre, s.id);
     });
   }
 
@@ -2131,6 +2246,8 @@
          entretien », un rappel en tête, et toute fiche ouverte tombe d'emblée
          sur son onglet Entretien. */
       if (pr.get("faire") === "entretien") tabParDefaut = "entretien";
+      /* De même pour le contrôle des papiers à bord. */
+      if (pr.get("faire") === "bord") tabParDefaut = "bord";
       /* VENU DES DÉPENSES : OUVRIR UNE FICHE PRÉCISE. Un clic sur une dépense
          mène ici avec l'immatriculation, et l'onglet à montrer. On filtre sur
          cette immatriculation, on déplie sa fiche sur l'onglet voulu, et on y
@@ -2158,6 +2275,10 @@
     });
 
     rendre();
+    /* VENU DE LA RECHERCHE « PAPIERS DU CHAUFFEUR » : la liste des
+       conducteurs s'ouvre directement. */
+    try { if (new URLSearchParams(location.search).get("vue") === "conducteurs" && !$("o-con").hidden &&
+      window.getComputedStyle($("o-con")).display !== "none") onglet(false); } catch (e) {}
 
     /* On amène l'écran sur la fiche ouverte depuis les dépenses. */
     if (viserImmat) {
