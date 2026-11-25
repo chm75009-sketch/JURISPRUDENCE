@@ -238,6 +238,13 @@
     { c: "telecCarte", lib: "Dernier téléchargement de la carte conducteur", t: "date" },
     { c: "telecCarteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
     { c: "visitePermisFin", lib: "Visite médicale du permis, valable jusqu'au", t: "date" },
+    /* LE SALARIÉ ÉTRANGER (25 novembre 2026) : la fin de son titre de séjour,
+       et, s'il conduit avec un permis étranger, le pays et la date d'arrivée
+       en France, qui fixe le délai d'un an de l'article R. 222-3 du code de la
+       route (LEGIARTI000035977232, lu à la source le même jour). */
+    { c: "titreFin", lib: "Titre de séjour, valable jusqu'au", t: "date" },
+    { c: "permisPays", lib: "Permis étranger, pays de délivrance", t: "text" },
+    { c: "arrivee", lib: "Arrivée en France le", t: "date" },
     { c: "suivi", lib: "Suivi médical du travail", t: "select", opts: SUIVIS, large: true },
     { c: "visiteTravail", lib: "Dernière visite avec le médecin du travail", t: "date" },
     { c: "visiteInter", lib: "Dernière visite intermédiaire", t: "date" },
@@ -407,6 +414,9 @@
       "périodicité usuelle de vingt-huit jours, fixée par arrêté, non relue par l'application : corrigez-la si votre protocole diffère");
     pose("Carte de qualification", f.carteQualif);
     pose("Visite du permis", f.visitePermisFin);
+    pose("Titre de séjour", f.titreFin);
+    pose("Échange du permis étranger", net(f.permisPays) && f.arrivee ? plusMois(f.arrivee, 12) : "",
+      "R. 222-3 du code de la route : le permis étranger n'est reconnu qu'un an après l'installation en France");
     /* Le code du travail, lui, est lu à la source : cinq ans au plus pour le
        renouvellement de la visite d'information et de prévention (R. 4624-16),
        quatre ans au plus en suivi renforcé, avec une visite intermédiaire à

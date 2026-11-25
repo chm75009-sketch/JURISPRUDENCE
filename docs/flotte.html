@@ -310,6 +310,37 @@
   .pf-choix button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-clair);color:var(--accent)}
   .pf-nb{margin:0 0 8px;font:700 var(--t3)/1.3 system-ui;color:var(--texte)}
   .pap .doux{margin:0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
+  /* LES FICHES REÇUES DES SALARIÉS, en tête de l'onglet Conducteurs. */
+  .fr-bloc{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r2);padding:16px;margin:0 0 var(--e4)}
+  .fr-tete{margin:0 0 8px}
+  .fr-t{font:700 var(--t3)/1.3 system-ui;color:var(--accent)}
+  .fr-doux{margin:0 0 12px;font:400 var(--t2)/1.45 system-ui;color:var(--texte-2)}
+  .fr-msg{margin:10px 0;padding:10px 12px;border-radius:var(--r1);background:var(--ambre-clair);color:var(--ambre);font:600 var(--t1)/1.45 system-ui}
+  .fr-b{display:block;width:100%;min-height:48px;border:0;border-radius:var(--r1);background:var(--accent);color:#fff;
+    font:600 var(--t2) system-ui;padding:0 14px;margin:8px 0 0;cursor:pointer}
+  .fr-b.second{background:var(--surface);color:var(--accent);border:1px solid var(--accent)}
+  .fr-lien .fr-l{display:block;font:600 var(--t1)/1.3 system-ui;color:var(--texte-3);margin:0 0 6px}
+  .fr-lien input{width:100%;box-sizing:border-box;font-size:14px;min-height:44px;padding:9px 11px;border:1px solid var(--filet-2);
+    border-radius:var(--r1);background:var(--creux);color:var(--texte)}
+  .fr-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .fr-2 .fr-b{margin-top:8px}
+  .fr-it{border-top:1px solid var(--filet);margin-top:12px}
+  .fr-ligne{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:12px 0;text-align:left;cursor:pointer;color:var(--texte)}
+  .fr-n{flex:1;min-width:0;font:700 var(--t2)/1.3 system-ui}
+  .fr-n small{display:block;font:400 var(--t1)/1.35 system-ui;color:var(--texte-3);margin-top:2px}
+  .fr-it.fait .fr-n small{color:var(--vert)}
+  .fr-fl{color:var(--texte-3);font-size:18px}
+  .fr-det{padding:0 0 14px}
+  .fr-al{background:var(--rouge-clair);color:var(--rouge);border-radius:var(--r1);padding:10px 12px;margin:0 0 12px;font:600 var(--t1)/1.45 system-ui}
+  .fr-al p{margin:0 0 4px}.fr-al p:last-child{margin:0}
+  .fr-tab{width:100%;border-collapse:collapse;font:400 var(--t1)/1.4 system-ui}
+  .fr-tab th{text-align:left;font-weight:400;color:var(--texte-3);padding:7px 10px 7px 0;border-bottom:1px solid var(--filet);width:48%;vertical-align:top}
+  .fr-tab td{font-weight:600;color:var(--texte);padding:7px 0;border-bottom:1px solid var(--filet);vertical-align:top}
+  .fr-st{margin:14px 0 8px;font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+  .fr-phs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .fr-ph{display:block;text-decoration:none;color:var(--texte-2);font:400 12px/1.3 system-ui}
+  .fr-ph img{display:block;width:100%;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--filet);margin-bottom:4px}
+  .fr-sig{display:block;width:100%;max-width:340px;border:1px solid var(--filet);border-radius:10px;background:#fff;margin:0 0 6px}
   .bd-g .doux{margin:8px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
   /* RECHERCHE, FILTRES, TRI. */
   .fbar{margin:var(--e4) 0 0;display:flex;flex-direction:column;gap:10px}
@@ -486,6 +517,7 @@
   </section>
 
   <section id="e-con" hidden>
+    <div id="fiches-recues"></div>
     <div id="conducteurs"></div>
     <p class="rien" id="con-vide" hidden>Le registre du personnel ne porte encore aucun salarié.
       C'est lui qui donne les noms des conducteurs :
@@ -521,6 +553,7 @@
 <script src="version.js"></script>
 <script src="parc-parametres.js"></script>
 <script src="flotte.js"></script>
+<script src="fiches-recues.js"></script>
 <script>
 (function () {
   "use strict";
