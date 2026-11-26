@@ -221,6 +221,7 @@
      du questionnaire qui n'avaient pas leur place dans la fiche. */
   var OUI_NON = [["", "- à préciser -"], ["oui", "Oui"], ["non", "Non"]];
   var CHAMPS_C = [
+    { c: "roulant", sal: true, lib: "Personnel roulant (conduit pour T.E.C)", t: "select", opts: OUI_NON },
     { c: "tel", sal: true, lib: "Téléphone", t: "text" },
     { c: "nir", sal: true, lib: "Numéro de sécurité sociale", t: "text" },
     { c: "ue", sal: true, lib: "Ressortissant de l'Union européenne ou de l'EEE", t: "select", opts: OUI_NON },
