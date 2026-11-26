@@ -119,7 +119,21 @@
   .org-cols .part h2{font-size:16px;padding:10px 12px}
   @media (max-width:420px){.org-cols .part .lig .ch{display:none}}
   .org-cols .part > :last-child{border-radius:0 0 15px 15px}
-  @media (max-width:899px){.org-cols .p-ech{grid-column:1/-1}}
+  details.part{padding:0;border-top:1px solid var(--filet)}
+  details.part > summary{display:flex;align-items:center;gap:8px;padding:0 12px 0 0;min-height:0;border-radius:15px;margin:0}
+  details.part > summary::before{content:none;display:none}
+  details.part > summary::marker{content:""}
+  details.part > summary h2{flex:1;background:none !important;color:#fff;padding:12px}
+  .p-fiche > summary{background:#2e6b4f}.p-dossier > summary{background:#1f3864}.p-tachy > summary{background:#5b3f8c}.p-ech > summary{background:#8a1c16}
+  details.part[open] > summary{border-radius:15px 15px 0 0}
+  details.part > summary .puce{background:#fff}
+  details.part > summary .puce.clig{background:#fff;color:#b3261e}
+  details.part > summary .fl{flex:none;width:9px;height:9px;border-right:2px solid #fff;border-bottom:2px solid #fff;
+    transform:rotate(45deg);margin:0 4px 4px 2px;transition:transform .15s}
+  details.part[open] > summary .fl{transform:rotate(-135deg);margin:4px 4px 0 2px}
+  details.part .lig:first-of-type{border-top:0}
+  /* Sur un téléphone, les quatre menus l'un sous l'autre, sur toute la largeur. */
+  @media (max-width:899px){.org-cols{grid-template-columns:1fr}}
   /* Les quatre parties de la page du salarié, aux couleurs du schéma. */
   .part{margin:16px 0 0;border:1px solid var(--filet);border-radius:16px;overflow:hidden;background:var(--surface)}
   .part h2{margin:0;padding:11px 14px;font:700 17px/1.2 system-ui;color:#fff}
@@ -366,6 +380,9 @@
   /* LA PAGE DU SALARIÉ (26 novembre 2026), d'après le schéma dessiné et
      validé ce jour-là : sa Fiche, son Dossier, son Suivi tachygraphe, ses
      Échéances. Chaque chose n'y est qu'une fois. */
+  /* Les parties ouvertes restent ouvertes au retour d'une rubrique. */
+  var OUVERTES = {};
+  try { OUVERTES = JSON.parse(sessionStorage.getItem("salarie-parties") || "{}") || {}; } catch (e) { OUVERTES = {}; }
   function peindreFiche(p) {
     var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
     /* EN ORGANIGRAMME (26 novembre 2026) : « il faut que je voie tout d'un
@@ -374,34 +391,51 @@
       ech([p.poste, p.ent ? "entré le " + (jj(p.ent) || p.ent) : ""].filter(Boolean).join(" · ")) + '</span></span></div></div>';
     var ef = "rouge";
     try { ef = window.Flotte.etatFiche(p.id); } catch (e) {}
-    h += '<section class="part p-fiche"><h2>Fiche</h2>' +
-      lien("#fiche", "Sa fiche", "ce qu'il a rempli",
-        ef === "vert" ? ["v", "validée"] : (ef === "orange" ? ["o", "à valider"] : ["r", "pas remplie"])) + '</section>';
-    h += '<section class="part p-dossier"><h2>Dossier</h2>' +
+    /* FERMÉES D'ABORD (26 novembre 2026) : « Déroule pas tout de suite.
+       C'est le menu déroulant. Laisse la secrétaire, le responsable, cliquer
+       pour voir ce qu'il y a dedans. » Chaque partie n'affiche que son titre
+       et ce qui demande l'attention ; on la touche pour l'ouvrir. */
+    var pu = function (c, t) { return '<span class="puce ' + c + '">' + ech(t) + '</span>'; };
+    var part = function (cle, titre, resume, corps) {
+      return '<details class="part p-' + cle + '" data-part="' + cle + '"' + (OUVERTES[cle] ? " open" : "") + '>' +
+        '<summary><h2>' + ech(titre) + '</h2>' + (resume || "") + '<i class="fl"></i></summary>' + corps + '</details>';
+    };
+    var etatF = ef === "vert" ? ["v", "validée"] : (ef === "orange" ? ["o", "à valider"] : ["r", "pas remplie"]);
+    h += part("fiche", "Fiche", pu(etatF[0], etatF[1]), lien("#fiche", "Sa fiche", "ce qu'il a rempli", etatF));
+    h += part("dossier", "Dossier", "",
       lien("#contrat", "Contrat") +
       (roulant(p) ? lien("#camion", "Camion") + lien("#permis", "Permis") : "") +
       lien("#medical", "Suivi médical") +
       lien("heures.html", "Heures de travail") +
-      lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Coffre fort") + '</section>';
+      lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Coffre fort"));
     if (transport && roulant(p)) {
       var c = "conformite-transport.html?c=" + encodeURIComponent(p.id) + "&e=";
-      h += '<section class="part p-tachy"><h2>Suivi tachygraphe</h2>' +
+      h += part("tachy", "Suivi tachygraphe", p.faits ? pu("o", p.faits + " à traiter") : "",
         lien(c + 0, "Instructions") + lien(c + 1, "Contrôle et suivi",
           p.faits ? p.faits + " fait" + (p.faits > 1 ? "s" : "") + " à traiter" : "", p.faits ? ["o", "à traiter"] : null) +
-        lien(c + 2, "Réaction") + lien(c + 3, "Coffre-fort") + '</section>';
+        lien(c + 2, "Réaction") + lien(c + 3, "Coffre-fort"));
     }
     var datees = p.mes.filter(function (m) { return m.j !== null; }), sansDate = p.mes.length - datees.length;
-    h += '<section class="part p-ech"><h2>Échéances</h2>' +
+    var enRetard = datees.filter(function (m) { return m.j < 0; }).length;
+    var bientot = datees.filter(function (m) { return m.j >= 0 && m.feu !== "v"; }).length;
+    h += part("ech", "Échéances",
+      enRetard ? pu("clig", enRetard + " en retard") : (bientot ? pu("r", bientot + " à venir") : pu("v", "rien ne presse")),
       (datees.length ? datees.map(function (m) {
         var retard = m.j < 0;
         return lien(pageDe(m.quoi, p.id), m.quoi, (retard ? "échéance du " : "avant le ") + jj(m.date),
           [retard ? "clig" : m.feu, delaiDit(m.j)], retard ? "r clig" : m.feu);
       }).join("") : '<p class="vide">Aucune échéance datée.</p>') +
       (sansDate ? '<p class="mention">' + sansDate + " date" + (sansDate > 1 ? "s" : "") + " à saisir pour cette personne.</p>" : "") +
-      '<p class="mention">Clignote : en retard. Rouge : sept jours. Orange : un mois.</p></section>';
-    var n = (h.match(/<section class="part/g) || []).length;
-    h = h.replace('<section class="part p-fiche">', '<div class="org-cols n' + n + '"><section class="part p-fiche">') + '</div>';
+      '<p class="mention">Clignote : en retard. Rouge : sept jours. Orange : un mois.</p>');
+    var n = (h.match(/<details class="part/g) || []).length;
+    h = h.replace('<details class="part p-fiche"', '<div class="org-cols n' + n + '"><details class="part p-fiche"') + '</div>';
     $("fiche").innerHTML = h;
+    Array.prototype.forEach.call($("fiche").querySelectorAll("details.part"), function (d) {
+      d.addEventListener("toggle", function () {
+        OUVERTES[d.getAttribute("data-part")] = d.open;
+        try { sessionStorage.setItem("salarie-parties", JSON.stringify(OUVERTES)); } catch (e) {}
+      });
+    });
   }
 
   /* TROIS ÉCRANS : le choix roulant ou non roulant, la liste du groupe, la
