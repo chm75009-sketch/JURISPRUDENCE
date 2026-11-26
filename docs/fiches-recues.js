@@ -371,7 +371,23 @@
       var N = mots((s.nom || "") + " " + (s.pre || ""));
       return M.every(function (m) { return N.indexOf(m) >= 0; }) || N.every(function (m) { return M.indexOf(m) >= 0; });
     });
-    return C.length === 1 ? C[0] : null;
+    if (C.length === 1) return C[0];
+    /* Même nom, prénom à une ou deux lettres près (Taoufik et Toufik,
+       Mohamed et Mohammed), et un seul salarié dans ce cas. */
+    var nomC = sansAccent(c.nom || ""), preC = sansAccent(c.prenom || "");
+    var P = R.filter(function (s) {
+      return sansAccent(s.nom || "") === nomC && preC.length >= 4 && ecart(sansAccent(s.pre || ""), preC) <= 2;
+    });
+    return P.length === 1 ? P[0] : null;
+  }
+  function ecart(a, b) {
+    if (Math.abs(a.length - b.length) > 2) return 9;
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++) d[i] = [i];
+    for (j = 0; j <= b.length; j++) d[0][j] = j;
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+    return d[a.length][b.length];
   }
   function sidDe(s) { return sansAccent(((s.nom || "") + " " + (s.pre || "")).trim()) || "salarie"; }
   /* La liste du registre, les plus proches du nom tapé en tête. */
