@@ -1402,16 +1402,14 @@
      la source le même jour : R. 233-1 du code de la route ; R. 3315-2,
      R. 3315-11, R. 3411-13 et R. 3312-58 du code des transports ; règlement
      (UE) 165/2014, art. 3 et 36 ; règlement (CE) 561/2006, art. 2. */
-  /* LES CATÉGORIES DÉCIDENT (26 novembre 2026). « Poids lourd ou pas » et
-     les catégories répondaient deux fois à la même question, et se
-     contredisaient. Ce sont les catégories cochées qui décident : C1, C1E, C
-     ou CE, c'est un poids lourd. Le profil choisi autrefois ne sert plus que
-     si aucune catégorie n'est connue. */
+  /* Le profil, poids lourd ou pas, est celui que le salarié a choisi dans sa
+     fiche (question remise le 26 novembre 2026, à la demande de
+     l'utilisatrice). Sans réponse, les catégories le donnent. */
   function profilChauffeur(f) {
-    var cat = net(f.permisCat).toUpperCase();
-    if (cat) return /(^|[^A-Z0-9])C1?E?([^A-Z0-9]|$)/.test(cat) ? "pl" : "leger";
     if (f.profil === "pl" || f.profil === "leger") return f.profil;
-    return "";
+    var cat = net(f.permisCat).toUpperCase();
+    if (!cat) return "";
+    return /(^|[^A-Z0-9])C1?E?([^A-Z0-9]|$)/.test(cat) ? "pl" : "leger";
   }
   function finFco(f) {
     if (net(f.carteQualif)) return f.carteQualif;
@@ -1446,7 +1444,7 @@
   function papiersChauffeurHtml(s, f) {
     var profil = profilChauffeur(f);
     if (!profil) {
-      return '<div class="pap"><p class="doux">Cochez les catégories de son permis, plus haut : la liste de ses papiers s\'affiche aussitôt.</p></div>';
+      return '<div class="pap"><p class="doux">Choisissez plus haut s\'il est poids lourd ou pas : la liste de ses papiers s\'affiche aussitôt.</p></div>';
     }
     var P = papiersChauffeur(profil, f), p = f.papiers || {}, c = p.c || {};
     var nb = P.filter(function (it) { return !it.si; }).length;
@@ -1574,9 +1572,14 @@
       : '<p class="fn-rien">Il n\'a pas encore rempli sa fiche.</p>';
     if (conduit) {
       var prof = profilChauffeur(f);
-      var alerte = prof === "leger" && PL_REG.test(s.emp || "")
-        ? '<p class="fn-al">' + ech(s.emp) + " au registre, mais sa fiche ne porte ni C ni CE.</p>" : "";
-      h += cadreFiche("Son permis", categoriesHtml(s, f) + alerte +
+      var sansC = net(f.permisCat) && !/(^|[^A-Z0-9])C1?E?([^A-Z0-9]|$)/.test(net(f.permisCat).toUpperCase());
+      var alerte = sansC && (prof === "pl" || PL_REG.test(s.emp || ""))
+        ? '<p class="fn-al">' + (prof === "pl" ? "Poids lourd selon sa fiche" : ech(s.emp) + " au registre") +
+          ", mais ses catégories ne portent ni C ni CE.</p>" : "";
+      var choix = '<p class="fn-l">Poids lourd ou pas</p><div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
+        '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (prof === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C ou CE</small></button>" +
+        '<button type="button" data-profil="' + ech(s.id) + '|leger"' + (prof === "leger" ? ' aria-pressed="true"' : "") + ">Pas poids lourd<small>permis B</small></button></div>";
+      h += cadreFiche("Son permis", choix + categoriesHtml(s, f) + alerte +
         champsDe(s, f, ["permisNum", "permisFin"].concat(prof === "leger" ? [] : ["code95"]).concat(["suspendu"])));
       /* Une date de poids lourd déjà connue reste visible, même quand les
          catégories disent le contraire : on ne cache pas ce qu'il a déclaré. */
