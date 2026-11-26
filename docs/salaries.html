@@ -44,6 +44,12 @@
   main.wrap{max-width:560px;padding-bottom:var(--e7)}
   [hidden]{display:none !important}
   .pq{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:20px 2px 10px}
+  .grp-b{width:100%;display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--filet);
+    border-radius:16px;padding:20px 18px;margin:14px 0 0;text-align:left;cursor:pointer;color:var(--texte);min-height:0;font:inherit}
+  .grp-b .gi{font-size:30px;flex:0 0 auto}
+  .grp-b .gt{flex:1;min-width:0}.grp-b .gt b{display:block;font:700 18px/1.25 system-ui;color:var(--accent)}
+  .grp-b .gt span{display:block;font:400 14px/1.3 system-ui;color:var(--texte-2);margin-top:2px}
+  .grp-b .gn{font:800 24px/1 system-ui;color:var(--accent)}
   .ch-ligne{display:flex;gap:9px;align-items:center;margin:14px 0 0}
   .ch-ligne .cherche{margin:0;flex:1;min-width:0}
   .ch-mic{flex:0 0 auto;width:50px;height:50px;border-radius:50%;border:0;background:#efeefc;color:#4f46e5;
@@ -56,7 +62,9 @@
   .lig{width:100%;text-align:left;background:var(--surface);border:1px solid var(--filet);border-radius:14px;
     padding:13px 12px 13px 14px;margin:0 0 8px;display:flex;align-items:center;gap:11px;min-height:60px;
     text-decoration:none;color:var(--texte);cursor:pointer;font:inherit}
-  .lig:hover{border-color:var(--accent)}
+  /* Le survol d'une ligne ou d'un grand bouton ne doit pas reprendre le fond
+     foncé des boutons : le nom, écrit en foncé, ne se lisait plus. */
+  .lig:hover,.grp-b:hover{border-color:var(--accent);background:var(--accent-clair);color:var(--texte)}
   .lig .t{flex:1;min-width:0}
   .lig .t b{display:block;font:600 16px/1.25 system-ui;color:var(--texte)}
   .lig .t span{display:block;font-size:13.5px;line-height:1.35;color:var(--texte-2);margin-top:2px}
@@ -91,8 +99,15 @@
 
 <main class="wrap" id="main">
 
+  <!-- écran 0 : roulant ou non roulant (26 novembre 2026) -->
+  <section id="e-choix" hidden>
+    <button type="button" class="grp-b" data-g="roulant"><span class="gi">🚛</span><span class="gt"><b>Personnel roulant</b><span>les chauffeurs</span></span><span class="gn" id="n-roulant"></span></button>
+    <button type="button" class="grp-b" data-g="non"><span class="gi">🏢</span><span class="gt"><b>Personnel non roulant</b><span>bureau, atelier, entrepôt</span></span><span class="gn" id="n-non"></span></button>
+    <p class="mention">Le partage se fait d'après l'emploi écrit au registre du personnel : chauffeur, conducteur, livreur, routier, coursier, convoyeur, ambulancier, cariste ou grutier, c'est le personnel roulant.</p>
+  </section>
+
   <!-- écran 1 : la liste -->
-  <section id="e-liste">
+  <section id="e-liste" hidden>
     <div class="ch-ligne" id="ch-ligne" hidden>
       <input type="search" class="cherche" id="cherche" data-micro="non" placeholder="Nom de famille, ou première lettre" aria-label="Chercher un salarié" autocomplete="off">
       <button type="button" class="ch-mic" id="ch-mic" aria-label="Dire un nom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg></button>
@@ -223,7 +238,7 @@
   }
   function proches(texte, n) {
     var q = phon(texte), mots = cle(texte).split(" ");
-    return PERSONNES.map(function (p) {
+    return base().map(function (p) {
       var f = phon(famille(p)), toute = phon(p.nom);
       var d = Math.min(ecart(q, f) / Math.max(q.length, f.length, 1), ecart(q, toute) / Math.max(q.length, toute.length, 1));
       /* Ce qu'on a dit ou tapé est le début du nom, à l'oreille : « Kouli »
@@ -235,7 +250,15 @@
     }).filter(function (o) { return o.d <= 0.4; }).sort(function (a, b) { return a.d - b.d; }).slice(0, n || 6)
       .map(function (o) { return o.p; });
   }
-  var VOIX = "";
+  var VOIX = "", GROUPE = null;
+  function base() {
+    if (!GROUPE) return PERSONNES;
+    return PERSONNES.filter(function (p) { return GROUPE === "roulant" ? !!p.conduit : !p.conduit; });
+  }
+  function peindreChoix() {
+    $("n-roulant").textContent = PERSONNES.filter(function (p) { return p.conduit; }).length;
+    $("n-non").textContent = PERSONNES.filter(function (p) { return !p.conduit; }).length;
+  }
   function peindreListe() {
     var q = cle($("cherche").value), dit = $("ch-dit"), L;
     if (VOIX) {
@@ -243,17 +266,18 @@
       dit.textContent = L.length ? "Les plus proches de « " + VOIX + " » :" : "Aucun nom proche de « " + VOIX + " ».";
       dit.hidden = false;
     } else if (q) {
-      L = PERSONNES.filter(function (p) { return famille(p).indexOf(q) === 0; });
+      L = base().filter(function (p) { return famille(p).indexOf(q) === 0; });
       dit.hidden = true;
       if (!L.length && q.length >= 3) {
         L = proches(q, 6);
         dit.textContent = L.length ? "Aucun nom ne commence par « " + $("cherche").value.trim() + " ». Les plus proches :" : "Aucun nom ne correspond.";
         dit.hidden = false;
       }
-    } else { L = PERSONNES; dit.hidden = true; }
-    $("ch-ligne").hidden = PERSONNES.length < 8;
+    } else { L = base(); dit.hidden = true; }
+    $("ch-ligne").hidden = base().length < 8;
     $("legende").hidden = !PERSONNES.length;
-    $("titre-liste").textContent = PERSONNES.length ? "Vos salariés (" + PERSONNES.length + ")" : "Vos salariés";
+    var nomG = GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : "Vos salariés");
+    $("titre-liste").textContent = nomG + " (" + base().length + ")";
     if (!PERSONNES.length) {
       $("liste").innerHTML = '<p class="vide">Le registre du personnel est vide. <a href="registre.html">Ouvrir le registre</a> pour y porter vos salariés : ils apparaîtront ici.</p>';
       return;
@@ -296,18 +320,34 @@
     $("fiche").innerHTML = h;
   }
 
+  /* TROIS ÉCRANS : le choix roulant ou non roulant, la liste du groupe, la
+     fiche d'une personne. Le retour remonte d'un écran à la fois. */
+  function adresse() {
+    var q = [];
+    if (GROUPE) q.push("g=" + GROUPE);
+    if (OUVERT) q.push("s=" + encodeURIComponent(OUVERT));
+    try { history.replaceState(null, "", location.pathname + (q.length ? "?" + q.join("&") : "")); } catch (ex) {}
+  }
   function montrer(id) {
     var p = PERSONNES.filter(function (x) { return x.id === id; })[0];
     OUVERT = p ? id : null;
-    $("e-liste").hidden = !!p; $("e-fiche").hidden = !p;
-    $("titre-page").textContent = p ? p.nom : "Salariés";
-    if (p) peindreFiche(p); else peindreListe();
+    if (p && !GROUPE) GROUPE = p.conduit ? "roulant" : "non";
+    $("e-choix").hidden = !!p || !!GROUPE;
+    $("e-liste").hidden = !!p || !GROUPE;
+    $("e-fiche").hidden = !p;
+    $("titre-page").textContent = p ? p.nom : (GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : "Les salariés"));
+    if (p) peindreFiche(p); else if (GROUPE) peindreListe(); else peindreChoix();
+    adresse();
     window.scrollTo(0, 0);
   }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-g]"), function (b) {
+    b.addEventListener("click", function () {
+      GROUPE = b.getAttribute("data-g"); VOIX = ""; $("cherche").value = ""; montrer(null);
+    });
+  });
 
   $("liste").addEventListener("click", function (e) {
     var b = e.target.closest ? e.target.closest("[data-id]") : null; if (!b) return;
-    try { history.replaceState(null, "", location.pathname + "?s=" + encodeURIComponent(b.getAttribute("data-id"))); } catch (ex) {}
     montrer(b.getAttribute("data-id"));
   });
   $("cherche").addEventListener("input", function () { VOIX = ""; peindreListe(); });
@@ -333,14 +373,18 @@
   })();
   /* Le retour ramène de la fiche à la liste ; depuis la liste, il quitte la page. */
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
-    if (!OUVERT) return false;
-    try { history.replaceState(null, "", location.pathname); } catch (ex) {}
-    montrer(null); return true;
+    if (OUVERT) { montrer(null); return true; }
+    if (GROUPE) { GROUPE = null; montrer(null); return true; }
+    return false;
   });
 
   charger();
   var demande = null;
-  try { demande = new URLSearchParams(location.search).get("s"); } catch (e) { demande = null; }
+  try {
+    var pa = new URLSearchParams(location.search);
+    demande = pa.get("s");
+    if (pa.get("g") === "roulant" || pa.get("g") === "non") GROUPE = pa.get("g");
+  } catch (e) { demande = null; }
   montrer(demande);
 })();
 </script>
