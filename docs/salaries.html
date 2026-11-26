@@ -33,6 +33,8 @@
 <link rel="stylesheet" href="style.css">
 <script src="droits.js"></script>
 <script src="flotte.js"></script>
+<script src="base-documents.js"></script>
+<script src="fiches-recues.js" defer></script>
 <script src="documents-transport.js"></script>
 <script src="conformite-transport.js"></script>
 <script src="echeances-salaries.js"></script>
@@ -213,8 +215,8 @@
       lien("heures.html", "Décompte des heures", "relevé du mois, à clore et à faire signer") +
       lien("sanctions.html", "Discipline", "ce qui a été prononcé, et ce qui reste invocable") +
       lien(transport ? "contrats-transport.html" : "gerer.html?pour=salarie", "Contrat", "contrat et avenants") +
-      (transport ? lien("flotte.html", "Titres de conduite", "permis, formation, carte de conducteur") : "") +
-      lien("mes-documents.html", "Documents", "ce qui a été rangé");
+      (transport ? lien("flotte.html?c=" + encodeURIComponent(p.id), "Titres de conduite", "permis, formation, carte de conducteur, sa fiche remplie") : "") +
+      lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Documents", "ses photos, sa fiche signée, ce qui a été rangé");
     var plus = datees.filter(function (m) { return m.feu === "v"; });
     if (plus.length) h += '<h2 class="pq">Plus tard</h2>' + plus.slice(0, 6).map(function (m) { return lien(pageDe(m.quoi, p.id), m.quoi, "avant le " + jj(m.date), ["v", delaiDit(m.j)]); }).join("");
     if (sansDate) h += '<p class="mention">' + sansDate + " date" + (sansDate > 1 ? "s" : "") + ' à saisir pour cette personne : <a href="agenda.html">les compléter à l\'agenda</a>.</p>';

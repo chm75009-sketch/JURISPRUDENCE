@@ -149,6 +149,7 @@
 
 <script src="droits.js"></script>
 <script src="base-documents.js"></script>
+<script src="fiches-recues.js" defer></script>
 <script src="exporter-dossier.js" defer></script>
 <!-- Le lecteur de classeur et le rendu de tableau de l'aperçu : c'est avec eux
      qu'un .xlsx déposé se regarde ici au lieu de renvoyer au téléchargement. -->
@@ -225,6 +226,17 @@
      intitulé approximatif qu'un document introuvable. */
   function nomDe(r) {
     if (NOMS[r]) return NOMS[r];
+    /* Les documents d'un salarié, rangés depuis sa fiche (25 novembre 2026). */
+    if (/^salarie-/.test(r)) {
+      var id = r.slice(8), nom = "";
+      try {
+        ((JSON.parse(localStorage.getItem("registre-personnel") || "{}") || {}).salaries || []).forEach(function (s) {
+          var n = ((s.nom || "") + " " + (s.pre || "")).trim();
+          if (n.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") === id) nom = n;
+        });
+      } catch (e) {}
+      return "Salarié : " + (nom || id.replace(/-/g, " ").toUpperCase());
+    }
     var t = String(r).replace(/[-_]+/g, " ").trim();
     return t ? t.charAt(0).toUpperCase() + t.slice(1) : "Sans rubrique";
   }
@@ -523,6 +535,16 @@
   });
 
   remplirFiltres();
+  /* VENU DE LA PAGE D'UN SALARIÉ (?r=salarie-<identifiant>) : la vue
+     « Salariés », filtrée sur lui. Ses pièces portent son nom. */
+  try {
+    var rq = new URLSearchParams(location.search).get("r") || "";
+    if (/^salarie-/.test(rq)) {
+      var nomQ = nomDe(rq).replace(/^Salarié : /, "");
+      Array.prototype.forEach.call($("f-salarie").options, function (o) { if (o.value === nomQ) $("f-salarie").value = nomQ; });
+      if ($("f-salarie").value) VUE = "salaries";
+    }
+  } catch (e) {}
   ["f-texte", "f-salarie", "f-vehicule"].forEach(function (id) {
     $(id).addEventListener("input", rendre);
     $(id).addEventListener("change", rendre);

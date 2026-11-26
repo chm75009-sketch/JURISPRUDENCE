@@ -214,18 +214,33 @@
     ["sir", "Suivi individuel renforcé (4 ans au plus, intermédiaire à 2 ans)"],
   ];
 
+  /* LES CASES DE LA FICHE, EN DEUX PARTIES (25 novembre 2026). Celles que
+     le salarié remplit lui-même depuis le lien des groupes WhatsApp portent
+     « sal » : la fiche qu'il envoie s'y range case par case. Les autres
+     restent à compléter par T.E.C. Les cases ajoutées ce jour-là sont celles
+     du questionnaire qui n'avaient pas leur place dans la fiche. */
+  var OUI_NON = [["", "- à préciser -"], ["oui", "Oui"], ["non", "Non"]];
   var CHAMPS_C = [
-    { c: "permisNum", lib: "Permis, numéro", t: "text" },
-    { c: "permisCat", lib: "Catégories", t: "text" },
-    { c: "permisFin", lib: "Validité du permis jusqu'au", t: "date" },
+    { c: "tel", sal: true, lib: "Téléphone", t: "text" },
+    { c: "ue", sal: true, lib: "Ressortissant de l'Union européenne ou de l'EEE", t: "select", opts: OUI_NON },
+    { c: "permisOrigine", sal: true, lib: "Permis français ou étranger", t: "select",
+      opts: [["", "- à préciser -"], ["fr", "Français"], ["etr", "Étranger"]] },
+    { c: "inter", sal: true, lib: "Fait de l'international ou du cabotage", t: "select", opts: OUI_NON },
+    { c: "suspendu", sal: true, lib: "Permis suspendu ou retiré, selon le salarié", t: "select", opts: OUI_NON },
+    { c: "code95", sal: true, lib: "Code 95 sur le permis", t: "select", opts: OUI_NON },
+    { c: "livret", sal: true, lib: "Livret individuel de contrôle en main", t: "select", opts: OUI_NON },
+    { c: "aCarte", sal: true, lib: "A une carte conducteur", t: "select", opts: OUI_NON },
+    { c: "permisNum", sal: true, lib: "Permis, numéro", t: "text" },
+    { c: "permisCat", sal: true, lib: "Catégories", t: "text" },
+    { c: "permisFin", sal: true, lib: "Validité du permis jusqu'au", t: "date" },
     { c: "points", lib: "Points restants", t: "num" },
     { c: "retraitLe", lib: "Retrait ou suspension, le", t: "date" },
     { c: "retraitFin", lib: "Jusqu'au", t: "date" },
     { c: "retraitMotif", lib: "Motif du retrait ou de la suspension", t: "text", large: true },
-    { c: "fco", lib: "Dernière FIMO ou FCO", t: "date" },
+    { c: "fco", sal: true, lib: "Dernière FIMO ou FCO", t: "date" },
     { c: "fcoMois", lib: "Périodicité de la FCO, en mois", t: "num" },
-    { c: "carteCond", lib: "Carte de conducteur, échéance", t: "date" },
-    { c: "carteQualif", lib: "Carte de qualification, échéance", t: "date" },
+    { c: "carteCond", sal: true, lib: "Carte de conducteur, échéance", t: "date" },
+    { c: "carteQualif", sal: true, lib: "Carte de qualification, échéance", t: "date" },
     /* LE TÉLÉCHARGEMENT DES DONNÉES, QUE RIEN NE SUIVAIT.
 
        Relevé le 27 septembre 2026 : aucune échéance de téléchargement, ni pour
@@ -237,16 +252,16 @@
        l'entreprise corrige. */
     { c: "telecCarte", lib: "Dernier téléchargement de la carte conducteur", t: "date" },
     { c: "telecCarteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
-    { c: "visitePermisFin", lib: "Visite médicale du permis, valable jusqu'au", t: "date" },
+    { c: "visitePermisFin", sal: true, lib: "Visite médicale du permis, valable jusqu'au", t: "date" },
     /* LE SALARIÉ ÉTRANGER (25 novembre 2026) : la fin de son titre de séjour,
        et, s'il conduit avec un permis étranger, le pays et la date d'arrivée
        en France, qui fixe le délai d'un an de l'article R. 222-3 du code de la
        route (LEGIARTI000035977232, lu à la source le même jour). */
-    { c: "titreFin", lib: "Titre de séjour, valable jusqu'au", t: "date" },
-    { c: "permisPays", lib: "Permis étranger, pays de délivrance", t: "text" },
-    { c: "arrivee", lib: "Arrivée en France le", t: "date" },
+    { c: "titreFin", sal: true, lib: "Titre de séjour, valable jusqu'au", t: "date" },
+    { c: "permisPays", sal: true, lib: "Permis étranger, pays de délivrance", t: "text" },
+    { c: "arrivee", sal: true, lib: "Arrivée en France le", t: "date" },
     { c: "suivi", lib: "Suivi médical du travail", t: "select", opts: SUIVIS, large: true },
-    { c: "visiteTravail", lib: "Dernière visite avec le médecin du travail", t: "date" },
+    { c: "visiteTravail", sal: true, lib: "Dernière visite avec le médecin du travail", t: "date" },
     { c: "visiteInter", lib: "Dernière visite intermédiaire", t: "date" },
     { c: "attestConduite", lib: "Attestation médicale de conduite, délivrée le", t: "date" },
     { c: "vehicule", lib: "Véhicule habituel", t: "vehicule" },
@@ -1477,6 +1492,36 @@
     });
   }
 
+  /* La fiche en deux parties : ce que le salarié a rempli, ce que T.E.C
+     complète. En tête de la seconde, ce que le registre du personnel sait déjà
+     (entrée, contrat, temps de travail) et le lien vers la discipline : la
+     secrétaire ne le saisit qu'une fois, au registre. */
+  var NATURE_LIB = { cdi: "CDI", cdd: "CDD", temporaire: "Salarié temporaire", groupement: "Groupement d'employeurs",
+    apprenti: "Apprentissage", pro: "Professionnalisation", autre: "Autre situation" };
+  function deuxParties(s, f) {
+    function grille(L) {
+      return '<div class="gr">' + L.map(function (ch) {
+        var val = f[ch.c];
+        if ((val == null || val === "") && ch.c === "fcoMois") val = 60;
+        return champHtml(ch, val, "c" + s.id);
+      }).join("") + "</div>";
+    }
+    var r = null;
+    ((lire(CLE_REG, {}) || {}).salaries || []).forEach(function (x) {
+      if (sansAccent((net(x.nom) + " " + net(x.pre)).trim()) === s.id) r = x;
+    });
+    var reg = r ? [r.ent ? "entré le " + enFrancais(r.ent) : "date d'entrée à porter au registre",
+      NATURE_LIB[r.nature] || "contrat à porter au registre",
+      r.part === "partiel" ? "temps partiel" : (r.part === "complet" ? "temps complet" : "")].filter(Boolean).join(" · ") : "";
+    var recue = f.recue && f.recue.le ? '<p class="fp-recue">Fiche remplie et signée par le salarié le ' + ech(enFrancais(f.recue.le)) +
+      ' : sa fiche signée et ses photos sont dans ses <a href="mes-documents.html?r=' + encodeURIComponent("salarie-" + s.id) + '">documents</a>.</p>' : "";
+    return '<div class="fp"><p class="fp-t">Rempli par le salarié</p>' + recue + grille(CHAMPS_C.filter(function (c) { return c.sal; })) + "</div>" +
+      '<div class="fp"><p class="fp-t">À compléter par T.E.C</p>' +
+      '<p class="fp-reg">' + ech(reg || "Ce salarié n'est pas au registre du personnel.") +
+      ' · <a href="registre.html">registre du personnel</a> · <a href="sanctions.html">discipline</a></p>' +
+      grille(CHAMPS_C.filter(function (c) { return !c.sal; })) + "</div>";
+  }
+
   var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
   function rendreConducteurs() {
     var G = salaries().filter(function (s) { return !s.sor; });
@@ -1496,12 +1541,8 @@
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
         '<div class="ech">' + pastilles(E) + "</div>" +
-        (est ? '<div class="corps">' + (CONDUIT.test(s.emp) ? papiersChauffeurHtml(s, f) : "") + '<div class="gr">' +
-          CHAMPS_C.map(function (ch) {
-            var val = f[ch.c];
-            if ((val == null || val === "") && ch.c === "fcoMois") val = 60;
-            return champHtml(ch, val, "c" + s.id);
-          }).join("") + "</div></div>" : "") +
+        (est ? '<div class="corps">' + (CONDUIT.test(s.emp) ? papiersChauffeurHtml(s, f) : "") +
+          deuxParties(s, f) + "</div>" : "") +
         "</div>";
     }).join("");
 
@@ -2287,8 +2328,17 @@
     rendre();
     /* VENU DE LA RECHERCHE « PAPIERS DU CHAUFFEUR » : la liste des
        conducteurs s'ouvre directement. */
-    try { if (new URLSearchParams(location.search).get("vue") === "conducteurs" && !$("o-con").hidden &&
-      window.getComputedStyle($("o-con")).display !== "none") onglet(false); } catch (e) {}
+    try {
+      var prc = new URLSearchParams(location.search);
+      if ((prc.get("vue") === "conducteurs" || prc.get("c")) && !$("o-con").hidden &&
+        window.getComputedStyle($("o-con")).display !== "none") {
+        /* Venu de la page du salarié : sa fiche s'ouvre directement. */
+        if (prc.get("c")) { ouvert["c" + prc.get("c")] = true; rendre(); }
+        onglet(false);
+        var vc = prc.get("c") && document.querySelector('[data-c="' + prc.get("c") + '"]');
+        if (vc && vc.scrollIntoView) vc.scrollIntoView({ block: "start" });
+      }
+    } catch (e) {}
 
     /* On amène l'écran sur la fiche ouverte depuis les dépenses. */
     if (viserImmat) {

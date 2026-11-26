@@ -20,12 +20,14 @@
 
   var ls = window.localStorage, S = window.crypto && window.crypto.subtle;
   if (!ls || !S || !window.fetch) return;
+  /* Sur les pages sans cadre (accueil, salariés, documents), le module
+     travaille sans rien afficher : il range les fiches arrivées. */
   var hote = document.getElementById("fiches-recues");
-  if (!hote) return;
   var brut64 = ls.getItem("synchro-cle");
   if (!brut64) return;
 
-  var CLE_PRIV = "fiches-cle-privee", CLE_CODE = "fiches-code", CLE_FAITES = "fiches-reportees";
+  var CLE_PRIV = "fiches-cle-privee", CLE_CODE = "fiches-code", CLE_FAITES = "fiches-reportees",
+    CLE_RANGEES = "fiches-rangees", CLE_VERROU = "fiches-verrou";
   var MOIS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 
   function ech(s) {
@@ -113,6 +115,7 @@
   var ETAT = { liste: [], resumes: {}, ouvertes: {}, fiches: {}, msg: "" };
 
   function rendre() {
+    if (!hote) return;
     var faites = lire(CLE_FAITES, {});
     var h = '<div class="fr-bloc"><div class="fr-tete"><span class="fr-t">Fiches reçues des salariés</span></div>';
     if (!lire(CLE_PRIV, null)) {
@@ -125,14 +128,22 @@
         '<div class="fr-2"><button type="button" class="fr-b" data-fr="copier">Copier le lien</button>' +
         (navigator.share ? '<button type="button" class="fr-b second" data-fr="partager">Partager</button>' : "") + "</div></div>";
       if (ETAT.msg) h += '<p class="fr-msg">' + ech(ETAT.msg) + "</p>";
-      if (!ETAT.liste.length) {
-        h += '<p class="fr-doux">Aucune fiche reçue pour l\'instant.</p>';
+      var R = lire(CLE_RANGEES, []);
+      if (R.length) {
+        h += '<p class="fr-st">Rangées dans la page du salarié</p>' + R.slice(0, 5).map(function (x) {
+          return '<a class="fr-ok" href="flotte.html?c=' + encodeURIComponent(x.sid) + '">' + ech(x.nom) +
+            "<small>rangée le " + ech(enFrancais(x.le)) + "</small></a>";
+        }).join("");
+      }
+      var attente = ETAT.liste.filter(function (it) { return !faites[it.id]; });
+      if (!attente.length) {
+        h += '<p class="fr-doux">' + (R.length ? "Aucune fiche en attente." : "Aucune fiche reçue pour l'instant.") + "</p>";
       } else {
-        h += ETAT.liste.map(function (it) {
+        h += '<p class="fr-st">En attente</p>' + attente.map(function (it) {
           var r = ETAT.resumes[it.id] || {};
           var nom = r.nom ? (r.nom + " " + (r.prenom || "")) : "Fiche reçue";
           var sous = [r.profil === "pl" ? "poids lourd" : (r.profil === "leger" ? "pas poids lourd" : ""),
-            "reçue le " + enFrancais(it.quand), faites[it.id] ? "reportée" : "à reporter"].filter(Boolean).join(" · ");
+            "reçue le " + enFrancais(it.quand), r.nom && !salarieDe(r) ? "nom absent du registre du personnel" : "en cours de rangement"].filter(Boolean).join(" · ");
           return '<div class="fr-it' + (faites[it.id] ? " fait" : "") + '">' +
             '<button type="button" class="fr-ligne" data-fr="voir" data-id="' + ech(it.id) + '">' +
             '<span class="fr-n">' + ech(nom) + '<small>' + ech(sous) + "</small></span><span class=\"fr-fl\">" +
@@ -197,41 +208,118 @@
       '<table class="fr-tab">' + lignes + "</table>" +
       (ph ? '<p class="fr-st">Photos</p><div class="fr-phs">' + ph + "</div>" : "") +
       '<p class="fr-st">Signature, le ' + ech(enFrancais(F.fait)) + '</p><img class="fr-sig" alt="Signature" src="' + ech(F.signature) + '">' +
-      '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Reporter dans la fiche du chauffeur</button>' +
+      (salarieDe(c) ? '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Ranger dans la page du salarié</button>'
+        : '<p class="fr-msg">' + ech((c.nom || "") + " " + (c.prenom || "")) + ' n\'est pas au registre du personnel sous ce nom. Ajoutez-le au <a href="registre.html">registre</a> : la fiche se rangera d\'elle-même à la prochaine ouverture.</p>') +
       '<button type="button" class="fr-b second" data-fr="supprimer" data-id="' + ech(id) + '">Supprimer cette fiche reçue</button></div>';
   }
 
-  /* ─── reporter dans la fiche du chauffeur ─── */
-  function reporter(id) {
-    var F = ETAT.fiches[id]; if (!F || !F.champs) return;
-    var c = F.champs;
-    var reg = lire("registre-personnel", {}), sal = null;
+  /* ─── le rangement dans la page du salarié ───
+
+     Demande du 25 novembre 2026 : la fiche remplie par le salarié entre d'elle-
+     même dans sa page, sans bouton. Ses réponses vont case par case dans sa
+     fiche chauffeur, ses photos et sa fiche signée dans ses documents, sous la
+     rubrique « salarie-<identifiant> ». Une fois rangée, la fiche est retirée
+     du serveur : l'autre appareil ne la rangera pas une seconde fois. Si le
+     nom n'est pas au registre du personnel, elle attend dans le cadre des
+     fiches reçues. */
+  var CHAMPS_FICHE = ["tel", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
+    "permisNum", "permisCat", "permisFin", "suspendu", "visiteTravail", "visitePermisFin", "fco",
+    "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil"];
+  function salarieDe(c) {
+    var reg = lire("registre-personnel", {}), sal = null, cible = sansAccent((c.nom || "") + " " + (c.prenom || ""));
     ((reg && reg.salaries) || []).forEach(function (s) {
-      if (sansAccent((s.nom || "") + " " + (s.pre || "")) === sansAccent(c.nom + " " + c.prenom) ||
-          sansAccent((s.pre || "") + " " + (s.nom || "")) === sansAccent(c.nom + " " + c.prenom)) sal = s;
+      if (sansAccent((s.nom || "") + " " + (s.pre || "")) === cible ||
+          sansAccent((s.pre || "") + " " + (s.nom || "")) === cible) sal = s;
     });
-    if (!sal) {
-      ETAT.msg = c.nom + " " + c.prenom + " n'est pas au registre du personnel sous ce nom. Ajoutez-le au registre, puis reportez la fiche.";
-      rendre(); return;
-    }
+    return sal;
+  }
+  function blobDe(url) { return fetch(url).then(function (r) { return r.blob(); }); }
+  /* La fiche signée, mise en image : ses réponses, puis la signature. */
+  function ficheImage(F) {
+    var c = F.champs || {}, W = 1240, M = 80, L = [];
+    LIB.forEach(function (l) { var v = valeur(l[0], c[l[0]]); if (v !== "") L.push([l[1], v]); });
+    var cv = document.createElement("canvas"), x = cv.getContext("2d");
+    cv.width = W; cv.height = 260 + L.length * 52 + 420;
+    x.fillStyle = "#fff"; x.fillRect(0, 0, W, cv.height);
+    x.fillStyle = "#1F3864"; x.font = "bold 44px system-ui, sans-serif";
+    x.fillText("Fiche chauffeur, T.E.C", M, 110);
+    x.fillStyle = "#5f6874"; x.font = "28px system-ui, sans-serif";
+    x.fillText("Remplie et signée par le salarié le " + enFrancais(F.fait), M, 160);
+    var y = 240;
+    L.forEach(function (l) {
+      x.fillStyle = "#5f6874"; x.font = "28px system-ui, sans-serif"; x.fillText(l[0], M, y);
+      x.fillStyle = "#16181d"; x.font = "bold 28px system-ui, sans-serif"; x.fillText(String(l[1]).slice(0, 40), 700, y);
+      x.strokeStyle = "#dcdfe4"; x.beginPath(); x.moveTo(M, y + 16); x.lineTo(W - M, y + 16); x.stroke();
+      y += 52;
+    });
+    y += 40;
+    x.fillStyle = "#5f6874"; x.font = "28px system-ui, sans-serif";
+    x.fillText("« Je certifie que ces informations sont exactes. »  Signature :", M, y);
+    return new Promise(function (ok) {
+      var im = new Image();
+      im.onload = function () {
+        var h = 300, l = Math.min(W - 2 * M, im.width * h / im.height);
+        x.drawImage(im, M, y + 24, l, h);
+        cv.toBlob(function (b) { ok(b); }, "image/png");
+      };
+      im.onerror = function () { cv.toBlob(function (b) { ok(b); }, "image/png"); };
+      im.src = F.signature || "";
+    });
+  }
+  function ranger(id, F) {
+    var c = F.champs || {}, sal = salarieDe(c);
+    if (!sal || !window.Documents) return Promise.resolve(false);
     var sid = sansAccent(((sal.nom || "") + " " + (sal.pre || "")).trim()) || "salarie";
-    var T = lire("flotte-conducteurs", {}), f = T[sid] || {};
-    ["permisNum", "permisCat", "permisFin", "visiteTravail", "visitePermisFin", "fco", "carteQualif", "carteCond",
-      "titreFin", "permisPays", "arrivee"].forEach(function (k) { if (c[k]) f[k] = c[k]; });
-    if (c.profil) f.profil = c.profil;
-    var note = "Fiche remplie et signée par le salarié le " + enFrancais(F.fait) + "." +
-      (c.tel ? " Téléphone : " + c.tel + "." : "") +
-      (c.suspendu === "oui" ? " Déclare un permis suspendu ou retiré." : "") +
-      (c.code95 ? " Code 95 sur le permis : " + c.code95 + "." : "") +
-      (c.livret ? " Livret individuel de contrôle : " + c.livret + "." : "");
-    f.note = (f.note ? f.note + "\n" : "") + note;
-    T[sid] = f; garder("flotte-conducteurs", T);
-    var faites = lire(CLE_FAITES, {}); faites[id] = new Date().toISOString().slice(0, 10); garder(CLE_FAITES, faites);
-    location.href = "flotte.html?vue=conducteurs";
+    var rub = "salarie-" + sid, quand = enFrancais(F.fait);
+    /* Le nom du salarié en tête de chaque pièce : « Mes documents » range
+       ses pièces sous son nom, et le filtre par salarié les retrouve. */
+    var qui = ((sal.nom || "").trim() + " " + (sal.pre || "").trim()).trim();
+    var P = Object.keys(F.photos || {}).map(function (k) {
+      var p = F.photos[k];
+      return blobDe(p.image).then(function (b) {
+        return window.Documents.enregistrer(rub, { nom: qui + ", " + p.titre.charAt(0).toLowerCase() + p.titre.slice(1) + " (" + quand + ").jpg", sorte: "depose", type: "image/jpeg", contenu: b });
+      });
+    });
+    P.push(ficheImage(F).then(function (b) {
+      return window.Documents.enregistrer(rub, { nom: qui + ", fiche chauffeur signée (" + quand + ").png", sorte: "produit", type: "image/png", contenu: b });
+    }));
+    return Promise.all(P).then(function () {
+      var T = lire("flotte-conducteurs", {}), f = T[sid] || {};
+      CHAMPS_FICHE.forEach(function (k) { if (c[k] != null && c[k] !== "") f[k] = c[k]; });
+      f.recue = { le: F.fait, id: id };
+      T[sid] = f; garder("flotte-conducteurs", T);
+      var faites = lire(CLE_FAITES, {}); faites[id] = new Date().toISOString().slice(0, 10); garder(CLE_FAITES, faites);
+      var R = lire(CLE_RANGEES, []);
+      R.unshift({ id: id, sid: sid, nom: ((c.nom || "") + " " + (c.prenom || "")).trim(), le: new Date().toISOString().slice(0, 10) });
+      garder(CLE_RANGEES, R.slice(0, 30));
+      return appel("DELETE", "depot/" + id).then(function () { return true; }, function () { return true; });
+    });
+  }
+  function chargerFiche(id) {
+    if (ETAT.fiches[id] && !ETAT.fiches[id].erreur) return Promise.resolve(ETAT.fiches[id]);
+    return appel("GET", "depot/" + id).then(function (r) { if (!r.ok) throw new Error(); return r.arrayBuffer(); })
+      .then(ouvrir).then(function (F) { ETAT.fiches[id] = F; return F; });
+  }
+  /* Une seule fois à la fois sur l'appareil, même si deux pages sont ouvertes. */
+  function rangerTout() {
+    var v = parseInt(ls.getItem(CLE_VERROU) || "0", 10);
+    if (Date.now() - v < 90000) return Promise.resolve(0);
+    ls.setItem(CLE_VERROU, String(Date.now()));
+    var faites = lire(CLE_FAITES, {}), n = 0;
+    var L = ETAT.liste.filter(function (it) { return !faites[it.id]; });
+    return L.reduce(function (pr, it) {
+      return pr.then(function () {
+        var r = ETAT.resumes[it.id];
+        if (r && !salarieDe(r)) return null;          /* pas au registre : on ne télécharge pas */
+        return chargerFiche(it.id).then(function (F) { return ranger(it.id, F); })
+          .then(function (ok) { if (ok) n++; }, function () {});
+      });
+    }, Promise.resolve()).then(function () { ls.removeItem(CLE_VERROU); return n; },
+      function () { ls.removeItem(CLE_VERROU); return n; });
   }
 
   /* ─── les gestes ─── */
-  hote.addEventListener("click", function (ev) {
+  if (hote) hote.addEventListener("click", function (ev) {
     var b = ev.target.closest ? ev.target.closest("[data-fr]") : null; if (!b) return;
     var q = b.getAttribute("data-fr"), id = b.getAttribute("data-id");
     if (q === "activer") {
@@ -252,7 +340,11 @@
             function () { ETAT.fiches[id] = { erreur: "Cette fiche ne s'ouvre pas sur cet appareil. Rouvrez la page dans un instant, le temps que le dossier se mette à jour." }; rendre(); });
       }
     } else if (q === "reporter") {
-      reporter(id);
+      b.disabled = true; b.textContent = "Rangement...";
+      chargerFiche(id).then(function (F) { return ranger(id, F); }).then(function (ok) {
+        if (ok) location.href = "flotte.html?c=" + encodeURIComponent(lire(CLE_RANGEES, [])[0].sid);
+        else { ETAT.msg = "Le rangement n'a pas pu se faire. Réessayez."; rendre(); }
+      }, function () { ETAT.msg = "Le rangement n'a pas pu se faire. Réessayez."; rendre(); });
     } else if (q === "supprimer") {
       if (!window.confirm("Supprimer cette fiche reçue ? Pensez à la reporter d'abord.")) return;
       appel("DELETE", "depot/" + id).then(function () { delete ETAT.fiches[id]; charger(); });
@@ -265,7 +357,7 @@
       /* Le lien peut avoir été créé sur un autre appareil : la clé arrive avec
          le partage du dossier. On le dit, sans en créer une seconde. */
       fetch("/fiches/cle", { cache: "no-store" }).then(function (r) {
-        if (r.ok) { ETAT.msg = ""; hote.querySelector(".fr-b").outerHTML = '<p class="fr-doux">Le lien a déjà été créé sur un autre appareil. Il apparaîtra ici dès que le dossier se sera mis à jour : rouvrez la page dans un instant.</p>'; }
+        if (r.ok && hote) { ETAT.msg = ""; hote.querySelector(".fr-b").outerHTML = '<p class="fr-doux">Le lien a déjà été créé sur un autre appareil. Il apparaîtra ici dès que le dossier se sera mis à jour : rouvrez la page dans un instant.</p>'; }
       }).catch(function () {});
       return;
     }
@@ -275,7 +367,13 @@
         if (!it.resume || ETAT.resumes[it.id]) return null;
         return ouvrir(deB64(it.resume)).then(function (r) { ETAT.resumes[it.id] = r; }, function () {});
       }));
-    }).then(rendre, function () { ETAT.msg = "La liste des fiches n'a pas pu être lue : vérifiez la connexion."; rendre(); });
+    }).then(function () {
+      rendre();
+      return rangerTout().then(function (n) {
+        if (n && hote) ETAT.msg = n + " fiche" + (n > 1 ? "s rangées" : " rangée") + " dans la page du salarié.";
+        rendre();
+      });
+    }, function () { ETAT.msg = "La liste des fiches n'a pas pu être lue : vérifiez la connexion."; rendre(); });
   }
   charger();
 })();
