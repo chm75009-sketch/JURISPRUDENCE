@@ -103,7 +103,7 @@
   <section id="e-choix" hidden>
     <button type="button" class="grp-b" data-g="roulant"><span class="gi">🚛</span><span class="gt"><b>Personnel roulant</b><span>les chauffeurs</span></span><span class="gn" id="n-roulant"></span></button>
     <button type="button" class="grp-b" data-g="non"><span class="gi">🏢</span><span class="gt"><b>Personnel non roulant</b><span>bureau, atelier, entrepôt</span></span><span class="gn" id="n-non"></span></button>
-    <p class="mention">Le partage se fait d'après l'emploi écrit au registre du personnel : chauffeur, conducteur, livreur, routier, coursier, convoyeur, ambulancier, cariste ou grutier, c'est le personnel roulant.</p>
+    <p class="mention">Le partage se fait d'après l'emploi écrit au registre du personnel : chauffeur, conducteur, livreur, routier, coursier, convoyeur ou ambulancier, c'est le personnel roulant. Le cariste et le grutier sont du personnel non roulant.</p>
   </section>
 
   <!-- écran 1 : la liste -->
@@ -251,13 +251,17 @@
       .map(function (o) { return o.p; });
   }
   var VOIX = "", GROUPE = null;
+  /* Le personnel roulant conduit sur la route. Le cariste et le grutier
+     conduisent un engin, pas un véhicule sur la route : ils sont du personnel
+     non roulant (demande du 26 novembre 2026). */
+  function roulant(p) { return !!p.conduit && !/cariste|grutier/i.test(p.poste || ""); }
   function base() {
     if (!GROUPE) return PERSONNES;
-    return PERSONNES.filter(function (p) { return GROUPE === "roulant" ? !!p.conduit : !p.conduit; });
+    return PERSONNES.filter(function (p) { return GROUPE === "roulant" ? roulant(p) : !roulant(p); });
   }
   function peindreChoix() {
-    $("n-roulant").textContent = PERSONNES.filter(function (p) { return p.conduit; }).length;
-    $("n-non").textContent = PERSONNES.filter(function (p) { return !p.conduit; }).length;
+    $("n-roulant").textContent = PERSONNES.filter(roulant).length;
+    $("n-non").textContent = PERSONNES.filter(function (p) { return !roulant(p); }).length;
   }
   function peindreListe() {
     var q = cle($("cherche").value), dit = $("ch-dit"), L;
@@ -331,7 +335,7 @@
   function montrer(id) {
     var p = PERSONNES.filter(function (x) { return x.id === id; })[0];
     OUVERT = p ? id : null;
-    if (p && !GROUPE) GROUPE = p.conduit ? "roulant" : "non";
+    if (p && !GROUPE) GROUPE = roulant(p) ? "roulant" : "non";
     $("e-choix").hidden = !!p || !!GROUPE;
     $("e-liste").hidden = !!p || !GROUPE;
     $("e-fiche").hidden = !p;
