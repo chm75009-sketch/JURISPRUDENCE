@@ -1587,7 +1587,9 @@
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
         '<div class="ech">' + pastilles(E) + "</div>" +
         (est ? '<div class="corps">' + (CONDUIT.test(s.emp) ? papiersChauffeurHtml(s, f) : "") +
-          deuxParties(s, f) + "</div>" : "") +
+          deuxParties(s, f) +
+          '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>' +
+          "</div>" : "") +
         "</div>";
     }).join("");
 
@@ -1601,6 +1603,22 @@
           if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
         });
       brancherPapiers(cadre, s.id);
+      /* REMETTRE LA FICHE À ZÉRO (26 novembre 2026) : pour une fiche d'essai
+         ou une fiche à refaire. Toutes les cases, les deux parties, le
+         contrôle des papiers, et les pièces rangées depuis sa fiche
+         (photos, fiche signée). Double confirmation : cela ne se rattrape pas. */
+      var bz = cadre.querySelector("[data-raz-fiche]");
+      if (bz) bz.addEventListener("click", function () {
+        if (!confirmerDur("Remettre à zéro la fiche de " + s.nom + " ? Toutes ses cases seront vidées, celles du salarié " +
+          "comme celles de T.E.C, ainsi que ses photos et sa fiche signée. Cette action ne se rattrape pas.", "ZERO")) return;
+        garderFiche(s.id, {});
+        try {
+          var R = JSON.parse(window.localStorage.getItem("fiches-rangees") || "[]");
+          garder("fiches-rangees", R.filter(function (x) { return x.sid !== s.id; }));
+        } catch (e) {}
+        var fin = function () { rendre(); };
+        if (window.Documents && window.Documents.vider) window.Documents.vider("salarie-" + s.id).then(fin, fin); else fin();
+      });
       var bv = cadre.querySelector("[data-valider]");
       if (bv) bv.addEventListener("click", function () {
         var fv = fiche(s.id); if (!fv.recue) return;
