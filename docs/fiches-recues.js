@@ -133,7 +133,7 @@
   function etats() {
     var T = lire("flotte-conducteurs", {}), attendus = {};
     Object.keys(ETAT.resumes).forEach(function (id) {
-      var r = ETAT.resumes[id], s = salarieDe(r);
+      var r = ETAT.resumes[id], s = salarieDe(r, id);
       if (s) attendus[sansAccent(((s.nom || "") + " " + (s.pre || "")).trim())] = 1;
     });
     return presents().map(function (p) {
@@ -258,7 +258,7 @@
           var r = ETAT.resumes[it.id] || {};
           var nom = r.nom ? (r.nom + " " + (r.prenom || "")) : "Fiche reçue";
           var sous = [r.profil === "pl" ? "poids lourd" : (r.profil === "leger" ? "pas poids lourd" : ""),
-            "reçue le " + enFrancais(it.quand), faites[it.id] ? "déjà reportée" : (r.nom && !salarieDe(r) ? "nom absent du registre du personnel" : "en cours de rangement")].filter(Boolean).join(" · ");
+            "reçue le " + enFrancais(it.quand), faites[it.id] ? "déjà reportée" : (r.nom && !salarieDe(r, it.id) ? "à rattacher à un salarié du registre" : "en cours de rangement")].filter(Boolean).join(" · ");
           return '<div class="fr-it' + (faites[it.id] ? " fait" : "") + '">' +
             '<button type="button" class="fr-ligne" data-fr="voir" data-id="' + ech(it.id) + '">' +
             '<span class="fr-n">' + ech(nom) + '<small>' + ech(sous) + "</small></span><span class=\"fr-fl\">" +
@@ -326,8 +326,13 @@
       '<table class="fr-tab">' + lignes + "</table>" +
       (ph ? '<p class="fr-st">Photos</p><div class="fr-phs">' + ph + "</div>" : "") +
       '<p class="fr-st">Signature, le ' + ech(enFrancais(F.fait)) + '</p><img class="fr-sig" alt="Signature" src="' + ech(F.signature) + '">' +
-      (salarieDe(c) ? '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Ranger dans la page du salarié</button>'
-        : '<p class="fr-msg">' + ech((c.nom || "") + " " + (c.prenom || "")) + ' n\'est pas au registre du personnel sous ce nom. Ajoutez-le au <a href="registre.html">registre</a> : la fiche se rangera d\'elle-même à la prochaine ouverture.</p>') +
+      (salarieDe(c, id) ? '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Ranger dans la page du salarié</button>'
+        : '<p class="fr-msg">' + ech((c.nom || "") + " " + (c.prenom || "")) + " n'est pas au registre du personnel sous ce nom exact. " +
+          "Choisissez-le dans la liste ci-dessous, les noms les plus proches en tête, ou ajoutez-le au <a href=\"registre.html\">registre</a>.</p>" +
+          '<select class="fr-sel" data-sel="' + ech(id) + '"><option value="">- choisir le salarié -</option>' +
+          choixSalaries(c).map(function (x) { return '<option value="' + ech(x.sid) + '">' + ech(x.nom) + "</option>"; }).join("") +
+          "</select>" +
+          '<button type="button" class="fr-b" data-fr="rattacher" data-id="' + ech(id) + '">Ranger chez ce salarié</button>') +
       '<button type="button" class="fr-b second" data-fr="supprimer" data-id="' + ech(id) + '">Supprimer cette fiche reçue</button></div>';
   }
 
@@ -343,13 +348,40 @@
   var CHAMPS_FICHE = ["tel", "nir", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
     "permisNum", "permisCat", "permisFin", "suspendu", "visiteTravail", "visitePermisFin", "fco",
     "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil"];
-  function salarieDe(c) {
-    var reg = lire("registre-personnel", {}), sal = null, cible = sansAccent((c.nom || "") + " " + (c.prenom || ""));
-    ((reg && reg.salaries) || []).forEach(function (s) {
+  /* RETROUVER LE SALARIÉ AU REGISTRE (26 novembre 2026). Le nom tapé par
+     le salarié diffère souvent du registre : prénom composé, deuxième prénom,
+     ordre inversé, tiret. On cherche d'abord le nom exact ; sinon le salarié
+     dont le nom et le prénom contiennent tous les mots tapés, s'il est le
+     seul. Une fiche rattachée à la main l'emporte toujours. */
+  function registre() { return ((lire("registre-personnel", {}) || {}).salaries || []); }
+  function mots(t) { return sansAccent(t).split("-").filter(Boolean); }
+  function salarieDe(c, id) {
+    var R = registre(), cible = sansAccent((c.nom || "") + " " + (c.prenom || "")), sal = null;
+    var lies = lire("fiches-rattachees", {});
+    if (id && lies[id]) R.forEach(function (s) { if (sidDe(s) === lies[id]) sal = s; });
+    if (sal) return sal;
+    R.forEach(function (s) {
       if (sansAccent((s.nom || "") + " " + (s.pre || "")) === cible ||
           sansAccent((s.pre || "") + " " + (s.nom || "")) === cible) sal = s;
     });
-    return sal;
+    if (sal) return sal;
+    var M = mots((c.nom || "") + " " + (c.prenom || ""));
+    if (M.length < 2) return null;
+    var C = R.filter(function (s) {
+      var N = mots((s.nom || "") + " " + (s.pre || ""));
+      return M.every(function (m) { return N.indexOf(m) >= 0; }) || N.every(function (m) { return M.indexOf(m) >= 0; });
+    });
+    return C.length === 1 ? C[0] : null;
+  }
+  function sidDe(s) { return sansAccent(((s.nom || "") + " " + (s.pre || "")).trim()) || "salarie"; }
+  /* La liste du registre, les plus proches du nom tapé en tête. */
+  function choixSalaries(c) {
+    var M = mots((c.nom || "") + " " + (c.prenom || ""));
+    return registre().filter(function (s) { return !String(s.sor || "").trim(); }).map(function (s) {
+      var N = mots((s.nom || "") + " " + (s.pre || "")), n = 0;
+      M.forEach(function (m) { if (N.indexOf(m) >= 0) n++; });
+      return { sid: sidDe(s), nom: ((s.nom || "") + " " + (s.pre || "")).trim(), n: n };
+    }).sort(function (a, b) { return b.n - a.n || a.nom.localeCompare(b.nom, "fr"); });
   }
   function blobDe(url) { return fetch(url).then(function (r) { return r.blob(); }); }
   /* La fiche signée, mise en image : ses réponses, puis la signature. */
@@ -385,7 +417,7 @@
     });
   }
   function ranger(id, F) {
-    var c = F.champs || {}, sal = salarieDe(c);
+    var c = F.champs || {}, sal = salarieDe(c, id);
     if (!sal || !window.Documents) return Promise.resolve(false);
     var sid = sansAccent(((sal.nom || "") + " " + (sal.pre || "")).trim()) || "salarie";
     var rub = "salarie-" + sid, quand = enFrancais(F.fait);
@@ -456,7 +488,7 @@
     return L.reduce(function (pr, it) {
       return pr.then(function () {
         var r = ETAT.resumes[it.id];
-        if (r && !salarieDe(r)) return null;          /* pas au registre : on ne télécharge pas */
+        if (r && !salarieDe(r, it.id)) return null;   /* pas au registre : on ne télécharge pas */
         return chargerFiche(it.id).then(function (F) { return ranger(it.id, F); })
           .then(function (ok) { if (ok) n++; }, function () {});
       });
@@ -494,7 +526,13 @@
       var t = "Fiche chauffeur pas encore remplie :\n" + nonRemplis().map(function (p) { return "- " + p.nom; }).join("\n");
       (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = "Liste copiée"; },
         function () { window.prompt("Copiez la liste :", t); });
-    } else if (q === "reporter") {
+    } else if (q === "rattacher") {
+      var sel = hote.querySelector('[data-sel="' + id + '"]');
+      if (!sel || !sel.value) { ETAT.msg = "Choisissez d'abord le salarié dans la liste."; rendre(); return; }
+      var lies = lire("fiches-rattachees", {}); lies[id] = sel.value; garder("fiches-rattachees", lies);
+      q = "reporter";
+    }
+    if (q === "reporter") {
       b.disabled = true; b.textContent = "Rangement...";
       chargerFiche(id).then(function (F) { return ranger(id, F); }).then(function (ok) {
         if (ok) location.href = "flotte.html?c=" + encodeURIComponent(lire(CLE_RANGEES, [])[0].sid);
