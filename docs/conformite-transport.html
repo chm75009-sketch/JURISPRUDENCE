@@ -623,7 +623,11 @@
     try { c = new URLSearchParams(location.search).get("c"); } catch (e) { c = null; }
     if (!c) return;
     var connu = (window.ConformiteTransport.salaries() || []).some(function (x) { return x.id === c; });
-    if (connu) { ST.choisir(c); ST.peindre(); }
+    if (connu) {
+      ST.choisir(c);
+      try { var e = new URLSearchParams(location.search).get("e"); if (e !== null && ST.aller) ST.aller(e); } catch (x) {}
+      ST.peindre();
+    }
   })();
   function aujourdhuiIso() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
   peindreConducteurs();

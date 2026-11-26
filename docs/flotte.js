@@ -147,6 +147,8 @@
     ["commun", "Transport en commun de personnes"],
     ["autre", "Autre"],
   ];
+  var GENRE_LIB = {};
+  GENRES.forEach(function (g) { GENRE_LIB[g[0]] = g[1]; });
   /* La périodicité du contrôle technique, en mois, telle que le code de la
      route la fixe, lu à la source le 15 septembre 2026 (deux lectures
      concordantes chacun) : deux ans pour un véhicule léger, R. 323-22
@@ -266,7 +268,7 @@
     { c: "visiteTravail", sal: true, lib: "Dernière visite avec le médecin du travail", t: "date" },
     { c: "visiteInter", lib: "Dernière visite intermédiaire", t: "date" },
     { c: "attestConduite", lib: "Attestation médicale de conduite, délivrée le", t: "date" },
-    { c: "vehicule", lib: "Véhicule habituel", t: "vehicule" },
+    { c: "vehicule", lib: "Camion attribué", t: "vehicule" },
     { c: "note", lib: "Observations", t: "textarea", large: true },
   ];
 
@@ -426,9 +428,9 @@
     pose("Fin de suspension", f.retraitFin);
     pose("FCO", f.fco ? plusMois(f.fco, f.fcoMois || 60) : "");
     pose("Carte conducteur", f.carteCond);
-    pose("Téléchargement de la carte conducteur",
-      f.telecCarte ? plusJours(f.telecCarte, nbJours(f.telecCarteJours, 28)) : "",
-      "périodicité usuelle de vingt-huit jours, fixée par arrêté, non relue par l'application : corrigez-la si votre protocole diffère");
+    /* Le téléchargement de la carte se suit au suivi tachygraphe, et nulle
+       part ailleurs (26 novembre 2026) : deux dates pour la même chose
+       finissaient par se contredire. */
     pose("Carte de qualification", f.carteQualif);
     pose("Visite du permis", f.visitePermisFin);
     pose("Titre de séjour", f.titreFin);
@@ -1400,11 +1402,16 @@
      la source le même jour : R. 233-1 du code de la route ; R. 3315-2,
      R. 3315-11, R. 3411-13 et R. 3312-58 du code des transports ; règlement
      (UE) 165/2014, art. 3 et 36 ; règlement (CE) 561/2006, art. 2. */
+  /* LES CATÉGORIES DÉCIDENT (26 novembre 2026). « Poids lourd ou pas » et
+     les catégories répondaient deux fois à la même question, et se
+     contredisaient. Ce sont les catégories cochées qui décident : C1, C1E, C
+     ou CE, c'est un poids lourd. Le profil choisi autrefois ne sert plus que
+     si aucune catégorie n'est connue. */
   function profilChauffeur(f) {
-    if (f.profil === "pl" || f.profil === "leger") return f.profil;
     var cat = net(f.permisCat).toUpperCase();
-    if (!cat) return "";
-    return /(^|[^A-Z])C1?E?([^A-Z]|$)/.test(cat) ? "pl" : "leger";
+    if (cat) return /(^|[^A-Z0-9])C1?E?([^A-Z0-9]|$)/.test(cat) ? "pl" : "leger";
+    if (f.profil === "pl" || f.profil === "leger") return f.profil;
+    return "";
   }
   function finFco(f) {
     if (net(f.carteQualif)) return f.carteQualif;
@@ -1438,12 +1445,8 @@
 
   function papiersChauffeurHtml(s, f) {
     var profil = profilChauffeur(f);
-    var choix = '<div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
-      '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (profil === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C ou CE</small></button>" +
-      '<button type="button" data-profil="' + ech(s.id) + '|leger"' + (profil === "leger" ? ' aria-pressed="true"' : "") + ">Pas poids lourd<small>permis B</small></button></div>";
     if (!profil) {
-      return '<div class="pap"><p class="pt">Ses papiers personnels</p>' + choix +
-        '<p class="doux">Choisissez son profil : la liste de ses papiers s\'ouvre aussitôt.</p></div>';
+      return '<div class="pap"><p class="doux">Cochez les catégories de son permis, plus haut : la liste de ses papiers s\'affiche aussitôt.</p></div>';
     }
     var P = papiersChauffeur(profil, f), p = f.papiers || {}, c = p.c || {};
     var nb = P.filter(function (it) { return !it.si; }).length;
@@ -1453,16 +1456,11 @@
       : '<div class="bord-etat jamais">Jamais contrôlé. Cochez ce qu\'il a sur lui, puis enregistrez le contrôle.</div>';
     var lignes = P.map(function (it) {
       var date = "";
-      if (net(it.d)) {
-        var j = joursAvant(it.d);
-        date = '<span class="bd-date' + (j < 0 ? " passe" : (j <= 30 ? " proche" : "")) + '">' +
-          (j < 0 ? "Plus valable depuis le " : "Valable jusqu'au ") + ech(enFrancais(it.d)) + "</span>";
-      }
       return '<label class="bd-l' + (it.si ? " si" : "") + '">' +
         '<input type="checkbox" data-pap="' + ech(s.id) + "|" + ech(it.k) + '"' + (c[it.k] ? " checked" : "") + ">" +
         '<span class="bd-t">' + ech(it.t) + '<span class="bd-r">' + ech(it.r) + "</span>" + date + "</span></label>";
     }).join("");
-    return '<div class="pap"><p class="pt">Ses papiers personnels</p>' + choix +
+    return '<div class="pap">' +
       '<p class="pf-nb">' + nb + " documents à avoir sur lui" + "</p>" + tete +
       '<div class="bd-g">' + lignes + (profil === "pl" ? '<p class="doux">' + ech(NOTE_OUBLI) + "</p>" : "") + "</div>" +
       '<div class="barre2"><button type="button" data-pap-ok="' + ech(s.id) + '">Enregistrer le contrôle d\'aujourd\'hui</button></div>' +
@@ -1505,12 +1503,6 @@
     });
   }
 
-  /* La fiche en deux parties : ce que le salarié a rempli, ce que T.E.C
-     complète. En tête de la seconde, ce que le registre du personnel sait déjà
-     (entrée, contrat, temps de travail) et le lien vers la discipline : la
-     secrétaire ne le saisit qu'une fois, au registre. */
-  var NATURE_LIB = { cdi: "CDI", cdd: "CDD", temporaire: "Salarié temporaire", groupement: "Groupement d'employeurs",
-    apprenti: "Apprentissage", pro: "Professionnalisation", autre: "Autre situation" };
   /* LA VALIDATION (26 novembre 2026). Une fiche arrivée est orange tant que
      T.E.C ou le cabinet ne l'a pas validée ; validée, elle passe au vert. Une
      mise à jour dit ce qu'elle a changé, ancienne valeur et nouvelle. */
@@ -1542,49 +1534,88 @@
     }
     return h + '<button type="button" class="fp-valider" data-valider="' + ech(s.id) + '">Valider la fiche</button></div>';
   }
-  function deuxParties(s, f, conduit) {
-    function grille(L) {
-      if (conduit === false) L = L.filter(function (ch) { return !CONDUITE_SEULE[ch.c]; });
-      return '<div class="gr">' + L.map(function (ch) {
-        var val = f[ch.c];
-        if ((val == null || val === "") && ch.c === "fcoMois") val = 60;
-        return champHtml(ch, val, "c" + s.id);
-      }).join("") + "</div>";
-    }
-    var r = null;
-    ((lire(CLE_REG, {}) || {}).salaries || []).forEach(function (x) {
-      if (sansAccent((net(x.nom) + " " + net(x.pre)).trim()) === s.id) r = x;
-    });
-    var reg = r ? [r.ent ? "entré le " + enFrancais(r.ent) : "date d'entrée à porter au registre",
-      NATURE_LIB[r.nature] || "contrat à porter au registre",
-      r.part === "partiel" ? "temps partiel" : (r.part === "complet" ? "temps complet" : "")].filter(Boolean).join(" · ") : "";
-    var recue = f.recue && f.recue.le ? '<p class="fp-recue">Fiche remplie et signée par le salarié le ' + ech(enFrancais(f.recue.le)) +
-      ' : sa fiche signée et ses photos sont dans ses <a href="mes-documents.html?r=' + encodeURIComponent("salarie-" + s.id) + '">documents</a>.</p>' +
-      validationHtml(s, f) : "";
-    return '<div class="fp"><p class="fp-t">Rempli par le salarié</p>' + recue + grille(CHAMPS_C.filter(function (c) { return c.sal; })) + "</div>" +
-      '<div class="fp"><p class="fp-t">À compléter par T.E.C</p>' +
-      '<p class="fp-reg">' + ech(reg || "Ce salarié n'est pas au registre du personnel.") +
-      ' · <a href="registre.html">registre du personnel</a> · <a href="sanctions.html">discipline</a></p>' +
-      grille(CHAMPS_C.filter(function (c) { return !c.sal; })) + "</div>";
-  }
-
   var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
 
-  /* CE QUI NE REGARDE QUE LA CONDUITE. Pour un salarié non roulant, la fiche
-     ne garde que ce dont on a besoin : ses coordonnées, son titre de séjour,
-     son suivi médical, les observations. Comme le formulaire qu'il remplit,
-     qui ne lui pose pas les questions du permis. */
-  var CONDUITE_SEULE = { permisOrigine: 1, inter: 1, suspendu: 1, code95: 1, livret: 1, aCarte: 1,
-    permisNum: 1, permisCat: 1, permisFin: 1, points: 1, retraitLe: 1, retraitFin: 1, retraitMotif: 1,
-    fco: 1, fcoMois: 1, carteCond: 1, carteQualif: 1, telecCarte: 1, telecCarteJours: 1,
-    visitePermisFin: 1, permisPays: 1, arrivee: 1, attestConduite: 1, vehicule: 1 };
-
-  /* LE CORPS DE LA FICHE D'UN SALARIÉ : ses papiers personnels s'il conduit,
-     les deux parties de sa fiche, la remise à zéro. Le même dessin sert à la
-     page « Les salariés », où vit la fiche, et à l'onglet du chef de parc. */
+  /* SA FICHE, NETTOYÉE (26 novembre 2026). « Nettoie-moi tout ça,
+     harmonise, fais quelque chose de propre. » Ce que le salarié a rempli,
+     en quatre cadres : son permis, ses cartes, ce qu'il doit avoir sur lui,
+     ses coordonnées. Chaque donnée n'est plus qu'à un endroit : les visites
+     médicales, les points et retraits, le camion sont dans son dossier ; le
+     téléchargement de la carte au suivi tachygraphe ; les dates d'échéance
+     dans ses échéances, sur sa page. */
+  var CATS = ["B", "BE", "C1", "C1E", "C", "CE", "D1", "D1E", "D", "DE", "A1", "A2", "A"];
+  var PL_REG = /(^|[^a-z])(pl|spl|poids lourds?|super ?lourds?)([^a-z]|$)/i;
+  function cadreFiche(titre, corps) {
+    return '<div class="fn-cadre"><h3 class="fn-t">' + ech(titre) + "</h3>" + corps + "</div>";
+  }
+  function champsDe(s, f, cles) {
+    var C = {};
+    CHAMPS_C.forEach(function (c) { C[c.c] = c; });
+    return '<div class="gr">' + cles.filter(function (k) { return C[k]; }).map(function (k) {
+      var val = f[k];
+      if ((val == null || val === "") && k === "fcoMois") val = 60;
+      return champHtml(C[k], val, "c" + s.id);
+    }).join("") + "</div>";
+  }
+  function categoriesDe(f) {
+    var on = {};
+    net(f.permisCat).toUpperCase().split(/[^A-Z0-9]+/).forEach(function (x) { if (x) on[x] = 1; });
+    return on;
+  }
+  function categoriesHtml(s, f) {
+    var on = categoriesDe(f);
+    return '<p class="fn-l">Catégories</p><div class="fn-cats" role="group" aria-label="Catégories du permis">' +
+      CATS.map(function (c) {
+        return '<button type="button" data-cat="' + ech(s.id) + "|" + c + '"' + (on[c] ? ' aria-pressed="true"' : "") + ">" + c + "</button>";
+      }).join("") + "</div>";
+  }
+  function ficheNette(s, f, conduit) {
+    var h = f.recue && f.recue.le ? validationHtml(s, f)
+      : '<p class="fn-rien">Il n\'a pas encore rempli sa fiche.</p>';
+    if (conduit) {
+      var prof = profilChauffeur(f);
+      var alerte = prof === "leger" && PL_REG.test(s.emp || "")
+        ? '<p class="fn-al">' + ech(s.emp) + " au registre, mais sa fiche ne porte ni C ni CE.</p>" : "";
+      h += cadreFiche("Son permis", categoriesHtml(s, f) + alerte +
+        champsDe(s, f, ["permisNum", "permisFin"].concat(prof === "leger" ? [] : ["code95"]).concat(["suspendu"])));
+      /* Une date de poids lourd déjà connue reste visible, même quand les
+         catégories disent le contraire : on ne cache pas ce qu'il a déclaré. */
+      var plConnu = ["visitePermisFin", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
+      var cartes = prof === "leger" ? ["livret", "aCarte"].concat(f.aCarte === "oui" || net(f.carteCond) ? ["carteCond"] : []) : [];
+      if (prof !== "leger" || plConnu) cartes = ["visitePermisFin", "fco", "carteQualif"].concat(cartes.indexOf("carteCond") < 0 ? ["carteCond"] : []).concat(cartes);
+      h += cadreFiche("Ses cartes", champsDe(s, f, cartes));
+      h += cadreFiche("Ce qu'il doit avoir sur lui",
+        (f.ue === "non" ? champsDe(s, f, ["inter"]) : "") + papiersChauffeurHtml(s, f));
+    }
+    var co = ["tel", "nir", "ue"];
+    if (f.ue === "non") {
+      co.push("titreFin");
+      if (conduit) {
+        co.push("permisOrigine");
+        if (f.permisOrigine === "etr") co.push("permisPays", "arrivee");
+      }
+    }
+    h += cadreFiche("Ses coordonnées", champsDe(s, f, co));
+    h += '<div class="fn-obs">' + cadreFiche("Observations", champsDe(s, f, ["note"])) + "</div>";
+    return h;
+  }
+  /* LES VOLETS DE SON DOSSIER, tenus par T.E.C. */
+  function partieDossier(s, f, partie, conduit) {
+    if (partie === "permis") return champsDe(s, f, ["points", "retraitLe", "retraitFin", "retraitMotif", "fcoMois"]);
+    if (partie === "medical") return champsDe(s, f, ["suivi", "visiteTravail"]
+      .concat(f.suivi === "sir" ? ["visiteInter"] : []).concat(["attestConduite"]));
+    if (partie === "camion") {
+      var L = vehicules().filter(function (v) { return v.conducteur === s.id || v.id === f.vehicule; });
+      return champsDe(s, f, ["vehicule"]) + (L.length ? L.map(function (v) {
+        return '<a class="fn-camion" href="flotte.html?immat=' + encodeURIComponent(net(v.immat)) + '"><b>' +
+          ech(v.immat || "sans immatriculation") + "</b><span>" +
+          ech([GENRE_LIB[v.genre] || "", net(v.marque)].filter(Boolean).join(" · ") || "ouvrir la fiche du camion") + "</span></a>";
+      }).join("") : '<p class="fn-rien">Aucun camion ne lui est attribué. Choisissez-le dans la liste ci-dessus.</p>');
+    }
+    return "";
+  }
   function corpsConducteur(s, f, conduit) {
-    return (conduit ? papiersChauffeurHtml(s, f) : "") +
-      deuxParties(s, f, conduit) +
+    return ficheNette(s, f, conduit) +
       '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>';
   }
   function brancherConducteur(cadre, s) {
@@ -1595,6 +1626,14 @@
         if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
       });
     brancherPapiers(cadre, s.id);
+    Array.prototype.forEach.call(cadre.querySelectorAll("[data-cat]"), function (b) {
+      b.addEventListener("click", function () {
+        var c = b.getAttribute("data-cat").split("|")[1], f = fiche(s.id), on = categoriesDe(f);
+        if (on[c]) delete on[c]; else on[c] = 1;
+        f.permisCat = CATS.filter(function (x) { return on[x]; }).join(", ");
+        garderFiche(s.id, f); rendre();
+      });
+    });
     /* REMETTRE LA FICHE À ZÉRO (26 novembre 2026) : pour une fiche d'essai
        ou une fiche à refaire. Toutes les cases, les deux parties, le
        contrôle des papiers, et les pièces rangées depuis sa fiche
@@ -1630,10 +1669,11 @@
     var s = null;
     salaries(true).forEach(function (x) { if (x.id === E.sid) s = x; });
     if (!s) { hote.innerHTML = '<p class="doux">Ce salarié n\'est pas au registre du personnel.</p>'; return; }
-    var f = fiche(s.id), Ech = echeancesConducteur(f);
+    var f = fiche(s.id);
     hote.innerHTML = '<div class="fiche-s" data-c="' + ech(s.id) + '">' +
-      (Ech.length ? '<div class="ech">' + pastilles(Ech) + "</div>" : "") +
-      corpsConducteur(s, f, E.conduit) + "</div>";
+      (E.partie === "fiche" ? corpsConducteur(s, f, E.conduit)
+        : '<div class="fn-cadre">' + partieDossier(s, f, E.partie, E.conduit) + "</div>" +
+          (E.partie === "medical" ? '<a class="fn-camion" href="visites.html"><b>Courriers du suivi médical</b><span>demande au service de santé au travail, convocation du salarié</span></a>' : "")) + "</div>";
     brancherConducteur(hote.querySelector("[data-c]"), s);
     if (E.apres) try { E.apres(); } catch (e) {}
   }
@@ -2183,8 +2223,8 @@
   window.Flotte = { echeances: toutesEcheances, rendre: function () { try { rendre(); } catch (e) {} },
     /* La fiche d'un salarié, dessinée dans sa page. « apres » est appelé à
        chaque nouveau dessin, pour que la page remette à jour ce qui en dépend. */
-    ficheSalarie: function (hote, sid, conduit, apres) {
-      EMBARQUE = hote ? { hote: hote, sid: sid, conduit: conduit !== false, apres: apres } : null;
+    ficheSalarie: function (hote, sid, conduit, apres, partie) {
+      EMBARQUE = hote ? { hote: hote, sid: sid, conduit: conduit !== false, apres: apres, partie: partie || "fiche" } : null;
       if (EMBARQUE) rendreEmbarque();
     },
     etatFiche: function (sid) { return etatFiche(fiche(sid)); } };

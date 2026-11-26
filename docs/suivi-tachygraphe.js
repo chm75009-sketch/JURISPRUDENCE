@@ -967,6 +967,9 @@
       choisir: function (id) { if (id && id !== S.id) { S.id = id; S.decoches = {}; S.reac = { cle: null, penal: false, entretien: "" }; } },
       versReaction: function (id, msg) { if (id) S.id = id; versReaction(msg); },
       etat: function () { return { id: S.id, etape: S.etape }; },
+      /* Ouvrir directement un volet : la page du salarié mène à chacun des
+         quatre (26 novembre 2026). */
+      aller: function (n) { n = parseInt(n, 10); if (n >= 0 && n <= 3) S.etape = n; },
     };
   }
 
