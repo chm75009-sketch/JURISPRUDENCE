@@ -818,6 +818,11 @@
      Une ligne « si » ne vaut que dans un cas particulier (camion loué,
      cabotage...) : elle se coche quand elle s'applique, et ne compte jamais
      comme un manque. */
+  /* L'oubli de la carte n'ouvre pas le droit de rouler au ticket : seuls la
+     carte abîmée, défectueuse, perdue ou volée (art. 29 et 35) et la panne de
+     l'appareil (art. 37) le permettent. Lu à la source le 26 novembre 2026,
+     règlement (UE) 165/2014, version consolidée du 20 août 2020. */
+  var NOTE_OUBLI = "L'oubli de la carte n'est pas un de ces cas : rouler sans pouvoir la présenter est puni de l'amende de 5e classe (code des transports, art. R. 3315-11, 3°, g).";
   function papiersBord(v) {
     var g = v.genre || "";
     var lourd = g === "pl" || g === "tracteur" || !g || g === "autre";
@@ -836,7 +841,10 @@
       C.push({ k: "permis", t: "Le permis de conduire C ou CE, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", f: "permisFin" });
       C.push({ k: "fimo", t: "La carte de qualification de conducteur (FIMO ou FCO), ou le permis s'il porte le code 95", r: "code des transports, R. 3315-2", f: "carteQualif" });
       C.push({ k: "carte", t: "La carte conducteur du chronotachygraphe", r: "code des transports, R. 3315-11, 3°, g", f: "carteCond" });
-      C.push({ k: "tickets", si: true, t: "Si, sur les 56 derniers jours, il a imprimé un ticket, écrit à la main ou conduit un camion à disques : ces tickets, ces notes et ces disques", r: "règlement (UE) 165/2014, art. 36" });
+      C.push({ k: "tickets", si: true, t: "Si sa carte a été abîmée, a mal fonctionné, a été perdue ou volée dans les 56 derniers jours : les tickets imprimés au début et à la fin de chaque trajet, portant à la main son nom, le numéro de sa carte ou de son permis, ses autres activités et ses repos, et sa signature", r: "règlement (UE) 165/2014, art. 35, 2, et art. 36" });
+      C.push({ k: "remplacement", si: true, t: "Dans ce même cas : la preuve qu'il a demandé une nouvelle carte dans les 7 jours, et pour une perte ou un vol, la déclaration faite aux autorités. Sans carte, il ne peut conduire que 15 jours au plus, et seulement s'il justifie ne pas pouvoir présenter ou utiliser sa carte", r: "règlement (UE) 165/2014, art. 29, 2 à 5" });
+      C.push({ k: "panne", si: true, t: "Si le chronotachygraphe est tombé en panne dans les 56 derniers jours : la feuille où il a noté son nom, le numéro de son permis ou de sa carte, ses périodes de travail et de repos, signée", r: "règlement (UE) 165/2014, art. 37, 2, et art. 36" });
+      C.push({ k: "disques", si: true, t: "S'il a conduit un camion à disques dans les 56 derniers jours : ces disques", r: "règlement (UE) 165/2014, art. 36, 2, iii" });
       C.push({ k: "attest", si: true, t: "S'il n'est pas ressortissant de l'Espace économique européen et fait de l'international ou du cabotage : l'attestation de conducteur", r: "code des transports, R. 3411-13, 4°" });
     } else if (leger) {
       C.push({ k: "permis", t: "Le permis de conduire, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", f: "permisFin" });
@@ -851,7 +859,7 @@
         C.push({ k: "carte", t: "La carte conducteur du chronotachygraphe", r: "code des transports, R. 3315-11, 3°, g", f: "carteCond" });
       }
     }
-    G.push({ titre: "Le conducteur", L: C });
+    G.push({ titre: "Le conducteur", L: C, note: lourd ? NOTE_OUBLI : "" });
 
     var V = [{ k: "cg", t: "La carte grise du véhicule", r: "code de la route, R. 233-1, 2°" },
       { k: "cg-rem", si: true, t: "S'il tire une remorque de plus de 500 kg en charge ou une semi-remorque : la carte grise de celle-ci", r: "code de la route, R. 233-1, 2°" }];
@@ -1406,7 +1414,10 @@
       { k: "permis", t: "Le permis de conduire C ou CE, en cours de validité, papier ou numérique", r: "code de la route, R. 233-1, 1°", d: f.permisFin },
       { k: "fimo", t: "La carte de qualification de conducteur (FIMO ou FCO), ou le permis s'il porte le code 95", r: "code des transports, R. 3315-2", d: finFco(f) },
       { k: "carte", t: "La carte conducteur du chronotachygraphe", r: "code des transports, R. 3315-11, 3°, g", d: f.carteCond },
-      { k: "tickets", si: true, t: "Si, sur les 56 derniers jours, il a imprimé un ticket, écrit à la main ou conduit un camion à disques : ces tickets, ces notes et ces disques", r: "règlement (UE) 165/2014, art. 36" },
+      { k: "tickets", si: true, t: "Si sa carte a été abîmée, a mal fonctionné, a été perdue ou volée dans les 56 derniers jours : les tickets imprimés au début et à la fin de chaque trajet, portant à la main son nom, le numéro de sa carte ou de son permis, ses autres activités et ses repos, et sa signature", r: "règlement (UE) 165/2014, art. 35, 2, et art. 36" },
+      { k: "remplacement", si: true, t: "Dans ce même cas : la preuve qu'il a demandé une nouvelle carte dans les 7 jours, et pour une perte ou un vol, la déclaration faite aux autorités. Sans carte, il ne peut conduire que 15 jours au plus, et seulement s'il justifie ne pas pouvoir présenter ou utiliser sa carte", r: "règlement (UE) 165/2014, art. 29, 2 à 5" },
+      { k: "panne", si: true, t: "Si le chronotachygraphe est tombé en panne dans les 56 derniers jours : la feuille où il a noté son nom, le numéro de son permis ou de sa carte, ses périodes de travail et de repos, signée", r: "règlement (UE) 165/2014, art. 37, 2, et art. 36" },
+      { k: "disques", si: true, t: "S'il a conduit un camion à disques dans les 56 derniers jours : ces disques", r: "règlement (UE) 165/2014, art. 36, 2, iii" },
       { k: "attest", si: true, t: "S'il n'est pas ressortissant de l'Espace économique européen et fait de l'international ou du cabotage : l'attestation de conducteur", r: "code des transports, R. 3411-13, 4°" },
     ];
     return [
@@ -1452,7 +1463,7 @@
     }).join("");
     return '<div class="pap"><p class="pt">Ses papiers personnels</p>' + choix +
       '<p class="pf-nb">' + nb + " documents à avoir sur lui" + "</p>" + tete +
-      '<div class="bd-g">' + lignes + "</div>" +
+      '<div class="bd-g">' + lignes + (profil === "pl" ? '<p class="doux">' + ech(NOTE_OUBLI) + "</p>" : "") + "</div>" +
       '<div class="barre2"><button type="button" data-pap-ok="' + ech(s.id) + '">Enregistrer le contrôle d\'aujourd\'hui</button></div>' +
       '<div class="barre2"><button type="button" class="second" data-pap-raz="' + ech(s.id) + '">Nouveau contrôle : tout décocher</button></div>' +
       "</div>";
