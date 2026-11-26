@@ -1498,6 +1498,37 @@
      secrétaire ne le saisit qu'une fois, au registre. */
   var NATURE_LIB = { cdi: "CDI", cdd: "CDD", temporaire: "Salarié temporaire", groupement: "Groupement d'employeurs",
     apprenti: "Apprentissage", pro: "Professionnalisation", autre: "Autre situation" };
+  /* LA VALIDATION (26 novembre 2026). Une fiche arrivée est orange tant que
+     T.E.C ou le cabinet ne l'a pas validée ; validée, elle passe au vert. Une
+     mise à jour dit ce qu'elle a changé, ancienne valeur et nouvelle. */
+  function etatFiche(f) {
+    if (!f || !f.recue) return "rouge";
+    return f.validee && f.validee.id === f.recue.id ? "vert" : "orange";
+  }
+  function libDe(k) { var l = k; CHAMPS_C.forEach(function (c) { if (c.c === k) l = c.lib; }); return k === "profil" ? "Profil" : l; }
+  function valLisible(k, v) {
+    if (v == null || v === "") return "vide";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return enFrancais(v);
+    if (k === "profil") return v === "pl" ? "poids lourd" : "pas poids lourd";
+    if (k === "permisOrigine") return v === "etr" ? "étranger" : "français";
+    return v;
+  }
+  function validationHtml(s, f) {
+    var e = etatFiche(f);
+    if (e === "vert") return '<p class="fp-ok"><i class="fr-pt"></i>Fiche validée le ' + ech(enFrancais(f.validee.le)) +
+      (f.validee.par ? " par " + ech(f.validee.par) : "") + ".</p>";
+    var maj = f.maj && f.maj.id === f.recue.id ? f.maj : null, h = '<div class="fp-av"><p><i class="fr-pt"></i><b>' +
+      (maj ? "Mise à jour du " : "Nouvelle fiche du ") + ech(enFrancais(f.recue.le)) + "</b>, à vérifier.</p>";
+    if (maj) {
+      var L = (maj.changes || []).map(function (c) {
+        return "<li>" + ech(libDe(c.k)) + " : " + ech(valLisible(c.k, c.avant)) + " → <b>" + ech(valLisible(c.k, c.apres)) + "</b></li>";
+      }).concat((maj.ajouts || []).map(function (k) {
+        return "<li>" + ech(libDe(k)) + " : complété, <b>" + ech(valLisible(k, f[k])) + "</b></li>";
+      }));
+      h += L.length ? "<ul>" + L.join("") + "</ul>" : "<p>Rien n'a changé par rapport à la fiche précédente.</p>";
+    }
+    return h + '<button type="button" class="fp-valider" data-valider="' + ech(s.id) + '">Valider la fiche</button></div>';
+  }
   function deuxParties(s, f) {
     function grille(L) {
       return '<div class="gr">' + L.map(function (ch) {
@@ -1514,7 +1545,8 @@
       NATURE_LIB[r.nature] || "contrat à porter au registre",
       r.part === "partiel" ? "temps partiel" : (r.part === "complet" ? "temps complet" : "")].filter(Boolean).join(" · ") : "";
     var recue = f.recue && f.recue.le ? '<p class="fp-recue">Fiche remplie et signée par le salarié le ' + ech(enFrancais(f.recue.le)) +
-      ' : sa fiche signée et ses photos sont dans ses <a href="mes-documents.html?r=' + encodeURIComponent("salarie-" + s.id) + '">documents</a>.</p>' : "";
+      ' : sa fiche signée et ses photos sont dans ses <a href="mes-documents.html?r=' + encodeURIComponent("salarie-" + s.id) + '">documents</a>.</p>' +
+      validationHtml(s, f) : "";
     return '<div class="fp"><p class="fp-t">Rempli par le salarié</p>' + recue + grille(CHAMPS_C.filter(function (c) { return c.sal; })) + "</div>" +
       '<div class="fp"><p class="fp-t">À compléter par T.E.C</p>' +
       '<p class="fp-reg">' + ech(reg || "Ce salarié n'est pas au registre du personnel.") +
@@ -1537,7 +1569,8 @@
         CONDUIT.test(s.emp) ? "" : "sédentaire : visites médicales"].filter(Boolean).join(" · ");
       return '<div class="carte-v' + (p === "passe" ? " urgent" : "") + '" data-c="' + ech(s.id) + '">' +
         '<div class="tt" data-plier="c' + ech(s.id) + '">' +
-        '<span class="nom">' + ech(s.nom) +
+        '<span class="nom">' + (CONDUIT.test(s.emp) ? '<i class="fr-pt fr-' + etatFiche(f) + '" title="' +
+          ({ rouge: "fiche pas encore remplie", orange: "fiche à vérifier", vert: "fiche validée" })[etatFiche(f)] + '"></i>' : "") + ech(s.nom) +
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
         '<div class="ech">' + pastilles(E) + "</div>" +
@@ -1556,6 +1589,13 @@
           if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
         });
       brancherPapiers(cadre, s.id);
+      var bv = cadre.querySelector("[data-valider]");
+      if (bv) bv.addEventListener("click", function () {
+        var fv = fiche(s.id); if (!fv.recue) return;
+        fv.validee = { id: fv.recue.id, le: iso(new Date()), par: quiControle() };
+        delete fv.maj;
+        garderFiche(s.id, fv); rendre();
+      });
     });
   }
 

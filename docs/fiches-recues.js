@@ -126,49 +126,107 @@
       return { sid: sansAccent(nom) || "salarie", nom: nom, emp: String(s.emp || "").trim() };
     }).sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); });
   }
-  function nonRemplis() {
+  /* L'ÉTAT DE CHAQUE SALARIÉ, EN TROIS COULEURS (26 novembre 2026).
+     Rouge : pas de fiche. Orange : une fiche nouvelle ou mise à jour, pas
+     encore validée. Vert : validée par T.E.C ou le cabinet. Une fiche qui
+     attend d'être rangée compte comme orange. */
+  function etats() {
     var T = lire("flotte-conducteurs", {}), attendus = {};
     Object.keys(ETAT.resumes).forEach(function (id) {
       var r = ETAT.resumes[id], s = salarieDe(r);
       if (s) attendus[sansAccent(((s.nom || "") + " " + (s.pre || "")).trim())] = 1;
     });
-    return presents().filter(function (p) { return !(T[p.sid] && T[p.sid].recue) && !attendus[p.sid]; });
+    return presents().map(function (p) {
+      var f = T[p.sid] || {}, e = "rouge";
+      if (f.recue) e = (f.validee && f.validee.id === f.recue.id) ? "vert" : "orange";
+      if (attendus[p.sid]) e = "orange";
+      p.etat = e; p.f = f; return p;
+    });
   }
+  function nonRemplis() { return etats().filter(function (p) { return p.etat === "rouge"; }); }
   function suivi() {
-    var P = presents();
-    if (!P.length) return "";
-    var N = nonRemplis(), faits = P.length - N.length;
-    var h = '<p class="fr-st">Suivi des réponses</p>' +
-      '<p class="fr-compte"><b>' + faits + " sur " + P.length + "</b> salarié" + (P.length > 1 ? "s ont" : " a") + " rempli leur fiche.</p>";
-    if (!N.length) return h + '<p class="fr-doux">Tout le monde a rempli sa fiche.</p>';
-    return h + '<details class="fr-nr"' + (ETAT.nrOuvert ? " open" : "") + '><summary>Pas encore rempli (' + N.length + ")</summary>" +
-      '<ul class="fr-liste">' + N.map(function (p) {
-        return "<li><b>" + ech(p.nom) + "</b>" + (p.emp ? "<span>" + ech(p.emp) + "</span>" : "") + "</li>";
-      }).join("") + "</ul>" +
-      '<button type="button" class="fr-b second" data-fr="copier-nr">Copier la liste pour relancer</button></details>';
+    var E = etats();
+    if (!E.length) return "";
+    var G = { orange: [], rouge: [], vert: [] };
+    E.forEach(function (p) { G[p.etat].push(p); });
+    function ligne(p) {
+      var f = p.f, sous = p.emp;
+      if (p.etat === "orange") sous = (f.maj && f.recue && f.maj.id === f.recue.id ? "mise à jour" : "nouvelle") +
+        (f.recue ? " du " + enFrancais(f.recue.le) : ", en cours de rangement") + ", à vérifier";
+      if (p.etat === "vert") sous = "validée le " + enFrancais(f.validee.le) + (f.validee.par ? " par " + f.validee.par : "");
+      var lienF = p.etat === "rouge" ? "<b>" + ech(p.nom) + "</b>"
+        : '<a href="flotte.html?c=' + encodeURIComponent(p.sid) + '"><b>' + ech(p.nom) + "</b></a>";
+      return '<li class="fr-' + p.etat + '"><i class="fr-pt"></i><span class="fr-qui">' + lienF +
+        (sous ? "<span>" + ech(sous) + "</span>" : "") + "</span>" +
+        (p.etat !== "rouge" && f.recue ? '<button type="button" class="fr-x" data-fr="retirer" data-id="' + ech(f.recue.id) +
+          '" data-sid="' + ech(p.sid) + '">Supprimer</button>' : "") + "</li>";
+    }
+    function groupe(cle, titre, ouvert) {
+      if (!G[cle].length) return "";
+      var o = ETAT["g-" + cle];
+      return '<details class="fr-g fr-g-' + cle + '" data-g="' + cle + '"' + ((o === undefined ? ouvert : o) ? " open" : "") + ">" +
+        '<summary><i class="fr-pt"></i>' + titre + " (" + G[cle].length + ")</summary>" +
+        '<ul class="fr-liste">' + G[cle].map(ligne).join("") + "</ul>" +
+        (cle === "rouge" ? '<button type="button" class="fr-b second" data-fr="copier-nr">Copier la liste pour relancer</button>' : "") +
+        "</details>";
+    }
+    return '<p class="fr-st">Suivi des réponses</p>' +
+      '<p class="fr-leg"><span class="fr-rouge"><i class="fr-pt"></i>pas encore remplie</span>' +
+      '<span class="fr-orange"><i class="fr-pt"></i>nouvelle ou mise à jour, à vérifier</span>' +
+      '<span class="fr-vert"><i class="fr-pt"></i>validée</span></p>' +
+      '<p class="fr-compte"><b>' + (G.orange.length + G.vert.length) + " sur " + E.length + "</b> salarié" +
+      (E.length > 1 ? "s ont" : " a") + " rempli leur fiche.</p>" +
+      groupe("orange", "À vérifier", true) + groupe("rouge", "Pas encore remplie", false) + groupe("vert", "Validées", false);
   }
 
-  /* Retirer une fiche déjà rangée : ses réponses sortent de la fiche du
-     salarié, ses pièces de ses documents. Pour une fiche d'essai, ou envoyée
-     par erreur. */
-  function retirer(id) {
+  /* Supprimer une fiche rangée. Si elle mettait à jour une fiche précédente,
+     les valeurs d'avant reviennent et les photos remplacées reprennent leur
+     nom ; sinon, ses réponses sortent de la fiche et ses pièces des
+     documents. Pour une fiche d'essai, ou envoyée par erreur. */
+  function renommer(d, nom) {
+    return window.Documents.lire(d.id).then(function (x) {
+      if (!x) return null;
+      return window.Documents.enregistrer(x.rubrique, { nom: nom, sorte: x.sorte, type: x.type, contenu: x.contenu })
+        .then(function () { return window.Documents.supprimer(d.id); });
+    });
+  }
+  function retirer(id, sidDonne) {
     var R = lire(CLE_RANGEES, []), x = null;
     R.forEach(function (e) { if (e.id === id) x = e; });
-    if (!x) return Promise.resolve();
-    var T = lire("flotte-conducteurs", {}), f = T[x.sid] || {};
-    var le = (f.recue && f.recue.id === id && f.recue.le) || x.fait || "";
+    var sid = (x && x.sid) || sidDonne;
+    if (!sid) return Promise.resolve();
+    var T = lire("flotte-conducteurs", {}), f = T[sid] || {};
+    var le = (f.recue && f.recue.id === id && f.recue.le) || (x && x.fait) || "";
+    var maj = f.maj && f.maj.id === id ? f.maj : null;
     if (f.recue && f.recue.id === id) {
-      CHAMPS_FICHE.forEach(function (k) { delete f[k]; });
-      delete f.recue; T[x.sid] = f; garder("flotte-conducteurs", T);
+      if (maj) {
+        (maj.changes || []).forEach(function (ch) { f[ch.k] = ch.avant; });
+        (maj.ajouts || []).forEach(function (k) { delete f[k]; });
+        f.recue = maj.precedente || null; if (!f.recue) delete f.recue;
+        if (maj.valideeAvant) f.validee = maj.valideeAvant; else delete f.validee;
+        delete f.maj;
+      } else {
+        CHAMPS_FICHE.forEach(function (k) { delete f[k]; });
+        delete f.recue; delete f.validee; delete f.maj;
+      }
+      T[sid] = f; garder("flotte-conducteurs", T);
     }
     garder(CLE_RANGEES, R.filter(function (e) { return e.id !== id; }));
     var faites = lire(CLE_FAITES, {}); delete faites[id]; garder(CLE_FAITES, faites);
     appel("DELETE", "depot/" + id).catch(function () {});
     if (!window.Documents || !le) return Promise.resolve();
-    var marque = "(" + enFrancais(le) + ")";
-    return window.Documents.liste("salarie-" + x.sid).then(function (L) {
-      return Promise.all(L.filter(function (d) { return String(d.nom || "").indexOf(marque) >= 0; })
-        .map(function (d) { return window.Documents.supprimer(d.id); }));
+    var marque = "(" + enFrancais(le) + ")", rempl = " (remplacée le " + enFrancais(le) + ")";
+    return window.Documents.liste("salarie-" + sid).then(function (L) {
+      /* D'abord retirer les pièces de cette fiche, puis rendre leur nom aux
+         anciennes : un document produit du même nom serait sinon confondu. */
+      var P = L.filter(function (d) { var n = String(d.nom || ""); return n.indexOf(marque) >= 0 && n.indexOf("remplacée") < 0; })
+        .map(function (d) { return window.Documents.supprimer(d.id); });
+      return Promise.all(P).then(function () {
+        if (!maj) return null;
+        return L.filter(function (d) { return String(d.nom || "").indexOf(rempl) >= 0; }).reduce(function (pr, d) {
+          return pr.then(function () { return renommer(d, String(d.nom).replace(rempl, "")); });
+        }, Promise.resolve());
+      });
     });
   }
 
@@ -190,17 +248,9 @@
         (navigator.share ? '<button type="button" class="fr-b second" data-fr="partager">Partager</button>' : "") + "</div></div>";
       if (ETAT.msg) h += '<p class="fr-msg">' + ech(ETAT.msg) + "</p>";
       h += suivi();
-      var R = lire(CLE_RANGEES, []);
-      if (R.length) {
-        h += '<p class="fr-st">Rangées dans la page du salarié</p>' + R.slice(0, 8).map(function (x) {
-          return '<div class="fr-rg"><a class="fr-ok" href="flotte.html?c=' + encodeURIComponent(x.sid) + '">' + ech(x.nom) +
-            "<small>rangée le " + ech(enFrancais(x.le)) + "</small></a>" +
-            '<button type="button" class="fr-x" data-fr="retirer" data-id="' + ech(x.id) + '">Supprimer</button></div>';
-        }).join("");
-      }
       var attente = ETAT.liste;
       if (!attente.length) {
-        h += '<p class="fr-doux">' + (R.length ? "Aucune fiche en attente." : "Aucune fiche reçue pour l'instant.") + "</p>";
+        h += "";
       } else {
         h += '<p class="fr-st">Reçues, pas encore rangées</p>' + attente.map(function (it) {
           var r = ETAT.resumes[it.id] || {};
@@ -216,8 +266,9 @@
       }
     }
     hote.innerHTML = h + "</div>";
-    var nr = hote.querySelector(".fr-nr");
-    if (nr) nr.addEventListener("toggle", function () { ETAT.nrOuvert = nr.open; });
+    Array.prototype.forEach.call(hote.querySelectorAll("details[data-g]"), function (d) {
+      d.addEventListener("toggle", function () { ETAT["g-" + d.getAttribute("data-g")] = d.open; });
+    });
   }
 
   var LIB = [
@@ -339,17 +390,45 @@
     /* Le nom du salarié en tête de chaque pièce : « Mes documents » range
        ses pièces sous son nom, et le filtre par salarié les retrouve. */
     var qui = ((sal.nom || "").trim() + " " + (sal.pre || "").trim()).trim();
-    var P = Object.keys(F.photos || {}).map(function (k) {
-      var p = F.photos[k];
-      return blobDe(p.image).then(function (b) {
-        return window.Documents.enregistrer(rub, { nom: qui + ", " + p.titre.charAt(0).toLowerCase() + p.titre.slice(1) + " (" + quand + ").jpg", sorte: "depose", type: "image/jpeg", contenu: b });
+    /* UNE PHOTO DU MÊME DOCUMENT REMPLACE L'ANCIENNE. L'ancienne n'est pas
+       effacée : elle prend la mention « remplacée le ... » et reste dans ses
+       documents. */
+    function poser(debut, ext, sorte, type, blob) {
+      return window.Documents.liste(rub).then(function (L) {
+        var anciennes = L.filter(function (d) {
+          var n = String(d.nom || ""); return n.indexOf(debut + " (") === 0 && n.indexOf("remplacée") < 0;
+        });
+        return Promise.all(anciennes.map(function (d) {
+          return renommer(d, String(d.nom).replace(/(\.[a-z]+)$/, "") + " (remplacée le " + quand + ")" + (String(d.nom).match(/\.[a-z]+$/) || [""])[0]);
+        }));
+      }).then(function () {
+        return window.Documents.enregistrer(rub, { nom: debut + " (" + quand + ")" + ext, sorte: sorte, type: type, contenu: blob });
       });
+    }
+    var cles = Object.keys(F.photos || {});
+    var P = cles.reduce(function (pr, k) {
+      var p = F.photos[k];
+      return pr.then(function () { return blobDe(p.image); }).then(function (b) {
+        return poser(qui + ", " + p.titre.charAt(0).toLowerCase() + p.titre.slice(1), ".jpg", "depose", "image/jpeg", b);
+      });
+    }, Promise.resolve()).then(function () { return ficheImage(F); }).then(function (b) {
+      return poser(qui + ", fiche chauffeur signée", ".png", "produit", "image/png", b);
     });
-    P.push(ficheImage(F).then(function (b) {
-      return window.Documents.enregistrer(rub, { nom: qui + ", fiche chauffeur signée (" + quand + ").png", sorte: "produit", type: "image/png", contenu: b });
-    }));
-    return Promise.all(P).then(function () {
+    return P.then(function () {
       var T = lire("flotte-conducteurs", {}), f = T[sid] || {};
+      /* LA MISE À JOUR NE FAIT QUE COMPLÉTER OU CORRIGER. Case vide :
+         complétée. Case identique : inchangée. Case différente : la nouvelle
+         valeur, l'ancienne gardée dans la trace. Case laissée vide par le
+         salarié : rien n'est effacé. */
+      var changes = [], ajouts = [];
+      if (f.recue) {
+        CHAMPS_FICHE.forEach(function (k) {
+          var v = c[k]; if (v == null || v === "") return;
+          if (f[k] == null || f[k] === "") ajouts.push(k);
+          else if (String(f[k]) !== String(v)) changes.push({ k: k, avant: f[k], apres: v });
+        });
+        f.maj = { id: id, le: F.fait, changes: changes, ajouts: ajouts, precedente: f.recue, valideeAvant: f.validee || null };
+      } else delete f.maj;
       CHAMPS_FICHE.forEach(function (k) { if (c[k] != null && c[k] !== "") f[k] = c[k]; });
       f.recue = { le: F.fait, id: id };
       T[sid] = f; garder("flotte-conducteurs", T);
@@ -406,7 +485,7 @@
       }
     } else if (q === "retirer") {
       if (!window.confirm("Supprimer cette fiche ? Ses réponses sortent de la fiche du salarié, et ses photos et sa fiche signée de ses documents.")) return;
-      retirer(id).then(function () { ETAT.msg = "Fiche supprimée."; rendre(); }, function () { rendre(); });
+      retirer(id, b.getAttribute("data-sid")).then(function () { ETAT.msg = "Fiche supprimée."; rendre(); }, function () { rendre(); });
     } else if (q === "copier-nr") {
       var t = "Fiche chauffeur pas encore remplie :\n" + nonRemplis().map(function (p) { return "- " + p.nom; }).join("\n");
       (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = "Liste copiée"; },
