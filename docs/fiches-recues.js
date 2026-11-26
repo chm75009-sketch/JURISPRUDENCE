@@ -111,6 +111,67 @@
     return location.origin + "/fiche-chauffeur.html#c=" + c;
   }
 
+  /* ─── QUI A REMPLI, QUI NE L'A PAS FAIT (26 novembre 2026) ───
+
+     Demande : savoir qui relancer. On part du registre du personnel, salariés
+     présents. Un salarié a rempli quand sa fiche porte une fiche reçue, ou
+     quand une fiche à son nom attend d'être rangée. Seuls ceux qui n'ont pas
+     rempli sont listés, avec un bouton pour copier leurs noms. */
+  function presents() {
+    var reg = lire("registre-personnel", {}) || {};
+    return (reg.salaries || []).filter(function (s) {
+      return !String(s.sor || "").trim() && (String(s.nom || "").trim() || String(s.pre || "").trim());
+    }).map(function (s) {
+      var nom = (String(s.nom || "").trim() + " " + String(s.pre || "").trim()).trim();
+      return { sid: sansAccent(nom) || "salarie", nom: nom, emp: String(s.emp || "").trim() };
+    }).sort(function (a, b) { return a.nom.localeCompare(b.nom, "fr"); });
+  }
+  function nonRemplis() {
+    var T = lire("flotte-conducteurs", {}), attendus = {};
+    Object.keys(ETAT.resumes).forEach(function (id) {
+      var r = ETAT.resumes[id], s = salarieDe(r);
+      if (s) attendus[sansAccent(((s.nom || "") + " " + (s.pre || "")).trim())] = 1;
+    });
+    return presents().filter(function (p) { return !(T[p.sid] && T[p.sid].recue) && !attendus[p.sid]; });
+  }
+  function suivi() {
+    var P = presents();
+    if (!P.length) return "";
+    var N = nonRemplis(), faits = P.length - N.length;
+    var h = '<p class="fr-st">Suivi des réponses</p>' +
+      '<p class="fr-compte"><b>' + faits + " sur " + P.length + "</b> salarié" + (P.length > 1 ? "s ont" : " a") + " rempli leur fiche.</p>";
+    if (!N.length) return h + '<p class="fr-doux">Tout le monde a rempli sa fiche.</p>';
+    return h + '<details class="fr-nr"' + (ETAT.nrOuvert ? " open" : "") + '><summary>Pas encore rempli (' + N.length + ")</summary>" +
+      '<ul class="fr-liste">' + N.map(function (p) {
+        return "<li><b>" + ech(p.nom) + "</b>" + (p.emp ? "<span>" + ech(p.emp) + "</span>" : "") + "</li>";
+      }).join("") + "</ul>" +
+      '<button type="button" class="fr-b second" data-fr="copier-nr">Copier la liste pour relancer</button></details>';
+  }
+
+  /* Retirer une fiche déjà rangée : ses réponses sortent de la fiche du
+     salarié, ses pièces de ses documents. Pour une fiche d'essai, ou envoyée
+     par erreur. */
+  function retirer(id) {
+    var R = lire(CLE_RANGEES, []), x = null;
+    R.forEach(function (e) { if (e.id === id) x = e; });
+    if (!x) return Promise.resolve();
+    var T = lire("flotte-conducteurs", {}), f = T[x.sid] || {};
+    var le = (f.recue && f.recue.id === id && f.recue.le) || x.fait || "";
+    if (f.recue && f.recue.id === id) {
+      CHAMPS_FICHE.forEach(function (k) { delete f[k]; });
+      delete f.recue; T[x.sid] = f; garder("flotte-conducteurs", T);
+    }
+    garder(CLE_RANGEES, R.filter(function (e) { return e.id !== id; }));
+    var faites = lire(CLE_FAITES, {}); delete faites[id]; garder(CLE_FAITES, faites);
+    appel("DELETE", "depot/" + id).catch(function () {});
+    if (!window.Documents || !le) return Promise.resolve();
+    var marque = "(" + enFrancais(le) + ")";
+    return window.Documents.liste("salarie-" + x.sid).then(function (L) {
+      return Promise.all(L.filter(function (d) { return String(d.nom || "").indexOf(marque) >= 0; })
+        .map(function (d) { return window.Documents.supprimer(d.id); }));
+    });
+  }
+
   /* ─── l'affichage ─── */
   var ETAT = { liste: [], resumes: {}, ouvertes: {}, fiches: {}, msg: "" };
 
@@ -128,22 +189,24 @@
         '<div class="fr-2"><button type="button" class="fr-b" data-fr="copier">Copier le lien</button>' +
         (navigator.share ? '<button type="button" class="fr-b second" data-fr="partager">Partager</button>' : "") + "</div></div>";
       if (ETAT.msg) h += '<p class="fr-msg">' + ech(ETAT.msg) + "</p>";
+      h += suivi();
       var R = lire(CLE_RANGEES, []);
       if (R.length) {
-        h += '<p class="fr-st">Rangées dans la page du salarié</p>' + R.slice(0, 5).map(function (x) {
-          return '<a class="fr-ok" href="flotte.html?c=' + encodeURIComponent(x.sid) + '">' + ech(x.nom) +
-            "<small>rangée le " + ech(enFrancais(x.le)) + "</small></a>";
+        h += '<p class="fr-st">Rangées dans la page du salarié</p>' + R.slice(0, 8).map(function (x) {
+          return '<div class="fr-rg"><a class="fr-ok" href="flotte.html?c=' + encodeURIComponent(x.sid) + '">' + ech(x.nom) +
+            "<small>rangée le " + ech(enFrancais(x.le)) + "</small></a>" +
+            '<button type="button" class="fr-x" data-fr="retirer" data-id="' + ech(x.id) + '">Supprimer</button></div>';
         }).join("");
       }
-      var attente = ETAT.liste.filter(function (it) { return !faites[it.id]; });
+      var attente = ETAT.liste;
       if (!attente.length) {
         h += '<p class="fr-doux">' + (R.length ? "Aucune fiche en attente." : "Aucune fiche reçue pour l'instant.") + "</p>";
       } else {
-        h += '<p class="fr-st">En attente</p>' + attente.map(function (it) {
+        h += '<p class="fr-st">Reçues, pas encore rangées</p>' + attente.map(function (it) {
           var r = ETAT.resumes[it.id] || {};
           var nom = r.nom ? (r.nom + " " + (r.prenom || "")) : "Fiche reçue";
           var sous = [r.profil === "pl" ? "poids lourd" : (r.profil === "leger" ? "pas poids lourd" : ""),
-            "reçue le " + enFrancais(it.quand), r.nom && !salarieDe(r) ? "nom absent du registre du personnel" : "en cours de rangement"].filter(Boolean).join(" · ");
+            "reçue le " + enFrancais(it.quand), faites[it.id] ? "déjà reportée" : (r.nom && !salarieDe(r) ? "nom absent du registre du personnel" : "en cours de rangement")].filter(Boolean).join(" · ");
           return '<div class="fr-it' + (faites[it.id] ? " fait" : "") + '">' +
             '<button type="button" class="fr-ligne" data-fr="voir" data-id="' + ech(it.id) + '">' +
             '<span class="fr-n">' + ech(nom) + '<small>' + ech(sous) + "</small></span><span class=\"fr-fl\">" +
@@ -153,6 +216,8 @@
       }
     }
     hote.innerHTML = h + "</div>";
+    var nr = hote.querySelector(".fr-nr");
+    if (nr) nr.addEventListener("toggle", function () { ETAT.nrOuvert = nr.open; });
   }
 
   var LIB = [
@@ -290,7 +355,7 @@
       T[sid] = f; garder("flotte-conducteurs", T);
       var faites = lire(CLE_FAITES, {}); faites[id] = new Date().toISOString().slice(0, 10); garder(CLE_FAITES, faites);
       var R = lire(CLE_RANGEES, []);
-      R.unshift({ id: id, sid: sid, nom: ((c.nom || "") + " " + (c.prenom || "")).trim(), le: new Date().toISOString().slice(0, 10) });
+      R.unshift({ id: id, sid: sid, nom: ((c.nom || "") + " " + (c.prenom || "")).trim(), le: new Date().toISOString().slice(0, 10), fait: F.fait });
       garder(CLE_RANGEES, R.slice(0, 30));
       return appel("DELETE", "depot/" + id).then(function () { return true; }, function () { return true; });
     });
@@ -339,6 +404,13 @@
           .then(ouvrir).then(function (F) { ETAT.fiches[id] = F; rendre(); },
             function () { ETAT.fiches[id] = { erreur: "Cette fiche ne s'ouvre pas sur cet appareil. Rouvrez la page dans un instant, le temps que le dossier se mette à jour." }; rendre(); });
       }
+    } else if (q === "retirer") {
+      if (!window.confirm("Supprimer cette fiche ? Ses réponses sortent de la fiche du salarié, et ses photos et sa fiche signée de ses documents.")) return;
+      retirer(id).then(function () { ETAT.msg = "Fiche supprimée."; rendre(); }, function () { rendre(); });
+    } else if (q === "copier-nr") {
+      var t = "Fiche chauffeur pas encore remplie :\n" + nonRemplis().map(function (p) { return "- " + p.nom; }).join("\n");
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function () { b.textContent = "Liste copiée"; },
+        function () { window.prompt("Copiez la liste :", t); });
     } else if (q === "reporter") {
       b.disabled = true; b.textContent = "Rangement...";
       chargerFiche(id).then(function (F) { return ranger(id, F); }).then(function (ok) {
