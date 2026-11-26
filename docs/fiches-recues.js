@@ -246,6 +246,8 @@
         '<input type="text" readonly value="' + ech(lien()) + '">' +
         '<div class="fr-2"><button type="button" class="fr-b" data-fr="copier">Copier le lien</button>' +
         (navigator.share ? '<button type="button" class="fr-b second" data-fr="partager">Partager</button>' : "") + "</div></div>";
+      h += '<button type="button" class="fr-b second fr-act" data-fr="actualiser">Actualiser</button>' +
+        '<p class="fr-auto">Vérifié automatiquement toutes les 30 secondes' + (ETAT.vu ? ", dernière fois à " + ETAT.vu : "") + ".</p>";
       if (ETAT.msg) h += '<p class="fr-msg">' + ech(ETAT.msg) + "</p>";
       h += suivi();
       var attente = ETAT.liste;
@@ -272,7 +274,7 @@
   }
 
   var LIB = [
-    ["nom", "Nom"], ["prenom", "Prénom"], ["tel", "Téléphone"],
+    ["nom", "Nom"], ["prenom", "Prénom"], ["tel", "Téléphone"], ["nir", "Numéro de sécurité sociale"],
     ["profil", "Profil"], ["ue", "Ressortissant UE ou EEE"], ["titreFin", "Titre de séjour, valable jusqu'au"],
     ["permisOrigine", "Permis"], ["permisPays", "Pays du permis"], ["arrivee", "Arrivée en France le"],
     ["inter", "International ou cabotage"],
@@ -338,7 +340,7 @@
      du serveur : l'autre appareil ne la rangera pas une seconde fois. Si le
      nom n'est pas au registre du personnel, elle attend dans le cadre des
      fiches reçues. */
-  var CHAMPS_FICHE = ["tel", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
+  var CHAMPS_FICHE = ["tel", "nir", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
     "permisNum", "permisCat", "permisFin", "suspendu", "visiteTravail", "visitePermisFin", "fco",
     "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil"];
   function salarieDe(c) {
@@ -483,6 +485,8 @@
           .then(ouvrir).then(function (F) { ETAT.fiches[id] = F; rendre(); },
             function () { ETAT.fiches[id] = { erreur: "Cette fiche ne s'ouvre pas sur cet appareil. Rouvrez la page dans un instant, le temps que le dossier se mette à jour." }; rendre(); });
       }
+    } else if (q === "actualiser") {
+      ETAT.msg = ""; b.textContent = "Vérification..."; charger();
     } else if (q === "retirer") {
       if (!window.confirm("Supprimer cette fiche ? Ses réponses sortent de la fiche du salarié, et ses photos et sa fiche signée de ses documents.")) return;
       retirer(id, b.getAttribute("data-sid")).then(function () { ETAT.msg = "Fiche supprimée."; rendre(); }, function () { rendre(); });
@@ -521,10 +525,22 @@
     }).then(function () {
       rendre();
       return rangerTout().then(function (n) {
+        var d = new Date(); ETAT.vu = ("0" + d.getHours()).slice(-2) + " h " + ("0" + d.getMinutes()).slice(-2);
         if (n && hote) ETAT.msg = n + " fiche" + (n > 1 ? "s rangées" : " rangée") + " dans la page du salarié.";
+        if (n && window.Flotte && window.Flotte.rendre) window.Flotte.rendre();
         rendre();
       });
     }, function () { ETAT.msg = "La liste des fiches n'a pas pu être lue : vérifiez la connexion."; rendre(); });
   }
   charger();
+  /* EN DIRECT (26 novembre 2026) : tant que la page est ouverte et visible,
+     on regarde toutes les 30 secondes si une fiche est arrivée. Seule la
+     liste est demandée, quelques octets ; la fiche n'est téléchargée que si
+     elle est nouvelle. */
+  setInterval(function () {
+    if (document.visibilityState === "visible" && lire(CLE_PRIV, null)) charger();
+  }, 30000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && lire(CLE_PRIV, null)) charger();
+  });
 })();

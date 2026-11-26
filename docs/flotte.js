@@ -222,6 +222,7 @@
   var OUI_NON = [["", "- à préciser -"], ["oui", "Oui"], ["non", "Non"]];
   var CHAMPS_C = [
     { c: "tel", sal: true, lib: "Téléphone", t: "text" },
+    { c: "nir", sal: true, lib: "Numéro de sécurité sociale", t: "text" },
     { c: "ue", sal: true, lib: "Ressortissant de l'Union européenne ou de l'EEE", t: "select", opts: OUI_NON },
     { c: "permisOrigine", sal: true, lib: "Permis français ou étranger", t: "select",
       opts: [["", "- à préciser -"], ["fr", "Français"], ["etr", "Étranger"]] },
@@ -2107,7 +2108,9 @@
     });
     return out;
   }
-  window.Flotte = { echeances: toutesEcheances };
+  /* « rendre » : le module des fiches reçues redessine la liste quand il
+     vient de ranger une fiche, sans recharger la page. */
+  window.Flotte = { echeances: toutesEcheances, rendre: function () { try { rendre(); } catch (e) {} } };
 
   function demarrer() {
     /* Le fichier est aussi chargé par l'agenda, qui n'a aucun de ces écrans :
