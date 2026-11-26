@@ -1567,40 +1567,74 @@
         return '<button type="button" data-cat="' + ech(s.id) + "|" + c + '"' + (on[c] ? ' aria-pressed="true"' : "") + ">" + c + "</button>";
       }).join("") + "</div>";
   }
+  /* DANS L'ORDRE DU QUESTIONNAIRE (26 novembre 2026). « Il faut être
+     cohérent [...] ne coupe pas les informations », et la fiche doit être
+     aussi fournie que le questionnaire envoyé par WhatsApp. Elle en reprend
+     donc chaque question, dans le même ordre : ses coordonnées, son profil,
+     sa nationalité, son permis, ses cartes, ses photos et sa signature. Ce
+     qui n'est pas de lui vient après : le contrôle de ce qu'il a sur lui, et
+     les observations de T.E.C. */
   function ficheNette(s, f, conduit) {
     var h = f.recue && f.recue.le ? validationHtml(s, f)
       : '<p class="fn-rien">Il n\'a pas encore rempli sa fiche.</p>';
+    h += cadreFiche("Ses coordonnées", champsDe(s, f, ["tel", "nir", "visiteTravail", "roulant"]));
+    var prof = profilChauffeur(f);
     if (conduit) {
-      var prof = profilChauffeur(f);
+      h += cadreFiche("Son profil", '<div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
+        '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (prof === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C ou CE</small></button>" +
+        '<button type="button" data-profil="' + ech(s.id) + '|leger"' + (prof === "leger" ? ' aria-pressed="true"' : "") + ">Pas poids lourd<small>permis B</small></button></div>");
+    }
+    var na = ["ue"];
+    if (f.ue === "non") {
+      na.push("titreFin");
+      if (conduit) {
+        na.push("permisOrigine");
+        if (f.permisOrigine === "etr") na.push("permisPays", "arrivee");
+        na.push("inter");
+      }
+    }
+    h += cadreFiche("Nationalité", champsDe(s, f, na));
+    if (conduit) {
       var sansC = net(f.permisCat) && !/(^|[^A-Z0-9])C1?E?([^A-Z0-9]|$)/.test(net(f.permisCat).toUpperCase());
       var alerte = sansC && (prof === "pl" || PL_REG.test(s.emp || ""))
         ? '<p class="fn-al">' + (prof === "pl" ? "Poids lourd selon sa fiche" : ech(s.emp) + " au registre") +
           ", mais ses catégories ne portent ni C ni CE.</p>" : "";
-      var choix = '<p class="fn-l">Poids lourd ou pas</p><div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
-        '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (prof === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C ou CE</small></button>" +
-        '<button type="button" data-profil="' + ech(s.id) + '|leger"' + (prof === "leger" ? ' aria-pressed="true"' : "") + ">Pas poids lourd<small>permis B</small></button></div>";
-      h += cadreFiche("Son permis", choix + categoriesHtml(s, f) + alerte +
-        champsDe(s, f, ["permisNum", "permisFin"].concat(prof === "leger" ? [] : ["code95"]).concat(["suspendu"])));
-      /* Une date de poids lourd déjà connue reste visible, même quand les
-         catégories disent le contraire : on ne cache pas ce qu'il a déclaré. */
+      h += cadreFiche("Son permis", champsDe(s, f, ["permisNum"]) + '<div style="height:12px"></div>' +
+        categoriesHtml(s, f) + alerte + champsDe(s, f, ["permisFin", "suspendu"]));
+      /* Une date de poids lourd déjà connue reste visible, même quand le
+         profil dit le contraire : on ne cache pas ce qu'il a déclaré. */
       var plConnu = ["visitePermisFin", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
-      var cartes = prof === "leger" ? ["livret", "aCarte"].concat(f.aCarte === "oui" || net(f.carteCond) ? ["carteCond"] : []) : [];
-      if (prof !== "leger" || plConnu) cartes = ["visitePermisFin", "fco", "carteQualif"].concat(cartes.indexOf("carteCond") < 0 ? ["carteCond"] : []).concat(cartes);
-      h += cadreFiche("Ses cartes", champsDe(s, f, cartes));
-      h += cadreFiche("Ce qu'il doit avoir sur lui",
-        (f.ue === "non" ? champsDe(s, f, ["inter"]) : "") + papiersChauffeurHtml(s, f));
+      if (prof !== "leger" || plConnu)
+        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fco", "carteQualif", "code95", "carteCond"]));
+      if (prof === "leger")
+        h += cadreFiche("Pas poids lourd", champsDe(s, f, ["livret", "aCarte"]
+          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteCond"] : [])));
     }
-    var co = ["tel", "nir", "ue"];
-    if (f.ue === "non") {
-      co.push("titreFin");
-      if (conduit) {
-        co.push("permisOrigine");
-        if (f.permisOrigine === "etr") co.push("permisPays", "arrivee");
-      }
-    }
-    h += cadreFiche("Ses coordonnées", champsDe(s, f, co));
-    h += '<div class="fn-obs">' + cadreFiche("Observations", champsDe(s, f, ["note"])) + "</div>";
+    h += cadreFiche("Ses photos et sa signature", '<div class="fn-photos" data-photos="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
+    if (conduit) h += '<p class="fn-sep">Contrôle par T.E.C</p>' + cadreFiche("Ce qu'il doit avoir sur lui", papiersChauffeurHtml(s, f));
+    h += '<div class="fn-obs">' + cadreFiche("Observations de T.E.C", champsDe(s, f, ["note"])) + "</div>";
     return h;
+  }
+  /* SES PHOTOS ET SA SIGNATURE : les images rangées dans son coffre fort par
+     sa fiche, en vignettes. Une vignette ouvre son coffre fort. */
+  function remplirPhotos(hote, sid) {
+    var z = hote.querySelector("[data-photos]");
+    if (!z) return;
+    var vers = "mes-documents.html?r=" + encodeURIComponent("salarie-" + sid);
+    if (!window.Documents) { z.innerHTML = '<p class="fn-rien">Les documents ne sont pas disponibles sur cet appareil.</p>'; return; }
+    window.Documents.liste("salarie-" + sid).then(function (L) {
+      L = L.filter(function (d) { return /^image\//.test(d.type || ""); });
+      if (!L.length) { z.innerHTML = '<p class="fn-rien">Aucune photo pour l\'instant.</p>'; return; }
+      z.innerHTML = '<div class="fn-vigs">' + L.map(function (d) {
+        return '<a class="fn-vig" href="' + vers + '"><img alt="" data-img="' + ech(d.id) + '"><span>' +
+          ech(String(d.nom || "").replace(/\s*\([^)]*\)\s*\.(jpe?g|png)$/i, "").replace(/\.(jpe?g|png)$/i, "")) + "</span></a>";
+      }).join("") + "</div>";
+      Array.prototype.forEach.call(z.querySelectorAll("[data-img]"), function (im) {
+        window.Documents.lire(im.getAttribute("data-img")).then(function (d) {
+          if (d && d.contenu) im.src = URL.createObjectURL(d.contenu instanceof Blob ? d.contenu : new Blob([d.contenu], { type: d.type || "" }));
+        });
+      });
+    }, function () { z.innerHTML = '<p class="fn-rien">Les photos n\'ont pas pu être lues.</p>'; });
   }
   /* LES VOLETS DE SON DOSSIER, tenus par T.E.C. */
   function partieDossier(s, f, partie, conduit) {
@@ -1678,6 +1712,7 @@
         : '<div class="fn-cadre">' + partieDossier(s, f, E.partie, E.conduit) + "</div>" +
           (E.partie === "medical" ? '<a class="fn-camion" href="visites.html"><b>Courriers du suivi médical</b><span>demande au service de santé au travail, convocation du salarié</span></a>' : "")) + "</div>";
     brancherConducteur(hote.querySelector("[data-c]"), s);
+    remplirPhotos(hote, s.id);
     if (E.apres) try { E.apres(); } catch (e) {}
   }
 
