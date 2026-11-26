@@ -155,7 +155,7 @@
         (f.recue ? " du " + enFrancais(f.recue.le) : ", en cours de rangement") + ", à vérifier";
       if (p.etat === "vert") sous = "validée le " + enFrancais(f.validee.le) + (f.validee.par ? " par " + f.validee.par : "");
       var lienF = p.etat === "rouge" ? "<b>" + ech(p.nom) + "</b>"
-        : '<a href="flotte.html?c=' + encodeURIComponent(p.sid) + '"><b>' + ech(p.nom) + "</b></a>";
+        : '<a href="salaries.html?s=' + encodeURIComponent(p.sid) + '&v=fiche"><b>' + ech(p.nom) + "</b></a>";
       return '<li class="fr-' + p.etat + '"><i class="fr-pt"></i><span class="fr-qui">' + lienF +
         (sous ? "<span>" + ech(sous) + "</span>" : "") + "</span>" +
         (p.etat !== "rouge" && f.recue ? '<button type="button" class="fr-x" data-fr="retirer" data-id="' + ech(f.recue.id) +
@@ -560,7 +560,7 @@
     if (q === "reporter") {
       b.disabled = true; b.textContent = "Rangement...";
       chargerFiche(id).then(function (F) { return ranger(id, F); }).then(function (ok) {
-        if (ok) location.href = "flotte.html?c=" + encodeURIComponent(lire(CLE_RANGEES, [])[0].sid);
+        if (ok) location.href = "salaries.html?s=" + encodeURIComponent(lire(CLE_RANGEES, [])[0].sid) + "&v=fiche";
         else { ETAT.msg = "Le rangement n'a pas pu se faire. Réessayez."; rendre(); }
       }, function () { ETAT.msg = "Le rangement n'a pas pu se faire. Réessayez."; rendre(); });
     } else if (q === "supprimer") {

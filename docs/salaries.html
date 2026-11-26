@@ -31,6 +31,7 @@
 -->
 
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="fiche-salarie.css">
 <script src="droits.js"></script>
 <script src="flotte.js"></script>
 <script src="base-documents.js"></script>
@@ -84,6 +85,11 @@
   .mention{font-size:13.5px;color:var(--texte-2);margin:10px 2px 0}
   .vide{background:var(--surface);border:1px solid var(--filet);border-radius:14px;padding:16px 14px;color:var(--texte-2);font-size:15px}
   .vide a{color:var(--accent);font-weight:600}
+  /* La fiche du salarié, dessinée par flotte.js dans sa page. */
+  #fiche-s .ech{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 16px}
+  #fiche-s .actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 0}
+  #fiche-s .actions button{width:100%}
+  #fiches-recues{margin:22px 0 0}
 </style>
 </head>
 <body>
@@ -104,6 +110,8 @@
     <button type="button" class="grp-b" data-g="roulant"><span class="gi">🚛</span><span class="gt"><b>Personnel roulant</b><span>les chauffeurs</span></span><span class="gn" id="n-roulant"></span></button>
     <button type="button" class="grp-b" data-g="non"><span class="gi">🏢</span><span class="gt"><b>Personnel non roulant</b><span>bureau, atelier, entrepôt</span></span><span class="gn" id="n-non"></span></button>
     <p class="mention">Le partage se fait d'après l'emploi écrit au registre du personnel : chauffeur, conducteur, livreur, routier, coursier, convoyeur ou ambulancier, c'est le personnel roulant. Le cariste et le grutier sont du personnel non roulant.</p>
+    <!-- le lien à envoyer aux salariés et le suivi des fiches reçues -->
+    <div id="fiches-recues"></div>
   </section>
 
   <!-- écran 1 : la liste -->
@@ -121,6 +129,12 @@
   <!-- écran 2 : la fiche d'une personne -->
   <section id="e-fiche" hidden>
     <div id="fiche"></div>
+  </section>
+
+  <!-- écran 3 : sa fiche, ce qu'il a rempli et ce que T.E.C complète -->
+  <section id="e-detail" hidden>
+    <div id="detail-tete"></div>
+    <div id="fiche-s"></div>
   </section>
 
 </main>
@@ -164,7 +178,7 @@
     if (/visite|examen|medical/.test(q)) return "visites.html";
     if (/heures|decompte|duree/.test(q)) return "heures.html";
     if (/forfait/.test(q)) return "forfait.html";
-    if (/permis|fco|fimo|formation|carte|adr|points|qualification/.test(q)) return "flotte.html?c=" + encodeURIComponent(id);
+    if (/permis|fco|fimo|formation|carte|adr|points|qualification|sejour/.test(q)) return "#fiche";
     return "agenda.html";
   }
   function feuDe(j) { return j === null ? "" : j <= 7 ? "r" : j <= 30 ? "o" : "v"; }
@@ -293,6 +307,10 @@
   }
 
   function lien(vers, titre, sous, puce) {
+    /* « #fiche » : sa fiche, qui s'ouvre dans cette page. */
+    if (vers === "#fiche") return '<a class="lig" href="' + adresseDe(GROUPE, OUVERT, true) + '" data-detail="1">' +
+      '<span class="t"><b>' + ech(titre) + '</b>' + (sous ? '<span>' + ech(sous) + '</span>' : '') + '</span>' +
+      (puce ? '<span class="puce ' + puce[0] + '">' + ech(puce[1]) + '</span>' : '<span class="ch">&rsaquo;</span>') + '</a>';
     return '<a class="lig" href="' + vers + '"><span class="t"><b>' + ech(titre) + '</b>' + (sous ? '<span>' + ech(sous) + '</span>' : '') + '</span>' +
       (puce ? '<span class="puce ' + puce[0] + '">' + ech(puce[1]) + '</span>' : '<span class="ch">&rsaquo;</span>') + '</a>';
   }
@@ -309,12 +327,15 @@
       h += presse.map(function (m) { return lien(pageDe(m.quoi, p.id), m.quoi, m.j < 0 ? "échéance du " + jj(m.date) : "avant le " + jj(m.date), [m.feu, delaiDit(m.j)]); }).join("");
     }
     h += '<h2 class="pq">Tout ce qui le concerne</h2>';
+    var ef = "rouge";
+    try { ef = window.Flotte.etatFiche(p.id); } catch (e) {}
+    h += lien("#fiche", "Sa fiche", roulant(p) ? "remplie par le salarié : permis, cartes, papiers à avoir sur lui" : "remplie par le salarié, complétée par T.E.C",
+      ef === "vert" ? ["v", "validée"] : (ef === "orange" ? ["o", "à vérifier"] : ["r", "pas remplie"]));
     if (transport && p.conduit) h += lien("conformite-transport.html?c=" + encodeURIComponent(p.id), "Suivi tachygraphe", "instructions, contrôle et suivi, réaction, coffre-fort");
     h += lien("visites.html", "Visites médicales", "information et prévention, renouvellement, reprise") +
       lien("heures.html", "Décompte des heures", "relevé du mois, à clore et à faire signer") +
       lien("sanctions.html", "Discipline", "ce qui a été prononcé, et ce qui reste invocable") +
       lien(transport ? "contrats-transport.html" : "gerer.html?pour=salarie", "Contrat", "contrat et avenants") +
-      (transport ? lien("flotte.html?c=" + encodeURIComponent(p.id), "Titres de conduite", "permis, formation, carte de conducteur, sa fiche remplie") : "") +
       lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Documents", "ses photos, sa fiche signée, ce qui a été rangé");
     var plus = datees.filter(function (m) { return m.feu === "v"; });
     if (plus.length) h += '<h2 class="pq">Plus tard</h2>' + plus.slice(0, 6).map(function (m) { return lien(pageDe(m.quoi, p.id), m.quoi, "avant le " + jj(m.date), ["v", delaiDit(m.j)]); }).join("");
@@ -326,24 +347,51 @@
 
   /* TROIS ÉCRANS : le choix roulant ou non roulant, la liste du groupe, la
      fiche d'une personne. Le retour remonte d'un écran à la fois. */
-  function adresse() {
+  function adresseDe(g, s, v) {
     var q = [];
-    if (GROUPE) q.push("g=" + GROUPE);
-    if (OUVERT) q.push("s=" + encodeURIComponent(OUVERT));
-    try { history.replaceState(null, "", location.pathname + (q.length ? "?" + q.join("&") : "")); } catch (ex) {}
+    if (g) q.push("g=" + g);
+    if (s) q.push("s=" + encodeURIComponent(s));
+    if (s && v) q.push("v=fiche");
+    return location.pathname.split("/").pop() + (q.length ? "?" + q.join("&") : "");
   }
-  function montrer(id) {
+  function adresse() {
+    try { history.replaceState(null, "", adresseDe(GROUPE, OUVERT, DETAIL)); } catch (ex) {}
+  }
+  /* QUATRE ÉCRANS : le choix, la liste, la personne, sa fiche. Sa fiche est
+     la seule du salarié dans l'application (26 novembre 2026). */
+  var DETAIL = false;
+  function montrer(id, detail) {
     var p = PERSONNES.filter(function (x) { return x.id === id; })[0];
     OUVERT = p ? id : null;
+    DETAIL = !!(p && detail);
     if (p && !GROUPE) GROUPE = roulant(p) ? "roulant" : "non";
     $("e-choix").hidden = !!p || !!GROUPE;
     $("e-liste").hidden = !!p || !GROUPE;
-    $("e-fiche").hidden = !p;
+    $("e-fiche").hidden = !p || DETAIL;
+    $("e-detail").hidden = !DETAIL;
     $("titre-page").textContent = p ? p.nom : (GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : "Les salariés"));
-    if (p) peindreFiche(p); else if (GROUPE) peindreListe(); else peindreChoix();
+    if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie(null);
+    if (DETAIL) peindreDetail(p);
+    else if (p) peindreFiche(p); else if (GROUPE) peindreListe(); else peindreChoix();
     adresse();
     window.scrollTo(0, 0);
   }
+  function peindreDetail(p) {
+    var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
+    $("detail-tete").innerHTML = '<div class="tete"><span class="rond">' + ech(ini) + '</span><span><b>Sa fiche</b><span>' +
+      ech([p.nom, p.poste].filter(Boolean).join(" · ")) + '</span></span></div>';
+    if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie($("fiche-s"), p.id, roulant(p), function () {
+      /* une échéance changée change le feu de la personne */
+      var o = OUVERT; charger(); OUVERT = o;
+    });
+    else $("fiche-s").innerHTML = '<p class="vide">La fiche n\'a pas pu s\'ouvrir. Rechargez la page.</p>';
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("[data-detail]") : null;
+    if (!a || !OUVERT) return;
+    e.preventDefault();
+    montrer(OUVERT, true);
+  });
   Array.prototype.forEach.call(document.querySelectorAll("[data-g]"), function (b) {
     b.addEventListener("click", function () {
       GROUPE = b.getAttribute("data-g"); VOIX = ""; $("cherche").value = ""; montrer(null);
@@ -377,19 +425,21 @@
   })();
   /* Le retour ramène de la fiche à la liste ; depuis la liste, il quitte la page. */
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
+    if (DETAIL) { montrer(OUVERT, false); return true; }
     if (OUVERT) { montrer(null); return true; }
     if (GROUPE) { GROUPE = null; montrer(null); return true; }
     return false;
   });
 
   charger();
-  var demande = null;
+  var demande = null, voirFiche = false;
   try {
     var pa = new URLSearchParams(location.search);
     demande = pa.get("s");
+    voirFiche = pa.get("v") === "fiche";
     if (pa.get("g") === "roulant" || pa.get("g") === "non") GROUPE = pa.get("g");
   } catch (e) { demande = null; }
-  montrer(demande);
+  montrer(demande, voirFiche);
 })();
 </script>
 </body>

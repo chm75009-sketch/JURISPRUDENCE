@@ -1,0 +1,141 @@
+/* LA FICHE D'UN SALARIÉ ET LES FICHES REÇUES, styles communs.
+
+   Demande du 26 novembre 2026 : « il faut harmoniser et ne pas avoir
+   plusieurs fiches inutiles, pas de doublons ». La fiche d'un salarié
+   (ce qu'il a rempli, ce que T.E.C complète, ses papiers personnels) et le
+   cadre des fiches reçues s'affichent dans la page « Les salariés ». La
+   page de la flotte garde les mêmes cases pour les papiers à bord de chaque
+   camion, et pour le chef de parc. Les deux pages lisent donc ce fichier,
+   au lieu d'en porter chacune une copie. */
+.ech .p{font:600 var(--t1)/1.25 system-ui;padding:7px 12px;border-radius:999px;
+  background:var(--creux);color:var(--texte-2)}
+.ech .p b{font-weight:700}
+.ech .p.vert{background:var(--vert-clair);color:var(--vert)}
+.ech .p.ambre{background:var(--ambre-clair);color:var(--ambre)}
+.ech .p.rouge{background:var(--rouge-clair);color:var(--rouge)}
+/* Une date qui manque : pastille ambre « à compléter », visible sans être une
+   alarme rouge pleine largeur. */
+.ech .p.vide{background:var(--ambre-clair);color:var(--ambre)}
+/* Une échéance passée ne se lit pas, elle se voit : c'est la même alerte
+   que celle des sanctions prescrites. */
+.ech .p.passe{background:var(--rouge);color:#fff;animation:bat 1.1s steps(1,end) infinite}
+@keyframes bat{0%,49%{opacity:1}50%,100%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.ech .p.passe{animation:none}}
+.gr{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:560px){.gr{grid-template-columns:1fr 1fr}}
+.gr label{display:flex;flex-direction:column;gap:5px;min-width:0}
+.gr label > span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+.gr label.large{grid-column:1/-1}
+.gr input,.gr select,.gr textarea{font-size:16px;min-height:46px;padding:9px 11px;width:100%;
+  min-width:0;box-sizing:border-box;border:1px solid var(--filet-2);border-radius:var(--r1);
+  background:var(--surface);color:var(--texte)}
+.gr textarea{min-height:76px;line-height:1.45;resize:vertical}
+.gr .aide{font:400 var(--t1)/1.4 system-ui;color:var(--texte-3);text-transform:none;letter-spacing:0}
+.gr input[type=date]{-webkit-appearance:none;appearance:none;display:block;max-width:100%}
+.gr input[type=date]::-webkit-date-and-time-value{text-align:left}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:var(--e3) 0 0}
+.actions button{min-height:46px;border-radius:var(--r1);font:600 var(--t3) system-ui;width:auto;padding:0 16px}
+.barre2{margin:var(--e3) 0 0}
+.barre2 button{width:100%;min-height:46px;border-radius:var(--r1);font:600 var(--t3) system-ui;padding:0 16px}
+/* LES PAPIERS À BORD. Une case par papier, son fondement dessous en petit. */
+.bord{margin:0}
+.bord-etat{margin:0 0 var(--e3);padding:11px 13px;border-radius:var(--r1);font:600 var(--t2)/1.45 system-ui}
+.bord-etat.ok{background:var(--vert-clair);color:var(--vert)}
+.bord-etat.mq{background:var(--rouge-clair);color:var(--rouge)}
+.bord-etat.jamais{background:var(--ambre-clair);color:var(--ambre)}
+.bd-g{margin:0 0 var(--e3)}
+.bd-g .pt{margin:0 0 6px;font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+.bd-l{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--filet);cursor:pointer}
+.bd-l input{flex:0 0 auto;width:22px;height:22px;margin:1px 0 0;accent-color:var(--accent)}
+.bd-t{font:600 var(--t2)/1.4 system-ui;color:var(--texte);min-width:0}
+.bd-l.si .bd-t{font-weight:400;color:var(--texte-2)}
+.bd-r{display:block;margin-top:2px;font:400 var(--t1)/1.35 system-ui;color:var(--texte-3)}
+.bd-date{display:block;margin-top:3px;font:600 var(--t1)/1.35 system-ui;color:var(--vert)}
+.bd-date.proche{color:var(--ambre)}
+.bd-date.passe{color:var(--rouge)}
+/* Les papiers personnels du chauffeur, en tête de sa fiche. */
+.pap{margin:0 0 var(--e4);padding:0 0 var(--e3);border-bottom:1px solid var(--filet)}
+.pap .pt{margin:0 0 8px;font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+.pf-choix{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 var(--e3)}
+.pf-choix button{min-height:58px;border:2px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);
+  color:var(--texte);font:700 var(--t2)/1.2 system-ui;padding:8px;width:100%;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.pf-choix button small{display:block;margin-top:3px;font:400 var(--t1)/1.2 system-ui;color:var(--texte-3)}
+.pf-choix button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-clair);color:var(--accent)}
+.pf-nb{margin:0 0 8px;font:700 var(--t3)/1.3 system-ui;color:var(--texte)}
+.pap .doux{margin:0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}
+/* La fiche du chauffeur en deux parties. */
+.fp{margin:0 0 var(--e4)}
+.seul{margin:0 0 var(--e3)}
+.seul button{width:100%;min-height:46px}
+.fp-t{margin:0 0 10px;padding:8px 12px;border-radius:var(--r1);background:var(--accent-clair);color:var(--accent);
+  font:700 var(--t2)/1.3 system-ui}
+.fp-recue{margin:0 0 12px;font:600 var(--t1)/1.45 system-ui;color:var(--vert)}
+.fp-reg{margin:0 0 12px;font:400 var(--t1)/1.5 system-ui;color:var(--texte-2)}
+.fp-recue a,.fp-reg a{color:var(--accent)}
+/* LES FICHES REÇUES DES SALARIÉS, en tête de l'onglet Conducteurs. */
+.fr-bloc{background:var(--surface);border:2px solid var(--accent);border-radius:var(--r2);padding:16px;margin:0 0 var(--e4)}
+.fr-tete{margin:0 0 8px}
+.fr-t{font:700 var(--t3)/1.3 system-ui;color:var(--accent)}
+.fr-doux{margin:0 0 12px;font:400 var(--t2)/1.45 system-ui;color:var(--texte-2)}
+.fr-msg{margin:10px 0;padding:10px 12px;border-radius:var(--r1);background:var(--ambre-clair);color:var(--ambre);font:600 var(--t1)/1.45 system-ui}
+.fr-b{display:block;width:100%;min-height:48px;border:0;border-radius:var(--r1);background:var(--accent);color:#fff;
+  font:600 var(--t2) system-ui;padding:0 14px;margin:8px 0 0;cursor:pointer}
+.fr-b.second{background:var(--surface);color:var(--accent);border:1px solid var(--accent)}
+.fr-lien .fr-l{display:block;font:600 var(--t1)/1.3 system-ui;color:var(--texte-3);margin:0 0 6px}
+.fr-lien input{width:100%;box-sizing:border-box;font-size:14px;min-height:44px;padding:9px 11px;border:1px solid var(--filet-2);
+  border-radius:var(--r1);background:var(--creux);color:var(--texte)}
+.fr-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fr-2 .fr-b{margin-top:8px}
+.fr-st{margin:14px 0 6px;font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3)}
+.fr-ok{display:block;padding:9px 0;border-bottom:1px solid var(--filet);text-decoration:none;color:var(--texte);font:700 var(--t2)/1.3 system-ui}
+.fr-ok small{display:block;font:400 var(--t1)/1.3 system-ui;color:var(--vert);margin-top:2px}
+.fr-msg a{color:inherit}
+.fr-compte{margin:0 0 8px;font:400 var(--t2)/1.45 system-ui;color:var(--texte)}
+.fr-liste{list-style:none;margin:0;padding:0}
+.fr-liste li{padding:8px 0;border-top:1px solid var(--filet);font:400 var(--t2)/1.35 system-ui}
+.fr-liste li span{display:block;font:400 var(--t1)/1.3 system-ui;color:var(--texte-3)}
+.fr-rg{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--filet)}
+.fr-rg .fr-ok{flex:1;min-width:0;border-bottom:0}
+.fr-x{flex:0 0 auto;background:none;border:1px solid var(--rouge);color:var(--rouge);border-radius:9px;
+  font:600 var(--t1) system-ui;padding:7px 10px;min-height:0;width:auto;cursor:pointer}
+/* Les trois couleurs du suivi des fiches, et leur légende. */
+.fr-pt{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--filet-2);flex:0 0 auto;margin-right:8px;vertical-align:-1px}
+.fr-rouge .fr-pt,.fr-pt.fr-rouge{background:var(--rouge)}
+.fr-orange .fr-pt,.fr-pt.fr-orange{background:var(--ambre)}
+.fr-vert .fr-pt,.fr-pt.fr-vert{background:var(--vert)}
+.fr-leg{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 10px;font:400 var(--t1)/1.35 system-ui;color:var(--texte-2)}
+.fr-g{border:1px solid var(--filet);border-left-width:4px;border-radius:var(--r1);padding:0 12px;margin:0 0 8px}
+.fr-g-rouge > summary .fr-pt{background:var(--rouge)}.fr-g-orange > summary .fr-pt{background:var(--ambre)}.fr-g-vert > summary .fr-pt{background:var(--vert)}
+.fr-g-rouge{border-left-color:var(--rouge)}.fr-g-orange{border-left-color:var(--ambre)}.fr-g-vert{border-left-color:var(--vert)}
+.fr-g > summary{cursor:pointer;padding:12px 0;font:700 var(--t2)/1.3 system-ui;color:var(--texte);display:flex;align-items:center}
+.fr-g .fr-b{margin:10px 0 12px}
+.fr-liste li{display:flex;align-items:center;gap:8px}
+.fr-qui{flex:1;min-width:0}
+.fr-qui a{color:var(--texte);text-decoration:none}
+.fp-ok{margin:0 0 12px;padding:10px 12px;border-radius:var(--r1);background:var(--vert-clair);color:var(--vert);font:600 var(--t1)/1.45 system-ui}
+.fp-av{margin:0 0 12px;padding:10px 12px;border-radius:var(--r1);background:var(--ambre-clair);color:var(--texte);font:400 var(--t1)/1.45 system-ui}
+.fp-av p{margin:0 0 6px}.fp-av ul{margin:0 0 8px;padding-left:18px}
+.fp-valider{display:block;width:100%;min-height:46px;border:0;border-radius:var(--r1);background:var(--vert);color:#fff;
+  font:700 var(--t2) system-ui;cursor:pointer;margin-top:6px}
+.fr-act{margin:10px 0 4px}
+.fr-sel{width:100%;box-sizing:border-box;font-size:16px;min-height:48px;padding:10px 12px;margin:4px 0 0;
+  border:1px solid var(--filet-2);border-radius:var(--r1);background:var(--surface);color:var(--texte)}
+.fr-auto{margin:0 0 6px;font:400 var(--t1)/1.35 system-ui;color:var(--texte-3)}
+.fr-it{border-top:1px solid var(--filet);margin-top:12px}
+.fr-ligne{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:12px 0;text-align:left;cursor:pointer;color:var(--texte)}
+.fr-n{flex:1;min-width:0;font:700 var(--t2)/1.3 system-ui}
+.fr-n small{display:block;font:400 var(--t1)/1.35 system-ui;color:var(--texte-3);margin-top:2px}
+.fr-it.fait .fr-n small{color:var(--vert)}
+.fr-fl{color:var(--texte-3);font-size:18px}
+.fr-det{padding:0 0 14px}
+.fr-al{background:var(--rouge-clair);color:var(--rouge);border-radius:var(--r1);padding:10px 12px;margin:0 0 12px;font:600 var(--t1)/1.45 system-ui}
+.fr-al p{margin:0 0 4px}.fr-al p:last-child{margin:0}
+.fr-tab{width:100%;border-collapse:collapse;font:400 var(--t1)/1.4 system-ui}
+.fr-tab th{text-align:left;font-weight:400;color:var(--texte-3);padding:7px 10px 7px 0;border-bottom:1px solid var(--filet);width:48%;vertical-align:top}
+.fr-tab td{font-weight:600;color:var(--texte);padding:7px 0;border-bottom:1px solid var(--filet);vertical-align:top}
+.fr-phs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fr-ph{display:block;text-decoration:none;color:var(--texte-2);font:400 12px/1.3 system-ui}
+.fr-ph img{display:block;width:100%;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--filet);margin-bottom:4px}
+.fr-sig{display:block;width:100%;max-width:340px;border:1px solid var(--filet);border-radius:10px;background:#fff;margin:0 0 6px}
+.bd-g .doux{margin:8px 0 0;font:400 var(--t1)/1.45 system-ui;color:var(--texte-3)}

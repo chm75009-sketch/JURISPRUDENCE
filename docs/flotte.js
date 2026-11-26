@@ -1542,8 +1542,9 @@
     }
     return h + '<button type="button" class="fp-valider" data-valider="' + ech(s.id) + '">Valider la fiche</button></div>';
   }
-  function deuxParties(s, f) {
+  function deuxParties(s, f, conduit) {
     function grille(L) {
+      if (conduit === false) L = L.filter(function (ch) { return !CONDUITE_SEULE[ch.c]; });
       return '<div class="gr">' + L.map(function (ch) {
         var val = f[ch.c];
         if ((val == null || val === "") && ch.c === "fcoMois") val = 60;
@@ -1568,23 +1569,83 @@
   }
 
   var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
-  /* UNE SEULE FICHE, VENUE DE LA PAGE DU SALARIÉ (26 novembre 2026). La
-     liste entière poussait sa fiche si bas que le bouton Retour sortait de
-     l'écran. On ne montre que la sienne, en haut, avec de quoi revenir à
-     tous les conducteurs. */
-  var SEUL = "";
-  try { SEUL = new URLSearchParams(location.search).get("c") || ""; } catch (e) {}
+
+  /* CE QUI NE REGARDE QUE LA CONDUITE. Pour un salarié non roulant, la fiche
+     ne garde que ce dont on a besoin : ses coordonnées, son titre de séjour,
+     son suivi médical, les observations. Comme le formulaire qu'il remplit,
+     qui ne lui pose pas les questions du permis. */
+  var CONDUITE_SEULE = { permisOrigine: 1, inter: 1, suspendu: 1, code95: 1, livret: 1, aCarte: 1,
+    permisNum: 1, permisCat: 1, permisFin: 1, points: 1, retraitLe: 1, retraitFin: 1, retraitMotif: 1,
+    fco: 1, fcoMois: 1, carteCond: 1, carteQualif: 1, telecCarte: 1, telecCarteJours: 1,
+    visitePermisFin: 1, permisPays: 1, arrivee: 1, attestConduite: 1, vehicule: 1 };
+
+  /* LE CORPS DE LA FICHE D'UN SALARIÉ : ses papiers personnels s'il conduit,
+     les deux parties de sa fiche, la remise à zéro. Le même dessin sert à la
+     page « Les salariés », où vit la fiche, et à l'onglet du chef de parc. */
+  function corpsConducteur(s, f, conduit) {
+    return (conduit ? papiersChauffeurHtml(s, f) : "") +
+      deuxParties(s, f, conduit) +
+      '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>';
+  }
+  function brancherConducteur(cadre, s) {
+    brancher(cadre, "c" + s.id,
+      function () { return fiche(s.id); },
+      function (o) { garderFiche(s.id, o); },
+      function (c, val, avant) {
+        if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
+      });
+    brancherPapiers(cadre, s.id);
+    /* REMETTRE LA FICHE À ZÉRO (26 novembre 2026) : pour une fiche d'essai
+       ou une fiche à refaire. Toutes les cases, les deux parties, le
+       contrôle des papiers, et les pièces rangées depuis sa fiche
+       (photos, fiche signée). Double confirmation : cela ne se rattrape pas. */
+    var bz = cadre.querySelector("[data-raz-fiche]");
+    if (bz) bz.addEventListener("click", function () {
+      if (!confirmerDur("Remettre à zéro la fiche de " + s.nom + " ? Toutes ses cases seront vidées, celles du salarié " +
+        "comme celles de T.E.C, ainsi que ses photos et sa fiche signée. Cette action ne se rattrape pas.", "ZERO")) return;
+      garderFiche(s.id, {});
+      try {
+        var R = JSON.parse(window.localStorage.getItem("fiches-rangees") || "[]");
+        garder("fiches-rangees", R.filter(function (x) { return x.sid !== s.id; }));
+      } catch (e) {}
+      var fin = function () { rendre(); };
+      if (window.Documents && window.Documents.vider) window.Documents.vider("salarie-" + s.id).then(fin, fin); else fin();
+    });
+    var bv = cadre.querySelector("[data-valider]");
+    if (bv) bv.addEventListener("click", function () {
+      var fv = fiche(s.id); if (!fv.recue) return;
+      fv.validee = { id: fv.recue.id, le: iso(new Date()), par: quiControle() };
+      delete fv.maj;
+      garderFiche(s.id, fv); rendre();
+    });
+  }
+
+  /* LA FICHE DANS LA PAGE « LES SALARIÉS » (26 novembre 2026).
+     « Il faut harmoniser et ne pas avoir plusieurs fiches inutiles, pas de
+     doublons. » La fiche d'un salarié n'existe plus qu'à un endroit : sa page.
+     Cette fonction l'y dessine ; chaque enregistrement la redessine sur place. */
+  var EMBARQUE = null;
+  function rendreEmbarque() {
+    var E = EMBARQUE, hote = E.hote;
+    var s = null;
+    salaries(true).forEach(function (x) { if (x.id === E.sid) s = x; });
+    if (!s) { hote.innerHTML = '<p class="doux">Ce salarié n\'est pas au registre du personnel.</p>'; return; }
+    var f = fiche(s.id), Ech = echeancesConducteur(f);
+    hote.innerHTML = '<div class="fiche-s" data-c="' + ech(s.id) + '">' +
+      (Ech.length ? '<div class="ech">' + pastilles(Ech) + "</div>" : "") +
+      corpsConducteur(s, f, E.conduit) + "</div>";
+    brancherConducteur(hote.querySelector("[data-c]"), s);
+    if (E.apres) try { E.apres(); } catch (e) {}
+  }
+
   function rendreConducteurs() {
     var G = salaries().filter(function (s) { return !s.sor; });
-    if (SEUL) G = G.filter(function (s) { return s.id === SEUL; });
-    var fr = $("fiches-recues"); if (fr) fr.hidden = !!SEUL;
     G = G.filter(function (s) { return CONDUIT.test(s.emp); })
       .concat(G.filter(function (s) { return !CONDUIT.test(s.emp); }));
     var hote = $("conducteurs");
     $("con-vide").hidden = !!G.length;
     if (!G.length) { hote.innerHTML = ""; return; }
-    hote.innerHTML = (SEUL ? '<div class="seul"><button type="button" class="second" data-tous="1">Voir tous les conducteurs</button></div>' : "") +
-      G.map(function (s) {
+    hote.innerHTML = G.map(function (s) {
       var f = fiche(s.id), E = echeancesConducteur(f), p = pire(E);
       var est = !!ouvert["c" + s.id];
       var sous = [s.emp, f.permisCat ? "permis " + f.permisCat : "",
@@ -1596,51 +1657,14 @@
         '<span class="sous">' + ech(sous || "à compléter") + "</span></span>" +
         '<span class="fl">' + (est ? "&#8963;" : "&#8964;") + "</span></div>" +
         '<div class="ech">' + pastilles(E) + "</div>" +
-        (est ? '<div class="corps">' + (CONDUIT.test(s.emp) ? papiersChauffeurHtml(s, f) : "") +
-          deuxParties(s, f) +
-          '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>' +
-          "</div>" : "") +
+        (est ? '<div class="corps">' + corpsConducteur(s, f, CONDUIT.test(s.emp)) + "</div>" : "") +
         "</div>";
     }).join("");
 
-    var bt = hote.querySelector("[data-tous]");
-    if (bt) bt.addEventListener("click", function () {
-      SEUL = ""; try { history.replaceState(null, "", location.pathname + "?vue=conducteurs"); } catch (e) {}
-      rendre(); window.scrollTo(0, 0);
-    });
     G.forEach(function (s) {
       var cadre = hote.querySelector('[data-c="' + s.id + '"]');
       if (!cadre || !ouvert["c" + s.id]) return;
-      brancher(cadre, "c" + s.id,
-        function () { return fiche(s.id); },
-        function (o) { garderFiche(s.id, o); },
-        function (c, val, avant) {
-          if (c === "vehicule") lierConducteurVehicule(s.id, val, avant);
-        });
-      brancherPapiers(cadre, s.id);
-      /* REMETTRE LA FICHE À ZÉRO (26 novembre 2026) : pour une fiche d'essai
-         ou une fiche à refaire. Toutes les cases, les deux parties, le
-         contrôle des papiers, et les pièces rangées depuis sa fiche
-         (photos, fiche signée). Double confirmation : cela ne se rattrape pas. */
-      var bz = cadre.querySelector("[data-raz-fiche]");
-      if (bz) bz.addEventListener("click", function () {
-        if (!confirmerDur("Remettre à zéro la fiche de " + s.nom + " ? Toutes ses cases seront vidées, celles du salarié " +
-          "comme celles de T.E.C, ainsi que ses photos et sa fiche signée. Cette action ne se rattrape pas.", "ZERO")) return;
-        garderFiche(s.id, {});
-        try {
-          var R = JSON.parse(window.localStorage.getItem("fiches-rangees") || "[]");
-          garder("fiches-rangees", R.filter(function (x) { return x.sid !== s.id; }));
-        } catch (e) {}
-        var fin = function () { rendre(); };
-        if (window.Documents && window.Documents.vider) window.Documents.vider("salarie-" + s.id).then(fin, fin); else fin();
-      });
-      var bv = cadre.querySelector("[data-valider]");
-      if (bv) bv.addEventListener("click", function () {
-        var fv = fiche(s.id); if (!fv.recue) return;
-        fv.validee = { id: fv.recue.id, le: iso(new Date()), par: quiControle() };
-        delete fv.maj;
-        garderFiche(s.id, fv); rendre();
-      });
+      brancherConducteur(cadre, s);
     });
   }
 
@@ -1774,6 +1798,8 @@
   }
 
   function rendre() {
+    if (EMBARQUE) { rendreEmbarque(); return; }
+    if (!$("compte")) return;
     rendreCompte();
     rendreJauge();
     rendreACompleter();
@@ -2154,7 +2180,14 @@
   }
   /* « rendre » : le module des fiches reçues redessine la liste quand il
      vient de ranger une fiche, sans recharger la page. */
-  window.Flotte = { echeances: toutesEcheances, rendre: function () { try { rendre(); } catch (e) {} } };
+  window.Flotte = { echeances: toutesEcheances, rendre: function () { try { rendre(); } catch (e) {} },
+    /* La fiche d'un salarié, dessinée dans sa page. « apres » est appelé à
+       chaque nouveau dessin, pour que la page remette à jour ce qui en dépend. */
+    ficheSalarie: function (hote, sid, conduit, apres) {
+      EMBARQUE = hote ? { hote: hote, sid: sid, conduit: conduit !== false, apres: apres } : null;
+      if (EMBARQUE) rendreEmbarque();
+    },
+    etatFiche: function (sid) { return etatFiche(fiche(sid)); } };
 
   function demarrer() {
     /* Le fichier est aussi chargé par l'agenda, qui n'a aucun de ces écrans :
