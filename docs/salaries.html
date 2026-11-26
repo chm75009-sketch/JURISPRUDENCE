@@ -150,6 +150,12 @@
   .btn-acte.b2{background:var(--surface);color:var(--accent)}
   .btn-acte.b2:hover{background:var(--accent-clair);color:var(--accent)}
   .val{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--filet);font-size:15px}
+  .ct-doc{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--filet)}
+  .ct-doc span{flex:1;min-width:0}.ct-doc b{display:block;font:600 15px/1.3 system-ui;word-break:break-word}
+  .ct-doc small{display:block;font-size:12.5px;color:var(--texte-2)}
+  .ct-tel{flex:none;width:auto;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--accent);
+    background:var(--accent);color:#fff;font:600 14px system-ui;cursor:pointer}
+  .ct-depot{cursor:pointer;margin-top:12px}
   .val:last-child{border:0}.val span{color:var(--texte-2)}.val b{text-align:right}
 </style>
 </head>
@@ -478,6 +484,36 @@
     for (var i = 0; i < reg.length; i++) if (cle((reg[i].nom || "") + " " + (reg[i].pre || "")) === cle(p.nom)) return reg[i];
     return null;
   }
+  /* SON CONTRAT ET SES AVENANTS, À TÉLÉCHARGER (26 novembre 2026) : ceux que
+     l'application a écrits pour lui (rangés sous « contrats », à son nom), et
+     ceux qu'on a déposés signés dans son coffre fort. */
+  function contratsDe(p) {
+    var hote = $("ct-docs"); if (!hote) return;
+    if (!window.Documents) { hote.innerHTML = '<p class="fn-rien">Les documents ne sont pas disponibles sur cet appareil.</p>'; return; }
+    var nom = cle(p.nom);
+    Promise.all([window.Documents.liste("contrats").catch(function () { return []; }),
+      window.Documents.liste("salarie-" + p.id).catch(function () { return []; })]).then(function (R) {
+      var L = R[0].filter(function (d) { return cle(d.nom).indexOf(nom) >= 0; })
+        .concat(R[1].filter(function (d) { return d.note === "contrat" || /contrat|avenant|\bcd[di]\b/i.test(cle(d.nom)); }));
+      L.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+      hote.innerHTML = L.length ? L.map(function (d) {
+        return '<div class="ct-doc"><span><b>' + ech(d.nom) + '</b><small>' + (d.sorte === "produit" ? "écrit par l'application" : "déposé") +
+          ', le ' + ech(jj(String(d.date || "").slice(0, 10))) + '</small></span>' +
+          '<button type="button" class="ct-tel" data-doc="' + ech(d.id) + '">Télécharger</button></div>';
+      }).join("") : '<p class="fn-rien">Aucun contrat ni avenant enregistré pour lui.</p>';
+      Array.prototype.forEach.call(hote.querySelectorAll("[data-doc]"), function (b) {
+        b.addEventListener("click", function () {
+          window.Documents.lire(b.getAttribute("data-doc")).then(function (d) {
+            if (!d || !d.contenu) return;
+            var u = URL.createObjectURL(d.contenu instanceof Blob ? d.contenu : new Blob([d.contenu], { type: d.type || "" }));
+            var a = document.createElement("a"); a.href = u; a.download = d.nom || "contrat";
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+          });
+        });
+      });
+    });
+  }
   function peindreDetail(p) {
     var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
     $("detail-tete").innerHTML = '<div class="tete"><span class="rond">' + ech(ini) + '</span><span><b>' + ech(VOLETS[DETAIL]) + '</b><span>' +
@@ -489,8 +525,19 @@
         lv("Contrat", r.nature === "autre" ? r.natAutre : NATURE[r.nature]) +
         lv("Temps de travail", r.part === "partiel" ? "temps partiel" : (r.part === "complet" ? "temps complet" : "")) +
         (r.sor ? lv("Sorti le", jj(r.sor)) : "") + '</div>' +
+        '<div class="fn-cadre"><h3 class="fn-t">Son contrat et ses avenants</h3><div id="ct-docs"><p class="fn-rien">Recherche...</p></div>' +
+        '<label class="btn-acte b2 ct-depot">Déposer un contrat ou un avenant signé<input type="file" id="ct-fichier" multiple hidden></label></div>' +
         '<a class="btn-acte" href="registre.html">Modifier au registre du personnel</a>' +
-        '<a class="btn-acte b2" href="' + (transport ? "contrats-transport.html" : "gerer.html?pour=salarie") + '">Ses contrats et avenants</a>';
+        '<a class="btn-acte b2" href="' + (transport ? "contrats-transport.html" : "gerer.html?pour=salarie") + '">Faire un contrat ou un avenant</a>';
+      contratsDe(p);
+      $("ct-fichier").addEventListener("change", function () {
+        var F = Array.prototype.slice.call(this.files || []);
+        if (!F.length || !window.Documents) return;
+        Promise.all(F.map(function (f) {
+          return window.Documents.enregistrer("salarie-" + p.id, { nom: f.name, sorte: "depose", type: f.type, note: "contrat", contenu: f });
+        })).then(function () { contratsDe(p); }, function () { $("ct-docs").innerHTML = '<p class="fn-al">Le document n\'a pas pu être gardé sur cet appareil.</p>'; });
+        this.value = "";
+      });
       return;
     }
     if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie($("fiche-s"), p.id, roulant(p), function () {
