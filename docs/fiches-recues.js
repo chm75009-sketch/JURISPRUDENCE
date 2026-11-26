@@ -372,11 +372,15 @@
       return M.every(function (m) { return N.indexOf(m) >= 0; }) || N.every(function (m) { return M.indexOf(m) >= 0; });
     });
     if (C.length === 1) return C[0];
-    /* Même nom, prénom à une ou deux lettres près (Taoufik et Toufik,
-       Mohamed et Mohammed), et un seul salarié dans ce cas. */
-    var nomC = sansAccent(c.nom || ""), preC = sansAccent(c.prenom || "");
+    /* Les mêmes mots à une ou deux lettres près (Taoufik et Toufik, Mohamed
+       et Mohammed), que le registre range le prénom à part ou l'écrive avec
+       le nom dans la même case. Un seul salarié dans ce cas, sinon on
+       demande. */
+    function proche(m, n) { return m === n || (m.length >= 4 && n.length >= 4 && ecart(m, n) <= 2); }
     var P = R.filter(function (s) {
-      return sansAccent(s.nom || "") === nomC && preC.length >= 4 && ecart(sansAccent(s.pre || ""), preC) <= 2;
+      var N = mots((s.nom || "") + " " + (s.pre || ""));
+      return N.length === M.length && M.every(function (m) { return N.some(function (n) { return proche(m, n); }); }) &&
+        N.every(function (n) { return M.some(function (m) { return proche(m, n); }); });
     });
     return P.length === 1 ? P[0] : null;
   }
@@ -506,7 +510,12 @@
         var r = ETAT.resumes[it.id];
         if (r && !salarieDe(r, it.id)) return null;   /* pas au registre : on ne télécharge pas */
         return chargerFiche(it.id).then(function (F) { return ranger(it.id, F); })
-          .then(function (ok) { if (ok) n++; }, function () {});
+          .then(function (ok) { if (ok) n++; }, function (e) {
+            /* Un échec se dit, au lieu de laisser la fiche en attente sans
+               explication. */
+            ETAT.msg = "La fiche de " + ((r && (r.nom + " " + (r.prenom || ""))) || "un salarié") +
+              " n'a pas pu être rangée (" + String((e && e.message) || e || "erreur").slice(0, 80) + "). Ouvrez-la et touchez « Ranger ».";
+          });
       });
     }, Promise.resolve()).then(function () { ls.removeItem(CLE_VERROU); return n; },
       function () { ls.removeItem(CLE_VERROU); return n; });
