@@ -44,6 +44,13 @@
   main.wrap{max-width:560px;padding-bottom:var(--e7)}
   [hidden]{display:none !important}
   .pq{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:20px 2px 10px}
+  .ch-ligne{display:flex;gap:9px;align-items:center;margin:14px 0 0}
+  .ch-ligne .cherche{margin:0;flex:1;min-width:0}
+  .ch-mic{flex:0 0 auto;width:50px;height:50px;border-radius:50%;border:0;background:#efeefc;color:#4f46e5;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;min-height:0}
+  .ch-mic svg{width:23px;height:23px}
+  .ch-mic.on{background:#fde7e7;color:var(--rouge)}
+  .ch-dit{margin:8px 2px 0;font:400 14px/1.4 system-ui;color:var(--texte-2)}
   .cherche{width:100%;box-sizing:border-box;margin:14px 0 0;border:1px solid var(--filet);border-radius:14px;padding:13px 14px;
     font:400 16px/1.2 system-ui;background:var(--surface);color:var(--texte);min-height:0}
   .lig{width:100%;text-align:left;background:var(--surface);border:1px solid var(--filet);border-radius:14px;
@@ -86,7 +93,11 @@
 
   <!-- écran 1 : la liste -->
   <section id="e-liste">
-    <input type="search" class="cherche" id="cherche" placeholder="Chercher un nom" aria-label="Chercher un salarié" hidden>
+    <div class="ch-ligne" id="ch-ligne" hidden>
+      <input type="search" class="cherche" id="cherche" data-micro="non" placeholder="Nom de famille, ou première lettre" aria-label="Chercher un salarié" autocomplete="off">
+      <button type="button" class="ch-mic" id="ch-mic" aria-label="Dire un nom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg></button>
+    </div>
+    <p class="ch-dit" id="ch-dit" hidden></p>
     <h2 class="pq" id="titre-liste">Vos salariés</h2>
     <div id="liste"></div>
     <p class="mention" id="legende" hidden>Rouge : une échéance dépassée ou dans les sept jours. Orange : dans le mois. Vert : rien ne presse.</p>
@@ -178,9 +189,69 @@
     PERSONNES.sort(function (a, b) { return rang[a.feu] - rang[b.feu] || (a.nom < b.nom ? -1 : 1); });
   }
 
+  /* CHERCHER UN SALARIÉ (26 novembre 2026).
+     Écrit : les noms de famille qui commencent par ce qu'on tape, et eux
+     seuls. « A » ne rend que les noms en A. Si rien ne commence ainsi, à partir
+     de trois lettres, les noms qui s'en rapprochent le plus à l'oreille.
+     Dit au micro : les noms les plus proches de ce qui a été entendu, à
+     l'oreille, car la dictée écrit « Souissi » pour « Souici ». */
+  function famille(p) {
+    var reg = ((function () { try { return JSON.parse(localStorage.getItem("registre-personnel") || "{}"); } catch (e) { return {}; } })().salaries) || [];
+    for (var i = 0; i < reg.length; i++) {
+      var s = reg[i], n = cle((s.nom || "") + " " + (s.pre || ""));
+      if (n === cle(p.nom)) return cle(s.nom || "") || n.split(" ")[0];
+    }
+    return cle(p.nom).split(" ")[0];
+  }
+  function phon(t) {
+    var w = cle(t).replace(/ /g, "");
+    w = w.replace(/ph/g, "f").replace(/qu/g, "k").replace(/q/g, "k").replace(/ck/g, "k")
+      .replace(/gu(?=[eiy])/g, "g").replace(/s?ch|sh/g, "S").replace(/c(?=[eiy])/g, "s").replace(/c/g, "k")
+      .replace(/g(?=[eiy])/g, "j").replace(/x/g, "ks").replace(/z/g, "s").replace(/w/g, "v").replace(/y/g, "i")
+      .replace(/h/g, "").replace(/eau|au/g, "o").replace(/ou|oo/g, "u").replace(/ai|ei/g, "e")
+      .replace(/[ae][nm](?![aeiou])/g, "A").replace(/[aeu]?i[nm](?![aeiou])/g, "I").replace(/o[nm](?![aeiou])/g, "O")
+      .replace(/(.)\1+/g, "$1").replace(/[estdx]+$/, "");
+    return w || cle(t);
+  }
+  function ecart(a, b) {
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++) d[i] = [i];
+    for (j = 0; j <= b.length; j++) d[0][j] = j;
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  function proches(texte, n) {
+    var q = phon(texte), mots = cle(texte).split(" ");
+    return PERSONNES.map(function (p) {
+      var f = phon(famille(p)), toute = phon(p.nom);
+      var d = Math.min(ecart(q, f) / Math.max(q.length, f.length, 1), ecart(q, toute) / Math.max(q.length, toute.length, 1));
+      /* Ce qu'on a dit ou tapé est le début du nom, à l'oreille : « Kouli »
+         pour COULIBALY. */
+      if (q.length >= 3 && f.indexOf(q) === 0) d = 0;
+      mots.forEach(function (m) { if (m.length >= 3) cle(p.nom).split(" ").forEach(function (x) {
+        var px = phon(x), pm = phon(m); d = Math.min(d, ecart(pm, px) / Math.max(pm.length, px.length, 1)); }); });
+      return { p: p, d: d };
+    }).filter(function (o) { return o.d <= 0.4; }).sort(function (a, b) { return a.d - b.d; }).slice(0, n || 6)
+      .map(function (o) { return o.p; });
+  }
+  var VOIX = "";
   function peindreListe() {
-    var q = cle($("cherche").value), L = PERSONNES.filter(function (p) { return !q || cle(p.nom).indexOf(q) >= 0; });
-    $("cherche").hidden = PERSONNES.length < 8;
+    var q = cle($("cherche").value), dit = $("ch-dit"), L;
+    if (VOIX) {
+      L = proches(VOIX, 6);
+      dit.textContent = L.length ? "Les plus proches de « " + VOIX + " » :" : "Aucun nom proche de « " + VOIX + " ».";
+      dit.hidden = false;
+    } else if (q) {
+      L = PERSONNES.filter(function (p) { return famille(p).indexOf(q) === 0; });
+      dit.hidden = true;
+      if (!L.length && q.length >= 3) {
+        L = proches(q, 6);
+        dit.textContent = L.length ? "Aucun nom ne commence par « " + $("cherche").value.trim() + " ». Les plus proches :" : "Aucun nom ne correspond.";
+        dit.hidden = false;
+      }
+    } else { L = PERSONNES; dit.hidden = true; }
+    $("ch-ligne").hidden = PERSONNES.length < 8;
     $("legende").hidden = !PERSONNES.length;
     $("titre-liste").textContent = PERSONNES.length ? "Vos salariés (" + PERSONNES.length + ")" : "Vos salariés";
     if (!PERSONNES.length) {
@@ -239,7 +310,27 @@
     try { history.replaceState(null, "", location.pathname + "?s=" + encodeURIComponent(b.getAttribute("data-id"))); } catch (ex) {}
     montrer(b.getAttribute("data-id"));
   });
-  $("cherche").addEventListener("input", peindreListe);
+  $("cherche").addEventListener("input", function () { VOIX = ""; peindreListe(); });
+  /* LA DICTÉE D'UN NOM. Chrome, Edge et Safari l'ont ; sur iPhone, seul
+     Safari la donne aux pages. Sinon, le micro du clavier. */
+  (function () {
+    var IOS_AUTRE = /(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(navigator.userAgent || "");
+    var SR = IOS_AUTRE ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+    var mic = $("ch-mic"), reco = null, ecoute = false;
+    mic.addEventListener("click", function () {
+      if (!SR) { $("cherche").focus(); $("ch-dit").textContent = "Touchez le micro de votre clavier pour dicter le nom."; $("ch-dit").hidden = false; return; }
+      if (ecoute) { try { reco.stop(); } catch (e) {} return; }
+      reco = new SR(); reco.lang = "fr-FR"; reco.interimResults = false; reco.maxAlternatives = 1;
+      reco.onstart = function () { ecoute = true; mic.classList.add("on"); $("ch-dit").textContent = "Je vous écoute : dites le nom."; $("ch-dit").hidden = false; };
+      reco.onresult = function (e) {
+        var t = (e.results[0] && e.results[0][0] && e.results[0][0].transcript) || "";
+        $("cherche").value = ""; VOIX = t.trim(); peindreListe();
+      };
+      reco.onerror = function () { $("ch-dit").textContent = "Je n'ai pas entendu. Touchez le micro et redites le nom."; };
+      reco.onend = function () { ecoute = false; mic.classList.remove("on"); };
+      try { reco.start(); } catch (e) { ecoute = false; }
+    });
+  })();
   /* Le retour ramène de la fiche à la liste ; depuis la liste, il quitte la page. */
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
     if (!OUVERT) return false;
