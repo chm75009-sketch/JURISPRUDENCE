@@ -1577,7 +1577,9 @@
   function ficheNette(s, f, conduit) {
     var h = f.recue && f.recue.le ? validationHtml(s, f)
       : '<p class="fn-rien">Il n\'a pas encore rempli sa fiche.</p>';
-    h += cadreFiche("Ses coordonnées", champsDe(s, f, ["tel", "nir", "visiteTravail", "roulant"]));
+    /* Comme dans le questionnaire, la première question : roulant ou non. */
+    h += cadreFiche("Roulant ou non roulant", champsDe(s, f, ["roulant"]));
+    h += cadreFiche("Ses coordonnées", champsDe(s, f, ["tel", "nir", "visiteTravail"]));
     var prof = profilChauffeur(f);
     if (conduit) {
       h += cadreFiche("Son profil", '<div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
