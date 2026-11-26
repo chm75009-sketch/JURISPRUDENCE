@@ -436,6 +436,37 @@
     e.preventDefault();
     montrer(OUVERT, a.getAttribute("data-voir"));
   });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-g]"), function (b) {
+    b.addEventListener("click", function () {
+      GROUPE = b.getAttribute("data-g"); VOIX = ""; $("cherche").value = ""; montrer(null);
+    });
+  });
+
+  $("liste").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-id]") : null; if (!b) return;
+    montrer(b.getAttribute("data-id"));
+  });
+  $("cherche").addEventListener("input", function () { VOIX = ""; peindreListe(); });
+  /* LA DICTÉE D'UN NOM. Chrome, Edge et Safari l'ont ; sur iPhone, seul
+     Safari la donne aux pages. Sinon, le micro du clavier. */
+  (function () {
+    var IOS_AUTRE = /(CriOS|FxiOS|EdgiOS|OPiOS|GSA)\//.test(navigator.userAgent || "");
+    var SR = IOS_AUTRE ? null : (window.SpeechRecognition || window.webkitSpeechRecognition);
+    var mic = $("ch-mic"), reco = null, ecoute = false;
+    mic.addEventListener("click", function () {
+      if (!SR) { $("cherche").focus(); $("ch-dit").textContent = "Touchez le micro de votre clavier pour dicter le nom."; $("ch-dit").hidden = false; return; }
+      if (ecoute) { try { reco.stop(); } catch (e) {} return; }
+      reco = new SR(); reco.lang = "fr-FR"; reco.interimResults = false; reco.maxAlternatives = 1;
+      reco.onstart = function () { ecoute = true; mic.classList.add("on"); $("ch-dit").textContent = "Je vous écoute : dites le nom."; $("ch-dit").hidden = false; };
+      reco.onresult = function (e) {
+        var t = (e.results[0] && e.results[0][0] && e.results[0][0].transcript) || "";
+        $("cherche").value = ""; VOIX = t.trim(); peindreListe();
+      };
+      reco.onerror = function () { $("ch-dit").textContent = "Je n'ai pas entendu. Touchez le micro et redites le nom."; };
+      reco.onend = function () { ecoute = false; mic.classList.remove("on"); };
+      try { reco.start(); } catch (e) { ecoute = false; }
+    });
+  })();
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
     if (DETAIL) { montrer(OUVERT, ""); return true; }
     if (OUVERT) { montrer(null); return true; }

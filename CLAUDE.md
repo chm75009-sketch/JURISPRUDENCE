@@ -205,6 +205,18 @@ lien de retour était au pied de la page, sous plus de deux cents lignes :
 l'utilisatrice est restée coincée sur le journal et a dû quitter l'application.
 La page du chef de parc n'en avait aucun.
 
+### Essayer l'écran par le chemin de l'utilisatrice, pas par une adresse
+
+Cas mesuré le 26 novembre 2026 - la page « Les salariés ». En remaniant la page
+du salarié, un bloc de code a été remplacé trop large : les boutons « Personnel
+roulant » et « Personnel non roulant », la liste, la recherche et le micro ont
+perdu leurs branchements. Les essais ouvraient la page directement par son
+adresse, jamais en touchant ces boutons : rien ne l'a vu, et la page a été mise
+en ligne et annoncée comme essayée. L'utilisatrice a trouvé les deux boutons
+morts. Un écran se teste en partant de l'accueil et en touchant chaque bouton
+comme elle le fera ; après un remplacement de code, on vérifie que rien
+d'autre n'a disparu (comparer les écouteurs avant et après).
+
 ### Lisibilité, simplicité, présentation : la demande, pas mon idée
 
 Trois mots redemandés un nombre incalculable de fois : **lisibilité,
