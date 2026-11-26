@@ -158,3 +158,6 @@
 .fn-vigs{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
 .fn-vig{display:block;text-decoration:none;color:var(--texte-2);font:400 12.5px/1.3 system-ui}
 .fn-vig img{display:block;width:100%;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--filet);background:var(--creux);margin-bottom:4px}
+.fn-lu{display:flex;justify-content:space-between;gap:12px;padding:0 0 10px;margin:0 0 10px;border-bottom:1px solid var(--filet)}
+.fn-lu span{font:600 11px/1.2 system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--texte-3);padding-top:3px}
+.fn-lu b{font:700 var(--t3)/1.3 system-ui;color:var(--texte);text-align:right}

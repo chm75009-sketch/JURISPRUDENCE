@@ -224,6 +224,7 @@
   var OUI_NON = [["", "- à préciser -"], ["oui", "Oui"], ["non", "Non"]];
   var CHAMPS_C = [
     { c: "roulant", sal: true, lib: "Personnel roulant (conduit pour T.E.C)", t: "select", opts: OUI_NON },
+    { c: "adresse", sal: true, lib: "Adresse", t: "text", large: true },
     { c: "tel", sal: true, lib: "Téléphone", t: "text" },
     { c: "nir", sal: true, lib: "Numéro de sécurité sociale", t: "text" },
     { c: "ue", sal: true, lib: "Ressortissant de l'Union européenne ou de l'EEE", t: "select", opts: OUI_NON },
@@ -1579,7 +1580,15 @@
       : '<p class="fn-rien">Il n\'a pas encore rempli sa fiche.</p>';
     /* Comme dans le questionnaire, la première question : roulant ou non. */
     h += cadreFiche("Roulant ou non roulant", champsDe(s, f, ["roulant"]));
-    h += cadreFiche("Ses coordonnées", champsDe(s, f, ["tel", "nir", "visiteTravail"]));
+    /* Nom et prénom, comme en tête du questionnaire : ceux du registre du
+       personnel, d'où vient le salarié. Ils se corrigent au registre. */
+    var r = null;
+    ((lire(CLE_REG, {}) || {}).salaries || []).forEach(function (x) {
+      if (sansAccent((net(x.nom) + " " + net(x.pre)).trim()) === s.id) r = x;
+    });
+    var lu = function (l, v) { return '<div class="fn-lu"><span>' + ech(l) + "</span><b>" + ech(v || "-") + "</b></div>"; };
+    h += cadreFiche("Ses coordonnées", lu("Nom", r ? net(r.nom) : s.nom) + lu("Prénom", r ? net(r.pre) : "") +
+      champsDe(s, f, ["adresse", "tel", "nir", "visiteTravail"]));
     var prof = profilChauffeur(f);
     if (conduit) {
       h += cadreFiche("Son profil", '<div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +

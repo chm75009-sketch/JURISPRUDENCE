@@ -274,7 +274,7 @@
   }
 
   var LIB = [
-    ["nom", "Nom"], ["prenom", "Prénom"], ["tel", "Téléphone"], ["nir", "Numéro de sécurité sociale"],
+    ["nom", "Nom"], ["prenom", "Prénom"], ["adresse", "Adresse"], ["tel", "Téléphone"], ["nir", "Numéro de sécurité sociale"],
     ["roulant", "Personnel roulant"], ["profil", "Profil"], ["ue", "Ressortissant UE ou EEE"], ["titreFin", "Titre de séjour, valable jusqu'au"],
     ["permisOrigine", "Permis"], ["permisPays", "Pays du permis"], ["arrivee", "Arrivée en France le"],
     ["inter", "International ou cabotage"],
@@ -345,7 +345,7 @@
      du serveur : l'autre appareil ne la rangera pas une seconde fois. Si le
      nom n'est pas au registre du personnel, elle attend dans le cadre des
      fiches reçues. */
-  var CHAMPS_FICHE = ["roulant", "tel", "nir", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
+  var CHAMPS_FICHE = ["roulant", "adresse", "tel", "nir", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
     "permisNum", "permisCat", "permisFin", "suspendu", "visiteTravail", "visitePermisFin", "fco",
     "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil"];
   /* RETROUVER LE SALARIÉ AU REGISTRE (26 novembre 2026). Le nom tapé par
