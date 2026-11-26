@@ -98,6 +98,8 @@
   }
 
   function retourner(ev) {
+    /* Un retour déjà fait par la page elle-même ne se refait pas. */
+    if (ev && ev.defaultPrevented) return;
     if (AVANT) {
       var reste = false;
       try { reste = AVANT() === true; } catch (e) { reste = false; }

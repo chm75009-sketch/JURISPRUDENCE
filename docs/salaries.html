@@ -164,7 +164,7 @@
     if (/visite|examen|medical/.test(q)) return "visites.html";
     if (/heures|decompte|duree/.test(q)) return "heures.html";
     if (/forfait/.test(q)) return "forfait.html";
-    if (/permis|fco|fimo|formation|carte|adr|points|qualification/.test(q)) return "flotte.html";
+    if (/permis|fco|fimo|formation|carte|adr|points|qualification/.test(q)) return "flotte.html?c=" + encodeURIComponent(id);
     return "agenda.html";
   }
   function feuDe(j) { return j === null ? "" : j <= 7 ? "r" : j <= 30 ? "o" : "v"; }

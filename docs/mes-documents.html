@@ -529,8 +529,11 @@
   });
   $("tout-voir").addEventListener("click", function () { VUE = null; rendre(); });
   /* Le retour ramène d'une vue à la liste entière ; sinon, il quitte la page. */
+  /* Venu de la page d'un salarié (?r=) : le retour y ramène directement,
+     sans s'arrêter sur la vue d'ensemble des documents. */
+  var VIENT_DU_SALARIE = /[?&]r=salarie-/.test(location.search);
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
-    if (!VUE) return false;
+    if (!VUE || VIENT_DU_SALARIE) return false;
     VUE = null; rendre(); return true;
   });
 

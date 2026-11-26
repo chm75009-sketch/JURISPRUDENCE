@@ -988,6 +988,11 @@
       ecran("e-profil");
       return;
     }
+    /* Venu d'une autre page de l'application (la fiche d'un salarié, par
+       exemple), le retour y ramène ; sinon, à Gérer. */
+    try {
+      if (document.referrer && new URL(document.referrer).origin === location.origin && history.length > 1) { history.back(); return; }
+    } catch (e) {}
     window.location.href = "gerer.html";
   });
 

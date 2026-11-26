@@ -1568,14 +1568,23 @@
   }
 
   var CONDUIT = /chauffeur|conducteur|livreur|convoyeur|routier/i;
+  /* UNE SEULE FICHE, VENUE DE LA PAGE DU SALARIÉ (26 novembre 2026). La
+     liste entière poussait sa fiche si bas que le bouton Retour sortait de
+     l'écran. On ne montre que la sienne, en haut, avec de quoi revenir à
+     tous les conducteurs. */
+  var SEUL = "";
+  try { SEUL = new URLSearchParams(location.search).get("c") || ""; } catch (e) {}
   function rendreConducteurs() {
     var G = salaries().filter(function (s) { return !s.sor; });
+    if (SEUL) G = G.filter(function (s) { return s.id === SEUL; });
+    var fr = $("fiches-recues"); if (fr) fr.hidden = !!SEUL;
     G = G.filter(function (s) { return CONDUIT.test(s.emp); })
       .concat(G.filter(function (s) { return !CONDUIT.test(s.emp); }));
     var hote = $("conducteurs");
     $("con-vide").hidden = !!G.length;
     if (!G.length) { hote.innerHTML = ""; return; }
-    hote.innerHTML = G.map(function (s) {
+    hote.innerHTML = (SEUL ? '<div class="seul"><button type="button" class="second" data-tous="1">Voir tous les conducteurs</button></div>' : "") +
+      G.map(function (s) {
       var f = fiche(s.id), E = echeancesConducteur(f), p = pire(E);
       var est = !!ouvert["c" + s.id];
       var sous = [s.emp, f.permisCat ? "permis " + f.permisCat : "",
@@ -1594,6 +1603,11 @@
         "</div>";
     }).join("");
 
+    var bt = hote.querySelector("[data-tous]");
+    if (bt) bt.addEventListener("click", function () {
+      SEUL = ""; try { history.replaceState(null, "", location.pathname + "?vue=conducteurs"); } catch (e) {}
+      rendre(); window.scrollTo(0, 0);
+    });
     G.forEach(function (s) {
       var cadre = hote.querySelector('[data-c="' + s.id + '"]');
       if (!cadre || !ouvert["c" + s.id]) return;
@@ -2408,8 +2422,7 @@
         /* Venu de la page du salarié : sa fiche s'ouvre directement. */
         if (prc.get("c")) { ouvert["c" + prc.get("c")] = true; rendre(); }
         onglet(false);
-        var vc = prc.get("c") && document.querySelector('[data-c="' + prc.get("c") + '"]');
-        if (vc && vc.scrollIntoView) vc.scrollIntoView({ block: "start" });
+        window.scrollTo(0, 0);
       }
     } catch (e) {}
 

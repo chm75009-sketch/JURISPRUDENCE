@@ -1219,6 +1219,10 @@
     a.href = "index.html";
     a.textContent = "← Retour";
     a.addEventListener("click", function (ev) {
+      /* Quand la barre est chargée, c'est elle qui fait le retour : deux
+         reculs pour un clic ramenaient deux écrans en arrière (agenda ouvert
+         depuis la fiche du salarié, relevé le 26 novembre 2026). */
+      if (window.Barre) return;
       var interne = false;
       try { interne = !!document.referrer && new URL(document.referrer).origin === location.origin; }
       catch (_) { interne = false; }
