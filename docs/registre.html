@@ -182,6 +182,18 @@
   .feuille .b-p{margin:0 0 6px;font-size:14.5px;line-height:1.6}
   .feuille .b-puce{margin:0 0 4px 18px;font-size:14.5px;line-height:1.55}
   .feuille .b-vide{height:8px}
+
+  /* L'APERÇU DU CLASSEUR, UNE LIGNE PAR SALARIÉ.
+     Les dates y sortaient en « Fri Jun 01 2018 00:00:00 GMT… », coupées sur
+     huit lignes : chaque salarié prenait cent quatre-vingts points, trois par
+     écran de téléphone. Relevé le 27 novembre 2026. Les dates se lisent en
+     jour/mois/année, une cellule ne passe pas à la ligne, et le tableau défile
+     de côté dans son cadre ; seuls les intitulés se replient. */
+  .ap-registre .ap-tab td{white-space:nowrap}
+  .ap-registre .ap-tab th{min-width:140px;white-space:normal}
+  /* Le Word et l'impression en tête de l'écran du document : ils étaient sous
+     tout le registre, à plus de six mille points du haut sur un téléphone. */
+  #e-doc .barre.haut-doc{margin:14px 0 14px}
   @media print{
     header.site,.barre,.suite,details,.rappel-fiche,.jauge{display:none !important}
     body{background:#fff}
@@ -353,11 +365,14 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
 
   <!-- ══════ LE DOCUMENT ══════ -->
   <section id="e-doc" hidden>
-    <div id="doc"></div>
-    <div class="barre pile">
+    <!-- Les deux boutons au-dessus du document, là où l'on arrive en touchant
+         « Word » : ils étaient sous le registre entier, à plus de six mille
+         points du haut sur un téléphone. Relevé le 27 novembre 2026. -->
+    <div class="barre pile haut-doc">
       <button type="button" class="btn" id="d-word">Télécharger en Word</button>
       <button type="button" class="btn second" id="d-imprimer">Imprimer</button>
     </div>
+    <div id="doc"></div>
     <details class="loi"><summary>Voir le texte de loi</summary><div class="c" id="textes-doc"></div></details>
   </section>
 
@@ -2548,11 +2563,39 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
        "les colonnes seront reconnues d'elles-mêmes."],
       ["Les dates s'écrivent en jour/mois/année ou en année-mois-jour, les deux sont lues."],
     ];
+    /* LA FEUILLE DES SALARIÉS PORTE LE NOM DE L'ENTREPRISE.
+       Ouverte seule, elle ne disait pas de quelle entreprise elle était le
+       registre. Relevé le 27 novembre 2026. Une ligne de titre au-dessus des
+       intitulés ne gêne plus le retour du fichier : depuis le 16 septembre
+       2026, le dépôt cherche la ligne d'intitulés parmi les vingt premières,
+       celle qui porte le plus de colonnes reconnues. */
+    var denom = String(E.cadre.nom || (E.profil && E.profil.denomination) || "").trim();
+    var titreSal = denom ? denom + " · Registre unique du personnel" : "";
+    var tableau = lignes;
+    if (titreSal) lignes = [[titreSal], []].concat(tableau);
     var nom = "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".xlsx";
-    window.TableurExport.telecharger(window.TableurExport.xlsx([
+    var feuilles = [
       { titre: "Salariés", lignes: lignes },
       { titre: "Mode d'emploi", lignes: ent, largeurs: [24, 80] },
-    ]), nom);
+    ];
+    var octets = window.TableurExport.xlsx(feuilles);
+    /* L'aperçu montre les dates comme le classeur les affichera, en
+       jour/mois/année, et non comme le navigateur écrit un objet date ; le
+       titre de la feuille au-dessus du tableau, les intitulés en tête. */
+    var A = window.Apercu;
+    if (A && A.poser && A.htmlFeuilles && A.tableHtml && A.ech) {
+      var lisible = function (v) {
+        if (v instanceof Date && !isNaN(v.getTime()))
+          return ("0" + v.getDate()).slice(-2) + "/" + ("0" + (v.getMonth() + 1)).slice(-2) + "/" + v.getFullYear();
+        return v == null ? "" : v;
+      };
+      var enClair = function (L) { return L.map(function (l) { return l.map(lisible); }); };
+      A.poser(octets, { titre: "Salariés",
+        html: '<div class="ap-registre"><p class="ap-feuille">Salariés · ' + lignes.length + " lignes</p>" +
+          (titreSal ? "<p>" + A.ech(titreSal) + "</p>" : "") + A.tableHtml(enClair(tableau)) + "</div>" +
+          A.htmlFeuilles([{ titre: "Mode d'emploi", lignes: enClair(ent) }]) });
+    }
+    window.TableurExport.telecharger(octets, nom);
   }
   $("r-excel").addEventListener("click", classeurRegistre);
   $("i-excel").addEventListener("click", classeurRegistre);

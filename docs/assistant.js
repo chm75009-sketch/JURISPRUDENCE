@@ -613,7 +613,8 @@
     "border-bottom:1px solid #dcdfe4;background:#f6f7f9}" +
     ".assist-tete b{font:600 16px/1.2 system-ui;color:#16181d;margin-right:auto}" +
     ".assist-tete select{font:13px/1.2 system-ui;padding:5px 6px;border:1px solid #dcdfe4;" +
-    "border-radius:7px;background:#fff;color:#2b313a;flex:none;max-width:none}" +
+    "border-radius:7px;background:#fff;color:#2b313a;flex:none;width:auto;min-width:0;max-width:none;" +
+    "min-height:0;height:auto}" +
     ".assist-tete button{font:13px/1.2 system-ui;padding:6px 10px;border-radius:7px;cursor:pointer;" +
     "border:1px solid #dcdfe4;background:#fff;color:#2b313a}" +
     ".assist-tete button:hover{border-color:#1F3864;color:#1F3864}" +

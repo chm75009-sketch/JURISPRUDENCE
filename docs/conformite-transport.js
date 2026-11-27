@@ -131,7 +131,17 @@
     try { window.localStorage.removeItem(AVANT_ESSAI); } catch (err) {}
   }
 
-  function iso(d) { return new Date(d).toISOString().slice(0, 10); }
+  /* LA DATE DU JOUR EN HEURE DE FRANCE (27 novembre 2026). iso() passait par
+     l'heure universelle : à Paris, une date prise à minuit sortait la veille,
+     une séance du 18/12 s'affichait au 17/12 et le délai pour sanctionner
+     perdait un jour. On lit désormais le jour, le mois et l'année locaux ; une
+     date déjà écrite « AAAA-MM-JJ » est rendue telle quelle. */
+  function iso(d) {
+    if (typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
+    var x = new Date(d);
+    if (isNaN(x.getTime())) return "";
+    return x.getFullYear() + "-" + (x.getMonth() < 9 ? "0" : "") + (x.getMonth() + 1) + "-" + (x.getDate() < 10 ? "0" : "") + x.getDate();
+  }
   function ajouterJours(dateStr, n) {
     var d = new Date(dateStr + "T00:00:00");
     d.setDate(d.getDate() + n);
@@ -433,6 +443,13 @@
     catch (e) { return String(s).slice(0, 10); }
   }
 
+  /* Une date ISO en chiffres à la française : 2026-11-27 devient 27/11/2026
+     (27 novembre 2026, pour les tableaux de la fiche en Word). */
+  function jjmm(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s || ""));
+    return m ? m[3] + "/" + m[2] + "/" + m[1] : String(s || "");
+  }
+
   /* L'ENCADREMENT, TEL QUE LA FICHE LE CONNAÎT. Relevé le 27 novembre 2026 : la
      fiche en Word portait « signée le [DATE] » et « Rappels : [DATES] » même
      une fois la consigne signée à l'écran. Les dates viennent maintenant de
@@ -462,7 +479,7 @@
     items.push({ k: "h1", t: "FICHE DE SUIVI DU CONDUCTEUR" });
     items.push({ k: "p", t: sal.nom + (sal.poste ? "  ·  " + sal.poste : "") +
       (sal.poidsLourd ? "  ·  poids lourd" : "") });
-    items.push({ k: "p", t: "État au " + iso(new Date()) + " : " + et.message });
+    items.push({ k: "p", t: "État au " + enLettres(iso(new Date())) + " : " + et.message });
 
     items.push({ k: "h2", t: "Encadrement" });
     items.push({ k: "p", t: phraseEncadrement(id) });
@@ -470,7 +487,7 @@
     items.push({ k: "h2", t: "Contrôle et anomalies relevées" });
     if (s.anomalies.length) {
       items.push({ k: "table", head: ["Date", "Type", "Détail"],
-        rows: s.anomalies.map(function (a) { return [a.date || "", a.type || "", a.detail || ""]; }) });
+        rows: s.anomalies.map(function (a) { return [jjmm(a.date), a.type || "", a.detail || ""]; }) });
     } else {
       items.push({ k: "p", t: "Aucune anomalie relevée à ce jour." });
     }
@@ -480,7 +497,7 @@
       items.push({ k: "table", head: ["Date", "Catégorie", "Mesure", "Pour le manquement"],
         rows: s.mesures.map(function (m) {
           var cat = (CATEGORIES.filter(function (c) { return c.cle === (m.categorie || "").toLowerCase(); })[0] || {}).nom || m.categorie || "";
-          return [m.date || "", cat, m.objet || "", m.pour || ""]; }) });
+          return [jjmm(m.date), cat, m.objet || "", m.pour || ""]; }) });
     } else {
       items.push({ k: "p", t: "Aucune mesure prise à ce jour." });
     }
@@ -924,6 +941,15 @@
         var m = String(a.detail || "").match(/v[ée]hicule\s+([A-Z0-9][A-Z0-9 -]*[A-Z0-9])/i);
         faits.push({ date: a.date || "", src: a.src || "", type: a.type || "", nom: noms[id] || id,
           carte: carte.numero || "", veh: m ? m[1] : "", detail: a.detail || "" });
+      });
+    });
+    /* Les faits du registre des véhicules (conduite sans carte lue dans le
+       fichier du tachygraphe) y figurent aussi, sous leur immatriculation, avec
+       le conducteur à établir (ajouté le 27 novembre 2026). */
+    Object.keys(e.suiviVehicules || {}).forEach(function (immat) {
+      ((e.suiviVehicules[immat] || {}).anomalies || []).forEach(function (a) {
+        faits.push({ date: a.date || "", src: "Fichier du véhicule", type: a.type || "",
+          nom: "à établir", carte: "", veh: immat, detail: a.detail || "" });
       });
     });
     faits.sort(function (x, y) { return x.date < y.date ? -1 : x.date > y.date ? 1 : (x.nom < y.nom ? -1 : x.nom > y.nom ? 1 : 0); });

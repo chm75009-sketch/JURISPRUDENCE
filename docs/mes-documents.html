@@ -36,8 +36,12 @@
   .doc .tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .doc .tete b{font:600 15px/1.35 system-ui;flex:1;min-width:0;word-break:break-word}
   .doc .quand{font-size:var(--t1);color:var(--texte-2);margin:4px 0 10px}
-  .doc .barre{margin:0}
-  .doc .barre button{min-height:38px;font-size:var(--t1);padding:8px 12px;width:auto}
+  /* Quatre boutons par pièce depuis « Renommer » (27 novembre 2026) : au
+     téléphone, deux par rangée au lieu de quatre l'un sous l'autre, pour
+     que la pièce suivante reste à l'écran. */
+  .doc .barre{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media (min-width:560px){.doc .barre{grid-template-columns:repeat(4,1fr)}}
+  .doc .barre button{min-height:40px;font-size:var(--t1);padding:8px 10px;width:100%;margin:0}
   .etiq{font:600 11px/1 system-ui;padding:6px 8px;border-radius:6px;white-space:nowrap;
     background:var(--creux);color:var(--texte-2)}
   .etiq.produit{background:var(--vert-clair);color:var(--vert)}
@@ -81,7 +85,7 @@
   <style>
     .coffre-t{font:700 22px/1.25 system-ui;color:var(--encre);margin:12px 0 2px}
     .coffre-tete .tout-voir{margin:2px 0 0}
-    .rendu-dit{font-size:var(--t1);color:var(--texte-2);margin:8px 0 0}
+    .rendu-dit{grid-column:1/-1;font-size:var(--t1);color:var(--texte-2);margin:0}
   </style>
   <div class="coffre-tete" id="coffre-tete" hidden>
     <h1 class="coffre-t" id="coffre-t"></h1>
@@ -438,8 +442,21 @@
     rubs.forEach(function (x) { tous = tous.concat(x.L); });
     return noms.map(function (n) {
       var c = sansAccent(n).trim(), mots = plaque ? null : c.split(/\s+/);
-      return { r: n, titre: n, L: tous.filter(function (d) {
-        return plaque ? (porte(d, [c.replace(/\s+/g, "")]) || porte(d, [c])) : porte(d, mots); }) };
+      var L = tous.filter(function (d) {
+        return plaque ? (porte(d, [c.replace(/\s+/g, "")]) || porte(d, [c])) : porte(d, mots); });
+      /* Les pièces de son coffre fort (rubrique « salarie-<identifiant> »)
+         comptent aussi, quel que soit leur nom : un « contrat-signe.pdf »
+         déposé pour lui n'était pas compté dans la tuile Salariés
+         (27 novembre 2026). */
+      if (!plaque) {
+        var cle = "salarie-" + String(n).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        var vus = {};
+        L.forEach(function (d) { vus[d.id] = 1; });
+        rubs.forEach(function (x) {
+          if (x.r === cle) x.L.forEach(function (d) { if (!vus[d.id]) { vus[d.id] = 1; L.push(d); } });
+        });
+      }
+      return { r: n, titre: n, L: L };
     }).filter(function (g) { return g.L.length; });
   }
   function vueDe(rubs, v) {
@@ -512,8 +529,8 @@
         ? total + " document" + (total > 1 ? "s" : "") + " sur " +
           pleines.reduce(function (n, x) { return n + x.L.length; }, 0) + " répond" +
           (total > 1 ? "ent" : "") + " au filtre"
-        : pleines.reduce(function (n, x) { return n + x.L.length; }, 0) + " document" +
-          (pleines.reduce(function (n, x) { return n + x.L.length; }, 0) > 1 ? "s" : "") + " gardés sur ce poste";
+        : (function (n) { return n + " document" + (n > 1 ? "s gardés" : " gardé") + " sur ce poste"; })(
+          pleines.reduce(function (n, x) { return n + x.L.length; }, 0));
       if (!gardees.length) {
         $("liste").innerHTML = '<div class="avis info"><b>Aucun document ne répond à ce filtre</b>' +
           "Le filtre cherche le nom ou la plaque dans le nom du document et dans sa note : " +

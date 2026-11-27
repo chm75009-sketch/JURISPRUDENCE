@@ -43,8 +43,8 @@
     if (document.getElementById("ru-style")) return;
     var s = document.createElement("style"); s.id = "ru-style";
     s.textContent =
-      ".rappel-urssaf-bulle{display:flex;align-items:center;gap:10px;max-width:980px;margin:8px auto;" +
-      "padding:10px 14px;background:var(--ambre-clair,#fdf3e2);border:1px solid var(--ambre,#c0892d);" +
+      ".rappel-urssaf-bulle{display:flex;align-items:center;gap:10px;max-width:980px;margin:6px auto 4px;" +
+      "padding:8px 12px;background:var(--ambre-clair,#fdf3e2);border:1px solid var(--ambre,#c0892d);" +
       "border-radius:11px;font:600 14px/1.35 system-ui;color:var(--ambre,#8a5a12)}" +
       ".rappel-urssaf-bulle .ru-t{flex:1}" +
       ".rappel-urssaf-bulle .ru-a{flex:none;text-decoration:none;background:var(--ambre,#c0892d);color:#fff;" +

@@ -415,7 +415,7 @@
         '<summary><h2>' + ech(titre) + '</h2>' + (resume || "") + '<i class="fl"></i></summary>' + corps + '</details>';
     };
     var etatF = ef === "vert" ? ["v", "validée"] : (ef === "orange" ? ["o", "à valider"] : ["r", "pas remplie"]);
-    h += part("fiche", "Fiche", pu(etatF[0], etatF[1]), lien("#fiche", "Sa fiche", "ce qu'il a rempli", etatF));
+    h += part("fiche", "Fiche", pu(etatF[0], etatF[1]), lien("#fiche", "Sa fiche", "ce que la personne a rempli", etatF));
     h += part("dossier", "Dossier", "",
       lien("#contrat", "Contrat") +
       (roulant(p) ? lien("#camion", "Camion") + lien("#permis", "Permis") : "") +
@@ -446,7 +446,7 @@
          l'endroit où elle se saisit. */
       (sansDate ? '<p class="mention">' + sansDate + " date" + (sansDate > 1 ? "s" : "") + " à saisir pour cette personne :</p>" +
         p.mes.filter(function (m) { return m.j === null; }).map(function (m) {
-          return lien(pageDe(m.quoi, p.id), m.quoi, "date à saisir", ["g", "à dater"]);
+          return lien(pageDe(m.quoi, p.id), m.quoi, "date à saisir", ["g", "à dater"], "g");
         }).join("") : "") +
       '<p class="mention">Clignote : en retard. Rouge : sept jours. Orange : un mois.</p>');
     var n = (h.match(/<details class="part/g) || []).length;

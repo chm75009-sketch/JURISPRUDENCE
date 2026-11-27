@@ -32,8 +32,11 @@
   /* ecran 1 : la fiche */
   .fiche{padding:20px 0 40px}
   .fiche h1{font:600 26px/1.2 system-ui;margin:4px 0 16px}
-  /* Le retour de la fiche, seul sur sa ligne au-dessus du titre. */
-  .tete-fiche{margin:0 0 10px}
+  /* Le retour de la fiche, seul sur sa ligne au-dessus du titre. Il reste
+     collé sous le bandeau pendant qu'on descend : la fiche fait plus de deux
+     mille pixels, et la ligne de la licence y ouvre l'écran tout en bas. */
+  .tete-fiche{position:sticky;top:var(--haut-bandeau,0px);z-index:30;margin:-12px -16px 6px;
+    padding:8px 16px;background:var(--fond)}
   .tete-fiche button.retour{font-size:17px}
   .fiche fieldset{border:0;background:none;border-radius:0;padding:0;margin:0}
   .fiche legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
@@ -128,8 +131,8 @@
   .chapeau{margin:20px 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
   .chapeau b{color:var(--texte)}
   .portes{display:flex;flex-direction:column;gap:10px;margin:0}
-  .titre-portes{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:14px 2px 8px}
-  .porte{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:18px;border:2px solid var(--accent);
+  .titre-portes{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:10px 2px 8px}
+  .porte{display:flex;align-items:center;gap:14px;padding:10px 14px;border-radius:18px;border:2px solid var(--accent);
     background:var(--accent-clair);text-decoration:none;color:var(--texte)}
   .porte .ico{flex:none;width:48px;height:48px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center}
   .porte .ico svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -520,13 +523,22 @@
        par un lien. À la toute première ouverture, fiche vide, il n'y en a pas :
        la fiche est alors l'entrée de l'application. */
     $("retour-fiche").hidden = !(depuisAccueil || venuParLien || complet(pf));
+    caleRetour();
     window.scrollTo(0, 0);
   }
+  /* Le retour se colle juste sous le bandeau, dont la hauteur change avec la
+     ligne de l'entreprise et la largeur de l'écran. */
+  function caleRetour() {
+    var tete = document.querySelector("header.site");
+    var h = tete ? Math.round(tete.getBoundingClientRect().height) : 0;
+    document.documentElement.style.setProperty("--haut-bandeau", h + "px");
+  }
+  window.addEventListener("resize", caleRetour);
 
   /* LA FICHE A SA PROPRE ADRESSE : index.html#fiche.
      L'agenda y envoie pour « Ouvrir la fiche d'entreprise », et le geste
      retour du téléphone doit la refermer comme le bouton. Demande du
-     27 novembre 2026. « #fiche-transport » ouvre en plus le pli du
+     27 novembre 2026. « #fiche-licence » ouvre en plus le pli du
      transport, pour la ligne de la licence dans « Cette semaine ». */
   var depuisAccueil = false;
   var venuParLien = false;
@@ -536,11 +548,15 @@
       try { history.pushState({ fiche: 1 }, "", "#fiche"); depuisAccueil = true; } catch (e) {}
     }
     montrerFiche();
-    if (location.hash === "#fiche-transport") {
+    if (location.hash === "#fiche-licence") {
       var pli = $("pli-transport");
       if (pli && !pli.hidden) {
         pli.open = true;
-        if (pli.scrollIntoView) pli.scrollIntoView({ block: "start" });
+        /* Le bandeau et le retour restent collés : on s'arrête sous eux. */
+        var tete = document.querySelector("header.site"), ret = document.querySelector(".tete-fiche");
+        var haut = (tete ? tete.getBoundingClientRect().height : 0) +
+          (ret ? ret.getBoundingClientRect().height : 0);
+        window.scrollTo(0, Math.max(0, pli.getBoundingClientRect().top + window.pageYOffset - haut - 8));
       }
     }
   }
@@ -632,7 +648,7 @@
     try {
       if (window.Profil && window.Profil.echeancesTransport)
         L = L.concat(window.Profil.echeancesTransport().map(function (e) {
-          e.vers = "#fiche-transport";
+          e.vers = "#fiche-licence";
           return e;
         }));
     } catch (e) {}

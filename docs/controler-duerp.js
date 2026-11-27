@@ -435,7 +435,10 @@
     "Postures pénibles, positions forcées des articulations",
     "Vibrations mécaniques",
     "Agents chimiques dangereux, y compris poussières et fumées",
-    "Activités en milieu hyperbare",
+    /* « Activités exercées en milieu hyperbare » : le mot manquait, et le
+       facteur écrit comme dans le texte n'était pas reconnu. Relu à la source
+       le 27 novembre 2026. */
+    "Activités exercées en milieu hyperbare",
     "Températures extrêmes",
     "Bruit",
     "Travail de nuit",
@@ -765,9 +768,17 @@
       return inflater(e.data).then(function (b) { return new TextDecoder("utf-8").decode(new Uint8Array(b)); });
     }).then(texteDeXml);
   }
+  /* L'APOSTROPHE DEVIENT UNE ESPACE, DES DEUX C\u00d4T\u00c9S.
+
+     Les expressions des mentions sont \u00e9crites sans apostrophe, \u00ab modalites d
+     acces \u00bb, \u00ab plan d action \u00bb, alors que le texte d\u00e9pos\u00e9 garde la sienne :
+     \u00ab modalit\u00e9s d'acc\u00e8s \u00bb ne se trouvait jamais, et un document qui portait
+     l'avis d'acc\u00e8s mot pour mot \u00e9tait dit muet. Relev\u00e9 le 27 novembre 2026.
+     L'apostrophe droite et la courbe sont repli\u00e9es en espace, dans le texte
+     comme dans ce qu'on y cherche. */
   function normaliser(s) {
     return String(s || "").toLowerCase().normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ");
+      .replace(/[\u0300-\u036f]/g, "").replace(/['\u2019]/g, " ").replace(/\s+/g, " ");
   }
 
   /* UN MOT N'EST PAS UNE PREUVE.
@@ -845,7 +856,12 @@
       fond: "L. 4121-2", m: "mesure de prevention|mesures de prevention|action de prevention|moyens de prevention|equipement de protection",
       quoi: "Les mesures répondent aux neuf principes généraux de prévention." },
     { cle: "plan", nom: "Programme annuel ou liste d'actions",
-      fond: "L. 4121-3-1, III", m: "programme annuel|plan d action|plan d actions|programme de prevention|actions a mener|echeancier",
+      /* « La liste de ces actions est consignée dans le document unique »
+         (L. 4121-3-1, III, 2°, LEGIARTI000043893919, lu en entier au relais
+         le 27 novembre 2026) : sous cinquante salariés, c'est ce que le
+         document porte, et le contrôle ne le cherchait pas. Ajouté le même
+         jour. */
+      fond: "L. 4121-3-1, III", m: "programme annuel|plan d action|plan d actions|programme de prevention|actions a mener|echeancier|liste des actions de prevention|liste d actions",
       quoi: "À partir de cinquante salariés, les résultats débouchent sur un programme annuel de prévention ; en dessous, sur une liste d'actions consignée dans le document." },
     { cle: "responsables", nom: "Responsable et échéance par action",
       fond: "L. 4121-3-1, III", m: "responsable|pilote|echeance|delai de realisation|date de realisation|cout estime",

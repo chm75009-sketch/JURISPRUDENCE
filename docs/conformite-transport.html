@@ -635,8 +635,16 @@
     var connu = (window.ConformiteTransport.salaries() || []).some(function (x) { return x.id === c; });
     if (connu) {
       ST.choisir(c);
-      try { var e = new URLSearchParams(location.search).get("e"); if (e !== null && ST.aller) ST.aller(e); } catch (x) {}
+      var e = null;
+      try { e = new URLSearchParams(location.search).get("e"); if (e !== null && ST.aller) ST.aller(e); } catch (x) {}
       ST.peindre();
+      /* Le volet demandé vient à l'écran, sous le Retour resté en haut. On
+         recommence une fois la page chargée : le navigateur peut remettre
+         entre-temps la position d'une visite précédente. */
+      if (e !== null && ST.versVolet) {
+        ST.versVolet();
+        window.addEventListener("load", function () { window.requestAnimationFrame(ST.versVolet); });
+      }
     }
   })();
   function aujourdhuiIso() { var d = new Date(); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
@@ -874,10 +882,10 @@
       var cid = document.getElementById("carte-cible").value;
       if (!cid) { msgCarte("Choisissez d'abord le conducteur."); return; }
       var d = a.periode ? a.periode.au : null;
-      d = d || new Date().toISOString().slice(0, 10);
+      if (!d) { var n = new Date(); d = n.getFullYear() + "-" + ("0" + (n.getMonth() + 1)).slice(-2) + "-" + ("0" + n.getDate()).slice(-2); }
       CT.porterTelechargementCarte(cid, d);
       peindreEch();
-      msgCarte("Date du téléchargement portée à l'échéancier (" + d + ").");
+      msgCarte("Date du téléchargement portée à l'échéancier (" + d.slice(8, 10) + "/" + d.slice(5, 7) + "/" + d.slice(0, 4) + ").");
     });
     var ba = document.getElementById("carte-ajouter");
     if (ba) ba.addEventListener("click", function () {

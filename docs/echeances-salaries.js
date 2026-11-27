@@ -107,6 +107,46 @@
   }
   function suite(id) { return lire(CLE_SUITES, {})[id] || {}; }
 
+  /* LA DATE DE LA DERNIÈRE VISITE N'A QU'UNE PLACE.
+
+     Relevé le 27 novembre 2026 : la date saisie dans l'agenda, sous « salariés
+     dont la dernière date n'est pas connue », partait dans la suite
+     d'embauche (« visite »), quand l'écran des visites et la page des salariés
+     la lisent dans la fiche du conducteur, « flotte-conducteurs », sous
+     « visiteTravail ». La date saisie dans l'agenda n'apparaissait donc nulle
+     part ailleurs, et celle des visites ne faisait rien dans l'agenda. Une
+     seule donnée : « visite » s'écrit désormais là où les visites la lisent,
+     et ce qui avait été rangé ailleurs y est rapatrié une fois. */
+  var CHAMPS_FICHE = { visite: "visiteTravail" };
+  function poserDate(id, champ, valeur) {
+    if (!id || !champ || !net(valeur)) return;
+    if (CHAMPS_FICHE[champ]) {
+      var C = lire(CLE_CONDUCTEURS, {});
+      if (!C || typeof C !== "object") C = {};
+      C[id] = C[id] || {};
+      C[id][CHAMPS_FICHE[champ]] = net(valeur);
+      garder(CLE_CONDUCTEURS, C);
+      return;
+    }
+    var d = {};
+    d[champ] = valeur;
+    poser(id, d);
+  }
+  (function rapatrier() {
+    try {
+      var S = lire(CLE_SUITES, {}), C = lire(CLE_CONDUCTEURS, {}), change = false;
+      Object.keys(S || {}).forEach(function (id) {
+        var v = net(S[id] && S[id].visite);
+        if (!v) return;
+        C[id] = C[id] || {};
+        if (!net(C[id].visiteTravail)) C[id].visiteTravail = v;
+        delete S[id].visite;
+        change = true;
+      });
+      if (change) { garder(CLE_CONDUCTEURS, C); garder(CLE_SUITES, S); }
+    } catch (e) {}
+  })();
+
   /* ------------------------------------------------------------- les échéances --- */
   function salaries() {
     var r = lire(CLE_REG, {});
@@ -188,6 +228,14 @@
     var d0 = aujourdhui instanceof Date ? aujourdhui : new Date();
     var conducteurs = lire(CLE_CONDUCTEURS, {});
     var out = [];
+    /* Les renouvellements de visite que la flotte pose déjà, par nom : ils ne
+       se posent pas une seconde fois ici. */
+    var visitesDeLaFlotte = {};
+    try {
+      if (global.Flotte && global.Flotte.echeances) global.Flotte.echeances().forEach(function (e) {
+        if (/^Visite (de prévention|du médecin|intermédiaire)$/.test(e.quoi)) visitesDeLaFlotte[e.qui] = true;
+      });
+    } catch (e) {}
     salaries().forEach(function (s) {
       /* UNE SORTIE LAISSE DEUX CHOSES À FAIRE, ET PERSONNE NE LES RAPPELAIT.
 
@@ -324,6 +372,39 @@
           "la convocation du service de prévention et de santé au travail, et l'attestation de suivi",
           "de la dernière visite médicale", "visite");
 
+      /* UNE VISITE SAISIE DOIT FAIRE APPARAÎTRE SON RENOUVELLEMENT.
+
+         Relevé le 27 novembre 2026 : la date saisie dans l'écran des visites
+         n'amenait rien dans l'agenda. La flotte ne pose le renouvellement que
+         pour ses conducteurs, et seulement si le type de suivi a été choisi,
+         alors que l'écran des visites retient la visite d'information et de
+         prévention tant qu'on ne choisit rien. Le renouvellement se pose donc
+         ici, avec la même règle que l'écran des visites, chaque fois que la
+         flotte ne l'a pas déjà posé : jamais deux fois pour la même personne.
+         Textes relus au relais Légifrance le 27 novembre 2026, deux lectures
+         concordantes chacun : R. 4624-16 (LEGIARTI000033769063), « selon une
+         périodicité qui ne peut excéder cinq ans » ; R. 4624-28
+         (LEGIARTI000033769094), « une périodicité qu'il détermine et qui ne
+         peut être supérieure à quatre ans. Une visite intermédiaire est
+         effectuée [...] au plus tard deux ans après la visite avec le médecin
+         du travail ». */
+      var derniere = net(f.visiteTravail);
+      if (derniere && !visitesDeLaFlotte[nom]) {
+        var faireVisite = "la convocation du service de prévention et de santé au travail, et l'attestation de suivi";
+        if (f.suivi === "sir") {
+          pose("Renouvellement de la visite avec le médecin du travail", plusMois(derniere, 48),
+            "R. 4624-28 : suivi individuel renforcé, renouvellement par le médecin du travail selon une périodicité qui ne peut être supérieure à quatre ans",
+            faireVisite);
+          pose("Visite intermédiaire", plusMois(net(f.visiteInter) || derniere, net(f.visiteInter) ? 48 : 24),
+            "R. 4624-28 : visite intermédiaire au plus tard deux ans après la visite avec le médecin du travail",
+            faireVisite);
+        } else {
+          pose("Renouvellement de la visite d'information et de prévention", plusMois(derniere, 60),
+            "R. 4624-16 : renouvellement selon une périodicité qui ne peut excéder cinq ans, fixée par le médecin du travail",
+            faireVisite);
+        }
+      }
+
       /* L'entretien de parcours professionnel : la première année, puis tous
          les quatre ans. On ne propose que la prochaine échéance. */
       if (ent) {
@@ -432,7 +513,7 @@
 
   global.EcheancesSalaries = {
     couper: couper,
-    CLE: CLE_SUITES, idDe: idDe, poser: poser, suite: suite,
+    CLE: CLE_SUITES, idDe: idDe, poser: poser, suite: suite, poserDate: poserDate,
     echeances: echeances, inscrire: inscrire, plusMois: plusMois, plusJours: plusJours,
   };
 })(typeof window !== "undefined" ? window : this);

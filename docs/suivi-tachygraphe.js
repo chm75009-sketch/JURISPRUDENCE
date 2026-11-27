@@ -150,11 +150,11 @@
     /* FAIRE DÉFILER SOUS L'EN-TÊTE. Depuis le 27 novembre 2026, la rangée du
        Retour reste collée en haut de l'écran : ce vers quoi on fait défiler
        s'arrête juste dessous, au lieu de passer derrière elle. */
-    function defilerVers(el) {
+    function defilerVers(el, marge) {
       if (!el) return;
       var haut = document.querySelector(".haut"), dessus = 0;
       if (haut && window.getComputedStyle(haut).position === "sticky") dessus = haut.getBoundingClientRect().height;
-      window.scrollTo(0, Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - dessus - 12));
+      window.scrollTo(0, Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - dessus - (marge == null ? 12 : marge)));
     }
     function prevenirPage() { if (opts.apresChangement) opts.apresChangement(); }
 
@@ -982,7 +982,13 @@
       /* Amener à l'écran la rangée des quatre étapes et le volet ouvert :
          arrivé de la page du salarié, son contenu commençait au bas de
          l'écran du téléphone (27 novembre 2026). */
-      versVolet: function () { defilerVers(cont.querySelector(".st-etapes")); },
+      versVolet: function () {
+        /* L'écart laissé au-dessus est celui qui sépare la rangée du bloc
+           précédent : le bas d'un bandeau d'alerte ne dépasse pas sous l'en-tête. */
+        var b = cont.querySelector(".st-etapes"), av = b && b.previousElementSibling;
+        var g = av ? Math.min(12, Math.max(0, b.getBoundingClientRect().top - av.getBoundingClientRect().bottom)) : 12;
+        defilerVers(b, g);
+      },
     };
   }
 

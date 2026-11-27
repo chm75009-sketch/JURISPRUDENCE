@@ -388,6 +388,23 @@
   }
   var GRILLE = ["Unité de travail", "Risque identifié", "Exposition", "Mesures existantes",
                 "Mesures à prendre", "Échéance", "Responsable"];
+  /* Les dix facteurs de risques professionnels de L. 4161-1
+     (LEGIARTI000035640694, lu en entier au relais le 27 novembre 2026, deux
+     lectures identiques), dans l'ordre du texte, pour l'annexe de
+     R. 4121-1-1. Le dernier est abrégé : le texte le décrit comme des
+     mouvements répétés sollicitant tout ou partie du membre supérieur. */
+  var FACTEURS_L4161 = [
+    "Manutentions manuelles de charges",
+    "Postures pénibles définies comme positions forcées des articulations",
+    "Vibrations mécaniques",
+    "Agents chimiques dangereux, y compris les poussières et les fumées",
+    "Activités exercées en milieu hyperbare",
+    "Températures extrêmes",
+    "Bruit",
+    "Travail de nuit dans les conditions fixées aux articles L. 3122-2 à L. 3122-5",
+    "Travail en équipes successives alternantes",
+    "Travail répétitif, à une fréquence élevée et sous cadence contrainte",
+  ];
 
   /* ══════════════════════════════════════════════════════════════════════
      LE SOCLE COMMUN
@@ -1079,12 +1096,22 @@
         C.push("DOCUMENT UNIQUE D'ÉVALUATION DES RISQUES PROFESSIONNELS");
         C.push("");
         C.push(nom.toUpperCase());
-        C.push(E ? E.adresse : cro((ctx.profil || {}).adresse, "adresse du siège"));
-        C.push("Version " + X(E, "1", "n° de version") + ", établie le " + X(E, leJour(d0), "DATE D'ÉTABLISSEMENT"));
+        /* UNE INFORMATION PAR LIGNE.
+
+           L'adresse, la version, la date et le rédacteur sortaient collés en
+           une seule ligne, à l'écran comme dans le Word : « 1 rue du Port 91000
+           Evry Version [n° de version], établie le... ». La feuille joint les
+           lignes d'un même paragraphe, sauf quand chacune commence par son
+           intitulé suivi d'un deux-points : chacune porte donc le sien. Relevé
+           le 27 novembre 2026. */
+        C.push("Adresse : " + (E ? E.adresse : cro((ctx.profil || {}).adresse, "adresse du siège")));
+        C.push("Version : " + X(E, "1", "n° de version"));
+        C.push("Établie le : " + X(E, leJour(d0), "DATE D'ÉTABLISSEMENT"));
         /* Hors de l'exemple, le rédacteur est celui que la fiche désigne : le
            document sortait « Rédacteur : [nom et qualité] ». Demande du
            27 septembre 2026. */
-        C.push("Rédacteur : " + (E ? E.redacteur : signataire(ctx)) + ". Validation : " + sig + ".");
+        C.push("Rédacteur : " + (E ? E.redacteur : signataire(ctx)));
+        C.push("Validation : " + sig);
         C.push("");
 
         C.push("1. OBJET ET PÉRIMÈTRE");
@@ -1380,13 +1407,32 @@
 
         C.push("8. CONSERVATION ET ACCÈS (L. 4121-3-1, V ; R. 4121-4)");
         C.push("");
-        C.push("Chaque version est conservée quarante ans au moins à compter de son");
-        C.push("élaboration et tenue à la disposition des travailleurs, des anciens");
-        C.push("travailleurs et des personnes et instances qui y ont accès.");
+        /* LES MOTS DE R. 4121-4, POUR QUE LE CONTRÔLE LES RETROUVE.
+
+           « Tenue à la disposition » et « l'avis d'accès » disaient la même
+           chose que le texte sans en reprendre les mots, et le contrôle du
+           document déposé, qui cherche « tenus à la disposition » et « avis
+           indiquant les modalités d'accès », relevait la mention introuvable
+           dans le document que l'application venait d'écrire. R. 4121-4
+           (LEGIARTI000045386451, lu en entier au relais le 27 novembre 2026,
+           deux lectures identiques) : le document et ses versions antérieures
+           « sont tenus, pendant une durée de 40 ans à compter de leur
+           élaboration, à la disposition » des travailleurs et des anciens
+           travailleurs, et des personnes et instances qu'il énumère ; « un avis
+           indiquant les modalités d'accès des travailleurs au document unique
+           est affiché », au même emplacement que le règlement intérieur là où
+           il en existe un. */
+        C.push("Le présent document et ses versions antérieures sont tenus à la");
+        C.push("disposition des travailleurs, des anciens travailleurs et des personnes");
+        C.push("et instances énumérées par R. 4121-4, pendant quarante ans à compter de");
+        C.push("leur élaboration.");
+        C.push("");
         C.push("Version en vigueur conservée à : " + X(E, "serveur de l'entreprise, dossier « prévention », et classeur papier au bureau du pilote", "LIEU ET SUPPORT") + ".");
         C.push("Versions antérieures conservées à : " + X(E, "même dossier, sous-dossier « versions », jamais écrasées", "LIEU ET SUPPORT") + ".");
         C.push("Demande d'accès à adresser à : " + X(E, E && E.pilote, "NOM ET FONCTION") + ".");
-        C.push("L'avis d'accès est affiché " + X(E, "à l'entrée des vestiaires, au même emplacement que le règlement intérieur", "LIEU, au même emplacement que le règlement intérieur s'il en existe un") + ".");
+        C.push("");
+        C.push("Un avis indiquant les modalités d'accès des travailleurs au document");
+        C.push("unique est affiché " + X(E, "à l'entrée des vestiaires, au même emplacement que le règlement intérieur", "LIEU, au même emplacement que le règlement intérieur s'il en existe un") + ".");
         C.push("");
 
         C.push("9. TRANSMISSION AU SERVICE DE PRÉVENTION ET DE SANTÉ AU TRAVAIL (L. 4121-3-1, VI)");
@@ -1399,6 +1445,43 @@
         C.push(sig);
         C.push("");
         C.push("");
+
+        /* L'ANNEXE DES DONNÉES COLLECTIVES D'EXPOSITION.
+
+           Le contrôle du document déposé la réclame, et le document que
+           l'application écrivait ne l'avait pas : le « oui » relevait
+           « données collectives introuvable » sur le Word sorti du « non ».
+           Relevé le 27 novembre 2026. R. 4121-1-1 (LEGIARTI000031818152, lu en
+           entier au relais le 27 novembre 2026, deux lectures identiques) :
+           l'employeur consigne, en annexe du document unique, les données
+           collectives utiles à l'évaluation des expositions individuelles aux
+           facteurs de risques de L. 4161-1, et la proportion de salariés
+           exposés à ces facteurs au-delà des seuils ; la proportion est
+           actualisée en tant que de besoin à la mise à jour. Les dix facteurs
+           sont ceux de L. 4161-1 (LEGIARTI000035640694, lu le même jour, deux
+           lectures identiques), dans l'ordre du texte. Les seuils sont fixés
+           ailleurs que dans ces deux articles : ils ne sont pas écrits ici, et
+           les chiffres restent à l'employeur. */
+        C.push("ANNEXE - DONNÉES COLLECTIVES D'EXPOSITION (R. 4121-1-1)");
+        C.push("");
+        C.push("Sont consignées ci-dessous, en annexe du document unique, les données");
+        C.push("collectives utiles à l'évaluation des expositions individuelles aux");
+        C.push("facteurs de risques professionnels mentionnés à l'article L. 4161-1, et la");
+        C.push("proportion de salariés exposés à ces facteurs au-delà des seuils prévus au");
+        C.push("même article. Cette proportion est actualisée en tant que de besoin lors");
+        C.push("de la mise à jour du document unique.");
+        C.push("");
+        if (E) {
+          C.push("Dans cet exemple, les chiffres ne sont pas portés : ils se relèvent dans");
+          C.push("chaque entreprise, facteur par facteur.");
+          C.push("");
+        }
+        C = C.concat(tableau(
+          ["Facteur de risques (L. 4161-1)", "Postes, métiers ou situations de travail concernés",
+           "Salariés exposés au-delà des seuils", "Proportion de l'effectif"],
+          FACTEURS_L4161.map(function (f) {
+            return [f, X(E, "-", "postes ou situations"), X(E, "-", "nombre"), X(E, "-", "proportion")];
+          })));
 
         C.push("PIÈCE JOINTE, NOTE DE LANCEMENT DE L'ÉVALUATION (interne)");
         C.push("");
@@ -1767,7 +1850,7 @@
       { cle: "s6", nom: "Les suites", texte: coupeSst(reste, "6. SUITES", "7. MISE À JOUR").join("\n") },
       { cle: "s7", nom: "Mise à jour", texte: coupeSst(reste, "7. MISE À JOUR", "8. CONSERVATION").join("\n") },
       { cle: "s8", nom: "Conservation", texte: coupeSst(reste, "8. CONSERVATION", "9. TRANSMISSION").join("\n") },
-      { cle: "s9", nom: "Transmission", texte: coupeSst(reste, "9. TRANSMISSION", "VOTRE CALENDRIER").join("\n") },
+      { cle: "s9", nom: "Transmission", texte: coupeSst(reste, "9. TRANSMISSION", "ANNEXE - DONNÉES COLLECTIVES").join("\n") },
       { cle: "cal", nom: "Le calendrier", texte: coupeSst(reste, "VOTRE CALENDRIER", "LES RÈGLES").join("\n") },
       sousDoc("SST-CTL-DUE-05", "Programme annuel"),
       sousDoc("SST-CTL-DUE-08", "Lettre au service de santé"),
@@ -1780,8 +1863,18 @@
        l'inventaire, c'est-à-dire tout sauf un document unique. Défaut relevé
        le 12 septembre 2026 sur le fichier téléchargé. L'onglet rend donc le
        document entier, sections 1 à 5, socle compris, et l'exemple vient
-       après lui, comme dans le règlement intérieur. */
-    var doc = entete.concat(coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "6. SUITES"))
+       après lui, comme dans le règlement intérieur.
+
+       ET LE DOCUMENT ENTIER VA JUSQU'À SON ANNEXE, PAS JUSQU'À LA SECTION 5.
+
+       Les suites, la mise à jour, la conservation et la transmission (sections
+       6 à 9) ne partaient que dans l'onglet des formalités : le Word du
+       document s'arrêtait à l'inventaire, et le contrôle du « oui », sur ce
+       même Word, relevait cinq mentions introuvables, dont le programme annuel
+       et les données collectives. Relevé le 27 novembre 2026. Le document va
+       donc jusqu'au calendrier, signature, annexe et note de lancement
+       comprises ; les formalités gardent leurs sous-onglets. */
+    var doc = entete.concat(coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "VOTRE CALENDRIER"))
       .concat([""], exemple);
     return [
       { cle: "document", nom: "Le document", texte: doc.join("\n") },

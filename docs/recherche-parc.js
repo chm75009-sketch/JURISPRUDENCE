@@ -131,7 +131,13 @@
     "papiers du chauffeur", "papier du chauffeur", "papiers chauffeur", "papiers du conducteur",
     "papier du conducteur", "papiers conducteur", "permis", "carte conducteur", "carte de conducteur",
     "carte du conducteur", "fimo", "fco", "reglement interieur", "attestation employeur",
-    "france travail", "pole emploi"];
+    "france travail", "pole emploi",
+    /* Relevé le 27 novembre 2026 : « combien de temps je peux conduire ? »
+       ouvrait les dépenses et « forfait jours cadre » n'était pas compris.
+       Le temps de conduite et de repos du chauffeur et le forfait en jours
+       sont des sujets de la direction. */
+    "combien de temps", "temps de conduite", "conduire", "conduite", "temps de repos", "repos", "amplitude",
+    "forfait", "cadre"];
 
   /* LES EXPRESSIONS MAL TAPÉES SONT AUSSI HORS DU PARC. Relevé le
      27 novembre 2026 : « entretine prépalable » ouvrait l'entretien des
@@ -148,9 +154,14 @@
   }
   function analyser(texte) {
     var w = norm(texte).split(/\s+/).filter(Boolean), pris = [], hors = false, i, j, k;
+    /* « entretien annuel du camion » est l'entretien d'un véhicule, pas
+       l'entretien annuel d'un salarié (relevé le 27 novembre 2026) : quand la
+       demande nomme un véhicule, « entretien ... » reste du parc. */
+    var vehicule = w.some(function (x) { return /^(camion|vehicule|voiture|remorque|semi|tracteur|porteur|utilitaire|fourgon|poids)/.test(x); });
     /* Les expressions longues d'abord : « fiche de paie » avant « paie ». */
     for (k = 0; k < HORS_TRIES.length; k++) {
       var hw = HORS_TRIES[k], flou = hw.length > 1;
+      if (vehicule && hw[0] === "entretien") continue;
       for (i = 0; i + hw.length <= w.length; i++) {
         for (j = 0; j < hw.length; j++) if (pris[i + j] || !motHors(w[i + j], hw[j], flou)) break;
         if (j === hw.length) { for (j = 0; j < hw.length; j++) pris[i + j] = true; hors = true; }

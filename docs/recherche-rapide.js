@@ -490,7 +490,7 @@
       var sansChamp = mode === "question" && !BASE_REPONSES;
       ligne.style.display = sansChamp ? "none" : "";
       mic.style.display = sansChamp ? "none" : "";
-      if (sansChamp) sousEl.textContent = "Une question de droit du travail se pose au cabinet";
+      if (sansChamp) sousEl.textContent = "Une question de droit du travail";
     }
 
     /* MODE ACTION : « J'ai compris », le bouton qui ouvre, puis les autres. */
