@@ -52,17 +52,22 @@
     border-radius:var(--r2);background:var(--surface);color:var(--encre);font:16px system-ui;
     width:100%;box-sizing:border-box}
   .compte{margin:10px 0 0;font-size:var(--t2);color:var(--texte-2)}
-  #apercu{margin:16px 0 0;border:1px solid var(--filet);border-radius:var(--r2);
-    background:var(--surface);overflow:hidden}
-  #apercu .ap-tete{display:flex;gap:10px;align-items:center;justify-content:space-between;
-    padding:10px 12px;border-bottom:1px solid var(--filet)}
+  /* LA PIÈCE EN GRAND (27 novembre 2026). L'aperçu s'ouvrait sous la liste,
+     dans une boîte à sa propre barre de défilement : la pièce était coupée et
+     la page ne descendait pas jusqu'à elle. Il couvre désormais l'écran, le
+     bouton « Fermer » en haut, et la pièce entière défile. */
+  #apercu{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;
+    background:var(--surface)}
+  #apercu[hidden]{display:none}
+  #apercu .ap-tete{display:flex;gap:12px;align-items:center;flex:0 0 auto;
+    padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid var(--filet);background:var(--surface)}
   #apercu .ap-tete b{font:600 15px/1.3 system-ui;color:var(--encre);min-width:0;
-    overflow:hidden;text-overflow:ellipsis}
-  #apercu .ap-tete button{min-height:38px;padding:0 12px;border:1px solid var(--filet);
-    border-radius:8px;background:var(--surface);color:var(--encre);font:14.5px system-ui;cursor:pointer}
-  #apercu .ap-corps{padding:12px;max-height:70vh;overflow:auto;background:#fff}
-  #apercu img{max-width:100%;height:auto;display:block}
-  #apercu iframe{width:100%;height:60vh;border:0}
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #apercu .ap-tete button{flex:0 0 auto;min-height:44px;padding:0 14px;border:1px solid var(--filet);
+    border-radius:10px;background:var(--surface);color:var(--encre);font:600 15px system-ui;cursor:pointer}
+  #apercu .ap-corps{flex:1 1 auto;overflow:auto;-webkit-overflow-scrolling:touch;padding:16px;background:#fff}
+  #apercu img{width:100%;max-width:900px;height:auto;display:block;margin:0 auto}
+  #apercu iframe{width:100%;height:100%;min-height:70vh;border:0}
   #apercu pre{white-space:pre-wrap;word-wrap:break-word;font:13.5px/1.55 ui-monospace,monospace;
     color:var(--encre);margin:0}
   #apercu .rien{font-size:14.5px;line-height:1.55;color:var(--texte-2);margin:0}
@@ -158,8 +163,8 @@
   <div id="liste"></div>
 
   <div id="apercu" hidden>
-    <div class="ap-tete"><b id="ap-nom"></b>
-      <button type="button" id="ap-fermer">Fermer</button></div>
+    <div class="ap-tete"><button type="button" id="ap-fermer">&larr; Fermer</button>
+      <b id="ap-nom"></b></div>
     <div class="ap-corps" id="ap-corps"></div>
   </div>
 </main>
@@ -351,13 +356,19 @@
           "téléchargez-le pour l'ouvrir dans Word, dans un tableur ou dans le logiciel qui le lit.</p>";
       }
       $("apercu").hidden = false;
-      $("apercu").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      z.scrollTop = 0;
+      document.documentElement.style.overflow = "hidden";
     });
   }
-  $("ap-fermer").addEventListener("click", function () {
+  function fermerVue() {
     $("apercu").hidden = true;
     $("ap-corps").innerHTML = "";
+    document.documentElement.style.overflow = "";
     libererVue();
+  }
+  $("ap-fermer").addEventListener("click", fermerVue);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !$("apercu").hidden) fermerVue();
   });
 
   /* ──────────────── LES FILTRES : UN NOM, UNE PLAQUE ──────────────────
@@ -638,6 +649,7 @@
      liste entière au coffre fort d'où l'on venait ; sinon, il quitte la
      page, et ramène à la page du salarié quand on en vient. */
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
+    if (!$("apercu").hidden) { fermerVue(); return true; }
     if (VUE) { VUE = null; rendre(); return true; }
     if (RUB_COFFRE && !COFFRE) { COFFRE = RUB_COFFRE; disposer(); rendre(); window.scrollTo(0, 0); return true; }
     return false;

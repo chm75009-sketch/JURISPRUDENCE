@@ -1764,30 +1764,88 @@
           .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond"] : [])));
     }
     h += cadreFiche("Ses photos et sa signature", '<div class="fn-photos" data-photos="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
+    h += cadreFiche("Sa signature", '<div data-signature="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
     if (conduit) h += '<p class="fn-sep">Contrôle par T.E.C</p>' + cadreFiche("Ce qu'il doit avoir sur lui", papiersChauffeurHtml(s, f));
     h += '<div class="fn-obs">' + cadreFiche("Observations de T.E.C", champsDe(s, f, ["note"])) + "</div>";
     return h;
   }
+  /* LA PIÈCE EN GRAND (27 novembre 2026). Toucher une vignette ouvrait son
+     coffre fort, où l'aperçu coupait la pièce. Elle s'ouvre désormais par-dessus
+     la page, le bouton « Fermer » en haut, et défile en entier. */
+  var VOILE = null;
+  function fermerGrand() {
+    if (!VOILE) return;
+    var u = VOILE.getAttribute("data-url");
+    if (u) try { URL.revokeObjectURL(u); } catch (e) {}
+    VOILE.remove(); VOILE = null;
+    document.documentElement.style.overflow = "";
+  }
+  function ouvrirGrand(id) {
+    if (!window.Documents) return;
+    window.Documents.lire(id).then(function (d) {
+      if (!d || !d.contenu) return;
+      fermerGrand();
+      var b = d.contenu instanceof Blob ? d.contenu : new Blob([d.contenu], { type: d.type || "" });
+      var u = URL.createObjectURL(b), nom = String(d.nom || "").replace(/\.(jpe?g|png)$/i, "");
+      VOILE = document.createElement("div");
+      VOILE.className = "pe-voile";
+      VOILE.setAttribute("role", "dialog");
+      VOILE.setAttribute("aria-label", nom);
+      VOILE.setAttribute("data-url", u);
+      VOILE.innerHTML = '<div class="pe-tete"><button type="button">&larr; Fermer</button><b>' + ech(nom) + "</b></div>" +
+        '<div class="pe-corps"><img alt="' + ech(nom) + '" src="' + u + '"></div>';
+      VOILE.querySelector("button").addEventListener("click", fermerGrand);
+      document.body.appendChild(VOILE);
+      document.documentElement.style.overflow = "hidden";
+    });
+  }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") fermerGrand(); });
   /* SES PHOTOS ET SA SIGNATURE : les images rangées dans son coffre fort par
-     sa fiche, en vignettes. Une vignette ouvre son coffre fort. */
+     sa fiche, en vignettes. Une vignette ouvre la pièce en grand. */
   function remplirPhotos(hote, sid) {
-    var z = hote.querySelector("[data-photos]");
+    var z = hote.querySelector("[data-photos]"), zs = hote.querySelector("[data-signature]");
     if (!z) return;
     var vers = "mes-documents.html?r=" + encodeURIComponent("salarie-" + sid);
-    if (!window.Documents) { z.innerHTML = '<p class="fn-rien">Les documents ne sont pas disponibles sur cet appareil.</p>'; return; }
+    if (!window.Documents) {
+      z.innerHTML = '<p class="fn-rien">Les documents ne sont pas disponibles sur cet appareil.</p>';
+      if (zs) zs.innerHTML = "";
+      return;
+    }
     window.Documents.liste("salarie-" + sid).then(function (L) {
       L = L.filter(function (d) { return /^image\//.test(d.type || ""); });
-      if (!L.length) { z.innerHTML = '<p class="fn-rien">Aucune photo pour l\'instant.</p>'; return; }
-      z.innerHTML = '<div class="fn-vigs">' + L.map(function (d) {
-        return '<a class="fn-vig" href="' + vers + '"><img alt="" data-img="' + ech(d.id) + '"><span>' +
+      /* SA SIGNATURE : le bas de sa dernière fiche signée, là où elle est
+         dessinée sous la phrase « Je certifie que ces informations sont
+         exactes ». Une fiche remplacée ne compte pas. */
+      if (zs) {
+        var sig = L.filter(function (d) {
+          var n = String(d.nom || ""); return /fiche (chauffeur|du gérant) signée/i.test(n) && n.indexOf("remplacée") < 0;
+        })[0];
+        var fs = fiche(sid), le = fs.recue && fs.recue.le ? fs.recue.le : "";
+        zs.innerHTML = sig
+          ? '<button type="button" class="fn-sign" data-grand="' + ech(sig.id) + '" aria-label="Voir sa fiche signée en entier"><img alt="" data-img="' + ech(sig.id) + '"></button>' +
+            '<p class="fn-sign-dit">' + (le ? "Fiche remplie et signée le " + ech(enFrancais(le)) + ". " : "") + "Touchez la signature pour voir la fiche signée en entier.</p>"
+          : '<p class="fn-rien">Pas de fiche signée pour l\'instant.</p>';
+      }
+      if (!L.length) { z.innerHTML = '<p class="fn-rien">Aucune photo pour l\'instant.</p>'; }
+      else z.innerHTML = '<div class="fn-vigs">' + L.map(function (d) {
+        return '<a class="fn-vig" href="' + vers + '" data-grand="' + ech(d.id) + '"><img alt="" data-img="' + ech(d.id) + '"><span>' +
           ech(String(d.nom || "").replace(/\s*\([^)]*\)\s*\.(jpe?g|png)$/i, "").replace(/\.(jpe?g|png)$/i, "")) + "</span></a>";
       }).join("") + "</div>";
-      Array.prototype.forEach.call(z.querySelectorAll("[data-img]"), function (im) {
-        window.Documents.lire(im.getAttribute("data-img")).then(function (d) {
-          if (d && d.contenu) im.src = URL.createObjectURL(d.contenu instanceof Blob ? d.contenu : new Blob([d.contenu], { type: d.type || "" }));
+      [z, zs].forEach(function (q) {
+        if (!q) return;
+        Array.prototype.forEach.call(q.querySelectorAll("[data-img]"), function (im) {
+          window.Documents.lire(im.getAttribute("data-img")).then(function (d) {
+            if (d && d.contenu) im.src = URL.createObjectURL(d.contenu instanceof Blob ? d.contenu : new Blob([d.contenu], { type: d.type || "" }));
+          });
+        });
+        Array.prototype.forEach.call(q.querySelectorAll("[data-grand]"), function (a) {
+          a.addEventListener("click", function (e) { e.preventDefault(); ouvrirGrand(a.getAttribute("data-grand")); });
         });
       });
-    }, function () { z.innerHTML = '<p class="fn-rien">Les photos n\'ont pas pu être lues.</p>'; });
+    }, function () {
+      z.innerHTML = '<p class="fn-rien">Les photos n\'ont pas pu être lues.</p>';
+      if (zs) zs.innerHTML = "";
+    });
   }
   /* LES VOLETS DE SON DOSSIER, tenus par T.E.C. */
   function partieDossier(s, f, partie, conduit) {
