@@ -301,7 +301,7 @@
     return v;
   }
   function alertes(c) {
-    var A = [], auj = new Date().toISOString().slice(0, 10);
+    var A = [], auj = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
     [["permisFin", "Le permis"], ["titreFin", "Le titre de séjour"], ["carteQualif", "La carte de qualification"],
       ["carteCond", "La carte conducteur"], ["visitePermisFin", "La visite médicale du permis"]].forEach(function (x) {
       if (c[x[0]] && c[x[0]] < auj) A.push(x[1] + " n'est plus valable depuis le " + enFrancais(c[x[0]]) + ".");
@@ -494,9 +494,9 @@
       CHAMPS_FICHE.forEach(function (k) { if (c[k] != null && c[k] !== "") f[k] = c[k]; });
       f.recue = { le: F.fait, id: id };
       T[sid] = f; garder("flotte-conducteurs", T);
-      var faites = lire(CLE_FAITES, {}); faites[id] = new Date().toISOString().slice(0, 10); garder(CLE_FAITES, faites);
+      var faites = lire(CLE_FAITES, {}); faites[id] = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()); garder(CLE_FAITES, faites);
       var R = lire(CLE_RANGEES, []);
-      R.unshift({ id: id, sid: sid, nom: ((c.nom || "") + " " + (c.prenom || "")).trim(), le: new Date().toISOString().slice(0, 10), fait: F.fait });
+      R.unshift({ id: id, sid: sid, nom: ((c.nom || "") + " " + (c.prenom || "")).trim(), le: (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()), fait: F.fait });
       garder(CLE_RANGEES, R.slice(0, 30));
       return appel("DELETE", "depot/" + id).then(function () { return true; }, function () { return true; });
     });

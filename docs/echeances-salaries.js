@@ -58,9 +58,16 @@
     return sansAccent((net(s.nom) + " " + net(s.pre)).trim()) || "salarie";
   }
 
+  /* LE JOUR EN HEURE DE FRANCE (27 novembre 2026). jour() passait par
+     l'heure universelle : appelé sur une date bâtie à minuit en France, comme
+     new Date(annee, mois, 0) pour le dernier jour du mois, il rendait la
+     veille. Une date déjà écrite « AAAA-MM-JJ » est rendue telle quelle ;
+     une autre est lue avec le jour, le mois et l'année locaux. */
   function jour(d) {
+    if (typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d)) return d;
     var x = new Date(d);
-    return isNaN(x) ? null : x.toISOString().slice(0, 10);
+    if (isNaN(x)) return null;
+    return x.getFullYear() + "-" + ("0" + (x.getMonth() + 1)).slice(-2) + "-" + ("0" + x.getDate()).slice(-2);
   }
   function plusJours(iso, n) {
     var d = new Date(iso + "T12:00:00");

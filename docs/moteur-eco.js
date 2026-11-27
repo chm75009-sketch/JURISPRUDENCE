@@ -451,7 +451,7 @@ function audit(f) {
   p("Ce tableau ne se lit qu'en cas de doute sur l'origine d'une affirmation. Il dit à quelle date les textes ont été relus, quelle version du moteur a produit ce document, et ce qui a été versé au dossier.");
   const _m = (() => { try { return MAN.construire(); } catch (e) { return null; } })();
   tab(["Traçabilité", "Valeur"], [
-   ["Date de génération du rapport", new Date().toISOString().slice(0,10)],
+   ["Date de génération du rapport", (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date())],
    ["Date de contrôle des sources", "15 août 2026 - articles relus sur Légifrance à cette date"],
    ["Date du dossier employeur", dateFr(f.dateAudit)],
    ["Décisions publiées prises en compte", f.veille && f.veille.decisions ? `jusqu'au ${f.veille.decisions.depuis}, ${f.veille.decisions.nombre} postérieure(s) signalée(s)` : "corpus arrêté au 8 juillet 2026"],

@@ -52,7 +52,7 @@
     var j = parseInt(m[3], 10);
     return (j === 1 ? "1er" : j) + " " + MOIS[parseInt(m[2], 10) - 1] + " " + m[1];
   }
-  function aujourdhui() { return new Date().toISOString().slice(0, 10); }
+  function aujourdhui() { return (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()); }
   function moisEcoules(iso) {
     var d = new Date(iso);
     if (isNaN(d.getTime())) return null;

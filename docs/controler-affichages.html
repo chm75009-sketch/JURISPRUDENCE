@@ -389,7 +389,7 @@
     var R = null;
     try { R = JSON.parse(localStorage.getItem("registre-personnel") || "null"); } catch (_) {}
     var L = (R && R.salaries) || [];
-    var auj = new Date().toISOString().slice(0, 10), n = 0;
+    var auj = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()), n = 0;
     L.forEach(function (s) {
       if (!s || s.ex) return;
       var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();
@@ -399,7 +399,7 @@
     });
     if (n) depuisProfil("condNb", String(n));
   })();
-  if (!E.v.dateReleve) E.v.dateReleve = new Date().toISOString().slice(0, 10);
+  if (!E.v.dateReleve) E.v.dateReleve = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
 
   var effectif = (function () {
     var n = Number(P.effectif);
@@ -1289,7 +1289,7 @@
     });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, "Affichages obligatoires"),
-      nom + "-" + new Date().toISOString().slice(0, 10) + ".docx",
+      nom + "-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   }
   $("#word-tout").addEventListener("click", function () { word(aPoser().length ? aPoser() : AFFICHES, "affichages"); });
@@ -1516,7 +1516,7 @@
         var f = i.files && i.files[0];
         if (!f) return;
         E.v["photo-" + id] = f.name;
-        E.v["photoLe-" + id] = new Date().toISOString().slice(0, 10);
+        E.v["photoLe-" + id] = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
         garder();
         var dit = i.parentNode.parentNode.querySelector(".pj-dit");
         if (dit) dit.textContent = direPhoto(id);
@@ -1564,7 +1564,7 @@
     ];
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, "Relevé des affichages"),
-      "releve-affichages-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "releve-affichages-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
 

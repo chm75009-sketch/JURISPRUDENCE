@@ -862,7 +862,7 @@
   $("#retour-diag").addEventListener("click", function () { onglet("diag"); });
 
   function nomFichier(ext) {
-    return "reglement-interieur-corrige-" + new Date().toISOString().slice(0, 10) + "." + ext;
+    return "reglement-interieur-corrige-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
   }
 
   $("#dl-txt").addEventListener("click", function () {

@@ -582,7 +582,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     /* L'exemple du travailleur étranger porte une fin de titre à quarante
        jours : c'est la seule façon de voir, sur l'écran de démonstration, à
        quoi ressemble l'alerte que L. 8251-1 commande de ne pas manquer. */
-    base[2].titFin = new Date(Date.now() + 40 * 86400000).toISOString().slice(0, 10);
+    base[2].titFin = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date(Date.now() + 40 * 86400000));
     return base.map(function (b) {
       var s = neuf();
       for (var k in b) if (Object.prototype.hasOwnProperty.call(b, k)) s[k] = b[k];
@@ -2575,7 +2575,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     var titreSal = denom ? denom + " · Registre unique du personnel" : "";
     var tableau = lignes;
     if (titreSal) lignes = [[titreSal], []].concat(tableau);
-    var nom = "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".xlsx";
+    var nom = "registre-unique-du-personnel-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".xlsx";
     var feuilles = [
       { titre: "Salariés", lignes: lignes },
       { titre: "Mode d'emploi", lignes: ent, largeurs: [24, 80] },
@@ -2671,7 +2671,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   $("d-word").addEventListener("click", function () {
     var octets = window.AuditExport.docx(itemsRegistre(), "Registre unique du personnel",
       { paysage: true });
-    var nom = "registre-unique-du-personnel-" + new Date().toISOString().slice(0, 10) + ".docx";
+    var nom = "registre-unique-du-personnel-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx";
     var type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     /* La version téléchargée est gardée par base-documents.js, qui enrobe
        AuditExport.telecharger : le registre se met à jour au fur et à mesure,
@@ -2747,7 +2747,7 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
   }
   $("r-modele").addEventListener("click", function () {
     var octets = window.AuditExport.docx(itemsModele(), "Registre unique du personnel, modèle", { paysage: true });
-    var nom = "registre-unique-du-personnel-modele-" + new Date().toISOString().slice(0, 10) + ".docx";
+    var nom = "registre-unique-du-personnel-modele-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx";
     var type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     window.AuditExport.telecharger(octets, nom, type);
   });

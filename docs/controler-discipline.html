@@ -860,7 +860,7 @@
   $("#imprimer").addEventListener("click", function () { window.print(); });
 
   function nomFichier(ext) {
-    return "procedure-disciplinaire-completee-" + new Date().toISOString().slice(0, 10) + "." + ext;
+    return "procedure-disciplinaire-completee-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
   }
   $("#dl-docx").addEventListener("click", function () {
     var c = corriger(analyse, choix());

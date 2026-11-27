@@ -3813,7 +3813,7 @@ const ccn = p => q(p.conventionCollective) || "votre convention collective (à i
 /* Les dates de l'exemple : cohérentes avec la date d'audit - à défaut, avec
    le jour où le modèle est produit. */
 const jour0 = p => /^\d{4}-\d{2}-\d{2}$/.test(String(p.dateAudit || "")) ? p.dateAudit
-  : new Date().toISOString().slice(0, 10);
+  : (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
 const plusJours = (p, n) => {
   const [a, m, j] = jour0(p).split("-").map(Number);
   return new Date(Date.UTC(a, m - 1, j + n)).toISOString().slice(0, 10);

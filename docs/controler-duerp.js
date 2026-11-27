@@ -104,7 +104,7 @@
   function garder() { try { localStorage.setItem(CLE, JSON.stringify(E)); } catch (_) {} }
   function v(c) { return String(E.v[c] == null ? "" : E.v[c]).trim(); }
 
-  var aujourdhui = new Date().toISOString().slice(0, 10);
+  var aujourdhui = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
   if (!v("dateVersion")) E.v.dateVersion = aujourdhui;
   if (!v("responsable") && P.responsable) E.v.responsable = String(P.responsable);
   if (!v("etablissement") && P.adresse) E.v.etablissement = String(P.adresse);
@@ -135,7 +135,7 @@
     var d = new Date((iso || aujourdhui) + "T12:00:00");
     if (isNaN(d)) d = new Date();
     d.setMonth(d.getMonth() + n);
-    return d.toISOString().slice(0, 10);
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
   }
   function slug(s) {
     return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()

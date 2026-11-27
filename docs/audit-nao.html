@@ -541,7 +541,7 @@
     });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, f.titre || "Convocation et calendrier de la négociation annuelle obligatoire"),
-      "negociation-annuelle-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "negociation-annuelle-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
   $("#btn-imprimer").addEventListener("click", function () { window.print(); });

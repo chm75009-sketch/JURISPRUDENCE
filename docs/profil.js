@@ -804,7 +804,7 @@
       .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
       .replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "").toLowerCase();
     return "profil-entreprise" + (d ? "-" + d : "") + "-" +
-      new Date().toISOString().slice(0, 10) + ".json";
+      (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".json";
   }
 
   /* Le téléchargement. Aucune requête : le fichier est fabriqué dans la page

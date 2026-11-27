@@ -2828,7 +2828,7 @@ function telecharger(nom, contenu, type){
 }
 function nomFichier(ext){
   const q = normaliser(etat.criteres.q).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,50) || "recherche";
-  return "jurisprudence-"+q+"-"+new Date().toISOString().slice(0,10)+"."+ext;
+  return "jurisprudence-"+q+"-"+(function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date())+"."+ext;
 }
 function pageHtml(lignes){
   const c = etat.criteres;

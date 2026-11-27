@@ -607,7 +607,7 @@
     });
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, f.titre || "Plan d'action pour l'égalité professionnelle"),
-      "plan-egalite-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "plan-egalite-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
   $("#btn-imprimer").addEventListener("click", function () { window.print(); });
@@ -1140,7 +1140,7 @@
     if (!DERNIER) return;
     window.AuditExport.telecharger(
       window.AuditExport.docx(motsIx(), "Index de l'égalité professionnelle", { sansTitre: true }),
-      "index-egalite-" + new Date().toISOString().slice(0, 10) + ".docx",
+      "index-egalite-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
 

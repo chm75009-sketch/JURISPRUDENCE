@@ -2363,7 +2363,7 @@ const nomE = f => q(f.entreprise) || "l'entreprise auditée";
 const eff = f => nb(f.effectif);
 const effTxte = f => eff(f) === null ? ex("120") : String(eff(f));
 const jour0 = f => /^\d{4}-\d{2}-\d{2}$/.test(String(f.dateAudit || "")) ? f.dateAudit
-  : new Date().toISOString().slice(0, 10);
+  : (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
 const declares = f => Array.isArray((f.base || {}).themes)
   ? f.base.themes.map(x => String((x && x.theme) || x)) : [];
 

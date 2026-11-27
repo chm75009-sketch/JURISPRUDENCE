@@ -1186,7 +1186,7 @@
     var suffixe = courant.cle === "lettre" ? "-" + slug(d.nom) : "";
     window.AuditExport.telecharger(
       window.AuditExport.docx(items, f.titre || courant.nom),
-      courant.fichier + suffixe + "-" + new Date().toISOString().slice(0, 10) + ".docx",
+      courant.fichier + suffixe + "-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + ".docx",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
   });
   $("#btn-imprimer").addEventListener("click", function () { window.print(); });

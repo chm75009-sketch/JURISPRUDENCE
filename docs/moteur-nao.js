@@ -1120,7 +1120,7 @@ const dit = x => x === true || x === "oui";
 const nie = x => x === false || x === "non";
 const ex = v => v + " [exemple]";
 const nomE = f => q(f.entreprise) || "l'entreprise auditée";
-const jour0 = f => (D.estDateISO(f.dateAudit) ? f.dateAudit : new Date().toISOString().slice(0, 10));
+const jour0 = f => (D.estDateISO(f.dateAudit) ? f.dateAudit : (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()));
 const nego = (f, cle) => (f.negos || {})[cle] || {};
 
 /* Un mois après, en respectant les fins de mois - même règle que les autres

@@ -223,7 +223,7 @@ function audit(f) {
 
   h1("Annexe · Traçabilité du résultat");
   tab(["Traçabilité", "Valeur"], [
-   ["Date de génération", new Date().toISOString().slice(0, 10)],
+   ["Date de génération", (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date())],
    ["Date de contrôle des sources", "15 août 2026 - articles relus sur Légifrance à cette date"],
    ["Articles lus à la source", String(Object.values(T).filter(v => v && v.texte).length)],
    ["Articles demandés sans réponse de la source", `${Object.values(T).filter(v => !v || !v.texte).length} - aucune règle ne peut s'y fonder : le chargement de la grille échoue si une règle cite un article dont le texte est absent`],
@@ -3422,7 +3422,7 @@ const ex = v => v + " [exemple]";
 const nomE = f => q(f.entreprise) || "l'entreprise auditée";
 const eff = f => nb(f.effectif);
 const effTxte = f => eff(f) === null ? ex("120") : String(eff(f));
-const jour0 = f => /^\d{4}-\d{2}-\d{2}$/.test(String(f.dateAudit || "")) ? f.dateAudit : new Date().toISOString().slice(0, 10);
+const jour0 = f => /^\d{4}-\d{2}-\d{2}$/.test(String(f.dateAudit || "")) ? f.dateAudit : (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
 const euros = n => n === null || n === undefined ? "-" : n.toLocaleString("fr-FR") + " €";
 
 /* Une addition de jours calendaires simple : elle ne sert qu'à illustrer un

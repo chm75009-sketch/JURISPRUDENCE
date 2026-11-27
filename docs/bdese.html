@@ -1063,7 +1063,7 @@
       .replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-")
       .replace(/^-|-$/g, "").toLowerCase().slice(0, 40);
     return "ma-bdese" + (e ? "-" + e : "") + "-" +
-      new Date().toISOString().slice(0, 10) + "." + ext;
+      (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
   }
 
   $("#dl-xlsx").addEventListener("click", function () {
@@ -1193,7 +1193,9 @@
     /* L'effectif mois par mois : compté au dernier jour de chaque mois. */
     MOIS_NOMS.forEach(function (nom, i) {
       var dernier = new Date(annee, i + 1, 0);
-      var jour = dernier.toISOString().slice(0, 10);
+      /* Le dernier jour du mois, bâti à minuit en France : lu en heure
+         universelle, il donnait la veille (27 novembre 2026). */
+      var jour = dernier.getFullYear() + "-" + ("0" + (dernier.getMonth() + 1)).slice(-2) + "-" + ("0" + dernier.getDate()).slice(-2);
       regle(function (l) {
         return l.sous && String(l.info).trim().toLowerCase() === nom &&
           /effectif/i.test(String(l.mere2 || ""));

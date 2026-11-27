@@ -31,7 +31,7 @@
 "use strict";
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var AUJOURDHUI = new Date().toISOString().slice(0, 10);
+  var AUJOURDHUI = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
 
   function e(s) {
     return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
@@ -1318,7 +1318,7 @@
           var note = "Le seuil doit d'abord être atteint pendant douze mois consécutifs, " +
             "ici jusqu'au " + dateFr(douze) + " ; l'obligation s'applique douze mois " +
             "après ce terme (art. L. 1311-2, renvoyant à L. 2312-2 ; art. R. 1321-5).";
-          var aujourdhui = new Date().toISOString().slice(0, 10);
+          var aujourdhui = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
           if (t <= aujourdhui)
             return { iso: t, libelle: "Règlement intérieur déjà exigible, depuis le " + dateFr(t),
               note: note + " Ce terme est passé : le règlement est dû aujourd'hui." };

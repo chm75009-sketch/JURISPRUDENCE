@@ -4056,7 +4056,7 @@
     function nomFichier(q, ext) {
       var base = (q.piece && q.piece.fichier) || slug(q.titre || q.id);
       return base + "-" + slug(profil.denomination) + "-" +
-        new Date().toISOString().slice(0, 10) + "." + ext;
+        (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
     }
 
     function exporter(q, ext) {
@@ -4176,7 +4176,7 @@
         '<button type="button" class="btn second" id="c-copier">Copier</button></div>' +
         '<pre class="sortie">' + ech(sortie) + "</pre>";
       var nom = ((q.piece && q.piece.fichier) || slug(q.titre)) + "-corrige-" +
-        new Date().toISOString().slice(0, 10);
+        (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
       document.getElementById("c-docx").addEventListener("click", function () {
         var items = sortie.split(/\n/).map(function (l) { return { k: "p", t: l }; });
         global.AuditExport.telecharger(global.AuditExport.docx(items, q.titre + " - version corrigée"),

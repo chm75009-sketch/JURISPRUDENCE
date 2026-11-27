@@ -654,7 +654,7 @@
     } catch (e) {}
     var limite = new Date();
     limite.setDate(limite.getDate() + 7);
-    var bout = limite.toISOString().slice(0, 10);
+    var bout = limite.getFullYear() + "-" + ("0" + (limite.getMonth() + 1)).slice(-2) + "-" + ("0" + limite.getDate()).slice(-2);
     L = L.filter(function (e) { return e.date && (e.etat === "passe" || e.date <= bout); });
 
     /* UNE DATE QU'ON N'A PAS N'EST PAS UNE ÉCHÉANCE DE LA SEMAINE.

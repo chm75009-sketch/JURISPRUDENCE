@@ -1258,7 +1258,8 @@
      dans les quinze jours qui suivent cette demande : la date proposée devient
      alors ce terme, et la note le dit.
      ══════════════════════════════════════════════════════════════════════════ */
-  function iso(d) { return d.toISOString().slice(0, 10); }
+  /* En heure de France, pas en heure universelle (27 novembre 2026). */
+  function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
   function joursApres(isoDate, n) {
     var d = new Date(isoDate + "T12:00:00");
     if (isNaN(d.getTime())) return null;
@@ -1708,7 +1709,7 @@
      EMPORTER
      ══════════════════════════════════════════════════════════════════════════ */
   function nomFichier(base, ext) {
-    return base + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
+    return base + "-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
   }
   function copier(t, bouton) {
     if (navigator.clipboard) navigator.clipboard.writeText(t);

@@ -543,7 +543,7 @@
     if (!/^\d{4}$/.test(String(colonne))) return "";
     var L = registrePersonnel();
     if (!L.length) return "";
-    var auj = new Date().toISOString().slice(0, 10);
+    var auj = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
     if (String(colonne) > auj.slice(0, 4)) return "";
     for (var i = 0; i < SERIES.length; i++) {
       if (!SERIES[i].re.test(String(info))) continue;
@@ -939,7 +939,7 @@
       .replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-")
       .replace(/^-|-$/g, "").toLowerCase().slice(0, 40);
     return "bdese" + (e ? "-" + e : "") + "-" +
-      new Date().toISOString().slice(0, 10) + "." + ext;
+      (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
   }
 
   $("#dl-xlsx").addEventListener("click", function () {

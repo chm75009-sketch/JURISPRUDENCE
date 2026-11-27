@@ -317,7 +317,7 @@
           o.title = "Aucune page ne contrôle encore cette pièce : votre réponse est notée sur ce poste.";
           o.addEventListener("click", function () {
             var v = lireVus();
-            v[l.cle] = new Date().toISOString().slice(0, 10);
+            v[l.cle] = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
             ecrireVus(v);
             rendre();
           });
@@ -333,7 +333,7 @@
           rien.title = "Aucun licenciement envisagé : rien à faire, la réponse est notée.";
           rien.addEventListener("click", function () {
             var v = lireVus();
-            v[l.cle] = new Date().toISOString().slice(0, 10);
+            v[l.cle] = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
             ecrireVus(v);
             rendre();
           });

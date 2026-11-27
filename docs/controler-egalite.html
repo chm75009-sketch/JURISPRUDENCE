@@ -1297,7 +1297,7 @@
      EMPORTER
      ══════════════════════════════════════════════════════════════════════════ */
   function nomFichier(base, ext) {
-    return base + "-" + new Date().toISOString().slice(0, 10) + "." + ext;
+    return base + "-" + (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()) + "." + ext;
   }
   function copier(t, bouton) {
     if (navigator.clipboard) navigator.clipboard.writeText(t);

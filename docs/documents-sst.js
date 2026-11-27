@@ -215,7 +215,7 @@
         ? window.localStorage.getItem("registre-personnel") : null) || "null");
     } catch (e) { R = null; }
     var L = (R && R.salaries) || [];
-    var auj = new Date().toISOString().slice(0, 10);
+    var auj = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date());
     return L.filter(function (s) {
       if (!s || s.ex) return false;
       var e = String(s.ent || "").trim(), o = String(s.sor || "").trim();

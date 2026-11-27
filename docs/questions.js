@@ -139,7 +139,7 @@
     tout.questions.forEach(function (q) {
       if (q.id !== id) return;
       if (!q.reponses) q.reponses = [];
-      var v = { le: net(r && r.le) || new Date().toISOString().slice(0, 10),
+      var v = { le: net(r && r.le) || (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()),
         texte: net(r && r.texte), notee: new Date().toISOString() };
       if (!v.texte) return;
       q.reponses.push(v);
