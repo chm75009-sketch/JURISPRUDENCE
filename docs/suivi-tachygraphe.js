@@ -227,7 +227,7 @@
       var j = x.jours;
       return { niveau: j < 0 ? "rouge" : j <= 7 ? "orange" : "vert",
         badge: j < 0 ? '<span class="st-badge rouge">Dépassé de ' + (-j) + ' j</span>' : j <= 7 ? '<span class="st-badge orange">Dans ' + j + ' j</span>' : '<span class="st-badge vert">À jour</span>',
-        txt: "téléchargement du " + jj(x.dernier) + (x.deFiche ? " (date portée sur sa fiche, aucun fichier lu)" : "") + ", prochaine limite le " + jj(x.date),
+        txt: "téléchargement du " + jj(x.dernier) + (x.deFiche ? " (date saisie par T.E.C, aucun fichier lu)" : "") + ", prochaine limite le " + jj(x.date),
         alerte: j < 0 ? "Limite du " + jj(x.date) + " dépassée de " + pluriel(-j, "jour") + "." : "À faire avant le " + jj(x.date) + ", dans " + pluriel(j, "jour") + "." };
     }
     function alertes(c) {

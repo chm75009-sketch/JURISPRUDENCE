@@ -272,10 +272,10 @@
        pour l'unité embarquée ; elle vient d'un arrêté que l'application n'a
        pas lu, comme la périodicité du chronotachygraphe : c'est un champ que
        l'entreprise corrige. */
-    /* Demandé au salarié dans son questionnaire depuis le 27 novembre 2026, et
-       saisissable ici : il lance le voyant des vingt-huit jours du suivi de la
-       carte, tant qu'aucun fichier de carte n'a été lu. */
-    { c: "telecCarte", sal: true, lib: "Dernier téléchargement de la carte, le", t: "date" },
+    /* Rempli par l'employeur, pas par le salarié (27 novembre 2026) : il
+       lance le voyant des vingt-huit jours du suivi de la carte, tant
+       qu'aucun fichier de carte n'a été lu. */
+    { c: "telecCarte", lib: "Dernier téléchargement de la carte, le", t: "date" },
     { c: "telecCarteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
     { c: "visitePermisFin", sal: true, lib: "Visite médicale du permis, valable jusqu'au", t: "date" },
     /* LE SALARIÉ ÉTRANGER (25 novembre 2026) : la fin de son titre de séjour,
