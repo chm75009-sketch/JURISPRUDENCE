@@ -302,6 +302,11 @@
     ["livret", "Livret individuel de contrôle"], ["aCarte", "A une carte conducteur"],
     /* La preuve que l'information sur les données a été lue (27 novembre 2026). */
     ["rgpdLu", "Information sur ses données lue"],
+    /* La fiche du gérant (27 novembre 2026). */
+    ["fonction", "Fonction"], ["gestionnaire", "Gestionnaire de transport"],
+    ["attNum", "Attestation de capacité, numéro"], ["attDate", "Attestation délivrée le"],
+    ["carteEnt", "A la carte entreprise"], ["carteEntNum", "Carte entreprise, numéro"],
+    ["carteEntFin", "Carte entreprise, jusqu'au"],
   ];
   function valeur(k, v) {
     if (v === "" || v == null) return "";
@@ -352,7 +357,8 @@
       '<table class="fr-tab">' + lignes + "</table>" +
       (ph ? '<p class="fr-st">Photos</p><div class="fr-phs">' + ph + "</div>" : "") +
       '<p class="fr-st">Signature, le ' + ech(enFrancais(F.fait)) + '</p><img class="fr-sig" alt="Signature" src="' + ech(F.signature) + '">' +
-      (salarieDe(c, id) ? '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Ranger dans la page du salarié</button>'
+      (c.type === "gerant" ? '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Ranger sous Direction de l\'entreprise</button>'
+        : salarieDe(c, id) ? '<button type="button" class="fr-b" data-fr="reporter" data-id="' + ech(id) + '">Ranger dans la page du salarié</button>'
         : '<p class="fr-msg">' + ech((c.nom || "") + " " + (c.prenom || "")) + " n'est pas au registre du personnel sous ce nom exact. " +
           "Choisissez-le dans la liste ci-dessous, les noms les plus proches en tête, ou ajoutez-le au <a href=\"registre.html\">registre</a>.</p>" +
           '<select class="fr-sel" data-sel="' + ech(id) + '"><option value="">- choisir le salarié -</option>' +
@@ -488,9 +494,9 @@
     cv.width = W; cv.height = 260 + L.length * 52 + 420;
     x.fillStyle = "#fff"; x.fillRect(0, 0, W, cv.height);
     x.fillStyle = "#1F3864"; x.font = "bold 44px system-ui, sans-serif";
-    x.fillText("Fiche chauffeur, T.E.C", M, 110);
+    x.fillText(c.type === "gerant" ? "Fiche du gérant, T.E.C" : "Fiche chauffeur, T.E.C", M, 110);
     x.fillStyle = "#5f6874"; x.font = "28px system-ui, sans-serif";
-    x.fillText("Remplie et signée par le salarié le " + enFrancais(F.fait), M, 160);
+    x.fillText("Remplie et signée par " + (c.type === "gerant" ? "le gérant" : "le salarié") + " le " + enFrancais(F.fait), M, 160);
     var y = 240;
     L.forEach(function (l) {
       x.fillStyle = "#5f6874"; x.font = "28px system-ui, sans-serif"; x.fillText(l[0], M, y);
@@ -512,7 +518,66 @@
       im.src = F.signature || "";
     });
   }
+  /* LA FICHE DU GÉRANT (27 novembre 2026). Il n'est pas au registre du
+     personnel : sa fiche ne cherche pas de salarié. Ses photos et sa fiche
+     signée vont dans les documents, rubrique « direction » ; ses réponses
+     sont gardées sous « direction-entreprise » et complètent les cases vides
+     de la fiche d'entreprise (représentant légal, gestionnaire de transport,
+     attestation de capacité, carte entreprise). Rien de ce que T.E.C y a déjà
+     mis n'est remplacé. */
+  function rangerGerant(id, F) {
+    if (!window.Documents) return Promise.resolve(false);
+    var c = F.champs || {}, rub = "direction", quand = enFrancais(F.fait);
+    var qui = ((c.prenom || "") + " " + (c.nom || "")).trim();
+    function poser(debut, ext, sorte, type, blob) {
+      return window.Documents.liste(rub).then(function (L) {
+        var anciennes = L.filter(function (d) {
+          var n = String(d.nom || ""); return n.indexOf(debut + " (") === 0 && n.indexOf("remplacée") < 0;
+        });
+        return Promise.all(anciennes.map(function (d) {
+          return renommer(d, String(d.nom).replace(/(\.[a-z]+)$/, "") + " (remplacée le " + quand + ")" + (String(d.nom).match(/\.[a-z]+$/) || [""])[0]);
+        }));
+      }).then(function () {
+        return window.Documents.enregistrer(rub, { nom: debut + " (" + quand + ")" + ext, sorte: sorte, type: type, contenu: blob });
+      });
+    }
+    var cles = Object.keys(F.photos || {});
+    return cles.reduce(function (pr, k) {
+      var p = F.photos[k];
+      return pr.then(function () { return blobDe(p.image); }).then(function (b) {
+        return poser(qui + ", " + p.titre.charAt(0).toLowerCase() + p.titre.slice(1), ".jpg", "depose", "image/jpeg", b);
+      });
+    }, Promise.resolve()).then(function () { return ficheImage(F); }).then(function (b) {
+      return poser(qui + ", fiche du gérant signée", ".png", "produit", "image/png", b);
+    }).then(function () {
+      var D = lire("direction-entreprise", {}) || {};
+      D.gerant = {}; Object.keys(c).forEach(function (k) { D.gerant[k] = c[k]; });
+      D.gerant.recue = { le: F.fait, id: id };
+      garder("direction-entreprise", D);
+      /* Les cases vides de la fiche d'entreprise. */
+      var P = (window.Profil && window.Profil.lire) ? window.Profil.lire() : (lire("profil-entreprise", {}) || {});
+      var patch = {};
+      function poserP(k, v) { if (v && !String(P[k] || "").trim()) patch[k] = v; }
+      poserP("responsableNom", qui);
+      poserP("responsableQualite", c.sexe === "F" ? "gérante" : "gérant");
+      if (c.gestionnaire === "oui") { poserP("transGestionnaire", qui); poserP("transGestionnaireLien", "dirigeant"); }
+      poserP("transAttestation", c.attNum);
+      poserP("transAttestationDate", c.attDate);
+      poserP("transCarteEntNum", c.carteEntNum);
+      poserP("transCarteEntFin", c.carteEntFin);
+      if (Object.keys(patch).length) {
+        if (window.Profil && window.Profil.ecrire) window.Profil.ecrire(patch);
+        else { Object.keys(patch).forEach(function (k) { P[k] = patch[k]; }); garder("profil-entreprise", P); }
+      }
+      var faites = lire(CLE_FAITES, {}); faites[id] = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()); garder(CLE_FAITES, faites);
+      var R = lire(CLE_RANGEES, []);
+      R.unshift({ id: id, sid: "direction", nom: qui + " (gérant)", le: faites[id], fait: F.fait });
+      garder(CLE_RANGEES, R.slice(0, 30));
+      return appel("DELETE", "depot/" + id).then(function () { return true; }, function () { return true; });
+    });
+  }
   function ranger(id, F) {
+    if (F && F.champs && F.champs.type === "gerant") return rangerGerant(id, F);
     var c = F.champs || {}, sal = salarieDe(c, id);
     if (!sal || !window.Documents) return Promise.resolve(false);
     var sid = sansAccent(((sal.nom || "") + " " + (sal.pre || "")).trim()) || "salarie";
@@ -586,7 +651,7 @@
     return L.reduce(function (pr, it) {
       return pr.then(function () {
         var r = ETAT.resumes[it.id];
-        if (r && !salarieDe(r, it.id)) return null;   /* pas au registre : on ne télécharge pas */
+        if (r && r.type !== "gerant" && !salarieDe(r, it.id)) return null;   /* pas au registre : on ne télécharge pas */
         return chargerFiche(it.id).then(function (F) { return ranger(it.id, F); })
           .then(function (ok) { if (ok) n++; }, function (e) {
             /* Un échec se dit, au lieu de laisser la fiche en attente sans
@@ -638,7 +703,9 @@
     if (q === "reporter") {
       b.disabled = true; b.textContent = "Rangement...";
       chargerFiche(id).then(function (F) { return ranger(id, F); }).then(function (ok) {
-        if (ok) location.href = "salaries.html?s=" + encodeURIComponent(lire(CLE_RANGEES, [])[0].sid) + "&v=fiche";
+        var der = lire(CLE_RANGEES, [])[0] || {};
+        if (ok && der.sid === "direction") location.href = "mes-documents.html?r=direction";
+        else if (ok) location.href = "salaries.html?s=" + encodeURIComponent(der.sid) + "&v=fiche";
         else { ETAT.msg = "Le rangement n'a pas pu se faire. Réessayez."; rendre(); }
       }, function () { ETAT.msg = "Le rangement n'a pas pu se faire. Réessayez."; rendre(); });
     } else if (q === "supprimer") {

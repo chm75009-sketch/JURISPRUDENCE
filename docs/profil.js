@@ -315,6 +315,12 @@
         "entrepreneur individuel", "habilité par contrat"],
       aide: "R. 3211-44 pour le lien interne ; R. 3211-45 pour la personne habilitée par contrat, à défaut de gestionnaire en interne." },
     { c: "transAttestation", nom: "Attestation de capacité professionnelle, numéro", t: "text", pleine: true },
+    /* Complétés par la fiche du gérant (27 novembre 2026) : la date de
+       l'attestation, et la carte entreprise du chronotachygraphe, qui sert à
+       télécharger les données des camions. */
+    { c: "transAttestationDate", nom: "Attestation délivrée le", t: "date" },
+    { c: "transCarteEntNum", nom: "Carte entreprise du chronotachygraphe, numéro", t: "text" },
+    { c: "transCarteEntFin", nom: "Carte entreprise valable jusqu'au", t: "date" },
     { c: "transCapitaux", nom: "Capitaux et réserves du dernier exercice, en euros", t: "number",
       aide: "C'est ce montant que la capacité financière met en face du parc, chaque année (R. 3211-32)." },
     { c: "transExercice", nom: "Exercice clos le", t: "date" },
@@ -386,6 +392,17 @@
     var etatDe = function (n) {
       return n < 0 ? "passe" : (n <= 60 ? "rouge" : (n <= 180 ? "ambre" : "vert"));
     };
+    /* La carte entreprise du chronotachygraphe, à renouveler avant sa fin
+       (27 novembre 2026). */
+    (function () {
+      var fin = String(f.transCarteEntFin || "").trim(), n = jours(fin);
+      if (n === null) return;
+      var num = String(f.transCarteEntNum || "").trim();
+      out.push({ quoi: "Carte entreprise du chronotachygraphe à renouveler",
+        qui: qui + (num ? " : carte n° " + num : ""), date: fin, jours: n, etat: etatDe(n),
+        fond: "la carte qui sert à télécharger et à protéger les données enregistrées dans les camions",
+        faire: "la demande de renouvellement avant la date de fin", prov: "transport" });
+    })();
     [["transLicenceFin", "transLicenceType", "transLicenceNum"],
      ["transLicence2Fin", "transLicence2Type", "transLicence2Num"]].forEach(function (c) {
       var fin = String(f[c[0]] || "").trim();

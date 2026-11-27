@@ -182,6 +182,7 @@
   /* Le nom lisible de chaque rubrique. Une rubrique inconnue garde son nom de
      page : mieux vaut un intitulé technique qu'un document introuvable. */
   var NOMS = {
+    "direction": "Direction de l'entreprise",
     "registre": "Registre du personnel",
     "controler-ri": "Règlement intérieur",
     "controler-duerp": "Document unique d'évaluation des risques",
@@ -429,8 +430,11 @@
     $("filtres").hidden = c;
     $("coffre-tete").hidden = !c;
     $("marque").textContent = c ? "Coffre fort" : "Mes documents";
-    document.title = c ? "Coffre fort de " + nomCoffre() : "Mes documents";
-    if (c) $("coffre-t").textContent = "Coffre fort de " + nomCoffre();
+    /* La rubrique de la direction (27 novembre 2026) : la fiche du gérant, ses
+       photos, sous son propre titre. */
+    var titreC = COFFRE === "direction" ? "Direction de l'entreprise" : "Coffre fort de " + nomCoffre();
+    document.title = c ? titreC : "Mes documents";
+    if (c) $("coffre-t").textContent = titreC;
   }
   var RUB_TYPES = ["notes-service", "courriers", "registre", "controler-ri", "controler-duerp", "duerp",
     "controler-affichages", "controle-urssaf", "controler-mutuelle", "controler-discipline", "audit-discipline", "audit-sst"];
@@ -492,6 +496,7 @@
         var mots = sansAccent(nomCoffre()).trim().split(/\s+/), siennes = [], ailleurs = [];
         pleines.forEach(function (x) {
           if (x.r === COFFRE) { siennes = x.L; return; }
+          if (COFFRE === "direction") return;
           var F = x.L.filter(function (d) { return porte(d, mots); });
           if (F.length) ailleurs.push({ r: x.r, titre: nomDe(x.r) + ", à son nom", L: F });
         });
@@ -643,7 +648,7 @@
      fort, c'est-à-dire sa rubrique entière. */
   try {
     var rq = new URLSearchParams(location.search).get("r") || "";
-    if (/^salarie-/.test(rq)) { RUB_COFFRE = rq; COFFRE = rq; }
+    if (/^salarie-/.test(rq) || rq === "direction") { RUB_COFFRE = rq; COFFRE = rq; }
   } catch (e) {}
   disposer();
   ["f-texte", "f-salarie", "f-vehicule"].forEach(function (id) {
