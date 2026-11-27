@@ -281,22 +281,32 @@
     });
   }
 
+  /* Les réponses ajoutées au questionnaire le 27 novembre 2026 : l'identité
+     du registre et de l'embauche, le titre de séjour, le permis étranger, les
+     points, le retrait, la formation et la carte conducteur. */
   var LIB = [
-    ["nom", "Nom"], ["prenom", "Prénom"], ["adresse", "Adresse"], ["tel", "Téléphone"], ["nir", "Numéro de sécurité sociale"],
-    ["roulant", "Personnel roulant"], ["profil", "Profil"], ["ue", "Ressortissant UE ou EEE"], ["titreFin", "Titre de séjour, valable jusqu'au"],
-    ["permisOrigine", "Permis"], ["permisPays", "Pays du permis"], ["arrivee", "Arrivée en France le"],
+    ["nom", "Nom"], ["prenom", "Prénoms"], ["sexe", "Sexe"], ["nais", "Date de naissance"], ["naisLieu", "Lieu de naissance"],
+    ["nat", "Nationalité"], ["adresse", "Adresse"], ["tel", "Téléphone"], ["courriel", "Adresse e-mail"],
+    ["nir", "Numéro de sécurité sociale"], ["sansNir", "Pas encore de numéro de sécurité sociale"],
+    ["roulant", "Personnel roulant"], ["profil", "Profil"], ["ue", "Ressortissant UE, EEE ou Suisse"],
+    ["titreType", "Titre de séjour ou de travail"], ["titreNum", "Numéro du titre"], ["titreFin", "Titre valable jusqu'au"],
     ["inter", "International ou cabotage"],
     ["permisNum", "Numéro du permis"], ["permisCat", "Catégories"], ["permisFin", "Permis valable jusqu'au"],
-    ["suspendu", "Permis suspendu ou retiré"], ["visiteTravail", "Dernière visite, médecin du travail"],
-    ["visitePermisFin", "Visite médicale du permis, jusqu'au"], ["fco", "Dernière FIMO ou FCO"],
-    ["carteQualif", "Carte de qualification, jusqu'au"], ["code95", "Code 95 sur le permis"],
-    ["carteCond", "Carte conducteur, jusqu'au"], ["livret", "Livret individuel de contrôle"], ["aCarte", "A une carte conducteur"],
+    ["permisOrigine", "Permis délivré"], ["permisPays", "Pays du permis"], ["arrivee", "Arrivée en France le"],
+    ["permisEchange", "Échange du permis demandé"], ["points", "Points restants"],
+    ["suspendu", "Permis suspendu ou retiré"], ["retraitLe", "Suspendu ou retiré depuis le"], ["retraitFin", "Jusqu'au"],
+    ["retraitMotif", "Motif"], ["visiteTravail", "Dernière visite, médecine du travail"],
+    ["visitePermisFin", "Visite médicale du permis, jusqu'au"], ["fcoType", "Dernière formation"], ["fco", "Date de la FIMO ou FCO"],
+    ["code95", "Code 95 sur le permis"], ["carteQualif", "Carte de qualification, jusqu'au"],
+    ["carteNum", "Numéro de la carte conducteur"], ["carteCond", "Carte conducteur, jusqu'au"],
+    ["livret", "Livret individuel de contrôle"], ["aCarte", "A une carte conducteur"],
   ];
   function valeur(k, v) {
     if (v === "" || v == null) return "";
     if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return enFrancais(v);
     if (k === "profil") return v === "pl" ? "Poids lourd" : "Pas poids lourd";
-    if (k === "permisOrigine") return v === "etr" ? "Étranger" : "Français";
+    if (k === "permisOrigine") return v === "etr" ? "Hors Union européenne" : (v === "ue" ? "Union européenne ou EEE" : "En France");
+    if (k === "sexe") return v === "F" ? "Femme" : (v === "M" ? "Homme" : v);
     if (v === "oui") return "Oui"; if (v === "non") return "Non";
     return v;
   }
@@ -355,7 +365,57 @@
      fiches reçues. */
   var CHAMPS_FICHE = ["roulant", "adresse", "tel", "nir", "ue", "permisOrigine", "permisPays", "arrivee", "inter", "titreFin",
     "permisNum", "permisCat", "permisFin", "suspendu", "visiteTravail", "visitePermisFin", "fco",
-    "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil"];
+    "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil",
+    /* Ajoutés le 27 novembre 2026, avec les questions du même jour. */
+    "sexe", "nais", "naisLieu", "nat", "courriel", "sansNir", "titreType", "titreNum", "permisEchange",
+    "points", "retraitLe", "retraitFin", "retraitMotif", "fcoType", "carteNum"];
+
+  /* LA FICHE REMPLIT AUSSI LE REGISTRE (27 novembre 2026).
+
+     Elle ne remplissait que la page du salarié. Or le registre du personnel,
+     les contrats, la déclaration préalable à l'embauche et les lettres lisent
+     le registre : l'adresse, le numéro de sécurité sociale, la nationalité, la
+     naissance, le sexe et le titre de séjour y restaient vides, et les
+     documents sortaient avec des crochets. La fiche complète donc les cases
+     vides du registre ; elle n'écrase jamais ce que T.E.C y a déjà mis. */
+  function versRegistre(sid, c, F) {
+    var R0 = lire("registre-personnel", null);
+    if (!R0 || !R0.salaries) return;
+    var x = null;
+    R0.salaries.forEach(function (s) { if (!x && sidDe(s) === sid) x = s; });
+    if (!x) return;
+    function poser(k, v) {
+      if (v == null || String(v).trim() === "") return;
+      if (x[k] == null || String(x[k]).trim() === "") x[k] = v;
+    }
+    poser("sexe", c.sexe === "F" ? "Féminin" : (c.sexe === "M" ? "Masculin" : ""));
+    poser("nais", c.nais);
+    poser("naisLieu", c.naisLieu);
+    poser("nat", c.nat ? String(c.nat).trim().charAt(0).toLowerCase() + String(c.nat).trim().slice(1) : "");
+    poser("adr", c.adresse);
+    /* Le contrat lit « nir », la déclaration préalable et les modèles « secu » :
+       les deux reçoivent le même numéro. */
+    poser("nir", c.nir);
+    poser("secu", c.nir);
+    if (c.ue === "non") {
+      poser("etr", "oui");
+      poser("titT", c.titreType);
+      poser("titN", c.titreNum);
+      poser("titFin", c.titreFin);
+      /* La copie du titre est annexée au registre (D. 1221-24) : les photos du
+         titre sont rangées dans son coffre fort. */
+      if (F && F.photos && (F.photos.titreRecto || F.photos.titreVerso)) poser("titCop", "oui");
+    } else if (c.ue === "oui") poser("etr", "non");
+    garder("registre-personnel", R0);
+  }
+  /* Le courriel sert à envoyer le relevé d'heures : il va là où la page des
+     heures le lit, s'il n'y en a pas déjà un. */
+  function versHeures(sid, c) {
+    if (!c.courriel) return;
+    var H = lire("heures-reference", {}) || {}, r = H[sid] || {};
+    if (String(r.courriel || "").trim()) return;
+    r.courriel = c.courriel; H[sid] = r; garder("heures-reference", H);
+  }
   /* RETROUVER LE SALARIÉ AU REGISTRE (26 novembre 2026). Le nom tapé par
      le salarié diffère souvent du registre : prénom composé, deuxième prénom,
      ordre inversé, tiret. On cherche d'abord le nom exact ; sinon le salarié
@@ -494,6 +554,8 @@
       CHAMPS_FICHE.forEach(function (k) { if (c[k] != null && c[k] !== "") f[k] = c[k]; });
       f.recue = { le: F.fait, id: id };
       T[sid] = f; garder("flotte-conducteurs", T);
+      versRegistre(sid, c, F);
+      versHeures(sid, c);
       var faites = lire(CLE_FAITES, {}); faites[id] = (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()); garder(CLE_FAITES, faites);
       var R = lire(CLE_RANGEES, []);
       R.unshift({ id: id, sid: sid, nom: ((c.nom || "") + " " + (c.prenom || "")).trim(), le: (function (d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); })(new Date()), fait: F.fait });

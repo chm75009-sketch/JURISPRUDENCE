@@ -224,12 +224,23 @@
   var OUI_NON = [["", "- à préciser -"], ["oui", "Oui"], ["non", "Non"]];
   var CHAMPS_C = [
     { c: "roulant", sal: true, lib: "Personnel roulant (conduit pour T.E.C)", t: "select", opts: OUI_NON },
+    /* L'identité que le registre et l'embauche demandent, recueillie par le
+       questionnaire depuis le 27 novembre 2026 (D. 1221-23, 1° à 3°, et
+       R. 1221-1, 2°, du code du travail). */
+    { c: "sexe", sal: true, lib: "Sexe", t: "select", opts: [["", "- à préciser -"], ["F", "Femme"], ["M", "Homme"]] },
+    { c: "nais", sal: true, lib: "Date de naissance", t: "date" },
+    { c: "naisLieu", sal: true, lib: "Lieu de naissance", t: "text" },
     { c: "adresse", sal: true, lib: "Adresse", t: "text", large: true },
     { c: "tel", sal: true, lib: "Téléphone", t: "text" },
+    { c: "courriel", sal: true, lib: "Adresse e-mail", t: "text" },
     { c: "nir", sal: true, lib: "Numéro de sécurité sociale", t: "text" },
-    { c: "ue", sal: true, lib: "Ressortissant de l'Union européenne ou de l'EEE", t: "select", opts: OUI_NON },
-    { c: "permisOrigine", sal: true, lib: "Permis français ou étranger", t: "select",
-      opts: [["", "- à préciser -"], ["fr", "Français"], ["etr", "Étranger"]] },
+    { c: "nat", sal: true, lib: "Nationalité", t: "text" },
+    { c: "ue", sal: true, lib: "Ressortissant de l'Union européenne, de l'EEE ou de la Suisse", t: "select", opts: OUI_NON },
+    { c: "titreType", sal: true, lib: "Titre de séjour ou de travail", t: "text", large: true },
+    { c: "titreNum", sal: true, lib: "Numéro du titre", t: "text" },
+    { c: "permisOrigine", sal: true, lib: "Permis délivré", t: "select",
+      opts: [["", "- à préciser -"], ["fr", "En France"], ["ue", "Dans l'Union européenne ou l'EEE"], ["etr", "Hors Union européenne"]] },
+    { c: "permisEchange", sal: true, lib: "Échange du permis demandé", t: "select", opts: OUI_NON },
     { c: "inter", sal: true, lib: "Fait de l'international ou du cabotage", t: "select", opts: OUI_NON },
     { c: "suspendu", sal: true, lib: "Permis suspendu ou retiré, selon le salarié", t: "select", opts: OUI_NON },
     { c: "code95", sal: true, lib: "Code 95 sur le permis", t: "select", opts: OUI_NON },
@@ -238,11 +249,13 @@
     { c: "permisNum", sal: true, lib: "Permis, numéro", t: "text" },
     { c: "permisCat", sal: true, lib: "Catégories", t: "text" },
     { c: "permisFin", sal: true, lib: "Validité du permis jusqu'au", t: "date" },
-    { c: "points", lib: "Points restants", t: "num" },
-    { c: "retraitLe", lib: "Retrait ou suspension, le", t: "date" },
-    { c: "retraitFin", lib: "Jusqu'au", t: "date" },
-    { c: "retraitMotif", lib: "Motif du retrait ou de la suspension", t: "text", large: true },
+    { c: "points", sal: true, lib: "Points restants", t: "num" },
+    { c: "retraitLe", sal: true, lib: "Retrait ou suspension, le", t: "date" },
+    { c: "retraitFin", sal: true, lib: "Jusqu'au", t: "date" },
+    { c: "retraitMotif", sal: true, lib: "Motif du retrait ou de la suspension", t: "text", large: true },
+    { c: "fcoType", sal: true, lib: "Dernière formation", t: "select", opts: [["", "- à préciser -"], ["FIMO", "FIMO"], ["FCO", "FCO"]] },
     { c: "fco", sal: true, lib: "Dernière FIMO ou FCO", t: "date" },
+    { c: "carteNum", sal: true, lib: "Carte de conducteur, numéro", t: "text" },
     { c: "fcoMois", lib: "Périodicité de la FCO, en mois", t: "num" },
     { c: "carteCond", sal: true, lib: "Carte de conducteur, échéance", t: "date" },
     { c: "carteQualif", sal: true, lib: "Carte de qualification, échéance", t: "date" },
@@ -361,13 +374,20 @@
      personne sans le dire.                                                  */
   var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|grutier|ambulancier|convoyeur/i;
   function salaries(tous) {
-    var r = lire(CLE_REG, {});
+    var r = lire(CLE_REG, {}), F = lire(CLE_C, {}) || {};
     var L = ((r && r.salaries) || []).filter(function (s) {
       return net(s.nom) || net(s.pre);
     }).map(function (s) {
-      var nom = (net(s.nom) + " " + net(s.pre)).trim();
-      return { id: sansAccent(nom) || "salarie", nom: nom, emp: net(s.emp), ent: net(s.ent), sor: net(s.sor),
-        conduit: CONDUIT.test(net(s.emp)) };
+      var nom = (net(s.nom) + " " + net(s.pre)).trim(), id = sansAccent(nom) || "salarie";
+      /* CE QUE LE SALARIÉ A RÉPONDU L'EMPORTE SUR L'INTITULÉ DU POSTE
+         (27 novembre 2026). Roulant ou non se déduisait seulement de l'emploi
+         écrit au registre : un conducteur dont le poste ne dit pas
+         « chauffeur » disparaissait du suivi tachygraphe, et sa page ne
+         montrait pas son permis. La réponse de sa fiche, quand il y en a une,
+         décide. */
+      var rf = net((F[id] || {}).roulant);
+      return { id: id, nom: nom, emp: net(s.emp), ent: net(s.ent), sor: net(s.sor),
+        conduit: rf === "oui" ? true : (rf === "non" ? false : CONDUIT.test(net(s.emp))), roulantFiche: rf };
     });
     if (tous) return L;
     var C = L.filter(function (s) { return s.conduit && !net(s.sor); });
@@ -1613,7 +1633,8 @@
     if (v == null || v === "") return "vide";
     if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return enFrancais(v);
     if (k === "profil") return v === "pl" ? "poids lourd" : "pas poids lourd";
-    if (k === "permisOrigine") return v === "etr" ? "étranger" : "français";
+    if (k === "permisOrigine") return v === "etr" ? "hors Union européenne" : (v === "ue" ? "Union européenne ou EEE" : "en France");
+    if (k === "sexe") return v === "F" ? "femme" : (v === "M" ? "homme" : v);
     return v;
   }
   function validationHtml(s, f) {
@@ -1700,22 +1721,18 @@
       if (sansAccent((net(x.nom) + " " + net(x.pre)).trim()) === s.id) r = x;
     });
     var lu = function (l, v) { return '<div class="fn-lu"><span>' + ech(l) + "</span><b>" + ech(v || "-") + "</b></div>"; };
-    h += cadreFiche("Ses coordonnées", lu("Nom", r ? net(r.nom) : s.nom) + lu("Prénom", r ? net(r.pre) : "") +
-      champsDe(s, f, ["adresse", "tel", "nir", "visiteTravail"]));
+    h += cadreFiche("Ses coordonnées", lu("Nom", r ? net(r.nom) : s.nom) + lu("Prénoms", r ? net(r.pre) : "") +
+      champsDe(s, f, ["sexe", "nais", "naisLieu", "adresse", "tel", "courriel", "nir", "visiteTravail"]));
     var prof = profilChauffeur(f);
     if (conduit) {
       h += cadreFiche("Son profil", '<div class="pf-choix" role="group" aria-label="Profil du chauffeur">' +
-        '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (prof === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C ou CE</small></button>" +
+        '<button type="button" data-profil="' + ech(s.id) + '|pl"' + (prof === "pl" ? ' aria-pressed="true"' : "") + ">Poids lourd<small>permis C1, C1E, C ou CE</small></button>" +
         '<button type="button" data-profil="' + ech(s.id) + '|leger"' + (prof === "leger" ? ' aria-pressed="true"' : "") + ">Pas poids lourd<small>permis B</small></button></div>");
     }
-    var na = ["ue"];
+    var na = ["nat", "ue"];
     if (f.ue === "non") {
-      na.push("titreFin");
-      if (conduit) {
-        na.push("permisOrigine");
-        if (f.permisOrigine === "etr") na.push("permisPays", "arrivee");
-        na.push("inter");
-      }
+      na.push("titreType", "titreNum", "titreFin");
+      if (conduit) na.push("inter");
     }
     h += cadreFiche("Nationalité", champsDe(s, f, na));
     if (conduit) {
@@ -1723,16 +1740,22 @@
       var alerte = sansC && (prof === "pl" || PL_REG.test(s.emp || ""))
         ? '<p class="fn-al">' + (prof === "pl" ? "Poids lourd selon sa fiche" : ech(s.emp) + " au registre") +
           ", mais ses catégories ne portent ni C ni CE.</p>" : "";
+      /* Le permis délivré hors Union européenne, quelle que soit la
+         nationalité (code de la route, R. 222-3), et le retrait déclaré. */
+      var pe = ["permisFin", "points", "permisOrigine"];
+      if (f.permisOrigine === "etr" || net(f.permisPays)) pe.push("permisPays", "arrivee", "permisEchange");
+      pe.push("suspendu");
+      if (f.suspendu === "oui" || net(f.retraitLe)) pe.push("retraitLe", "retraitFin", "retraitMotif");
       h += cadreFiche("Son permis", champsDe(s, f, ["permisNum"]) + '<div style="height:12px"></div>' +
-        categoriesHtml(s, f) + alerte + champsDe(s, f, ["permisFin", "suspendu"]));
+        categoriesHtml(s, f) + alerte + champsDe(s, f, pe));
       /* Une date de poids lourd déjà connue reste visible, même quand le
          profil dit le contraire : on ne cache pas ce qu'il a déclaré. */
       var plConnu = ["visitePermisFin", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
       if (prof !== "leger" || plConnu)
-        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fco", "carteQualif", "code95", "carteCond"]));
+        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fcoType", "fco", "code95", "carteQualif", "carteNum", "carteCond"]));
       if (prof === "leger")
         h += cadreFiche("Pas poids lourd", champsDe(s, f, ["livret", "aCarte"]
-          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteCond"] : [])));
+          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond"] : [])));
     }
     h += cadreFiche("Ses photos et sa signature", '<div class="fn-photos" data-photos="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
     if (conduit) h += '<p class="fn-sep">Contrôle par T.E.C</p>' + cadreFiche("Ce qu'il doit avoir sur lui", papiersChauffeurHtml(s, f));

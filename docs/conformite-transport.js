@@ -368,7 +368,15 @@
     L.push({ quand: c.quand || new Date().toISOString(), lib: net(c.lib), resume: net(c.resume) });
     poserSuivi(id, "controles", L);
   }
-  function carteDe(id) { return champSuivi(id, "carte", null); }
+  function carteDe(id) {
+    var c = champSuivi(id, "carte", null);
+    if (c && net(c.numero)) return c;
+    var f = ficheC(id);
+    if (!net(f.carteNum)) return c;
+    var o = {}; if (c) Object.keys(c).forEach(function (k) { o[k] = c[k]; });
+    o.numero = net(f.carteNum); if (!net(o.expiration) && net(f.carteCond)) o.expiration = net(f.carteCond);
+    return o;
+  }
   function porterCarte(id, c) { poserSuivi(id, "carte", { numero: net(c.numero), titulaire: net(c.titulaire), expiration: net(c.expiration) }); }
   function supprimerAnomalie(id, i) {
     var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
@@ -1177,10 +1185,19 @@
      listes : ce que le conducteur doit détenir lui-même, avec la date de
      validité et l'alerte, et ce qu'on lui remet à signer. Le profil par défaut
      suit le poste du registre ; il reste modifiable. */
+  /* LA FICHE QUE LE CONDUCTEUR A REMPLIE (27 novembre 2026). Le profil
+     poids lourd, les dates de ses papiers et le numéro de sa carte étaient
+     redemandés ici alors qu'il les avait donnés dans sa fiche : ils en
+     viennent désormais, tant que rien n'a été saisi sur cet écran. */
+  function ficheC(id) {
+    var T = lire("flotte-conducteurs", {}) || {};
+    return T[id] || {};
+  }
   function profilConducteur(id) {
     var e = etat(), s = (e.suivi && e.suivi[id]) || {}, pr = s.profil || {};
-    var sal = salDe(id);
-    return { pl: (pr.pl != null) ? pr.pl : !!sal.poidsLourd, adr: !!pr.adr };
+    var sal = salDe(id), pf = net(ficheC(id).profil);
+    var defaut = pf === "pl" ? true : (pf === "leger" ? false : !!sal.poidsLourd);
+    return { pl: (pr.pl != null) ? pr.pl : defaut, adr: !!pr.adr };
   }
   function setProfilConducteur(id, champ, val) {
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};
@@ -1189,7 +1206,12 @@
     s.profil[champ] = val; e.suivi[id] = s; garderEtat(e);
   }
   function echeancesDoc(id) {
-    var e = etat(), s = (e.suivi && e.suivi[id]) || {}; return s.docsEch || {};
+    var e = etat(), s = (e.suivi && e.suivi[id]) || {}, d = s.docsEch || {}, f = ficheC(id), out = {};
+    Object.keys(d).forEach(function (k) { out[k] = d[k]; });
+    [["permis", "permisFin"], ["qualif", "carteQualif"], ["carte", "carteCond"], ["medical", "visitePermisFin"]].forEach(function (x) {
+      if (!out[x[0]] && net(f[x[1]])) out[x[0]] = net(f[x[1]]);
+    });
+    return out;
   }
   function porterEcheanceDoc(id, cle, date) {
     var e = etat(); e.suivi = e.suivi || {}; var s = e.suivi[id] || {};

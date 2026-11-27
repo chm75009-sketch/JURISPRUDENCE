@@ -132,6 +132,12 @@
       .forEach(function (c) { V[c] = ""; });
     if (s.adr) V.adresse = s.adr;
     if (s.nir) V.nir = s.nir;
+    else if (s.secu) V.nir = s.secu;
+    /* Le titre de séjour du registre, que le contrat redemandait
+       (27 novembre 2026). */
+    if (s.titT) V.titreTravail = s.titT;
+    if (s.titN) V.titreNumero = s.titN;
+    if (s.titFin) V.titreFin = s.titFin;
     if (s.naisLieu) V.lieuNaissance = s.naisLieu;
     V.nom = (String(s.nom || "").trim() + " " + String(s.pre || "").trim()).trim();
     if (s.nat) V.nationalite = s.nat;

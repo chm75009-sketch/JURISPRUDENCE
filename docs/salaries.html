@@ -284,7 +284,7 @@
       var dit = datees.length && datees[0].feu !== "v"
         ? datees[0].quoi.charAt(0).toLowerCase() + datees[0].quoi.slice(1) + (datees[0].j < 0 ? ", en retard" : ", avant le " + jj(datees[0].date))
         : faits ? faits + " fait" + (faits > 1 ? "s" : "") + " à traiter au suivi tachygraphe" : "rien ne presse";
-      return { id: s.id, nom: s.nom, poste: net(s.emp), ent: net(s.ent), conduit: !!s.conduit, mes: mes, faits: faits, feu: feu, dit: dit };
+      return { id: s.id, nom: s.nom, poste: net(s.emp), ent: net(s.ent), conduit: !!s.conduit, roulantFiche: s.roulantFiche || "", mes: mes, faits: faits, feu: feu, dit: dit };
     });
     var rang = { r: 0, o: 1, v: 2 };
     PERSONNES.sort(function (a, b) { return rang[a.feu] - rang[b.feu] || (a.nom < b.nom ? -1 : 1); });
@@ -340,7 +340,12 @@
   /* Le personnel roulant conduit sur la route. Le cariste et le grutier
      conduisent un engin, pas un véhicule sur la route : ils sont du personnel
      non roulant (demande du 26 novembre 2026). */
-  function roulant(p) { return !!p.conduit && !/cariste|grutier/i.test(p.poste || ""); }
+  function roulant(p) {
+    /* La réponse de sa fiche décide quand il y en a une (27 novembre 2026). */
+    if (p.roulantFiche === "oui") return true;
+    if (p.roulantFiche === "non") return false;
+    return !!p.conduit && !/cariste|grutier/i.test(p.poste || "");
+  }
   function base() {
     if (!GROUPE) return PERSONNES;
     return PERSONNES.filter(function (p) { return GROUPE === "roulant" ? roulant(p) : !roulant(p); });

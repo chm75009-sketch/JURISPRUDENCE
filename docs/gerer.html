@@ -5817,8 +5817,10 @@
         ent: String(x.ent || "").trim(), sor: String(x.sor || "").trim(),
         emp: String(x.emp || "").trim(), qua: String(x.qua || "").trim(),
         nat: String(x.nat || "").trim(), nais: String(x.nais || "").trim(),
-        sexe: String(x.sexe || "").trim(), secu: String(x.secu || "").trim(),
-        adresse: String(x.adresse || "").trim(),
+        /* Le registre range l'adresse sous « adr » et le numéro sous « nir »
+           ou « secu » : les trois se lisent (27 novembre 2026). */
+        sexe: String(x.sexe || "").trim(), secu: String(x.secu || x.nir || "").trim(),
+        adresse: String(x.adresse || x.adr || "").trim(), naisLieu: String(x.naisLieu || "").trim(),
         nature: String(x.nature || "").trim(), part: String(x.part || "").trim(),
       };
     });
@@ -5913,12 +5915,12 @@
   /* Le champ du formulaire, et ce qui le remplit dans le registre. */
   var DU_REGISTRE = {
     entree: "ent", sortie: "sor", fin: "sor", poste: "emp", emploi: "emp",
-    nationalite: "nat", naissance: "nais", secu: "secu", adresse: "adresse",
+    nationalite: "nat", naissance: "nais", secu: "secu", adresse: "adresse", lieuNaissance: "naisLieu",
   };
   var DIT_REGISTRE = {
     ent: "la date d'entrée", sor: "la date de sortie", emp: "l'emploi",
     nat: "la nationalité", nais: "la date de naissance",
-    secu: "le numéro de sécurité sociale", adresse: "l'adresse",
+    secu: "le numéro de sécurité sociale", adresse: "l'adresse", naisLieu: "le lieu de naissance",
     qua: "la qualification",
   };
   /* Ce qui a été posé par le registre peut être reposé par le registre quand

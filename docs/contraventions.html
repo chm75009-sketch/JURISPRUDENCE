@@ -405,9 +405,24 @@
     L.push({ k: "p", t: "En application de l'article L. 121-6 du code de la route, nous vous " +
       "indiquons l'identité et l'adresse de la personne physique qui conduisait ce véhicule :" });
     L.push({ k: "p", t: "Nom et prénom : " + (net(a.condNom) || "[nom et prénom du conducteur]") + "." });
-    L.push({ k: "p", t: "Adresse : [adresse du conducteur]." });
-    L.push({ k: "p", t: "Date de naissance : [date de naissance]." });
-    L.push({ k: "p", t: "Permis de conduire : [numéro], délivré le [date] par [autorité]." });
+    /* L'ADRESSE, LA NAISSANCE ET LE PERMIS VIENNENT DE SA FICHE (27 novembre
+       2026). La lettre ne lisait ni la fiche du conducteur ni le registre :
+       elle sortait avec des crochets que le salarié avait déjà remplis. Ce qui
+       manque encore reste entre crochets ; la date et l'autorité de
+       délivrance se lisent sur la photo de son permis, dans son coffre fort. */
+    var fc = fichesConducteurs()[net(a.cond)] || {}, rg = null;
+    try {
+      ((lireLocal("registre-personnel", {}) || {}).salaries || []).forEach(function (x) {
+        var n = (net(x.nom) + " " + net(x.pre)).trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        if (n && n === net(a.cond)) rg = x;
+      });
+    } catch (e) {}
+    var adrC = net(fc.adresse) || net(rg && rg.adr);
+    var naisC = net(fc.nais) || net(rg && rg.nais);
+    L.push({ k: "p", t: "Adresse : " + (adrC || "[adresse du conducteur]") + "." });
+    L.push({ k: "p", t: "Date de naissance : " + (naisC ? dateFr(naisC) : "[date de naissance]") + "." });
+    L.push({ k: "p", t: "Permis de conduire : " + (net(fc.permisNum) || "[numéro]") + ", délivré le [date] par [autorité]." });
     L.push({ k: "p", t: "Cette désignation vous est adressée dans le délai de quarante-cinq jours " +
       "à compter de l'envoi de l'avis, soit avant le " +
       (plusJours(a.le, 45) ? dateFr(plusJours(a.le, 45)) : "[date]") + " (L. 121-6)." });
