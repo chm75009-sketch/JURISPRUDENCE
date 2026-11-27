@@ -974,6 +974,13 @@
   function avecEnTete(blocs) {
     var b = (blocs || []).slice();
     var i = 0;
+    /* LE TITRE N'ARRÊTE PAS LE NETTOYAGE (27 novembre 2026). La recherche
+       s'arrêtait au premier bloc qui n'était pas de l'identité : un document
+       ouvert par son titre (la décision de complémentaire santé, la demande
+       de visite, l'autorisation de conduite) gardait donc, sous l'en-tête,
+       la dénomination, l'adresse et le SIRET une seconde fois. Le titre est
+       laissé en place et le nettoyage reprend juste après lui. */
+    while (i < b.length && b[i] && b[i].k === "t1") i++;
     while (i < b.length && i < 10) {
       if (b[i] && b[i].t !== undefined && estIdentite(b[i].t)) { b.splice(i, 1); continue; }
       break;
@@ -2814,7 +2821,31 @@
       ". Elle est conclue pour une durée indéterminée. Elle peut être modifiée ou dénoncée par l'employeur, " +
       "après information individuelle des salariés et information du comité social et économique lorsqu'il " +
       "existe ; la dénonciation ne prend effet qu'à l'issue d'un délai de prévenance suffisant." });
-    b.push({ k: "h1", t: "Article 6 - Remise" });
+    /* LA PORTABILITÉ MANQUAIT À LA DÉCISION, ET SON PROPRE CONTRÔLE LA REFUSAIT
+       (27 novembre 2026). La décision produite ici, déposée ensuite dans le
+       « Oui » de l'audit, sortait avec « portabilité (L. 911-8) introuvable ».
+       L. 911-8 du code de la sécurité sociale (LEGIARTI000027549338), relu en
+       entier au relais le 27 novembre 2026 : l'article reprend ses 1° à 6° et
+       son dernier alinéa, sans rien y ajouter. */
+    b.push({ k: "h1", t: "Article 6 - Maintien des garanties après la cessation du contrat de travail" });
+    b.push({ k: "p", t: "En cas de cessation du contrat de travail non consécutive à une faute lourde et ouvrant " +
+      "droit à prise en charge par le régime d'assurance chômage, l'ancien salarié bénéficie du maintien à titre " +
+      "gratuit des garanties en vigueur dans l'entreprise, dans les conditions de " + ref(["CSS-L911-8"]) + "." });
+    b.push({ k: "p", t: "Le maintien des garanties s'applique à compter de la date de cessation du contrat de " +
+      "travail et pendant une durée égale à la période d'indemnisation du chômage, dans la limite de la durée du " +
+      "dernier contrat de travail ou, le cas échéant, des derniers contrats de travail lorsqu'ils sont consécutifs " +
+      "chez le même employeur. Cette durée est appréciée en mois, le cas échéant arrondie au nombre supérieur, sans " +
+      "pouvoir excéder douze mois." });
+    b.push({ k: "p", t: "Le maintien est subordonné à la condition que les droits à remboursements complémentaires " +
+      "aient été ouverts chez le dernier employeur. Il ne peut conduire l'ancien salarié à percevoir des indemnités " +
+      "d'un montant supérieur à celui des allocations chômage qu'il aurait perçues au titre de la même période. " +
+      "L'ancien salarié justifie auprès de son organisme assureur, à l'ouverture et au cours de la période de " +
+      "maintien des garanties, des conditions requises." });
+    b.push({ k: "p", t: "L'employeur signale le maintien des garanties dans le certificat de travail et informe " +
+      "l'organisme assureur de la cessation du contrat de travail. Le maintien s'applique dans les mêmes " +
+      "conditions aux ayants droit du salarié qui bénéficient effectivement des garanties à la date de la " +
+      "cessation du contrat de travail." });
+    b.push({ k: "h1", t: "Article 7 - Remise" });
     b.push({ k: "p", t: "Un exemplaire de la présente décision est remis à chaque salarié, contre émargement ou " +
       "par tout moyen donnant date certaine, conformément à " + ref(["CSS-L911-1"]) + "." });
     b.push({ k: "sign", t: "\n" + signataire() + "\n" + profil.denomination });
@@ -2837,7 +2868,7 @@
           f: "la date d'effet retenue est aujourd'hui ou passée : l'écrit ne peut pas avoir été remis " +
             "avant. Reportez l'effet, le premier jour du mois suivant par exemple.", c: "non" });
     }
-    return { blocs: b, loi: ["CSS-L911-1", "CSS-L911-7", "CSS-D911-2"], dates: D };
+    return { blocs: b, loi: ["CSS-L911-1", "CSS-L911-7", "CSS-D911-2", "CSS-L911-8"], dates: D };
   }
 
   /* ═══════════════════ LES AVENANTS GUIDÉS ═══════════════════════════

@@ -2292,7 +2292,9 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
     L.push((E.cadre.nom || "[DÉNOMINATION]").toUpperCase());
     L.push("Établissement : " + croch(E.cadre.etab, "établissement à nommer"));
     if (!vide(E.cadre.adresse)) L.push("Adresse : " + E.cadre.adresse);
-    L.push("Édité le " + new Date().toISOString().slice(0, 10));
+    /* La date à la française et en heure de France, pas « 2026-11-27 » en
+       heure universelle (27 novembre 2026). */
+    L.push("Édité le " + (function (d) { return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear(); })(new Date()));
     L.push("");
     L.push("Tenu au titre de l'article L. 1221-13 du code du travail : un registre unique du");
     L.push("personnel est tenu dans tout établissement où sont employés des salariés. Les noms et");
@@ -2838,6 +2840,11 @@ DURAND&#9;Sophie&#9;05/02/2026&#9;Comptable&#9;Niveau 4&#9;CDD"></textarea>
      de quatre-vingt-cinq salariés déjà chargé. Il ouvre le registre, où
      chaque ligne dit ce qui lui manque ; le dépôt reste à un bouton. */
   if (PLEIN && REP !== "non") ouvrir("registre");
+  /* LE « NON » DE L'AUDIT CONSTRUIT (27 novembre 2026). Il ouvrait la même
+     liste que le « oui » quand le registre de l'application est rempli :
+     « je n'ai pas ce document » ouvre donc le document lui-même, prêt à
+     télécharger, et le Retour ramène à la liste. */
+  else if (PLEIN && REP === "non") ouvrir("doc");
   else if (E.reponse === "oui") ouvrir("import");
   else if (E.reponse === "non") {
     if (!E.salaries.length || E.salaries.every(function (x) {

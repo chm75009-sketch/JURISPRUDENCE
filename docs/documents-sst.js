@@ -1895,8 +1895,19 @@
        et les données collectives. Relevé le 27 novembre 2026. Le document va
        donc jusqu'au calendrier, signature, annexe et note de lancement
        comprises ; les formalités gardent leurs sous-onglets. */
-    var doc = coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "VOTRE CALENDRIER")
-      .concat([""], exemple);
+    var doc = coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "VOTRE CALENDRIER");
+    /* LA CONSIGNE NE VA PAS DANS LE DOCUMENT (27 novembre 2026). Le Word
+       s'ouvrait sur « VOTRE DOCUMENT UNIQUE, À COMPLÉTER » et trois lignes
+       de mode d'emploi, qui s'adressent à l'utilisateur et non au lecteur du
+       document : elles s'arrêtent à « Ne laissez aucun crochet... ». */
+    for (var c = 0; c < doc.length && c < 8; c++) {
+      if (doc[c].indexOf("Ne laissez aucun crochet") === 0) {
+        doc = doc.slice(c + 1);
+        while (doc.length && !doc[0].trim()) doc.shift();
+        break;
+      }
+    }
+    doc = doc.concat([""], exemple);
     return [
       { cle: "document", nom: "Le document", texte: doc.join("\n") },
       { cle: "formalites", nom: "Formalités", pieces: true,

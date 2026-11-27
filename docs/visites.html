@@ -785,7 +785,11 @@
       return "<p>" + ech(b.t) + "</p>";
     }).join("");
     $("doc").hidden = false;
-    $("doc").scrollIntoView({ behavior: "smooth", block: "start" });
+    /* Le bandeau du haut reste collé : le courrier se pose juste dessous, son
+       titre visible, au lieu de commencer caché sous lui (27 novembre 2026). */
+    var tete = document.querySelector("header.site");
+    var marge = (tete ? tete.offsetHeight : 0) + 10;
+    window.scrollTo({ top: Math.max(0, $("doc").getBoundingClientRect().top + window.pageYOffset - marge), behavior: "smooth" });
   }
   /* LE RETOUR REFERME LE COURRIER, IL NE QUITTE PAS LA PAGE.
 
@@ -838,7 +842,29 @@
       ech(TEXTES[c].dit) + "</p>";
   }).join("");
 
+  /* LE « OUI » ET LE « NON » DE L'AUDIT N'OUVRAIENT PAS LA MÊME CHOSE PAR
+     HASARD : ILS OUVRAIENT LA MÊME PAGE (27 novembre 2026). « Non », on n'a
+     pas de suivi : la page construit, en ouvrant la première personne à
+     convoquer et sa convocation. « Oui », on en a un : la page contrôle,
+     tous les salariés affichés avec leurs échéances. */
+  var REP = "";
+  try { REP = new URLSearchParams(window.location.search).get("rep") || ""; } catch (e) {}
+  if (REP === "oui") {
+    FILTRE = "tous";
+    Array.prototype.forEach.call($("filtres").querySelectorAll("button"), function (x) {
+      x.classList.toggle("actif", x.getAttribute("data-f") === "tous");
+    });
+  }
   rendre();
+  if (REP === "non") {
+    var premiere = document.querySelector(".sal[data-sal]");
+    if (premiere) {
+      var pid = premiere.getAttribute("data-sal");
+      ouvert[pid] = true;
+      rendre();
+      ouvrirDoc("salarie", pid);
+    }
+  }
 })();
 </script>
 </body>
