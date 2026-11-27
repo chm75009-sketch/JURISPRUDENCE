@@ -284,7 +284,7 @@
   function lienSalarie(quoi, id) {
     var q = slug(quoi).replace(/-/g, " "), s = "salaries.html?s=" + encodeURIComponent(id);
     if (/telechargement/.test(q))
-      return ["conformite-transport.html?c=" + encodeURIComponent(id) + "&e=1", "Ouvrir son suivi tachygraphe"];
+      return ["conformite-transport.html?c=" + encodeURIComponent(id) + "&e=1", "Ouvrir le suivi de sa carte conducteur"];
     if (/portabilite/.test(q)) return ["registre.html", "Ouvrir le registre du personnel"];
     if (/visite du permis/.test(q)) return [s + "&v=fiche", "Ouvrir sa fiche"];
     if (/suspension|points/.test(q)) return [s + "&v=permis", "Ouvrir son permis"];

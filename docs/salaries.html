@@ -283,7 +283,7 @@
         : (datees.some(function (m) { return m.feu === "o"; }) || faits) ? "o" : "v";
       var dit = datees.length && datees[0].feu !== "v"
         ? datees[0].quoi.charAt(0).toLowerCase() + datees[0].quoi.slice(1) + (datees[0].j < 0 ? ", en retard" : ", avant le " + jj(datees[0].date))
-        : faits ? faits + " fait" + (faits > 1 ? "s" : "") + " à traiter au suivi tachygraphe" : "rien ne presse";
+        : faits ? faits + " fait" + (faits > 1 ? "s" : "") + " à traiter au suivi de la carte conducteur" : "rien ne presse";
       return { id: s.id, nom: s.nom, poste: net(s.emp), ent: net(s.ent), conduit: !!s.conduit, roulantFiche: s.roulantFiche || "", mes: mes, faits: faits, feu: feu, dit: dit };
     });
     var rang = { r: 0, o: 1, v: 2 };
@@ -431,7 +431,7 @@
       lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Coffre fort"));
     if (transport && roulant(p)) {
       var c = "conformite-transport.html?c=" + encodeURIComponent(p.id) + "&e=";
-      h += part("tachy", "Suivi tachygraphe", p.faits ? pu("o", p.faits + " à traiter") : "",
+      h += part("tachy", "Suivi de la carte conducteur", p.faits ? pu("o", p.faits + " à traiter") : "",
         lien(c + 0, "Instructions") + lien(c + 1, "Contrôle et suivi",
           p.faits ? p.faits + " fait" + (p.faits > 1 ? "s" : "") + " à traiter" : "", p.faits ? ["o", "à traiter"] : null) +
         lien(c + 2, "Réaction") + lien(c + 3, "Coffre-fort"));
