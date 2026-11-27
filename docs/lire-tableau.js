@@ -93,10 +93,48 @@
     });
     return out;
   }
-  function feuilleEnLignes(xml, partagees) {
+  /* LES DATES D'UN CLASSEUR (27 novembre 2026). Excel range une date comme
+     un nombre de jours ; ce qui en fait une date, c'est le format de la
+     cellule. On ne devine rien : seules les cellules dont le format, lu dans
+     le classeur lui-même, est un format de date sont rendues en jj/mm/aaaa.
+     Le registre produit par l'application revenait sinon avec « 43252 » à
+     la place du 01/06/2018, et ses dates étaient perdues au redépôt. */
+  function stylesDates(xml) {
+    var perso = {}, out = [];
+    if (!xml) return out;
+    (xml.match(/<numFmt\s[^>]*>/g) || []).forEach(function (f) {
+      var id = (f.match(/numFmtId="(\d+)"/) || [])[1], code = deXml((f.match(/formatCode="([^"]*)"/) || [])[1] || "");
+      /* Un format de date porte un jour ou une année, hors des passages entre guillemets ou crochets. */
+      var nu = code.replace(/"[^"]*"|\[[^\]]*\]|\\./g, "").toLowerCase();
+      if (id) perso[id] = /[dy]/.test(nu);
+    });
+    var bloc = (xml.match(/<cellXfs[\s\S]*?<\/cellXfs>/) || [""])[0];
+    (bloc.match(/<xf\s[^>]*\/?>/g) || []).forEach(function (x) {
+      var id = Number((x.match(/numFmtId="(\d+)"/) || [])[1] || 0);
+      out.push((id >= 14 && id <= 17) || id === 22 || (id >= 27 && id <= 36) || (id >= 50 && id <= 58) || !!perso[id]);
+    });
+    return out;
+  }
+  function serieEnDate(n, base1904) {
+    var j = Math.floor(Number(n));
+    if (!isFinite(j) || j < 1) return null;
+    var t = Date.UTC(1899, 11, 30) + (j + (base1904 ? 1462 : 0)) * 86400000;
+    var d = new Date(t);
+    return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "/" + d.getUTCFullYear();
+  }
+  function feuilleEnLignes(xml, partagees, dates, base1904) {
     var lignes = [];
-    (xml.match(/<row[\s>][\s\S]*?<\/row>|<row[^>]*\/>/g) || []).forEach(function (row) {
-      var cells = row.match(/<c[\s>][\s\S]*?<\/c>|<c[^>]*\/>/g) || [];
+    dates = dates || [];
+    /* LES CELLULES ET LES LIGNES VIDES (27 novembre 2026). Une cellule vide
+       s'écrit <c r="B2"/> : l'ancienne recherche commençait à ce <c et allait
+       jusqu'au </c> de la cellule suivante, prenait la référence de la vide
+       et la valeur de la pleine, et toute la ligne glissait d'une colonne
+       (l'emploi arrivait sous Nationalité au redépôt du registre). Même chose
+       pour une ligne vide <row r="5"/>. La forme fermée se reconnaît donc
+       d'abord, et la forme ouverte ne peut plus enjamber une balise fermée. */
+    (xml.match(/<row(?:\s[^>]*)?\/>|<row(?:\s[^>]*[^\/])?>[\s\S]*?<\/row>/g) || []).forEach(function (row) {
+      if (/^<row[^>]*\/>$/.test(row)) { lignes.push([]); return; }
+      var cells = row.match(/<c(?:\s[^>]*)?\/>|<c(?:\s[^>]*[^\/])?>[\s\S]*?<\/c>/g) || [];
       var ligne = [];
       cells.forEach(function (c) {
         var ref = (c.match(/r="([A-Z]+\d+)"/) || [])[1];
@@ -109,9 +147,11 @@
           var v = (c.match(/<v[^>]*>([\s\S]*?)<\/v>/) || [])[1];
           if (v != null) {
             val = type === "s" ? (partagees[Number(v)] || "") : deXml(v);
-            /* Une date d'un classeur arrive en nombre de jours depuis 1900.
-               On la rend telle quelle : la deviner ferait entrer une date
-               fausse dans un registre. L'écran dira qu'elle est illisible. */
+            /* Un nombre n'est lu comme une date que si le format de sa
+               cellule, écrit dans le classeur, est un format de date. Sinon
+               il est rendu tel quel, et l'écran dira qu'il est illisible. */
+            var st = Number((c.match(/\ss="(\d+)"/) || [])[1]);
+            if ((type === "" || type === "n") && dates[st] && /^\d+(\.\d+)?$/.test(val)) val = serieEnDate(val, base1904) || val;
           }
         }
         var j = ref ? colonneDe(ref) : ligne.length;
@@ -127,10 +167,11 @@
     var nomFeuille = Object.keys(z).filter(function (n) {
       return /^xl\/worksheets\/sheet\d+\.xml$/.test(n); }).sort()[0];
     if (!nomFeuille) throw new Error("Ce classeur ne contient aucune feuille lisible.");
-    return texteEntree(z["xl/sharedStrings.xml"]).then(function (sst) {
-      var partagees = sst ? chainesPartagees(sst) : [];
+    return Promise.all([texteEntree(z["xl/sharedStrings.xml"]), texteEntree(z["xl/styles.xml"]), texteEntree(z["xl/workbook.xml"])]).then(function (r) {
+      var partagees = r[0] ? chainesPartagees(r[0]) : [];
+      var dates = stylesDates(r[1]), base1904 = /date1904="(1|true)"/.test(r[2] || "");
       return texteEntree(z[nomFeuille]).then(function (xml) {
-        return feuilleEnLignes(xml, partagees);
+        return feuilleEnLignes(xml, partagees, dates, base1904);
       });
     });
   }

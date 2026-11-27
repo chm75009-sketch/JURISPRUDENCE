@@ -170,8 +170,16 @@
        « le bouton Oui marque seulement vu, sans dépôt ni contrôle ». */
     { cle: "mutuelle",   nom: "Complémentaire santé obligatoire", seuil: 1,   non: "gerer.html#mutuelle",
       oui: "controler-mutuelle.html" },
-    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "visites.html",
-      oui: "visites.html" },
+    /* « NON » ET « OUI » OUVRAIENT LA MÊME PAGE, À LA MÊME PLACE.
+
+       Relevé le 27 novembre 2026. La réponse passe maintenant dans l'adresse,
+       comme pour le registre et le forfait : « rep=non » demande la
+       construction, l'échéancier des visites à faire et le premier courrier
+       ouvert ; « rep=oui » demande le contrôle, tous les salariés et les
+       échéances passées ou sans date. C'est la page des visites qui lit la
+       réponse. */
+    { cle: "visites",    nom: "Visites médicales",         seuil: 1,   non: "visites.html?rep=non",
+      oui: "visites.html?rep=oui" },
     /* « Non » veut dire : il n'y a pas de comité. Ce qui s'impose alors est
        le processus électoral (L. 2314-4, L. 2314-5), ou le procès-verbal de
        carence si personne ne se présente (L. 2314-9) ; pas l'installation

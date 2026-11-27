@@ -58,6 +58,27 @@
   .haut .retour:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
   .haut b{font-size:17px;color:var(--encre);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .haut span{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* LE MENU ET LE RETOUR DES ÉCRANS SUIVANTS, COMME SUR LES AUTRES PAGES.
+
+     La page a trois rangées « .haut », une par écran. Le bouton Menu de la
+     première porte l'identifiant que la feuille de style commune habille ;
+     ceux des deux autres n'ont que la classe, et sortaient avec le style par
+     défaut des boutons : gros, foncé, à côté d'un « ← Retour » écrit en
+     toutes lettres sur un téléphone. C'est l'écran des élections, ouvert par
+     le « non » de l'audit, qui le montrait. Relevé le 27 novembre 2026. Les
+     mêmes règles que style.css, posées sur la classe. */
+  .haut .menu{display:inline-flex;align-items:center;justify-content:center;flex:none;
+    margin:0 0 0 auto;font:600 17px/1 system-ui;padding:10px 14px;min-height:var(--h-touche,44px);
+    border:1px solid var(--filet);border-radius:var(--r1,10px);background:var(--surface);
+    color:var(--encre);white-space:nowrap;cursor:pointer}
+  .haut .menu:hover{background:var(--creux);border-color:var(--filet-2)}
+  .haut b{flex:0 1 auto}
+  @media (max-width:460px){
+    .haut .retour{font-size:0;gap:0;padding:10px 13px}
+    .haut .retour::before{content:"\2190";font:600 19px/1 system-ui}
+    .haut .menu{font-size:16px;padding:10px 12px}
+    .haut b{font-size:16px}
+  }
   .aide{margin:14px 0 4px;color:var(--texte-2);font-size:16px;max-width:none}
 
   /* écran 3 : une ligne par obligation */

@@ -74,6 +74,32 @@
   var cro = O.cro, resp = O.resp, leJour = O.leJour, dans = O.dans, entete = O.entete;
   var villeFiche = O.villeDe;
 
+  /* L'EN-TÊTE, UNE INFORMATION PAR LIGNE, MÊME QUAND IL N'OUVRE PAS LE TEXTE.
+
+     La feuille rend ligne par ligne le premier paragraphe du texte, et joint
+     les lignes des suivants. Le calendrier des négociations commence par son
+     exemple : l'en-tête de l'entreprise n'y est donc pas le premier
+     paragraphe, et l'adresse, le SIRET, le représentant, le courriel,
+     l'effectif et la convention sortaient en une seule ligne, à l'écran comme
+     dans le Word. Relevé le 27 novembre 2026. La feuille garde séparées les
+     lignes qui commencent chacune par un intitulé suivi d'un deux-points :
+     chaque ligne de l'identité reçoit le sien. On ne touche pas à l'en-tête
+     commun, que d'autres écrans reconnaissent tel quel pour ne pas le poser
+     deux fois. */
+  function enteteParLigne(ctx, titre, fondement) {
+    var L = entete(ctx, titre, fondement);
+    if (L.length < 7 || !/^(SIRET\b|\[SIRET\])/.test(String(L[2]))) return L;
+    return [
+      L[0],
+      "Siège : " + L[1],
+      /^\[SIRET\]$/.test(L[2]) ? "SIRET : [numéro]" : String(L[2]).replace(/^SIRET\s+/, "SIRET : "),
+      String(L[3]).replace(/^Représentée par /, "Représentée par : "),
+      "Courriel : " + L[4],
+      L[5],
+      L[6],
+    ].concat(L.slice(7));
+  }
+
   var TRAIT = "────────────────────────────────────────────────────────────────────────";
   var GROS  = "════════════════════════════════════════════════════════════════════════";
 
@@ -701,6 +727,14 @@
       L.push("");
       L.push("UN EXEMPLE D'ACCORD DE MÉTHODE");
       L.push("");
+      /* L'EXEMPLE COMMENÇAIT À L'ARTICLE 2. Relevé le 27 novembre 2026 : à
+         l'écran, l'accord d'exemple passait du titre à « ARTICLE 2 », sans
+         article 1. Il porte maintenant son champ d'application, comme
+         l'accord à compléter. */
+      L.push("ARTICLE 1 - CHAMP D'APPLICATION ET NIVEAUX DE NÉGOCIATION");
+      L.push("Le présent accord s'applique à l'entreprise " + ex.nom + ". La négociation");
+      L.push("obligatoire y est conduite au niveau de l'entreprise.");
+      L.push("");
       L.push("ARTICLE 2 - LES THÈMES ET LEUR PÉRIODICITÉ (L. 2242-11, 1°)");
       L.push("");
       L.push("  thème                                  | périodicité | prochaine");
@@ -716,9 +750,15 @@
       // PART 2: Restructured content with À COMPLÉTER
       L.push("VOTRE CALENDRIER, À COMPLÉTER");
       L.push("");
-      L.push("Même structure que l'exemple. Remplissez chaque champ selon votre calendrier réel.");
-      L.push("");
-      L = L.concat(entete(ctx, "Le calendrier des négociations obligatoires",
+      /* LA CONSIGNE N'EST PAS UNE LIGNE DU DOCUMENT.
+
+         « Remplissez chaque champ selon votre calendrier réel » ouvrait le Word,
+         seule sur sa ligne, au-dessus du nom de l'entreprise ; et comme elle
+         tenait la place du premier paragraphe, celui qui se rend ligne par
+         ligne, l'en-tête qui la suivait sortait collé en une seule ligne :
+         adresse, SIRET, représentant et effectif bout à bout. Relevé le
+         27 novembre 2026. Les crochets disent déjà ce qui reste à remplir. */
+      L = L.concat(enteteParLigne(ctx, "Le calendrier des négociations obligatoires",
         "articles L. 2242-10 à L. 2242-13 du code du travail"));
 
       modeDEmploi(L, "la pièce qui arrête le calendrier de vos négociations obligatoires");

@@ -613,7 +613,11 @@
        numérotée, l'autre non. Relevé le 26 septembre 2026. */
     $("word").disabled = true;
     $("word").title = "La note se télécharge une fois validée et numérotée.";
-    $("word-dit").textContent = "Le Word se télécharge une fois la note validée et numérotée.";
+    /* Les boutons grisés ne s'expliquaient que par une infobulle, invisible
+       au doigt (27 novembre 2026) : la raison s'écrit sous le Word pour les
+       trois documents qui attendent le numéro. */
+    $("word-dit").textContent = "Le Word" + (MOD && MOD.adjonction ? ", le courrier à l'inspection" : "") +
+      " et la feuille d'émargement se téléchargent une fois la note validée et numérotée.";
     $("word-dit").hidden = false;
     $("valider-dit").textContent = "";
     $("valider-dit").hidden = true;
@@ -729,6 +733,7 @@
     $("word-dit").hidden = true;
     $("emargement").disabled = false;
     $("emargement").title = "";
+    direEmargement();
     if ($("lettre-inspection")) { $("lettre-inspection").disabled = false; $("lettre-inspection").title = ""; }
     $("etat").textContent = "Note inscrite au registre sous la référence " + EMISE.reference + ".";
     rendreRegistre();
@@ -804,7 +809,8 @@
       return;
     }
     z.textContent = L.length + " ligne" + (L.length > 1 ? "s" : "") + ", " +
-      (seuls ? "les conducteurs du registre" : "les salariés en poste au registre") + ".";
+      (seuls ? "les conducteurs du registre" : "les salariés en poste au registre") + "." +
+      ($("emargement").disabled ? " La feuille se télécharge une fois la note validée et numérotée." : "");
   }
   $("qui-emarge").addEventListener("change", direEmargement);
 
