@@ -533,21 +533,6 @@
       });
     });
   }
-  /* ROULANT OU NON, D'APRÈS LE REGISTRE (27 novembre 2026). La case de sa
-     fiche restait « à préciser » alors que la page le range déjà dans un
-     groupe d'après l'emploi écrit au registre. Tant que la case est vide, elle
-     montre ce que le registre en dit ; rien n'est enregistré tant que personne
-     ne la change. La case est dessinée par flotte.js : on n'en change que le
-     libellé du choix vide, à chaque dessin. */
-  function selonRegistre(p) {
-    var sel = $("fiche-s").querySelector('select[data-ch="roulant"]');
-    if (!sel || sel.value || !sel.options.length) return;
-    sel.options[0].textContent = "D'après le registre : " + (roulant(p) ? "roulant" : "non roulant");
-    var lab = sel.parentNode;
-    if (lab && !lab.querySelector(".selon-reg")) lab.insertAdjacentHTML("beforeend",
-      '<small class="aide selon-reg">Déduit de l\'emploi écrit au registre (' + ech(p.poste || "non précisé") +
-      '). Choisissez Oui ou Non pour l\'enregistrer.</small>');
-  }
   function peindreDetail(p) {
     var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
     $("detail-tete").innerHTML = '<div class="tete"><span class="rond">' + ech(ini) + '</span><span><b>' + ech(VOLETS[DETAIL]) + '</b><span>' +
@@ -581,7 +566,6 @@
     if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie($("fiche-s"), p.id, roulant(p), function () {
       /* une date changée change ses échéances */
       charger();
-      selonRegistre(p);
     }, DETAIL);
     else $("fiche-s").innerHTML = '<p class="vide">Cette page n\'a pas pu s\'ouvrir. Rechargez la page.</p>';
   }

@@ -30,6 +30,7 @@
      Documents.lire(id)                   -> { ..., contenu }
      Documents.dernier(rubrique, sorte)   -> le plus récent, contenu compris
      Documents.supprimer(id)
+     Documents.renommer(id, nom)          -> la ligne, sous son nouveau nom
      Documents.vider(rubrique)
 
    « sorte » vaut « depose » ou « produit » : ce que le client a remis, ou ce
@@ -170,7 +171,7 @@
   }
   function estRetire(nom) {
     var n = String(nom == null ? "" : nom).trim();
-    return !!n && retires().indexOf(n) >= 0;
+    return !!n && (retires().indexOf(n) >= 0 || renommes().indexOf(n) >= 0);
   }
   function noterRetire(nom) {
     var n = String(nom == null ? "" : nom).trim();
@@ -181,6 +182,53 @@
   function rendre(nom) {
     var n = String(nom == null ? "" : nom).trim();
     garderRetires(retires().filter(function (x) { return x !== n; }));
+  }
+
+  /* RENOMMER UNE PIÈCE (27 novembre 2026). « Mes documents » n'offrait que
+     voir, télécharger et retirer : un fichier mal nommé le restait. La ligne
+     garde son identifiant, sa rubrique, sa date et son contenu ; seul le nom
+     change.
+
+     L'ancien nom est gardé à part : le dossier du client repose ses pièces
+     en sautant celles dont le nom est déjà là, et une pièce renommée, qui ne
+     porte plus son nom d'origine, serait sinon rentrée une seconde fois.
+     Ces noms ne vont pas dans la liste des pièces retirées : la pièce n'est
+     pas retirée, elle a changé de nom. */
+  var CLE_RENOMMES = "documents-renommes";
+  function renommes() {
+    try { return JSON.parse(window.localStorage.getItem(CLE_RENOMMES) || "[]") || []; }
+    catch (e) { return []; }
+  }
+  function renommer(id, nom) {
+    var n = String(nom == null ? "" : nom).trim();
+    if (!n) return Promise.reject(new Error("Le nom est vide."));
+    /* La lecture et la réécriture se suivent dans la même transaction, par
+       leurs rappels directs : une promesse entre les deux laisserait certains
+       navigateurs fermer la transaction avant la réécriture. */
+    return transaction("readwrite").then(function (m) {
+      return new Promise(function (ok, non) {
+        var g = m.get(Number(id));
+        g.onerror = function () { non(g.error); };
+        g.onsuccess = function () {
+          var l = g.result;
+          if (!l) { non(new Error("Ce document n'est plus dans la base.")); return; }
+          var avant = String(l.nom || "").trim();
+          l.nom = n;
+          var p = m.put(l);
+          p.onerror = function () { non(p.error); };
+          p.onsuccess = function () {
+            if (avant && avant !== n) {
+              var L = renommes();
+              if (L.indexOf(avant) < 0) {
+                L.push(avant);
+                try { window.localStorage.setItem(CLE_RENOMMES, JSON.stringify(L)); } catch (e) {}
+              }
+            }
+            ok(sansContenu(l));
+          };
+        };
+      });
+    });
   }
 
   function supprimer(id) {
@@ -285,7 +333,7 @@
 
   window.Documents = {
     enregistrer: enregistrer, liste: liste, lire: lire, dernier: dernier,
-    supprimer: supprimer, vider: vider, rubriques: rubriques,
+    supprimer: supprimer, vider: vider, rubriques: rubriques, renommer: renommer,
     /* Les pièces retirées : le dossier du client les saute à la repose, et
        « Rendre la pièce » les oublie. */
     estRetire: estRetire, retires: retires, rendre: rendre,

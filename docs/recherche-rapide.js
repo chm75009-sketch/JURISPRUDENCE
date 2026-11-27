@@ -109,6 +109,12 @@
       mots: "elections election cse vote voter candidats candidature liste protocole preelectoral pv carence proces verbal carence premier second tour scrutin" },
     { nom: "Suivi tachygraphe", ou: "Tachygraphe et cartes conducteurs", page: "conformite-transport.html",
       mots: "tachygraphe chronotachygraphe carte conducteur telechargement ddd temps conduite repos pause infraction controle dreal drieat 561 temps service" },
+    /* LA PANNE EST UN ENTRETIEN, PAS UN SINISTRE. Relevé le 27 novembre 2026 :
+       « camion en panne » ouvrait les sinistres du parc, faute d'une entrée
+       pour l'entretien. La fiche du camion a son onglet Entretien, que
+       flotte.html?faire=entretien ouvre directement. */
+    { nom: "Entretien ou réparation d'un camion", ou: "Fiche du camion, onglet Entretien", page: "flotte.html?faire=entretien",
+      mots: "panne pannes depanner depannage depanneuse remorquer reparation reparations reparer repare entretien entretenir vidange revision maintenance garage garagiste mecanique mecanicien atelier pneu pneus crevaison creve frein freins plaquettes embrayage batterie demarre demarrage moteur fuite huile voyant ampoule phare clim climatisation hayon groupe froid adblue courroie" },
     { nom: "Sinistres du parc", ou: "Accident, bris de glace, vol", page: "parc-sinistres.html",
       mots: "sinistre sinistres declarer declaration accident camion vehicule bris glace vol vole incendie vandalisme choc degats dommage collision accrochage constat assurance" },
     { nom: "Dépenses du parc", ou: "Coûts par véhicule", page: "parc-depenses.html",
@@ -243,7 +249,11 @@
      quelqu'un, pas ce qu'on veut faire : ils ne comptent que pour un point,
      pour que le geste (sanctionner, licencier, déclarer) choisisse l'écran. */
   var GENERIQUES = { chauffeur: 1, chauffeurs: 1, conducteur: 1, conducteurs: 1, salarie: 1,
-    salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1 };
+    salaries: 1, employe: 1, employes: 1, personne: 1, gars: 1, quelqu: 1, homme: 1, lui: 1,
+    /* « attestation employeur » : l'employeur, c'est celui qui cherche, il ne
+       choisit pas l'écran (relevé le 27 novembre 2026, la mise à la retraite
+       sortait à égalité avec l'attestation). */
+    employeur: 1 };
 
   /* LES FORMES D'UN MÊME MOT. « téléphonait » est « téléphone », « camions »
      est « camion », « malade » est « maladie » : un mot reconnu à sa racine
@@ -313,6 +323,49 @@
       .filter(function (o) { return o.s > 0; })
       .sort(function (a, b) { return b.s - a.s; });
   }
+
+  /* « PAS ÇA ? » NE PROPOSE QUE CE QUI A UN VRAI RAPPORT. Relevé le
+     27 novembre 2026 : « solde de tout compte » proposait en second la
+     suspension du permis et le procès-verbal du CSE, sur un mot isolé
+     (« tout », « compte »). Une autre piste n'est retenue que si elle obtient
+     au moins les trois quarts du score de la première : elle répond alors à
+     la demande presque aussi bien, elle n'y touche pas par hasard. Trois au
+     plus. */
+  var SEUIL_AUTRES = 0.75;
+  function retenir(liste) {
+    if (!liste.length) return [];
+    var min = liste[0].s * SEUIL_AUTRES;
+    return [liste[0]].concat(liste.slice(1).filter(function (o) { return o.s >= min; }).slice(0, 3));
+  }
+
+  /* CE QUI N'A PAS ENCORE D'ÉCRAN. Relevé le 27 novembre 2026 : « congé
+     maternité » ouvrait les congés payés, « fin de période d'essai » le
+     contrat de travail. Aucun écran de l'application ne traite la maternité,
+     le congé de paternité, le congé parental, ni la rupture de la période
+     d'essai : mieux vaut le dire que mener ailleurs. Le jour où l'écran
+     existe, on retire la ligne et on ajoute l'entrée dans DEST. */
+  var SANS_ECRAN = [
+    { si: /\b(maternite|grossesse|enceinte)\b/, sujet: "la maternité" },
+    { si: /\bpaternite\b/, sujet: "le congé de paternité" },
+    { si: /\bparental\b/, sujet: "le congé parental" },
+    { si: /\bessai\b/, et: /\b(fin|finir|terminer|termine|rompre|romp[a-z]*|rupture|arreter|arrete|interromp[a-z]*|stopper|garder|convient|renvoyer|licenci[a-z]*|virer|vire|separer|partir|quitter|quitte|terme)\b/,
+      sujet: "la rupture de la période d'essai" }
+  ];
+  function sansEcran(texte) {
+    var t = norm(texte);
+    for (var i = 0; i < SANS_ECRAN.length; i++) {
+      var c = SANS_ECRAN[i];
+      if (c.si.test(t) && (!c.et || c.et.test(t))) return c.sujet;
+    }
+    return null;
+  }
+
+  /* LA BASE DE RÉPONSES N'EXISTE PAS ENCORE. Tant qu'elle n'existe pas, aucun
+     bouton ne promet une réponse : l'onglet « Poser une question » renvoie
+     aux questions au cabinet, et le bouton « C'est une question ? » reste
+     caché. Le jour où la base est montée, on passe ce drapeau à true. */
+  var BASE_REPONSES = false;
+
   function parPage(page) {
     for (var i = 0; i < DEST.length; i++) if (DEST[i].page === page) return DEST[i];
     return null;
@@ -423,6 +476,7 @@
     var res = hote.querySelector(".rr-res");
     var ecoute = hote.querySelector(".rr-ecoute");
     var mic = hote.querySelector(".rr-mic");
+    var ligne = hote.querySelector(".rr-ligne");
 
     function aller(page) { window.location.href = page; }
 
@@ -431,6 +485,12 @@
       titreEl.textContent = m.titre;
       sousEl.textContent = m.sous;
       champ.setAttribute("placeholder", m.exemple);
+      /* Sans base de réponses, l'onglet question n'a ni champ ni micro : on
+         n'écrit pas une question qui ne recevra pas de réponse ici. */
+      var sansChamp = mode === "question" && !BASE_REPONSES;
+      ligne.style.display = sansChamp ? "none" : "";
+      mic.style.display = sansChamp ? "none" : "";
+      if (sansChamp) sousEl.textContent = "Une question de droit du travail se pose au cabinet";
     }
 
     /* MODE ACTION : « J'ai compris », le bouton qui ouvre, puis les autres. */
@@ -438,7 +498,9 @@
       res.textContent = "";
       var texte = champ.value.trim();
       if (!texte) return;
-      var liste = classer(texte);
+      var manque = sansEcran(texte);
+      if (manque) { pasDEcran(manque); return; }
+      var liste = retenir(classer(texte));
 
       if (liste.length) {
         var best = liste[0].d;
@@ -471,7 +533,7 @@
         res.appendChild(blocAutres(sugg));
       }
 
-      if (estQuestion(texte)) {
+      if (BASE_REPONSES && estQuestion(texte)) {
         var bascule = document.createElement("button");
         bascule.type = "button";
         bascule.className = "rr-bascule";
@@ -490,22 +552,37 @@
         a.href = d.page;
         a.innerHTML = '<span><span class="rr-nom"></span><span class="rr-ou"></span></span><span class="rr-fl">›</span>';
         a.querySelector(".rr-nom").textContent = d.nom;
-        a.querySelector(".rr-ou").textContent = d.ou;
+        /* Le sous-titre qui redit le nom ne s'affiche pas : « Forfait en
+           jours » se lisait deux fois sur la même ligne (27 novembre 2026). */
+        var ou = a.querySelector(".rr-ou");
+        if (d.ou && norm(d.nom).indexOf(norm(d.ou).trim()) < 0) ou.textContent = d.ou;
+        else ou.parentNode.removeChild(ou);
         box.appendChild(a);
       });
       return box;
     }
 
-    /* MODE QUESTION : la base de réponses est montée à l'étape suivante. */
+    /* Ce que l'application ne fait pas encore se dit franchement, avec la
+       seule suite possible : poser la question au cabinet. */
+    function pasDEcran(sujet) {
+      var v = document.createElement("div");
+      v.className = "rr-vide";
+      v.textContent = "L'application n'a pas encore d'écran pour " + sujet + ". Vous pouvez poser la question au cabinet :";
+      res.appendChild(v);
+      res.appendChild(blocAutres([parPage("questions.html")]));
+    }
+
+    /* MODE QUESTION : tant que la base de réponses n'existe pas, l'onglet ne
+       promet rien qu'il ne tient pas. Il renvoie, dès qu'on l'ouvre, à la
+       page des questions au cabinet. */
     function rendreQuestion() {
       res.textContent = "";
-      var texte = champ.value.trim();
-      if (!texte) return;
+      if (BASE_REPONSES) return;
       var a = document.createElement("div");
-      a.className = "rr-attente";
-      a.textContent = "La base de réponses du transport est en cours de constitution. " +
-        "Elle répondra ici aux questions de temps de conduite, de repos, de documents à bord, etc.";
+      a.className = "rr-vide";
+      a.textContent = "Les réponses ne s'affichent pas encore ici. Posez votre question au cabinet :";
       res.appendChild(a);
+      res.appendChild(blocAutres([parPage("questions.html")]));
     }
 
     function rendre() {
@@ -520,7 +597,7 @@
       }
       majTete();
       rendre();
-      champ.focus();
+      if (ligne.style.display !== "none") champ.focus();
     }
 
     for (var i = 0; i < onglets.length; i++) {

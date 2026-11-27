@@ -654,7 +654,10 @@
       ? "Contrat de régularisation : il constate la relation en cours et se signe à sa date. " +
         "Ne l'antidatez pas ; c'est l'ancienneté qui remonte, et elle est écrite à l'article 1."
       : "";
-    $("titre-haut").textContent = (NATURE === "cdd" ? "CDD " : "CDI ") + PROFIL.nom.toLowerCase();
+    /* Seule l'initiale passe en minuscule : le titre entier en minuscules
+       écrivait « pl ou spl » et « adr ». Relevé le 27 novembre 2026. */
+    $("titre-haut").textContent = (NATURE === "cdd" ? "CDD " : "CDI ") +
+      PROFIL.nom.charAt(0).toLowerCase() + PROFIL.nom.slice(1);
     garder();
     ecran("e-contrat");
   });

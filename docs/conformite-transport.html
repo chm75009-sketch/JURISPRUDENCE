@@ -29,6 +29,9 @@
      surface et filet. Sans ces deux lignes, les cartes n'avaient ni fond ni bord. */
   :root{--fond-2:var(--surface);--trait:var(--filet)}
   .enveloppe{max-width:820px;margin:0 auto;padding:0 16px}
+  /* Le Retour reste en haut quand la page descend sur un volet (27 novembre
+     2026) : on arrive de la page du salarié directement sur l'étape choisie. */
+  .haut{position:sticky;top:0;z-index:20;background:var(--fond)}
   h1.titre{font:600 clamp(22px,3.4vw,30px)/1.3 system-ui;margin:var(--e5) 0 4px}
   .sous{color:var(--texte-2);margin:0 0 var(--e5)}
   .espace{margin:var(--e6) 0}
@@ -261,6 +264,11 @@
     try{ return new Intl.DateTimeFormat("fr-FR",{day:"numeric",month:"short",year:"numeric"})
       .format(new Date(iso+"T00:00:00")); }catch(e){ return iso; }
   }
+  /* Une date ISO rendue jj/mm/aaaa : 2026-11-29 devient 29/11/2026. */
+  function jma(iso){
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
+    return m ? m[3] + "/" + m[2] + "/" + m[1] : (iso || "");
+  }
 
   if (!CT || !CT.estTransport()) {
     corps.innerHTML = '<div class="nontransport">Ce module s\'adresse aux entreprises de transport routier ' +
@@ -359,7 +367,7 @@
     var cible = document.getElementById("delai-disc");
     var d = CT.delaiDisciplinaire(e.target.value);
     if (!d) { cible.textContent = ""; return; }
-    cible.innerHTML = '<p>Dernier jour pour engager la sanction : <b>' + ech(d.echeance) +
+    cible.innerHTML = '<p>Dernier jour pour engager la sanction : <b>' + ech(jma(d.echeance)) +
       '</b> <span class="pastille f-' + (d.jours < 0 ? "rouge" : d.jours <= 7 ? "orange" : "vert") +
       '">' + ech(d.etat) + (d.jours != null ? " (" + d.jours + " j)" : "") + '</span></p>' +
       '<p class="bloc-note">' + ech(d.reserve) + '</p>';
@@ -383,7 +391,9 @@
         '<input type="date" data-k="' + (carte ? "c" : "v") + '" data-qui="' + ech(x.qui) +
         '" value="' + (x.dernier || "") + '"></div>' +
         '<div class="et-ligne"><span class="lab">Prochaine limite</span>' +
-        '<span><b>' + (x.date ? ech(joliDate(x.date)) : "à renseigner") + '</b> ' +
+        /* Sans date, la pastille seule dit « à renseigner » : le mot n'est
+           plus écrit deux fois sur la ligne (27 novembre 2026). */
+        '<span>' + (x.date ? '<b>' + ech(joliDate(x.date)) + '</b> ' : '') +
         '<span class="pastille f-' + fond + '">' + ech(x.etat) +
         (x.jours != null ? " (" + x.jours + " j)" : "") + '</span></span></div>';
       if (!carte) {
@@ -892,7 +902,7 @@
     var ds = document.getElementById("date-seance").value || null;
     var tb = document.getElementById("retro-corps"), h = '';
     CT.retroplanning(ds).forEach(function (e) {
-      h += '<tr><td>' + ech(e.quoi) + '</td><td>' + ech(e.regle) + '</td><td>' + ech(e.date || "") + '</td></tr>';
+      h += '<tr><td>' + ech(e.quoi) + '</td><td>' + ech(e.regle) + '</td><td>' + ech(jma(e.date)) + '</td></tr>';
     });
     tb.innerHTML = h;
   }

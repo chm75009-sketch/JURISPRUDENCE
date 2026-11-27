@@ -68,12 +68,25 @@
 
 <header class="site">
   <div class="wrap">
-    <p class="marque">Mes documents</p>
+    <p class="marque" id="marque">Mes documents</p>
     <div class="outils"><a href="index.html">Accueil</a></div>
   </div>
 </header>
 
 <main class="wrap">
+  <!-- LE COFFRE FORT D'UN SALARIÉ (27 novembre 2026). Venu de sa page
+       (?r=salarie-<identifiant>), on voit en haut de qui c'est le coffre, et
+       ses pièces tout de suite : l'export et les quatre tuiles, qui servent
+       à tout le dossier, sont rangés tant qu'on est dans son coffre. -->
+  <style>
+    .coffre-t{font:700 22px/1.25 system-ui;color:var(--encre);margin:12px 0 2px}
+    .coffre-tete .tout-voir{margin:2px 0 0}
+    .rendu-dit{font-size:var(--t1);color:var(--texte-2);margin:8px 0 0}
+  </style>
+  <div class="coffre-tete" id="coffre-tete" hidden>
+    <h1 class="coffre-t" id="coffre-t"></h1>
+  </div>
+
   <p class="rappel-fiche" id="chapeau">Ce que vous avez déposé et ce que l'application a produit,
     gardés sur ce poste, rubrique par rubrique.</p>
 
@@ -203,6 +216,8 @@
       (d.note ? " · " + ech(d.note) : "") + "</p>" +
       '<div class="barre"><button type="button" data-voir="' + d.id + '">Voir</button>' +
       '<button type="button" data-tel="' + d.id + '">Télécharger</button>' +
+      /* Renommer un document mal nommé (27 novembre 2026). */
+      '<button type="button" data-ren="' + d.id + '" data-nom="' + ech(d.nom) + '">Renommer</button>' +
       '<button type="button" class="second" data-del="' + d.id + '">Retirer</button></div></div>';
   }
 
@@ -398,6 +413,21 @@
      pièces sous le nom d'un salarié ou la plaque d'un camion, lus dans
      l'intitulé de la pièce comme le font déjà les deux filtres. */
   var VUE = null;
+  /* Le coffre fort ouvert (« salarie-<identifiant> »), et celui d'où l'on
+     est venu, pour y revenir par le retour. */
+  var COFFRE = null, RUB_COFFRE = null;
+  function nomCoffre() { return nomDe(RUB_COFFRE || COFFRE || "").replace(/^Salarié : /, ""); }
+  function disposer() {
+    var c = !!COFFRE;
+    $("chapeau").hidden = c;
+    document.querySelector(".exporter-bloc").hidden = c;
+    $("quatre").hidden = c;
+    $("filtres").hidden = c;
+    $("coffre-tete").hidden = !c;
+    $("marque").textContent = c ? "Coffre fort" : "Mes documents";
+    document.title = c ? "Coffre fort de " + nomCoffre() : "Mes documents";
+    if (c) $("coffre-t").textContent = "Coffre fort de " + nomCoffre();
+  }
   var RUB_TYPES = ["notes-service", "courriers", "registre", "controler-ri", "controler-duerp", "duerp",
     "controler-affichages", "controle-urssaf", "controler-mutuelle", "controler-discipline", "audit-discipline", "audit-sst"];
   var RUB_COLLECTIF = ["controler-cse", "audit-cse", "controler-nao", "audit-nao", "bdese", "controler-bdese", "audit-bdese",
@@ -434,8 +464,28 @@
         $("n-" + v).textContent = n + " pièce" + (n > 1 ? "s" : "");
       });
       Array.prototype.forEach.call($("quatre").children, function (b) { b.classList.toggle("ici", b.getAttribute("data-vue") === VUE); });
-      $("tout-voir").hidden = !VUE;
+      $("tout-voir").hidden = !VUE && !COFFRE;
       var toutesPleines = pleines;
+      /* SON COFFRE FORT : toutes les pièces de sa rubrique, quel que soit
+         leur nom (photos de sa fiche, fiche signée, contrats déposés depuis
+         sa page). Le filtre sur le nom de fichier en laissait dehors un
+         « contrat-signe.pdf » déposé pour lui. Les pièces rangées ailleurs
+         et qui portent son nom suivent, rubrique par rubrique, comme avant. */
+      if (COFFRE) {
+        var mots = sansAccent(nomCoffre()).trim().split(/\s+/), siennes = [], ailleurs = [];
+        pleines.forEach(function (x) {
+          if (x.r === COFFRE) { siennes = x.L; return; }
+          var F = x.L.filter(function (d) { return porte(d, mots); });
+          if (F.length) ailleurs.push({ r: x.r, titre: nomDe(x.r) + ", à son nom", L: F });
+        });
+        pleines = (siennes.length ? [{ r: COFFRE, titre: "Ses pièces", L: siennes }] : []).concat(ailleurs);
+        if (!pleines.length) {
+          $("f-dit").textContent = "";
+          $("liste").innerHTML = '<div class="avis info"><b>Son coffre fort est vide pour l\'instant</b>' +
+            "Les photos et la fiche signée qu'il envoie, et les contrats déposés depuis sa page, viennent ici.</div>";
+          return;
+        }
+      }
       if (VUE) pleines = vueDe(pleines, VUE);
       if (VUE && !pleines.length) {
         $("f-dit").textContent = "";
@@ -457,8 +507,8 @@
         total += F.length;
         if (F.length) gardees.push({ r: x.r, titre: x.titre, L: F });
       });
-      var actif = !!($("f-texte").value.trim() || $("f-salarie").value || $("f-vehicule").value);
-      $("f-dit").textContent = actif
+      var actif = !COFFRE && !!($("f-texte").value.trim() || $("f-salarie").value || $("f-vehicule").value);
+      $("f-dit").textContent = COFFRE ? total + " pièce" + (total > 1 ? "s" : "") + " dans son coffre fort" : actif
         ? total + " document" + (total > 1 ? "s" : "") + " sur " +
           pleines.reduce(function (n, x) { return n + x.L.length; }, 0) + " répond" +
           (total > 1 ? "ent" : "") + " au filtre"
@@ -485,26 +535,53 @@
          comme retirée, et la repose la saute. Reste à pouvoir changer d'avis :
          la liste est sous les rubriques, avec un bouton par nom. Relevé le
          26 septembre 2026. */
-      var horsBase = (window.Documents.retires && window.Documents.retires()) || [];
+      /* CE QUI REVIENT, ET CE QUI NE REVIENT PAS (27 novembre 2026).
+         « Rendre cette pièce » annonçait qu'elle reviendrait à la prochaine
+         entrée. Seules reviennent les pièces du dossier transmis au client,
+         que son site repose à chaque entrée ; un fichier déposé sur ce poste
+         est effacé quand on le retire, et rien ne le ramène. Sur un poste qui
+         ne reçoit pas de dossier (aucune entrée notée), rien ne revient
+         jamais : la liste le dit, sans bouton qui promettrait le contraire. */
+      var horsBase = COFFRE ? [] : ((window.Documents.retires && window.Documents.retires()) || []);
+      var recoitDossier = false;
+      try { recoitDossier = !!window.localStorage.getItem("dossier-ouvert-le"); } catch (e) { recoitDossier = false; }
       if (horsBase.length)
         $("liste").insertAdjacentHTML("beforeend",
           '<section class="rub"><h2>Pièces retirées</h2>' +
           '<p class="compte">' + horsBase.length + " pièce" + (horsBase.length > 1 ? "s" : "") +
-          " du dossier " + (horsBase.length > 1 ? "ont" : "a") + " été retirée" +
-          (horsBase.length > 1 ? "s" : "") + " de ce poste. " +
-          (horsBase.length > 1 ? "Elles ne reviendront" : "Elle ne reviendra") +
-          " plus à la prochaine entrée.</p>" +
+          (horsBase.length > 1 ? " ont" : " a") + " été retirée" + (horsBase.length > 1 ? "s" : "") + " de ce poste. " +
+          (recoitDossier
+            ? "Celles qui viennent du dossier transmis ne reviennent plus à la prochaine entrée, sauf si vous les rendez. Un fichier déposé sur ce poste, lui, a été effacé : il ne revient pas, il faut le déposer de nouveau."
+            : "Un fichier retiré a été effacé de ce poste : il ne revient pas, il faut le déposer de nouveau.") + "</p>" +
           horsBase.map(function (n) {
             return '<div class="doc"><div class="tete"><b>' + ech(n) + "</b>" +
               '<span class="etiq">retirée</span></div>' +
-              '<div class="barre"><button type="button" class="second" data-rendre="' +
-              ech(n) + '">Rendre cette pièce</button></div></div>';
+              (recoitDossier ? '<div class="barre"><button type="button" class="second" data-rendre="' +
+              ech(n) + '">Rendre cette pièce</button></div>' : "") + "</div>";
           }).join("") + "</section>");
       Array.prototype.forEach.call(document.querySelectorAll("[data-rendre]"), function (b) {
         b.addEventListener("click", function () {
           window.Documents.rendre(b.getAttribute("data-rendre"));
           b.disabled = true;
-          b.textContent = "Rendue : elle reviendra à la prochaine entrée";
+          b.textContent = "Rendue";
+          b.insertAdjacentHTML("afterend", '<p class="rendu-dit">Si elle vient du dossier transmis, elle reviendra à la prochaine entrée. ' +
+            "Si c'est un fichier déposé sur ce poste, elle ne reviendra pas : déposez-le de nouveau.</p>");
+        });
+      });
+      Array.prototype.forEach.call(document.querySelectorAll("[data-ren]"), function (b) {
+        b.addEventListener("click", function () {
+          var avant = b.getAttribute("data-nom") || "";
+          var n = window.prompt("Nouveau nom du document :", avant);
+          if (n == null) return;
+          n = n.trim();
+          if (!n || n === avant) return;
+          /* Sans son extension, le fichier téléchargé ne s'ouvrirait plus :
+             elle est remise si le nouveau nom n'en porte pas. */
+          var ext = (/\.[a-z0-9]{1,5}$/i.exec(avant) || [""])[0];
+          if (ext && !/\.[a-z0-9]{1,5}$/i.test(n)) n += ext;
+          window.Documents.renommer(b.getAttribute("data-ren"), n).then(rendre, function (e) {
+            window.alert("Le document n'a pas pu être renommé" + (e && e.message ? " : " + e.message : "."));
+          });
         });
       });
       Array.prototype.forEach.call(document.querySelectorAll("[data-voir]"), function (b) {
@@ -527,27 +604,31 @@
     VUE = VUE === b.getAttribute("data-vue") ? null : b.getAttribute("data-vue");
     rendre();
   });
-  $("tout-voir").addEventListener("click", function () { VUE = null; rendre(); });
-  /* Le retour ramène d'une vue à la liste entière ; sinon, il quitte la page. */
-  /* Venu de la page d'un salarié (?r=) : le retour y ramène directement,
-     sans s'arrêter sur la vue d'ensemble des documents. */
-  var VIENT_DU_SALARIE = /[?&]r=salarie-/.test(location.search);
+  /* « VOIR TOUS LES DOCUMENTS » VEUT DIRE TOUS (27 novembre 2026) : depuis
+     le coffre fort d'un salarié, il gardait le filtre sur son nom et disait
+     « 0 document sur 2 ». Il quitte le coffre, la vue et les filtres. */
+  $("tout-voir").addEventListener("click", function () {
+    VUE = null; COFFRE = null;
+    $("f-texte").value = ""; $("f-salarie").value = ""; $("f-vehicule").value = "";
+    disposer(); rendre(); window.scrollTo(0, 0);
+  });
+  /* Le retour remonte d'un écran : d'une vue à la liste entière, de la
+     liste entière au coffre fort d'où l'on venait ; sinon, il quitte la
+     page, et ramène à la page du salarié quand on en vient. */
   if (window.Barre && window.Barre.avant) window.Barre.avant(function () {
-    if (!VUE || VIENT_DU_SALARIE) return false;
-    VUE = null; rendre(); return true;
+    if (VUE) { VUE = null; rendre(); return true; }
+    if (RUB_COFFRE && !COFFRE) { COFFRE = RUB_COFFRE; disposer(); rendre(); window.scrollTo(0, 0); return true; }
+    return false;
   });
 
   remplirFiltres();
-  /* VENU DE LA PAGE D'UN SALARIÉ (?r=salarie-<identifiant>) : la vue
-     « Salariés », filtrée sur lui. Ses pièces portent son nom. */
+  /* VENU DE LA PAGE D'UN SALARIÉ (?r=salarie-<identifiant>) : son coffre
+     fort, c'est-à-dire sa rubrique entière. */
   try {
     var rq = new URLSearchParams(location.search).get("r") || "";
-    if (/^salarie-/.test(rq)) {
-      var nomQ = nomDe(rq).replace(/^Salarié : /, "");
-      Array.prototype.forEach.call($("f-salarie").options, function (o) { if (o.value === nomQ) $("f-salarie").value = nomQ; });
-      if ($("f-salarie").value) VUE = "salaries";
-    }
+    if (/^salarie-/.test(rq)) { RUB_COFFRE = rq; COFFRE = rq; }
   } catch (e) {}
+  disposer();
   ["f-texte", "f-salarie", "f-vehicule"].forEach(function (id) {
     $(id).addEventListener("input", rendre);
     $(id).addEventListener("change", rendre);

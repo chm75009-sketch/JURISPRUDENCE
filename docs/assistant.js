@@ -613,7 +613,7 @@
     "border-bottom:1px solid #dcdfe4;background:#f6f7f9}" +
     ".assist-tete b{font:600 16px/1.2 system-ui;color:#16181d;margin-right:auto}" +
     ".assist-tete select{font:13px/1.2 system-ui;padding:5px 6px;border:1px solid #dcdfe4;" +
-    "border-radius:7px;background:#fff;color:#2b313a;max-width:110px}" +
+    "border-radius:7px;background:#fff;color:#2b313a;flex:none;max-width:none}" +
     ".assist-tete button{font:13px/1.2 system-ui;padding:6px 10px;border-radius:7px;cursor:pointer;" +
     "border:1px solid #dcdfe4;background:#fff;color:#2b313a}" +
     ".assist-tete button:hover{border-color:#1F3864;color:#1F3864}" +
@@ -646,7 +646,17 @@
     ".assist-pied{padding:7px 14px;border-top:1px solid #eef0f3;font-size:12px;color:#8a93a0;" +
     "display:flex;gap:10px;align-items:center}" +
     ".assist-pied a{color:#8a93a0;cursor:pointer;text-decoration:underline}" +
-    "@media (max-width:520px){#assist-panneau{width:100vw}}";
+    "@media (max-width:520px){#assist-panneau{width:100vw}}" +
+    /* LE BOUTON PREND SA PLACE DANS LA BARRE DU BAS, QUAND IL Y EN A UNE.
+       Relevé le 27 novembre 2026 : au téléphone, flottant au-dessus de la
+       barre, il cachait la fin du texte de la carte Gérer à l'accueil, et sur
+       plusieurs pages la fin des listes et les boutons de validation. Dans la
+       barre, il ne recouvre plus rien, à aucun moment du défilement. */
+    "#barre-bas #assist-bouton.dans-bas{position:static;flex:none;align-self:center;" +
+    "width:46px;height:46px;margin:0 0 0 6px;font-size:20px;box-shadow:0 2px 8px rgba(22,24,29,.22)}" +
+    /* Sans barre, il flotte : la page reçoit sous son contenu la hauteur du
+       bouton et de sa marge, barre du bas comprise si elle revient. */
+    "body.assist-flottant.avec-bas{padding-bottom:calc(150px + env(safe-area-inset-bottom))}";
 
   function nouvelleBulle(genre) {
     var d = document.createElement("div");
@@ -878,6 +888,28 @@
     bouton.innerHTML = "&#10022;";              // ✦
     document.body.appendChild(bouton);
 
+    /* La barre du bas est posée par barre.js au chargement du document, parfois
+       après ce script : on l'attend, et le bouton s'y range dès qu'elle est là. */
+    function ranger() {
+      var bas = document.getElementById("barre-bas");
+      if (bas && bouton.parentNode !== bas) {
+        bas.appendChild(bouton);
+        bouton.classList.add("dans-bas");
+        bouton.style.display = "";
+      }
+      document.body.classList.toggle("assist-flottant", !bouton.classList.contains("dans-bas"));
+      return !!bas;
+    }
+    if (!ranger()) {
+      document.addEventListener("DOMContentLoaded", ranger);
+      window.addEventListener("load", ranger);
+      if (window.MutationObserver) {
+        var guet = new MutationObserver(function () { if (ranger()) guet.disconnect(); });
+        guet.observe(document.body, { childList: true });
+        window.setTimeout(function () { guet.disconnect(); }, 10000);
+      }
+    }
+
     /* LE BOUTON S'EFFACE PENDANT QU'ON REMPLIT UN CHAMP.
 
        Posé en bas à droite, il recouvrait la fin du champ « Secteur » de la
@@ -894,6 +926,8 @@
     var CHAMPS = /^(INPUT|SELECT|TEXTAREA)$/;
     document.addEventListener("focusin", function (ev) {
       var t = ev.target;
+      /* Rangé dans la barre du bas, il ne gêne aucun champ : il reste. */
+      if (bouton.classList.contains("dans-bas")) return;
       if (t && (CHAMPS.test(t.tagName) || t.isContentEditable)) bouton.style.display = "none";
     });
     document.addEventListener("focusout", function () {

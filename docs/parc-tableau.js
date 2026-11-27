@@ -168,9 +168,13 @@
     var ages = V.map(function (v) { return moisDepuis(v.mec || v.dateAchat); }).filter(function (m) { return m != null; });
     var ageMoyen = ages.length ? ages.reduce(function (s, m) { return s + m; }, 0) / ages.length : null;
     var sansKm = V.filter(function (v) { return !net(v.km) && v.genre !== "remorque"; }).length;
+    /* Le chef de parc sans autorisation ne voit rien des conducteurs
+       (27 novembre 2026) : ni leur nombre ici, ni leurs permis, cartes et
+       visites sous la surveillance, que Flotte.echeances ne lui rend plus. */
+    var cache = !!(window.Flotte && window.Flotte.conducteursCaches && window.Flotte.conducteursCaches());
     $("vue").innerHTML = '<div class="tiles">' +
       tile(V.length, "Véhicules", null, "truck", "flotte.html") +
-      tile(C.length, "Conducteurs", null, "user") +
+      (cache ? "" : tile(C.length, "Conducteurs", null, "user")) +
       tile(sansKm, "Sans relevé km", sansKm ? "ambre" : "", "gauge", "flotte.html?etat=sanskm") +
       tile(kms.length ? entier(kmMoyen) + " km" : "-", "Kilométrage moyen", null, "gauge") +
       tile(ages.length ? ageTexte(Math.round(ageMoyen)) : "-", "Âge moyen du parc", null, "calendar") + "</div>";
@@ -233,7 +237,7 @@
       " à compléter : aucune échéance n'est encore calculable."; blien = "flotte.html"; }
     if ($("banniere")) {
       var bin = '<div class="banniere ' + bcls + '">' + BELL + "<span>" + ech(btxt) + "</span></div>";
-      $("banniere").innerHTML = blien ? '<a href="' + blien + '" class="bl">' + bin + "</a>" : bin;
+      $("banniere").innerHTML = blien ? '<a href="' + blien + '" class="ban-lien">' + bin + "</a>" : bin;
     }
 
     $("surveillance").innerHTML =

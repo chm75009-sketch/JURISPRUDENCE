@@ -547,8 +547,8 @@
       if (l.sem === 0 || i === lignes.length - 1) {
         var s = document.createElement("div");
         s.className = "semaine";
-        s.innerHTML = "<span>Semaine du " + quantieme(courante.du) + " au " + courante.au + " " +
-          MOIS[mo] + "</span><b>0,00 h</b>";
+        s.innerHTML = "<span>Semaine " + ech(duAu(courante.du, courante.au, MOIS[mo])) +
+          "</span><b>0,00 h</b>";
         hote.appendChild(s);
         courante.noeud = s.querySelector("b");
         courante.cadre = s;
@@ -992,6 +992,17 @@
      la grille, dans le tableau du classeur et sur la feuille signée. Relevé le
      27 septembre 2026. */
   function quantieme(j) { return j === 1 ? "1er" : String(j); }
+  /* UNE SEMAINE D'UN SEUL JOUR NE VA PAS « DU 1ER AU 1 ».
+
+     Relevé le 27 novembre 2026 : novembre 2026 commence un dimanche, et la
+     grille titrait « Semaine du 1er au 1 novembre », le dernier lundi
+     « du 30 au 30 ». Une semaine qui n'a qu'un jour dans le mois est celle qui
+     finit le 1er, ou celle qui commence le dernier jour : on le dit ainsi. */
+  function duAu(du, au, moisNom) {
+    var m = moisNom ? " " + moisNom : "";
+    if (du === au) return (du === 1 ? "finissant le " : "commençant le ") + quantieme(du) + m;
+    return "du " + quantieme(du) + " au " + au + m;
+  }
 
   /* LA CATÉGORIE D'UN CONDUCTEUR SE DEMANDE, ELLE NE SE DEVINE PAS.
 
@@ -1148,6 +1159,8 @@
           "convention collective des transports routiers). C'est la règle que le contrat écrit " +
           "ici applique aussi. L. 3121-36, qui majore les huit premières heures de chaque " +
           "semaine, ne vaut qu'à défaut d'accord.",
+        court: "décompte au mois, 25 % de la 153e à la 186e heure, 50 % au-delà (accord du " +
+          "23 avril 2002, article 2.1)",
       };
     }
     /* Sans accord applicable, la règle de la semaine, celle du code : les
@@ -1161,7 +1174,14 @@
           ? " La semaine est le principe pour un personnel roulant : le décompte sur une période " +
             "plus longue, jusqu'à trois mois, suppose l'avis du comité social et économique s'il " +
             "en existe un (D. 3312-41 du code des transports)."
-          : "") };
+          : ""),
+      /* La règle en une ligne, pour la tuile du temps de service : L. 3121-36
+         (LEGIARTI000033020341, relu deux fois au relais le 27 novembre 2026,
+         lectures concordantes), « 25 % pour chacune des huit premières heures
+         supplémentaires. Les heures suivantes donnent lieu à une majoration
+         de 50 % », au-delà de la durée hebdomadaire retenue. */
+      court: "décompte à la semaine, au-delà de " + pl.seuil + " heures : 25 % pour les huit " +
+        "premières heures supplémentaires de la semaine, 50 % au-delà (L. 3121-36)" };
   }
   function tauxHoraire() {
     if (!qui) return 0;
@@ -1327,7 +1347,7 @@
     if (dep.length) {
       L.push('<p class="al rouge">' + (dep.length === 1 ? "Une semaine dépasse " : dep.length +
         " semaines dépassent ") + a.pl.sem + " heures : " +
-        dep.map(function (x) { return "du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au +
+        dep.map(function (x) { return duAu(x.du, x.au) +
           " (" + nbh(x.h) + ")"; }).join(", ") + ".</p>");
     }
     var vent = ventilation(a);
@@ -1434,7 +1454,7 @@
     var cheval = a.semaines.filter(function (x) { return x.voisin; });
     if (cheval.length) {
       L.push('<p class="doux">' + cheval.map(function (x) {
-        return "Semaine du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au + " : " + x.voisin +
+        return "Semaine " + duAu(x.du, x.au) + " : " + x.voisin +
           ", total " + nbh(x.h) + (x.aNous ? ", comptée ici" : ", comptée dans le mois suivant");
       }).join(". ") + ".</p>");
     }
@@ -1762,14 +1782,25 @@
        roulants, article 2, tel que le contrat du module transport le cite).
        Le total est celui des jours saisis : il se reprend du relevé du
        chronotachygraphe, jour par jour. */
+    /* UN SEUL CHIFFRE D'HEURES MAJORÉES, CELUI DE LA RÈGLE QUI S'APPLIQUE.
+
+       Relevé le 27 novembre 2026 sur un chauffeur, en novembre : cette ligne
+       comptait toujours au mois, « majorées de 25 % : 11,80 h » selon l'accord
+       de 2002, pendant que le bloc des heures supplémentaires, décompté à la
+       semaine faute d'avis du comité, annonçait « 20,00 h à 25 % ». Deux
+       régimes affichés côte à côte pour le même mois. La ventilation est
+       désormais celle du bloc des heures supplémentaires, la seule que
+       l'écran retient, et la règle appliquée est dite en une ligne. Aucun
+       calcul n'est changé : le mois reste compté au mois quand le décompte
+       au mois a été choisi. */
     var tr = $("t-transport");
     if (tr) {
       if (estConducteur(qui)) {
-        var base = Math.min(total, 152), m25 = Math.max(0, Math.min(total, 186) - 152), m50 = Math.max(0, total - 186);
+        var vt = ventilation(analyse());
         tr.hidden = false;
-        tr.textContent = "Temps de service du mois : " + nbh(total) + ". Au taux normal : " + nbh(base) +
-          " ; majorées de 25 % : " + nbh(m25) + " ; majorées de 50 % : " + nbh(m50) +
-          " (accord du 23 avril 2002, article 2). Reprenez chaque jour du relevé du chronotachygraphe.";
+        tr.textContent = "Temps de service du mois : " + nbh(total) + ". Heures majorées retenues : " +
+          nbh(vt.h25) + " à 25 % et " + nbh(vt.h50) + " à 50 %. Règle appliquée : " + vt.court +
+          ". Reprenez chaque jour du relevé du chronotachygraphe.";
       } else tr.hidden = true;
     }
 
@@ -1932,7 +1963,16 @@
     var suivant = new Date(an, mo + 1, 5);
     $("mois-sous").textContent = clos ? "clos" : "clôture prévue le 5 " + MOIS[suivant.getMonth()] + " " + suivant.getFullYear();
     $("etat").classList.toggle("clos", clos);
-    $("etat-txt").textContent = clos ? "Mois clos" : "Mois en cours";
+    /* UN MOIS FINI N'EST PLUS « EN COURS ».
+
+       Relevé le 27 novembre 2026 : octobre, terminé et non clos, portait
+       « Mois en cours ». Il est à clore ; le mois qui contient aujourd'hui est
+       en cours ; celui qui n'a pas commencé est à venir. Et le refus de
+       clôture d'un mois ne reste pas affiché sur le mois voisin. */
+    var auj = new Date(), debutMois = new Date(an, mo, 1), finMois = new Date(an, mo + 1, 0, 23, 59, 59);
+    $("etat-txt").textContent = clos ? "Mois clos"
+      : (finMois < auj ? "Mois à clore" : (debutMois > auj ? "Mois à venir" : "Mois en cours"));
+    if ($("cl-refus")) { $("cl-refus").hidden = true; $("cl-refus").textContent = ""; }
     $("clore").disabled = clos;
     $("clore").textContent = "Clore le mois de " + MOIS[mo];
     $("rectifier").hidden = !clos;
@@ -2009,6 +2049,7 @@
     rendreMois();
     dessinerJours();
     calculer();
+    rendreDeclaration();
   }
 
   /* ──────────────────────────────── sorties ─────────────────────────────── */
@@ -2050,7 +2091,7 @@
                     v: Math.round(cumul * 100) / 100 };
           totaux.push("F" + (decalage + t.length + 1));
         }
-        t.push(["Semaine du " + quantieme(sem) + " au " + l.j, "", "", "", "Total semaine", total]);
+        t.push(["Semaine " + duAu(sem, l.j), "", "", "", "Total semaine", total]);
         sem = null; cumul = 0; depart = null;
       }
     });
@@ -2066,7 +2107,7 @@
       a.jours.map(function (x) { return leJourDit(x.j) + " (" + nbh(x.h) + ")"; }).join(", ") + ".");
     var dep = a.semaines.filter(function (x) { return x.depasse; });
     if (dep.length) L.push("Semaines au-delà de " + a.pl.sem + " heures : " +
-      dep.map(function (x) { return "du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au +
+      dep.map(function (x) { return duAu(x.du, x.au) +
         " (" + nbh(x.h) + ")"; }).join(", ") + ".");
     /* La feuille signée et le classeur disent ce que l'écran dit : même
        ventilation, même ligne d'équivalence, mêmes montants. Relevé le
@@ -2145,7 +2186,7 @@
     if (!a.jours.length && !dep.length && a.hs <= 0.005)
       L.push("Aucun dépassement des plafonds, et aucune semaine entière au-delà de trente-cinq heures.");
     a.semaines.filter(function (x) { return x.voisin; }).forEach(function (x) {
-      L.push("Semaine du " + (x.du === 1 ? "1er" : x.du) + " au " + x.au + " : " + x.voisin +
+      L.push("Semaine " + duAu(x.du, x.au) + " : " + x.voisin +
         ", total " + nbh(x.h) + (x.aNous ? ", comptée dans ce mois." : ", comptée dans le mois suivant."));
     });
     if (a.partielles) L.push(a.partielles > 1
@@ -2625,8 +2666,51 @@
     return v || new Array((n || 22) + 1).join(".");
   }
 
+  /* UN TITRE EXPIRÉ NE SE DÉCLARE PAS « EN COURS DE VALIDITÉ ».
+
+     Relevé le 27 novembre 2026 : la déclaration faisait signer à un
+     conducteur un permis « en cours de validité jusqu'au 20 août 2025 » et une
+     visite médicale « à jour, valable jusqu'au 1er novembre 2023 », sans un
+     mot à l'écran. Une date passée de la fiche est donc dite avant que le
+     document soit produit, et le document laisse la date en blanc : c'est le
+     conducteur qui l'écrit, au vu de son titre renouvelé. */
+  function titresPerimes() {
+    var f = permisDu(qui.id), auj = iso(new Date()), L = [];
+    if (/^\d{4}-\d{2}-\d{2}$/.test(net(f.permisFin)) && net(f.permisFin) < auj)
+      L.push({ quoi: "le permis de conduire", c: "permisFin", date: net(f.permisFin) });
+    if (/^\d{4}-\d{2}-\d{2}$/.test(net(f.visitePermisFin)) && net(f.visitePermisFin) < auj)
+      L.push({ quoi: "la visite médicale du permis", c: "visitePermisFin", date: net(f.visitePermisFin) });
+    return L;
+  }
+  function direPerimes(L) {
+    return L.map(function (x) { return x.quoi + " a expiré le " + enFrancais(x.date); }).join(", et ");
+  }
+  function rendreDeclaration() {
+    var z = $("decl-alerte");
+    if (!z || !qui) return;
+    var L = titresPerimes();
+    if (!L.length) { z.hidden = true; z.innerHTML = ""; return; }
+    z.hidden = false;
+    z.innerHTML = "Selon la fiche de " + ech(qui.nom) + ", " + ech(direPerimes(L)) + ". " +
+      "La déclaration ne reprend pas " + (L.length > 1 ? "ces dates : elle les laisse" : "cette date : elle la laisse") +
+      " en blanc, à remplir par le conducteur au vu de son titre renouvelé. Sans titre renouvelé, " +
+      "il ne peut pas la signer. " +
+      '<a href="salaries.html?s=' + encodeURIComponent(qui.id) + '&amp;v=fiche">' +
+      "Mettre la fiche à jour</a>.";
+  }
+  /* Avant de produire : la date passée se redit, et l'on confirme. */
+  function declarationPermise() {
+    var L = titresPerimes();
+    rendreDeclaration();
+    if (!L.length) return true;
+    return window.confirm("Attention : " + direPerimes(L) + ". La déclaration laissera la date en " +
+      "blanc, à remplir par le conducteur. La produire quand même ?");
+  }
+
   function declarationItems() {
     var p = entreprise(), f = permisDu(qui.id);
+    var perime = {};
+    titresPerimes().forEach(function (x) { perime[x.c] = true; });
     var items = [
       { k: "sur", t: (p.denomination || "") + (p.adresse ? " - " + p.adresse : "") },
       { k: "h1", t: "Déclaration du conducteur sur la validité de son permis de conduire" },
@@ -2636,7 +2720,8 @@
         ", déclare ce qui suit." },
       { k: "puce", t: "Je suis titulaire du permis de conduire de la catégorie " +
         pointilles(f.permisCat, 12) + ", délivré sous le numéro " + pointilles(f.permisNum, 18) +
-        ", en cours de validité" + (net(f.permisFin) ? " jusqu'au " + enFrancais(f.permisFin) : "") + "." },
+        ", en cours de validité" + (net(f.permisFin)
+          ? " jusqu'au " + (perime.permisFin ? pointilles("", 22) : enFrancais(f.permisFin)) : "") + "." },
       { k: "puce", t: "Ce permis ne fait l'objet, à ce jour, d'aucune rétention, suspension, " +
         "annulation ni invalidation." },
       { k: "puce", t: "Il ne m'a pas été retiré la totalité de mes points, et je n'ai reçu aucune " +
@@ -2645,7 +2730,9 @@
         "décision qui affecterait la validité de mon permis : rétention, suspension, annulation, " +
         "invalidation, ou retrait de la totalité des points." },
       { k: "puce", t: "Lorsque ma catégorie l'exige, la visite médicale du permis est à jour" +
-        (net(f.visitePermisFin) ? ", valable jusqu'au " + enFrancais(f.visitePermisFin) : "") + "." },
+        (net(f.visitePermisFin)
+          ? ", valable jusqu'au " + (perime.visitePermisFin ? pointilles("", 22) : enFrancais(f.visitePermisFin))
+          : "") + "." },
       { k: "note", t: "Le retrait de la totalité des points fait perdre le droit de conduire : " +
         "l'intéressé reçoit l'injonction de remettre son permis au préfet (code de la route, " +
         "article L. 223-5, I). L'entreprise de transport public routier peut obtenir de " +
@@ -2663,6 +2750,7 @@
 
   function declarationWord() {
     if (!window.AuditExport) return;
+    if (!declarationPermise()) return;
     var titre = "Déclaration du conducteur - " + qui.nom + " - " + MOIS[mo] + " " + an;
     var nom = "declaration-conducteur-" + qui.id + "-" + an + "-" + ("0" + (mo + 1)).slice(-2) + ".docx";
     window.AuditExport.telecharger(window.AuditExport.docx(declarationItems(), titre), nom,
@@ -2674,6 +2762,7 @@
   function declarationImprimer() {
     var z = $("impression");
     if (!z) return;
+    if (!declarationPermise()) return;
     var garde = z.innerHTML;
     z.innerHTML = declarationItems().map(function (x) {
       if (x.k === "sur") return '<p class="i-sur">' + ech(x.t) + "</p>";
@@ -2708,6 +2797,20 @@
     try { garde = window.localStorage.getItem("heures-salarie") || ""; } catch (e) { garde = ""; }
     var depart = 0;
     GENS.forEach(function (s, i) { if (s.id === garde) depart = i; });
+    /* LE SALARIÉ DEMANDÉ PAR L'ADRESSE PASSE AVANT CELUI DE LA DERNIÈRE FOIS.
+
+       Relevé le 27 novembre 2026 : la page des salariés et l'agenda ouvrent
+       ce relevé avec « ?s=identifiant », et l'écran l'ignorait, rouvrant le
+       dernier salarié consulté. L'identifiant est celui de la flotte : nom et
+       prénom sans accents, en minuscules, reliés par des traits d'union. */
+    var demande = "";
+    try { demande = new URLSearchParams(window.location.search).get("s") || ""; } catch (e) { demande = ""; }
+    if (demande) {
+      GENS.forEach(function (s, i) { if (s.id === demande) depart = i; });
+      if (GENS[depart] && GENS[depart].id === demande) {
+        try { window.localStorage.setItem("heures-salarie", demande); } catch (e) {}
+      }
+    }
     $("qui").value = String(depart);
     qui = GENS[depart];
 

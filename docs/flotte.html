@@ -278,8 +278,17 @@
      médicales : ce sont des données du personnel, étrangères à la seule
      gestion du parc. Pour une séance de role « parc », l'onglet disparaît et
      la flotte occupe toute la largeur. */
+  /* Sans les conducteurs, il ne reste qu'un onglet : un bouton « Véhicules »
+     seul ne mène nulle part, et le titre ne parle que de la flotte
+     (27 novembre 2026). */
   :root[data-role="parc"]:not([data-conducteurs="oui"]) #o-con{display:none}
-  :root[data-role="parc"]:not([data-conducteurs="oui"]) .onglets{grid-template-columns:1fr}
+  :root[data-role="parc"]:not([data-conducteurs="oui"]) .onglets{display:none}
+  :root[data-role="parc"]:not([data-conducteurs="oui"]) #t-flotte-c{display:none}
+  /* LE BOUTON ROND DE L'ASSISTANT NE CACHE RIEN (27 novembre 2026). Il flotte
+     au-dessus de la barre du bas et recouvrait la fin des lignes « À bord »
+     et le bouton « Valider l'importation ». La page garde en bas assez de
+     place pour que tout puisse remonter au-dessus de lui. */
+  body.avec-bas{padding-bottom:calc(160px + env(safe-area-inset-bottom))}
   /* L'INTERRUPTEUR DE T.E.C (25 novembre 2026). Les fiches conducteur restent
      cachées au chef de parc ; T.E.C, ou le cabinet, peut décider de les lui
      montrer. L'interrupteur n'apparaît qu'à eux, jamais au chef de parc. */

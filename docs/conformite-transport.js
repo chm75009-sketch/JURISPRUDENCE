@@ -426,6 +426,31 @@
     });
   }
 
+  /* Une date ISO écrite en toutes lettres : 2026-11-27 devient 27 novembre 2026. */
+  function enLettres(s) {
+    if (!s) return "";
+    try { return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(String(s).slice(0, 10) + "T12:00:00")); }
+    catch (e) { return String(s).slice(0, 10); }
+  }
+
+  /* L'ENCADREMENT, TEL QUE LA FICHE LE CONNAÎT. Relevé le 27 novembre 2026 : la
+     fiche en Word portait « signée le [DATE] » et « Rappels : [DATES] » même
+     une fois la consigne signée à l'écran. Les dates viennent maintenant de
+     l'étape Instructions : la consigne, et la note de service qui rappelle la
+     réglementation. Ce qui n'est pas encore signé le dit en clair. */
+  function phraseEncadrement(id) {
+    var d = docsRemis(id), pr = profilConducteur(id);
+    var nomConsigne = "Consigne de conduite" + (pr.pl ? " avec carte" : "");
+    function etat(cle, signe, imprime, rien) {
+      var x = d[cle] || {};
+      if (x.etat === "signe" && x.signeLe) return signe + " le " + enLettres(x.signeLe);
+      if (x.etat === "imprime" && x.imprimeLe) return imprime + " le " + enLettres(x.imprimeLe) + ", pas encore signée";
+      return rien;
+    }
+    return etat("consigne", nomConsigne + " remise et signée", nomConsigne + " imprimée", nomConsigne + " : pas encore remise au conducteur") + ". " +
+      "Rappels de la réglementation : " + etat("note", "note de service signée", "note de service imprimée", "aucun rappel signé à ce jour") + ".";
+  }
+
   /* LA FICHE DE SUIVI EN WORD, à l'en-tête de l'entreprise. */
   function ficheSuiviItems(id) {
     var p = profil();
@@ -440,7 +465,7 @@
     items.push({ k: "p", t: "État au " + iso(new Date()) + " : " + et.message });
 
     items.push({ k: "h2", t: "Encadrement" });
-    items.push({ k: "p", t: "Consigne de conduite avec carte remise et signée le [DATE]. Rappels de la réglementation : [DATES]." });
+    items.push({ k: "p", t: phraseEncadrement(id) });
 
     items.push({ k: "h2", t: "Contrôle et anomalies relevées" });
     if (s.anomalies.length) {
@@ -808,6 +833,9 @@
       { quoi: "Déposer les observations écrites", regle: "avant la séance", jours: -2 },
       { quoi: "Séance de la commission", regle: "", jours: 0 },
     ];
+    /* Dans l'ordre du temps (27 novembre 2026) : « dès réception de la
+       convocation », à J-20, venait après l'étape de J-5. */
+    etapes.sort(function (x, y) { return x.jours - y.jours; });
     return etapes.map(function (e) {
       var o = { quoi: e.quoi, regle: e.regle };
       if (dateSeance) o.date = ajouterJours(dateSeance, e.jours);
@@ -879,9 +907,34 @@
       "Mesures prises pour éviter la réitération"];
     var veh = vehiculesFlotte().map(function (v) { return [v.immat || "sans immatriculation"]; });
     var cond = salariesRegistre().map(function (s) { return [s.nom]; });
+    /* LES INFRACTIONS SAISIES. Relevé le 27 novembre 2026 : la feuille ne
+       portait que sa ligne de titres, même après l'ajout d'une infraction à la
+       fiche d'un conducteur. Chaque fait porté à une fiche y fait maintenant
+       sa ligne, du plus ancien au plus récent. Le véhicule se lit dans le
+       détail quand celui-ci le nomme ; la date est écrite jj/mm/aaaa, en texte,
+       pour qu'une infraction passée ne s'affiche pas en rouge comme une
+       échéance dépassée. Les colonnes que la fiche ne connaît pas restent
+       vides, à compléter depuis le procès-verbal. */
+    var e = etat(), noms = {};
+    salariesRegistre().forEach(function (s) { noms[s.id] = s.nom; });
+    var faits = [];
+    Object.keys(e.suivi || {}).forEach(function (id) {
+      var carte = carteDe(id) || {};
+      ((e.suivi[id] || {}).anomalies || []).forEach(function (a) {
+        var m = String(a.detail || "").match(/v[ée]hicule\s+([A-Z0-9][A-Z0-9 -]*[A-Z0-9])/i);
+        faits.push({ date: a.date || "", src: a.src || "", type: a.type || "", nom: noms[id] || id,
+          carte: carte.numero || "", veh: m ? m[1] : "", detail: a.detail || "" });
+      });
+    });
+    faits.sort(function (x, y) { return x.date < y.date ? -1 : x.date > y.date ? 1 : (x.nom < y.nom ? -1 : x.nom > y.nom ? 1 : 0); });
+    var lignes = faits.map(function (f, i) {
+      var jma = /^\d{4}-\d{2}-\d{2}/.test(f.date) ? f.date.slice(8, 10) + "/" + f.date.slice(5, 7) + "/" + f.date.slice(0, 4) : f.date;
+      var typ = f.type ? f.type.charAt(0).toUpperCase() + f.type.slice(1) : "";
+      return [String(i + 1), "", f.src, jma, "", "", "", "", "", typ, "", f.nom, f.carte, f.veh, f.detail, ""];
+    });
     var feuilles = [
-      { titre: "Infractions", lignes: [cols],
-        largeurs: [5, 22, 20, 12, 10, 10, 15, 11, 12, 28, 14, 20, 20, 40, 34] },
+      { titre: "Infractions", lignes: [cols].concat(lignes),
+        largeurs: [5, 14, 22, 12, 10, 10, 15, 11, 12, 30, 14, 22, 20, 14, 44, 34] },
       { titre: "Véhicules (flotte)", lignes: [["Immatriculation"]].concat(veh.length ? veh : [[""]]) },
       { titre: "Conducteurs (registre)", lignes: [["Conducteur"]].concat(cond.length ? cond : [[""]]) },
       { titre: "Mode d'emploi", lignes: [

@@ -38,6 +38,8 @@
   .db-quitter svg{width:17px;height:17px}
   :root[data-role="parc"] .db-quitter{display:inline-flex}
 
+  .db-haut{border-bottom:0;padding:12px 0 0}
+
   .banniere{margin:14px 0 0;display:flex;align-items:center;gap:13px;padding:16px 18px;border-radius:16px;
     font:600 var(--t3)/1.35 system-ui;box-shadow:var(--db-ombre)}
   .banniere svg{width:22px;height:22px;flex:0 0 auto}
@@ -45,7 +47,11 @@
   .banniere.rouge{background:var(--db-rouge-bg);color:var(--db-rouge)}
   .banniere.ambre{background:var(--db-ambre-bg);color:var(--db-ambre)}
   .banniere.vert{background:var(--db-vert-bg);color:var(--db-vert)}
-  a.bl{display:block;text-decoration:none}
+  /* Le lien de la bannière portait la classe « bl », celle des étiquettes du
+     graphique, qui interdit le retour à la ligne : au téléphone, la page
+     s'élargissait à 555 pixels pour 390 (relevé le 27 novembre 2026). Il a
+     maintenant sa propre classe. */
+  a.ban-lien{display:block;text-decoration:none}
 
   .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0 0}
   @media (max-width:760px){.grid{grid-template-columns:1fr}}
@@ -144,6 +150,16 @@
 <body>
 <main class="wrap">
 
+  <!-- LE RETOUR, EN HAUT (27 novembre 2026). La page n'avait ni Retour ni
+       Menu : on y arrivait par le bouton « Tableau de bord » de la flotte et
+       rien n'y ramenait, seul « Quitter » existait. La rangée « .haut » reçoit
+       le Retour, et barre.js y pose le Menu, comme sur les autres pages. Le
+       retour ramène à la page d'avant, ou à la flotte quand on arrive
+       directement. -->
+  <div class="haut db-haut">
+    <a class="retour" href="flotte.html">&larr; Retour</a>
+  </div>
+
   <div class="db-tete">
     <span class="rond"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h13v12H1z"/><path d="M14 8h4l4 4v3h-8V8z"/><circle cx="5.5" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg></span>
     <div class="ttw"><div class="t">Tableau de bord du parc</div><div class="s" id="ent"></div></div>
@@ -184,6 +200,17 @@
 <script src="parc-tableau.js"></script>
 <script src="recherche-parc.js"></script>
 <script>
+(function () {
+  /* Arrivé ici depuis la porte du site (entrer.html), le retour du
+     navigateur ramènerait à l'écran du mot de passe : on va à la flotte. Ce
+     geste passe avant celui de barre.js, qui voit alors l'événement traité. */
+  var r = document.querySelector(".db-haut .retour");
+  if (r) r.addEventListener("click", function (ev) {
+    var d = "";
+    try { d = new URL(document.referrer).pathname.split("/").pop(); } catch (e) { d = ""; }
+    if (d === "entrer.html") { ev.preventDefault(); location.href = "flotte.html"; }
+  }, true);
+})();
 (function () {
   var q = document.getElementById("db-quitter");
   if (!q) return;

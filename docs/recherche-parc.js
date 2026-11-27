@@ -49,7 +49,9 @@
       mots: "camion camions vehicule vehicules fiche fiches completer incomplet incomplete incompletes incomplets manque manquant manquante informations infos renseigner remplir vide vides" },
     { nom: "Tableau de bord du parc", ou: "La synthèse du parc",
       page: "parc-tableau.html",
-      mots: "tableau bord synthese resume vue ensemble accueil indicateur indicateurs kpi structure surveillance etat general bilan point chiffres statistiques stats graphique" },
+      /* « chef de parc » mène à son tableau de bord, pas aux dépenses
+         (relevé le 27 novembre 2026). */
+      mots: "chef parc espace tableau bord synthese resume vue ensemble accueil indicateur indicateurs kpi structure surveillance etat general bilan point chiffres statistiques stats graphique" },
     { nom: "Paramètres du parc", ou: "Listes et réglages",
       page: "parc-parametres.html",
       mots: "ajouter liste parametres parametre reglages reglage regler listes types type depenses garages garage entreprises fournisseurs prestataires configurer configuration personnaliser categories" },
@@ -117,19 +119,62 @@
     "entretien annuel", "entretien professionnel", "promesse d embauche", "periode d essai",
     "solde de tout compte", "certificat de travail", "rupture conventionnelle", "amende", "contravention",
     "radar", "designer le conducteur", "pv de stationnement", "exces de vitesse", "malade",
-    "vient plus", "revient plus", "venu travailler", "pas venu"];
+    "vient plus", "revient plus", "venu travailler", "pas venu",
+    /* Relevé le 27 novembre 2026 : le registre du personnel, le document
+       unique, la fiche d'un salarié, les heures supplémentaires et les
+       papiers personnels du chauffeur (permis, carte conducteur, FIMO, FCO)
+       ouvraient un écran du parc ou « Je n'ai pas compris ». Ce sont des
+       sujets de la direction : le chef de parc reçoit le message hors parc. */
+    "registre du personnel", "registre unique", "personnel", "document unique", "duerp",
+    "fiche salari", "fiche du salari", "fiche de salari", "fiches salari", "fiches des salari",
+    "dossier du salari", "dossier salari", "heures sup", "heure sup",
+    "papiers du chauffeur", "papier du chauffeur", "papiers chauffeur", "papiers du conducteur",
+    "papier du conducteur", "papiers conducteur", "permis", "carte conducteur", "carte de conducteur",
+    "carte du conducteur", "fimo", "fco", "reglement interieur", "attestation employeur",
+    "france travail", "pole emploi"];
+
+  /* LES EXPRESSIONS MAL TAPÉES SONT AUSSI HORS DU PARC. Relevé le
+     27 novembre 2026 : « entretine prépalable » ouvrait l'entretien des
+     camions, parce que « entretine » ressemble à « entretien ». Une
+     expression de plusieurs mots est reconnue quand chacun de ses mots l'est,
+     au début du mot ou à une faute de frappe près (voir proche) ; un mot seul
+     ne l'est qu'à son début, pour qu'une faute ne fasse pas d'un mot du parc
+     un mot de la direction. La demande se lit mot à mot ; les mots pris par
+     une expression hors du parc sont retirés de ce qui reste. */
+  var HORS_TRIES = HORS_PARC.slice().sort(function (a, b) { return b.length - a.length; })
+    .map(function (h) { return h.split(" "); });
+  function motHors(q, h, flou) {
+    return q.indexOf(h) === 0 || (flou && proche(q, h));
+  }
+  function analyser(texte) {
+    var w = norm(texte).split(/\s+/).filter(Boolean), pris = [], hors = false, i, j, k;
+    /* Les expressions longues d'abord : « fiche de paie » avant « paie ». */
+    for (k = 0; k < HORS_TRIES.length; k++) {
+      var hw = HORS_TRIES[k], flou = hw.length > 1;
+      for (i = 0; i + hw.length <= w.length; i++) {
+        for (j = 0; j < hw.length; j++) if (pris[i + j] || !motHors(w[i + j], hw[j], flou)) break;
+        if (j === hw.length) { for (j = 0; j < hw.length; j++) pris[i + j] = true; hors = true; }
+      }
+    }
+    return { hors: hors, reste: w.filter(function (x, n) { return !pris[n]; }) };
+  }
   /* Ce qui reste de la demande une fois retirés les mots hors du parc :
      « accident du travail » ne laisse pas « accident » passer pour un sinistre. */
   function resteDuParc(texte) {
-    var t = " " + norm(texte).replace(/\s+/g, " ") + " ";
-    /* Les expressions longues d'abord : « fiche de paie » avant « paie ». */
-    HORS_PARC.slice().sort(function (a, b) { return b.length - a.length; }).forEach(function (h) { t = t.replace(new RegExp(" " + h + "[a-z]*", "g"), " "); });
-    return t;
+    return " " + analyser(texte).reste.join(" ") + " ";
   }
   function horsParc(texte) {
-    var t = " " + norm(texte).replace(/\s+/g, " ") + " ";
-    for (var i = 0; i < HORS_PARC.length; i++) if (t.indexOf(" " + HORS_PARC[i]) >= 0) return true;
-    return false;
+    return analyser(texte).hors;
+  }
+
+  /* « PAS ÇA ? » NE PROPOSE QUE CE QUI A UN VRAI RAPPORT (27 novembre 2026) :
+     une autre piste n'est retenue que si elle obtient au moins les trois
+     quarts du score de la première. Trois au plus. */
+  var SEUIL_AUTRES = 0.75;
+  function retenir(liste) {
+    if (!liste.length) return [];
+    var min = liste[0].s * SEUIL_AUTRES;
+    return [liste[0]].concat(liste.slice(1).filter(function (o) { return o.s >= min; }).slice(0, 3));
   }
 
   /* LES FORMES D'UN MÊME MOT. « téléphonait » est « téléphone », « camions »
@@ -280,15 +325,16 @@
       res.textContent = "";
       var texte = champ.value.trim();
       if (!texte) return;
-      var liste = classer(texte);
+      var liste = retenir(classer(texte));
       /* Une demande hors du parc n'ouvre rien du parc, sauf si elle porte
          aussi un vrai geste du parc (« réparation », « sinistre »...). */
-      var gestesDuParc = toks(resteDuParc(texte)).filter(function (q) {
+      var lu = analyser(texte);
+      var gestesDuParc = toks(lu.reste.join(" ")).filter(function (q) {
         return !GENERIQUES[q] && !horsParc(q) && classer(q).some(function (o) { return o.s >= 2; });
       });
-      if (horsParc(texte) && !gestesDuParc.length) {
+      if (lu.hors && !gestesDuParc.length) {
         var h = document.createElement("div"); h.className = "rp-vide";
-        h.textContent = "Cette démarche ne se fait pas depuis l'espace du parc : sanctions, contrats, paie et absences se traitent depuis l'accès de T.E.C. Prévenez la direction.";
+        h.textContent = "Cette démarche ne se fait pas depuis l'espace du parc : sanctions, contrats, paie, absences et dossiers du personnel se traitent depuis l'accès de T.E.C. Prévenez la direction.";
         res.appendChild(h);
         return;
       }

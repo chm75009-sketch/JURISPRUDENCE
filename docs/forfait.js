@@ -285,6 +285,9 @@
         "pourrait réclamer ses heures supplémentaires sur trois ans. Le décompte des heures, " +
         "lui, existe : <a href=\"heures.html\">ouvrir le décompte des heures</a>." : "");
     majBlocs();
+    /* Cette réponse est aussi celle de la convention (27 novembre 2026) : la
+       remarque qui l'accompagne se refait aussitôt. */
+    if (fiche().rep === "non") rendreConvention();
   }
 
   /* Ce qui reste ouvert dépend de deux choses seulement : le salarié est-il
@@ -1417,9 +1420,25 @@
      tournées et un chronotachygraphe : la convention serait nulle, et le
      rappel d'heures supplémentaires court sur trois ans. */
   var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|magasinier|manutention/i;
+  /* LA RÉPONSE DU PREMIER BLOC VAUT POUR LA CONVENTION.
+
+     Relevé le 27 novembre 2026 : « qui peut conclure ce forfait » se posait
+     deux fois, dans « Sa situation » puis sous la convention, et la
+     convention en Word était refusée tant que la seconde case restait vide.
+     Il n'y a plus qu'une question : « cadre » reste « cadre », le non-cadre
+     dont la durée ne peut pas être prédéterminée devient « autonome », celui
+     qui suit un horaire « ni ». Une fiche plus ancienne, qui n'avait que la
+     seconde réponse, la garde. */
+  function eligDeLaConvention(f) {
+    var cat = net(f.elig && f.elig.cat);
+    if (cat === "cadre") return "cadre";
+    if (cat === "autre") return "autonome";
+    if (cat === "non") return "ni";
+    return net(f.conv && f.conv.elig);
+  }
   function refusDeConvention() {
     var f = fiche();
-    var elig = net(f.conv.elig);
+    var elig = eligDeLaConvention(f);
     if (CONDUIT.test(qui.emp || "")) {
       return "L'emploi porté au registre, « " + (qui.emp || "") + " », est un emploi de conduite " +
         "ou d'exécution soumis à un horaire : la durée du travail y est prédéterminée, et le " +
@@ -1427,8 +1446,9 @@
         "ne se forfaitisent pas : l'écran du décompte des heures est fait pour cela.";
     }
     if (!elig) {
-      return "Dites d'abord qui peut conclure ce forfait : l'article L. 3121-58 ne l'ouvre qu'aux " +
-        "cadres autonomes et aux salariés dont la durée du travail ne peut pas être prédéterminée.";
+      return "Répondez d'abord, plus haut, à « Sa situation » : l'article L. 3121-58 n'ouvre ce " +
+        "forfait qu'aux cadres autonomes et aux salariés dont la durée du travail ne peut pas être " +
+        "prédéterminée.";
     }
     if (elig === "ni") {
       return "Ni cadre autonome, ni salarié dont la durée du travail ne peut pas être " +
@@ -1451,7 +1471,7 @@
      avant de signer. */
   var OUVRIER_EMPLOYE = /^\s*(ouvrier|employ[eé])/i;
   function remarqueConvention() {
-    var f = fiche(), elig = net(f.conv.elig);
+    var f = fiche(), elig = eligDeLaConvention(f);
     if (!qui || elig !== "cadre") return "";
     var q = String(qui.qua || "");
     if (!OUVRIER_EMPLOYE.test(q)) return "";
@@ -2190,11 +2210,19 @@
 
   /* ═══════════════════════════ l'aiguillage ══════════════════════════════ */
 
-  function poserReponse(r) {
+  function poserReponse(r, sansDefiler) {
     var f = fiche();
     f.rep = r;
     garderFiche(f);
     rendreTout();
+    /* ARRIVER DEPUIS L'AUDIT, C'EST ARRIVER EN HAUT DE LA PAGE.
+
+       Relevé le 27 novembre 2026 : venue de l'audit avec la réponse dans
+       l'adresse, la page défilait jusqu'à la branche choisie, et le Retour
+       n'était visible qu'en remontant. À l'arrivée, la page reste en haut,
+       le Retour sous les yeux ; c'est le geste de l'utilisatrice, toucher
+       « Oui » ou « Non » ici, qui fait défiler. */
+    if (sansDefiler) { window.scrollTo(0, 0); return; }
     var cible = r === "non" ? "br-non" : "br-oui";
     setTimeout(function () {
       if ($(cible)) $(cible).scrollIntoView({ behavior: "smooth", block: "start" });
@@ -2482,7 +2510,7 @@
     /* Le module s'ouvre parfois depuis l'audit, qui a déjà posé la question :
        « Oui » et « Non » arrivent alors dans l'adresse. */
     var rep = /[?&]rep=(oui|non)/.exec(window.location.search);
-    if (rep) poserReponse(rep[1]);
+    if (rep) poserReponse(rep[1], true);
     else rendreTout();
   }
 

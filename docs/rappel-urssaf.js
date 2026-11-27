@@ -19,6 +19,19 @@
     } catch (e) { return false; }
   }
 
+  /* LA CROIX EST RETENUE. Relevé le 27 novembre 2026 : le rappel fermé
+     revenait à chaque rechargement. Le choix se garde sur le poste, pour la
+     phase du rappel où il a été fait (avant la visite, le jour même, après) :
+     un rappel fermé ne revient que si ce qu'il annonce a changé. */
+  var CLE_FERME = "rappel-urssaf-ferme";
+  function phase(n) { return n > 0 ? "avant" : (n === 0 ? "jour" : "apres"); }
+  function estFerme(n) {
+    try { return localStorage.getItem(CLE_FERME) === phase(n); } catch (e) { return false; }
+  }
+  function retenirFerme(n) {
+    try { localStorage.setItem(CLE_FERME, phase(n)); } catch (e) {}
+  }
+
   function message(n) {
     if (n > 1) return "Contrôle URSSAF : plus que " + n + " jours (visite le 17 novembre 2026).";
     if (n === 1) return "Contrôle URSSAF : plus qu'un jour (visite le 17 novembre 2026).";
@@ -49,6 +62,7 @@
     var now = new Date();
     if (now > FIN) return;
     var n = Math.ceil((VISITE - now) / (24 * 3600 * 1000));
+    if (estFerme(n)) return;
 
     var hote = document.getElementById("rappel-urssaf");
     if (!hote) {
@@ -67,7 +81,7 @@
     }
     var x = document.createElement("button"); x.type = "button"; x.className = "ru-x";
     x.setAttribute("aria-label", "Fermer"); x.textContent = "×";
-    x.addEventListener("click", function () { hote.remove(); });
+    x.addEventListener("click", function () { retenirFerme(n); hote.remove(); });
     b.appendChild(x);
     hote.appendChild(b);
   }

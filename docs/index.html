@@ -32,6 +32,9 @@
   /* ecran 1 : la fiche */
   .fiche{padding:20px 0 40px}
   .fiche h1{font:600 26px/1.2 system-ui;margin:4px 0 16px}
+  /* Le retour de la fiche, seul sur sa ligne au-dessus du titre. */
+  .tete-fiche{margin:0 0 10px}
+  .tete-fiche button.retour{font-size:17px}
   .fiche fieldset{border:0;background:none;border-radius:0;padding:0;margin:0}
   .fiche legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .fiche .grille{display:flex;flex-direction:column;align-items:stretch;gap:14px}
@@ -71,19 +74,31 @@
   .pli-org>div{padding:0 16px 16px}
   .pli-org .aide-champ{font-size:14px;line-height:1.4;color:var(--texte-2)}
   /* La semaine : des lignes courtes, la date à gauche, le retard en rouge. */
-  .semaine{margin:0 0 18px;padding:14px 16px;border:1px solid var(--filet);border-radius:12px;background:var(--surface)}
-  .semaine h2{font:600 17px/1.3 system-ui;margin:0 0 10px}
-  .sem-l{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-top:1px solid var(--filet)}
+  /* LES DEUX PORTES SE VOIENT SANS DÉFILER, AU TÉLÉPHONE COMME À L'ORDINATEUR.
+     Mesuré le 27 novembre 2026 à 390 x 844 : la carte Audit commençait sous la
+     barre du bas, et à 1366 x 768 les deux cartes y mordaient. Rien n'est
+     retiré : les marges du rappel, de la semaine et des cartes sont resserrées. */
+  .semaine{margin:0 0 4px;padding:10px 14px 8px;border:1px solid var(--filet);border-radius:12px;background:var(--surface)}
+  .semaine h2{font:600 17px/1.3 system-ui;margin:0 0 2px}
+  /* CHAQUE LIGNE MÈNE OÙ ELLE SE TRAITE. Les retards se lisaient sans se
+     toucher : il fallait chercher le salarié ou le camion ailleurs. Relevé le
+     27 novembre 2026. La ligne entière est le lien, la flèche le dit. */
+  .sem-l{display:flex;gap:8px;align-items:baseline;padding:5px 0;border-top:1px solid var(--filet);
+    color:var(--texte);text-decoration:none}
   .sem-l:first-child{border-top:0}
-  .sem-d{flex:0 0 auto;min-width:74px;font:600 13px/1.4 system-ui;color:var(--texte-2)}
+  a.sem-l{align-items:center;min-height:40px;padding:2px 0}
+  a.sem-l::after{content:"\203A";flex:none;margin-left:auto;padding-left:2px;font:600 20px/1 system-ui;color:var(--accent)}
+  a.sem-l:hover .sem-q,a.sem-l:focus-visible .sem-q{text-decoration:underline}
+  .sem-d{flex:0 0 auto;min-width:64px;font:600 13px/1.4 system-ui;color:var(--texte-2)}
   .sem-l.passe .sem-d{color:#b3261e}
   .sem-q{font-size:15px;line-height:1.35}
-  .sem-plus{margin:8px 0 0;font-size:13.5px;color:var(--texte-2)}
+  .sem-l.adater .sem-q{font-size:14px}
+  .sem-plus{margin:2px 0 2px;font-size:13.5px;color:var(--texte-2)}
   /* La ligne des dates à saisir : elle ne réclame pas un rendez-vous mais une
      saisie, et elle se tient sous ce qui a une vraie échéance. */
   .sem-l.adater .sem-d{color:var(--texte-3)}
   .sem-l.adater .sem-q{color:var(--texte-2)}
-  .semaine-tout{display:inline-block;margin-top:10px;font-size:14.5px}
+  .semaine-tout{display:inline-block;margin-top:4px;font-size:14.5px}
   .fiche .idcc-liste{font-size:16px}
   .fiche .idcc-liste .idcc-o{min-height:44px}
   .btn-suite{display:block;width:100%;margin:22px 0 0;font:600 19px system-ui;padding:16px;
@@ -105,18 +120,18 @@
     min-height:52px;border-radius:12px;
     background:var(--accent-clair);color:var(--accent);border:2px solid var(--accent)}
   #modifier-fiche.retour:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .rappel{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--filet)}
+  .rappel{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--filet);margin:0 0 10px}
   .modifier-fiche{flex:none;min-height:0;padding:9px 12px;border:1px solid var(--filet);border-radius:10px;background:var(--surface);
     color:var(--accent);font:600 14px/1.2 system-ui;cursor:pointer}
   .rappel .texte{flex:1;min-width:0;font-size:16px;line-height:1.35;color:var(--texte-2)}
   .rappel .texte b{color:var(--texte);font-size:17px}
   .chapeau{margin:20px 0 0;font-size:17px;line-height:1.5;color:var(--texte-2)}
   .chapeau b{color:var(--texte)}
-  .portes{display:flex;flex-direction:column;gap:12px;margin:0}
-  .titre-portes{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:22px 2px 10px}
-  .porte{display:flex;align-items:center;gap:14px;padding:18px 16px;border-radius:18px;border:2px solid var(--accent);
+  .portes{display:flex;flex-direction:column;gap:10px;margin:0}
+  .titre-portes{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:14px 2px 8px}
+  .porte{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:18px;border:2px solid var(--accent);
     background:var(--accent-clair);text-decoration:none;color:var(--texte)}
-  .porte .ico{flex:none;width:52px;height:52px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+  .porte .ico{flex:none;width:48px;height:48px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center}
   .porte .ico svg{width:28px;height:28px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   .porte .mots{flex:1;min-width:0}
   .porte .mots b{display:block;font:700 22px/1.15 system-ui;color:var(--accent)}
@@ -174,6 +189,11 @@
   <div id="rappel-urssaf"></div>
 
   <section class="fiche" id="ecran-fiche" hidden>
+    <!-- LE RETOUR, EN HAUT DE LA FICHE. Ouverte par « Modifier la fiche », la
+         fiche n'avait aucun retour : on n'en sortait que par « Continuer »,
+         deux mille pixels plus bas. Relevé le 27 novembre 2026. Le bouton
+         referme la fiche et ramène à l'écran d'où l'on vient. -->
+    <p class="tete-fiche"><button type="button" class="retour" id="retour-fiche" hidden>&larr; Retour</button></p>
     <h1>Votre entreprise</h1>
     <div id="fiche-accueil"></div>
     <!-- L'effectif du registre, en face de l'effectif saisi. -->
@@ -495,7 +515,54 @@
     var pf = profil();
     $("continuer-fiche").disabled = !complet(pf);
     direManque(pf);
+    /* Le retour se montre dès qu'il y a un écran où revenir : l'accueil, si
+       la fiche est complète ou ouverte depuis lui, ou la page d'où l'on vient
+       par un lien. À la toute première ouverture, fiche vide, il n'y en a pas :
+       la fiche est alors l'entrée de l'application. */
+    $("retour-fiche").hidden = !(depuisAccueil || venuParLien || complet(pf));
     window.scrollTo(0, 0);
+  }
+
+  /* LA FICHE A SA PROPRE ADRESSE : index.html#fiche.
+     L'agenda y envoie pour « Ouvrir la fiche d'entreprise », et le geste
+     retour du téléphone doit la refermer comme le bouton. Demande du
+     27 novembre 2026. « #fiche-transport » ouvre en plus le pli du
+     transport, pour la ligne de la licence dans « Cette semaine ». */
+  var depuisAccueil = false;
+  var venuParLien = false;
+  function adresseFiche() { return /^#fiche/.test(location.hash); }
+  function ouvrirFiche() {
+    if (!adresseFiche()) {
+      try { history.pushState({ fiche: 1 }, "", "#fiche"); depuisAccueil = true; } catch (e) {}
+    }
+    montrerFiche();
+    if (location.hash === "#fiche-transport") {
+      var pli = $("pli-transport");
+      if (pli && !pli.hidden) {
+        pli.open = true;
+        if (pli.scrollIntoView) pli.scrollIntoView({ block: "start" });
+      }
+    }
+  }
+  function fermerFiche() {
+    /* Ouverte depuis l'accueil : on revient en arrière dans l'historique, ce
+       qui retire « #fiche » de l'adresse. Venue d'une autre page : on y
+       retourne. Sinon, l'accueil. */
+    if (depuisAccueil || venuParLien) { history.back(); return; }
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    montrerPortes();
+  }
+  function suivreAdresse() {
+    if (adresseFiche()) {
+      if ($("ecran-fiche").hidden) {
+        /* Un lien de l'accueil vers la fiche (la licence) : l'accueil est
+           l'écran d'avant, le retour y ramène par l'historique. */
+        if (!$("ecran-portes").hidden) depuisAccueil = true;
+        ouvrirFiche();
+      }
+      return;
+    }
+    if (!$("ecran-fiche").hidden) { depuisAccueil = false; montrerPortes(); }
   }
   /* CE QUI VIENT DANS LES SEPT JOURS, ET CE QUI EST DÉJÀ DÉPASSÉ.
 
@@ -514,20 +581,60 @@
     return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" })
       .replace(/(^|\s)1 /, "$1" + "1er ");
   }
+  /* OÙ CHAQUE LIGNE SE TRAITE. Relevé le 27 novembre 2026 : « Permis SOUICI
+     Toufik, en retard » ne menait nulle part. Un salarié s'ouvre sur sa fiche,
+     un véhicule sur la sienne dans la flotte, la licence sur la fiche
+     d'entreprise. L'identifiant d'un salarié est celui de flotte.js et
+     d'echeances-salaries.js : nom et prénom sans accents, en minuscules, les
+     espaces en traits d'union. */
+  function idSalarie(nom) {
+    var t = String(nom == null ? "" : nom);
+    try { t = t.normalize("NFD").replace(/[̀-ͯ]/g, ""); } catch (e) {}
+    return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "salarie";
+  }
+  function versSalarie(e) {
+    return "salaries.html?s=" + encodeURIComponent(e.id || idSalarie(e.qui)) + "&v=fiche";
+  }
+  function immatsDeLaFlotte() {
+    var I = {};
+    try {
+      (JSON.parse(localStorage.getItem("flotte-vehicules") || "[]") || []).forEach(function (v) {
+        var m = String((v && v.immat) || "").trim();
+        if (m) I[m] = true;
+      });
+    } catch (e) {}
+    return I;
+  }
   function semaine() {
     var L = [];
+    var immats = immatsDeLaFlotte();
     try {
-      if (window.Flotte && window.Flotte.echeances) L = L.concat(window.Flotte.echeances());
+      if (window.Flotte && window.Flotte.echeances)
+        L = L.concat(window.Flotte.echeances().map(function (e) {
+          /* La flotte rend le véhicule par son immatriculation, le conducteur
+             par son nom : c'est ce qui les distingue. */
+          var q = String(e.qui || "").trim();
+          if (immats[q]) e.vers = "flotte.html?immat=" + encodeURIComponent(q);
+          else if (/^v[ée]hicule sans immatriculation$/i.test(q)) e.vers = "flotte.html";
+          else e.vers = versSalarie(e);
+          return e;
+        }));
     } catch (e) {}
     try {
       if (window.EcheancesSalaries && window.EcheancesSalaries.echeances)
-        L = L.concat(window.EcheancesSalaries.echeances());
+        L = L.concat(window.EcheancesSalaries.echeances().map(function (e) {
+          e.vers = versSalarie(e);
+          return e;
+        }));
     } catch (e) {}
     /* La licence de transport : elle tient à l'entreprise, pas à un véhicule
        ni à un salarié, et c'est pourquoi elle ne figurait nulle part. */
     try {
       if (window.Profil && window.Profil.echeancesTransport)
-        L = L.concat(window.Profil.echeancesTransport());
+        L = L.concat(window.Profil.echeancesTransport().map(function (e) {
+          e.vers = "#fiche-transport";
+          return e;
+        }));
     } catch (e) {}
     var limite = new Date();
     limite.setDate(limite.getDate() + 7);
@@ -554,9 +661,12 @@
        Maquette du 21 novembre 2026. */
     var MAX = 3;
     var h = L.slice(0, MAX).map(function (e) {
-      return '<div class="sem-l ' + (e.etat === "passe" ? "passe" : "proche") + '">' +
-        '<span class="sem-d">' + (e.etat === "passe" ? "en retard" : enFrCourt(e.date)) + "</span>" +
-        '<span class="sem-q"><b>' + esc(e.quoi) + "</b> " + esc(e.qui) + "</span></div>";
+      var classe = "sem-l " + (e.etat === "passe" ? "passe" : "proche");
+      var dedans = '<span class="sem-d">' + (e.etat === "passe" ? "en retard" : enFrCourt(e.date)) + "</span>" +
+        '<span class="sem-q"><b>' + esc(e.quoi) + "</b> " + esc(e.qui) + "</span>";
+      return e.vers
+        ? '<a class="' + classe + '" href="' + esc(e.vers) + '">' + dedans + "</a>"
+        : '<div class="' + classe + '">' + dedans + "</div>";
     }).join("");
     if (L.length > MAX)
       h += '<p class="sem-plus">et ' + (L.length - MAX) + " autre" +
@@ -571,11 +681,12 @@
         parQuoi[q]++;
       });
       ordre.sort(function (a, b) { return parQuoi[b] - parQuoi[a]; });
-      h += '<div class="sem-l adater"><span class="sem-d">à dater</span>' +
+      /* Ces dates se saisissent sous leur carte, dans l'agenda social. */
+      h += '<a class="sem-l adater" href="agenda.html"><span class="sem-d">à dater</span>' +
         '<span class="sem-q"><b>' + aDater.length + " date" + (aDater.length > 1 ? "s" : "") +
         " à saisir</b> " + esc(ordre.slice(0, 3).map(function (q) {
           return parQuoi[q] + " " + q.toLowerCase();
-        }).join(", ") + (ordre.length > 3 ? ", et d'autres" : "")) + "</span></div>";
+        }).join(", ") + (ordre.length > 3 ? ", et d'autres" : "")) + "</span></a>";
     }
     document.getElementById("semaine-liste").innerHTML = h;
   }
@@ -1029,9 +1140,18 @@
 
   $("continuer-fiche").addEventListener("click", function () {
     if (!complet(profil())) return;
+    /* « Continuer » mène à l'accueil, et l'adresse perd « #fiche ». */
+    if (depuisAccueil) { history.back(); return; }
+    venuParLien = false;
+    if (adresseFiche()) {
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+    }
     montrerPortes();
   });
-  $("modifier-fiche").addEventListener("click", montrerFiche);
+  $("modifier-fiche").addEventListener("click", ouvrirFiche);
+  $("retour-fiche").addEventListener("click", fermerFiche);
+  window.addEventListener("hashchange", suivreAdresse);
+  window.addEventListener("popstate", suivreAdresse);
 
   /* UNE FICHE DÉJÀ REMPLIE NE SE REDEMANDE PAS À CHAQUE OUVERTURE.
 
@@ -1042,7 +1162,17 @@
      2026. Quand la fiche est complète, on arrive donc droit sur l'accueil ;
      elle reste à un geste, par « Modifier la fiche ». Tant qu'il y manque
      quelque chose, c'est elle qui s'ouvre, comme avant. */
-  if (complet(profil())) montrerPortes(); else montrerFiche();
+  /* Arrivé par index.html#fiche depuis une autre page de l'application (l'agenda) :
+     la fiche s'ouvre d'emblée, et son retour ramène à cette page. */
+  if (adresseFiche()) {
+    try {
+      var vient = document.referrer ? new URL(document.referrer) : null;
+      venuParLien = !!vient && vient.origin === location.origin &&
+        vient.pathname.replace(/index\.html$/, "") !== location.pathname.replace(/index\.html$/, "") &&
+        history.length > 1;
+    } catch (e) { venuParLien = false; }
+    ouvrirFiche();
+  } else if (complet(profil())) montrerPortes(); else montrerFiche();
 
   /* Mise à jour de l'application : un bandeau, jamais un rechargement imposé. */
   if ("serviceWorker" in navigator) {

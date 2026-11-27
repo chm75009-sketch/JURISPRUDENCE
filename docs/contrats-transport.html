@@ -31,6 +31,17 @@
 <style>
   main.wrap{max-width:720px}
   .haut{position:sticky;top:0;z-index:20;background:var(--fond)}
+  /* L'EN-TÊTE TIENT SUR UNE RANGÉE, COMME AILLEURS.
+     Au téléphone, le titre long (« CDI conducteur marchandises PL ou SPL »)
+     refusait de se réduire : le Menu passait seul sur une deuxième ligne, le
+     nom de l'entreprise sur une troisième, et l'en-tête collant mangeait près
+     de deux cents points de l'écran. Relevé le 27 novembre 2026. Le titre
+     prend la place qui reste entre le Retour et le Menu, et passe à la ligne
+     dans cette place au lieu de chasser le Menu. */
+  @media (max-width:520px){
+    main .haut b#titre-haut{flex:1 1 0;min-width:0;white-space:normal;overflow:visible;
+      text-overflow:clip;line-height:1.25}
+  }
   .aide{margin:16px 0 0;font-size:var(--t4);color:var(--texte-2);line-height:1.5}
 
   .profils{display:grid;gap:12px;margin:16px 0 0}

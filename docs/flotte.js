@@ -1682,13 +1682,17 @@
        du personnel (« conduit »), sans l'enregistrer : elle ne s'écrit que si
        quelqu'un la change. Relevé le 27 novembre 2026 : elle disait « à
        préciser » pour un chauffeur que le registre classe roulant. */
-    var fR = f;
+    var caseRoulant = champsDe(s, f, ["roulant"]);
     if (!net(f.roulant)) {
-      fR = {}; Object.keys(f).forEach(function (k) { fR[k] = f[k]; });
-      fR.roulant = conduit ? "oui" : "non";
+      /* Le choix vide prend le libellé du registre ; Oui ou Non l'enregistre. */
+      var chR = {};
+      CHAMPS_C.forEach(function (c) { if (c.c === "roulant") Object.keys(c).forEach(function (k) { chR[k] = c[k]; }); });
+      chR.opts = [["", "D'après le registre : " + (conduit ? "roulant" : "non roulant")]].concat(OUI_NON.slice(1));
+      caseRoulant = '<div class="gr">' + champHtml(chR, "", "c" + s.id).replace(/<\/label>$/,
+        '<small class="aide selon-reg">Déduit de l\'emploi écrit au registre du personnel. ' +
+        "Choisissez Oui ou Non pour l'enregistrer.</small></label>") + "</div>";
     }
-    h += cadreFiche("Roulant ou non roulant", champsDe(s, fR, ["roulant"]) +
-      (net(f.roulant) ? "" : '<small class="aide">D\'après le registre du personnel.</small>'));
+    h += cadreFiche("Roulant ou non roulant", caseRoulant);
     /* Nom et prénom, comme en tête du questionnaire : ceux du registre du
        personnel, d'où vient le salarié. Ils se corrigent au registre. */
     var r = null;
@@ -2128,6 +2132,16 @@
   function montrerApercu() {
     var hote = $("i-apercu");
     LU = serrer(LU.filter(function (l) { return l.some(function (c) { return net(c); }); }));
+    /* LA LIGNE D'EN-TÊTE N'EST PAS UN VÉHICULE (27 novembre 2026). Un
+       classeur à six véhicules annonçait « 7 lignes » : son en-tête était
+       compté. Une première ligne sans aucune immatriculation, au-dessus de
+       lignes qui en portent, est un en-tête : elle est écartée. */
+    var entete = false;
+    if (LU.length > 1 && !LU[0].some(function (c) { return IMMAT.test(net(c)); }) &&
+      LU.slice(1).some(function (l) { return l.some(function (c) { return IMMAT.test(net(c)); }); })) {
+      LU = LU.slice(1);
+      entete = true;
+    }
     if (!LU.length) { hote.innerHTML = '<p class="dit mal">Rien de lisible dans ce tableau.</p>'; return; }
     var choix = deviner(LU);
     var nb = choix.length;
@@ -2145,7 +2159,8 @@
     });
     h += "</tbody></table></div>";
     h += '<p class="dit">' + LU.length + " ligne" + (LU.length > 1 ? "s" : "") +
-      " lue" + (LU.length > 1 ? "s" : "") + ". Les quatre premières sont montrées ; " +
+      " lue" + (LU.length > 1 ? "s" : "") + (entete ? ", sans la ligne d'en-tête" : "") +
+      ". Les quatre premières sont montrées ; " +
       "vérifiez l'intitulé de chaque colonne.</p>";
     h += '<div class="barre"><button type="button" id="i-ajouter">Valider l\'importation de ' +
       LU.length + " ligne" + (LU.length > 1 ? "s" : "") + "</button></div>";
@@ -2386,7 +2401,9 @@
           date: e.date, etat: e.etat, jours: e.jours, fond: e.fond });
       });
     });
-    salaries().forEach(function (s) {
+    /* Le chef de parc sans autorisation ne reçoit que les véhicules : c'est
+       par ici que le tableau de bord du parc nommait permis et cartes. */
+    if (!conducteursCaches()) salaries().forEach(function (s) {
       echeancesConducteur(fiche(s.id)).forEach(function (e) {
         if (!e.date) return;
         out.push({ quoi: e.quoi, qui: s.nom, date: e.date, etat: e.etat, jours: e.jours, fond: e.fond });
@@ -2403,7 +2420,8 @@
       EMBARQUE = hote ? { hote: hote, sid: sid, conduit: conduit !== false, apres: apres, partie: partie || "fiche" } : null;
       if (EMBARQUE) rendreEmbarque();
     },
-    etatFiche: function (sid) { return etatFiche(fiche(sid)); } };
+    etatFiche: function (sid) { return etatFiche(fiche(sid)); },
+    conducteursCaches: conducteursCaches };
 
   function demarrer() {
     /* Le fichier est aussi chargé par l'agenda, qui n'a aucun de ces écrans :
@@ -2579,7 +2597,7 @@
         L.forEach(function (x) { if (x.id === id) v = x; });
         if (!confirmerDur("Retirer " + ((v && v.immat) || "ce véhicule") + " du fichier ? Son suivi, " +
           "ses échéances et ses interventions seront perdus. Cette action ne se rattrape pas.", "SUPPRIMER")) return;
-        if (v && v.conducteur) lierVehiculeConducteur(id, "", v.conducteur);
+        if (v && v.conducteur) lierVehiculeConducteur(id, "", v.conducteur, true);
         garderVehicules(L.filter(function (x) { return x.id !== id; }));
         delete ouvert["v" + id];
         rendre();

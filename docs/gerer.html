@@ -61,6 +61,26 @@
   .haut .retour:hover{background:var(--creux);color:var(--encre);border-color:var(--filet-2)}
   .haut b{font-size:17px;color:var(--encre);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .haut span{color:var(--texte-2);font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* L'ÉCRAN DU DOCUMENT A LA MÊME TÊTE QUE LES AUTRES.
+     Son « Menu » sortait foncé et plus haut que partout ailleurs : barre.js
+     lui pose la classe « menu » sans l'identifiant que la feuille de style
+     habille, et le bouton prenait l'allure des boutons d'action. Le titre,
+     lui, était coupé à 390 points, « Élections du C… ». Relevé le
+     27 novembre 2026. Le Menu reprend l'habit de celui de la liste, le
+     Retour se réduit à sa flèche sur un téléphone comme sur la liste, et le
+     titre passe à la ligne au lieu d'être coupé. */
+  .haut button.menu{display:inline-flex;align-items:center;justify-content:center;flex:none;
+    margin:0 0 0 auto;font:600 17px/1 system-ui;padding:10px 14px;min-height:var(--h-touche,44px);
+    border:1px solid var(--filet);border-radius:var(--r1,10px);background:var(--surface);
+    color:var(--encre);white-space:nowrap;cursor:pointer}
+  .haut button.menu:hover{background:var(--creux);border-color:var(--filet-2)}
+  #e-doc .haut b{flex:1 1 auto;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25}
+  @media (max-width:460px){
+    #e-doc .haut button.retour{font-size:0;gap:0;padding:10px 13px}
+    #e-doc .haut button.retour::before{content:"\2190";font:600 19px/1 system-ui}
+    .haut button.menu{font-size:16px;padding:10px 12px}
+    #e-doc .haut b{font-size:16px}
+  }
   .aide{margin:14px 0 0;color:var(--texte-2);font-size:16px;max-width:none}
   .pq{font:600 13px/1.2 system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--texte-2);margin:20px 2px 10px}
   .trois{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -871,6 +891,14 @@
     return m ? String(Number(m[0])) : "";
   }
   var ccn = CCN[numeroIdcc()] || null;
+  /* LA CONVENTION 16 SE LIT UNE FOIS, POUR LA LISTE ET POUR L'OUVERTURE.
+     Le contrat générique était retiré de la liste, mais la recherche, celle
+     d'ici comme celle de l'accueil, ouvrait encore gerer.html#cdi, #cdd ou
+     #partiel : « 35 heures par semaine » et l'arrêt envoyé « dans les
+     quarante-huit heures » pour un conducteur. Relevé le 27 novembre 2026.
+     Le même test sert donc aux deux. */
+  var TRANSPORT16 = /^0*16\b/.test(String(profil.conventionCollective || profil.convention || profil.idcc || "").trim());
+  var CONTRAT_GENERIQUE = { cdi: 1, cdd: 1, partiel: 1 };
   var effectif = parseInt(profil.effectif, 10); if (isNaN(effectif)) effectif = 0;
 
   /* LE SIGNATAIRE, DANS LES DEUX FORMES DE LA FICHE. « responsable » est
@@ -5363,7 +5391,7 @@
        contrat avec le coefficient, la garantie annuelle, les frais de
        déplacement et le temps de service de la grille, et c'est lui qui est
        juste. Ailleurs, rien ne change. */
-    var transport16 = /^0*16\b/.test(idcc.trim());
+    var transport16 = TRANSPORT16;
     /* SANS COMITÉ, ON N'ÉCRIT PAS SA CONVOCATION.
 
        La liste offrait convocation, ordre du jour et procès-verbal à une
@@ -5965,6 +5993,14 @@
 
   function ouvrir(cle) {
     var doc = DOCS[cle]; if (!doc) return;
+    /* Sous la convention 16, un contrat de travail s'écrit dans le module du
+       transport, d'où qu'on vienne : la liste, la recherche, une adresse
+       gerer.html#cdd. La page est remplacée, pas empilée : le Retour des
+       contrats ramène là d'où l'on était parti. */
+    if (TRANSPORT16 && CONTRAT_GENERIQUE[cle]) {
+      location.replace("contrats-transport.html");
+      return;
+    }
     function montrer() {
       if (dictee && dictee.on) { try { dictee.reco.stop(); } catch (e) {} }
       ACTIF = cle; V = {}; corrections = {}; VENU_DU_REGISTRE = {};
@@ -6037,7 +6073,31 @@
     var b = ev.target.closest("button[data-doc]");
     if (b) ouvrir(b.getAttribute("data-doc"));
   });
-  $("btn-retour").addEventListener("click", revenir);
+  /* LE DOCUMENT OUVERT PAR UNE AUTRE PAGE RAMÈNE À CETTE PAGE.
+     « Écrire un avertissement » du registre des sanctions ouvre
+     gerer.html#avert, la recherche de l'accueil gerer.html#faute, l'audit
+     gerer.html#mutuelle ; le Retour menait chaque fois à la liste de Gérer,
+     où l'on n'avait jamais été, et il fallait un second appui pour revenir.
+     Relevé le 27 novembre 2026. Quand la page s'ouvre directement sur un
+     document et que la page précédente est une autre page de l'application,
+     le Retour de ce document y ramène d'un seul appui. Ouvert depuis la liste,
+     ou par une adresse tapée, il ramène à la liste comme avant. */
+  var OUVERT_DEHORS = null;
+  function venuDAilleurs() {
+    try {
+      if (!document.referrer) return false;
+      var u = new URL(document.referrer);
+      return u.origin === location.origin && u.pathname !== location.pathname;
+    } catch (e) { return false; }
+  }
+  $("btn-retour").addEventListener("click", function () {
+    if (OUVERT_DEHORS && ACTIF === OUVERT_DEHORS && history.length > 1) {
+      if (dictee && dictee.on) { try { dictee.reco.stop(); } catch (e) {} }
+      history.back();
+      return;
+    }
+    revenir();
+  });
   $("d-reprise").addEventListener("click", function (ev) {
     if (!ev.target || ev.target.id !== "d-vider") return;
     oublierSaisie();
@@ -6349,7 +6409,10 @@
   if (POUR) peindrePour();
 
   var demande = (location.hash || "").replace(/^#/, "") || new URLSearchParams(location.search).get("d");
-  if (demande && DOCS[demande]) ouvrir(demande);
+  if (demande && DOCS[demande]) {
+    if (venuDAilleurs()) OUVERT_DEHORS = demande;
+    ouvrir(demande);
+  }
   /* Le bouton « précédent » du navigateur ramène à la liste, et un lien
      gerer.html#avert ouvre directement l'avertissement. */
   window.addEventListener("hashchange", function () {
