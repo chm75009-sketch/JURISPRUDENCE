@@ -96,6 +96,10 @@
   .barre button.s{background:var(--surface);color:var(--accent);border:2px solid var(--accent)}
   .barre button[disabled]{opacity:.5;cursor:default}
   @media (min-width:520px){.barre{grid-template-columns:1fr 1fr}}
+  .barre .case{display:flex;flex-direction:column;gap:6px;min-width:0}
+  .dit-bouton{margin:0;font-size:14px;line-height:1.45;color:var(--texte-2)}
+  .dit-bouton.refus{color:var(--rouge);font-weight:600;background:var(--rouge-clair);
+    border-radius:8px;padding:9px 11px}
   .etat{margin:10px 0 0;font-size:14.5px;color:var(--vert);min-height:20px}
   .emarge{margin:14px 0 0;padding:12px 14px;border:1px solid var(--filet);
     border-radius:10px;background:var(--surface)}
@@ -170,9 +174,22 @@
     </div>
     <div class="note-doc" id="doc" contenteditable="true" spellcheck="true"></div>
     <div class="form cache" id="formalites"></div>
+    <!-- LA RAISON SOUS LE BOUTON, PAS DANS UNE INFOBULLE.
+         Au téléphone, « Valider et numéroter » refusait une note incomplète
+         mais le message s'écrivait sous la feuille d'émargement, à 897 points
+         sur un écran de 844 : le bouton semblait ne rien faire. Et le Word
+         grisé ne disait pourquoi que dans une infobulle, qu'un doigt n'ouvre
+         pas. Relevé le 27 novembre 2026. Chacun porte sa phrase juste dessous,
+         dans la même case de la grille, à toutes les largeurs. -->
     <div class="barre">
-      <button type="button" class="p" id="valider">Valider et numéroter</button>
-      <button type="button" class="s" id="word">Télécharger en Word</button>
+      <div class="case">
+        <button type="button" class="p" id="valider">Valider et numéroter</button>
+        <p class="dit-bouton refus" id="valider-dit" role="alert" hidden></p>
+      </div>
+      <div class="case">
+        <button type="button" class="s" id="word">Télécharger en Word</button>
+        <p class="dit-bouton" id="word-dit" hidden></p>
+      </div>
       <button type="button" class="s" id="imprimer">Imprimer</button>
       <button type="button" class="s" id="modele">Revenir au modèle</button>
       <button type="button" class="s" id="lettre-inspection">Courrier à l'inspection</button>
@@ -596,6 +613,10 @@
        numérotée, l'autre non. Relevé le 26 septembre 2026. */
     $("word").disabled = true;
     $("word").title = "La note se télécharge une fois validée et numérotée.";
+    $("word-dit").textContent = "Le Word se télécharge une fois la note validée et numérotée.";
+    $("word-dit").hidden = false;
+    $("valider-dit").textContent = "";
+    $("valider-dit").hidden = true;
     /* La feuille porte la référence de la note : elle attend le numéro, comme
        le Word, pour qu'une seule version circule. */
     $("emargement").disabled = true;
@@ -666,12 +687,20 @@
     if (!MOD || EMISE) return;
     var manque = crochets();
     if (manque.length) {
-      $("etat").textContent = "Il reste " + manque.length + " mention" +
+      /* Le refus s'écrit sous le bouton qu'on vient de toucher, et l'écran
+         s'y place : la barre du bas ne doit pas le recouvrir. */
+      var z = $("valider-dit");
+      z.textContent = "Il reste " + manque.length + " mention" +
         (manque.length > 1 ? "s" : "") + " à compléter : " +
         manque.slice(0, 4).join(" ") + (manque.length > 4 ? " …" : "") +
         ". Une note ne se numérote pas tant qu'elle est incomplète.";
+      z.hidden = false;
+      $("etat").textContent = "";
+      try { z.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) { z.scrollIntoView(); }
       return;
     }
+    $("valider-dit").textContent = "";
+    $("valider-dit").hidden = true;
     var d = new Date(), annee = d.getFullYear();
     var numero = prochainNumero(annee);
     EMISE = {
@@ -696,6 +725,8 @@
     $("valider").textContent = "Numérotée : " + EMISE.reference;
     $("word").disabled = false;
     $("word").title = "";
+    $("word-dit").textContent = "";
+    $("word-dit").hidden = true;
     $("emargement").disabled = false;
     $("emargement").title = "";
     if ($("lettre-inspection")) { $("lettre-inspection").disabled = false; $("lettre-inspection").title = ""; }
@@ -901,6 +932,15 @@
       ecran("e-themes");
       return;
     }
+    /* RETOUR VEUT DIRE : LÀ D'OÙ L'ON VIENT.
+       Le premier écran renvoyait toujours à Gérer, même ouvert depuis le menu
+       de l'accueil : Accueil, Menu, Notes de service, Retour menait à Gérer.
+       Relevé le 27 novembre 2026. Quand la page précédente est une page de
+       l'application, c'est elle qu'on retrouve ; Gérer reste le chemin par
+       défaut, pour qui arrive par un favori ou une adresse collée. */
+    var venu = false;
+    try { venu = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) { venu = false; }
+    if (venu && history.length > 1) { history.back(); return; }
     location.href = "gerer.html";
   });
 

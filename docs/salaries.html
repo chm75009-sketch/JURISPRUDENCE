@@ -117,7 +117,9 @@
   .org-cols .part .lig .t span{font-size:12.5px}
   .org-cols .part .puce{padding:5px 7px;font-size:11.5px}
   .org-cols .part h2{font-size:16px;padding:10px 12px}
-  @media (max-width:420px){.org-cols .part .lig .ch{display:none}}
+  /* Au téléphone, le chevron était masqué : rien ne disait qu'une ligne se
+     touche. Il reste visible, à côté de la pastille (27 novembre 2026). */
+  .org-cols .part .lig .ch{font-size:20px;line-height:1}
   .org-cols .part > :last-child{border-radius:0 0 15px 15px}
   details.part{padding:0;border-top:1px solid var(--filet)}
   details.part > summary{display:flex;align-items:center;gap:8px;padding:0 12px 0 0;min-height:0;border-radius:15px;margin:0}
@@ -183,7 +185,7 @@
 
   <!-- écran 1 : la liste -->
   <section id="e-liste" hidden>
-    <div class="ch-ligne" id="ch-ligne" hidden>
+    <div class="ch-ligne" id="ch-ligne">
       <input type="search" class="cherche" id="cherche" data-micro="non" placeholder="Nom de famille, ou première lettre" aria-label="Chercher un salarié" autocomplete="off">
       <button type="button" class="ch-mic" id="ch-mic" aria-label="Dire un nom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg></button>
     </div>
@@ -246,7 +248,7 @@
     if (/visite du permis/.test(q)) return "#fiche";
     if (/suspension|points/.test(q)) return "#permis";
     if (/visite|examen|medical|attestation de conduite/.test(q)) return "#medical";
-    if (/heures|decompte|duree/.test(q)) return "heures.html";
+    if (/heures|decompte|duree/.test(q)) return "heures.html?s=" + encodeURIComponent(id);
     if (/forfait/.test(q)) return "forfait.html";
     if (/permis|fco|fimo|formation|carte|adr|qualification|sejour/.test(q)) return "#fiche";
     return "agenda.html";
@@ -351,21 +353,27 @@
     var q = cle($("cherche").value), dit = $("ch-dit"), L;
     if (VOIX) {
       L = proches(VOIX, 6);
-      dit.textContent = L.length ? "Les plus proches de « " + VOIX + " » :" : "Aucun nom proche de « " + VOIX + " ».";
-      dit.hidden = false;
+      dit.textContent = "Les plus proches de « " + VOIX + " » :";
+      dit.hidden = !L.length;
     } else if (q) {
       L = base().filter(function (p) { return famille(p).indexOf(q) === 0; });
       dit.hidden = true;
       if (!L.length && q.length >= 3) {
         L = proches(q, 6);
-        dit.textContent = L.length ? "Aucun nom ne commence par « " + $("cherche").value.trim() + " ». Les plus proches :" : "Aucun nom ne correspond.";
-        dit.hidden = false;
+        dit.textContent = "Aucun nom ne commence par « " + $("cherche").value.trim() + " ». Les plus proches :";
+        dit.hidden = !L.length;
       }
     } else { L = base(); dit.hidden = true; }
-    $("ch-ligne").hidden = base().length < 8;
     $("legende").hidden = !PERSONNES.length;
     var nomG = GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : "Vos salariés");
-    $("titre-liste").textContent = nomG + " (" + base().length + ")";
+    /* UNE RECHERCHE SANS RÉSULTAT (27 novembre 2026) : le titre gardait le
+       total du groupe et « Aucun nom ne correspond » s'écrivait deux fois.
+       Pendant une recherche, le titre dit combien de noms sont trouvés, et le
+       message ne s'écrit qu'une fois, dans la liste. */
+    var cherche = !!(VOIX || q);
+    $("titre-liste").textContent = cherche
+      ? nomG + " : " + (L.length ? L.length + " trouvé" + (L.length > 1 ? "s" : "") : "aucun trouvé") + " sur " + base().length
+      : nomG + " (" + base().length + ")";
     if (!PERSONNES.length) {
       $("liste").innerHTML = '<p class="vide">Le registre du personnel est vide. <a href="registre.html">Ouvrir le registre</a> pour y porter vos salariés : ils apparaîtront ici.</p>';
       return;
@@ -373,7 +381,7 @@
     $("liste").innerHTML = L.map(function (p) {
       return '<button type="button" class="lig" data-id="' + ech(p.id) + '"><i class="feu ' + p.feu + '"></i><span class="t"><b>' + ech(p.nom) +
         '</b><span>' + ech(p.dit) + '</span></span><span class="ch">&rsaquo;</span></button>';
-    }).join("") || '<p class="vide">Aucun nom ne correspond.</p>';
+    }).join("") || '<p class="vide">Aucun nom ne correspond à « ' + ech(VOIX || $("cherche").value.trim()) + ' ».</p>';
   }
 
   function lien(vers, titre, sous, puce, feu) {
@@ -381,7 +389,7 @@
     return '<a class="lig" href="' + (dedans ? adresseDe(GROUPE, OUVERT, vers.slice(1)) : vers) + '"' +
       (dedans ? ' data-voir="' + vers.slice(1) + '"' : '') + '>' + (feu ? '<i class="feu ' + feu + '"></i>' : '') +
       '<span class="t"><b>' + ech(titre) + '</b>' + (sous ? '<span>' + ech(sous) + '</span>' : '') + '</span>' +
-      (puce ? '<span class="puce ' + puce[0] + '">' + ech(puce[1]) + '</span>' : '<span class="ch">&rsaquo;</span>') + '</a>';
+      (puce ? '<span class="puce ' + puce[0] + '">' + ech(puce[1]) + '</span>' : '') + '<span class="ch" aria-hidden="true">&rsaquo;</span></a>';
   }
   /* LA PAGE DU SALARIÉ (26 novembre 2026), d'après le schéma dessiné et
      validé ce jour-là : sa Fiche, son Dossier, son Suivi tachygraphe, ses
@@ -412,7 +420,9 @@
       lien("#contrat", "Contrat") +
       (roulant(p) ? lien("#camion", "Camion") + lien("#permis", "Permis") : "") +
       lien("#medical", "Suivi médical") +
-      lien("heures.html", "Heures de travail") +
+      /* Les heures de ce salarié, pas la page des heures en général
+         (27 novembre 2026) : heures.html lit le paramètre s. */
+      lien("heures.html?s=" + encodeURIComponent(p.id), "Heures de travail") +
       lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Coffre fort"));
     if (transport && roulant(p)) {
       var c = "conformite-transport.html?c=" + encodeURIComponent(p.id) + "&e=";
@@ -431,7 +441,13 @@
         return lien(pageDe(m.quoi, p.id), m.quoi, (retard ? "échéance du " : "avant le ") + jj(m.date),
           [retard ? "clig" : m.feu, delaiDit(m.j)], retard ? "r clig" : m.feu);
       }).join("") : '<p class="vide">Aucune échéance datée.</p>') +
-      (sansDate ? '<p class="mention">' + sansDate + " date" + (sansDate > 1 ? "s" : "") + " à saisir pour cette personne.</p>" : "") +
+      /* LES DATES À SAISIR, NOMMÉES (27 novembre 2026) : « 3 dates à saisir »
+         ne disait ni lesquelles ni où. Chacune a sa ligne, qui mène à
+         l'endroit où elle se saisit. */
+      (sansDate ? '<p class="mention">' + sansDate + " date" + (sansDate > 1 ? "s" : "") + " à saisir pour cette personne :</p>" +
+        p.mes.filter(function (m) { return m.j === null; }).map(function (m) {
+          return lien(pageDe(m.quoi, p.id), m.quoi, "date à saisir", ["g", "à dater"]);
+        }).join("") : "") +
       '<p class="mention">Clignote : en retard. Rouge : sept jours. Orange : un mois.</p>');
     var n = (h.match(/<details class="part/g) || []).length;
     h = h.replace('<details class="part p-fiche"', '<div class="org-cols n' + n + '"><details class="part p-fiche"') + '</div>';
@@ -507,12 +523,30 @@
             if (!d || !d.contenu) return;
             var u = URL.createObjectURL(d.contenu instanceof Blob ? d.contenu : new Blob([d.contenu], { type: d.type || "" }));
             var a = document.createElement("a"); a.href = u; a.download = d.nom || "contrat";
+            /* Ce fichier sort de la base : sans cette marque, l'accrochage le
+               rangerait une seconde fois, sous la rubrique de la page. */
+            a.setAttribute("data-sans-base", "1");
             document.body.appendChild(a); a.click(); a.remove();
             setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
           });
         });
       });
     });
+  }
+  /* ROULANT OU NON, D'APRÈS LE REGISTRE (27 novembre 2026). La case de sa
+     fiche restait « à préciser » alors que la page le range déjà dans un
+     groupe d'après l'emploi écrit au registre. Tant que la case est vide, elle
+     montre ce que le registre en dit ; rien n'est enregistré tant que personne
+     ne la change. La case est dessinée par flotte.js : on n'en change que le
+     libellé du choix vide, à chaque dessin. */
+  function selonRegistre(p) {
+    var sel = $("fiche-s").querySelector('select[data-ch="roulant"]');
+    if (!sel || sel.value || !sel.options.length) return;
+    sel.options[0].textContent = "D'après le registre : " + (roulant(p) ? "roulant" : "non roulant");
+    var lab = sel.parentNode;
+    if (lab && !lab.querySelector(".selon-reg")) lab.insertAdjacentHTML("beforeend",
+      '<small class="aide selon-reg">Déduit de l\'emploi écrit au registre (' + ech(p.poste || "non précisé") +
+      '). Choisissez Oui ou Non pour l\'enregistrer.</small>');
   }
   function peindreDetail(p) {
     var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
@@ -526,10 +560,14 @@
         lv("Temps de travail", r.part === "partiel" ? "temps partiel" : (r.part === "complet" ? "temps complet" : "")) +
         (r.sor ? lv("Sorti le", jj(r.sor)) : "") + '</div>' +
         '<div class="fn-cadre"><h3 class="fn-t">Son contrat et ses avenants</h3><div id="ct-docs"><p class="fn-rien">Recherche...</p></div>' +
-        '<label class="btn-acte b2 ct-depot">Déposer un contrat ou un avenant signé<input type="file" id="ct-fichier" multiple hidden></label></div>' +
+        '<label class="btn-acte b2 ct-depot">Déposer un contrat ou un avenant signé<input type="file" id="ct-fichier" data-sans-base="1" multiple hidden></label></div>' +
         '<a class="btn-acte" href="registre.html">Modifier au registre du personnel</a>' +
         '<a class="btn-acte b2" href="' + (transport ? "contrats-transport.html" : "gerer.html?pour=salarie") + '">Faire un contrat ou un avenant</a>';
       contratsDe(p);
+      /* Le dépôt porte « data-sans-base » : il s'enregistre ici, une seule
+         fois, sous salarie-<identifiant>. Sans la marque, l'accrochage de
+         base-documents.js le gardait une seconde fois sous « salaries »
+         (27 novembre 2026). */
       $("ct-fichier").addEventListener("change", function () {
         var F = Array.prototype.slice.call(this.files || []);
         if (!F.length || !window.Documents) return;
@@ -543,6 +581,7 @@
     if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie($("fiche-s"), p.id, roulant(p), function () {
       /* une date changée change ses échéances */
       charger();
+      selonRegistre(p);
     }, DETAIL);
     else $("fiche-s").innerHTML = '<p class="vide">Cette page n\'a pas pu s\'ouvrir. Rechargez la page.</p>';
   }
