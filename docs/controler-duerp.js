@@ -225,6 +225,24 @@
     "séparés, et situation des salariées enceintes ou allaitantes. [ Ce que cet examen a fait " +
     "apparaître dans l'entreprise, poste par poste, et ce qui en a été tiré ]";
 
+  /* LE HARCÈLEMENT ET LES AGISSEMENTS SEXISTES, QUE LE CONTRÔLE RÉCLAME.
+
+     Le document écrit ici, déposé dans le « oui », sortait avec « Risques liés
+     au harcèlement moral et au harcèlement sexuel : introuvable », mention
+     bloquante de ce même fichier : aucun métier du modèle ne les porte.
+     Relevé le 27 novembre 2026. L. 4121-2, 7° (LEGIARTI000033019913, lu en
+     entier au relais le 27 novembre 2026, deux lectures identiques) : la
+     prévention se planifie en y intégrant « notamment les risques liés au
+     harcèlement moral et au harcèlement sexuel, tels qu'ils sont définis aux
+     articles L. 1152-1 et L. 1153-1, ainsi que ceux liés aux agissements
+     sexistes définis à l'article L. 1142-2-1 ». La phrase le dit, et laisse
+     entre crochets ce que l'entreprise seule peut écrire. */
+  var HARCELEMENT = "La prévention intègre les risques liés au harcèlement moral et au " +
+    "harcèlement sexuel, tels qu'ils sont définis aux articles L. 1152-1 et L. 1153-1, ainsi que " +
+    "ceux liés aux agissements sexistes définis à l'article L. 1142-2-1 (L. 4121-2, 7°). [ Les " +
+    "situations où ils peuvent survenir dans l'entreprise, les mesures en place et celles à prendre, " +
+    "avec leur responsable et leur échéance ]";
+
   /* LES UNITÉS SONT DÉDUITES DE L'ACTIVITÉ, PAS CONSTATÉES SUR LE SITE.
 
      Le document de TEC décrivait un atelier mécanique intégré, une citerne et
@@ -585,6 +603,7 @@
     return enTeteHtml() +
       "<p>" + ech(INTRO) + "</p>" +
       "<p>" + ech(SEXE) + "</p>" +
+      "<p>" + ech(HARCELEMENT) + "</p>" +
       "<p>" + ech(UNITES_A_CONFIRMER) + "</p>" +
       unitesHtml(groupes, 1) +
       (registrePhrase(groupes) ? "<p>" + ech(registrePhrase(groupes)) + "</p>" : "") +
@@ -631,6 +650,7 @@
     items.push({ k: "p", t: "Version du " + (dateFr(v("dateVersion")) || "[ date ]") + ", établie par " + ou("responsable", "responsable") + "." });
     items.push({ k: "p", t: INTRO });
     items.push({ k: "p", t: SEXE });
+    items.push({ k: "p", t: HARCELEMENT });
     items.push({ k: "p", t: UNITES_A_CONFIRMER });
     unitesItems(groupes, 1, items);
     var phraseReg = registrePhrase(groupes);

@@ -654,7 +654,7 @@
        plusieurs pages la fin des listes et les boutons de validation. Dans la
        barre, il ne recouvre plus rien, à aucun moment du défilement. */
     "#barre-bas #assist-bouton.dans-bas{position:static;flex:none;align-self:center;" +
-    "width:46px;height:46px;margin:0 0 0 6px;font-size:20px;box-shadow:0 2px 8px rgba(22,24,29,.22)}" +
+    "width:46px;height:46px;min-height:0;padding:0;margin:0 0 0 6px;font-size:20px;box-shadow:0 2px 8px rgba(22,24,29,.22)}" +
     /* Sans barre, il flotte : la page reçoit sous son contenu la hauteur du
        bouton et de sa marge, barre du bas comprise si elle revient. */
     "body.assist-flottant.avec-bas{padding-bottom:calc(150px + env(safe-area-inset-bottom))}";

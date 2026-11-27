@@ -605,7 +605,7 @@
      espaces en traits d'union. */
   function idSalarie(nom) {
     var t = String(nom == null ? "" : nom);
-    try { t = t.normalize("NFD").replace(/[̀-ͯ]/g, ""); } catch (e) {}
+    try { t = t.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } catch (e) {}
     return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "salarie";
   }
   function versSalarie(e) {

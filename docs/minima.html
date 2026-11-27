@@ -500,8 +500,12 @@
     var L = salaries();
     var rows = L.map(function (s) {
       var m = mesurer(s);
+      /* Le minimum dit la durée mensuelle sur laquelle il est calculé : celle
+         du profil, 151,67, 169 ou 186 heures, et pas une durée sous-entendue.
+         Relevé le 27 novembre 2026. */
       return [s.nom, s.emp || "", m.coef || "", m.p ? m.p.nom : "",
-        m.minimum ? eur(m.minimum) : "", m.paye === null ? "" : eur(m.paye),
+        m.minimum ? eur(m.minimum) + " (" + String(m.heures).replace(".", ",") + " heures)" : "",
+        m.paye === null ? "" : eur(m.paye),
         m.etat === "non" ? eur(m.manque > 0 ? m.manque : m.manqueAn) : (m.etat === "ok" ? "conforme" : m.dit)];
     });
     var items = [];

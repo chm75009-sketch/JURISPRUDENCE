@@ -23,6 +23,14 @@
   /* Sur les pages sans cadre (accueil, salariés, documents), le module
      travaille sans rien afficher : il range les fiches arrivées. */
   var hote = document.getElementById("fiches-recues");
+  /* LE CHEF DE PARC SANS ACCÈS AUX CONDUCTEURS (27 novembre 2026) : les fiches
+     reçues portent l'identité, le numéro de sécurité sociale et les papiers
+     des chauffeurs. Elles ne s'écrivent pas dans sa page, même dans l'onglet
+     masqué ; le module continue seulement de les ranger. */
+  try {
+    var role = (window.sessionStorage && window.sessionStorage.getItem("seance-role")) || ls.getItem("seance-role");
+    if (role === "parc" && ls.getItem("parc-conducteurs-visibles") !== "oui") hote = null;
+  } catch (e) {}
   var brut64 = ls.getItem("synchro-cle");
   if (!brut64) return;
 

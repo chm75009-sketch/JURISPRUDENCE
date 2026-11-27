@@ -391,8 +391,10 @@
   /* Les dix facteurs de risques professionnels de L. 4161-1
      (LEGIARTI000035640694, lu en entier au relais le 27 novembre 2026, deux
      lectures identiques), dans l'ordre du texte, pour l'annexe de
-     R. 4121-1-1. Le dernier est abrégé : le texte le décrit comme des
-     mouvements répétés sollicitant tout ou partie du membre supérieur. */
+     R. 4121-1-1. Deux sont abrégés : le travail de nuit, que le texte
+     rattache aux conditions des articles L. 3122-2 à L. 3122-5, et le
+     travail répétitif, qu'il décrit comme des mouvements répétés sollicitant
+     tout ou partie du membre supérieur. */
   var FACTEURS_L4161 = [
     "Manutentions manuelles de charges",
     "Postures pénibles définies comme positions forcées des articulations",
@@ -401,7 +403,9 @@
     "Activités exercées en milieu hyperbare",
     "Températures extrêmes",
     "Bruit",
-    "Travail de nuit dans les conditions fixées aux articles L. 3122-2 à L. 3122-5",
+    /* Sans les numéros d'articles que le texte y joint : un chiffre à côté
+       du facteur se lit, au contrôle, comme une donnée portée. */
+    "Travail de nuit",
     "Travail en équipes successives alternantes",
     "Travail répétitif, à une fréquence élevée et sous cadence contrainte",
   ];
@@ -1477,15 +1481,19 @@
           C.push("");
         }
         C = C.concat(tableau(
-          ["Facteur de risques (L. 4161-1)", "Postes, métiers ou situations de travail concernés",
-           "Salariés exposés au-delà des seuils", "Proportion de l'effectif"],
+          ["Facteur (L. 4161-1)", "Postes ou situations de travail",
+           "Salariés exposés au-delà des seuils", "Proportion"],
           FACTEURS_L4161.map(function (f) {
-            return [f, X(E, "-", "postes ou situations"), X(E, "-", "nombre"), X(E, "-", "proportion")];
+            return [f, X(E, "-", "postes"), X(E, "-", "nombre"), X(E, "-", "%")];
           })));
 
         C.push("PIÈCE JOINTE, NOTE DE LANCEMENT DE L'ÉVALUATION (interne)");
         C.push("");
+        /* Les blancs qui suivent séparent ce que la feuille collait en une
+           seule ligne : l'émetteur et l'objet, puis les points 1 à 5 et le 6,
+           qui n'a pas d'intitulé. Relevé le 27 novembre 2026 sur le Word. */
         C.push(nom + ", note du " + X(E, leJour(dans(d0, -60)), "date"));
+        C.push("");
         C.push("Objet : évaluation des risques professionnels, organisation des travaux");
         C.push("");
         C.push("1. Périmètre : " + X(E, "l'ensemble de l'entreprise, un seul établissement", "établissements et sites") + ".");
@@ -1497,6 +1505,7 @@
         C.push("5. Calendrier : visites de postes du " + X(E, leJour(dans(d0, -45)), "date") + " au " + X(E, leJour(dans(d0, -25)), "date") +
           " ; rédaction pour le " + X(E, leJour(dans(d0, -15)), "date") + " ; consultation du comité le " + X(E, leJour(dans(d0, -12)), "date") +
           " ; version datée le " + X(E, leJour(d0), "date") + ".");
+        C.push("");
         C.push("6. Le comité social et économique et sa commission, s'ils existent,");
         C.push("   apportent leur contribution (L. 4121-3, 1°) et le comité est consulté");
         C.push("   sur le document et ses mises à jour.");
@@ -1813,11 +1822,23 @@
        produit : sans cette coupure, elles partaient à la fin de l'onglet,
        derrière l'exemple, et le Word téléchargé s'ouvrait sur « VOTRE
        DOCUMENT UNIQUE, À COMPLÉTER » au lieu du nom de l'entreprise. */
+    /* LE REPÈRE DE L'EXEMPLE NE SE TROUVAIT PAS, ET L'EN-TÊTE FINISSAIT LE WORD.
+
+       On cherchait « EXEMPLE, À ADAPTER », alors que le bandeau commun
+       s'écrit « EXEMPLE : ce qui suit n'est pas votre document » : l'en-tête
+       restait collé devant l'exemple, et quand l'exemple était retiré du
+       Word, il restait seul à la fin, ses lignes jointes en une seule
+       (« 1 rue du Port 91000 Evry SIRET ... Représentée par ... »). Relevé le
+       27 novembre 2026. Le repère se cherche maintenant comme le fait la
+       coupe commune, sur « EXEMPLE » en début de ligne. Et l'en-tête ne
+       vient plus du tout dans l'onglet du document : le document unique
+       porte déjà, ligne par ligne, la dénomination, l'adresse, la version, la
+       date, le rédacteur et la validation, et un second en-tête « Établi le »
+       daté du jour contredisait la date de version laissée à remplir. */
     var iEx = -1;
     for (var k = 0; k < L.length; k++)
-      if (L[k].indexOf("EXEMPLE, À ADAPTER") === 0) { iEx = k; break; }
-    var entete = (iEx > 0 && (coupure < 0 || iEx < coupure)) ? L.slice(0, iEx) : [];
-    var debutExemple = entete.length ? iEx : 0;
+      if (L[k].indexOf("EXEMPLE") === 0) { iEx = k; break; }
+    var debutExemple = (iEx > 0 && (coupure < 0 || iEx < coupure)) ? iEx : 0;
     var exemple = coupure > 0 ? L.slice(debutExemple, coupure) : [];
     var reste = coupure > 0 ? L.slice(coupure) : L;
 
@@ -1874,7 +1895,7 @@
        et les données collectives. Relevé le 27 novembre 2026. Le document va
        donc jusqu'au calendrier, signature, annexe et note de lancement
        comprises ; les formalités gardent leurs sous-onglets. */
-    var doc = entete.concat(coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "VOTRE CALENDRIER"))
+    var doc = coupeSst(reste, "VOTRE DOCUMENT UNIQUE", "VOTRE CALENDRIER")
       .concat([""], exemple);
     return [
       { cle: "document", nom: "Le document", texte: doc.join("\n") },

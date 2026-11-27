@@ -1062,12 +1062,14 @@
       out.push({ grille: "Ouvriers, annexe I", coef: c,
         groupe: G.parCoefficient[c] || "",
         taux: S.ouvriers[c],
-        gar: (S.gar["151.67"] || {})[c] || null });
+        gar: (S.gar["151.67"] || {})[c] || null,
+        gar169: (S.gar["169"] || {})[c] || null,
+        gar200: (S.gar["200"] || {})[c] || null });
     });
     Object.keys(S.employes).forEach(function (c) {
       out.push({ grille: "Employés, annexe II", coef: c, groupe: "",
         taux: S.employes[c],
-        gar: (S.garEmployes || {})[c] || null });
+        gar: (S.garEmployes || {})[c] || null, gar169: null, gar200: null });
     });
     return out;
   }
@@ -1082,9 +1084,16 @@
     var h = "";
     Object.keys(par).forEach(function (g) {
       h += "<h3>" + ech(g) + "</h3>";
+      /* LA DURÉE DE LA GARANTIE EST ÉCRITE DANS LE TABLEAU.
+         Il donnait 23 301,79 euros au 150 M sans dire que c'est le barème de
+         151,67 heures, quand le contrat d'un conducteur PL prend celui de
+         169 heures, 26 629,52 euros : deux chiffres pour le même coefficient,
+         sans rien qui les accorde. Relevé le 27 novembre 2026. La colonne dit
+         sa durée, et les barèmes de 169 et de 200 heures des ouvriers suivent
+         dans leur propre tableau, mêmes chiffres que ceux du contrat. */
       h += '<div class="min-t"><div class="min-l min-e">' +
         "<span>Coefficient</span><span>Groupe</span><span>Taux horaire</span>" +
-        "<span>Garantie annuelle</span></div>";
+        "<span>Garantie annuelle, 151,67 heures par mois</span></div>";
       par[g].forEach(function (l) {
         h += '<div class="min-l"><span>' + ech(l.coef) + "</span><span>" +
           (l.groupe ? ech(l.groupe) : "&mdash;").replace("&mdash;", "-") + "</span><span>" +
@@ -1092,10 +1101,32 @@
           (l.gar ? CT.fr(l.gar, 2) + " &euro;" : "-") + "</span></div>";
       });
       h += "</div>";
+      var plus = par[g].filter(function (l) { return l.gar169 || l.gar200; });
+      if (plus.length) {
+        h += '<p class="aide">' + ech(g) + " : garantie annuelle selon la durée mensuelle " +
+          "du poste.</p>";
+        h += '<div class="min-t"><div class="min-l min-g min-e">' +
+          "<span>Coefficient</span><span>169 heures par mois</span><span>200 heures par mois</span></div>";
+        plus.forEach(function (l) {
+          h += '<div class="min-l min-g"><span>' + ech(l.coef) + "</span><span>" +
+            (l.gar169 ? CT.fr(l.gar169, 2) + " &euro;" : "-") + "</span><span>" +
+            (l.gar200 ? CT.fr(l.gar200, 2) + " &euro;" : "-") + "</span></div>";
+        });
+        h += "</div>";
+      }
     });
-    h += '<p class="aide">Garantie annuelle donnée pour 151,67 heures par mois chez les ' +
-      "ouvriers. Les garanties de 169 et de 200 heures figurent au contrat de chaque " +
-      "salarié concerné, selon son temps de service.</p>";
+    /* Le barème que chaque contrat retient, lu dans le calcul du contrat
+       lui-même (CT.garantie) et non écrit à la main : si l'un change, la
+       phrase suit. */
+    var retenus = CT.PROFILS.map(function (p) {
+      var g = CT.garantie(p, p.coefDefaut || (p.coefs || [])[0], p.mensuel);
+      if (!g) return "";
+      return p.nom + ", barème de " + g.pour + " heures" + (g.exact ? "" : " (durée du poste " +
+        String(p.mensuel).replace(".", ",") + " heures, barème immédiatement inférieur)");
+    }).filter(Boolean);
+    if (retenus.length)
+      h += '<p class="aide">Barème retenu par le contrat, selon l\'emploi. ' +
+        ech(retenus.join(" ; ")) + ".</p>";
     h += '<p class="aide">Source : ' + ech(S.source) + ", " + ech(S.article) +
       ", en vigueur au " + ech(CT.dateFr(S.depuis)) + ".</p>";
     return h;
@@ -1346,10 +1377,14 @@
        téléchargement entier échouait, sans rien dire. Relevé le
        28 septembre 2026, en relisant le bouton. */
     items.push({ k: "table",
-      head: ["Grille", "Coefficient", "Groupe", "Taux horaire", "Garantie annuelle"],
+      paysage: true,
+      head: ["Grille", "Coefficient", "Groupe", "Taux horaire", "Garantie annuelle, 151,67 heures",
+        "Garantie annuelle, 169 heures", "Garantie annuelle, 200 heures"],
       rows: lignesMinima().map(function (l) {
         return [l.grille, l.coef, l.groupe || "-", CT.fr(l.taux, 4) + " euros",
-          l.gar ? CT.fr(l.gar, 2) + " euros" : "-"];
+          l.gar ? CT.fr(l.gar, 2) + " euros" : "-",
+          l.gar169 ? CT.fr(l.gar169, 2) + " euros" : "-",
+          l.gar200 ? CT.fr(l.gar200, 2) + " euros" : "-"];
       }) });
     var SAL = salaires();
     var smic = parseFloat(String(SAL.smic || "").replace(",", "."));

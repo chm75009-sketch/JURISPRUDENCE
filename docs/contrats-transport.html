@@ -175,6 +175,10 @@
     letter-spacing:.03em;color:var(--texte-3);background:var(--surface-2)}
   .min-l span:nth-child(3),.min-l span:nth-child(4){text-align:right;
     font-variant-numeric:tabular-nums}
+  /* Les garanties des ouvriers à 169 et 200 heures : trois colonnes, les
+     montants alignés à droite. */
+  .min-l.min-g{grid-template-columns:1fr 1fr 1fr}
+  .min-l.min-g span:nth-child(2){text-align:right;font-variant-numeric:tabular-nums}
   .min-smic{display:block;margin:12px 0;font:600 14px/1.4 system-ui;color:var(--texte-2)}
   .min-smic input{display:block;margin:6px 0 0;font-size:16px;padding:10px 12px;min-height:44px;
     width:100%;max-width:220px;box-sizing:border-box;border-radius:10px;
