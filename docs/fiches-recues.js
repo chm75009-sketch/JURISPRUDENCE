@@ -296,7 +296,7 @@
     ["permisEchange", "Échange du permis demandé"], ["points", "Points restants"],
     ["suspendu", "Permis suspendu ou retiré"], ["retraitLe", "Suspendu ou retiré depuis le"], ["retraitFin", "Jusqu'au"],
     ["retraitMotif", "Motif"], ["visiteTravail", "Dernière visite, médecine du travail"],
-    ["visitePermisFin", "Visite médicale du permis, jusqu'au"], ["fcoType", "Dernière formation"], ["fco", "Date de la FIMO ou FCO"],
+    ["visitePermisFin", "Visite médicale du permis, jusqu'au"], ["fimo", "FIMO, le"], ["fco", "Dernière FCO, le"],
     ["code95", "Code 95 sur le permis"], ["carteQualif", "Carte de qualification, jusqu'au"],
     ["carteNum", "Numéro de la carte conducteur"], ["carteCond", "Carte conducteur, jusqu'au"],
     ["livret", "Livret individuel de contrôle"], ["aCarte", "A une carte conducteur"],
@@ -368,7 +368,7 @@
     "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil",
     /* Ajoutés le 27 novembre 2026, avec les questions du même jour. */
     "sexe", "nais", "naisLieu", "nat", "courriel", "sansNir", "titreType", "titreNum", "permisEchange",
-    "points", "retraitLe", "retraitFin", "retraitMotif", "fcoType", "carteNum"];
+    "points", "retraitLe", "retraitFin", "retraitMotif", "fimo", "carteNum"];
 
   /* LA FICHE REMPLIT AUSSI LE REGISTRE (27 novembre 2026).
 

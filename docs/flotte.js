@@ -253,8 +253,12 @@
     { c: "retraitLe", sal: true, lib: "Retrait ou suspension, le", t: "date" },
     { c: "retraitFin", sal: true, lib: "Jusqu'au", t: "date" },
     { c: "retraitMotif", sal: true, lib: "Motif du retrait ou de la suspension", t: "text", large: true },
-    { c: "fcoType", sal: true, lib: "Dernière formation", t: "select", opts: [["", "- à préciser -"], ["FIMO", "FIMO"], ["FCO", "FCO"]] },
-    { c: "fco", sal: true, lib: "Dernière FIMO ou FCO", t: "date" },
+    /* La FIMO et la dernière FCO, deux dates (27 novembre 2026) : la FCO se
+       suit tous les cinq ans, la première dans les cinq ans de la FIMO (code
+       des transports, R. 3314-10). L'échéance part de la plus récente. Une
+       fiche plus ancienne portait sous « fco » la dernière des deux. */
+    { c: "fimo", sal: true, lib: "FIMO, le", t: "date" },
+    { c: "fco", sal: true, lib: "Dernière FCO, le", t: "date" },
     { c: "carteNum", sal: true, lib: "Carte de conducteur, numéro", t: "text" },
     { c: "fcoMois", lib: "Périodicité de la FCO, en mois", t: "num" },
     { c: "carteCond", sal: true, lib: "Carte de conducteur, échéance", t: "date" },
@@ -373,6 +377,8 @@
      autres, quand on demande la liste entière : l'application ne retire
      personne sans le dire.                                                  */
   var CONDUIT = /conducteur|conductrice|chauffeur|routier|livreur|coursier|cariste|grutier|ambulancier|convoyeur/i;
+  /* La dernière formation suivie : la FCO si elle est datée, sinon la FIMO. */
+  function derForm(f) { var a = net(f && f.fco), b = net(f && f.fimo); return a && (!b || a >= b) ? a : b; }
   function salaries(tous) {
     var r = lire(CLE_REG, {}), F = lire(CLE_C, {}) || {};
     var L = ((r && r.salaries) || []).filter(function (s) {
@@ -447,7 +453,7 @@
     }
     pose("Permis", f.permisFin);
     pose("Fin de suspension", f.retraitFin);
-    pose("FCO", f.fco ? plusMois(f.fco, f.fcoMois || 60) : "");
+    pose("FCO", derForm(f) ? plusMois(derForm(f), f.fcoMois || 60) : "");
     pose("Carte conducteur", f.carteCond);
     /* Le téléchargement de la carte se suit au suivi tachygraphe, et nulle
        part ailleurs (26 novembre 2026) : deux dates pour la même chose
@@ -1533,7 +1539,7 @@
   }
   function finFco(f) {
     if (net(f.carteQualif)) return f.carteQualif;
-    return f.fco ? plusMois(f.fco, f.fcoMois || 60) : "";
+    return derForm(f) ? plusMois(derForm(f), f.fcoMois || 60) : "";
   }
   function papiersChauffeur(profil, f) {
     if (profil === "pl") return [
@@ -1750,9 +1756,9 @@
         categoriesHtml(s, f) + alerte + champsDe(s, f, pe));
       /* Une date de poids lourd déjà connue reste visible, même quand le
          profil dit le contraire : on ne cache pas ce qu'il a déclaré. */
-      var plConnu = ["visitePermisFin", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
+      var plConnu = ["visitePermisFin", "fimo", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
       if (prof !== "leger" || plConnu)
-        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fcoType", "fco", "code95", "carteQualif", "carteNum", "carteCond"]));
+        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fimo", "fco", "code95", "carteQualif", "carteNum", "carteCond"]));
       if (prof === "leger")
         h += cadreFiche("Pas poids lourd", champsDe(s, f, ["livret", "aCarte"]
           .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond"] : [])));
@@ -2318,8 +2324,8 @@
       if (f.suivi === "sir" && f.visiteTravail) prochaine = plusMois(f.visiteTravail, 48);
       C.push([
         s.nom, s.emp, f.permisNum || "", f.permisCat || "", dateExcel(f.permisFin),
-        f.points == null ? "" : f.points, dateExcel(f.retraitFin), dateExcel(f.fco),
-        dateExcel(f.fco ? plusMois(f.fco, f.fcoMois || 60) : ""),
+        f.points == null ? "" : f.points, dateExcel(f.retraitFin), dateExcel(derForm(f)),
+        dateExcel(derForm(f) ? plusMois(derForm(f), f.fcoMois || 60) : ""),
         dateExcel(f.carteCond), dateExcel(f.carteQualif), dateExcel(f.visitePermisFin),
         dateExcel(f.attestConduite ? plusMois(f.attestConduite, 60) : ""),
         suivi, dateExcel(f.visiteTravail), dateExcel(prochaine),
