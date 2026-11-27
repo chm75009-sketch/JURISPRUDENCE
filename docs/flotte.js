@@ -272,7 +272,10 @@
        pour l'unité embarquée ; elle vient d'un arrêté que l'application n'a
        pas lu, comme la périodicité du chronotachygraphe : c'est un champ que
        l'entreprise corrige. */
-    { c: "telecCarte", lib: "Dernier téléchargement de la carte conducteur", t: "date" },
+    /* Demandé au salarié dans son questionnaire depuis le 27 novembre 2026, et
+       saisissable ici : il lance le voyant des vingt-huit jours du suivi de la
+       carte, tant qu'aucun fichier de carte n'a été lu. */
+    { c: "telecCarte", sal: true, lib: "Dernier téléchargement de la carte, le", t: "date" },
     { c: "telecCarteJours", lib: "Périodicité du téléchargement, en jours", t: "num" },
     { c: "visitePermisFin", sal: true, lib: "Visite médicale du permis, valable jusqu'au", t: "date" },
     /* LE SALARIÉ ÉTRANGER (25 novembre 2026) : la fin de son titre de séjour,
@@ -1758,10 +1761,10 @@
          profil dit le contraire : on ne cache pas ce qu'il a déclaré. */
       var plConnu = ["visitePermisFin", "fimo", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
       if (prof !== "leger" || plConnu)
-        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fimo", "fco", "code95", "carteQualif", "carteNum", "carteCond"]));
+        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fimo", "fco", "code95", "carteQualif", "carteNum", "carteCond", "telecCarte"]));
       if (prof === "leger")
         h += cadreFiche("Pas poids lourd", champsDe(s, f, ["livret", "aCarte"]
-          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond"] : [])));
+          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond", "telecCarte"] : [])));
     }
     h += cadreFiche("Ses photos et sa signature", '<div class="fn-photos" data-photos="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
     h += cadreFiche("Sa signature", '<div data-signature="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');

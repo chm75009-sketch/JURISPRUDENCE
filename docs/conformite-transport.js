@@ -224,12 +224,16 @@
         etat: q.etat, jours: q.jours, fond: q.fond, dernier: der });
     });
     salariesRegistre().forEach(function (s) {
-      var der = (e.cartes[s.id] || {}).dernier;
+      /* La date d'un fichier de carte lu, ou celle portée sur sa fiche (par le
+         salarié dans son questionnaire, ou par T.E.C) : la plus récente des
+         deux (27 novembre 2026). Sans fichier lu, le voyant part de la fiche. */
+      var lu = net((e.cartes[s.id] || {}).dernier), fi = net(ficheC(s.id).telecCarte);
+      var der = lu && (!fi || lu >= fi) ? lu : fi;
       if (!der) { out.push({ quoi: "Téléchargement de la carte", qui: s.nom, date: null,
         etat: "à renseigner", jours: null, fond: "gris" }); return; }
       var ech = ajouterJours(der, DELAI_CARTE), q = qualifier(ech);
       out.push({ quoi: "Téléchargement de la carte", qui: s.nom, date: ech,
-        etat: q.etat, jours: q.jours, fond: q.fond, dernier: der });
+        etat: q.etat, jours: q.jours, fond: q.fond, dernier: der, deFiche: der !== lu });
     });
     return out;
   }
