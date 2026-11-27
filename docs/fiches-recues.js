@@ -166,7 +166,11 @@
         : '<a href="salaries.html?s=' + encodeURIComponent(p.sid) + '&v=fiche"><b>' + ech(p.nom) + "</b></a>";
       return '<li class="fr-' + p.etat + '"><i class="fr-pt"></i><span class="fr-qui">' + lienF +
         (sous ? "<span>" + ech(sous) + "</span>" : "") + "</span>" +
-        (p.etat !== "rouge" && f.recue ? '<button type="button" class="fr-x" data-fr="retirer" data-id="' + ech(f.recue.id) +
+        /* UNE FICHE VALIDÉE NE SE SUPPRIME PLUS D'UN GESTE (27 novembre 2026) :
+           à sa place, « Ouvrir » mène à sa fiche, où la modification, la
+           suppression et la remise à zéro sont en haut, avec confirmation. */
+        (p.etat === "vert" ? '<a class="fr-x fr-ouvrir" href="salaries.html?s=' + encodeURIComponent(p.sid) + '&v=fiche">Ouvrir</a>'
+          : p.etat !== "rouge" && f.recue ? '<button type="button" class="fr-x" data-fr="retirer" data-id="' + ech(f.recue.id) +
           '" data-sid="' + ech(p.sid) + '">Supprimer</button>' : "") + "</li>";
     }
     function groupe(cle, titre, ouvert) {
@@ -237,6 +241,9 @@
       });
     });
   }
+
+  /* La suppression d'une fiche reçue, pour la page du salarié. */
+  window.FichesRecues = { retirer: retirer };
 
   /* ─── l'affichage ─── */
   var ETAT = { liste: [], resumes: {}, ouvertes: {}, fiches: {}, msg: "" };

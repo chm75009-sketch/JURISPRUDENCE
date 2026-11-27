@@ -1648,8 +1648,20 @@
   }
   function validationHtml(s, f) {
     var e = etatFiche(f);
-    if (e === "vert") return '<p class="fp-ok"><i class="fr-pt"></i>Fiche validée le ' + ech(enFrancais(f.validee.le)) +
-      (f.validee.par ? " par " + ech(f.validee.par) : "") + ".</p>";
+    /* LA FICHE VALIDÉE (27 novembre 2026) : ses réponses sont verrouillées ;
+       trois gestes en haut, modifier, supprimer (deux confirmations),
+       remettre à zéro (deux confirmations). */
+    if (e === "vert") {
+      var ouv = !!OUVERTES[s.id];
+      return '<p class="fp-ok"><i class="fr-pt"></i>Fiche validée le ' + ech(enFrancais(f.validee.le)) +
+        (f.validee.par ? " par " + ech(f.validee.par) : "") + ".</p>" +
+        '<div class="fp-gestes">' +
+        '<button type="button" data-modifier="' + ech(s.id) + '"' + (ouv ? ' aria-pressed="true"' : "") + ">" + (ouv ? "Terminer" : "Modifier") + "</button>" +
+        '<button type="button" class="fp-rouge" data-supprimer-fiche="' + ech(s.id) + '">Supprimer</button>' +
+        '<button type="button" class="fp-rouge" data-raz-fiche="' + ech(s.id) + '">Remettre à zéro</button></div>' +
+        (ouv ? '<p class="fp-verrou">Les cases sont ouvertes : corrigez, puis touchez « Terminer ».</p>'
+          : '<p class="fp-verrou">Ses réponses sont verrouillées. Touchez « Modifier » pour les corriger.</p>');
+    }
     var maj = f.maj && f.maj.id === f.recue.id ? f.maj : null, h = '<div class="fp-av"><p><i class="fr-pt"></i><b>' +
       (maj ? "Mise à jour du " : "Nouvelle fiche du ") + ech(enFrancais(f.recue.le)) + "</b>, à vérifier.</p>";
     if (maj) {
@@ -1704,9 +1716,12 @@
      sa nationalité, son permis, ses cartes, ses photos et sa signature. Ce
      qui n'est pas de lui vient après : le contrôle de ce qu'il a sur lui, et
      les observations de T.E.C. */
+  var OUVERTES = {};
   function ficheNette(s, f, conduit) {
     var h = f.recue && f.recue.le ? validationHtml(s, f)
       : '<p class="fn-rien">Il n\'a pas encore rempli sa fiche.</p>';
+    var verrou = etatFiche(f) === "vert" && !OUVERTES[s.id];
+    h += '<fieldset class="fn-verrou"' + (verrou ? " disabled" : "") + ">";
     /* Comme dans le questionnaire, la première question : roulant ou non.
        Tant que personne n'a répondu, la case montre ce que dit le registre
        du personnel (« conduit »), sans l'enregistrer : elle ne s'écrit que si
@@ -1761,14 +1776,20 @@
          profil dit le contraire : on ne cache pas ce qu'il a déclaré. */
       var plConnu = ["visitePermisFin", "fimo", "fco", "carteQualif"].some(function (k) { return net(f[k]); });
       if (prof !== "leger" || plConnu)
-        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fimo", "fco", "code95", "carteQualif", "carteNum", "carteCond", "telecCarte"]));
+        h += cadreFiche("Poids lourd", champsDe(s, f, ["visitePermisFin", "fimo", "fco", "code95", "carteQualif", "carteNum", "carteCond"]));
       if (prof === "leger")
         h += cadreFiche("Pas poids lourd", champsDe(s, f, ["livret", "aCarte"]
-          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond", "telecCarte"] : [])));
+          .concat(!plConnu && (f.aCarte === "oui" || net(f.carteCond)) ? ["carteNum", "carteCond"] : [])));
     }
+    /* Le verrou s'arrête ici : les photos et la signature s'ouvrent toujours. */
+    h += "</fieldset>";
     h += cadreFiche("Ses photos et sa signature", '<div class="fn-photos" data-photos="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
     h += cadreFiche("Sa signature", '<div data-signature="' + ech(s.id) + '"><p class="fn-rien">Recherche...</p></div>');
-    if (conduit) h += '<p class="fn-sep">Contrôle par T.E.C</p>' + cadreFiche("Ce qu'il doit avoir sur lui", papiersChauffeurHtml(s, f));
+    /* Le dernier téléchargement de sa carte, rempli par T.E.C, jamais par le
+       salarié : il est hors du verrou de la fiche validée. */
+    if (conduit) h += '<p class="fn-sep">Contrôle par T.E.C</p>' +
+      cadreFiche("Téléchargement de sa carte", champsDe(s, f, ["telecCarte"])) +
+      cadreFiche("Ce qu'il doit avoir sur lui", papiersChauffeurHtml(s, f));
     h += '<div class="fn-obs">' + cadreFiche("Observations de T.E.C", champsDe(s, f, ["note"])) + "</div>";
     return h;
   }
@@ -1866,8 +1887,9 @@
     return "";
   }
   function corpsConducteur(s, f, conduit) {
-    return ficheNette(s, f, conduit) +
-      '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>';
+    /* Validée, la remise à zéro est en haut, avec les autres gestes. */
+    return ficheNette(s, f, conduit) + (etatFiche(f) === "vert" ? "" :
+      '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>');
   }
   function brancherConducteur(cadre, s) {
     brancher(cadre, "c" + s.id,
@@ -1911,6 +1933,20 @@
       } catch (e) {}
       var fin = function () { rendre(); };
       if (window.Documents && window.Documents.vider) window.Documents.vider("salarie-" + s.id).then(fin, fin); else fin();
+    });
+    var bm = cadre.querySelector("[data-modifier]");
+    if (bm) bm.addEventListener("click", function () {
+      OUVERTES[s.id] = !OUVERTES[s.id]; rendre();
+    });
+    var bs = cadre.querySelector("[data-supprimer-fiche]");
+    if (bs) bs.addEventListener("click", function () {
+      var fs = fiche(s.id); if (!fs.recue) return;
+      if (!window.FichesRecues) { window.alert("La suppression n'est pas disponible sur cette page. Rouvrez la fiche depuis « Les salariés »."); return; }
+      if (!confirmerDur("Supprimer la fiche envoyée par " + s.nom + " ? Ses réponses sortent de sa fiche, ses photos et sa fiche " +
+        "signée de son coffre fort. Ce que T.E.C a saisi reste. Cette action ne se rattrape pas.", "SUPPRIMER")) return;
+      delete OUVERTES[s.id];
+      var fin = function () { rendre(); };
+      window.FichesRecues.retirer(fs.recue.id, s.id).then(fin, fin);
     });
     var bv = cadre.querySelector("[data-valider]");
     if (bv) bv.addEventListener("click", function () {

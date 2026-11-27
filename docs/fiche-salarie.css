@@ -99,6 +99,18 @@
 .fr-rg .fr-ok{flex:1;min-width:0;border-bottom:0}
 .fr-x{flex:0 0 auto;background:none;border:1px solid var(--rouge);color:var(--rouge);border-radius:9px;
   font:600 var(--t1) system-ui;padding:7px 10px;min-height:0;width:auto;cursor:pointer}
+.fr-ouvrir{border-color:var(--accent);color:var(--accent);text-decoration:none;display:inline-block}
+/* LA FICHE VALIDÉE (27 novembre 2026) : ses réponses verrouillées, et trois
+   gestes en haut, modifier, supprimer, remettre à zéro. */
+.fp-gestes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.fp-gestes button{min-height:46px;width:100%;padding:0 6px;border-radius:var(--r1);border:1px solid var(--filet-2);
+  background:var(--surface);color:var(--texte);font:600 var(--t1)/1.2 system-ui;cursor:pointer}
+.fp-gestes .fp-rouge{border-color:var(--rouge);color:var(--rouge)}
+.fp-gestes button[aria-pressed="true"]{background:var(--accent-clair);border-color:var(--accent);color:var(--accent)}
+.fp-verrou{margin:0 0 12px;font:400 var(--t1)/1.45 system-ui;color:var(--texte-2)}
+fieldset.fn-verrou{border:0;margin:0;padding:0;min-width:0}
+fieldset.fn-verrou[disabled] input,fieldset.fn-verrou[disabled] select,fieldset.fn-verrou[disabled] textarea{opacity:1;color:var(--texte);background:var(--creux)}
+fieldset.fn-verrou[disabled] button{opacity:.75;cursor:default}
 /* Les trois couleurs du suivi des fiches, et leur légende. */
 .fr-pt{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--filet-2);flex:0 0 auto;margin-right:8px;vertical-align:-1px}
 .fr-rouge .fr-pt,.fr-pt.fr-rouge{background:var(--rouge)}
