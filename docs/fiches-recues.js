@@ -300,6 +300,8 @@
     ["code95", "Code 95 sur le permis"], ["carteQualif", "Carte de qualification, jusqu'au"],
     ["carteNum", "Numéro de la carte conducteur"], ["carteCond", "Carte conducteur, jusqu'au"],
     ["livret", "Livret individuel de contrôle"], ["aCarte", "A une carte conducteur"],
+    /* La preuve que l'information sur les données a été lue (27 novembre 2026). */
+    ["rgpdLu", "Information sur ses données lue"],
   ];
   function valeur(k, v) {
     if (v === "" || v == null) return "";
@@ -307,6 +309,12 @@
     if (k === "profil") return v === "pl" ? "Poids lourd" : "Pas poids lourd";
     if (k === "permisOrigine") return v === "etr" ? "Hors Union européenne" : (v === "ue" ? "Union européenne ou EEE" : "En France");
     if (k === "sexe") return v === "F" ? "Femme" : (v === "M" ? "Homme" : v);
+    if (k === "rgpdLu") {
+      var d = new Date(v);
+      if (isNaN(d.getTime())) return v;
+      return "le " + (d.getDate() === 1 ? "1er" : d.getDate()) + " " + MOIS[d.getMonth()] + " " + d.getFullYear() +
+        " à " + ("0" + d.getHours()).slice(-2) + " h " + ("0" + d.getMinutes()).slice(-2);
+    }
     if (v === "oui") return "Oui"; if (v === "non") return "Non";
     return v;
   }
@@ -368,7 +376,7 @@
     "carteQualif", "code95", "carteCond", "livret", "aCarte", "profil",
     /* Ajoutés le 27 novembre 2026, avec les questions du même jour. */
     "sexe", "nais", "naisLieu", "nat", "courriel", "sansNir", "titreType", "titreNum", "permisEchange",
-    "points", "retraitLe", "retraitFin", "retraitMotif", "fimo", "carteNum"];
+    "points", "retraitLe", "retraitFin", "retraitMotif", "fimo", "carteNum", "rgpdLu"];
 
   /* LA FICHE REMPLIT AUSSI LE REGISTRE (27 novembre 2026).
 
