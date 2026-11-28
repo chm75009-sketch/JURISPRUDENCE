@@ -197,6 +197,13 @@
       <button type="button" class="ch-mic" id="ch-mic" aria-label="Dire un nom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/><path d="M8 21h8"/></svg></button>
     </div>
     <p class="ch-dit" id="ch-dit" hidden></p>
+    <!-- LE FICHIER POUR VÉRIF PERMIS (28 novembre 2026) : les chauffeurs, avec
+         nom, prénom, date de naissance et numéro de permis, les quatre données
+         que le site demande. Il part par WhatsApp pour être complété. -->
+    <div id="vp" hidden>
+      <button type="button" class="btn-acte b2" id="b-verif">Fichier pour Vérif Permis</button>
+      <p class="mention" id="vp-dit" hidden></p>
+    </div>
     <h2 class="pq" id="titre-liste">Vos salariés</h2>
     <div id="liste"></div>
     <p class="mention" id="legende" hidden>Rouge : une échéance dépassée ou dans les sept jours. Orange : dans le mois. Vert : rien ne presse.</p>
@@ -392,6 +399,7 @@
        Pendant une recherche, le titre dit combien de noms sont trouvés, et le
        message ne s'écrit qu'une fois, dans la liste. */
     var cherche = !!(VOIX || q);
+    $("vp").hidden = GROUPE !== "roulant" || cherche || !base().length;
     $("titre-liste").textContent = cherche
       ? nomG + " : " + (L.length ? L.length + " trouvé" + (L.length > 1 ? "s" : "") : "aucun trouvé") + " sur " + base().length
       : nomG + " (" + base().length + ")";
@@ -639,6 +647,58 @@
     montrer(b.getAttribute("data-id"));
   });
   $("cherche").addEventListener("input", function () { VOIX = ""; peindreListe(); });
+
+  /* LE FICHIER POUR VÉRIF PERMIS (28 novembre 2026).
+     Le site demande, pour chaque conducteur, « le nom, prénom, date de
+     naissance et numéro de permis de conduire (délivré en France, hors
+     COM) », en CSV, sans « aucun caractère spécial » (sa foire aux questions,
+     lue ce jour-là). Les accents sont donc retirés, et le chauffeur dont la
+     fiche dit son permis délivré hors de France est écarté : le site ne le
+     vérifie pas. Une donnée qui manque laisse sa case vide, à compléter. Le
+     modèle exact du site n'est visible qu'une fois connecté : les colonnes se
+     comparent à lui avant le dépôt. */
+  function plat(s) {
+    var t = net(s);
+    try { t = t.normalize("NFD").replace(/[̀-ͯ]/g, ""); } catch (e) {}
+    return t.replace(/[;"\r\n\t]+/g, " ").replace(/[^\x20-\x7E]/g, "").replace(/\s+/g, " ").trim();
+  }
+  $("b-verif").addEventListener("click", function () {
+    var F = {};
+    try { F = JSON.parse(localStorage.getItem("flotte-conducteurs") || "{}") || {}; } catch (e) { F = {}; }
+    var lignes = ["Nom;Prenom;Date de naissance;Numero de permis"], n = 0, sansNum = 0, sansNais = 0, ecartes = [];
+    PERSONNES.filter(roulant).sort(function (a, b) { return a.nom < b.nom ? -1 : 1; }).forEach(function (p) {
+      var r = auRegistre(p) || {}, f = F[p.id] || {};
+      if (f.permisOrigine === "ue" || f.permisOrigine === "etr" || (f.permisOrigine !== "fr" && net(f.permisPays))) { ecartes.push(p.nom); return; }
+      var nom = net(r.nom) || p.nom.split(" ")[0], pre = net(r.pre) || p.nom.split(" ").slice(1).join(" ");
+      var nais = jj(net(f.nais) || net(r.nais)), num = plat(f.permisNum).replace(/\s+/g, "").toUpperCase();
+      if (!num) sansNum++;
+      if (!nais) sansNais++;
+      lignes.push([plat(nom).toUpperCase(), plat(pre), nais, num].join(";"));
+      n++;
+    });
+    var d = new Date(), j = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    var nomF = "verif-permis-chauffeurs-" + j + ".csv", texte = lignes.join("\r\n") + "\r\n";
+    var dit = n + " chauffeur" + (n > 1 ? "s" : "") + " dans le fichier.";
+    if (sansNum || sansNais) dit += " À compléter : " + (sansNum ? sansNum + " sans numéro de permis" : "") +
+      (sansNum && sansNais ? ", " : "") + (sansNais ? sansNais + " sans date de naissance" : "") + ".";
+    if (ecartes.length) dit += " Écarté" + (ecartes.length > 1 ? "s" : "") + ", permis délivré hors de France, que Vérif Permis ne vérifie pas : " + ecartes.join(", ") + ".";
+    dit += " Avant de le déposer sur le site, comparez les colonnes au modèle de fichier de votre espace Vérif Permis.";
+    $("vp-dit").textContent = dit; $("vp-dit").hidden = false;
+    function enregistrer() {
+      var u = URL.createObjectURL(new Blob([texte], { type: "text/csv" })), a = document.createElement("a");
+      a.href = u; a.download = nomF; document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 2000);
+    }
+    /* Sur le téléphone, le partage ouvre WhatsApp ; ailleurs, le fichier se
+       télécharge. */
+    var fichier = null;
+    try { fichier = new File([texte], nomF, { type: "text/csv" }); } catch (e) { fichier = null; }
+    if (fichier && navigator.canShare && navigator.share && navigator.canShare({ files: [fichier] })) {
+      navigator.share({ files: [fichier], title: "Chauffeurs pour Vérif Permis" }).catch(function (e) {
+        if (!e || e.name !== "AbortError") enregistrer();
+      });
+    } else enregistrer();
+  });
   /* LA DICTÉE D'UN NOM. Chrome, Edge et Safari l'ont ; sur iPhone, seul
      Safari la donne aux pages. Sinon, le micro du clavier. */
   (function () {
