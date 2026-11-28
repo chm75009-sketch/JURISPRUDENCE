@@ -90,10 +90,13 @@
   <style>
     .coffre-t{font:700 22px/1.25 system-ui;color:var(--encre);margin:12px 0 2px}
     .coffre-tete .tout-voir{margin:2px 0 0}
+    .coffre-arch{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--creux);border:1px solid var(--filet);
+      font:400 14.5px/1.45 system-ui;color:var(--texte)}
     .rendu-dit{grid-column:1/-1;font-size:var(--t1);color:var(--texte-2);margin:0}
   </style>
   <div class="coffre-tete" id="coffre-tete" hidden>
     <h1 class="coffre-t" id="coffre-t"></h1>
+    <p class="coffre-arch" id="coffre-arch" hidden></p>
   </div>
 
   <p class="rappel-fiche" id="chapeau">Ce que vous avez déposé et ce que l'application a produit,
@@ -217,7 +220,20 @@
     "egalite": "Index de l'égalité",
   };
 
+  /* LE COFFRE D'UN ANCIEN SALARIÉ (28 novembre 2026) : une date de sortie au
+     registre, et son coffre se lit sans se modifier. Voir et télécharger
+     restent ; renommer et retirer disparaissent. */
+  function sortieDe(rub) {
+    var m = /^salarie-(.+)$/.exec(String(rub || "")); if (!m) return "";
+    var R = lireLocal("registre-personnel", null), sor = "";
+    ((R && R.salaries) || []).forEach(function (x) {
+      var id = sansAccent((String(x.nom || "").trim() + " " + String(x.pre || "").trim()).trim()).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      if (id === m[1] && String(x.sor || "").trim()) sor = String(x.sor).trim();
+    });
+    return sor;
+  }
   function ligne(d) {
+    var lecture = !!(COFFRE && sortieDe(COFFRE));
     return '<div class="doc"><div class="tete"><b>' + ech(d.nom) + "</b>" +
       '<span class="etiq' + (d.sorte === "produit" ? " produit" : "") + '">' +
       (d.sorte === "produit" ? "produit ici" : "déposé") + "</span></div>" +
@@ -227,8 +243,8 @@
       '<div class="barre"><button type="button" data-voir="' + d.id + '">Voir</button>' +
       '<button type="button" data-tel="' + d.id + '">Télécharger</button>' +
       /* Renommer un document mal nommé (27 novembre 2026). */
-      '<button type="button" data-ren="' + d.id + '" data-nom="' + ech(d.nom) + '">Renommer</button>' +
-      '<button type="button" class="second" data-del="' + d.id + '">Retirer</button></div></div>';
+      (lecture ? "" : '<button type="button" data-ren="' + d.id + '" data-nom="' + ech(d.nom) + '">Renommer</button>' +
+      '<button type="button" class="second" data-del="' + d.id + '">Retirer</button>') + "</div></div>";
   }
 
   function telecharger(id) {
@@ -446,6 +462,10 @@
     var titreC = COFFRE === "direction" ? "Direction de l'entreprise" : "Coffre fort de " + nomCoffre();
     document.title = c ? titreC : "Mes documents";
     if (c) $("coffre-t").textContent = titreC;
+    var sor = c ? sortieDe(COFFRE) : "";
+    $("coffre-arch").hidden = !sor;
+    if (sor) $("coffre-arch").textContent = "Archivé : parti le " + sor.slice(8, 10) + "/" + sor.slice(5, 7) + "/" + sor.slice(0, 4) +
+      ". Ses pièces se voient et se téléchargent ; rien ne s'y modifie.";
   }
   var RUB_TYPES = ["notes-service", "courriers", "registre", "controler-ri", "controler-duerp", "duerp",
     "controler-affichages", "controle-urssaf", "controler-mutuelle", "controler-discipline", "audit-discipline", "audit-sst"];

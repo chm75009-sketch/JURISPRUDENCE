@@ -51,6 +51,12 @@
   .grp-b .gt{flex:1;min-width:0}.grp-b .gt b{display:block;font:700 18px/1.25 system-ui;color:var(--accent)}
   .grp-b .gt span{display:block;font:400 14px/1.3 system-ui;color:var(--texte-2);margin-top:2px}
   .grp-b .gn{font:800 24px/1 system-ui;color:var(--accent)}
+  /* LES ANCIENS SALARIÉS (28 novembre 2026) : ceux qui ont quitté l'entreprise. */
+  .grp-b.anc{padding:14px 18px}.grp-b.anc .gi{font-size:24px}.grp-b.anc .gt b{font-size:16px;color:var(--texte)}
+  .grp-b.anc .gn{font-size:20px;color:var(--texte-2)}
+  .arch{margin:12px 0;padding:12px 14px;border-radius:12px;background:var(--creux);border:1px solid var(--filet);
+    font:400 15px/1.45 system-ui;color:var(--texte)}
+  .arch b{display:block;font-weight:700;margin-bottom:2px}
   .ch-ligne{display:flex;gap:9px;align-items:center;margin:14px 0 0}
   .ch-ligne .cherche{margin:0;flex:1;min-width:0}
   .ch-mic{flex:0 0 auto;width:50px;height:50px;border-radius:50%;border:0;background:#efeefc;color:#4f46e5;
@@ -178,6 +184,7 @@
   <section id="e-choix" hidden>
     <button type="button" class="grp-b" data-g="roulant"><span class="gi">🚛</span><span class="gt"><b>Personnel roulant</b><span>les chauffeurs</span></span><span class="gn" id="n-roulant"></span></button>
     <button type="button" class="grp-b" data-g="non"><span class="gi">🏢</span><span class="gt"><b>Personnel non roulant</b><span>bureau, atelier, entrepôt</span></span><span class="gn" id="n-non"></span></button>
+    <button type="button" class="grp-b anc" data-g="anciens" id="b-anciens" hidden><span class="gi">🗄️</span><span class="gt"><b>Anciens salariés</b><span>partis de l'entreprise, fiche et coffre fort archivés</span></span><span class="gn" id="n-anciens"></span></button>
     <p class="mention">Le partage se fait d'après l'emploi écrit au registre du personnel : chauffeur, conducteur, livreur, routier, coursier, convoyeur ou ambulancier, c'est le personnel roulant. Le cariste et le grutier sont du personnel non roulant.</p>
     <!-- le lien à envoyer aux salariés et le suivi des fiches reçues -->
     <div id="fiches-recues"></div>
@@ -261,7 +268,7 @@
     return j + " jour" + (j > 1 ? "s" : "");
   }
 
-  var PERSONNES = [], OUVERT = null;
+  var PERSONNES = [], ANCIENS = [], OUVERT = null;
   function charger() {
     var E = toutes(), parNom = {};
     E.forEach(function (e) {
@@ -288,6 +295,12 @@
     });
     var rang = { r: 0, o: 1, v: 2 };
     PERSONNES.sort(function (a, b) { return rang[a.feu] - rang[b.feu] || (a.nom < b.nom ? -1 : 1); });
+    /* Les salariés partis : une date de sortie au registre. Plus d'échéance,
+       plus de voyant ; leur fiche et leur coffre fort restent lisibles. */
+    ANCIENS = L.filter(function (s) { return !!net(s.sor); }).map(function (s) {
+      return { id: s.id, nom: s.nom, poste: net(s.emp), ent: net(s.ent), sor: net(s.sor), conduit: !!s.conduit,
+        roulantFiche: s.roulantFiche || "", mes: [], faits: 0, feu: "g", dit: "parti le " + jj(net(s.sor)), ancien: true };
+    }).sort(function (a, b) { return a.sor < b.sor ? 1 : a.sor > b.sor ? -1 : (a.nom < b.nom ? -1 : 1); });
   }
 
   /* CHERCHER UN SALARIÉ (26 novembre 2026).
@@ -347,12 +360,15 @@
     return !!p.conduit && !/cariste|grutier/i.test(p.poste || "");
   }
   function base() {
+    if (GROUPE === "anciens") return ANCIENS;
     if (!GROUPE) return PERSONNES;
     return PERSONNES.filter(function (p) { return GROUPE === "roulant" ? roulant(p) : !roulant(p); });
   }
   function peindreChoix() {
     $("n-roulant").textContent = PERSONNES.filter(roulant).length;
     $("n-non").textContent = PERSONNES.filter(function (p) { return !roulant(p); }).length;
+    $("n-anciens").textContent = ANCIENS.length;
+    $("b-anciens").hidden = !ANCIENS.length;
   }
   function peindreListe() {
     var q = cle($("cherche").value), dit = $("ch-dit"), L;
@@ -369,8 +385,8 @@
         dit.hidden = !L.length;
       }
     } else { L = base(); dit.hidden = true; }
-    $("legende").hidden = !PERSONNES.length;
-    var nomG = GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : "Vos salariés");
+    $("legende").hidden = !PERSONNES.length || GROUPE === "anciens";
+    var nomG = GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : (GROUPE === "anciens" ? "Anciens salariés" : "Vos salariés"));
     /* UNE RECHERCHE SANS RÉSULTAT (27 novembre 2026) : le titre gardait le
        total du groupe et « Aucun nom ne correspond » s'écrivait deux fois.
        Pendant une recherche, le titre dit combien de noms sont trouvés, et le
@@ -379,7 +395,7 @@
     $("titre-liste").textContent = cherche
       ? nomG + " : " + (L.length ? L.length + " trouvé" + (L.length > 1 ? "s" : "") : "aucun trouvé") + " sur " + base().length
       : nomG + " (" + base().length + ")";
-    if (!PERSONNES.length) {
+    if (!PERSONNES.length && GROUPE !== "anciens") {
       $("liste").innerHTML = '<p class="vide">Le registre du personnel est vide. <a href="registre.html">Ouvrir le registre</a> pour y porter vos salariés : ils apparaîtront ici.</p>';
       return;
     }
@@ -404,6 +420,27 @@
   try { OUVERTES = JSON.parse(sessionStorage.getItem("salarie-parties") || "{}") || {}; } catch (e) { OUVERTES = {}; }
   function peindreFiche(p) {
     var ini = p.nom.split(/\s+/).map(function (x) { return x.charAt(0); }).slice(0, 2).join("").toUpperCase();
+    /* UN ANCIEN SALARIÉ (28 novembre 2026) : sa fiche et son coffre fort, en
+       lecture seule, et de quoi le désarchiver si c'était une erreur. */
+    if (p.ancien) {
+      $("fiche").innerHTML = '<div class="org-haut"><div class="org-nom"><span class="rond">' + ech(ini) + '</span><span><b>' + ech(p.nom) + '</b><span>' +
+        ech([p.poste, p.ent ? "entré le " + (jj(p.ent) || p.ent) : ""].filter(Boolean).join(" · ")) + '</span></span></div></div>' +
+        '<div class="arch"><b>Archivé : parti le ' + ech(jj(p.sor)) + '.</b>Sa fiche et son coffre fort se lisent ; rien ne s\'y modifie.</div>' +
+        lien("#fiche", "Sa fiche", "en lecture seule") +
+        lien("mes-documents.html?r=" + encodeURIComponent("salarie-" + p.id), "Coffre fort", "en lecture seule") +
+        '<button type="button" class="btn-acte b2" id="desarchiver" style="margin-top:16px">Désarchiver : il fait encore partie de l\'entreprise</button>';
+      $("desarchiver").addEventListener("click", function () {
+        if (!window.confirm("Désarchiver " + p.nom + " ? Sa date de sortie (" + jj(p.sor) + ") sera retirée du registre du personnel, et il reviendra parmi vos salariés.")) return;
+        var R = {}; try { R = JSON.parse(localStorage.getItem("registre-personnel") || "{}") || {}; } catch (e) { R = {}; }
+        (R.salaries || []).forEach(function (x) { if (cle((x.nom || "") + " " + (x.pre || "")) === cle(p.nom)) x.sor = ""; });
+        try { localStorage.setItem("registre-personnel", JSON.stringify(R)); } catch (e) {}
+        charger();
+        var q = PERSONNES.filter(function (x) { return x.id === p.id; })[0];
+        GROUPE = q ? (roulant(q) ? "roulant" : "non") : null;
+        montrer(q ? q.id : null);
+      });
+      return;
+    }
     /* EN ORGANIGRAMME (26 novembre 2026) : « il faut que je voie tout d'un
        coup ». Le salarié en haut, ses quatre parties côte à côte dessous. */
     var h = '<div class="org-haut"><div class="org-nom"><span class="rond">' + ech(ini) + '</span><span><b>' + ech(p.nom) + '</b><span>' +
@@ -482,16 +519,17 @@
      (sa fiche, ou un volet de son dossier). */
   var DETAIL = "";
   function montrer(id, volet) {
-    var p = PERSONNES.filter(function (x) { return x.id === id; })[0];
+    var p = PERSONNES.concat(ANCIENS).filter(function (x) { return x.id === id; })[0];
     OUVERT = p ? id : null;
-    DETAIL = p && VOLETS[volet] ? volet : "";
-    if (p && !GROUPE) GROUPE = roulant(p) ? "roulant" : "non";
+    DETAIL = p && VOLETS[volet] && (!p.ancien || volet === "fiche") ? volet : "";
+    if (p && p.ancien) GROUPE = "anciens";
+    else if (p && (!GROUPE || GROUPE === "anciens")) GROUPE = roulant(p) ? "roulant" : "non";
     $("e-choix").hidden = !!p || !!GROUPE;
     $("e-liste").hidden = !!p || !GROUPE;
     $("e-fiche").hidden = !p || !!DETAIL;
     $("e-detail").hidden = !DETAIL;
     $("main").classList.toggle("large", !!p && !DETAIL);
-    $("titre-page").textContent = p ? p.nom : (GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : "Les salariés"));
+    $("titre-page").textContent = p ? p.nom : (GROUPE === "roulant" ? "Personnel roulant" : (GROUPE === "non" ? "Personnel non roulant" : (GROUPE === "anciens" ? "Anciens salariés" : "Les salariés")));
     if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie(null);
     if (DETAIL) peindreDetail(p);
     else if (p) peindreFiche(p); else if (GROUPE) peindreListe(); else peindreChoix();
@@ -571,6 +609,16 @@
     if (window.Flotte && window.Flotte.ficheSalarie) window.Flotte.ficheSalarie($("fiche-s"), p.id, roulant(p), function () {
       /* une date changée change ses échéances */
       charger();
+      /* Un ancien salarié : tout se lit, rien ne se modifie. Les photos et
+         la signature s'ouvrent toujours en grand. */
+      if (p.ancien) {
+        var z = $("fiche-s");
+        Array.prototype.forEach.call(z.querySelectorAll("input, select, textarea, button"), function (e) {
+          if (!e.hasAttribute("data-grand")) e.disabled = true;
+        });
+        Array.prototype.forEach.call(z.querySelectorAll(".fp-gestes, .fp-verrou, .fp-valider, .actions"), function (e) { e.remove(); });
+        if (!z.querySelector(".arch")) z.insertAdjacentHTML("afterbegin", '<div class="arch"><b>Archivé : parti le ' + ech(jj(p.sor)) + '.</b>Cette fiche se lit ; rien ne s\'y modifie.</div>');
+      }
     }, DETAIL);
     else $("fiche-s").innerHTML = '<p class="vide">Cette page n\'a pas pu s\'ouvrir. Rechargez la page.</p>';
   }
@@ -624,7 +672,7 @@
     var pa = new URLSearchParams(location.search);
     demande = pa.get("s");
     voirFiche = pa.get("v") || "";
-    if (pa.get("g") === "roulant" || pa.get("g") === "non") GROUPE = pa.get("g");
+    if (pa.get("g") === "roulant" || pa.get("g") === "non" || pa.get("g") === "anciens") GROUPE = pa.get("g");
   } catch (e) { demande = null; }
   montrer(demande, voirFiche);
 })();
