@@ -424,6 +424,9 @@
         '<button type="button" class="st-btn" data-st="saisir" data-v="Procès-verbal reçu">Autre (procès-verbal reçu, courrier de l\'administration…)</button></div></div>';
       var G = groupes(true);
       h += '<div class="st-carte"><h2 class="st-h2">Anomalies relevées</h2>' + (G.length ? G.map(ligneGroupe).join("") : '<p class="st-vide">Aucune anomalie : rien à faire.</p>') + '</div>';
+      /* Après un essai fait sur un vrai salarié (28 novembre 2026). */
+      h += '<div class="st-btns col"><button type="button" class="st-btn st-rouge" data-st="reinit">Réinitialiser le suivi de ce conducteur</button></div>' +
+        '<div class="st-sub">Efface les faits relevés, les mesures, le journal des contrôles et la date de lecture de sa carte. Sa fiche et ses documents signés restent.</div>';
       return h;
     }
     function versReaction(msg) { S.etape = 2; peindre(); prevenirPage(); defilerVers(cont); dire(msg + " : à vous de réagir"); }
@@ -919,6 +922,15 @@
       var a = b.getAttribute("data-st"), v = b.getAttribute("data-v");
       if (a === "etape" || a === "aller") { S.etape = +v; peindre(); if (a === "aller") defilerVers(cont); return; }
       if (a === "fiche") { if (!CT.enWordSuivi(S.id)) dire("Le générateur Word n'est pas disponible."); return; }
+      if (a === "reinit") {
+        var c0 = conducteur(), nom0 = (c0 && c0.nom) || "ce conducteur";
+        if (!window.confirm("Réinitialiser le suivi de la carte de " + nom0 + " ? Les faits relevés, les mesures, le journal des contrôles et la date de lecture de sa carte seront effacés. Sa fiche et ses documents signés restent.")) return;
+        var r0 = window.prompt("Dernière confirmation. Pour confirmer, tapez ZERO en majuscules.");
+        if (r0 === null) return;
+        if (String(r0).trim().toUpperCase() !== "ZERO") { window.alert("Action annulée : la confirmation ne correspond pas."); return; }
+        CT.reinitialiserSuivi(S.id); peindre(); prevenirPage(); dire("Suivi réinitialisé");
+        return;
+      }
       if (a === "essai") return proposerEssai();
       if (a === "essai-annuler") return finEssai(false);
       if (a === "essai-garder") return finEssai(true);

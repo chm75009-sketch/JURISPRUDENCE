@@ -386,6 +386,21 @@
     var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
     if (s.anomalies && s.anomalies[i]) { s.anomalies.splice(i, 1); garderSuivi(id, s); }
   }
+  /* RÉINITIALISER LE SUIVI D'UN CONDUCTEUR (28 novembre 2026) : après un
+     essai de lecture de carte fait sur un vrai salarié. S'effacent les faits
+     relevés, les mesures prises, le journal des contrôles, l'identité de carte
+     lue et la date du dernier téléchargement lu. Restent les documents remis
+     et signés, son profil et les dates de ses papiers. */
+  function reinitialiserSuivi(id) {
+    if (!id) return false;
+    var e = etat(); e.suivi = e.suivi || {};
+    var s = e.suivi[id] || {};
+    delete s.anomalies; delete s.mesures; delete s.controles; delete s.carte;
+    e.suivi[id] = s;
+    if (e.cartes) delete e.cartes[id];
+    garderEtat(e);
+    return true;
+  }
   function supprimerMesure(id, i) {
     var e = etat(); var s = (e.suivi && e.suivi[id]) || {};
     if (s.mesures && s.mesures[i]) { s.mesures.splice(i, 1); garderSuivi(id, s); }
@@ -1362,6 +1377,7 @@
     ajouterAnomalie: ajouterAnomalie,
     ajouterMesure: ajouterMesure,
     supprimerAnomalie: supprimerAnomalie,
+    reinitialiserSuivi: reinitialiserSuivi,
     supprimerMesure: supprimerMesure,
     matchConducteur: matchConducteur,
     importerAnomalies: importerAnomalies,
