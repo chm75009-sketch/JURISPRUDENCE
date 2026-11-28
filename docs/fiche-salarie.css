@@ -102,7 +102,7 @@
 .fr-ouvrir{border-color:var(--accent);color:var(--accent);text-decoration:none;display:inline-block}
 /* LA FICHE VALIDÉE (27 novembre 2026) : ses réponses verrouillées, et trois
    gestes en haut, modifier, supprimer, remettre à zéro. */
-.fp-gestes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.fp-gestes{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:0 0 12px}
 .fp-gestes button{min-height:46px;width:100%;padding:0 6px;border-radius:var(--r1);border:1px solid var(--filet-2);
   background:var(--surface);color:var(--texte);font:600 var(--t1)/1.2 system-ui;cursor:pointer}
 .fp-gestes .fp-rouge{border-color:var(--rouge);color:var(--rouge)}

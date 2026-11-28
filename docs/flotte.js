@@ -1658,7 +1658,8 @@
         '<div class="fp-gestes">' +
         '<button type="button" data-modifier="' + ech(s.id) + '"' + (ouv ? ' aria-pressed="true"' : "") + ">" + (ouv ? "Terminer" : "Modifier") + "</button>" +
         '<button type="button" class="fp-rouge" data-supprimer-fiche="' + ech(s.id) + '">Supprimer</button>' +
-        '<button type="button" class="fp-rouge" data-raz-fiche="' + ech(s.id) + '">Remettre à zéro</button></div>' +
+        '<button type="button" class="fp-rouge" data-raz-fiche="' + ech(s.id) + '">Remettre à zéro</button>' +
+        '<button type="button" data-archiver="' + ech(s.id) + '">Archiver</button></div>' +
         (ouv ? '<p class="fp-verrou">Les cases sont ouvertes : corrigez, puis touchez « Terminer ».</p>'
           : '<p class="fp-verrou">Ses réponses sont verrouillées. Touchez « Modifier » pour les corriger.</p>');
     }
@@ -1889,7 +1890,8 @@
   function corpsConducteur(s, f, conduit) {
     /* Validée, la remise à zéro est en haut, avec les autres gestes. */
     return ficheNette(s, f, conduit) + (etatFiche(f) === "vert" ? "" :
-      '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button></div>');
+      '<div class="actions"><button type="button" class="second" data-raz-fiche="' + ech(s.id) + '">Remettre la fiche à zéro</button>' +
+      '<button type="button" class="second" data-archiver="' + ech(s.id) + '">Archiver : le salarié a quitté T.E.C</button></div>');
   }
   function brancherConducteur(cadre, s) {
     brancher(cadre, "c" + s.id,
@@ -1947,6 +1949,26 @@
       delete OUVERTES[s.id];
       var fin = function () { rendre(); };
       window.FichesRecues.retirer(fs.recue.id, s.id).then(fin, fin);
+    });
+    /* ARCHIVER (28 novembre 2026) : le salarié a quitté l'entreprise. La date
+       de départ s'écrit au registre du personnel (sa date de sortie) ; il passe
+       dans « Anciens salariés », où sa fiche et son coffre fort restent
+       lisibles. Rien n'est effacé. */
+    var ba = cadre.querySelector("[data-archiver]");
+    if (ba) ba.addEventListener("click", function () {
+      var auj = iso(new Date()), d = auj.slice(8, 10) + "/" + auj.slice(5, 7) + "/" + auj.slice(0, 4);
+      var r = window.prompt("Archiver " + s.nom + " : il a quitté T.E.C.\nDate de son départ (jour/mois/année) :", d);
+      if (r === null) return;
+      var m = /^\s*(\d{1,2})[\/.\- ](\d{1,2})[\/.\- ](\d{4})\s*$/.exec(r);
+      if (!m || +m[2] < 1 || +m[2] > 12 || +m[1] < 1 || +m[1] > 31) { window.alert("Date non reconnue. Écrivez-la ainsi : " + d); return; }
+      var sor = m[3] + "-" + ("0" + m[2]).slice(-2) + "-" + ("0" + m[1]).slice(-2);
+      var R = lire(CLE_REG, {}) || {}, trouve = false;
+      (R.salaries || []).forEach(function (x) {
+        if (sansAccent((net(x.nom) + " " + net(x.pre)).trim()) === s.id) { x.sor = sor; trouve = true; }
+      });
+      if (!trouve) { window.alert("Ce salarié n'est pas au registre du personnel : rien n'a été archivé."); return; }
+      garder(CLE_REG, R);
+      location.href = "salaries.html?g=anciens&s=" + encodeURIComponent(s.id);
     });
     var bv = cadre.querySelector("[data-valider]");
     if (bv) bv.addEventListener("click", function () {
